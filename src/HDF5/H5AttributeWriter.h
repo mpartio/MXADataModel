@@ -7,7 +7,7 @@
 
 #include <vector>
 
-class H5AttributeWriter : public IAttributeWriter
+class MXA_EXPORT H5AttributeWriter : public IAttributeWriter
 {
 public:
   H5AttributeWriter(){};

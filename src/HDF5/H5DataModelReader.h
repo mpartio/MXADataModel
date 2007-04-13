@@ -35,7 +35,7 @@
  * @version 1.0
  * @header H5DataModelReader.h
  */
-class H5DataModelReader : public IDataModelReader
+class MXA_EXPORT H5DataModelReader : public IDataModelReader
 {
 
 public:

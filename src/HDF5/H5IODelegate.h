@@ -32,7 +32,7 @@ class H5DataModelWriter;
  * @version
  * @header
  */
-class H5IODelegate : public IFileIODelegate
+class MXA_EXPORT H5IODelegate : public IFileIODelegate
 {
 
 public:

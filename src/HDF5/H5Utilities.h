@@ -12,6 +12,8 @@
 #define _HDF5UTILITIES_H_
 
 
+#include "Headers/DLLExport.h"
+
 // C++ Includes
 #include <map>
 #include <list>
@@ -27,19 +29,13 @@
  * @version
  * @header
  */
-class H5Utilities
+class MXA_EXPORT H5Utilities
 {
 
 public:
   
   virtual ~H5Utilities();
-#if 0
-  static const int MXA_GROUP = 1;
-  static const int MXA_DATATYPE = 2;
-  static const int MXA_TYPE = 4;
-  static const int MXA_LINK = 8;
-  static const int MXA_ANY = 15;
-  #endif
+
   
   #if 1
   enum CustomHDFDataTypes {

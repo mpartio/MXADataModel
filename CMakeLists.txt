@@ -96,6 +96,7 @@ SET( MXADATAMODEL_SRCS
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
 SET (MXADATAMODEL_HEADERS
+	src/Headers/DLLExport.h
   src/Headers/MXATypeDefs.h
   src/Headers/MXATypes.h
   src/Interfaces/IAttribute.h

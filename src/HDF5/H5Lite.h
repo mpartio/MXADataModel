@@ -11,6 +11,8 @@
 #ifndef HDF5HIGHLEVEL_H_
 #define HDF5HIGHLEVEL_H_
 
+#include "Headers/DLLExport.h"
+
 //-- C++ Headers
 #include <string>
 #include <iostream>
@@ -21,7 +23,7 @@
 
 
 
-class H5Lite
+class MXA_EXPORT H5Lite
 {
 public:
 
