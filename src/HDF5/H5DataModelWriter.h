@@ -34,7 +34,7 @@ class MXANode;
  * @version
  * @header
  */
-class MXA_EXPORT H5DataModelWriter : public IDataModelWriter
+class  H5DataModelWriter : public IDataModelWriter
 {
 
 public:

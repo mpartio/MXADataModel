@@ -23,7 +23,7 @@
 
 
 
-class MXA_EXPORT H5Lite
+class  H5Lite
 {
 public:
 

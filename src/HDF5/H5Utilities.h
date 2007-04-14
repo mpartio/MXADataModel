@@ -29,7 +29,7 @@
  * @version
  * @header
  */
-class MXA_EXPORT H5Utilities
+class  H5Utilities
 {
 
 public:
