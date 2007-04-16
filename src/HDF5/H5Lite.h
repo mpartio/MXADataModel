@@ -23,7 +23,7 @@
 
 
 
-class  H5Lite
+class H5Lite
 {
 public:
 
@@ -34,7 +34,7 @@ public:
  * @param The HDF5_TYPE of object
  * @return Standard HDF5 Error Conditions
  */
-static herr_t openId( hid_t loc_id, std::string obj_name, int obj_type);
+static MXA_EXPORT herr_t openId( hid_t loc_id, std::string obj_name, int obj_type);
                      
 /**
  * @brief Opens an HDF5 Object
@@ -42,7 +42,8 @@ static herr_t openId( hid_t loc_id, std::string obj_name, int obj_type);
  * @param obj_type Basic Object Type
  * @return Standard HDF5 Error Conditions
  */
-static herr_t closeId( hid_t obj_id, int obj_type );
+static MXA_EXPORT herr_t closeId( hid_t obj_id, int obj_type );
+
 
 template<typename T>
 static hid_t HDFTypeForPrimitive(T value)
@@ -83,7 +84,7 @@ static hid_t HDFTypeForPrimitive(T value)
  * @param attrName The attribute to search for
  * @return Standard HDF5 Error condition
  */
-static herr_t findAttribute( hid_t loc_id, std::string attrName );
+static MXA_EXPORT herr_t findAttribute( hid_t loc_id, std::string attrName );
 
 /**
  * @brief Creates a Dataset with the given name at the location defined by loc_id
@@ -216,7 +217,7 @@ static herr_t writeDataset (hid_t loc_id,
  * @param data The actual data to write as a null terminated string
  * @return Standard HDF5 error conditions
  */
-static herr_t writeDataset (hid_t loc_id, std::string &dset_name, std::string &data);
+static MXA_EXPORT herr_t  writeDataset (hid_t loc_id, std::string &dset_name, std::string &data);
 
 /**
  * @brief Writes an Attribute to an HDF5 Object
@@ -322,7 +323,7 @@ static herr_t writeAttribute(hid_t loc_id,
  * @brief
  */
 template <typename T>
-static herr_t writeAttribute(hid_t loc_id, 
+static herr_t  writeAttribute(hid_t loc_id, 
                              std::string &objName, 
                              std::string &attrName, 
                              T &data, 
@@ -405,7 +406,7 @@ static herr_t writeAttribute(hid_t loc_id,
  * @param data The string to write as the attribute
  * @return Standard HDF error conditions
  */
-static herr_t writeAttribute(hid_t loc_id, 
+static MXA_EXPORT herr_t  writeAttribute(hid_t loc_id, 
                               std::string &objName, 
                               std::string &attrName, 
                               std::string &data );
@@ -544,7 +545,7 @@ static herr_t readDataset(hid_t loc_id, std::string dsetName, T &data, hid_t dat
  * @param data The std::string to hold the data
  * @return Standard HDF error condition
  */
-static herr_t readDataset(hid_t loc_id, std::string dsetName, std::string &data);
+static MXA_EXPORT herr_t readDataset(hid_t loc_id, std::string dsetName, std::string &data);
 
 /**
  * @brief Reads an Attribute from an HDF5 Object.
@@ -618,7 +619,7 @@ static herr_t readAttribute(hid_t loc_id, std::string objName, std::string attrN
 //  
 // -----------------------------------------------------------------------------
 template <typename T>
-static herr_t readAttribute(hid_t loc_id, 
+static herr_t  readAttribute(hid_t loc_id, 
                             std::string objName, 
                             std::string attrName,
                             T &data, 
@@ -671,18 +672,18 @@ static herr_t readAttribute(hid_t loc_id,
  * @param data The memory to store the data
  * @return Standard HDF Error condition
  */
-static herr_t readAttribute(hid_t loc_id, std::string objName, std::string attrName,
+static MXA_EXPORT herr_t readAttribute(hid_t loc_id, std::string objName, std::string attrName,
                               std::string &data);
 
 /**
  * @brief
  */
-static hid_t getAttributeNDims(hid_t loc_id, std::string objName, std::string attrName, hid_t &rank);
+static MXA_EXPORT hid_t getAttributeNDims(hid_t loc_id, std::string objName, std::string attrName, hid_t &rank);
 
 /**
  * @brief
  */
-static hid_t getDatasetNDims(hid_t loc_id, std::string objName, hid_t &rank);
+static MXA_EXPORT hid_t getDatasetNDims(hid_t loc_id, std::string objName, hid_t &rank);
 
 /**
  * @brief Get the information about a dataset.
@@ -696,7 +697,7 @@ static hid_t getDatasetNDims(hid_t loc_id, std::string objName, hid_t &rank);
  * @param type_size THe HDF5 size of the data
  * @return Negative value is Failure. Zero or Positive is success;
  */
-static herr_t   getDatasetInfo( hid_t loc_id,
+static MXA_EXPORT herr_t getDatasetInfo( hid_t loc_id,
                               std::string dsetName,
                               std::vector<hsize_t> &dims,
                               H5T_class_t &type_class,
@@ -705,7 +706,7 @@ static herr_t   getDatasetInfo( hid_t loc_id,
 /**
  * @brief
  */
-static herr_t getAttributeInfo(hid_t loc_id, 
+static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id, 
                                std::string obj_name,
                                std::string attr_name,
                                std::vector<hsize_t> &dims,
