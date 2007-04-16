@@ -17,6 +17,18 @@
 using boost::unit_test::test_suite;
 
 // -----------------------------------------------------------------------------
+//  Define where to put our temporary files
+// -----------------------------------------------------------------------------
+#if defined (_WIN32)
+  #define FILE_NAME_BEFORE "C:\\WINDOWS\\Temp\\DataImportTest-Before.h5"
+  #define FILE_NAME_AFTER "C:\\WINDOWS\\Temp\\DataImportTest-After.h5"
+#else 
+  #define FILE_NAME_BEFORE "/tmp/DataImportTest-Before.h5"
+  #define FILE_NAME_AFTER "/tmp/DataImportTest-After.h5"
+#endif
+
+
+// -----------------------------------------------------------------------------
 //  This class is used to show simply how to write some data into an HDF5 file.
 //  Some of the features of the IDataImportDelegate are not shown. This class
 //  will simply write a single value to the HDF5 file.
@@ -155,7 +167,7 @@ MXADataModelPtr createSimpleModel()
 // -----------------------------------------------------------------------------
 int DataImportTest ()
 {
-  std::string outputFile("/tmp/DataImportTest.h5");
+  std::string outputFile(FILE_NAME_BEFORE);
   MXADataModelPtr model = createSimpleModel();
   BOOST_REQUIRE(model->writeModel(outputFile, false) >= 0); //Leave the file open for the import
   ImportSimpleData(model, outputFile);

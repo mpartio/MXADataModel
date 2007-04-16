@@ -92,12 +92,14 @@ SET (MXADATAMODEL_HEADERS
   src/Interfaces/IAttributeHelper.h
   src/Interfaces/IAttributeWriter.h
   src/Interfaces/IDataDimension.h
+  src/Interfaces/IDataDimensionWriter.h
   src/Interfaces/IDataImport.h
   src/Interfaces/IDataImportDelegate.h
   src/Interfaces/IDataModel.h
   src/Interfaces/IDataModelReader.h
   src/Interfaces/IDataModelWriter.h
   src/Interfaces/IDataRecord.h
+  src/Interfaces/IDataRecordWriter.h
   src/Interfaces/IFileIODelegate.h
   src/Interfaces/INode.h
   src/MXADataModel/AttributeHelpers.h

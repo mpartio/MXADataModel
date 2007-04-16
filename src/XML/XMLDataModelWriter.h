@@ -12,6 +12,7 @@
 #define _XMLWRITER_H_
 
 // MXA Includes
+#include "Headers/DLLExport.h"
 #include "MXADataModel/MXADataModel.h"
 #include "Interfaces/IDataModelWriter.h"
 #include "Interfaces/IDataDimensionWriter.h"
@@ -34,7 +35,7 @@ class MXANode;
  * @version
  * @header
  */
-class XMLDataModelWriter : public IDataModelWriter, 
+class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter, 
                            public IDataDimensionWriter,
                            public IDataRecordWriter
 {

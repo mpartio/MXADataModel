@@ -32,6 +32,21 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 
 
 // -----------------------------------------------------------------------------
+//  Define where to put our temporary files
+// -----------------------------------------------------------------------------
+#if defined (_WIN32)
+  #define FILE_NAME_BEFORE "C:\\WINDOWS\\Temp\\DataModelTest-Before.h5"
+  #define FILE_NAME_AFTER "C:\\WINDOWS\\Temp\\DataModelTest-After.h5"
+  #define FILE_NAME_XML "C:\\WINDOWS\\Temp\\DataModelTest.xml"
+#else 
+  #define FILE_NAME_BEFORE "/tmp/DataModelTest-Before.h5"
+  #define FILE_NAME_AFTER "/tmp/DataModelTest-After.h5"
+  #define FILE_NAME_XML "/tmp/DataModelTest.xml"
+#endif
+
+
+
+// -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
 template<typename T>
@@ -75,7 +90,7 @@ void CreateAttributes(MXADataModel* model)
     uint32 ui32 = 32;
     int64 i64 = -64;
     uint64 ui64 = 64;
-    float32 f32 = 32.32;
+    float32 f32 = 32.32f;
     float64 f64 = 64.64;
      
     
@@ -209,7 +224,7 @@ void WriteTestModel()
   std::cout << "WriteTestModel Running...." << std::endl;
   MXADataModelPtr modelPtr = createModel();
   MXADataModel* model = modelPtr.get();
-  std::string fileName("/tmp/DataModelTest-Before.h5");
+  std::string fileName(FILE_NAME_BEFORE);
   BOOST_REQUIRE (model->writeModel(fileName) >= 0 );
   IODelegatePtr ioPtr;
   BOOST_REQUIRE ( model->writeModel(fileName, ioPtr) < 0);
@@ -224,8 +239,8 @@ void ReReadTestModel()
 {
   std::cout << "ReReadTestModel Running....." << std::endl;
   
-  std::string inFile("/tmp/DataModelTest-Before.h5");
-  std::string outFile("/tmp/DataModelTest-After.h5");
+  std::string inFile(FILE_NAME_BEFORE);
+  std::string outFile(FILE_NAME_AFTER);
   
   {
     MXADataModelPtr rmodel  = MXADataModel::New();
@@ -245,7 +260,7 @@ void WriteXMLModelTest()
 {
   std::cout << "WriteXMLModelTest Running...." << std::endl;
   MXADataModelPtr model = createModel();
-  std::string xmlFile("/tmp/DataModelTest.xml");
+  std::string xmlFile(FILE_NAME_XML);
   BOOST_REQUIRE ( model->writeModelToXML(xmlFile) >= 0);
 }
 

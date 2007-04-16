@@ -11,6 +11,11 @@
 #ifndef STRINGUTILITIES_H_
 #define STRINGUTILITIES_H_
 
+//-- MXA Includes
+#include "Headers/DLLExport.h"
+
+
+//-- STL Includes
 #include <string>
 #include <list>
 #include <map>
@@ -19,12 +24,15 @@
 #include <algorithm>
 
 
-//using namespace std;
+//TODO: Create Test Suite for these Methods
   
 class StringUtils {
   
 public:
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 template<typename T>
 static std::string typeForPrimitive(T value)
 {
@@ -56,7 +64,9 @@ static std::string typeForPrimitive(T value)
   return "";
 }
 
-//-------- Convert from 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 template <typename T>
 static bool stringToNum(T& t,const std::string& s, std::ios_base& (*f)(std::ios_base&))
 {
@@ -64,13 +74,19 @@ static bool stringToNum(T& t,const std::string& s, std::ios_base& (*f)(std::ios_
   return !(iss >> f >> t).fail();
 }
 
-static std::string numToString(int num) 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+static MXA_EXPORT std::string numToString(int num) 
 {
 	std::stringstream converter;
   converter << num;
   return converter.str();
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 template<typename T>
 static std::string numToString(T num) 
 {
@@ -79,24 +95,32 @@ static std::string numToString(T num)
   return converter.str();
 }
 
-static std::string numToString(size_t num)
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+static MXA_EXPORT std::string numToString(size_t num)
 {
   std::stringstream converter;
   converter << num;
   return converter.str();
 }
   
-
-static void ensureRightSlash(std::string& path)
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+static MXA_EXPORT void ensureRightSlash(std::string& path)
 {
   if (! (path.at(path.length()-1) == '/')) {  
     path += "/";
   }
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 //TODO: Fix this to be more efficient
 /* Returns a copy of the list. Not memory efficient at all */
-static std::list<std::string> splitString(std::string sep, std::string str)
+static MXA_EXPORT std::list<std::string> splitString(std::string sep, std::string str)
 {
   std::list<std::string> strings;
   int sep_length = sep.length();
@@ -114,7 +138,7 @@ static std::list<std::string> splitString(std::string sep, std::string str)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-static std::string joinList(std::string sep, std::list<std::string> strs)
+static MXA_EXPORT std::string joinList(std::string sep, std::list<std::string> strs)
 {
   std::string result("");
   std::list<std::string>::const_iterator iter = strs.begin();
@@ -131,8 +155,10 @@ static std::string joinList(std::string sep, std::list<std::string> strs)
   return result;
 }
 
-
-static std::string joinList(std::string sep, std::list<int> nums)
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+static MXA_EXPORT std::string joinList(std::string sep, std::list<int> nums)
 {
   std::string result("");
   
@@ -147,8 +173,10 @@ static std::string joinList(std::string sep, std::list<int> nums)
   return result;
 }
   
-
-static std::string makePath(std::string parentPath, std::string name)
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+static MXA_EXPORT std::string makePath(std::string parentPath, std::string name)
 {
   std::string result;
   if (parentPath == "/") {

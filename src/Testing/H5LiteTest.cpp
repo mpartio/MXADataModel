@@ -22,9 +22,14 @@
 using boost::unit_test::test_suite;
 
 
+#if defined (_WIN32)
+  #define FILE_NAME "C:\\WINDOWS\\Temp\\test_lite1.h5"
+  #define FILE_NAME2 "C:\\WINDOWS\\Temp\\test_lite2.h5"
+#else 
+  #define FILE_NAME "/tmp/test_lite1.h5"
+  #define FILE_NAME2 "/tmp/test_lite2.h5"
+#endif
 
-#define FILE_NAME "test_lite1.h5"
-#define FILE_NAME2 "test_lite2.h5"
 
 #define DSET0_NAME "2D int array"
 #define DSET1_NAME "dataset char"
