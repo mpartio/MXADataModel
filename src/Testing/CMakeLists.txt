@@ -19,8 +19,8 @@ SET (Boost_USE_UNIT_TEST_FRAMEWORK TRUE)
 INCLUDE(${PROJECT_SOURCE_DIR}/../../CMake/FindBoost.cmake)
 
 #--- Data Model Test Program --------------------
-OPTION (BUILD_MXADATAMODEL_TEST "Builds a Program to test the User meta data read/write classes" OFF)
-IF ( BUILD_MXADATAMODEL_TEST )
+OPTION (MXA_BUILD_DATAMODEL_TEST "Builds a Program to test the User meta data read/write classes" OFF)
+IF ( MXA_BUILD_DATAMODEL_TEST )
   SET (MXADATAMODEL_TEST_SRCS
     DataModelTest.cpp
   )
@@ -30,11 +30,11 @@ IF ( BUILD_MXADATAMODEL_TEST )
     MXADataModel
     ${Boost_LIBRARIES}
   )
-ENDIF ( BUILD_MXADATAMODEL_TEST )
+ENDIF ( MXA_BUILD_DATAMODEL_TEST )
 
 #---- Data Import Test Program -----------------------
-OPTION (BUILD_MXADATAIMPORT_TEST "Builds a Program to test the User meta data read/write classes" OFF)
-IF ( BUILD_MXADATAIMPORT_TEST )
+OPTION (MXA_BUILD_DATAIMPORT_TEST "Builds a Program to test the User meta data read/write classes" OFF)
+IF ( MXA_BUILD_DATAIMPORT_TEST )
   SET (MXADATAIMPORT_TEST_SRCS
     DataImportTest.cpp
   )
@@ -44,12 +44,12 @@ IF ( BUILD_MXADATAIMPORT_TEST )
     ${MXADATAMODEL_LIB_NAME}
     ${Boost_LIBRARIES}
   )
-ENDIF ( BUILD_MXADATAIMPORT_TEST )
+ENDIF ( MXA_BUILD_DATAIMPORT_TEST )
 
 #------------------- Build the HD5Lite Testing ---------------
-IF ( BUILD_HDF5_MODULES )
-  OPTION(BUILD_H5LITE_TEST "Builds a program that tests the H5Lite methods" OFF)
-  IF ( BUILD_H5LITE_TEST )
+IF ( MXA_USE_HDF5 )
+  OPTION(MXA_BUILD_H5LITE_TEST "Builds a program that tests the H5Lite methods" OFF)
+  IF ( MXA_BUILD_H5LITE_TEST )
     SET (H5LITE_TEST_SRCS
       H5LiteTest.cpp
       ${PROJECT_SOURCE_DIR}/../HDF5/H5Lite.cpp
@@ -61,5 +61,5 @@ IF ( BUILD_HDF5_MODULES )
     ${HDF5_LIBRARIES}
 	${Boost_LIBRARIES}
     )
-  ENDIF ( BUILD_H5LITE_TEST )
-ENDIF ( BUILD_HDF5_MODULES )
+  ENDIF ( MXA_BUILD_H5LITE_TEST )
+ENDIF ( MXA_USE_HDF5 )

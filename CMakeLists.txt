@@ -33,9 +33,6 @@ IF ( CMAKE_BUILD_TYPE MATCHES Debug )
   ADD_DEFINITIONS(-DDEBUG)
   ADD_DEFINITIONS(-Wall)
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
-IF(WIN32)
- ADD_DEFINITIONS(-DNODEFAULTLIB:library)
-ENDIF(WIN32)
 
 
 # ---------- Find TIFF Library --------------------------------
@@ -44,12 +41,6 @@ ENDIF(WIN32)
 # ---------- Find ZLIB Library --------------------------------
 #FIND_PACKAGE(ZLIB)
 
-# ---------- Find the SZip Libraries -------------------------
-OPTION(HDF5_USE_SZIP "HDF5 Library Requires SZip Library" OFF)
-IF (HDF5_USE_SZIP)
-  SET (SZLIB_FIND_REQUIRED TRUE)
-  INCLUDE( ${PROJECT_SOURCE_DIR}/CMake/FindSZip.cmake )
-ENDIF (HDF5_USE_SZIP)
 
 # ---------- Find Boost Headers/Libraries -----------------------
 INCLUDE (${PROJECT_SOURCE_DIR}/CMake/FindBoost.cmake)
@@ -57,15 +48,13 @@ IF(NOT Boost_FOUND)
   MESSAGE(FATAL_ERROR "Boost was not found. ${Boost_DIR_MESSAGE}")
 ENDIF(NOT Boost_FOUND)
 
-# ------ Make sure MXAFInterface Library is built First -------
-#SUBDIRS( ${PROJECT_SOURCE_DIR}/../MXA-HDF5Interface/ )
 
 # Extend the include path to include the MXADataModel source directory
 INCLUDE_DIRECTORIES( "${PROJECT_SOURCE_DIR}/src"  ${INCLUDE_DIRECTORIES} )
 
 # ---------- Set up the Project Options -----------------------
 # Build shared libraries
-OPTION (BUILD_SHARED "Build Shared Libraries" OFF)
+OPTION (MXA_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 
 #-- Include the MXADataModel Testing Sources
 SUBDIRS(${PROJECT_SOURCE_DIR}/src/Testing)
@@ -74,10 +63,10 @@ SUBDIRS(${PROJECT_SOURCE_DIR}/src/Testing)
 SUBDIRS(${PROJECT_SOURCE_DIR}/src/Examples)
 
 # ----------  Build Qt Data Model  -----------------------
-OPTION (BUILD_Qt_MODULES "Builds the Qt Data Model" OFF)
-IF ( BUILD_Qt_MODULES )
+OPTION (MXA_BUILD_Qt_MODULES "Builds the Qt Data Model" OFF)
+IF ( MXA_BUILD_Qt_MODULES )
   SUBDIRS(src/QtMXADataModel)
-ENDIF ( BUILD_Qt_MODULES )
+ENDIF ( MXA_BUILD_Qt_MODULES )
 
 # ------- Set up the MHDataModel Project Source Files -----------
 # with SET() command you can change variables or define new ones
@@ -124,8 +113,8 @@ SET (MXADATAMODEL_HEADERS
   src/Utilities/StringUtils.h
   )
   
-OPTION (BUILD_HDF5_MODULES "Compiles Sources dependent on HDF5 Libraries" ON)
-IF ( BUILD_HDF5_MODULES )
+OPTION (MXA_USE_HDF5 "Compiles Sources dependent on HDF5 Libraries" ON)
+IF ( MXA_USE_HDF5 )
 
   # ---------- Find the HDF Libraries ---------------------------
   SET (HDF5_USE_HIGH_LEVEL FALSE)
@@ -153,7 +142,7 @@ IF ( BUILD_HDF5_MODULES )
     src/HDF5/H5Utilities.h
   )
   SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
-ENDIF ( BUILD_HDF5_MODULES )
+ENDIF ( MXA_USE_HDF5 )
 
 #--------- XML Sources
 SET( MXA_XML_SRCS
@@ -172,21 +161,22 @@ SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
 # Include Libraries
 SET (EXTRA_LIBS 
-  ${ZLIB_LIBRARIES}
+#  ${ZLIB_LIBRARIES}
   ${HDF5_LIBRARIES}
-  ${TIFF_LIBRARIES}
-  ${SZLIB_LIBRARIES}
+#  ${TIFF_LIBRARIES}
+#  ${SZLIB_LIBRARIES}
 )
 
 
 #---------- Build the MXADataModel Library ----------------------
 SET (LIB_TYPE STATIC)
-IF (BUILD_SHARED)
+IF (MXA_BUILD_SHARED_LIBS)
   SET (LIB_TYPE SHARED)
   IF (WIN32)
     ADD_DEFINITIONS("-D_HDF5USEDLL_")
+    ADD_DEFINITIONS("-DMXA_BUILD_SHARED_LIBS")
   ENDIF (WIN32)
-ENDIF (BUILD_SHARED)
+ENDIF (MXA_BUILD_SHARED_LIBS)
 
 IF ( APPLE )
   SET (OSX_EMBEDDED_LIBRARY ON)
