@@ -10,10 +10,6 @@ IF ( NOT DEFINED  QT_MXADATAMODEL_LIB_NAME)
   SET (QT_MXADATAMODEL_LIB_NAME QtMHDataModel)
 ENDIF ( NOT DEFINED QT_MXADATAMODEL_LIB_NAME )
 
-IF ( NOT DEFINED  MXA_HDF_INTERFACE_LIB_NAME)
-	SET( MXA_HDF_INTERFACE_LIB_NAME HDFWrapper)
-ENDIF ( NOT DEFINED MXA_HDF_INTERFACE_LIB_NAME )
-
 
 # ---------- Setup output Directories -------------------------
 SET (LIBRARY_OUTPUT_PATH
@@ -29,17 +25,11 @@ SET (EXECUTABLE_OUTPUT_PATH
   "Single Directory for all Executables."
   )
 
+# -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
   ADD_DEFINITIONS(-DDEBUG)
   ADD_DEFINITIONS(-Wall)
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
-
-
-# ---------- Find TIFF Library --------------------------------
-#FIND_PACKAGE(TIFF)
-  
-# ---------- Find ZLIB Library --------------------------------
-#FIND_PACKAGE(ZLIB)
 
 
 # ---------- Find Boost Headers/Libraries -----------------------
@@ -51,10 +41,6 @@ ENDIF(NOT Boost_FOUND)
 
 # Extend the include path to include the MXADataModel source directory
 INCLUDE_DIRECTORIES( "${PROJECT_SOURCE_DIR}/src"  ${INCLUDE_DIRECTORIES} )
-
-# ---------- Set up the Project Options -----------------------
-# Build shared libraries
-OPTION (MXA_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 
 #-- Include the MXADataModel Testing Sources
 SUBDIRS(${PROJECT_SOURCE_DIR}/src/Testing)
@@ -100,6 +86,7 @@ SET (MXADATAMODEL_HEADERS
   src/Interfaces/IDataModelWriter.h
   src/Interfaces/IDataRecord.h
   src/Interfaces/IDataRecordWriter.h
+  src/Interfaces/IDataSource.h
   src/Interfaces/IFileIODelegate.h
   src/Interfaces/INode.h
   src/MXADataModel/AttributeHelpers.h
@@ -146,22 +133,22 @@ IF ( MXA_USE_HDF5 )
   SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
 ENDIF ( MXA_USE_HDF5 )
 
-#--------- XML Sources
+#--------- XML Sources ---------------------------------------------------
 SET( MXA_XML_SRCS
   src/XMLTools/MHDXMLGenerator.cpp
   src/XMLTools/MHDXML.cpp
 )  
 
-#--- Tiff Sources
+#--- Tiff Sources ---------------------------------------------------
 SET (MXA_TIFF_IO_SRCS
   src/ImageIO/MHDTiffIO.cpp
   src/ImageIO/TiffToHDFDelegate.cpp  
   )
 
-# - Combine all the source files together
+# - Combine all the source files together -----------------------------
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
-# Include Libraries
+# ------------Include Libraries ----------------------------------------
 SET (EXTRA_LIBS 
 #  ${ZLIB_LIBRARIES}
   ${HDF5_LIBRARIES}
@@ -169,8 +156,9 @@ SET (EXTRA_LIBS
 #  ${SZLIB_LIBRARIES}
 )
 
-
-#---------- Build the MXADataModel Library ----------------------
+# ---------- Set up the Project Options -----------------------
+# Build shared libraries
+OPTION (MXA_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 SET (LIB_TYPE STATIC)
 IF (MXA_BUILD_SHARED_LIBS)
   SET (LIB_TYPE SHARED)
@@ -180,9 +168,10 @@ IF (MXA_BUILD_SHARED_LIBS)
   ENDIF (WIN32)
 ENDIF (MXA_BUILD_SHARED_LIBS)
 
-IF ( APPLE )
-  SET (OSX_EMBEDDED_LIBRARY ON)
-ENDIF ( APPLE )
+# ----- OS X specific build settings
+#IF ( APPLE )
+#  SET (OSX_EMBEDDED_LIBRARY ON)
+#ENDIF ( APPLE )
 
 
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )

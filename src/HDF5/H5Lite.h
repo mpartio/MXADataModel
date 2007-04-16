@@ -165,6 +165,87 @@ static herr_t writeDataset (hid_t loc_id, std::string &datasetName,
   return retErr;
 }
 
+/**
+ * @brief Creates a Dataset with the given name at the location defined by loc_id
+ * 
+ * The permissible types that can be used for dataType are:
+ * <ul>
+ * <li>H5T_NATIVE_INT8</li>
+ * <li>H5T_NATIVE_UINT8</li>
+ * <li>H5T_NATIVE_INT16</li>
+ * <li>H5T_NATIVE_UINT16</li>
+ * <li>H5T_NATIVE_INT32</li>
+ * <li>H5T_NATIVE_UINT32</li>
+ * <li>H5T_NATIVE_INT64</li>
+ * <li>H5T_NATIVE_UINT64</li>
+ * <li>H5T_NATIVE_FLOAT</li>
+ * <li>H5T_NATIVE_DOUBLE</li>
+ * </ul>
+ * 
+ * @param loc_id The Parent location to store the data
+ * @param datasetName The name of the dataset
+ * @param dims The dimensions of the dataset
+ * @param rank The number of dimensions to the dataset
+ * @param data The data to write to the file
+ * @param dataType The HDF_Type of data
+ * @return Standard HDF5 error conditions
+ * 
+ * The dimensions of the data sets are usually passed as both a "rank" and 
+ * dimensions array. By using a std::vector<hsize_t> that stores the values of
+ * each of the dimensions we can reduce the number of arguments to this method as
+ * the value of the "rank" simply becomes dims.length(). So to create a Dims variable
+ * for a 3D data space of size(x,y,z) = {10,20,30} I would use the following code:
+ * <code>
+ * std::vector<hsize_t> dims;
+ * dims.push_back(10);
+ * dims.push_back(20);
+ * dims.push_back(30);
+ * </code>
+ * 
+ * Also when passing data BE SURE that the type of data and the data type match. 
+ * For example if I create some data in a std::vector<UInt8Type> I would need to
+ * pass H5T_NATIVE_UINT8 as the dataType.
+ */
+template<typename T>
+static herr_t writeDataset(hid_t loc_id, std::string &datasetName,
+                           hsize_t* dims, signed int &rank, T* data,
+                           hid_t dataType)
+{
+  herr_t err = -1;
+  hid_t did = -1;
+  hid_t sid = -1;
+  herr_t retErr = 0;
+  //Create the DataSpace
+  sid = H5Screate_simple( rank, dims, NULL );
+  if (sid < 0) 
+  {
+    return sid;
+  }
+  // Create the Dataset
+  did = H5Dcreate (loc_id, datasetName.c_str(), dataType, sid, H5P_DEFAULT);
+  if ( did >= 0 ) 
+  {
+    err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
+    if (err < 0 ) {
+      std::cout << "Error Writing Data" << std::endl;
+      retErr = err;
+    }
+    err = H5Dclose( did );
+    if (err < 0) {
+      std::cout << "Error Closing Dataset." << std::endl;
+      retErr = err;
+    }
+  }
+  /* Terminate access to the data space. */
+  err= H5Sclose( sid );
+  if (err< 0) {
+    std::cout << "Error Closing Dataspace" << std::endl;
+    retErr = err; 
+  }
+  return retErr;
+}
+
+
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
