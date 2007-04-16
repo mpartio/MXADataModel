@@ -187,7 +187,18 @@ static MXA_EXPORT std::string makePath(std::string parentPath, std::string name)
   }
   return result;
 } 
-  
+
+// -----------------------------------------------------------------------------
+//  Determines if a string ends with another string
+// -----------------------------------------------------------------------------
+static MXA_EXPORT bool endsWith(std::string &base, std::string ending) {
+  std::string::size_type len = base.length();
+  std::string::size_type eLen = ending.length();
+  std::string::size_type npos = len - eLen;
+  std::string::size_type pos = base.find(ending, npos);  
+  return   ( pos != std::string::npos);
+}
+
 };
 
 
