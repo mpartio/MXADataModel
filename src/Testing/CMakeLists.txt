@@ -52,12 +52,12 @@ IF ( MXA_USE_HDF5 )
   IF ( MXA_BUILD_H5LITE_TEST )
     SET (H5LITE_TEST_SRCS
       H5LiteTest.cpp
-      ${PROJECT_SOURCE_DIR}/../HDF5/H5Lite.cpp
     )
   
     ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
     TARGET_LINK_LIBRARIES ( 
-	H5LiteTest 
+	H5LiteTest
+	MXADataModel
     ${HDF5_LIBRARIES}
 	${Boost_LIBRARIES}
     )
