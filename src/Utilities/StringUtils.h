@@ -129,7 +129,7 @@ static MXA_EXPORT std::list<std::string> splitString(std::string sep, std::strin
   std::string::iterator iter_start;
   while(iter != str.end()) {
     iter_start = iter+sep_length;
-	iter = std::search(iter_start, str.end(), sep.begin(), sep.end());
+    iter = std::search(iter_start, str.end(), sep.begin(), sep.end());
     strings.push_back(std::string(iter_start, iter));
   }
   return strings;

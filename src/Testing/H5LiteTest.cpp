@@ -45,6 +45,51 @@ using boost::unit_test::test_suite;
 using namespace MXATypes;
 
 // -----------------------------------------------------------------------------
+//  Uses Raw Pointers to save data to the data file
+// -----------------------------------------------------------------------------
+template <typename T>
+herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, hid_t &dataType, T type ) {
+  herr_t err = 1;
+  hsize_t dimx = 2;
+  hsize_t dimy = 3;
+  int32 rank = 2;
+  // Create the Dimensions
+  std::vector<hsize_t> dims;
+  dims.push_back(dimx);
+  dims.push_back(dimy);
+  
+  /* Make dataset char */
+  std::vector<T> data;
+  for (int i = 0; i < DIM; ++i) {
+    data.push_back(type);
+  }
+  std::cout << "Write/Read->Vector: " << name;
+  err = H5Lite::writeDataset( file_id, name, &(dims.front()), rank, &(data.front()), dataType );
+  if (err<0) {
+     std::cout << " - Failed - Could not write data to file." << std::endl;
+     return err;; 
+  }
+#if 1
+  /* Now read the dataset into another vector and compare */
+  std::vector<T> rData; //Create a vector to hold the data.
+  err = H5Lite::readDataset( file_id, name, rData, dataType);
+  if (err<0) {
+    std::cout << " - Failed - Error Reading Data from File" << std::endl;
+    return err;; 
+  }
+  if ( data == rData) {
+    err = 0;
+    std::cout << " - Passed" << std::endl;
+  } else {
+    std::cout << " - Failed - Data Read from the file does not match the stored data." << std::endl;
+    err = -1;
+  }
+#endif
+  
+  return err;
+}
+
+// -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
 template <typename T>
@@ -239,7 +284,25 @@ void H5LiteTest() {
   BOOST_REQUIRE ( testMakeDataset(file_id, "H5T_NATIVE_FLOAT", H5T_NATIVE_FLOAT, Float32Type) >= 0);
   BOOST_REQUIRE ( testMakeDataset(file_id, "H5T_NATIVE_DOUBLE", H5T_NATIVE_DOUBLE, Float64Type) >= 0);
   BOOST_REQUIRE ( testMakeStringDataset(file_id)  >= 0);
-  
+ 
+  for (int i = 0; i < 1; ++i)
+  {
+    char name[10]; memset(name, 0, 10);
+    snprintf(name, sizeof(name), "%d/", i);
+    hid_t g = H5Gcreate(file_id, name, 0);
+    //std::cout << "\n----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl; 
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Signed Int-H5T_NATIVE_INT8 Ptr",  H5T_NATIVE_INT8, Int8Type) >= 0);
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Unsigned Int-H5T_NATIVE_UINT8 Ptr", H5T_NATIVE_UINT8, Uint8Type) >= 0);
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Signed Int-H5T_NATIVE_INT16 Ptr",   H5T_NATIVE_INT16, Int16Type) >= 0);
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Unsigned Int-H5T_NATIVE_UINT16 Ptr", H5T_NATIVE_UINT16, Uint16Type) >= 0);
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Signed Int-H5T_NATIVE_INT32 Ptr", H5T_NATIVE_INT32, Int32Type) >= 0);
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Unsigned Int-H5T_NATIVE_UINT32 Ptr", H5T_NATIVE_UINT32, Uint32Type) >= 0);
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Signed Int-H5T_NATIVE_INT64 Ptr",  H5T_NATIVE_INT64, Int64Type) >= 0);
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Unsigned Int-H5T_NATIVE_UINT64 Ptr", H5T_NATIVE_UINT64, Uint64Type) >= 0);
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "H5T_NATIVE_FLOAT Ptr", H5T_NATIVE_FLOAT, Float32Type) >= 0);
+    BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "H5T_NATIVE_DOUBLE Ptr", H5T_NATIVE_DOUBLE, Float64Type) >= 0);
+    err = H5Gclose(g); //Close the group
+  }  
   // ******************* Test Writing Attributes *******************************
   std::cout << "\n----------- Testing Writing/Reading of Attributes -----------" << std::endl;
   BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT8",  H5T_NATIVE_INT8, Int8Type) >= 0);

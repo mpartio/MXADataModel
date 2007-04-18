@@ -30,10 +30,10 @@ class MXANode;
 
 /**
  * @brief
- * @auther
+ * @author 
  * @date
  * @version
- * @header
+ *  
  */
 class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter, 
                            public IDataDimensionWriter,

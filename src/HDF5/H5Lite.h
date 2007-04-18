@@ -44,7 +44,43 @@ static MXA_EXPORT herr_t openId( hid_t loc_id, std::string obj_name, int obj_typ
  */
 static MXA_EXPORT herr_t closeId( hid_t obj_id, int obj_type );
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+static std::string HDFTypeForPrimitiveAsStr(T value)
+{
+  if (typeid(value) == typeid(char)) return "H5T_NATIVE_INT8";
+  if (typeid(value) == typeid(signed char)) return "H5T_NATIVE_INT8";  
+  if (typeid(value) == typeid(unsigned char)) return "H5T_NATIVE_UINT8";
+  
+  if (typeid(value) == typeid(short int)) return "H5T_NATIVE_INT16";
+  if (typeid(value) == typeid(signed short int)) return "H5T_NATIVE_INT16";
+  if (typeid(value) == typeid(unsigned short int)) return "H5T_NATIVE_UINT16";
+  
+  if (typeid(value) == typeid(int)) return "H5T_NATIVE_INT32";
+  if (typeid(value) == typeid(signed int)) return "H5T_NATIVE_INT32";
+  if (typeid(value) == typeid(long int)) return "H5T_NATIVE_INT32";
+  if (typeid(value) == typeid(signed long int)) return "H5T_NATIVE_INT32";
+  
+  if (typeid(value) == typeid(unsigned int)) return "H5T_NATIVE_UINT32";
+  if (typeid(value) == typeid(unsigned long int)) return "H5T_NATIVE_UINT32";
+  
+  if (typeid(value) == typeid(long long int)) return "H5T_NATIVE_INT64";
+  if (typeid(value) == typeid(signed long long int)) return "H5T_NATIVE_INT64";
+  if (typeid(value) == typeid(unsigned long long int)) return "H5T_NATIVE_UINT64";
+  
+  
+  if (typeid(value) == typeid(float)) return "H5T_NATIVE_FLOAT";
+  if (typeid(value) == typeid(double)) return "H5T_NATIVE_DOUBLE";
+  
+  std::cout << "Error: HDFTypeForPrimitive - Unknown Type: " << typeid(value).name() << std::endl;
+  return "";
+}
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 template<typename T>
 static hid_t HDFTypeForPrimitive(T value)
 {

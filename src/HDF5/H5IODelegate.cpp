@@ -8,7 +8,8 @@
 //  
 // -----------------------------------------------------------------------------
 H5IODelegate::H5IODelegate() :
-  _fileId(-1)
+  _fileId(-1),
+  _openFile("")
 {
   
 }
@@ -47,7 +48,10 @@ MXATypes::MXAError H5IODelegate::writeFromModel(std::string fileName, MXADataMod
   //Close the file as we are done with it.
   if (closeWhenFinished) 
   {  closeMXAFile(); }
-  
+  else 
+  {
+    this->_openFile = fileName;
+  }
   return success;
 }
 
@@ -68,6 +72,10 @@ MXATypes::MXAError H5IODelegate::readIntoModel(std::string fileName, MXADataMode
   //Close the file as we are done with it.
   if (closeWhenFinished) 
   {  closeMXAFile(); }
+  else 
+  {
+    this->_openFile = fileName;
+  }
   return error;
 }
 
@@ -164,6 +172,7 @@ hid_t H5IODelegate::openMXAFile(std::string filename, bool readOnly)
     closeMXAFile();
     return (hid_t) -1;
   } 
+  this->_openFile = filename;
   return _fileId;
 }
 
@@ -199,6 +208,7 @@ void H5IODelegate::closeMXAFile()
 		   H5F_OBJ_DATATYPE | H5F_OBJ_ATTR, 
 		   num_open, &(attr_ids.front()) );
     for (int i=0; i<num_open; i++) {
+      
       H5Utilities::closeHDF5Object(attr_ids[i]);
     }
 
@@ -208,7 +218,9 @@ void H5IODelegate::closeMXAFile()
   if (err < 0) {
     std::cout << "H5IODelegate::closeMXAFile(): H5Fclose() caused error " << err << std::endl;
   }
+  this->_openFile = "";
 }
+
 
 // -----------------------------------------------------------------------------
 //  
@@ -235,41 +247,50 @@ int32 H5IODelegate::createGroupsFromPath(std::string path, hid_t parent)
   
   if (path.size() == 0) 
   {
-  //  std::cout << "  Removal of front and trailing slashes caused string length to be 0" << std::endl;
     return -1; // The path that was passed in was only a slash.. 
   }
   
+  hid_t gid = 1;
+  herr_t err = -1;
   std::string first;
   std::string second;
-
+  
   pos = path.find_first_of("/", 0);
-  if (pos == std::string::npos) // No slash found
-  {
-    first = path;
-    second = "";
-  } 
-  else 
+  while (pos != std::string::npos )
   {
     first = path.substr(0, pos);
-    second = path.substr(pos, path.size());
+    second = path.substr(pos+1, path.length() );
+    gid = _createGroup(parent,first);
+    if (gid < 0)
+    {
+      std::cout << "Error creating group:" << gid << std::endl;
+      return gid;
+    }
+    err = H5Gclose(gid);
+    pos = path.find_first_of("/", pos+1);
+    if (pos == std::string::npos) 
+    {
+      first += "/" + second;
+      gid = _createGroup(parent,first);
+      if (gid < 0)
+      {
+        std::cout << "Error creating group:" << gid << std::endl;
+        return gid;
+      }
+      err = H5Gclose(gid);
+    }
   }
-  
-  //hid_t gid = H5Gcreate(parent, first.c_str(), 0); // create the group
-  hid_t gid = _createGroup(parent, first);
-  if (!second.empty())
-  {
-    createGroupsFromPath(second, gid);
-  }
-  gid = H5Gclose(gid); // Close the group
-  return gid;
+  return err;
 }
+
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
 hid_t H5IODelegate::_createGroup(hid_t loc_id, std::string group) 
 {
-  hid_t test_id, grp_id;
+  hid_t grp_id;
+  herr_t err = -1;
 
   // Suspend the HDF Error Handlers
   herr_t (*_oldHDF_error_func)(void *);
@@ -281,26 +302,16 @@ hid_t H5IODelegate::_createGroup(hid_t loc_id, std::string group)
   // Turn off error handling
   H5Eset_auto(NULL, NULL);
 
-
-  // check if it already exists
-  test_id = H5Gopen(loc_id, group.c_str());
-  if (test_id < 0) { 
-    #if DEBUG1
-    std::cout << "Group doesn't exist - creating: " << group << std::endl;
-    #endif
+  err = H5Gget_objinfo(loc_id, group.c_str(), 0, NULL);
+//  std::cout << "H5Gget_objinfo = " << err << " for " << group << std::endl;  
+  if (err == 0)
+  {
+    grp_id = H5Gopen(loc_id, group.c_str());
+  } else 
+  {
     grp_id = H5Gcreate(loc_id, group.c_str(), 0);
-  } else {
-    #if DEBUG1
-      std::cout << "Group already exists: " << group << std::endl;
-    #endif
-    grp_id = test_id;
   }
-
   // Turn the HDF Error handlers back on
   H5Eset_auto(_oldHDF_error_func, _oldHDF_error_client_data);
-
   return grp_id;
 }
-
-
-

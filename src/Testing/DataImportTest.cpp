@@ -36,7 +36,7 @@ using boost::unit_test::test_suite;
   #define FILE_NAME_AFTER "/tmp/DataImportTest-After.h5"
 #endif
 
-
+static int GLOBAL_INT = 0;
 // -----------------------------------------------------------------------------
 //  This class is used to show simply how to write some data into an HDF5 file.
 //  Some of the features of the IDataImportDelegate are not shown. This class
@@ -47,18 +47,17 @@ class H5ImportTestDelegate: public IDataImportDelegate
 public:
   H5ImportTestDelegate(){};
   virtual ~H5ImportTestDelegate(){};
-  
+
   int32 importDataSource(MXADataSourcePtr dataSource, MXADataModelPtr model)
   {
-    //std::cout << dataSource->generateInternalPath() << std::endl;
-    int32 value = 55;
-    std::string path ( dataSource->generateInternalPath() );
-    hid_t fileId = model->getIODelegate()->getOpenFileId();
-    uint32 pos = path.find_last_of("/");
-    std::string parentPath ( path.substr(0, pos)  );
-    model->getIODelegate()->createGroupsFromPath(parentPath,  fileId);
-    //Write the Data to the HDF5 File
-    return H5Lite::writeDataset(fileId, path , value, H5Lite::HDFTypeForPrimitive(value));
+      std::string path ( dataSource->generateInternalPath() );
+      uint32 pos = path.find_last_of("/");
+      std::string parentPath ( path.substr(0, pos)  );
+      int32 value = 55;
+      hid_t fileId = model->getIODelegate()->getOpenFileId();
+      model->getIODelegate()->createGroupsFromPath(parentPath,  fileId);
+      //Write the Data to the HDF5 File
+    return H5Lite::writeDataset(fileId, path, value, H5Lite::HDFTypeForPrimitive(value));
   }
   
 private:
@@ -102,7 +101,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   int dim1Start = dim1->getStartValue();
   int dim1End = dim1->getEndValue();
   int dim1Increment = dim1->getIncrement();
-  
+  std::cout << "CREATING DATA SOURCES" << std::endl;
   for( int i = dim0Start; i <= dim0End; i += dim0Increment )
   {
     for (int j = dim1Start; j <= dim1End; j = j+ dim1Increment) 
@@ -121,6 +120,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
     }
   }
   
+  std::cout << "IMPORTING DATA NOW" << std::endl;
   int32 err = dataImport->import();
   BOOST_REQUIRE(err >= 0);
   
@@ -139,9 +139,9 @@ MXADataModelPtr createSimpleModel()
 	  model->setFileVersion(MXA::MXACurrentFileVersion);
 
 	  // ---------- Test creation/addition of Data Dimensions
-	  MXADataDimensionPtr dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 3, 1, 3, 1, 1);
+	  MXADataDimensionPtr dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
 	  model->addDataDimension(dim0);
-    MXADataDimensionPtr dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 4, 2, 8, 2, 1);
+    MXADataDimensionPtr dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
     model->addDataDimension(dim1);
 	  	  
 	  //Create Data Records

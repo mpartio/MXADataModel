@@ -29,10 +29,10 @@ class MXANode;
 
 /**
  * @brief
- * @auther
+ * @author 
  * @date
  * @version
- * @header
+ *  
  */
 class  H5DataModelWriter : public IDataModelWriter
 {

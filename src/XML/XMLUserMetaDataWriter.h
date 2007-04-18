@@ -23,7 +23,7 @@
  * @author
  * @date
  * @version
- * @header
+ *  
  */
 class XMLUserMetaDataWriter : public IAttributeWriter
 {

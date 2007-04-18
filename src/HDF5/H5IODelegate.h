@@ -26,11 +26,12 @@ class H5DataModelReader;
 class H5DataModelWriter;
 
 /**
- * @brief
- * @author
- * @date
- * @version
- * @header
+ * @brief Concrete implementation of the IFileIODelegate interface. This class
+ * supports reading/writing of the data model and data to and from HDF5 files.
+ * @author Mike Jackson
+ * @date March 2007
+ * @version 1.0
+ *  
  */
 class  H5IODelegate : public IFileIODelegate
 {
@@ -59,24 +60,74 @@ public:
   */
   MXATypes::MXAError readIntoModel(std::string fileName, MXADataModel* model, bool closeWhenFinished=false);
 
+  /**
+   * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model
+   * @param version The version to check.
+   */
   bool supportedMXAFileVersion(float version);
 
+  /**
+   * @brief Is the file describe by an absolute path an MXA based data file
+   * @param fileName The data file to check
+   * @return True if the file is MXA based
+   */
   bool isMXAFile(std::string fileName);
   
+  /**
+   * @brief Is the file identified by the given identifier an MXA Base data file
+   */
   bool isMXAFile(int32 identifier);
 
-  hid_t openMXAFile(std::string, bool readOnly=false);
+  /**
+   * @brief Opens an existing MXA Data File. IE an HDF5 file with the proper data model
+   * encoded.
+   * @param filename The absolute path of the file to open
+   * @param readOnly True if you want the file opened as read only. False if you need to write something to the file
+   * @return HDF5 file id
+   */
+  hid_t openMXAFile(std::string filename, bool readOnly=false);
   
+  /**
+   * @brief Creates a new blank HDF5 file
+   * @param fileName The path + filename to create. At least the parent path must exist
+   * @return HDF5 unique file id.
+   */
   hid_t createMXAFile(std::string fileName);
   
+  /**
+   * @brief Closes the currently open file
+   */
   void closeMXAFile();
   
-  
+  /**
+   * @brief Returns the HDF file id of the currently open file
+   */
   hid_t getOpenFileId() { return _fileId; }
   
+  /**
+   * @brief Returns the currently open filename as an absolute path
+   */
+  std::string getOpenFileName() { return this->_openFile; }
+  
+  /**
+   * @brief Given a path relative to the Parent ID, this method will create all
+   * the intermediate groups if necessary.
+   * @param path The path to either create or ensure exists
+   * @param parent The HDF unique id for the parent
+   * @return Error Condition: Negative is error. Positive is success.
+   */
   herr_t  createGroupsFromPath(std::string path, int32 parent);
   
 protected:
+  
+  /**
+   * @brief Creates a HDF Group by checking if the group already exists. If the 
+   * group already exists then that group is returned otherwise a new group is 
+   * created.
+   * @param loc_id The HDF unique id given to files or groups
+   * @param group The name of the group to create. Note that this group name should
+   * not be any sort of 'path'. It should be a single group.
+   */
   hid_t _createGroup(hid_t loc_id, std::string group);
 
 private:
@@ -84,6 +135,7 @@ private:
     void operator=(const H5IODelegate&); //Copy Assignment Not Implemented
     
     hid_t _fileId;
+    std::string _openFile;
 };
 
 

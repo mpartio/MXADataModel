@@ -33,7 +33,7 @@
  * @author Mike Jackson
  * @date Mar 2007
  * @version 1.0
- * @header H5DataModelReader.h
+ *   H5DataModelReader.h
  */
 class  H5DataModelReader : public IDataModelReader
 {
