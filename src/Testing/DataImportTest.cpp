@@ -36,7 +36,7 @@ using boost::unit_test::test_suite;
   #define FILE_NAME_AFTER "/tmp/DataImportTest-After.h5"
 #endif
 
-static int GLOBAL_INT = 0;
+//static int GLOBAL_INT = 0;
 // -----------------------------------------------------------------------------
 //  This class is used to show simply how to write some data into an HDF5 file.
 //  Some of the features of the IDataImportDelegate are not shown. This class

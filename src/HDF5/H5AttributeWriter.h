@@ -19,8 +19,7 @@ public:
     template<typename T>
     int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, T value)
     {
-        hid_t type = H5Lite::HDFTypeForPrimitive( value );
-        return H5Lite::writeAttribute(locationId, datasetPath, key, value, type);
+        return H5Lite::writeAttribute(locationId, datasetPath, key, value);
     }
 
 // -----------------------------------------------------------------------------
@@ -40,7 +39,7 @@ public:
     // -----------------------------------------------------------------------------  
    int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::string &value)
    {
-     //std::cout << "Writing Attribute for String '" << key << "'" << std::endl;
+   //  std::cout << "Writing Attribute for String '" << key << "'" << std::endl;
      return H5Lite::writeAttribute(locationId,datasetPath,key,value);
    }
   

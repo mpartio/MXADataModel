@@ -181,6 +181,7 @@ herr_t H5Utilities::getGroupObjects(hid_t loc_id, int typeFilter, std::list<std:
   return err;
 }
 
+
 // HDF Creation/Modification Methods
 hid_t H5Utilities::createGroup(hid_t loc_id, std::string group) 
 {
@@ -217,6 +218,9 @@ hid_t H5Utilities::createGroup(hid_t loc_id, std::string group)
   return grp_id;
 }
 
+#if 0
+There is a bug in here somewhere that is causing HDF5 to not create a group 
+but create a dataset instead. Use the H5IODelegate->createGroupPaths() function instead.
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -250,7 +254,7 @@ void H5Utilities::createPathGroups(hid_t loc_id, std::string path,
 }
 
 
-
+#endif
 
 //--------------------------------------------------------------------//
 // HDF Attribute Methods

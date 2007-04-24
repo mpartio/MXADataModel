@@ -1,6 +1,13 @@
 //TODO: Import Model from XML
+    Do we try to find a library that does this or create our own basic parser
 //TODO: Test Export/Import of XML Model
+
 //TODO: Write Data Import Example that imports images (tiffs) into HDF5
+
 //TODO: Reimplement the HDF5-IM API set using the specification from the HDF group
 
 //TODO: Update the Qt based Data viewer to work with the latest MXADataModel API
+
+//TODO: Review the Qt based design from Shawn and decide what the best course of action is.
+
+//TODO: Review the Qt Based data importer for design and implementation

@@ -273,7 +273,7 @@ void H5LiteTest() {
   err = H5Gclose(uintGid);
   // ******************* Test Writing Data *************************************
   std::cout << "\n----------- Testing Writing/Reading of Datasets -----------" << std::endl;
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT8",  H5T_NATIVE_INT8, Int8Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT8",  H5T_NATIVE_INT8, MXATypes::Int8Type) >= 0);
   BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT8", H5T_NATIVE_UINT8, Uint8Type) >= 0);
   BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT16",   H5T_NATIVE_INT16, Int16Type) >= 0);
   BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT16", H5T_NATIVE_UINT16, Uint16Type) >= 0);

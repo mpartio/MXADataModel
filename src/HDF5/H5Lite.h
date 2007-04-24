@@ -21,8 +21,16 @@
 //-- HDF Headers
 #include "hdf5.h"
 
+//TODO: Add tests for the find* methods
+//TODO: Add test for attributeInfo
+//TODO: Add test for datasetInfo
 
-
+/**
+ * @brief
+ * @class
+ * @author
+ * @date
+ */
 class H5Lite
 {
 public:
@@ -123,6 +131,14 @@ static hid_t HDFTypeForPrimitive(T value)
 static MXA_EXPORT herr_t findAttribute( hid_t loc_id, std::string attrName );
 
 /**
+ * @brief
+ * @param loc_id The location to search
+ * @param name The attribute to search for
+ * @return Standard HDF5 Error condition
+ */
+static MXA_EXPORT herr_t findDataset( hid_t loc_id, std::string name );
+
+/**
  * @brief Creates a Dataset with the given name at the location defined by loc_id
  * 
  * The permissible types that can be used for dataType are:
@@ -191,6 +207,8 @@ static herr_t writeDataset (hid_t loc_id, std::string &datasetName,
       std::cout << "Error Closing Dataset." << std::endl;
       retErr = err;
     }
+  } else {
+    retErr = did;
   }
   /* Terminate access to the data space. */
   err= H5Sclose( sid );
@@ -271,6 +289,8 @@ static herr_t writeDataset(hid_t loc_id, std::string &datasetName,
       std::cout << "Error Closing Dataset." << std::endl;
       retErr = err;
     }
+  } else {
+    retErr = did;
   }
   /* Terminate access to the data space. */
   err= H5Sclose( sid );
@@ -317,9 +337,11 @@ static herr_t writeDataset (hid_t loc_id,
       std::cout << "Error Closing Dataset." << std::endl;
       retErr = err;
     }
+  } else {
+    retErr = did;
   }
   /* Terminate access to the data space. */
-  err= H5Sclose( sid );
+  err = H5Sclose( sid );
   if (err< 0) {
     std::cout << "Error Closing Dataspace" << std::endl;
     retErr = err; 
@@ -443,9 +465,9 @@ template <typename T>
 static herr_t  writeAttribute(hid_t loc_id, 
                              std::string &objName, 
                              std::string &attrName, 
-                             T &data, 
-                             hid_t dataType )
+                             T &data )
 {
+  
   hid_t      obj_id, sid, attr_id;
   int        has_attr;
   H5G_stat_t statbuf;
@@ -453,6 +475,7 @@ static herr_t  writeAttribute(hid_t loc_id,
   herr_t retErr = 0;
   hsize_t dims = 1;
   hid_t rank = 1;
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(data);
   /* Get the type of object */
   if (H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf) < 0) {
     std::cout << "Error getting object info." << std::endl;
@@ -831,13 +854,15 @@ static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id,
                                size_t &type_size,
                                hid_t &attr_type);
 
+
+
+
+
+
 // -----------------------------------------------------------------------------
 protected:
   H5Lite();
   ~H5Lite();
 };
-
-
-
 
 #endif /* HDF5HIGHLEVEL_H_ */

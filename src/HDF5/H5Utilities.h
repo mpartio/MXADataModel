@@ -61,8 +61,8 @@ public:
   // -------------- HDF Group Methods ----------------------------
   static herr_t getGroupObjects(hid_t, int, std::list<std::string> &);
   static hid_t createGroup(hid_t, std::string);
-  static void createGroups(hid_t, std::list<std::string>);
-  static void createPathGroups(hid_t, std::string, bool trimlast=false);
+ // static void createGroups(hid_t, std::list<std::string>);
+//  static void createPathGroups(hid_t, std::string, bool trimlast=false);
 
   // -------------- HDF Attribute Methods ----------------------------
   static bool probeForAttribute(hid_t, std::string, std::string);

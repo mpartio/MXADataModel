@@ -6,11 +6,6 @@ IF ( NOT DEFINED  MXADATAMODEL_LIB_NAME)
   SET (MXADATAMODEL_LIB_NAME MXADataModel)
 ENDIF ( NOT DEFINED MXADATAMODEL_LIB_NAME )
 
-IF ( NOT DEFINED  QT_MXADATAMODEL_LIB_NAME)
-  SET (QT_MXADATAMODEL_LIB_NAME QtMHDataModel)
-ENDIF ( NOT DEFINED QT_MXADATAMODEL_LIB_NAME )
-
-
 # ---------- Setup output Directories -------------------------
 SET (LIBRARY_OUTPUT_PATH
   ${PROJECT_BINARY_DIR}/Bin
@@ -74,6 +69,7 @@ SET (MXADATAMODEL_HEADERS
 	src/Headers/DLLExport.h
   src/Headers/MXATypeDefs.h
   src/Headers/MXATypes.h
+  src/Headers/MXAErrorDefinitions.h
   src/Interfaces/IAttribute.h
   src/Interfaces/IAttributeHelper.h
   src/Interfaces/IAttributeWriter.h
@@ -113,8 +109,10 @@ IF ( MXA_USE_HDF5 )
   ENDIF(NOT HDF5_FOUND)
   
   ADD_DEFINITIONS(-DHDF5_MODULES_ON)
+  
   # ---------- Include the HDF5 Dependant source in the Build -------------
   SET( MXA_HDF5_SRCS
+    src/HDF5/H5Image.cpp
     src/HDF5/H5Lite.cpp
     src/HDF5/H5Utilities.cpp
     src/HDF5/H5IODelegate.cpp
@@ -128,10 +126,30 @@ IF ( MXA_USE_HDF5 )
     src/HDF5/H5DataModelWriter.h
     src/HDF5/H5IODelegate.h
     src/HDF5/H5Lite.h
+    src/HDF5/H5Image.h
     src/HDF5/H5Utilities.h
   )
   SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
+  SET(EXTRA_LIBS ${EXTRA_LIBS} ${HDF5_LIBRARIES})
 ENDIF ( MXA_USE_HDF5 )
+
+
+# ------------------ Check for and Include Tif Lib dependent code --------------
+OPTION(MXA_USE_TIFF "Compiles source code that depends on having the Tif Lib installed" ON)
+IF(MXA_USE_TIFF)
+
+	FIND_PACKAGE(TIFF REQUIRED)
+	SET(MXA_HDF5_TIFF_SRCS
+		src/HDF5/H5TiffIO.cpp
+		)
+		
+	SET(MXA_HDF5_TIFF_HEADERS
+		src/HDF5/H5TiffIO.h
+		)
+		
+		SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
+		SET(EXTRA_LIBS ${EXTRA_LIBS} ${TIFF_LIBRARIES})
+ENDIF (MXA_USE_TIFF)
 
 #--------- XML Sources ---------------------------------------------------
 SET( MXA_XML_SRCS
@@ -139,22 +157,17 @@ SET( MXA_XML_SRCS
   src/XMLTools/MHDXML.cpp
 )  
 
-#--- Tiff Sources ---------------------------------------------------
-SET (MXA_TIFF_IO_SRCS
-  src/ImageIO/MHDTiffIO.cpp
-  src/ImageIO/TiffToHDFDelegate.cpp  
-  )
 
 # - Combine all the source files together -----------------------------
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
 # ------------Include Libraries ----------------------------------------
-SET (EXTRA_LIBS 
+#SET (EXTRA_LIBS 
 #  ${ZLIB_LIBRARIES}
-   ${HDF5_LIBRARIES}
+#  ${HDF5_LIBRARIES}
 #  ${TIFF_LIBRARIES}
 #  ${SZLIB_LIBRARIES}
-)
+#)
 
 # ---------- Set up the Project Options -----------------------
 # Build shared libraries

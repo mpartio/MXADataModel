@@ -14,6 +14,7 @@
 #include "HDF5/H5Lite.h"
 #include "HDF5/H5Utilities.h"
 #include "HDF5/H5AttributeWriter.h"
+#include "Headers/LogTime.h"
 #include "MXADataModel/MXADataModel.h"
 #include "Utilities/StringUtils.h"
 
@@ -39,17 +40,17 @@ H5DataModelWriter::~H5DataModelWriter()
 // -----------------------------------------------------------------------------
 bool H5DataModelWriter::writeModelToFile(hid_t fileId)
 {
- /// std::cout << "Writing File Type/Version, DataRoot, and DataModel Groups..." << std::endl;
+//  std::cout << "Writing File Type/Version, DataRoot, and DataModel Groups..." << std::endl;printf("\n");
   if ( writeDataModelTemplate(fileId) < 0 ) return false;
- // std::cout << "Writing Data Dimensions..." << std::endl;
+//  std::cout << "Writing Data Dimensions..." << std::endl;printf("\n");
   if ( writeDataDimensions(fileId) < 0) return false;
-//  std::cout << "Writing Data Records..." << std::endl;
+//  std::cout << "Writing Data Records..." << std::endl;printf("\n");
   if ( writeDataRecords(fileId) < 0) return false;
- // std::cout << "Writing Required MetaData..." << std::endl;
+//  std::cout << "Writing Required MetaData..." << std::endl;  printf("\n");
   if ( writeRequiredMetaData(fileId) < 0) return false;
- // std::cout << "Writing User MetaData...." << std::endl;
+//  std::cout << "Writing User MetaData...." << std::endl;printf("\n");
   if ( writeUserMetaData(fileId) < 0) return false;
-//  std::cout << "Done Writing Model" << std::endl;
+//  std::cout << "Done Writing Model" << std::endl;printf("\n");
   return true;
 }
 
@@ -59,11 +60,27 @@ bool H5DataModelWriter::writeModelToFile(hid_t fileId)
 // -----------------------------------------------------------------------------
 int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
 {
-  H5Utilities::createPathGroups(fileId, MXA::DataDimensionsPath);
-  H5Utilities::createPathGroups(fileId, MXA::DataRecordsPath);
-  H5Utilities::createPathGroups(fileId, MXA::MetaDataPath);
+  herr_t err = -1;
+  err = _dataModel->getIODelegate()->createGroupsFromPath( MXA::DataDimensionsPath, fileId);
+  if (err < 0)
+  {
+    std::cout << logTime() << "Error Creating Data Dimension Parent Group" << std::endl;
+    return err;
+  }
+  err = _dataModel->getIODelegate()->createGroupsFromPath( MXA::DataRecordsPath, fileId);
+  if (err < 0)
+  {
+    std::cout << logTime() << "Error Creating Data Records Parent Group" << std::endl;
+    return err;
+  }
+  err = _dataModel->getIODelegate()->createGroupsFromPath( MXA::MetaDataPath, fileId);
+  if (err < 0)
+  {
+    std::cout << logTime() << "Error Creating MetaData Group" << std::endl;
+    return err;
+  }
   
-  herr_t err = 0;
+  err = 0;
   //Write the File Version
   float32 version = _dataModel->getFileVersion();
   err = H5Lite::writeDataset(fileId, const_cast<std::string&>(MXA::FileVersionPath), version, H5T_NATIVE_FLOAT);
@@ -87,6 +104,15 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
     std::cout << "Error Writing Data Root to HDF File" << std::endl;
     return err;
   }
+  
+  // Create the HDF5 Group structure for the actual Data Root
+//  H5Utilities::createPathGroups(fileId, _dataModel->getDataRoot());
+  err = _dataModel->getIODelegate()->createGroupsFromPath(_dataModel->getDataRoot(), fileId);
+  if (err < 0) 
+  {
+    std::cout << logTime() << "Error Creating Group structure for the Data Root" << std::endl;
+  }
+
   return err;
 }
 
@@ -117,23 +143,23 @@ int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
     H5Lite::writeDataset(gid, dsetName,  i, H5T_NATIVE_INT32);
     
     i = dim->getCount();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_COUNT_TAG), i, H5T_NATIVE_INT32);
+    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_COUNT_TAG), i);
     if (err<0) { std::cout << "Error writing attribute " << MXA::MXA_COUNT_TAG << std::endl; break;}
     
     i = dim->getStartValue();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_START_VALUE_TAG), i, H5T_NATIVE_INT32);
+    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_START_VALUE_TAG), i);
     if (err<0) { std::cout << "Error writing attribute " << MXA::MXA_START_VALUE_TAG << std::endl; break;}
       
     i = dim->getUniform();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_UNIFORM_TAG), i, H5T_NATIVE_INT32);
+    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_UNIFORM_TAG), i);
     if (err<0) { std::cout << "Error writing attribute " << MXA::MXA_UNIFORM_TAG << std::endl; break;}
       
     i = dim->getEndValue();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_END_VALUE_TAG), i, H5T_NATIVE_INT32);
+    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_END_VALUE_TAG), i);
     if (err<0) { std::cout << "Error writing attribute " << MXA::MXA_END_VALUE_TAG << std::endl; break;}
       
     i = dim->getIncrement();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_INCREMENT_TAG), i, H5T_NATIVE_INT32);
+    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_INCREMENT_TAG), i);
     if (err<0) { std::cout << "Error writing attribute " << MXA::MXA_INCREMENT_TAG << std::endl; break;}
     
     std::string s(dim->getDimensionName() );
@@ -202,11 +228,11 @@ int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, MXADataRecords &records
 
     // Set the attributes
     i = rec->getLuid();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_LUID_TAG), i, H5T_NATIVE_INT32);
+    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_LUID_TAG), i);
     if (err<0){std::cout << "Error Writing Attribute " << MXA::MXA_LUID_TAG << std::endl; break;}
     
     i = rec->getGuid();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_GUID_TAG), i, H5T_NATIVE_INT32);
+    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_GUID_TAG), i);
     if (err<0) {std::cout << "Error Writing Attribute " << MXA::MXA_GUID_TAG << std::endl; break;}
 
     std::string s = rec->getRecordName();
@@ -228,13 +254,18 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
 {
   int data = 0;
   herr_t err = 0;
-  H5Lite::writeDataset(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), data, H5T_NATIVE_INT32);
+  err = H5Lite::writeDataset(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), data, H5T_NATIVE_INT32);
+  if (err < 0)
+  {
+    std::cout << logTime() << "Error Creating Dataset for RequiredMetaData." << err << std::endl;
+    return err;
+  }
   std::map<std::string, std::string> metadata;
   _dataModel->getRequiredMetaData(metadata);
 
   for (std::map<std::string, std::string>::iterator iter=metadata.begin(); iter!=metadata.end(); iter++) {
     err = H5Lite::writeAttribute(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), const_cast<std::string&>( iter->first), iter->second);
-    if(err<0) {std::cout << "Error Writing Required MetaData Attribute " << MXA::RequiredMetaDataPath << std::endl; break;}
+    if(err<0) {std::cout << "Error Writing Required MetaData: " << iter->first << "=" << iter->second << " at path " << MXA::RequiredMetaDataPath << std::endl; break;}
   }
   return err;
 }

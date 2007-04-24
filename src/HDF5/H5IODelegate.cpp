@@ -1,3 +1,4 @@
+#include "Headers/LogTime.h"
 #include "HDF5/H5IODelegate.h"
 #include "HDF5/H5Lite.h"
 #include "HDF5/H5DataModelReader.h"
@@ -227,6 +228,12 @@ void H5IODelegate::closeMXAFile()
 // -----------------------------------------------------------------------------
 int32 H5IODelegate::createGroupsFromPath(std::string path, hid_t parent)
 {
+  
+  hid_t gid = 1;
+  herr_t err = -1;
+  std::string first;
+  std::string second;
+  
   if (parent <= 0) {
     std::cout << "Bad parent Id. Returning from createGroupsFromPath" << std::endl;
     return -1;
@@ -236,6 +243,17 @@ int32 H5IODelegate::createGroupsFromPath(std::string path, hid_t parent)
   if ( 0 == pos ) 
   {
     path = path.substr(1, path.size());
+  } else if (pos == std::string::npos) // Path contains only one element
+  {
+    gid = _createGroup(parent, path);
+    if (gid < 0)
+    {
+      std::cout << "Error creating group: " << path << " err:" << gid << std::endl;
+      return gid;
+    }
+    err = H5Gclose(gid);
+    if (err < 0) { std::cout << logTime() << "Error closing group during group creation." << std::endl; return err; }
+    return err; //Now return here as this was a special case.
   }
   
   //Remove any trailing slash
@@ -249,11 +267,7 @@ int32 H5IODelegate::createGroupsFromPath(std::string path, hid_t parent)
   {
     return -1; // The path that was passed in was only a slash.. 
   }
-  
-  hid_t gid = 1;
-  herr_t err = -1;
-  std::string first;
-  std::string second;
+
   
   pos = path.find_first_of("/", 0);
   while (pos != std::string::npos )

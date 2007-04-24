@@ -17,8 +17,50 @@
   if (err < 0 ) {std::cout << "Error closing DataType" << std::endl; retErr = err;}
 
 
+
+/*-------------------------------------------------------------------------
+ * Function: find_dataset
+ *
+ * Purpose: operator function used by H5LTfind_dataset
+ *
+ * Programmer: Pedro Vicente, pvn@ncsa.uiuc.edu
+ *
+ * Date: June 21, 2001
+ *
+ * Comments:
+ *
+ * Modifications:
+ *
+ *-------------------------------------------------------------------------
+ */
+static herr_t find_dataset( hid_t loc_id, const char *name, void *op_data)
+{
+
+ /* Define a default zero value for return. This will cause the iterator to continue if
+  * the dataset is not found yet.
+  */
+
+ int ret = 0;
+
+ char *dset_name = (char*)op_data;
+
+ /* Shut the compiler up */
+ loc_id=loc_id;
+
+ /* Define a positive value for return value if the dataset was found. This will
+  * cause the iterator to immediately return that positive value,
+  * indicating short-circuit success
+  */
+
+ if( strcmp( name, dset_name ) == 0 )
+  ret = 1;
+
+
+ return ret;
+}
+
 // -----------------------------------------------------------------------------
-//  Function operator for the findAttribute method
+//  
 // -----------------------------------------------------------------------------
 static herr_t find_attr( hid_t loc_id, const char *name, void *op_data)
 {
@@ -134,6 +176,20 @@ herr_t H5Lite::findAttribute( hid_t loc_id, std::string attrName )
  return ret;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+herr_t H5Lite::findDataset( hid_t loc_id, std::string dset_name )
+{
+
+ herr_t  ret;
+
+ ret = H5Giterate( loc_id, ".", 0, find_dataset, (void*)(dset_name.c_str() ) );
+
+ return ret;
+}
+
+
 
 // -----------------------------------------------------------------------------
 //  Writes a string to a HDF5 dataset
@@ -169,6 +225,8 @@ herr_t H5Lite::writeDataset (hid_t loc_id, std::string &dset_name, std::string &
                     retErr = err;
                   }
               }
+          } else {
+            retErr = did;
           }
           CloseH5D(did, err, retErr);
 //          err = H5Dclose(did);
@@ -214,7 +272,8 @@ herr_t H5Lite::writeAttribute(hid_t loc_id, std::string &objName, std::string &a
   herr_t retErr = 0;
 
   /* Get the type of object */
-  if (H5Gget_objinfo( loc_id, objName.c_str(), 1, &statbuf ) >= 0) {
+  retErr = H5Gget_objinfo( loc_id, objName.c_str(), 1, &statbuf );
+  if (retErr >= 0) {
     /* Open the object */
     obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
     if ( obj_id >= 0) {
@@ -515,14 +574,17 @@ herr_t H5Lite::getDatasetInfo( hid_t loc_id,
 }
 
 // -----------------------------------------------------------------------------
-//  
+//  You must close the attributeType argument or resource leaks will occur. Use
+//  H5Tclose(tid); after your call to this method if you do not need the id for
+//   anything.
 // -----------------------------------------------------------------------------
-herr_t H5Lite::getAttributeInfo(hid_t loc_id, std::string objName,
-             std::string attrName,
-             std::vector<hsize_t> &dims,
-             H5T_class_t &type_class,
-             size_t &type_size,
-             hid_t &tid)
+herr_t H5Lite::getAttributeInfo(hid_t loc_id, 
+                                std::string objName,
+                                std::string attrName,
+                                std::vector<hsize_t> &dims,
+                                H5T_class_t &type_class,
+                                size_t &type_size,
+                                hid_t &tid)
 {
    /* identifiers */
    hid_t      obj_id;
@@ -580,5 +642,4 @@ herr_t H5Lite::getAttributeInfo(hid_t loc_id, std::string objName,
  }
  return retErr;
 }
-
 
