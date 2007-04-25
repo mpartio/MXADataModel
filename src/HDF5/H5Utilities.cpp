@@ -1,8 +1,9 @@
-#include "Utilities/StringUtils.h"
-#include "HDF5/H5Lite.h"
-#include "HDF5/H5Utilities.h"
-#include "Headers/MXATypes.h"
 
+
+#include "HDF5/H5Utilities.h"
+#include "HDF5/H5Lite.h"
+#include "Utilities/StringUtils.h"
+#include "Headers/LogTime.h"
 
 // C++ Includes
 #include <iostream>
@@ -185,7 +186,8 @@ herr_t H5Utilities::getGroupObjects(hid_t loc_id, int typeFilter, std::list<std:
 // HDF Creation/Modification Methods
 hid_t H5Utilities::createGroup(hid_t loc_id, std::string group) 
 {
-  hid_t test_id, grp_id;
+  hid_t grp_id;
+  herr_t err = -1;
 
   // Suspend the HDF Error Handlers
   herr_t (*_oldHDF_error_func)(void *);
@@ -197,64 +199,95 @@ hid_t H5Utilities::createGroup(hid_t loc_id, std::string group)
   // Turn off error handling
   H5Eset_auto(NULL, NULL);
 
-
-  // check if it already exists
-  test_id = H5Gopen(loc_id, group.c_str());
-  if (test_id < 0) { 
-    #if DEBUG1
-    std::cout << "Group doesn't exist - creating: " << group << std::endl;
-    #endif
+  err = H5Gget_objinfo(loc_id, group.c_str(), 0, NULL);
+//  std::cout << "H5Gget_objinfo = " << err << " for " << group << std::endl;  
+  if (err == 0)
+  {
+    grp_id = H5Gopen(loc_id, group.c_str());
+  } else 
+  {
     grp_id = H5Gcreate(loc_id, group.c_str(), 0);
-  } else {
-    #if DEBUG1
-      std::cout << "Group already exists: " << group << std::endl;
-    #endif
-    grp_id = test_id;
   }
-
   // Turn the HDF Error handlers back on
   H5Eset_auto(_oldHDF_error_func, _oldHDF_error_client_data);
-
   return grp_id;
 }
 
-#if 0
-There is a bug in here somewhere that is causing HDF5 to not create a group 
-but create a dataset instead. Use the H5IODelegate->createGroupPaths() function instead.
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void H5Utilities::createGroups(hid_t loc_id, std::list<std::string> groups)
+int32 H5Utilities::createGroupsFromPath(std::string path, hid_t parent)
 {
-  hid_t grpId = loc_id;
-  std::list<hid_t> groupIds;
+  
+  hid_t gid = 1;
+  herr_t err = -1;
+  std::string first;
+  std::string second;
+  
+  if (parent <= 0) {
+    std::cout << "Bad parent Id. Returning from createGroupsFromPath" << std::endl;
+    return -1;
+  }
+  // remove any front slash
+  uint32 pos = path.find_first_of("/", 0);
+  if ( 0 == pos ) 
+  {
+    path = path.substr(1, path.size());
+  } 
+  else if (pos == std::string::npos) // Path contains only one element
+  {
+    gid = H5Utilities::createGroup(parent, path);
+    if (gid < 0)
+    {
+      std::cout << "Error creating group: " << path << " err:" << gid << std::endl;
+      return gid;
+    }
+    err = H5Gclose(gid);
+    if (err < 0) { std::cout << logTime() << "Error closing group during group creation." << std::endl; return err; }
+    return err; //Now return here as this was a special case.
+  }
+  
+  //Remove any trailing slash
+  pos = path.find_last_of("/");
+  if ( pos == (path.size() - 1) ) // slash was in the last position
+  {
+    path = path.substr(0, pos);
+  }
+  
+  if (path.size() == 0) 
+  {
+    return -1; // The path that was passed in was only a slash.. 
+  }
 
-  std::list<std::string>::const_iterator iter;
-  for (iter=groups.begin(); iter!=groups.end(); iter++) {
-    grpId = createGroup(grpId, *iter);
-    groupIds.push_back(grpId);
+  
+  pos = path.find_first_of("/", 0);
+  while (pos != std::string::npos )
+  {
+    first = path.substr(0, pos);
+    second = path.substr(pos+1, path.length() );
+    gid = H5Utilities::createGroup(parent,first);
+    if (gid < 0)
+    {
+      std::cout << "Error creating group:" << gid << std::endl;
+      return gid;
+    }
+    err = H5Gclose(gid);
+    pos = path.find_first_of("/", pos+1);
+    if (pos == std::string::npos) 
+    {
+      first += "/" + second;
+      gid = createGroup(parent,first);
+      if (gid < 0)
+      {
+        std::cout << "Error creating group:" << gid << std::endl;
+        return gid;
+      }
+      err = H5Gclose(gid);
+    }
   }
-  std::list<hid_t>::const_iterator citer;
-  for (citer=groupIds.begin(); citer!=groupIds.end(); citer++) {
-    H5Gclose((*citer));
-  }
+  return err;
 }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-void H5Utilities::createPathGroups(hid_t loc_id, std::string path, 
-				     bool trimlast)
-{
-  std::list<std::string> groups = StringUtils::splitString("/", path);
-  if (trimlast) {
-    groups.pop_back();
-  }
-  createGroups(loc_id, groups);
-}
-
-
-#endif
 
 //--------------------------------------------------------------------//
 // HDF Attribute Methods

@@ -61,19 +61,19 @@ bool H5DataModelWriter::writeModelToFile(hid_t fileId)
 int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
 {
   herr_t err = -1;
-  err = _dataModel->getIODelegate()->createGroupsFromPath( MXA::DataDimensionsPath, fileId);
+  err = H5Utilities::createGroupsFromPath( MXA::DataDimensionsPath, fileId);
   if (err < 0)
   {
     std::cout << logTime() << "Error Creating Data Dimension Parent Group" << std::endl;
     return err;
   }
-  err = _dataModel->getIODelegate()->createGroupsFromPath( MXA::DataRecordsPath, fileId);
+  err = H5Utilities::createGroupsFromPath( MXA::DataRecordsPath, fileId);
   if (err < 0)
   {
     std::cout << logTime() << "Error Creating Data Records Parent Group" << std::endl;
     return err;
   }
-  err = _dataModel->getIODelegate()->createGroupsFromPath( MXA::MetaDataPath, fileId);
+  err = H5Utilities::createGroupsFromPath( MXA::MetaDataPath, fileId);
   if (err < 0)
   {
     std::cout << logTime() << "Error Creating MetaData Group" << std::endl;
@@ -107,7 +107,7 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
   
   // Create the HDF5 Group structure for the actual Data Root
 //  H5Utilities::createPathGroups(fileId, _dataModel->getDataRoot());
-  err = _dataModel->getIODelegate()->createGroupsFromPath(_dataModel->getDataRoot(), fileId);
+  err = H5Utilities::createGroupsFromPath(_dataModel->getDataRoot(), fileId);
   if (err < 0) 
   {
     std::cout << logTime() << "Error Creating Group structure for the Data Root" << std::endl;

@@ -108,27 +108,11 @@ public:
    * @brief Returns the currently open filename as an absolute path
    */
   std::string getOpenFileName() { return this->_openFile; }
-  
-  /**
-   * @brief Given a path relative to the Parent ID, this method will create all
-   * the intermediate groups if necessary.
-   * @param path The path to either create or ensure exists
-   * @param parent The HDF unique id for the parent
-   * @return Error Condition: Negative is error. Positive is success.
-   */
-  herr_t  createGroupsFromPath(std::string path, int32 parent);
+
   
 protected:
   
-  /**
-   * @brief Creates a HDF Group by checking if the group already exists. If the 
-   * group already exists then that group is returned otherwise a new group is 
-   * created.
-   * @param loc_id The HDF unique id given to files or groups
-   * @param group The name of the group to create. Note that this group name should
-   * not be any sort of 'path'. It should be a single group.
-   */
-  hid_t _createGroup(hid_t loc_id, std::string group);
+
 
 private:
     H5IODelegate(const H5IODelegate&);   //Copy Constructor Not Implemented
