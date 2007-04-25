@@ -19,6 +19,7 @@
 #include "MXADataModel/MXADataSource.h"
 
 #include "HDF5/H5Lite.h"
+#include "HDF5/H5Utilities.h"
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>
@@ -55,7 +56,7 @@ public:
       std::string parentPath ( path.substr(0, pos)  );
       int32 value = 55;
       hid_t fileId = model->getIODelegate()->getOpenFileId();
-      model->getIODelegate()->createGroupsFromPath(parentPath,  fileId);
+      H5Utilities::createGroupsFromPath(parentPath,  fileId);
       //Write the Data to the HDF5 File
     return H5Lite::writeDataset(fileId, path, value, H5Lite::HDFTypeForPrimitive(value));
   }
