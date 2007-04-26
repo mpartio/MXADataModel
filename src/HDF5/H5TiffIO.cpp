@@ -112,7 +112,7 @@ herr_t H5TiffIO::_readGrayscaleTiff(TIFF *in, hid_t groupId,
   uint32  width, height;    /* image width & height */
   herr_t err = 0;
   
-  std::cout << "Importing grayscale tiff image" << std::endl;
+  //std::cout << "Importing grayscale tiff image" << std::endl;
   
   TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
   TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
@@ -155,7 +155,7 @@ herr_t H5TiffIO::_readGrayscaleTiff(TIFF *in, hid_t groupId,
   }
   
   // Need to update the attributes to be correct for a grayscale image
-  H5Lite::writeAttribute(groupId, 
+  H5Lite::writeAttributeStr(groupId, 
                          datasetName, 
                          const_cast<std::string&>(H5ImageConst::ImageSubclass), 
                          const_cast<std::string&>(H5ImageConst::ImageGrayScale) );
@@ -171,7 +171,7 @@ herr_t H5TiffIO::_readGrayscaleTiff(TIFF *in, hid_t groupId,
   //    "LL": (0,0) is at the lower left.
   //    "UR": (0,0) is at the upper right.
   //    "LR": (0,0) is at the lower right.
-  err = H5Lite::writeAttribute(groupId, 
+  err = H5Lite::writeAttributeStr(groupId, 
                                datasetName, 
                                const_cast<std::string&>(H5ImageConst::DisplayOrigin), 
                                const_cast<std::string&>(H5ImageConst::UpperLeft) );
@@ -283,7 +283,7 @@ herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName)
 
 //  err = H5LTset_attribute_string(groupId, pname, H5ImageConst::PalColorMap, H5ImageConst::RGB);
   std::string strPname(pname);
-  err = H5Lite::writeAttribute(groupId, 
+  err = H5Lite::writeAttributeStr(groupId, 
                                strPname, 
                                const_cast<std::string&>(H5ImageConst::PalColorMap), 
                                const_cast<std::string&>(H5ImageConst::RGB) );
@@ -293,7 +293,7 @@ herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName)
   }
 
 
-  err = H5Lite::writeAttribute(groupId, 
+  err = H5Lite::writeAttributeStr(groupId, 
                                strPname, 
                                const_cast<std::string&>(H5ImageConst::PalType), 
                                const_cast<std::string&>(H5ImageConst::Standard8) );
@@ -317,7 +317,7 @@ herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName)
   }
 
   // Set the image colorset (redundant information from pal_colormap
-  err = H5Lite::writeAttribute(groupId, 
+  err = H5Lite::writeAttributeStr(groupId, 
                                datasetName, 
                                const_cast<std::string&>(H5ImageConst::ImageColorModel),
                                const_cast<std::string&>(H5ImageConst::RGB) );
@@ -331,7 +331,7 @@ herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName)
   //    "LL": (0,0) is at the lower left.
   //    "UR": (0,0) is at the upper right.
   //    "LR": (0,0) is at the lower right.
-  err = H5Lite::writeAttribute(groupId,
+  err = H5Lite::writeAttributeStr(groupId,
                                  datasetName, 
                                  const_cast<std::string&>(H5ImageConst::DisplayOrigin),
                                  const_cast<std::string&>(H5ImageConst::UpperLeft) );
@@ -542,8 +542,7 @@ herr_t H5TiffIO::exportTiff(hid_t fileId, string filename,
   
   switch (imageClass) {
   case GrayscaleTiffImage:
-    err = _writeGrayscaleTiff(out, fileId, img_dataset_name, data,
-			      width, height);
+    err = _writeGrayscaleTiff(out, data, width, height);
     break;
   case PaletteColorTiffImage:
     err = _write8BitTiff(out, fileId, img_dataset_name, data, width, 
@@ -567,10 +566,10 @@ herr_t H5TiffIO::exportTiff(hid_t fileId, string filename,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5TiffIO::_writeGrayscaleTiff(TIFF *image, hid_t fileId, 
-				     string img_dataset_name,
-				     unsigned char *data, hsize_t width, 
-				     hsize_t height)
+herr_t H5TiffIO::_writeGrayscaleTiff(TIFF *image,
+                                     unsigned char *data, 
+                                     hsize_t width, 
+                                     hsize_t height)
 {
   herr_t err = 0;
 
@@ -592,11 +591,13 @@ herr_t H5TiffIO::_writeGrayscaleTiff(TIFF *image, hid_t fileId,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5TiffIO::_write8BitTiff(TIFF *image, hid_t fileId, 
-				string img_dataset_name,
-				unsigned char *data, hsize_t width,
-				hsize_t height,
-				hssize_t numpalettes)
+herr_t H5TiffIO::_write8BitTiff(TIFF *image, 
+                                hid_t fileId, 
+                                std::string img_dataset_name,
+                                unsigned char *data, 
+                                hsize_t width,
+                                hsize_t height,
+                                hssize_t numpalettes)
 {
   herr_t err = 0;
 

@@ -63,15 +63,15 @@ herr_t H5Image::H5IMmake_image_8bit( hid_t loc_id,
   return -1;
 
  /* Attach the CLASS attribute */
- if ( H5Lite::writeAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageClass), const_cast<std::string&>(H5ImageConst::Image) ) < 0 )
+ if ( H5Lite::writeAttributeStr( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageClass), const_cast<std::string&>(H5ImageConst::Image) ) < 0 )
   return -1;
 
  /* Attach the VERSION attribute */
- if ( H5Lite::writeAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::PalVersionValue) ) < 0 )
+ if ( H5Lite::writeAttributeStr( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::PalVersionValue) ) < 0 )
   return -1;
 
  /* Attach the IMAGE_SUBCLASS attribute */
- if ( H5Lite::writeAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::ImageIndexed) ) < 0 )
+ if ( H5Lite::writeAttributeStr( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::ImageIndexed) ) < 0 )
   return -1;
 
  return 0;
@@ -138,7 +138,7 @@ herr_t H5Image::H5IMmake_image_24bit( hid_t loc_id,
   return -1;
 
  /* Attach the CLASS attribute */
- if ( H5Lite::writeAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageClass), const_cast<std::string&>(H5ImageConst::Image) ) < 0 )
+ if ( H5Lite::writeAttributeStr( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageClass), const_cast<std::string&>(H5ImageConst::Image) ) < 0 )
   return -1;
 
  /* Attach the VERSION attribute */
@@ -146,11 +146,11 @@ herr_t H5Image::H5IMmake_image_24bit( hid_t loc_id,
   return -1;
 
  /* Attach the IMAGE_SUBCLASS attribute */
- if ( H5Lite::writeAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::ImageTrueColor) ) < 0 )
+ if ( H5Lite::writeAttributeStr( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::ImageTrueColor) ) < 0 )
   return -1;
 
  /* Attach the INTERLACE_MODE attribute. This attributes is only for true color images */
- if ( H5Lite::writeAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::InterlaceMode), const_cast<std::string&>(interlace) ) < 0 )
+ if ( H5Lite::writeAttributeStr( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::InterlaceMode), const_cast<std::string&>(interlace) ) < 0 )
   return -1;
 
  return 0;
@@ -449,11 +449,11 @@ herr_t H5Image::H5IMmake_palette( hid_t loc_id,
   return -1;
 
  /* Attach the attribute const_cast<std::string&>(H5ImageConst::ImageClass) to the >>palette<< dataset*/
- if ( H5Lite::writeAttribute( loc_id, pal_name, const_cast<std::string&>(H5ImageConst::ImageClass), const_cast<std::string&>(H5ImageConst::Palette) ) < 0 )
+ if ( H5Lite::writeAttributeStr( loc_id, pal_name, const_cast<std::string&>(H5ImageConst::ImageClass), const_cast<std::string&>(H5ImageConst::Palette) ) < 0 )
   return -1;
 
  /* Attach the attribute const_cast<std::string&>(H5ImageConst::PalVersion) to the >>palette<< dataset*/
- if ( H5Lite::writeAttribute( loc_id, pal_name, const_cast<std::string&>(H5ImageConst::PalVersion), const_cast<std::string&>(H5ImageConst::PalVersionValue) ) < 0 )
+ if ( H5Lite::writeAttributeStr( loc_id, pal_name, const_cast<std::string&>(H5ImageConst::PalVersion), const_cast<std::string&>(H5ImageConst::PalVersionValue) ) < 0 )
   return -1;
 
  return 0;

@@ -11,6 +11,8 @@
 #ifndef _HDF5MODELCODEC_H_
 #define _HDF5MODELCODEC_H_
 
+//-- MXA Includes
+#include "Headers/DLLExport.h"
 #include "Interfaces/IFileIODelegate.h"
 
 
@@ -33,7 +35,7 @@ class H5DataModelWriter;
  * @version 1.0
  *  
  */
-class  H5IODelegate : public IFileIODelegate
+class MXA_EXPORT H5IODelegate : public IFileIODelegate
 {
 
 public:

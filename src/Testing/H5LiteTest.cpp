@@ -203,7 +203,7 @@ void printData(std::vector<T> &data, std::vector<T> &rData) {
 //  
 // -----------------------------------------------------------------------------
 template <typename T>
-herr_t testMakeAttribute(hid_t &file_id, std::string objName, hid_t &dataType, T type ) {
+herr_t testMakeAttribute(hid_t &file_id, std::string objName, T type ) {
   std::string testAttribute("Test_Attribute");
   herr_t err = -1;
   int numElements = 4;
@@ -217,14 +217,14 @@ herr_t testMakeAttribute(hid_t &file_id, std::string objName, hid_t &dataType, T
     data.push_back( 0x0F );
   }
   std::cout << "Attribute->Write: " << objName;
-  err = H5Lite::writeAttribute( file_id, objName, testAttribute, dims, data, dataType );
+  err = H5Lite::writeAttribute( file_id, objName, testAttribute, dims, data );
   if (err < 0 ) {
-    std::cout << " - Failed - Could not Write the Attribute" << std::endl;
+    std::cout << " - Failed - Could not Write the Attribute: " << objName << std::endl;
     return err;
   }
   
   std::vector<T> rData(numElements, 0); //allocate and zero out the memory
-  err = H5Lite::readAttribute(file_id, objName, testAttribute, rData, dataType);
+  err = H5Lite::readAttribute(file_id, objName, testAttribute, rData);
   if ( data == rData ) {
     std::cout << " - Passed" << std::endl;
   } else { 
@@ -244,7 +244,7 @@ herr_t testMakeStringAttribute(hid_t file_id) {
   std::string strData ("Some data for the Attribute");
   int size = strData.size();
   std::cout << "WriteAttribute->H5T_STR_NULLTERM: ";
-  err = H5Lite::writeAttribute(file_id, dsetName, testAttribute, strData);
+  err = H5Lite::writeAttributeStr(file_id, dsetName, testAttribute, strData);
   
   
   std::string rData;
@@ -305,16 +305,16 @@ void H5LiteTest() {
   }  
   // ******************* Test Writing Attributes *******************************
   std::cout << "\n----------- Testing Writing/Reading of Attributes -----------" << std::endl;
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT8",  H5T_NATIVE_INT8, Int8Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT8", H5T_NATIVE_UINT8, Uint8Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT16",   H5T_NATIVE_INT16, Int16Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT16", H5T_NATIVE_UINT16, Uint16Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT32", H5T_NATIVE_INT32, Int32Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT32", H5T_NATIVE_UINT32, Uint32Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT64",  H5T_NATIVE_INT64, Int64Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT64", H5T_NATIVE_UINT64, Uint64Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "H5T_NATIVE_FLOAT", H5T_NATIVE_FLOAT, Float32Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "H5T_NATIVE_DOUBLE", H5T_NATIVE_DOUBLE, Float64Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT8",   Int8Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT8",  Uint8Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT16",    Int16Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT16",  Uint16Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT32",  Int32Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT32",  Uint32Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT64",   Int64Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT64",  Uint64Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "H5T_NATIVE_FLOAT",  Float32Type) >= 0);
+  BOOST_REQUIRE ( testMakeAttribute(file_id, "H5T_NATIVE_DOUBLE",  Float64Type) >= 0);
   BOOST_REQUIRE ( testMakeStringAttribute(file_id)  >= 0);
 
   /* Close the file. */

@@ -15,6 +15,7 @@
 
 
 //MXA Includes
+#include "Headers/DLLExport.h"
 #include "MXADataModel/MXADataModel.h"
 #include "Interfaces/IDataModelReader.h"
 #include "HDF5/H5IODelegate.h"
@@ -35,7 +36,7 @@
  * @version 1.0
  *   H5DataModelReader.h
  */
-class  H5DataModelReader : public IDataModelReader
+class MXA_EXPORT H5DataModelReader : public IDataModelReader
 {
 
 public:
@@ -53,19 +54,19 @@ public:
   herr_t readRequiredMetaData(hid_t locId);
   herr_t readUserMetaData(hid_t locId);
   
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
   template<typename T>
   int32 readPrimitiveAttribute( hid_t locId, const std::string &datasetPath, 
                                  const std::string &key, 
                                  const std::vector<hsize_t> &dims)
   {
-    
-    T test = 0x0;
-    hid_t type = H5Lite::HDFTypeForPrimitive(test);
     herr_t err = -1;
     if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
     {
       T data;
-      err = H5Lite::readAttribute(locId, datasetPath, key, data, type);
+      err = H5Lite::readAttribute(locId, datasetPath, key, data);
       if (err >= 0) {   
         MXAAttributePtr attr = MXAAttribute::createAttribute(key, data);
         this->_dataModel->addUserMetaData(attr);
@@ -74,7 +75,7 @@ public:
     else // Multi-Dimensional Data 
     {
       std::vector<T> data;
-      err = H5Lite::readAttribute(locId, datasetPath, key, data, type);
+      err = H5Lite::readAttribute(locId, datasetPath, key, data);
       if (err >= 0) {   
         MXAAttributePtr attr = MXAAttribute::createAttribute(key, data, dims);
         this->_dataModel->addUserMetaData(attr);

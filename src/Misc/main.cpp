@@ -10,6 +10,9 @@
 #include "hdf5.h"
 #include "H5LT.h"
 
+#define CLOSE_FILE 1
+
+#if 0
 template<typename T>
 hid_t HDFTypeForPrimitive(T value)
 {
@@ -38,7 +41,7 @@ hid_t HDFTypeForPrimitive(T value)
   if (typeid(value) == typeid(double)) return H5T_NATIVE_DOUBLE;
   return -1;
 }
-
+#endif
 
 
 // -----------------------------------------------------------------------------
@@ -227,8 +230,6 @@ int main(int argc, char **argv) {
       {
         std::cout << "Error creating data for " << i << "/" << j << std::endl;
       }
-      
-      
       err = H5Gclose(jGroup);
       if (err<0)
       {
@@ -240,10 +241,14 @@ int main(int argc, char **argv) {
     {
       std::cout << "Error Closing iGroup: " << i << std::endl;
     }
-    std::cout << logTime() << i << " : NOT Cycling File" << std::endl;
+#if CLOSE_FILE
+    std::cout << logTime() << i << " : Cycling File" << std::endl;
     err = H5Fclose(fileId);
     if (err < 0) { std::cout << "Error closing File:" << std::endl;}
     fileId = H5Fopen(filename.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
+#else 
+    std::cout << logTime() << i << " : NOT Cycling File" << std::endl;
+#endif
   }
   
   

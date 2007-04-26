@@ -7,7 +7,7 @@
 
 #include <vector>
 
-class  H5AttributeWriter : public IAttributeWriter
+class MXA_EXPORT H5AttributeWriter : public IAttributeWriter
 {
 public:
   H5AttributeWriter(){};
@@ -28,9 +28,7 @@ public:
     template<typename T>
     int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<hsize_t> &dims, std::vector<T> value)
     {
-      T test = value.front();
-      hid_t type = H5Lite::HDFTypeForPrimitive( test );
-      return H5Lite::writeAttribute(locationId, datasetPath, key, dims, value, type );
+      return H5Lite::writeAttribute(locationId, datasetPath, key, dims, value );
     }
     
 
@@ -40,7 +38,7 @@ public:
    int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::string &value)
    {
    //  std::cout << "Writing Attribute for String '" << key << "'" << std::endl;
-     return H5Lite::writeAttribute(locationId,datasetPath,key,value);
+     return H5Lite::writeAttributeStr(locationId,datasetPath,key,value);
    }
   
    // -----------------------------------------------------------------------------

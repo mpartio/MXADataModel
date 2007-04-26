@@ -388,13 +388,13 @@ H5Utilities::getAttributesMap(hid_t loc_id, std::string obj_name)
       	}
       	break;
       case H5T_INTEGER:
-      	err = H5Lite::readAttribute(loc_id, obj_name, (*iter), ires, MXATypes::Int32Type);
+      	err = H5Lite::readAttribute(loc_id, obj_name, (*iter), ires);
       	if (err >= 0) {
       	  attributes[(*iter)] = StringUtils::numToString(ires[0]);
       	}
       	break;
       case H5T_FLOAT:
-      	err = H5Lite::readAttribute(loc_id, obj_name, (*iter), fres, MXATypes::Float32Type);
+      	err = H5Lite::readAttribute(loc_id, obj_name, (*iter), fres);
       	if (err >= 0) {
       	  attributes[(*iter)] = StringUtils::numToString(fres[0]);
       	}

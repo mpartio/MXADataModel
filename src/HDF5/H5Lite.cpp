@@ -258,8 +258,8 @@ herr_t H5Lite::writeDataset (hid_t loc_id, std::string &dset_name, std::string &
 // -----------------------------------------------------------------------------
 //  Writes a string to an HDF5 Attribute
 // -----------------------------------------------------------------------------
-herr_t H5Lite::writeAttribute(hid_t loc_id, std::string &objName, std::string &attrName, 
-                            std::string &data )
+herr_t H5Lite::writeAttributeStr(hid_t loc_id, std::string &objName, std::string &attrName, 
+                            std::string data )
 {
   hid_t      attr_type;
   hid_t      attr_space_id;

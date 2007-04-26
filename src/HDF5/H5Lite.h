@@ -82,7 +82,7 @@ static std::string HDFTypeForPrimitiveAsStr(T value)
   if (typeid(value) == typeid(float)) return "H5T_NATIVE_FLOAT";
   if (typeid(value) == typeid(double)) return "H5T_NATIVE_DOUBLE";
   
-  std::cout << "Error: HDFTypeForPrimitive - Unknown Type: " << typeid(value).name() << std::endl;
+  std::cout << "Error: HDFTypeForPrimitiveAsStr - Unknown Type: " << typeid(value).name() << std::endl;
   return "";
 }
 
@@ -116,7 +116,7 @@ static hid_t HDFTypeForPrimitive(T value)
   if (typeid(value) == typeid(float)) return H5T_NATIVE_FLOAT;
   if (typeid(value) == typeid(double)) return H5T_NATIVE_DOUBLE;
   
-  std::cout << "Error: HDFTypeForPrimitive - Unknown Type: " << typeid(value).name() << std::endl;
+  std::cout << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
   return -1;
 }
 
@@ -179,9 +179,11 @@ static MXA_EXPORT herr_t findDataset( hid_t loc_id, std::string name );
  * pass H5T_NATIVE_UINT8 as the dataType.
  */
 template <typename T>
-static herr_t writeDataset (hid_t loc_id, std::string &datasetName, 
-                           std::vector<hsize_t> &dims, std::vector<T> &data,
-                           hid_t dataType)
+static herr_t writeDataset (hid_t loc_id, 
+                            std::string &datasetName, 
+                            std::vector<hsize_t> &dims, 
+                            std::vector<T> &data,
+                            hid_t dataType)
 {
   herr_t err = -1;
   hid_t did = -1;
@@ -261,8 +263,11 @@ static herr_t writeDataset (hid_t loc_id, std::string &datasetName,
  * pass H5T_NATIVE_UINT8 as the dataType.
  */
 template<typename T>
-static herr_t writeDataset(hid_t loc_id, std::string &datasetName,
-                           hsize_t* dims, signed int &rank, T* data,
+static herr_t writeDataset(hid_t loc_id, 
+                           std::string &datasetName,
+                           hsize_t* dims, 
+                           signed int &rank, 
+                           T* data,
                            hid_t dataType)
 {
   herr_t err = -1;
@@ -356,7 +361,9 @@ static herr_t writeDataset (hid_t loc_id,
  * @param data The actual data to write as a null terminated string
  * @return Standard HDF5 error conditions
  */
-static MXA_EXPORT herr_t  writeDataset (hid_t loc_id, std::string &dset_name, std::string &data);
+static MXA_EXPORT herr_t  writeDataset (hid_t loc_id, 
+                                        std::string &dset_name, 
+                                        std::string &data);
 
 /**
  * @brief Writes an Attribute to an HDF5 Object
@@ -386,8 +393,7 @@ static herr_t writeAttribute(hid_t loc_id,
                              std::string &objName, 
                              std::string &attrName, 
                              std::vector<hsize_t> &dims, 
-                             std::vector<T> &data, 
-                             hid_t dataType )
+                             std::vector<T> &data )
 {
   hid_t      obj_id, sid, attr_id;
   //hsize_t    dim_size = data.size();
@@ -395,6 +401,7 @@ static herr_t writeAttribute(hid_t loc_id,
   H5G_stat_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(data.front());
   /* Get the type of object */
   if (H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf) < 0) {
     std::cout << "Error getting object info." << std::endl;
@@ -459,13 +466,28 @@ static herr_t writeAttribute(hid_t loc_id,
 }
 
 /**
- * @brief
+ * @brief Writes a string as a null terminated attribute.
+ * @param loc_id The location to look for objName
+ * @param objName The Object to write the attribute to
+ * @param attrName The name of the Attribute
+ * @param data The string to write as the attribute
+ * @return Standard HDF error conditions
+ */
+static MXA_EXPORT herr_t  writeAttributeStr(hid_t loc_id, 
+                              std::string &objName, 
+                              std::string &attrName, 
+                              std::string data );
+
+/**
+ * @brief Writes an attribute to the given object. This method is designed with
+ * a Template parameter that represents a primitive value. If you need to write
+ * an array, please use the other over loaded method that takes a vector.
  */
 template <typename T>
 static herr_t  writeAttribute(hid_t loc_id, 
                              std::string &objName, 
                              std::string &attrName, 
-                             T &data )
+                             T data )
 {
   
   hid_t      obj_id, sid, attr_id;
@@ -538,18 +560,7 @@ static herr_t  writeAttribute(hid_t loc_id,
   return retErr;  
 }
 
-/**
- * @brief Writes a string as a null terminated attribute.
- * @param loc_id The location to look for objName
- * @param objName The Object to write the attribute to
- * @param attrName The name of the Attribute
- * @param data The string to write as the attribute
- * @return Standard HDF error conditions
- */
-static MXA_EXPORT herr_t  writeAttribute(hid_t loc_id, 
-                              std::string &objName, 
-                              std::string &attrName, 
-                              std::string &data );
+
 
 /**
  * @brief Reads data from the HDF5 File
@@ -702,7 +713,7 @@ static MXA_EXPORT herr_t readDataset(hid_t loc_id, std::string dsetName, std::st
  */
 template <typename T>
 static herr_t readAttribute(hid_t loc_id, std::string objName, std::string attrName,
-                    std::vector<T> &data, hid_t dataType)
+                    std::vector<T> &data)
 {
   /* identifiers */
   hid_t      obj_id;
@@ -711,6 +722,8 @@ static herr_t readAttribute(hid_t loc_id, std::string objName, std::string attrN
   herr_t retErr = 0;
   hid_t attr_id;
   hid_t tid;
+  T test;
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
   //std::cout << "   Reading Vector Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
   err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
@@ -762,8 +775,7 @@ template <typename T>
 static herr_t  readAttribute(hid_t loc_id, 
                             std::string objName, 
                             std::string attrName,
-                            T &data, 
-                            hid_t dataType)
+                            T &data)
 {
 
   /* identifiers */
@@ -772,6 +784,8 @@ static herr_t  readAttribute(hid_t loc_id,
   herr_t err = 0;
   herr_t retErr = 0;
   hid_t attr_id;
+  T test;
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
  // std::cout << "Reading Scalar style Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
   err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);

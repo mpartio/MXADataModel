@@ -163,11 +163,11 @@ int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
     if (err<0) { std::cout << "Error writing attribute " << MXA::MXA_INCREMENT_TAG << std::endl; break;}
     
     std::string s(dim->getDimensionName() );
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_NAME_TAG), s );
+    err = H5Lite::writeAttributeStr(gid, dsetName, const_cast<std::string&>(MXA::MXA_NAME_TAG), s );
     if (err<0) { std::cout << "Error writing attribute " << MXA::MXA_NAME_TAG << std::endl; break;}
     
     s = dim->getAltName();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_ALT_NAME_TAG), s);   
+    err = H5Lite::writeAttributeStr(gid, dsetName, const_cast<std::string&>(MXA::MXA_ALT_NAME_TAG), s);   
     if (err<0) { std::cout << "Error writing attribute " << MXA::MXA_ALT_NAME_TAG << std::endl; break;}
   }
   
@@ -236,11 +236,11 @@ int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, MXADataRecords &records
     if (err<0) {std::cout << "Error Writing Attribute " << MXA::MXA_GUID_TAG << std::endl; break;}
 
     std::string s = rec->getRecordName();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_NAME_TAG), s);
+    err = H5Lite::writeAttributeStr(gid, dsetName, const_cast<std::string&>(MXA::MXA_NAME_TAG), s);
     if (err<0) {std::cout << "Error Writing Attribute " << MXA::MXA_NAME_TAG << std::endl; break;}
     
     s = rec->getAltName();
-    err = H5Lite::writeAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_ALT_NAME_TAG), s );
+    err = H5Lite::writeAttributeStr(gid, dsetName, const_cast<std::string&>(MXA::MXA_ALT_NAME_TAG), s );
     if (err<0) {std::cout << "Error Writing Attribute " << MXA::MXA_ALT_NAME_TAG << std::endl; break;}
   }
   return err;
@@ -264,7 +264,7 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
   _dataModel->getRequiredMetaData(metadata);
 
   for (std::map<std::string, std::string>::iterator iter=metadata.begin(); iter!=metadata.end(); iter++) {
-    err = H5Lite::writeAttribute(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), const_cast<std::string&>( iter->first), iter->second);
+    err = H5Lite::writeAttributeStr(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), const_cast<std::string&>( iter->first), iter->second);
     if(err<0) {std::cout << "Error Writing Required MetaData: " << iter->first << "=" << iter->second << " at path " << MXA::RequiredMetaDataPath << std::endl; break;}
   }
   return err;

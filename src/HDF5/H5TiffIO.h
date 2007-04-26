@@ -11,6 +11,9 @@
 #ifndef _MHDTIFFIO_H_
 #define _MHDTIFFIO_H_
 
+//-- MXA Headers
+#include "Headers/DLLExport.h"
+
 //-- HDF Headers
 #include "hdf5.h"
 
@@ -22,10 +25,15 @@
 
 using namespace std;
 
+namespace TiffIOConst {
+  const std::string TifExtension(".tif");
+  const std::string TiffExtension(".tiff");
+}
+
 //#define H5IM_INTERLACE_PIXEL "INTERLACE_PIXEL"
 const std::string H5IM_INTERLACE_PIXEL("INTERLACE_PIXEL");
 
-class H5TiffIO 
+class MXA_EXPORT H5TiffIO 
 {
  public:
   explicit H5TiffIO(hid_t fileId);
@@ -141,10 +149,10 @@ class H5TiffIO
    * @param height
    * @return
    */
-  herr_t _writeGrayscaleTiff(TIFF *image, hid_t fileId, 
-             string img_dataset_name,
-             unsigned char *data, hsize_t width, 
-             hsize_t height);
+  herr_t _writeGrayscaleTiff(TIFF *image,
+                             unsigned char *data, 
+                             hsize_t width, 
+                             hsize_t height);
   
   
   /**

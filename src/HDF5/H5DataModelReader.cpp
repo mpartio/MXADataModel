@@ -172,27 +172,27 @@ MXADataDimensionPtr H5DataModelReader::_loadDataDimension(hid_t loc_id, std::str
     std::cout << "Error reading dimension alt name value" << std::endl;
   }
   // Count
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_COUNT_TAG, count, H5T_NATIVE_INT32);
+  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_COUNT_TAG, count);
   if (err < 0) { 
     std::cout << "Error reading dimension count value" << std::endl;
   }
   // Start Value
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_START_VALUE_TAG, start_val, H5T_NATIVE_INT32);
+  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_START_VALUE_TAG, start_val);
   if (err < 0) { 
     std::cout << "Error reading dimension start index value" << std::endl;
   }
   // Uniform
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_UNIFORM_TAG, uniform, H5T_NATIVE_INT32);
+  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_UNIFORM_TAG, uniform);
   if (err < 0) {
     std::cout << "No Uniform increment marker in dimension" << std::endl;
   }
   // Increment
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_INCREMENT_TAG, increment, H5T_NATIVE_INT32);
+  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_INCREMENT_TAG, increment);
   if (err < 0) {
     std::cout << "No increment value in dimension" << std::endl;
   }
   // End Value
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_END_VALUE_TAG, end_val, H5T_NATIVE_INT32);
+  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_END_VALUE_TAG, end_val);
   if (err < 0) { 
     std::cout << "Error reading dimension end index value" << std::endl;
   }
@@ -348,13 +348,13 @@ MXADataRecordPtr H5DataModelReader::_loadDataRecord(hid_t loc_id, std::string na
     return record;
   }
   // GUID
-  err = H5Lite::readAttribute(loc_id, name, MXA::MXA_GUID_TAG, guid, H5T_NATIVE_INT32);
+  err = H5Lite::readAttribute(loc_id, name, MXA::MXA_GUID_TAG, guid);
   if (err < 0) { 
     std::cout << "Error reading data record GUID value" << std::endl;
     return record;
   }
   // LUID
-  err = H5Lite::readAttribute(loc_id, name, MXA::MXA_LUID_TAG, luid, H5T_NATIVE_INT32);
+  err = H5Lite::readAttribute(loc_id, name, MXA::MXA_LUID_TAG, luid);
   if (err < 0) { 
     std::cout << "Error reading data record LUID value" << std::endl;
     return record;

@@ -37,27 +37,32 @@ using boost::unit_test::test_suite;
   #define FILE_NAME_AFTER "/tmp/DataImportTest-After.h5"
 #endif
 
-//static int GLOBAL_INT = 0;
-// -----------------------------------------------------------------------------
-//  This class is used to show simply how to write some data into an HDF5 file.
-//  Some of the features of the IDataImportDelegate are not shown. This class
-//  will simply write a single value to the HDF5 file.
-// -----------------------------------------------------------------------------
+
+/**
+*  @brief This class is used to show simply how to write some data into an HDF5 file.
+*  Some of the features of the IDataImportDelegate are not shown. This class
+*  will simply write a single value to the HDF5 file.
+* @author Mike Jackson
+* @date April 2007
+*/
 class H5ImportTestDelegate: public IDataImportDelegate
 {
 public:
   H5ImportTestDelegate(){};
   virtual ~H5ImportTestDelegate(){};
 
+// -----------------------------------------------------------------------------
+//  Implemented Method from the IDataImportDelegate interface 
+// -----------------------------------------------------------------------------
   int32 importDataSource(MXADataSourcePtr dataSource, MXADataModelPtr model)
   {
-      std::string path ( dataSource->generateInternalPath() );
-      uint32 pos = path.find_last_of("/");
-      std::string parentPath ( path.substr(0, pos)  );
-      int32 value = 55;
-      hid_t fileId = model->getIODelegate()->getOpenFileId();
-      H5Utilities::createGroupsFromPath(parentPath,  fileId);
-      //Write the Data to the HDF5 File
+    std::string path ( dataSource->generateInternalPath() );
+    uint32 pos = path.find_last_of("/");
+    std::string parentPath ( path.substr(0, pos)  );
+    int32 value = 55;
+    hid_t fileId = model->getIODelegate()->getOpenFileId();
+    H5Utilities::createGroupsFromPath(parentPath,  fileId);
+    //Write the Data to the HDF5 File
     return H5Lite::writeDataset(fileId, path, value, H5Lite::HDFTypeForPrimitive(value));
   }
   
@@ -77,24 +82,26 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
 {
   //Create the DataImport Class
   MXADataImportPtr dataImport( new MXADataImport() );
+  // Set the HDF5 Output file to write all the data into
   dataImport->setOutputFilePath(outputFilePath);
+  // Set the MXADataModel Object into the dataImport Object
   dataImport->setDataModel(model);
   
   // Create an Import Delegate to use for the DataSources
   IDataImportDelegatePtr delegatePtr( new H5ImportTestDelegate());
   
-  
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
   MXADataDimension* dim0 = model->getDataDimension(0); // Get the first Dimension, since there is only one this works
-  BOOST_REQUIRE(dim0 != NULL);
+  BOOST_REQUIRE(dim0 != NULL); // Used for Boost Unit Test Framework
   
   MXADataDimension* dim1 = model->getDataDimension(1);
-  BOOST_REQUIRE(dim1 != NULL);
+  BOOST_REQUIRE(dim1 != NULL); // Used for Boost Unit Test Framework
   
-  
+  // Create a DataRecord entry for the Data Model
   MXADataRecordPtr record = model->getDataRecordByPath("DataRecordContainer/Test Data/Deep Nested Data");
-  BOOST_REQUIRE(NULL != record.get());
+  BOOST_REQUIRE(NULL != record.get()); // Used for Boost Unit Test Framework
 
+  // Set the start/end/increment values for each Data Dimension
   int dim0Start = dim0->getStartValue();
   int dim0End = dim0->getEndValue();
   int dim0Increment = dim0->getIncrement();
@@ -102,6 +109,9 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   int dim1Start = dim1->getStartValue();
   int dim1End = dim1->getEndValue();
   int dim1Increment = dim1->getIncrement();
+  
+  // Create a nested loop to create the necessary DataSource objects that will
+  //  be used to import the data into the HDF5 file
   std::cout << "CREATING DATA SOURCES" << std::endl;
   for( int i = dim0Start; i <= dim0End; i += dim0Increment )
   {
@@ -121,15 +131,16 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
     }
   }
   
+  // Import the Data into the HDF5 File
   std::cout << "IMPORTING DATA NOW" << std::endl;
   int32 err = dataImport->import();
-  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(err >= 0); // Used for Boost Unit Test Framework
   
 }
 
 
 // -----------------------------------------------------------------------------
-//  Creates a Data Model to use
+//  Creates a Data Model programmitically to use with our data import
 // -----------------------------------------------------------------------------
 MXADataModelPtr createSimpleModel()
 {
@@ -139,22 +150,23 @@ MXADataModelPtr createSimpleModel()
 	  model->setFileType(MXA::MXACurrentFileType);
 	  model->setFileVersion(MXA::MXACurrentFileVersion);
 
-	  // ---------- Test creation/addition of Data Dimensions
+	  // ---------- Create 2 Data Dimensions
 	  MXADataDimensionPtr dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
 	  model->addDataDimension(dim0);
     MXADataDimensionPtr dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
     model->addDataDimension(dim1);
 	  	  
-	  //Create Data Records
+	  // ---------- Create Data Records
 	  MXADataRecordPtr rec1 = MXADataRecord::New(0, std::string("DataRecordContainer"), std::string("DRC1") );
 	  model->addDataRecord(rec1);
-	  //Create Data Records with Parents
+	  
+    // ---------- Create Data Records with Parents
 	  MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Test Data"), std::string("Test Data") );
 	  model->addDataRecord(rec2, rec1);
     MXADataRecordPtr rec3 = MXADataRecord::New(0, std::string("Deep Nested Data"), std::string("Nested Data") );
     model->addDataRecord(rec3, rec2);   
 
-	  //Create the Required MetaData 
+	  // ---------- Create the Required MetaData 
 	  std::map<std::string, std::string> md;
 	  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
 	  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
@@ -165,7 +177,6 @@ MXADataModelPtr createSimpleModel()
 	  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
 	  md[MXA::MXA_RELEASE_TAG] = "90312901291239012390";
 	  model->setRequiredMetaData(md);
-	  
 	  
 	  return modelPtr;
 }
