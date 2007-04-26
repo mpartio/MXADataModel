@@ -28,6 +28,7 @@ ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
 
 # ---------- Find Boost Headers/Libraries -----------------------
+SET (Boost_USE_FILESYSTEM TRUE)
 INCLUDE (${PROJECT_SOURCE_DIR}/CMake/FindBoost.cmake)
 IF(NOT Boost_FOUND)
   MESSAGE(FATAL_ERROR "Boost was not found. ${Boost_DIR_MESSAGE}")
@@ -141,10 +142,12 @@ IF(MXA_USE_TIFF)
 	FIND_PACKAGE(TIFF REQUIRED)
 	SET(MXA_HDF5_TIFF_SRCS
 		src/HDF5/H5TiffIO.cpp
+		src/HDF5/H5TiffImportDelegate.cpp
 		)
 		
 	SET(MXA_HDF5_TIFF_HEADERS
 		src/HDF5/H5TiffIO.h
+		src/HDF5/H5TiffImportDelegate.h
 		)
 		
 		SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
@@ -157,17 +160,8 @@ SET( MXA_XML_SRCS
   src/XMLTools/MHDXML.cpp
 )  
 
-
 # - Combine all the source files together -----------------------------
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
-
-# ------------Include Libraries ----------------------------------------
-#SET (EXTRA_LIBS 
-#  ${ZLIB_LIBRARIES}
-#  ${HDF5_LIBRARIES}
-#  ${TIFF_LIBRARIES}
-#  ${SZLIB_LIBRARIES}
-#)
 
 # ---------- Set up the Project Options -----------------------
 # Build shared libraries
@@ -188,9 +182,9 @@ ENDIF (MXA_BUILD_SHARED_LIBS)
 
 
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
-TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${EXTRA_LIBS} )
+TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${EXTRA_LIBS} ${Boost_LIBRARIES})
 
 
-ADD_EXECUTABLE(MiscTesting src/Misc/main.cpp src/HDF5/H5Lite.cpp)
-TARGET_LINK_LIBRARIES(MiscTesting ${HDF5_LIBRARIES})
+#ADD_EXECUTABLE(H5ResourceTest src/Misc/HDFResourceTest.cpp src/HDF5/H5Lite.cpp)
+#TARGET_LINK_LIBRARIES(H5ResourceTest ${HDF5_LIBRARIES})
 
