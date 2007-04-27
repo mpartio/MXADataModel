@@ -30,7 +30,7 @@ H5IODelegate::~H5IODelegate()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXATypes::MXAError H5IODelegate::writeFromModel(std::string fileName, MXADataModel* model, bool closeWhenFinished)
+MXATypes::MXAError H5IODelegate::writeModelToFile(std::string fileName, MXADataModel* model, bool closeWhenFinished)
 {
   
   int32 success = -1;
@@ -60,7 +60,7 @@ MXATypes::MXAError H5IODelegate::writeFromModel(std::string fileName, MXADataMod
 //  Opens the file and then reads the data model from the file. Then closes the
 //  when reading is complete.
 // -----------------------------------------------------------------------------
-MXATypes::MXAError H5IODelegate::readIntoModel(std::string fileName, MXADataModel* model, bool closeWhenFinished)
+MXATypes::MXAError H5IODelegate::readModelFromFile(std::string fileName, MXADataModel* model, bool closeWhenFinished)
 {
   //Open the HDF File
   _fileId = openMXAFile(fileName, true);

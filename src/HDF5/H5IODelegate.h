@@ -52,7 +52,7 @@ public:
   * @param model The Model to serialize
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
-  MXATypes::MXAError writeFromModel(std::string fileName,MXADataModel* model, bool closeWhenFinished=false);
+  int32 writeModelToFile(std::string fileName,MXADataModel* model, bool closeWhenFinished=false);
   
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
@@ -60,7 +60,7 @@ public:
   * release the Object. If an Error occurs during the reading, then a NULL pointer
   * is returned.
   */
-  MXATypes::MXAError readIntoModel(std::string fileName, MXADataModel* model, bool closeWhenFinished=false);
+  int32 readModelFromFile(std::string fileName, MXADataModel* model, bool closeWhenFinished=false);
 
   /**
    * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model
