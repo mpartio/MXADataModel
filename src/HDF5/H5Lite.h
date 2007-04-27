@@ -722,7 +722,7 @@ static herr_t readAttribute(hid_t loc_id, std::string objName, std::string attrN
   herr_t retErr = 0;
   hid_t attr_id;
   hid_t tid;
-  T test;
+  T test = 0x00;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
   //std::cout << "   Reading Vector Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
@@ -784,7 +784,7 @@ static herr_t  readAttribute(hid_t loc_id,
   herr_t err = 0;
   herr_t retErr = 0;
   hid_t attr_id;
-  T test;
+  T test = 0x00;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
  // std::cout << "Reading Scalar style Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */

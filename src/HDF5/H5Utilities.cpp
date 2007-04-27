@@ -358,8 +358,7 @@ std::list<std::string> H5Utilities::getAllAttributeNames(hid_t loc_id,
 
 // Returns a std::map with all of the attributes for obj_name 
 //  and their attribute values in a std::string std::map
-std::map<std::string, std::string>
-H5Utilities::getAttributesMap(hid_t loc_id, std::string obj_name)
+std::map<std::string, std::string> H5Utilities::getAttributesMap(hid_t loc_id, std::string obj_name)
 {	
   //AbstractKeyValuePtr attr(new StringAttribute(key, value));
   std::map<std::string, std::string> attributes;

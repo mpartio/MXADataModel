@@ -9,9 +9,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-
-#include "HDF5/H5Lite.h"
+//--MXA Includes
+#include "Headers/LogTime.h"
 #include "Headers/MXATypes.h"
+#include "HDF5/H5Lite.h"
 
 //-- Boost includes
 #include <boost/test/unit_test.hpp>
@@ -272,7 +273,7 @@ void H5LiteTest() {
   herr_t err = H5Gclose(sintGid);
   err = H5Gclose(uintGid);
   // ******************* Test Writing Data *************************************
-  std::cout << "\n----------- Testing Writing/Reading of Datasets -----------" << std::endl;
+  std::cout << logTime() << "----------- Testing Writing/Reading of Datasets -----------" << std::endl;
   BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT8",  H5T_NATIVE_INT8, MXATypes::Int8Type) >= 0);
   BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT8", H5T_NATIVE_UINT8, Uint8Type) >= 0);
   BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT16",   H5T_NATIVE_INT16, Int16Type) >= 0);
@@ -287,9 +288,11 @@ void H5LiteTest() {
  
   for (int i = 0; i < 1; ++i)
   {
-    char name[10]; memset(name, 0, 10);
-    snprintf(name, sizeof(name), "%d/", i);
-    hid_t g = H5Gcreate(file_id, name, 0);
+    //char name[10]; memset(name, 0, 10);
+    //snprintf(name, sizeof(name), "%d/", i);
+    std::stringstream ss;
+    ss << i << "/";
+    hid_t g = H5Gcreate(file_id, ss.str().c_str(), 0);
     //std::cout << "\n----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl; 
     BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Signed Int-H5T_NATIVE_INT8 Ptr",  H5T_NATIVE_INT8, Int8Type) >= 0);
     BOOST_REQUIRE ( testMakeDatasetFromPointer(g, "Unsigned Int-H5T_NATIVE_UINT8 Ptr", H5T_NATIVE_UINT8, Uint8Type) >= 0);
@@ -304,7 +307,7 @@ void H5LiteTest() {
     err = H5Gclose(g); //Close the group
   }  
   // ******************* Test Writing Attributes *******************************
-  std::cout << "\n----------- Testing Writing/Reading of Attributes -----------" << std::endl;
+  std::cout << logTime() << "----------- Testing Writing/Reading of Attributes -----------" << std::endl;
   BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT8",   Int8Type) >= 0);
   BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT8",  Uint8Type) >= 0);
   BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT16",    Int16Type) >= 0);
@@ -319,7 +322,7 @@ void H5LiteTest() {
 
   /* Close the file. */
   H5Fclose( file_id );
-  std::cout << "Testing Complete" << std::endl;
+  std::cout << logTime() << "Testing Complete" << std::endl;
 }
 
 
