@@ -106,7 +106,7 @@ H5Lite::~H5Lite()
 // -----------------------------------------------------------------------------
 //  Opens an ID for HDF5 operations
 // -----------------------------------------------------------------------------
-herr_t H5Lite::openId( hid_t loc_id, std::string obj_name, int obj_type)
+herr_t H5Lite::openId( hid_t loc_id, const std::string& obj_name, int obj_type)
 {
 
  hid_t   obj_id = -1;
@@ -164,7 +164,7 @@ herr_t H5Lite::closeId( hid_t obj_id, int obj_type )
 // -----------------------------------------------------------------------------
 //  Finds an Attribute given an object to look in
 // -----------------------------------------------------------------------------
-herr_t H5Lite::findAttribute( hid_t loc_id, std::string attrName )
+herr_t H5Lite::findAttribute( hid_t loc_id, const std::string& attrName )
 {
 
  unsigned int attr_num;
@@ -179,12 +179,12 @@ herr_t H5Lite::findAttribute( hid_t loc_id, std::string attrName )
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5Lite::findDataset( hid_t loc_id, std::string dset_name )
+herr_t H5Lite::findDataset( hid_t loc_id, const std::string& dsetName )
 {
 
  herr_t  ret;
 
- ret = H5Giterate( loc_id, ".", 0, find_dataset, (void*)(dset_name.c_str() ) );
+ ret = H5Giterate( loc_id, ".", 0, find_dataset, (void*)(dsetName.c_str() ) );
 
  return ret;
 }
@@ -194,7 +194,7 @@ herr_t H5Lite::findDataset( hid_t loc_id, std::string dset_name )
 // -----------------------------------------------------------------------------
 //  Writes a string to a HDF5 dataset
 // -----------------------------------------------------------------------------
-herr_t H5Lite::writeDataset (hid_t loc_id, std::string &dset_name, std::string &data)
+herr_t H5Lite::writeStringDataset (hid_t loc_id, const std::string& dsetName, const std::string &data)
 {
   hid_t   did=-1;
   hid_t   sid=-1;
@@ -215,7 +215,7 @@ herr_t H5Lite::writeDataset (hid_t loc_id, std::string &dset_name, std::string &
         if ( (sid = H5Screate( H5S_SCALAR )) >= 0 )
         {
           /* Create the dataset. */
-          if ( (did = H5Dcreate(loc_id, dset_name.c_str(), tid, sid, H5P_DEFAULT)) >= 0 )
+          if ( (did = H5Dcreate(loc_id, dsetName.c_str(), tid, sid, H5P_DEFAULT)) >= 0 )
           {
              if ( !data.empty() )
               {
@@ -258,8 +258,10 @@ herr_t H5Lite::writeDataset (hid_t loc_id, std::string &dset_name, std::string &
 // -----------------------------------------------------------------------------
 //  Writes a string to an HDF5 Attribute
 // -----------------------------------------------------------------------------
-herr_t H5Lite::writeAttributeStr(hid_t loc_id, std::string &objName, std::string &attrName, 
-                            std::string data )
+herr_t H5Lite::writeStringAttribute(hid_t loc_id, 
+                                 const std::string& objName, 
+                                 const std::string& attrName, 
+                                 const std::string& data )
 {
   hid_t      attr_type;
   hid_t      attr_space_id;
@@ -338,7 +340,7 @@ herr_t H5Lite::writeAttributeStr(hid_t loc_id, std::string &objName, std::string
 // -----------------------------------------------------------------------------
 //  Reads a String dataset
 // -----------------------------------------------------------------------------
-herr_t H5Lite::readDataset(hid_t loc_id, std::string dsetName, std::string &data) {
+herr_t H5Lite::readStringDataset(hid_t loc_id, const std::string& dsetName, std::string &data) {
   hid_t did; // dataset id
   hid_t tid; //type id
   herr_t err;
@@ -372,7 +374,7 @@ herr_t H5Lite::readDataset(hid_t loc_id, std::string dsetName, std::string &data
 // -----------------------------------------------------------------------------
 //  Reads a string Attribute from the HDF file
 // -----------------------------------------------------------------------------
-herr_t H5Lite::readAttribute(hid_t loc_id, std::string objName, std::string attrName,
+herr_t H5Lite::readStringAttribute(hid_t loc_id, const std::string& objName, const std::string& attrName,
                               std::string &data)
 {
   
@@ -429,7 +431,7 @@ herr_t H5Lite::readAttribute(hid_t loc_id, std::string objName, std::string attr
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5Lite::getDatasetNDims( hid_t loc_id, std::string dset_name, hid_t &rank)
+herr_t H5Lite::getDatasetNDims( hid_t loc_id, const std::string& dsetName, hid_t &rank)
 {
  hid_t       did;
  hid_t       sid;
@@ -438,7 +440,7 @@ herr_t H5Lite::getDatasetNDims( hid_t loc_id, std::string dset_name, hid_t &rank
  rank = 0;
  
  /* Open the dataset. */
- if ( (did = H5Dopen( loc_id, dset_name.c_str() )) < 0 )
+ if ( (did = H5Dopen( loc_id, dsetName.c_str() )) < 0 )
   return -1;
 
  /* Get the dataspace handle */
@@ -472,8 +474,8 @@ herr_t H5Lite::getDatasetNDims( hid_t loc_id, std::string dset_name, hid_t &rank
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5Lite::getAttributeNDims(hid_t loc_id, std::string objName, 
-                                std::string attrName, hid_t &rank)
+herr_t H5Lite::getAttributeNDims(hid_t loc_id, const std::string& objName, 
+                                const std::string& attrName, hid_t &rank)
 {
    /* identifiers */
    hid_t      obj_id;
@@ -517,7 +519,7 @@ herr_t H5Lite::getAttributeNDims(hid_t loc_id, std::string objName,
 //  Get the dataset information
 // -----------------------------------------------------------------------------
 herr_t H5Lite::getDatasetInfo( hid_t loc_id,
-                             std::string dsetName,
+                             const std::string& dsetName,
                              std::vector<hsize_t> &dims,
                              H5T_class_t &classType,
                              size_t &sizeType )
@@ -579,8 +581,8 @@ herr_t H5Lite::getDatasetInfo( hid_t loc_id,
 //   anything.
 // -----------------------------------------------------------------------------
 herr_t H5Lite::getAttributeInfo(hid_t loc_id, 
-                                std::string objName,
-                                std::string attrName,
+                                const std::string& objName,
+                                const std::string& attrName,
                                 std::vector<hsize_t> &dims,
                                 H5T_class_t &type_class,
                                 size_t &type_size,

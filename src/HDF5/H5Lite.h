@@ -8,12 +8,12 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef HDF5HIGHLEVEL_H_
-#define HDF5HIGHLEVEL_H_
+#ifndef _HDF5_LITE_H_
+#define _HDF5_LITE_H_
 
 #include "Headers/DLLExport.h"
 
-//-- C++ Headers
+//-- STL Headers
 #include <string>
 #include <iostream>
 #include <vector>
@@ -26,10 +26,10 @@
 //TODO: Add test for datasetInfo
 
 /**
- * @brief
- * @class
- * @author
- * @date
+ * @brief Class to bring together some high level methods to read/write data to HDF5 files.
+ * @class H5Lite
+ * @author Mike Jackson
+ * @date April 2007
  */
 class H5Lite
 {
@@ -38,11 +38,11 @@ public:
 /**
  * @brief Opens and object for HDF5 operations
  * @param loc_id The parent object that holds the true object we want to open
- * @param obj_name The string name of the object
- * @param The HDF5_TYPE of object
+ * @param objName The string name of the object
+ * @param obj_type The HDF5_TYPE of object
  * @return Standard HDF5 Error Conditions
  */
-static MXA_EXPORT herr_t openId( hid_t loc_id, std::string obj_name, int obj_type);
+static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int obj_type);
                      
 /**
  * @brief Opens an HDF5 Object
@@ -52,9 +52,12 @@ static MXA_EXPORT herr_t openId( hid_t loc_id, std::string obj_name, int obj_typ
  */
 static MXA_EXPORT herr_t closeId( hid_t obj_id, int obj_type );
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
+/**
+* @brief Returns the HDF Type for a given primitive value. 
+ * @param value A value to use. Can be anything. Just used to get the type info
+ * from
+ * @return A std::string representing the HDF5 Type
+ */
 template<typename T>
 static std::string HDFTypeForPrimitiveAsStr(T value)
 {
@@ -86,9 +89,12 @@ static std::string HDFTypeForPrimitiveAsStr(T value)
   return "";
 }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
+/**
+* @brief Returns the HDF Type for a given primitive value. 
+ * @param value A value to use. Can be anything. Just used to get the type info
+ * from
+ * @return The HDF5 native type for the value
+ */
 template<typename T>
 static hid_t HDFTypeForPrimitive(T value)
 {
@@ -128,7 +134,7 @@ static hid_t HDFTypeForPrimitive(T value)
  * @param attrName The attribute to search for
  * @return Standard HDF5 Error condition
  */
-static MXA_EXPORT herr_t findAttribute( hid_t loc_id, std::string attrName );
+static MXA_EXPORT herr_t findAttribute( hid_t loc_id, const std::string& attrName );
 
 /**
  * @brief
@@ -136,7 +142,7 @@ static MXA_EXPORT herr_t findAttribute( hid_t loc_id, std::string attrName );
  * @param name The attribute to search for
  * @return Standard HDF5 Error condition
  */
-static MXA_EXPORT herr_t findDataset( hid_t loc_id, std::string name );
+static MXA_EXPORT herr_t findDataset( hid_t loc_id, const std::string& name );
 
 /**
  * @brief Creates a Dataset with the given name at the location defined by loc_id
@@ -156,7 +162,7 @@ static MXA_EXPORT herr_t findDataset( hid_t loc_id, std::string name );
  * </ul>
  * 
  * @param loc_id The Parent location to store the data
- * @param datasetName The name of the dataset
+ * @param dsetName The name of the dataset
  * @param dims The dimensions of the dataset
  * @param data The data to write to the file
  * @param dataType The HDF_Type of data
@@ -179,16 +185,16 @@ static MXA_EXPORT herr_t findDataset( hid_t loc_id, std::string name );
  * pass H5T_NATIVE_UINT8 as the dataType.
  */
 template <typename T>
-static herr_t writeDataset (hid_t loc_id, 
-                            std::string &datasetName, 
+static herr_t writeVectorDataset (hid_t loc_id, 
+                            const std::string& dsetName, 
                             std::vector<hsize_t> &dims, 
-                            std::vector<T> &data,
-                            hid_t dataType)
+                            std::vector<T> &data)
 {
   herr_t err = -1;
   hid_t did = -1;
   hid_t sid = -1;
   herr_t retErr = 0;
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(data.front());
   //Create the DataSpace
   sid = H5Screate_simple( dims.size(), &(dims.front()), NULL );
   if (sid < 0) 
@@ -196,7 +202,7 @@ static herr_t writeDataset (hid_t loc_id,
     return sid;
   }
   // Create the Dataset
-  did = H5Dcreate (loc_id, datasetName.c_str(), dataType, sid, H5P_DEFAULT);
+  did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
   if ( did >= 0 ) 
   {
     err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &(data.front()) );
@@ -224,26 +230,11 @@ static herr_t writeDataset (hid_t loc_id,
 /**
  * @brief Creates a Dataset with the given name at the location defined by loc_id
  * 
- * The permissible types that can be used for dataType are:
- * <ul>
- * <li>H5T_NATIVE_INT8</li>
- * <li>H5T_NATIVE_UINT8</li>
- * <li>H5T_NATIVE_INT16</li>
- * <li>H5T_NATIVE_UINT16</li>
- * <li>H5T_NATIVE_INT32</li>
- * <li>H5T_NATIVE_UINT32</li>
- * <li>H5T_NATIVE_INT64</li>
- * <li>H5T_NATIVE_UINT64</li>
- * <li>H5T_NATIVE_FLOAT</li>
- * <li>H5T_NATIVE_DOUBLE</li>
- * </ul>
- * 
  * @param loc_id The Parent location to store the data
- * @param datasetName The name of the dataset
+ * @param dsetName The name of the dataset
  * @param dims The dimensions of the dataset
  * @param rank The number of dimensions to the dataset
  * @param data The data to write to the file
- * @param dataType The HDF_Type of data
  * @return Standard HDF5 error conditions
  * 
  * The dimensions of the data sets are usually passed as both a "rank" and 
@@ -258,22 +249,19 @@ static herr_t writeDataset (hid_t loc_id,
  * dims.push_back(30);
  * </code>
  * 
- * Also when passing data BE SURE that the type of data and the data type match. 
- * For example if I create some data in a std::vector<UInt8Type> I would need to
- * pass H5T_NATIVE_UINT8 as the dataType.
  */
 template<typename T>
 static herr_t writeDataset(hid_t loc_id, 
-                           std::string &datasetName,
+                           const std::string& dsetName,
+                           signed int &rank,
                            hsize_t* dims, 
-                           signed int &rank, 
-                           T* data,
-                           hid_t dataType)
+                           T* data)
 {
   herr_t err = -1;
   hid_t did = -1;
   hid_t sid = -1;
   herr_t retErr = 0;
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(data[0]);
   //Create the DataSpace
   sid = H5Screate_simple( rank, dims, NULL );
   if (sid < 0) 
@@ -281,7 +269,7 @@ static herr_t writeDataset(hid_t loc_id,
     return sid;
   }
   // Create the Dataset
-  did = H5Dcreate (loc_id, datasetName.c_str(), dataType, sid, H5P_DEFAULT);
+  did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
   if ( did >= 0 ) 
   {
     err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
@@ -307,14 +295,22 @@ static herr_t writeDataset(hid_t loc_id,
 }
 
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
+/**
+ * @brief Creates a Dataset with the given name at the location defined by loc_id.
+ * This version of writeDataset should be used with a single scalar value. If you 
+ * need to write an array of values, use the form that takes an std::vector<>
+ * 
+ * @param loc_id The Parent location to store the data
+ * @param dsetName The name of the dataset
+ * @param value The value to write to the HDF5 dataset
+ * @param data The data to write to the file
+ * @param dataType
+ * @return Standard HDF5 error conditions
+ */
 template <typename T>
-static herr_t writeDataset (hid_t loc_id,
-                            std::string &dsetName,
-                            T &value,
-                            hid_t dataType) 
+static herr_t writeScalarDataset (hid_t loc_id,
+                            const std::string& dsetName,
+                            T &value) 
 {
   herr_t err = -1;
   hid_t did = -1;
@@ -322,6 +318,7 @@ static herr_t writeDataset (hid_t loc_id,
   herr_t retErr = 0;
   hsize_t dims = 1;
   hid_t rank = 1;
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(value);
   //Create the DataSpace
   sid = H5Screate_simple( rank, &(dims), NULL );
   if (sid < 0) 
@@ -357,41 +354,28 @@ static herr_t writeDataset (hid_t loc_id,
 /**
  * @brief Writes a std::string as a HDF Dataset.
  * @param loc_id The Parent location to write the dataset
- * @param dset_name The Name to use for the dataset
+ * @param dsetName The Name to use for the dataset
  * @param data The actual data to write as a null terminated string
  * @return Standard HDF5 error conditions
  */
-static MXA_EXPORT herr_t  writeDataset (hid_t loc_id, 
-                                        std::string &dset_name, 
-                                        std::string &data);
+static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id, 
+                                        const std::string& dsetName, 
+                                        const std::string& data);
 
 /**
  * @brief Writes an Attribute to an HDF5 Object
  * @param loc_id The Parent Location of the HDFobject that is getting the attribute
  * @param objName The Name of Object to write the attribute into.
  * @param attrName The Name of the Attribute
- * @param tid The HDF5 Type of the Attribute
+ * @param dims The Dimensions of the data set
  * @param data The Attribute Data to write
  * @return Standard HDF Error Condition
  *  
- * The permissible types that can be used for dataType are:
- * <ul>
- * <li>H5T_NATIVE_INT8</li>
- * <li>H5T_NATIVE_UINT8</li>
- * <li>H5T_NATIVE_INT16</li>
- * <li>H5T_NATIVE_UINT16</li>
- * <li>H5T_NATIVE_INT32</li>
- * <li>H5T_NATIVE_UINT32</li>
- * <li>H5T_NATIVE_INT64</li>
- * <li>H5T_NATIVE_UINT64</li>
- * <li>H5T_NATIVE_FLOAT</li>
- * <li>H5T_NATIVE_DOUBLE</li>
- * </ul>
  */
 template <typename T>
-static herr_t writeAttribute(hid_t loc_id, 
-                             std::string &objName, 
-                             std::string &attrName, 
+static herr_t writeVectorAttribute(hid_t loc_id, 
+                             const std::string& objName, 
+                             const std::string& attrName, 
                              std::vector<hsize_t> &dims, 
                              std::vector<T> &data )
 {
@@ -473,10 +457,10 @@ static herr_t writeAttribute(hid_t loc_id,
  * @param data The string to write as the attribute
  * @return Standard HDF error conditions
  */
-static MXA_EXPORT herr_t  writeAttributeStr(hid_t loc_id, 
-                              std::string &objName, 
-                              std::string &attrName, 
-                              std::string data );
+static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id, 
+                              const std::string& objName, 
+                              const std::string& attrName, 
+                              const std::string& data);
 
 /**
  * @brief Writes an attribute to the given object. This method is designed with
@@ -484,9 +468,9 @@ static MXA_EXPORT herr_t  writeAttributeStr(hid_t loc_id,
  * an array, please use the other over loaded method that takes a vector.
  */
 template <typename T>
-static herr_t  writeAttribute(hid_t loc_id, 
-                             std::string &objName, 
-                             std::string &attrName, 
+static herr_t  writeScalarAttribute(hid_t loc_id, 
+                             const std::string& objName, 
+                             const std::string& attrName, 
                              T data )
 {
   
@@ -587,8 +571,11 @@ static herr_t  writeAttribute(hid_t loc_id,
  * </ul>
  */
 template <typename T>
-static herr_t readDataset(hid_t loc_id, std::string dsetName, std::vector<T> &data,
-                          hid_t dataType) {
+static herr_t readVectorDataset(hid_t loc_id, 
+                          const std::string& dsetName, 
+                          std::vector<T> &data,
+                          hid_t dataType) 
+{
   hid_t   did;
   herr_t  err = 0;
   herr_t retErr = 0;
@@ -638,17 +625,23 @@ static herr_t readDataset(hid_t loc_id, std::string dsetName, std::vector<T> &da
 }
 
 /**
- * @brief
+ * @brief Reads a dataset that consists of a single scalar value
+ * @param loc_id The HDF5 file or group id
+ * @param dsetName The name or path to the dataset to read
+ * @param data The variable to store the data into
+ * @return HDF error condition.
  */
 template <typename T>
-static herr_t readDataset(hid_t loc_id, std::string dsetName, T &data, hid_t dataType)
+static herr_t readScalarDataset(hid_t loc_id, 
+                          const std::string& dsetName, 
+                          T &data)
 {
   hid_t   did;
   herr_t  err = 0;
   herr_t retErr = 0;
   hid_t spaceId;
- // hsize_t dims = 1;
   
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(data);
  /* Open the dataset. */
   did = H5Dopen( loc_id, dsetName.c_str() );
   if ( did < 0 ) {
@@ -696,7 +689,9 @@ static herr_t readDataset(hid_t loc_id, std::string dsetName, T &data, hid_t dat
  * @param data The std::string to hold the data
  * @return Standard HDF error condition
  */
-static MXA_EXPORT herr_t readDataset(hid_t loc_id, std::string dsetName, std::string &data);
+static MXA_EXPORT herr_t readStringDataset(hid_t loc_id, 
+                                     const std::string& dsetName, 
+                                     std::string &data);
 
 /**
  * @brief Reads an Attribute from an HDF5 Object.
@@ -712,8 +707,10 @@ static MXA_EXPORT herr_t readDataset(hid_t loc_id, std::string dsetName, std::st
  * @return Standard HDF Error condition
  */
 template <typename T>
-static herr_t readAttribute(hid_t loc_id, std::string objName, std::string attrName,
-                    std::vector<T> &data)
+static herr_t readVectorAttribute(hid_t loc_id, 
+                            const std::string& objName, 
+                            const std::string& attrName,
+                            std::vector<T> &data)
 {
   /* identifiers */
   hid_t      obj_id;
@@ -768,13 +765,18 @@ static herr_t readAttribute(hid_t loc_id, std::string objName, std::string attrN
   return retErr;
 }                    
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
+/**
+ * @brief Reads a scalar attribute value from a dataset
+ * @param loc_id
+ * @param objName The name of the dataset
+ * @param attrName The name of the Attribute
+ * @param data The preallocated memory for the variable to be stored into
+ * @return Standard HDF5 error condition
+ */
 template <typename T>
-static herr_t  readAttribute(hid_t loc_id, 
-                            std::string objName, 
-                            std::string attrName,
+static herr_t  readScalarAttribute(hid_t loc_id, 
+                            const std::string& objName, 
+                            const std::string& attrName,
                             T &data)
 {
 
@@ -826,18 +828,25 @@ static herr_t  readAttribute(hid_t loc_id,
  * @param data The memory to store the data
  * @return Standard HDF Error condition
  */
-static MXA_EXPORT herr_t readAttribute(hid_t loc_id, std::string objName, std::string attrName,
+static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id, const std::string& objName, const std::string& attrName,
                               std::string &data);
 
 /**
- * @brief
+ * @brief Returns the number of dimensions for a given attribute
+ * @param loc_id The HDF5 id of the parent group/file for the objName
+ * @param objName The name of the dataset
+ * @param attrName The name of the attribute
+ * @param rank (out) Number of dimensions is store into this variable
  */
-static MXA_EXPORT hid_t getAttributeNDims(hid_t loc_id, std::string objName, std::string attrName, hid_t &rank);
+static MXA_EXPORT hid_t getAttributeNDims(hid_t loc_id, const std::string& objName, const std::string& attrName, hid_t &rank);
 
 /**
- * @brief
+ * @brief Returns the number of dimensions for a given dataset
+ * @param loc_id The HDF5 id of the parent group/file for the objName
+ * @param objName The name of the dataset
+ * @param rank (out) Number of dimensions is store into this variable
  */
-static MXA_EXPORT hid_t getDatasetNDims(hid_t loc_id, std::string objName, hid_t &rank);
+static MXA_EXPORT hid_t getDatasetNDims(hid_t loc_id, const std::string& objName, hid_t &rank);
 
 /**
  * @brief Get the information about a dataset.
@@ -852,17 +861,25 @@ static MXA_EXPORT hid_t getDatasetNDims(hid_t loc_id, std::string objName, hid_t
  * @return Negative value is Failure. Zero or Positive is success;
  */
 static MXA_EXPORT herr_t getDatasetInfo( hid_t loc_id,
-                              std::string dsetName,
+                              const std::string& dsetName,
                               std::vector<hsize_t> &dims,
                               H5T_class_t &type_class,
                               size_t &type_size );
 
 /**
- * @brief
+ * @brief Returns the information about an attribute
+ * @param loc_id
+ * @param objName
+ * @param attr_name
+ * @param dims
+ * @param type_class
+ * @param type_size
+ * @param attr_type
+ * @return
  */
 static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id, 
-                               std::string obj_name,
-                               std::string attr_name,
+                               const std::string& objName,
+                               const std::string& attr_name,
                                std::vector<hsize_t> &dims,
                                H5T_class_t &type_class,
                                size_t &type_size,
@@ -879,4 +896,4 @@ protected:
   ~H5Lite();
 };
 
-#endif /* HDF5HIGHLEVEL_H_ */
+#endif /* _HDF5_LITE_H_ */

@@ -44,7 +44,7 @@ public:
   XMLDataModelWriter( MXADataModel* dataModel, const std::string &fileName );
   virtual ~XMLDataModelWriter();
 
-  bool writeModelToFile(int32 fileId);
+  int32 writeModelToFile(int32 fileId);
 
   int32 writeDataModelTemplate(int32 uniqueId);
   int32 writeDataDimensions(int32 uniqueId);

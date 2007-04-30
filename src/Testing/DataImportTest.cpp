@@ -10,6 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "Headers/MXATypes.h"
 #include "Headers/MXATypeDefs.h"
+#include "Headers/LogTime.h"
 #include "Interfaces/IDataImportDelegate.h"
 #include "Interfaces/IFileIODelegate.h"
 #include "MXADataModel/MXADataModel.h"
@@ -63,7 +64,7 @@ public:
     hid_t fileId = model->getIODelegate()->getOpenFileId();
     H5Utilities::createGroupsFromPath(parentPath,  fileId);
     //Write the Data to the HDF5 File
-    return H5Lite::writeDataset(fileId, path, value, H5Lite::HDFTypeForPrimitive(value));
+    return H5Lite::writeScalarDataset(fileId, path, value);
   }
   
 private:
@@ -112,7 +113,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   
   // Create a nested loop to create the necessary DataSource objects that will
   //  be used to import the data into the HDF5 file
-  std::cout << "CREATING DATA SOURCES" << std::endl;
+  //std::cout << "CREATING DATA SOURCES" << std::endl;
   for( int i = dim0Start; i <= dim0End; i += dim0Increment )
   {
     for (int j = dim1Start; j <= dim1End; j = j+ dim1Increment) 
@@ -132,7 +133,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   }
   
   // Import the Data into the HDF5 File
-  std::cout << "IMPORTING DATA NOW" << std::endl;
+  //std::cout << "IMPORTING DATA NOW" << std::endl;
   int32 err = dataImport->import();
   BOOST_REQUIRE(err >= 0); // Used for Boost Unit Test Framework
   
@@ -188,6 +189,7 @@ MXADataModelPtr createSimpleModel()
 // -----------------------------------------------------------------------------
 int DataImportTest ()
 {
+  std::cout << logTime() << "----- Running DataImport Test ------------- " << std::endl;
   std::string outputFile(FILE_NAME_BEFORE);
   MXADataModelPtr model = createSimpleModel();
   BOOST_REQUIRE(model->writeModel(outputFile, false) >= 0); //Leave the file open for the import

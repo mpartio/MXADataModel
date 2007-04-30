@@ -59,7 +59,7 @@ herr_t H5DataModelReader::readFileType(hid_t locId)
 {
   herr_t err = -1;
   std::string fileType;
-  err = H5Lite::readDataset(locId, MXA::FileTypePath, fileType);
+  err = H5Lite::readStringDataset(locId, MXA::FileTypePath, fileType);
   if(err < 0)
   {
     std::cout << "Error Reading FileType from HDF5 File" << std::endl;
@@ -78,7 +78,7 @@ herr_t H5DataModelReader::readFileVersion(hid_t locId)
 {
   herr_t err = -1;
   float32 fileVersion;
-  err = H5Lite::readDataset(locId, MXA::FileVersionPath, fileVersion, H5T_NATIVE_FLOAT);
+  err = H5Lite::readScalarDataset(locId, MXA::FileVersionPath, fileVersion);
   if(err < 0)
   {
     std::cout << "Error Reading FileVersion from HDF5 File" << std::endl;
@@ -97,7 +97,7 @@ herr_t H5DataModelReader::readDataRoot(hid_t locId)
 {
   herr_t err = -1;
   std::string dataRoot;
-  err = H5Lite::readDataset(locId, MXA::DataRootPath, dataRoot);
+  err = H5Lite::readStringDataset(locId, MXA::DataRootPath, dataRoot);
   if(err < 0)
   {
     std::cout << "Error Reading DataRoot from HDF5 File" << std::endl;
@@ -157,42 +157,42 @@ MXADataDimensionPtr H5DataModelReader::_loadDataDimension(hid_t loc_id, std::str
   // Read the Data Dimension values
   // Dimension Order
 
-  err = H5Lite::readDataset(loc_id, dimensionName, dim_order, H5T_NATIVE_INT32);
+  err = H5Lite::readScalarDataset(loc_id, dimensionName, dim_order);
   if (err < 0) {
     std::cout << "Error reading dimension order value" << std::endl;
   }
   // Name
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_NAME_TAG, dimName);
+  err = H5Lite::readStringAttribute(loc_id, dimensionName, MXA::MXA_NAME_TAG, dimName);
   if (err < 0) { 
     std::cout << "Error reading dimension name value" << std::endl;
   }
   // Alt Name
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_ALT_NAME_TAG, altName);
+  err = H5Lite::readStringAttribute(loc_id, dimensionName, MXA::MXA_ALT_NAME_TAG, altName);
   if (err < 0) { 
     std::cout << "Error reading dimension alt name value" << std::endl;
   }
   // Count
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_COUNT_TAG, count);
+  err = H5Lite::readScalarAttribute(loc_id, dimensionName, MXA::MXA_COUNT_TAG, count);
   if (err < 0) { 
     std::cout << "Error reading dimension count value" << std::endl;
   }
   // Start Value
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_START_VALUE_TAG, start_val);
+  err = H5Lite::readScalarAttribute(loc_id, dimensionName, MXA::MXA_START_VALUE_TAG, start_val);
   if (err < 0) { 
     std::cout << "Error reading dimension start index value" << std::endl;
   }
   // Uniform
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_UNIFORM_TAG, uniform);
+  err = H5Lite::readScalarAttribute(loc_id, dimensionName, MXA::MXA_UNIFORM_TAG, uniform);
   if (err < 0) {
     std::cout << "No Uniform increment marker in dimension" << std::endl;
   }
   // Increment
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_INCREMENT_TAG, increment);
+  err = H5Lite::readScalarAttribute(loc_id, dimensionName, MXA::MXA_INCREMENT_TAG, increment);
   if (err < 0) {
     std::cout << "No increment value in dimension" << std::endl;
   }
   // End Value
-  err = H5Lite::readAttribute(loc_id, dimensionName, MXA::MXA_END_VALUE_TAG, end_val);
+  err = H5Lite::readScalarAttribute(loc_id, dimensionName, MXA::MXA_END_VALUE_TAG, end_val);
   if (err < 0) { 
     std::cout << "Error reading dimension end index value" << std::endl;
   }
@@ -336,25 +336,25 @@ MXADataRecordPtr H5DataModelReader::_loadDataRecord(hid_t loc_id, std::string na
   MXADataRecordPtr record; // This will contain a NULL Pointer to the DataRecordNode
   // Read the Data Record Values
   // Name
-  err = H5Lite::readAttribute(loc_id, name, MXA::MXA_NAME_TAG, recName);
+  err = H5Lite::readStringAttribute(loc_id, name, MXA::MXA_NAME_TAG, recName);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return record;
   }
   // Alt Name
-  err = H5Lite::readAttribute(loc_id, name, MXA::MXA_ALT_NAME_TAG, altName);
+  err = H5Lite::readStringAttribute(loc_id, name, MXA::MXA_ALT_NAME_TAG, altName);
   if (err < 0) { 
     std::cout << "Error reading data record alt_name value" << std::endl;
     return record;
   }
   // GUID
-  err = H5Lite::readAttribute(loc_id, name, MXA::MXA_GUID_TAG, guid);
+  err = H5Lite::readScalarAttribute(loc_id, name, MXA::MXA_GUID_TAG, guid);
   if (err < 0) { 
     std::cout << "Error reading data record GUID value" << std::endl;
     return record;
   }
   // LUID
-  err = H5Lite::readAttribute(loc_id, name, MXA::MXA_LUID_TAG, luid);
+  err = H5Lite::readScalarAttribute(loc_id, name, MXA::MXA_LUID_TAG, luid);
   if (err < 0) { 
     std::cout << "Error reading data record LUID value" << std::endl;
     return record;
@@ -388,43 +388,43 @@ herr_t H5DataModelReader::readRequiredMetaData(hid_t locId)
   }
   herr_t err = -1;
 
-  err = H5Lite::readAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_CREATOR_TAG, researcherName);
+  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_CREATOR_TAG, researcherName);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
   
-  err = H5Lite::readAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_DATE_TAG, dateCreated);
+  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_DATE_TAG, dateCreated);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
-  err = H5Lite::readAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_DSET_NAME_TAG, datasetName);
+  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_DSET_NAME_TAG, datasetName);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
-  err = H5Lite::readAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_DESCRIPTION_TAG, description);
+  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_DESCRIPTION_TAG, description);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
-  err = H5Lite::readAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_PEDIGREE_TAG, pedigree);
+  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_PEDIGREE_TAG, pedigree);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
-  err = H5Lite::readAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_DERIVED_SRC_TAG, derivedSrcFile);
+  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_DERIVED_SRC_TAG, derivedSrcFile);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
-  err = H5Lite::readAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_RIGHTS_TAG, distributionRights);
+  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_RIGHTS_TAG, distributionRights);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
-  err = H5Lite::readAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_RELEASE_TAG, releaseNumber);
+  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_RELEASE_TAG, releaseNumber);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
@@ -459,7 +459,7 @@ herr_t H5DataModelReader::readUserMetaData(hid_t locId)
       switch(attr_type) 
       {
       case H5T_STRING:
-        err = H5Lite::readAttribute(locId, MXA::UserMetaDataPath, (*iter), res );
+        err = H5Lite::readStringAttribute(locId, MXA::UserMetaDataPath, (*iter), res );
         if (err >= 0) {
           MXAAttributePtr attr = MXAAttribute::createAttribute((*iter), res);
           this->_dataModel->addUserMetaData(attr);

@@ -19,7 +19,7 @@ public:
     template<typename T>
     int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, T value)
     {
-        return H5Lite::writeAttribute(locationId, datasetPath, key, value);
+        return H5Lite::writeScalarAttribute(locationId, datasetPath, key, value);
     }
 
 // -----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ public:
     template<typename T>
     int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<hsize_t> &dims, std::vector<T> value)
     {
-      return H5Lite::writeAttribute(locationId, datasetPath, key, dims, value );
+      return H5Lite::writeVectorAttribute(locationId, datasetPath, key, dims, value );
     }
     
 
@@ -38,7 +38,7 @@ public:
    int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::string &value)
    {
    //  std::cout << "Writing Attribute for String '" << key << "'" << std::endl;
-     return H5Lite::writeAttributeStr(locationId,datasetPath,key,value);
+     return H5Lite::writeStringAttribute(locationId,datasetPath,key,value);
    }
   
    // -----------------------------------------------------------------------------

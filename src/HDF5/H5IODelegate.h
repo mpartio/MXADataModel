@@ -50,14 +50,16 @@ public:
   /** @brief Writes the Model to a data file
   * @param filename The name of the file (and path if needed) to write the model to
   * @param model The Model to serialize
+  * @param closeWhenFinished
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
-  int32 writeModelToFile(std::string fileName,MXADataModel* model, bool closeWhenFinished=false);
+  int32 writeModelToFile(std::string fileName, MXADataModel* model, bool closeWhenFinished=false);
   
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
   * @return A pointer to a new'ed MXADataModel Object. It is up to the Programmer to
   * release the Object. If an Error occurs during the reading, then a NULL pointer
+  * @param closeWhenFinished
   * is returned.
   */
   int32 readModelFromFile(std::string fileName, MXADataModel* model, bool closeWhenFinished=false);

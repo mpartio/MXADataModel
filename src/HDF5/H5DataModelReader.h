@@ -66,7 +66,7 @@ public:
     if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
     {
       T data;
-      err = H5Lite::readAttribute(locId, datasetPath, key, data);
+      err = H5Lite::readScalarAttribute(locId, datasetPath, key, data);
       if (err >= 0) {   
         MXAAttributePtr attr = MXAAttribute::createAttribute(key, data);
         this->_dataModel->addUserMetaData(attr);
@@ -75,7 +75,7 @@ public:
     else // Multi-Dimensional Data 
     {
       std::vector<T> data;
-      err = H5Lite::readAttribute(locId, datasetPath, key, data);
+      err = H5Lite::readVectorAttribute(locId, datasetPath, key, data);
       if (err >= 0) {   
         MXAAttributePtr attr = MXAAttribute::createAttribute(key, data, dims);
         this->_dataModel->addUserMetaData(attr);

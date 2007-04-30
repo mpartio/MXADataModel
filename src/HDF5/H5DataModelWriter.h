@@ -24,15 +24,16 @@
 //-- HDF Headers
 #include "hdf5.h"
 
+//Forward Declare classes
 class H5IODelegate;
 class MXANode;
 
 
 /**
- * @brief
- * @author 
- * @date
- * @version
+ * @brief Writes the DataModel to an HDF5 file
+ * @author Mike Jackson
+ * @date March 2007
+ * @version 1.0
  *  
  */
 class MXA_EXPORT H5DataModelWriter : public IDataModelWriter
@@ -42,19 +43,57 @@ public:
   H5DataModelWriter(IFileIODelegate* ioDelegate, MXADataModel* dataModel);
   virtual ~H5DataModelWriter();
 
-  bool writeModelToFile(hid_t fileId);
+  /**
+   * @brief Writes the Data Model to the HDF5 file
+  * @param fileId HDF5 FileId to write to
+   * @return true on success
+   */
+  int32 writeModelToFile(hid_t fileId);
 
- // int32 writeAttribute( int32 locationId, MXAAttribute* attribute);
-
+  /**
+   * @brief Writes the Data Model skeleton groups
+  * @param uniqueId HDF5 FileId to write to
+   * @return
+   */
   int32 writeDataModelTemplate(hid_t uniqueId);
-  int32 writeDataDimensions(hid_t);
-  int32 writeDataRecords(hid_t);
-  int32 writeRequiredMetaData(hid_t);
-  int32 writeUserMetaData(hid_t);
-  //int32 writeSources(hid_t);
+  
+  /**
+   * @brief Writes the Data Dimensions from the Model
+  * @param fileId HDF5 FileId to write to
+  * @return
+  */
+  int32 writeDataDimensions(hid_t fileId);
+  
+  /**
+  * @brief Writes the Data Records
+  * @param fileId HDF5 FileId to write to
+  * @return
+  */
+  int32 writeDataRecords(hid_t fileId);
+  
+  /**
+   * @brief Writes the Required MetaData
+  * @param fileId HDF5 FileId to write to
+  * @return
+  */
+  int32 writeRequiredMetaData(hid_t fileId);
+  
+  /**
+   * @brief Writes the User Meta Data
+  * @param fileId HDF5 FileId to write to
+  * @return
+  */
+  int32 writeUserMetaData(hid_t fileId);
+
     
 protected:
-
+  
+  /**
+   * @brief Walks the Data records hierarchy
+* @param gid
+* @param records
+* @return
+*/
   int32 _traverseDataRecords(hid_t gid,  MXADataRecords &records);
   
 private:

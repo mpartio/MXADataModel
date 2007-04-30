@@ -65,7 +65,7 @@ herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, hid_t &dataT
     data.push_back(type);
   }
   std::cout << "Write/Read->Vector: " << name;
-  err = H5Lite::writeDataset( file_id, name, &(dims.front()), rank, &(data.front()), dataType );
+  err = H5Lite::writeDataset( file_id, name, rank, &(dims.front()), &(data.front()) );
   if (err<0) {
      std::cout << " - Failed - Could not write data to file." << std::endl;
      return err;; 
@@ -73,7 +73,7 @@ herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, hid_t &dataT
 #if 1
   /* Now read the dataset into another vector and compare */
   std::vector<T> rData; //Create a vector to hold the data.
-  err = H5Lite::readDataset( file_id, name, rData, dataType);
+  err = H5Lite::readVectorDataset( file_id, name, rData, dataType);
   if (err<0) {
     std::cout << " - Failed - Error Reading Data from File" << std::endl;
     return err;; 
@@ -109,7 +109,7 @@ herr_t testMakeDataset(hid_t &file_id, std::string name, hid_t &dataType, T type
     data.push_back(type);
   }
   std::cout << "Write/Read->Vector: " << name;
-  err = H5Lite::writeDataset( file_id, name, dims, data, dataType );
+  err = H5Lite::writeVectorDataset( file_id, name, dims, data );
   if (err<0) {
      std::cout << " - Failed - Could not write data to file." << std::endl;
      return err;; 
@@ -117,7 +117,7 @@ herr_t testMakeDataset(hid_t &file_id, std::string name, hid_t &dataType, T type
 
   /* Now read the dataset into another vector and compare */
   std::vector<T> rData; //Create a vector to hold the data.
-  err = H5Lite::readDataset( file_id, name, rData, dataType);
+  err = H5Lite::readVectorDataset( file_id, name, rData, dataType);
   if (err<0) {
     std::cout << " - Failed - Error Reading Data from File" << std::endl;
     return err;; 
@@ -133,14 +133,14 @@ herr_t testMakeDataset(hid_t &file_id, std::string name, hid_t &dataType, T type
   std::cout << "Write/Read->Scalar: " << name;
   name += "_Single";
   T sData = type;
-  err = H5Lite::writeDataset(file_id, name, sData, dataType);
+  err = H5Lite::writeScalarDataset(file_id, name, sData);
   if (err<0) {
      std::cout << " - Failed - Could not write single value data to file." << std::endl;
      return err;; 
   }
   /* Now read the dataset into another vector and compare */
-  T srData; //Create a vector to hold the data.
-  err = H5Lite::readDataset( file_id, name, srData, dataType);
+  T srData; //Create something to hold the data.
+  err = H5Lite::readScalarDataset( file_id, name, srData);
   if (err<0) {
     std::cout << " - Failed - Error Reading Single Value Data from File" << std::endl;
     return err;; 
@@ -163,13 +163,13 @@ herr_t testMakeStringDataset(hid_t file_id) {
   std::string dsetName ("H5T_STR_NULLTERM");
   std::string strData ("Some data for the File");
   std::cout << "Write/Read->H5T_STR_NULLTERM: ";
-  err = H5Lite::writeDataset(file_id, dsetName, strData);
+  err = H5Lite::writeStringDataset(file_id, dsetName, strData);
   if (err<0) {
      std::cout << " - Failed - Could not write data to file." << std::endl;
      return err;; 
   }
   std::string rData;
-  err = H5Lite::readDataset(file_id, dsetName, rData);
+  err = H5Lite::readStringDataset(file_id, dsetName, rData);
   if ( strData == rData) {
     err = 0;
     std::cout << " - Passed" << std::endl;
@@ -218,14 +218,14 @@ herr_t testMakeAttribute(hid_t &file_id, std::string objName, T type ) {
     data.push_back( 0x0F );
   }
   std::cout << "Attribute->Write: " << objName;
-  err = H5Lite::writeAttribute( file_id, objName, testAttribute, dims, data );
+  err = H5Lite::writeVectorAttribute( file_id, objName, testAttribute, dims, data );
   if (err < 0 ) {
     std::cout << " - Failed - Could not Write the Attribute: " << objName << std::endl;
     return err;
   }
   
   std::vector<T> rData(numElements, 0); //allocate and zero out the memory
-  err = H5Lite::readAttribute(file_id, objName, testAttribute, rData);
+  err = H5Lite::readVectorAttribute(file_id, objName, testAttribute, rData);
   if ( data == rData ) {
     std::cout << " - Passed" << std::endl;
   } else { 
@@ -245,11 +245,11 @@ herr_t testMakeStringAttribute(hid_t file_id) {
   std::string strData ("Some data for the Attribute");
   int size = strData.size();
   std::cout << "WriteAttribute->H5T_STR_NULLTERM: ";
-  err = H5Lite::writeAttributeStr(file_id, dsetName, testAttribute, strData);
+  err = H5Lite::writeStringAttribute(file_id, dsetName, testAttribute, strData);
   
   
   std::string rData;
-  err = H5Lite::readAttribute(file_id, dsetName, testAttribute, rData);
+  err = H5Lite::readStringAttribute(file_id, dsetName, testAttribute, rData);
    size = rData.size();
    if ( strData == rData) {
     std::cout << " - Passed" << std::endl;

@@ -104,7 +104,7 @@ bool H5IODelegate::isMXAFile(hid_t fileId)
   
   // Check the Type
   std::string ftype;
-  err = H5Lite::readDataset(fileId, const_cast<std::string&>(MXA::FileTypePath), ftype);
+  err = H5Lite::readStringDataset(fileId, const_cast<std::string&>(MXA::FileTypePath), ftype);
   if (err < 0 || (ftype != "MHD")) {
     std::cout << "NOT an HDF5 File (wrong type): " << ftype << std::endl;
     return false;
@@ -112,7 +112,7 @@ bool H5IODelegate::isMXAFile(hid_t fileId)
 
   // Check the Version
   float32 fileVersion;
-  err = H5Lite::readDataset(fileId, MXA::FileVersionPath, fileVersion, H5T_NATIVE_FLOAT);
+  err = H5Lite::readScalarDataset(fileId, MXA::FileVersionPath, fileVersion);
   
   if (err < 0 || ! supportedMXAFileVersion(fileVersion)) {
     std::cout << "Not a supported HDF5 File (wrong version): "  << fileVersion << "  Error: " << err << std::endl;

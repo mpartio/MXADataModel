@@ -143,7 +143,7 @@ int32 H5TiffImportDelegate::importDataSource(MXADataSourcePtr dataSource, MXADat
     return -1;
   }
   
-  err = H5Lite::writeAttributeStr(fileId, datasetPath, CONST_CAST_STRING(MXA::FieldVariable), CONST_CAST_STRING(MXA::DataTypeImage) );
+  err = H5Lite::writeStringAttribute(fileId, datasetPath, CONST_CAST_STRING(MXA::FieldVariable), CONST_CAST_STRING(MXA::DataTypeImage) );
   CPP_CHECK_ATTRIBUTE_ADDITION(datasetPath, FIELD_VARIABLE, DATA_TYPE_IMAGE);
   
   return 1;

@@ -381,19 +381,19 @@ std::map<std::string, std::string> H5Utilities::getAttributesMap(hid_t loc_id, s
       switch(attr_type) 
       {
       case H5T_STRING:
-      	err = H5Lite::readAttribute(loc_id, obj_name, (*iter), res );
+      	err = H5Lite::readStringAttribute(loc_id, obj_name, (*iter), res );
       	if (err >= 0) {
       	  attributes[(*iter)] = res;
       	}
       	break;
       case H5T_INTEGER:
-      	err = H5Lite::readAttribute(loc_id, obj_name, (*iter), ires);
+      	err = H5Lite::readVectorAttribute(loc_id, obj_name, (*iter), ires);
       	if (err >= 0) {
       	  attributes[(*iter)] = StringUtils::numToString(ires[0]);
       	}
       	break;
       case H5T_FLOAT:
-      	err = H5Lite::readAttribute(loc_id, obj_name, (*iter), fres);
+      	err = H5Lite::readVectorAttribute(loc_id, obj_name, (*iter), fres);
       	if (err >= 0) {
       	  attributes[(*iter)] = StringUtils::numToString(fres[0]);
       	}

@@ -21,7 +21,7 @@ XMLDataModelWriter::~XMLDataModelWriter()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-bool XMLDataModelWriter::writeModelToFile(int32 fileId)
+int32 XMLDataModelWriter::writeModelToFile(int32 fileId)
 {
   // Open the file in the proper mode.
   _ofstreamPtr.reset( new std::ofstream ( _fileName.c_str() ) );
@@ -31,7 +31,7 @@ bool XMLDataModelWriter::writeModelToFile(int32 fileId)
   if ( NULL == _ofstreamPtr.get() || false == stream.is_open() )
   {
     std::cout << "Could not open file '" << this->_fileName << "' for writing XML Model." << std::endl;
-    return false;
+    return -1;
   }
   
   
@@ -49,7 +49,7 @@ bool XMLDataModelWriter::writeModelToFile(int32 fileId)
   writeUserMetaData(2);
   _closeGroupTag(MXA::MXA_XML_META_DATA, 1);
   _closeGroupTag(MXA::MXA_XML_FILE_ROOT, 0);
-  return true;
+  return 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -192,7 +192,7 @@ void XMLDataModelWriter::_saveDataRoot(int depth)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeDataDimensions(int depth)
+int32 XMLDataModelWriter::writeDataDimensions(int32 depth)
 {
   _openTag(MXA::MXA_XML_DATA_DIMENSIONS_GROUP, depth);
   MXADataDimensions dimensions = _dataModel->getDataDimensions();
@@ -209,7 +209,7 @@ int32 XMLDataModelWriter::writeDataDimensions(int depth)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeDataRecords(int depth)
+int32 XMLDataModelWriter::writeDataRecords(int32 depth)
 {
   _openTag(MXA::MXA_XML_DATA_RECORDS_GROUP, depth);
   MXADataRecords records =  _dataModel->getDataRecords();
@@ -228,7 +228,7 @@ int32 XMLDataModelWriter::writeDataRecords(int depth)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeRequiredMetaData(int depth)
+int32 XMLDataModelWriter::writeRequiredMetaData(int32 depth)
 {
   std::map<std::string, std::string> meta;
   _dataModel->getRequiredMetaData(meta);
@@ -240,7 +240,7 @@ int32 XMLDataModelWriter::writeRequiredMetaData(int depth)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeUserMetaData(int depth)
+int32 XMLDataModelWriter::writeUserMetaData(int32 depth)
 {
   std::map<std::string, std::string> meta;
   _openTag(MXA::MXA_XML_USER_META_DATA, depth, true, meta);

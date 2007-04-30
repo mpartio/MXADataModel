@@ -79,7 +79,7 @@ public:
    * @param parent The HDF unique id for the parent
    * @return Error Condition: Negative is error. Positive is success.
    */
-  static MXA_EXPORT herr_t  createGroupsFromPath(std::string path, int32 parent);
+  static MXA_EXPORT herr_t  createGroupsFromPath(std::string path, hid_t parent);
 
   // -------------- HDF Attribute Methods ----------------------------
   static MXA_EXPORT bool probeForAttribute(hid_t, std::string, std::string);
