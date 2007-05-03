@@ -103,18 +103,18 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   BOOST_REQUIRE(NULL != record.get()); // Used for Boost Unit Test Framework
 
   // Set the start/end/increment values for each Data Dimension
-  int dim0Start = dim0->getStartValue();
-  int dim0End = dim0->getEndValue();
-  int dim0Increment = dim0->getIncrement();
+  int32 dim0Start = dim0->getStartValue();
+  int32 dim0End = dim0->getEndValue();
+  int32 dim0Increment = dim0->getIncrement();
   
-  int dim1Start = dim1->getStartValue();
-  int dim1End = dim1->getEndValue();
-  int dim1Increment = dim1->getIncrement();
+  int32 dim1Start = dim1->getStartValue();
+  int32 dim1End = dim1->getEndValue();
+  int32 dim1Increment = dim1->getIncrement();
   
   // Create a nested loop to create the necessary DataSource objects that will
   //  be used to import the data into the HDF5 file
   //std::cout << "CREATING DATA SOURCES" << std::endl;
-  for( int i = dim0Start; i <= dim0End; i += dim0Increment )
+  for( int32 i = dim0Start; i <= dim0End; i += dim0Increment )
   {
     for (int j = dim1Start; j <= dim1End; j = j+ dim1Increment) 
     {
@@ -200,7 +200,7 @@ int DataImportTest ()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-test_suite* init_unit_test_suite( int /*argc*/, char* /*argv*/[] ) {
+test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test_suite* test= BOOST_TEST_SUITE( "Data Import Tests" );
     test->add( BOOST_TEST_CASE( &DataImportTest), 0);
     return test; 

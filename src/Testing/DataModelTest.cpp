@@ -267,7 +267,7 @@ void WriteXMLModelTest()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-test_suite* init_unit_test_suite( int /*argc*/, char* /*argv*/[] ) {
+test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
     //test->add( new DataModelTest () );
     

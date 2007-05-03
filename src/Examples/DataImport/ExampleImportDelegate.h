@@ -12,7 +12,7 @@ public:
 	ExampleImportDelegate();
 	virtual ~ExampleImportDelegate();
   
-  signed int encodeSourceToHDF5( int fileId, std::string recordGroup,
+  int32 encodeSourceToHDF5( int32 fileId, std::string recordGroup,
                             std::string recordName, std::string filePath);
                             
   private:

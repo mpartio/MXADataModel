@@ -49,7 +49,7 @@ herr_t H5Image::H5IMmake_image_8bit( hid_t loc_id,
                             hsize_t height,
                             const unsigned char *buffer )
 {
- int      rank = 3;
+ int32      rank = 3;
  hsize_t  dims[3];
  //herr_t err = -1;
  
@@ -111,7 +111,7 @@ herr_t H5Image::H5IMmake_image_24bit( hid_t loc_id,
                              const std::string &interlace,
                              const unsigned char *buffer )
 {
- int      rank = 3;
+ int32      rank = 3;
  hsize_t  dims[3];
 
  /* Initialize the image dimensions */
@@ -181,7 +181,7 @@ herr_t H5Image::H5IMmake_image_24bit( hid_t loc_id,
 herr_t H5Image::H5IM_find_palette( hid_t loc_id )
 {
 
- unsigned int attr_num;     /* Starting attribute to look up */
+ uint32 attr_num;     /* Starting attribute to look up */
  herr_t      ret;
 
  attr_num = 0;
@@ -224,10 +224,10 @@ herr_t H5Image::H5IMget_image_info( hid_t loc_id,
  hsize_t dims[3];
  hid_t   attr_id;
  hid_t   attr_type;
- int     has_attr;
+ int32     has_attr;
  hid_t   attr_space_id;
  hid_t   attr_class;
- int     has_pal;
+ int32     has_pal;
 
  /*assume initially we have no palettes attached*/
  *npals = 0;
@@ -434,7 +434,7 @@ herr_t H5Image::H5IMmake_palette( hid_t loc_id,
 
 {
 
- int has_pal;
+ int32 has_pal;
 
  /* Check if the dataset already exists */
  has_pal = H5Lite::findDataset( loc_id, pal_name );
@@ -500,7 +500,7 @@ herr_t H5Image::H5IMlink_palette( hid_t loc_id,
  hobj_ref_t  *refbuf;     /* buffer to read references */
  hssize_t    n_refs;
  hsize_t     dim_ref;
- int         ok_pal;
+ int32         ok_pal;
 
  /* The image dataset may or not have the attribute const_cast<std::string&>(H5ImageConst::Palette)
   * First we try to open to see if it is already there; if not, it is created.
@@ -659,7 +659,7 @@ herr_t H5Image::H5IMunlink_palette( hid_t loc_id,
  hid_t       attr_type;
  hid_t       attr_id;
  hid_t       attr_class;
- int         ok_pal, has_pal;
+ int32         ok_pal, has_pal;
 
  /* Try to find the palette dataset */
  has_pal = H5Lite::findDataset( loc_id, pal_name );
@@ -755,7 +755,7 @@ herr_t H5Image::H5IMget_npalettes( hid_t loc_id,
  hid_t      attr_id;
  hid_t      attr_space_id;
  hid_t      attr_class;
- int        has_pal;
+ int32        has_pal;
 
  /*assume initially we have no palettes attached*/
  *npals = 0;
@@ -837,11 +837,11 @@ out:
 
 herr_t H5Image::H5IMget_palette_info( hid_t loc_id,
                         std::string imageName,
-                        int pal_number,
+                        int32 pal_number,
                         hsize_t *pal_dims )
 {
  hid_t      image_id;
- int        has_pal;
+ int32        has_pal;
  hid_t      attr_type;
  hid_t      attr_id;
  hid_t      attr_space_id;
@@ -959,11 +959,11 @@ out:
 
 herr_t H5Image::H5IMget_palette( hid_t loc_id,
                         std::string imageName,
-                        int pal_number,
+                        int32 pal_number,
                         unsigned char *pal_data )
 {
  hid_t      image_id;
- int        has_pal;
+ int32        has_pal;
  hid_t      attr_type;
  hid_t      attr_id;
  hid_t      attr_space_id;
@@ -1072,7 +1072,7 @@ herr_t H5Image::H5IMis_image( hid_t loc_id,
                      std::string datasetName )
 {
  hid_t      did;
- int        has_class;
+ int32        has_class;
  hid_t      attr_type;
  hid_t      attr_id;
  char       attr_data[20];
@@ -1160,7 +1160,7 @@ herr_t H5Image::H5IMis_palette( hid_t loc_id,
                        std::string datasetName )
 {
  hid_t      did;
- int        has_class;
+ int32        has_class;
  hid_t      attr_type;
  hid_t      attr_id;
  char       attr_data[20];

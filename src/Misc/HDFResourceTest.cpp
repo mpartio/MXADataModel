@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   
   std::vector<char> gName(20, 0);
   char* gNamePtr = &(gName.front());
-  int rank = 1;
+  int32 rank = 1;
   std::vector<hsize_t> dims(1, 1024);
   hsize_t* dimsPtr = &(dims.front());
   std::vector<int> buff(1024,0xFFAAFFAA);
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
   }
   
   
-  int num_open = H5Fget_obj_count(fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |  H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
+  int32 num_open = H5Fget_obj_count(fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |  H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
   if (num_open > 0) {
     std::cout << "WARNING: " << num_open << " IDs weren't closed. Closing them."  << std::endl;
   }

@@ -252,7 +252,7 @@ int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, MXADataRecords &records
 // -----------------------------------------------------------------------------
 int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
 {
-  int data = 0;
+  int32 data = 0;
   herr_t err = 0;
   err = H5Lite::writeScalarDataset(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), data);
   if (err < 0)
@@ -275,7 +275,7 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
 // -----------------------------------------------------------------------------
 int32 H5DataModelWriter::writeUserMetaData(hid_t fileId)
 { 
-  int data = 0;
+  int32 data = 0;
   herr_t err = 0;
   H5Lite::writeScalarDataset(fileId, const_cast<std::string&>(MXA::UserMetaDataPath), data);
   std::vector<MXAAttributePtr> metadata = _dataModel->getUserMetaData();

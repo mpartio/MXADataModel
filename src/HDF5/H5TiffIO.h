@@ -84,7 +84,7 @@ class MXA_EXPORT H5TiffIO
    * @param in The Tiff Image
    * @return element from tiffImageClasses enum
    */
-  int _determineTiffImageClass(TIFF *);
+  int32 _determineTiffImageClass(TIFF *);
   
   
   /**
@@ -93,7 +93,7 @@ class MXA_EXPORT H5TiffIO
    * @param string
    * @return
    */
-  int _determineTiffOutputImageClass(hid_t, string);
+  int32 _determineTiffOutputImageClass(hid_t, string);
   
   
   /**
@@ -170,7 +170,7 @@ class MXA_EXPORT H5TiffIO
 
     
  private:
-  int _findColorMapIndex(int, int, int, int, unsigned char *);
+  int32 _findColorMapIndex(int, int, int, int, unsigned char *);
   void _closePaletteCreatedDataset(hid_t, hid_t, string, int);
     
 };

@@ -39,7 +39,7 @@ std::string H5Utilities::getObjectPath(hid_t loc_id, bool trim)
 //    it in the parameter obj_type passed in.
 // -----------------------------------------------------------------------------
 herr_t H5Utilities::getObjectType(hid_t loc_id, std::string objName, 
-				    int *obj_type)
+				    int32 *obj_type)
 {
   herr_t err=0;
   H5G_stat_t obj_info;
@@ -60,7 +60,7 @@ herr_t H5Utilities::getObjectType(hid_t loc_id, std::string objName,
 //  different open and close methods for different types of objects
 hid_t H5Utilities::openHDF5Object(hid_t loc_id, std::string objName)
 {
-  int obj_type;
+  int32 obj_type;
   hid_t obj_id;
   herr_t err=0;
 
@@ -139,7 +139,7 @@ herr_t H5Utilities::closeHDF5Object(hid_t obj_id)
  *  command.  Or you can pass in HDF5_ANY (equivalent to: HDF5_GROUP |
  *  HDF5_DATASET | HDF5_TYPE | HDF5_LINK) to not filter at all
  */
-herr_t H5Utilities::getGroupObjects(hid_t loc_id, int typeFilter, std::list<std::string>& names)
+herr_t H5Utilities::getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<std::string>& names)
 {
   herr_t err=0;
   hsize_t numObjs = 0;
@@ -156,7 +156,7 @@ herr_t H5Utilities::getGroupObjects(hid_t loc_id, int typeFilter, std::list<std:
   }
    
   size_t size=0;
-  int type=-1;
+  int32 type=-1;
   
   for (hsize_t i=0; i<numObjs; i++) {
     size = 1 + H5Gget_objname_by_idx(loc_id, i, NULL, 0);
@@ -229,7 +229,7 @@ int32 H5Utilities::createGroupsFromPath(std::string path, hid_t parent)
     return -1;
   }
   // remove any front slash
-  uint32 pos = path.find_first_of("/", 0);
+  std::string::size_type pos = path.find_first_of("/", 0);
   if ( 0 == pos ) 
   {
     path = path.substr(1, path.size());
@@ -300,7 +300,7 @@ bool H5Utilities::probeForAttribute(hid_t loc_id, std::string obj_name,
 				    std::string attr_name)
 {
   herr_t err=0;
-  int rank;
+  int32 rank;
   err = H5Lite::getAttributeNDims(loc_id, obj_name, attr_name, rank);
   //err = H5LTget_attribute_ndims(loc_id, obj_name.c_str(), attr_name.c_str(), &rank);
   if (err < 0) {
@@ -316,7 +316,7 @@ bool H5Utilities::probeForAttribute(hid_t loc_id, std::string obj_name,
 std::list<std::string> H5Utilities::getAllAttributeNames(hid_t obj_id)
 {
   std::list<std::string> results;
-  int num_attrs;
+  int32 num_attrs;
   hid_t attr_id;
   size_t name_size;
 
@@ -369,7 +369,7 @@ std::map<std::string, std::string> H5Utilities::getAttributesMap(hid_t loc_id, s
   hid_t tid;
   MXATypes::Int32Vector ires;
   MXATypes::Float32Vector fres;
-  std::vector<hsize_t> dims;  //Reusable for the loop
+  std::vector<uint64> dims;  //Reusable for the loop
   std::list<std::string> names = getAllAttributeNames(loc_id, obj_name);
   std::list<std::string>::iterator iter;
   for (iter=names.begin(); iter != names.end(); iter++) 
@@ -456,13 +456,14 @@ void H5Utilities::printHDFClassType(H5T_class_t class_type)
 // -----------------------------------------------------------------------------
 //  Returns a std::string that is the name of the object at the given index
 // -----------------------------------------------------------------------------
-herr_t H5Utilities::objectNameAtIndex(hid_t fileId, int idx, std::string &name)
+herr_t H5Utilities::objectNameAtIndex(hid_t fileId, int32 idx, std::string &name)
 {
   herr_t err = -1;
   // call H5Gget_objname_by_idx with name as NULL to get its length
   ssize_t name_len = H5Gget_objname_by_idx(fileId, idx, NULL, 0);
   if(name_len < 0) {
-    return NULL;
+  	name.clear();
+    return -1;
   }
   
   std::vector<char> buf(name_len + 1, 0);

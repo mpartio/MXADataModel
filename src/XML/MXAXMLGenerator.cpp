@@ -53,7 +53,7 @@ bool MHDXMLGenerator::write(string filename)
 // -----------------------------------------------------------------------------
 string MHDXMLGenerator::indent(int depth)
 {
-  const int indentSize = 2;
+  const int32 indentSize = 2;
   return string(indentSize * depth, ' ');
 }
 
@@ -64,7 +64,7 @@ string MHDXMLGenerator::indent(int depth)
 void MHDXMLGenerator::_replaceAll(string &str, string search_str,
 				 string replace_str)
 {
-  int search_len = search_str.length();
+  int32 search_len = search_str.length();
   string::const_iterator iter;
 
   string::size_type start=0;
@@ -112,7 +112,7 @@ string MHDXMLGenerator::escapedAttribute(const string &str)
 string MHDXMLGenerator::_toUpper(const string str)
 {
   string res = str;
-  int (*pf)(int)= toupper;
+  int32 (*pf)(int)= toupper;
   transform(res.begin(), res.end(), res.begin(), pf);
   return res;
 }
@@ -120,11 +120,11 @@ string MHDXMLGenerator::_toUpper(const string str)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MHDXMLGenerator::_openTag(string tagName, int depth, bool group,
+void MHDXMLGenerator::_openTag(string tagName, int32 depth, bool group,
 			       map<string, string> attributes,
 			       bool allupper)
 {
-  int numAttributes = attributes.size();
+  int32 numAttributes = attributes.size();
 
   _out << indent(depth) << "<" << tagName;
 
@@ -148,7 +148,7 @@ void MHDXMLGenerator::_openTag(string tagName, int depth, bool group,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MHDXMLGenerator::_openTag(string tagName, int depth, bool group)
+void MHDXMLGenerator::_openTag(string tagName, int32 depth, bool group)
 {
   map<string, string> attrs;
   _openTag(tagName, depth, group, attrs);
@@ -159,7 +159,7 @@ void MHDXMLGenerator::_openTag(string tagName, int depth, bool group)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MHDXMLGenerator::_closeGroupTag(string tagName, int depth)
+void MHDXMLGenerator::_closeGroupTag(string tagName, int32 depth)
 {
   _out << indent(depth) << "</" << tagName << ">" << "\n";
 }
@@ -201,7 +201,7 @@ void MHDXMLGenerator::_saveDataDimensions(int depth)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MHDXMLGenerator::_saveSignal(MXANode *signal, int depth)
+void MHDXMLGenerator::_saveSignal(MXANode *signal, int32 depth)
 {
   map<string, string> attrs;
   pRecordData rec = _model->getRecordData(signal);

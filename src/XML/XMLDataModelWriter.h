@@ -83,3 +83,4 @@ private:
 
 
 #endif /* _XMLWRITER_H_ */
+

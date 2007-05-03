@@ -60,7 +60,7 @@ public:
   template<typename T>
   int32 readPrimitiveAttribute( hid_t locId, const std::string &datasetPath, 
                                  const std::string &key, 
-                                 const std::vector<hsize_t> &dims)
+                                 const std::vector<uint64> &dims)
   {
     herr_t err = -1;
     if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element

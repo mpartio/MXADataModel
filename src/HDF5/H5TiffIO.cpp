@@ -35,7 +35,7 @@ herr_t H5TiffIO::importTiff(string filename, hid_t groupId,
   if (asGrayscale) {
     err = _readGrayscaleTiff(in, groupId, datasetName);
   } else {
-    int imageClass = _determineTiffImageClass(in);
+    int32 imageClass = _determineTiffImageClass(in);
 
     switch (imageClass) {
     case GrayscaleTiffImage:
@@ -136,7 +136,7 @@ herr_t H5TiffIO::_readGrayscaleTiff(TIFF *in, hid_t groupId,
   
   // Collapse the data down to a single channel, that will end up
   //  being the grayscale values
-  int pixel_count = width * height;
+  int32 pixel_count = width * height;
   unsigned char *src, *dst;
   
   src = (unsigned char *) raster;
@@ -229,7 +229,7 @@ herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName)
   TIFFGetField(in, TIFFTAG_COLORMAP, &dRed, &dGreen, &dBlue);
   
   unsigned char colorMap[cmapRank * 3];
-  int j=0;
+  int32 j=0;
   for (int i=0; i<cmapRank; i++) {
     colorMap[j++] = ((int) dRed[i] / 256);
     colorMap[j++] = ((int) dGreen[i] / 256);
@@ -238,9 +238,9 @@ herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName)
 
   // Need to go back and turn the RGBA values back into index entries
   //  into the colormap
-  int pixel_count = width * height;
+  int32 pixel_count = width * height;
   unsigned char idxRaster[pixel_count];
-  int index;
+  int32 index;
 
   for (int i=0; i<pixel_count; i++) {
     index = _findColorMapIndex(pixel_count,(int) TIFFGetR(raster[i]), 
@@ -304,12 +304,12 @@ herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName)
 
   // record the # of open attribute ids for error checking after
   //  the next call to H5IMlink_palette
-  int num_attrs = H5Fget_obj_count(this->_fileId, H5F_OBJ_ATTR);
+  int32 num_attrs = H5Fget_obj_count(this->_fileId, H5F_OBJ_ATTR);
 
   // Attach the color palette to the image
   err = H5Image::H5IMlink_palette(groupId, datasetName, pname);
 
-  int new_num_attrs = H5Fget_obj_count(this->_fileId, H5F_OBJ_ATTR);
+  int32 new_num_attrs = H5Fget_obj_count(this->_fileId, H5F_OBJ_ATTR);
   if (new_num_attrs > num_attrs) {
     std::cout << "NUMBER OF ATTRIBUTES DON'T MATCH: " 
 	      << new_num_attrs << std::endl;
@@ -351,7 +351,7 @@ herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName)
 //   and close the one matching.
 void H5TiffIO::_closePaletteCreatedDataset(hid_t fileId, hid_t groupId, 
 					    string datasetName, 
-					    int num_attrs)
+					    int32 num_attrs)
 {
   hid_t *attr_ids;
   attr_ids = (hid_t *)malloc(num_attrs * sizeof(hid_t));
@@ -386,7 +386,7 @@ void H5TiffIO::_closePaletteCreatedDataset(hid_t fileId, hid_t groupId,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int H5TiffIO::_findColorMapIndex(int max, int imgR, int imgG, int imgB,
+int H5TiffIO::_findColorMapIndex(int max, int32 imgR, int32 imgG, int32 imgB,
 				 unsigned char *colorMap)
 {
   // note - colorMap is in the format for HDF5 which means it's a flat
@@ -433,7 +433,7 @@ herr_t H5TiffIO::_read24BitTiff(TIFF *in, hid_t groupId, string &datasetName)
   /*
   ** Strip out the Alpha Components
   */
-  int pixel_count = width * height;
+  int32 pixel_count = width * height;
   unsigned char *src, *dst;
   
   src = (unsigned char *) raster;
@@ -466,7 +466,7 @@ int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId,
 					     string img_dataset_name)
 {
   herr_t err = 0;
-  int dimRank;
+  int32 dimRank;
 
   err = H5Lite::getAttributeNDims(fileId, img_dataset_name, const_cast<std::string&>(H5ImageConst::ImageSubclass), dimRank);
   if (err < 0) {
@@ -476,7 +476,7 @@ int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId,
   size_t type_size;
   H5T_class_t class_type;
   hid_t attrType = -1;
-  std::vector<hsize_t> dimensions;
+  std::vector<uint64> dimensions;
   err = H5Lite::getAttributeInfo(fileId,
                                  img_dataset_name, 
                                  const_cast<std::string&>(H5ImageConst::ImageSubclass), 
@@ -538,7 +538,7 @@ herr_t H5TiffIO::exportTiff(hid_t fileId, string filename,
     return -1;
   }
 
-  int imageClass = _determineTiffOutputImageClass(fileId, img_dataset_name);
+  int32 imageClass = _determineTiffOutputImageClass(fileId, img_dataset_name);
   
   switch (imageClass) {
   case GrayscaleTiffImage:
@@ -610,18 +610,18 @@ herr_t H5TiffIO::_write8BitTiff(TIFF *image,
   }
 
   // Read the color map
-  int numRows = pal_dims[0];
-  int palRank = numRows * pal_dims[1];
+  int32 numRows = pal_dims[0];
+  int32 palRank = numRows * pal_dims[1];
   unsigned char colorMap[palRank];
   err = H5Image::H5IMget_palette(fileId, img_dataset_name, 0, colorMap);
   if (err < 0) {
     std::cout << "Error getting color palette" << std::endl;
     return err;
   }
-  int cRank = (int) palRank / 3;
+  int32 cRank = (int) palRank / 3;
   uint16 dRed[cRank], dGreen[cRank], dBlue[cRank];
   
-  int index;
+  int32 index;
   for (int i=0; i<palRank; i=i+3) {
     index = (int) i/3;
     dRed[index] = (uint16) colorMap[i] * 256;

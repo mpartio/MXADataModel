@@ -135,7 +135,7 @@ int32 createGroupsFromPath(std::string path, hid_t parent)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t writeFloatData( hid_t loc_id,  const char *dset_name, int rank,
+herr_t writeFloatData( hid_t loc_id,  const char *dset_name, int32 rank,
                                  const hsize_t *dims, const float *data )
 {
   //std::cout << ">>>>> Attempting Write of Float Data........." << std::endl;
@@ -176,10 +176,10 @@ herr_t writeFloatData( hid_t loc_id,  const char *dset_name, int rank,
   return err;
 }
 
-void more(hid_t fileId, int &global) 
+void more(hid_t fileId, int32 &global) 
 {
   char name[20]; memset(name, 0, sizeof(name) );
-  int rank = 1;
+  int32 rank = 1;
 //  float data[65536];
   std::vector<float> data(10000000, 0);
   hsize_t dims[1] ={ 65536 };
@@ -208,8 +208,8 @@ int main(int argc, char **argv) {
   
   std::vector<char> gName(20, 0);
   char* gNamePtr = &(gName.front());
-  int rank = 1;
-  std::vector<hsize_t> dims(1, 1024);
+  int32 rank = 1;
+  std::vector<uint64> dims(1, 1024);
   hsize_t* dimsPtr = &(dims.front());
   std::vector<int> buff(1024,0xFFAAFFAA);
   int* buffer = &(buff.front());
@@ -252,7 +252,7 @@ int main(int argc, char **argv) {
   }
   
   
-  int num_open = H5Fget_obj_count(fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |  H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
+  int32 num_open = H5Fget_obj_count(fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |  H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
   if (num_open > 0) {
     std::cout << "WARNING: " << num_open << " IDs weren't closed. Closing them."  << std::endl;
   }
@@ -285,11 +285,11 @@ int main3(int argc, char **argv) {
   std::string filename  ("/tmp/H5GroupTest.h5");
   herr_t err = -1;
   hid_t fileId = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
-  int GLOBAL = 0;
+  int32 GLOBAL = 0;
   for (int i = 0; i < 1; ++i)
   {
     more(fileId, GLOBAL);
-    int num_open = H5Fget_obj_count(fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |  H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
+    int32 num_open = H5Fget_obj_count(fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |  H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
     if (num_open > 0) {
       std::cout << "WARNING: Some IDs weren't closed. Closing them."  << std::endl;
     }
@@ -317,11 +317,11 @@ int main2 (int argc, char const* argv[])
   uint8 ui8 = 1;
   int16 i16 = 0;
   uint16 ui16 = 0;
-   signed long int i32 = 0;
+   signed long int32 i32 = 0;
   uint32 ui32 = 0;
-  signed long long int i64 = 0;
+  signed long long int32 i64 = 0;
   
-  unsigned long long int ui64 = 0;
+  unsigned long long int32 ui64 = 0;
   float32 f32 = 0.0;
   float64 f64 = 0.0;
   

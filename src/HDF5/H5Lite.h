@@ -12,6 +12,7 @@
 #define _HDF5_LITE_H_
 
 #include "Headers/DLLExport.h"
+#include "Headers/MXATypes.h"
 
 //-- STL Headers
 #include <string>
@@ -42,7 +43,7 @@ public:
  * @param obj_type The HDF5_TYPE of object
  * @return Standard HDF5 Error Conditions
  */
-static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int obj_type);
+static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int32 obj_type);
                      
 /**
  * @brief Opens an HDF5 Object
@@ -50,7 +51,7 @@ static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int o
  * @param obj_type Basic Object Type
  * @return Standard HDF5 Error Conditions
  */
-static MXA_EXPORT herr_t closeId( hid_t obj_id, int obj_type );
+static MXA_EXPORT herr_t closeId( hid_t obj_id, int32 obj_type );
 
 /**
 * @brief Returns the HDF Type for a given primitive value. 
@@ -187,7 +188,7 @@ static MXA_EXPORT herr_t findDataset( hid_t loc_id, const std::string& name );
 template <typename T>
 static herr_t writeVectorDataset (hid_t loc_id, 
                             const std::string& dsetName, 
-                            std::vector<hsize_t> &dims, 
+                            std::vector<uint64> &dims, 
                             std::vector<T> &data)
 {
   herr_t err = -1;
@@ -253,7 +254,7 @@ static herr_t writeVectorDataset (hid_t loc_id,
 template<typename T>
 static herr_t writeDataset(hid_t loc_id, 
                            const std::string& dsetName,
-                           signed int &rank,
+                           int32 &rank,
                            hsize_t* dims, 
                            T* data)
 {
@@ -376,12 +377,12 @@ template <typename T>
 static herr_t writeVectorAttribute(hid_t loc_id, 
                              const std::string& objName, 
                              const std::string& attrName, 
-                             std::vector<hsize_t> &dims, 
+                             std::vector<uint64> &dims, 
                              std::vector<T> &data )
 {
   hid_t      obj_id, sid, attr_id;
   //hsize_t    dim_size = data.size();
-  int        has_attr;
+  int32        has_attr;
   H5G_stat_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
@@ -399,7 +400,16 @@ static herr_t writeVectorAttribute(hid_t loc_id,
   }
   
   /* Create the data space for the attribute. */
-  hsize_t* dimsPtr = &(dims.front());
+  hsize_t* dimsPtr = 0x0;
+	//size mismatch between hsize_t and size_t
+	std::vector<uint64>::size_type _size = dims.size();
+	hsize_t _dims[ _size ];
+	for (std::vector<uint64>::size_type i = 0; i < _size; ++i) 
+	{
+		_dims[i] = static_cast<hsize_t>(dims[i]);
+	}
+	dimsPtr = _dims;
+
   sid = H5Screate_simple( dims.size(), dimsPtr, NULL );
   if ( sid >= 0 ) {
     /* Verify if the attribute already exists */
@@ -475,7 +485,7 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
 {
   
   hid_t      obj_id, sid, attr_id;
-  int        has_attr;
+  int32        has_attr;
   H5G_stat_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
@@ -592,7 +602,7 @@ static herr_t readVectorDataset(hid_t loc_id,
   if ( did >= 0 ) {
     spaceId = H5Dget_space(did);
     if ( spaceId > 0 ) {
-      int rank = H5Sget_simple_extent_ndims(spaceId);
+      int32 rank = H5Sget_simple_extent_ndims(spaceId);
       if (rank > 0) {
         std::vector<hsize_t> dims;
         dims.resize(rank);// Allocate enough room for the dims
@@ -651,7 +661,7 @@ static herr_t readScalarDataset(hid_t loc_id,
   if ( did >= 0 ) {
     spaceId = H5Dget_space(did);
     if ( spaceId > 0 ) {
-      int rank = H5Sget_simple_extent_ndims(spaceId);
+      int32 rank = H5Sget_simple_extent_ndims(spaceId);
       if (rank > 0) {
         std::vector<hsize_t> dims;
         dims.resize(rank);// Allocate enough room for the dims
@@ -736,10 +746,10 @@ static herr_t readVectorAttribute(hid_t loc_id,
       //Need to allocate the array size
       H5T_class_t type_class;
       size_t type_size;
-      std::vector<hsize_t> dims;
+      std::vector<uint64_t> dims;
       H5Lite::getAttributeInfo(loc_id, objName, attrName, dims, type_class, type_size, tid);
       hsize_t numElements = 1;
-      for (std::vector<hsize_t>::iterator iter = dims.begin(); iter < dims.end(); ++iter )
+      for (std::vector<uint64>::iterator iter = dims.begin(); iter < dims.end(); ++iter )
       {
         numElements *= *(iter);
       }
@@ -862,7 +872,7 @@ static MXA_EXPORT hid_t getDatasetNDims(hid_t loc_id, const std::string& objName
  */
 static MXA_EXPORT herr_t getDatasetInfo( hid_t loc_id,
                               const std::string& dsetName,
-                              std::vector<hsize_t> &dims,
+                              std::vector<uint64> &dims,
                               H5T_class_t &type_class,
                               size_t &type_size );
 
@@ -880,7 +890,7 @@ static MXA_EXPORT herr_t getDatasetInfo( hid_t loc_id,
 static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id, 
                                const std::string& objName,
                                const std::string& attr_name,
-                               std::vector<hsize_t> &dims,
+                               std::vector<uint64> &dims,
                                H5T_class_t &type_class,
                                size_t &type_size,
                                hid_t &attr_type);

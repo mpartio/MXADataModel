@@ -50,8 +50,8 @@ public:
   
   // -------------- HDF Indentifier Methods ----------------------------
   static MXA_EXPORT std::string getObjectPath(hid_t, bool trim=false);
-  static MXA_EXPORT herr_t getObjectType(hid_t, std::string, int *);
-  static MXA_EXPORT herr_t objectNameAtIndex(hid_t fileId, int idx, std::string &name);
+  static MXA_EXPORT herr_t getObjectType(hid_t, std::string, int32 *);
+  static MXA_EXPORT herr_t objectNameAtIndex(hid_t fileId, int32 idx, std::string &name);
   static MXA_EXPORT bool isGroup(hid_t nodeId, std::string objName);
   
   static MXA_EXPORT hid_t openHDF5Object(hid_t locId, std::string);

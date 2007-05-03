@@ -29,7 +29,7 @@ ExampleImportDelegate::~ExampleImportDelegate()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-signed int ExampleImportDelegate::encodeSourceToHDF5( hid_t fileId, std::string recordGroup,
+int32 ExampleImportDelegate::encodeSourceToHDF5( hid_t fileId, std::string recordGroup,
                             std::string recordName, std::string filePath)
 {
   herr_t err = 0;
@@ -38,16 +38,16 @@ signed int ExampleImportDelegate::encodeSourceToHDF5( hid_t fileId, std::string 
   std::cout << " recordGroup: " << recordGroup << std::endl;
   std::cout << " recordName: " << recordName << std::endl;
  
-  int NX  =  5; /* dataset dimensions */
-  int NY   =  3;
-  int RANK  = 2;
+  int32 NX  =  5; /* dataset dimensions */
+  int32 NY   =  3;
+  int32 RANK  = 2;
 
   hid_t       dataset;         /* file and dataset handles */
   hid_t       datatype, dataspace;   /* handles */
   hsize_t     dimsf[2];              /* dataset dimensions */
   herr_t      status;
-  int         data[NX][NY];          /* data to write */
-  int         i, j;
+  int32         data[NX][NY];          /* data to write */
+  int32         i, j;
 
     /*
      * Data  and output buffer initialization.
@@ -77,7 +77,7 @@ signed int ExampleImportDelegate::encodeSourceToHDF5( hid_t fileId, std::string 
 
     /*
      * Define datatype for the data in the file.
-     * We will store little endian INT numbers.
+     * We will store little endian int32 numbers.
      */
     datatype = H5Tcopy(H5T_NATIVE_INT);
     status = H5Tset_order(datatype, H5T_ORDER_LE);

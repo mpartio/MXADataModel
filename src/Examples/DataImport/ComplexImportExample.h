@@ -58,13 +58,13 @@ public:
     std::string _hdfFileOutput;
     std::string _simRoot;
     
-    int _timestepStart;
-    int _timestepEnd;
-    int _timestepIncrement;
+    int32 _timestepStart;
+    int32 _timestepEnd;
+    int32 _timestepIncrement;
 
-    int _sliceStart;
-    int _sliceEnd;
-    int _sliceIncrement;
+    int32 _sliceStart;
+    int32 _sliceEnd;
+    int32 _sliceIncrement;
     
     virtual   void setupModel();
     virtual   void makeDimensions();

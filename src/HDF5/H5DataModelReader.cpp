@@ -150,8 +150,8 @@ MXADataDimensionPtr H5DataModelReader::_loadDataDimension(hid_t loc_id, std::str
 {
  // MXADataDimension* node = NULL;
   std::string dimName, altName;
-  int count=1, start_val=0, end_val=0, dim_order;
-  int uniform=1, increment=1;
+  int32 count=1, start_val=0, end_val=0, dim_order;
+  int32 uniform=1, increment=1;
   herr_t err=0;
 
   // Read the Data Dimension values
@@ -276,7 +276,7 @@ herr_t H5DataModelReader::_traverseDataRecords( hid_t gid, MXADataRecordPtr pare
     return -1;
   }
   herr_t err = -1;
-  uint64 numObjects = 0;
+  hsize_t numObjects = 0;
   err = H5Gget_num_objs(gid, &numObjects);
   if (err < 0 ) {
     std::cout << "Error Retrieving the number of Data Records: " << err << std::endl;
@@ -332,7 +332,7 @@ MXADataRecordPtr H5DataModelReader::_loadDataRecord(hid_t loc_id, std::string na
   herr_t err=0;
   //MXANode *node=NULL;
   std::string recName, altName;
-  int guid=-1, luid =-1;
+  int32 guid=-1, luid =-1;
   MXADataRecordPtr record; // This will contain a NULL Pointer to the DataRecordNode
   // Read the Data Record Values
   // Name
@@ -447,7 +447,7 @@ herr_t H5DataModelReader::readUserMetaData(hid_t locId)
   size_t attr_size;
   std::string res;
  
-  std::vector<hsize_t> dims;  //Reusable for the loop
+  std::vector<uint64> dims;  //Reusable for the loop
   std::list<std::string> names = H5Utilities::getAllAttributeNames(locId, MXA::UserMetaDataPath );
 
   for (std::list<std::string>::iterator iter=names.begin(); iter != names.end(); iter++) 

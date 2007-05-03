@@ -29,7 +29,7 @@ using boost::unit_test::test_suite;
 #endif
 
 
-#define DSET0_NAME "2D int array"
+#define DSET0_NAME "2D int32 array"
 #define DSET1_NAME "dataset char"
 #define DSET2_NAME "dataset short"
 #define DSET3_NAME "dataset int"
@@ -55,7 +55,7 @@ herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, hid_t &dataT
   hsize_t dimy = 3;
   int32 rank = 2;
   // Create the Dimensions
-  std::vector<hsize_t> dims;
+  std::vector<uint64> dims;
   dims.push_back(dimx);
   dims.push_back(dimy);
   
@@ -207,7 +207,7 @@ template <typename T>
 herr_t testMakeAttribute(hid_t &file_id, std::string objName, T type ) {
   std::string testAttribute("Test_Attribute");
   herr_t err = -1;
-  int numElements = 4;
+  int32 numElements = 4;
   // Create the Dimensions
   std::vector<hsize_t> dims;
   dims.push_back(numElements);
@@ -243,7 +243,7 @@ herr_t testMakeStringAttribute(hid_t file_id) {
   std::string dsetName ("H5T_STR_NULLTERM");
   std::string testAttribute("Test_Attribute");
   std::string strData ("Some data for the Attribute");
-  int size = strData.size();
+  int32 size = strData.size();
   std::cout << "WriteAttribute->H5T_STR_NULLTERM: ";
   err = H5Lite::writeStringAttribute(file_id, dsetName, testAttribute, strData);
   
@@ -329,7 +329,7 @@ void H5LiteTest() {
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-test_suite* init_unit_test_suite( int /*argc*/, char* /*argv*/[] ) {
+test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test_suite* test= BOOST_TEST_SUITE( "H5Lite Tests" );
     //test->add( new DataModelTest () );
     

@@ -3,6 +3,7 @@
 
 //MXA Includes
 #include "Headers/DLLExport.h"
+#include "Headers/MXATypes.h"
 
 //-- STL headers
 #include <string>
@@ -96,13 +97,13 @@ static MXA_EXPORT herr_t H5IMget_npalettes( hid_t loc_id,
 
 static MXA_EXPORT herr_t H5IMget_palette_info( hid_t loc_id,
                         std::string imageName,
-                        int pal_number,
+                        int32 pal_number,
                         hsize_t *pal_dims );
 
 
 static MXA_EXPORT herr_t H5IMget_palette( hid_t loc_id,
                         std::string imageName,
-                        int pal_number,
+                        int32 pal_number,
                         unsigned char *pal_data );
 
 static MXA_EXPORT herr_t H5IMis_image( hid_t loc_id,
@@ -138,7 +139,7 @@ static herr_t find_palette( hid_t loc_id, const char *name, void  *op_data )
   * the palette attribute is not found yet.
   */
 
- int ret = 0;
+ int32 ret = 0;
 
  /* Shut compiler */
  loc_id=loc_id;

@@ -198,7 +198,7 @@ void H5IODelegate::closeMXAFile()
   
   // Get the number of open identifiers of all types
   //  except files
-  int num_open = H5Fget_obj_count(_fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |
+  int32 num_open = H5Fget_obj_count(_fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |
 			      H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
   if (num_open > 0) {
     std::cout << "WARNING: Some IDs weren't closed. Closing them."  << std::endl;

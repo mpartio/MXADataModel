@@ -66,7 +66,7 @@ int32 XMLDataModelWriter::writeDataModelTemplate(int32 uniqueId)
 // -----------------------------------------------------------------------------
 std::string XMLDataModelWriter::indent(int depth)
 {
-  const int indentSize = 2;
+  const int32 indentSize = 2;
   return std::string(indentSize * depth, ' ');
 }
 
@@ -77,7 +77,7 @@ std::string XMLDataModelWriter::indent(int depth)
 void XMLDataModelWriter::_replaceAll(std::string &str, std::string search_str,
 				 std::string replace_str)
 {
-  int search_len = search_str.length();
+  int32 search_len = search_str.length();
   std::string::const_iterator iter;
 
   std::string::size_type start=0;
@@ -125,7 +125,7 @@ std::string XMLDataModelWriter::escapedAttribute(const std::string &str)
 std::string XMLDataModelWriter::_toUpper(const std::string str)
 {
   std::string res = str;
-  int (*pf)(int)= toupper;
+  int32 (*pf)(int)= toupper;
   transform(res.begin(), res.end(), res.begin(), pf);
   return res;
 }
@@ -133,11 +133,11 @@ std::string XMLDataModelWriter::_toUpper(const std::string str)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void XMLDataModelWriter::_openTag(std::string tagName, int depth, bool group,
+void XMLDataModelWriter::_openTag(std::string tagName, int32 depth, bool group,
                                   std::map<std::string, std::string> attributes,
 			                            bool allupper)
 {
-  int numAttributes = attributes.size();
+  int32 numAttributes = attributes.size();
   std::ofstream &stream = *(_ofstreamPtr.get());
   stream << indent(depth) << "<" << tagName;
 
@@ -161,7 +161,7 @@ void XMLDataModelWriter::_openTag(std::string tagName, int depth, bool group,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void XMLDataModelWriter::_openTag(std::string tagName, int depth, bool group)
+void XMLDataModelWriter::_openTag(std::string tagName, int32 depth, bool group)
 {
   std::map<std::string, std::string> attrs;
   _openTag(tagName, depth, group, attrs);
@@ -172,7 +172,7 @@ void XMLDataModelWriter::_openTag(std::string tagName, int depth, bool group)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void XMLDataModelWriter::_closeGroupTag(std::string tagName, int depth)
+void XMLDataModelWriter::_closeGroupTag(std::string tagName, int32 depth)
 {
   std::ofstream &stream = *(_ofstreamPtr.get());
   stream << indent(depth) << "</" << tagName << ">" << "\n";

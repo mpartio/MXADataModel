@@ -26,7 +26,7 @@ public:
 //  
 // -----------------------------------------------------------------------------  
     template<typename T>
-    int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<hsize_t> &dims, std::vector<T> value)
+    int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<T> value)
     {
       return H5Lite::writeVectorAttribute(locationId, datasetPath, key, dims, value );
     }
@@ -134,7 +134,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
-  int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<int8> &value)
+  int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<int8> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key, dims, value);
@@ -143,7 +143,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
-   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<uint8> &value)
+   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<uint8> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key, dims, value);
@@ -152,7 +152,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
-   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<int16> &value)
+   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<int16> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key,  dims, value);
@@ -161,7 +161,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
-   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<uint16> &value)
+   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<uint16> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key, dims, value);
@@ -170,7 +170,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
-   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<int32> &value)
+   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<int32> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key, dims, value);
@@ -179,7 +179,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
-   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<uint32> &value)
+   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<uint32> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key, dims, value);
@@ -188,7 +188,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
-  int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<int64> &value)
+  int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<int64> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key, dims, value);
@@ -197,7 +197,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
-   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<uint64> &value)
+   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<uint64> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key, dims, value);
@@ -206,7 +206,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------   
-   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<float32> &value)
+   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<float32> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key, dims, value);
@@ -215,7 +215,7 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
-   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<unsigned long long int> &dims, std::vector<float64> &value)
+   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<float64> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
      return _writeAttribute(locationId, datasetPath, key, dims, value);
