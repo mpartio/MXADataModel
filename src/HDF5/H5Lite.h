@@ -106,6 +106,9 @@ static hid_t HDFTypeForPrimitive(T value)
   if (typeid(value) == typeid(uint64)) return H5T_NATIVE_UINT64; 
   
   std::cout << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
+  if (typeid(value).name() == "l" ) {
+    std::cout << "You are using 'long int' as a type which is not 32/64 bit safe. Suggest you use one of the MXATypes defined in <Headers/MXATypes.h> such as int32 or uint32." << std::endl;
+  }
   return -1;
 }
 
@@ -178,6 +181,10 @@ static herr_t writeVectorDataset (hid_t loc_id,
   hid_t sid = -1;
   herr_t retErr = 0;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(data.front());
+  if(dataType == -1)
+  {
+    return -1;
+  }
   //Create the DataSpace
   std::vector<uint64>::size_type size = dims.size();
   hsize_t _dims[size];
@@ -251,6 +258,10 @@ static herr_t writeDataset(hid_t loc_id,
   hid_t sid = -1;
   herr_t retErr = 0;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(data[0]);
+  if (dataType == -1)
+  {
+    return -1;
+  }
   //Create the DataSpace
   sid = H5Screate_simple( rank, dims, NULL );
   if (sid < 0) 
@@ -308,6 +319,10 @@ static herr_t writeScalarDataset (hid_t loc_id,
   hsize_t dims = 1;
   hid_t rank = 1;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(value);
+  if (dataType == -1)
+  {
+    return -1;
+  }
   //Create the DataSpace
   sid = H5Screate_simple( rank, &(dims), NULL );
   if (sid < 0) 
@@ -375,6 +390,10 @@ static herr_t writeVectorAttribute(hid_t loc_id,
   herr_t err = 0;
   herr_t retErr = 0;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(data.front());
+  if (dataType == -1)
+  {
+    return -1;
+  }
   /* Get the type of object */
   if (H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf) < 0) {
     std::cout << "Error getting object info." << std::endl;
@@ -480,6 +499,10 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
   hsize_t dims = 1;
   hid_t rank = 1;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(data);
+  if (dataType == -1)
+  {
+    return -1;
+  }
   /* Get the type of object */
   if (H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf) < 0) {
     std::cout << "Error getting object info." << std::endl;
@@ -580,6 +603,10 @@ static herr_t readVectorDataset(hid_t loc_id,
 	hid_t dataType;
 	T test = 0xFF;
   dataType = H5Lite::HDFTypeForPrimitive(test);
+  if (dataType == -1)
+  {
+    return -1;
+  }
   //std::cout << "HDF5 Data Type: " << H5Lite::HDFTypeForPrimitiveAsStr(test) << std::endl;
  /* Open the dataset. */
 // std::cout << "  Opening " << dsetName << " for data Retrieval.  " << std::endl;
@@ -603,7 +630,7 @@ static herr_t readVectorDataset(hid_t loc_id,
        // std::cout << "NumElements: " << numElements << std::endl;
         //Resize the vector
         data.resize( static_cast<int>(numElements) );
-        for (uint32 i = 0; i<numElements; ++i) { data[i] = 555555555555;  }
+        for (uint32 i = 0; i<numElements; ++i) { data[i] = 55555555;  }
         err = H5Dread(did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &( data.front() ) );
         if (err < 0) {
           std::cout << "Error Reading Data." << std::endl; 
@@ -643,6 +670,10 @@ static herr_t readScalarDataset(hid_t loc_id,
   hid_t spaceId;
   
   hid_t dataType = H5Lite::HDFTypeForPrimitive(data);
+  if (dataType == -1)
+  {
+    return -1;
+  }
  /* Open the dataset. */
   did = H5Dopen( loc_id, dsetName.c_str() );
   if ( did < 0 ) {
@@ -722,6 +753,10 @@ static herr_t readVectorAttribute(hid_t loc_id,
   hid_t tid;
   T test = 0x00;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
+  if (dataType == -1)
+  {
+    return -1;
+  }
   //std::cout << "   Reading Vector Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
   err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
@@ -789,6 +824,10 @@ static herr_t  readScalarAttribute(hid_t loc_id,
   hid_t attr_id;
   T test = 0x00;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
+  if (dataType == -1)
+  {
+    return -1;
+  }
  // std::cout << "Reading Scalar style Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
   err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);

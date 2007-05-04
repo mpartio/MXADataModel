@@ -226,8 +226,9 @@ herr_t testMakeAttribute(hid_t &file_id, std::string objName, T type ) {
   
   /* Make dataset */
   std::vector<T> data;
+  T _dat = 0x0f;
   for (int i = 0; i < numElements; ++i) {
-    data.push_back( 0x0F );
+    data.push_back( _dat );
   }
   std::cout << "Attribute->Write: " << objName;
   err = H5Lite::writeVectorAttribute( file_id, objName, testAttribute, dims, data );
@@ -336,18 +337,6 @@ void H5LiteTest() {
   BOOST_REQUIRE ( testMakeAttribute(file_id, "H5T_NATIVE_DOUBLE",  Float64Type) >= 0);
   BOOST_REQUIRE ( testMakeStringAttribute(file_id)  >= 0);
 
-	// **************** Test using non MXA data types ****************************
-	// This may trip up the 32/64 bit implementations... 
-	std::cout << logTime() << "----------- Testing Writing/Reading of C99 Types -----------" << std::endl;
-	long int lTest = 0xabcdef00;
-	long unsigned int ulTest= 0x12345678;
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Test C99/long int",   lTest) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Test C99/long unsigned int",  ulTest) >= 0);
-  
-  int iTest = 0xabcdef00;
-	unsigned int uTest= 0x12345678;
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Test C99/int",   iTest) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Test C99/unsigned int",  uTest) >= 0);
   
   /* Close the file. */
   H5Fclose( file_id );
