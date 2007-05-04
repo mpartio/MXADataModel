@@ -99,7 +99,7 @@ herr_t testMakeDataset(hid_t &file_id, std::string name, hid_t &dataType, T type
   hsize_t dimx = 2;
   hsize_t dimy = 3;
   // Create the Dimensions
-  std::vector<hsize_t> dims;
+  std::vector<uint64> dims;
   dims.push_back(dimx);
   dims.push_back(dimy);
   
@@ -209,7 +209,7 @@ herr_t testMakeAttribute(hid_t &file_id, std::string objName, T type ) {
   herr_t err = -1;
   int32 numElements = 4;
   // Create the Dimensions
-  std::vector<hsize_t> dims;
+  std::vector<uint64> dims;
   dims.push_back(numElements);
   
   /* Make dataset */
