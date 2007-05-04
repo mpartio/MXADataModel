@@ -630,19 +630,19 @@ herr_t H5Lite::getAttributeInfo(hid_t loc_id,
         if (sid >= 0 ) 
         {
           rank = H5Sget_simple_extent_ndims( sid );
-		  hsize_t _dims[rank];
+		      hsize_t _dims[rank];
           err = H5Sget_simple_extent_dims(sid, _dims, NULL );
           if (err<0) {
             std::cout << "Error Getting Attribute dims" << std::endl;
             retErr = err; 
           }
           //Copy the dimensions into the dims vector
-		  dims.clear(); //Erase everything in the Vector
-		  dims.resize(rank);
-		  for (hid_t i = 0; i < rank; ++i) 
-		  {
-			dims[i] = static_cast<uint64>(_dims[i]);
-		  }
+    		  dims.clear(); //Erase everything in the Vector
+    		  dims.resize(rank);
+    		  for (hid_t i = 0; i < rank; ++i) 
+    		  {
+    			dims[i] = static_cast<uint64>(_dims[i]);
+    		  }
           CloseH5S(sid, err, retErr);
         }
         //CloseH5T(tid, err, retErr); We are passing back the tid so don't close it

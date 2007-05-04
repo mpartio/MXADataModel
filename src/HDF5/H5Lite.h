@@ -197,8 +197,13 @@ static herr_t writeVectorDataset (hid_t loc_id,
   herr_t retErr = 0;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(data.front());
   //Create the DataSpace
-  #error Insert copy code here 
-  sid = H5Screate_simple( dims.size(), &(dims.front()), NULL );
+  std::vector<uint64>::size_type size = dims.size();
+  hsize_t _dims[size];
+  for (std::vector<uint64>::size_type i = 0; i < size; ++i)
+  {
+    _dims[i] = static_cast<hsize_t>(dims[i]);
+  }
+  sid = H5Screate_simple( dims.size(), _dims, NULL );
   if (sid < 0) 
   {
     return sid;

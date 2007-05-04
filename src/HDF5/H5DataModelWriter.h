@@ -13,8 +13,8 @@
 
 // MXA Includes
 #include "Headers/DLLExport.h"
-#include "MXADataModel/MXADataModel.h"
 #include "Interfaces/IDataModelWriter.h"
+#include "MXADataModel/MXADataModel.h"
 #include "HDF5/H5IODelegate.h"
 
 //-- STL Headers

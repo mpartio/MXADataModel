@@ -33,6 +33,12 @@ namespace TiffIOConst {
 //#define H5IM_INTERLACE_PIXEL "INTERLACE_PIXEL"
 const std::string H5IM_INTERLACE_PIXEL("INTERLACE_PIXEL");
 
+/**
+* @brief General IO class for TIFF images
+* @author Mike Jackson/Shawn Nicholson
+* @date March 2007
+* @version 1.0
+*/
 class MXA_EXPORT H5TiffIO 
 {
  public:

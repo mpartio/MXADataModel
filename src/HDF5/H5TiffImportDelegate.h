@@ -29,10 +29,10 @@ class MXADataModel;
 namespace FileSystem = boost::filesystem;
 
 /**
- * @brief
- * @author
+ * @brief A generic Import Delegate that imports TIFF images into an HDF5 data file
+ * @author Mike Jackson
  * @date April 2007
- * @header
+ * @header HDF5/H5TiffImportDelegate.h
  */
 class MXA_EXPORT H5TiffImportDelegate : public IDataImportDelegate
 {
@@ -51,7 +51,16 @@ public:
    */
   void setDataModel(MXADataModelPtr model);
   
+  /**
+  * @brief 
+  * @param value
+  */
   void setFileNotFoundIsError(bool value);
+
+  /**
+  * @brief 
+  * @param value
+  */
   void setImportAsGrayScale(bool value);
   
 private:
@@ -61,9 +70,6 @@ private:
   
   H5TiffImportDelegate(const H5TiffImportDelegate&);   //Copy Constructor Not Implemented
   void operator=(const H5TiffImportDelegate&); //Copy Assignment Not Implemented
-
-  
-  
 };
 
 #endif /*OFIMPORTDELEGATE_H_*/

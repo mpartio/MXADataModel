@@ -1,4 +1,3 @@
-#include "Headers/LogTime.h"
 
 #include <string>
 #include <iostream>

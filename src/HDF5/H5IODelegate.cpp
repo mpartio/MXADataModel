@@ -192,7 +192,8 @@ hid_t H5IODelegate::createMXAFile(std::string filename)
 // -----------------------------------------------------------------------------
 void H5IODelegate::closeMXAFile() 
 {
-  if (_fileId <= 0) {  // fileId isn't open
+  //std::cout << logTime() << "H5IODelegate::closeMXAFile  _fileId: " << _fileId << std::endl;
+  if (_fileId < 0) {  // fileId isn't open
     return;
   }
   
@@ -219,6 +220,7 @@ void H5IODelegate::closeMXAFile()
   if (err < 0) {
     std::cout << "H5IODelegate::closeMXAFile(): H5Fclose() caused error " << err << std::endl;
   }
+  this->_fileId = -1;
   this->_openFile = "";
 }
 

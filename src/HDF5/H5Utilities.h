@@ -24,11 +24,10 @@
 #include "hdf5.h"
 
 /**
- * @brief
- * @author
- * @date
- * @version
- *  
+ * @brief General Utilities for working with the HDF5 data files and API
+ * @author Mike Jackson/Shawn Nicholson
+ * @date March 2007
+ * @version 1.0
  */
 class H5Utilities
 {
@@ -49,18 +48,73 @@ public:
   #endif
   
   // -------------- HDF Indentifier Methods ----------------------------
-  static MXA_EXPORT std::string getObjectPath(hid_t, bool trim=false);
-  static MXA_EXPORT herr_t getObjectType(hid_t, std::string, int32 *);
-  static MXA_EXPORT herr_t objectNameAtIndex(hid_t fileId, int32 idx, std::string &name);
+  /**
+  * @brief 
+  * @param objId
+  * @param trim=false
+  * @return 
+  */
+  static MXA_EXPORT std::string getObjectPath(hid_t objId, bool trim=false);
+ 
+  /**
+  * @brief 
+  * @param objId
+  * @param datasetPath
+  * @param type
+  * @return 
+  */
+  static MXA_EXPORT herr_t getObjectType(hid_t objId, std::string datasetPath, int *type);
+ 
+  /**
+  * @brief 
+  * @param fileId
+  * @param idx
+  * @param name
+  * @return 
+  */
+  static MXA_EXPORT herr_t objectNameAtIndex(hid_t fileId, int idx, std::string &name);
+ 
+  /**
+  * @brief 
+  * @param nodeId
+  * @param objName
+  * @return 
+  */
   static MXA_EXPORT bool isGroup(hid_t nodeId, std::string objName);
   
-  static MXA_EXPORT hid_t openHDF5Object(hid_t locId, std::string);
+
+  /**
+  * @brief 
+  * @param locId
+  * @param objectPath
+  * @return 
+  */
+  static MXA_EXPORT hid_t openHDF5Object(hid_t locId, std::string objectPath);
+
+  /**
+  * @brief 
+  * @param locId
+  * @return 
+  */
   static MXA_EXPORT herr_t closeHDF5Object(hid_t locId);
 
-  static MXA_EXPORT void printHDFClassType(H5T_class_t);
+
+  /**
+  * @brief 
+  * @param classT
+  * @return 
+  */
+  static MXA_EXPORT void printHDFClassType(H5T_class_t classT);
 
   // -------------- HDF Group Methods ----------------------------
-  static MXA_EXPORT herr_t getGroupObjects(hid_t, int, std::list<std::string> &);
+  /**
+  * @brief 
+  * @param groupId
+  * @param typeFilter
+  * @param list
+  * @return 
+  */
+  static MXA_EXPORT herr_t getGroupObjects(hid_t groupId, int typeFilter, std::list<std::string> &list);
   
   /**
    * @brief Creates a HDF Group by checking if the group already exists. If the 
@@ -82,12 +136,40 @@ public:
   static MXA_EXPORT herr_t  createGroupsFromPath(std::string path, hid_t parent);
 
   // -------------- HDF Attribute Methods ----------------------------
-  static MXA_EXPORT bool probeForAttribute(hid_t, std::string, std::string);
+  /**
+  * @brief 
+  * @param loc_id
+  * @param obj_name
+  * @param attr_name
+  * @return 
+  */
+  static MXA_EXPORT bool probeForAttribute(hid_t loc_id, 
+                                            std::string obj_name, 
+                                            std::string attr_name);
 
 
-  static MXA_EXPORT std::list<std::string> getAllAttributeNames(hid_t);
-  static MXA_EXPORT std::list<std::string> getAllAttributeNames(hid_t, std::string);
-  static MXA_EXPORT std::map<std::string, std::string> getAttributesMap(hid_t, std::string);
+  /**
+  * @brief 
+  * @param objId
+  * @return 
+  */
+  static MXA_EXPORT std::list<std::string> getAllAttributeNames(hid_t objId);
+
+  /**
+  * @brief 
+  * @param objId
+  * @param std::stringobj_name
+  * @return 
+  */
+  static MXA_EXPORT std::list<std::string> getAllAttributeNames(hid_t objId, std::string obj_name);
+
+  /**
+  * @brief 
+  * @param objId
+  * @param obj_name
+  * @return 
+  */
+  static MXA_EXPORT std::map<std::string, std::string> getAttributesMap(hid_t objId, std::string obj_name);
   
   
 protected:

@@ -7,6 +7,11 @@
 
 #include <vector>
 
+/**
+* @brief Writes Attributes for a dataset to an HDF5 data file
+* @author Mike Jackson
+* @date March 2007
+*/
 class MXA_EXPORT H5AttributeWriter : public IAttributeWriter
 {
 public:
@@ -32,9 +37,14 @@ public:
     }
     
 
-    // -----------------------------------------------------------------------------
-    //  
-    // -----------------------------------------------------------------------------  
+   /**
+   * @brief Writes a Scalar Attribute value for a given dataset
+   * @param locationId An HDF5 id the represents a file or group that contains the dataset
+   * @param datasetPath The Path to the dataset that the attribute is going to be written to
+   * @param key The Key for the Attribute
+   * @param value The Value of the Attribute
+   * @return Standard HDF5 Error condition.
+   */
    int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::string &value)
    {
    //  std::cout << "Writing Attribute for String '" << key << "'" << std::endl;
@@ -134,6 +144,15 @@ public:
    // -----------------------------------------------------------------------------
    //  
    // -----------------------------------------------------------------------------  
+   /**
+   * @brief Writes a Vector/Matrix Attribute value for a given dataset
+   * @param locationId An HDF5 id the represents a file or group that contains the dataset
+   * @param datasetPath The Path to the dataset that the attribute is going to be written to
+   * @param key The Key for the Attribute
+   * @param dims The dimensions of the data set
+   * @param value The Value of the Attribute
+   * @return Standard HDF5 Error condition.
+   */
   int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<int8> &value)
    {
      //std::cout << "Writing Attribute for Vector '" << key << "'" << std::endl;     
@@ -221,7 +240,7 @@ public:
      return _writeAttribute(locationId, datasetPath, key, dims, value);
    }
   
-		
+    
 };
 
 #endif //_HDF5AttributeWriter _h_

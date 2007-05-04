@@ -40,23 +40,82 @@ class MXA_EXPORT H5DataModelReader : public IDataModelReader
 {
 
 public:
+  /**
+  * @brief Constructor for H5DataModelReader
+  * @param ioDelegate The IFileIODelegate object to use
+  * @param dataModel The DataModel to use. Note that settings in the datamodel will
+  * be over written with those from the file.
+  */
   H5DataModelReader(IFileIODelegate* ioDelegate, MXADataModel* dataModel);
+  
   virtual ~H5DataModelReader();
   
   
   // Loading Methods
+  /**
+  * @brief 
+  * @param locId
+  * @return 
+  */
   herr_t readDataModel(hid_t locId);
+ 
+  /**
+  * @brief 
+  * @param locId
+  * @return 
+  */
   herr_t readFileType(hid_t locId);
+ 
+  /**
+  * @brief 
+  * @param locId
+  * @return 
+  */
   herr_t readFileVersion(hid_t locId);
+ 
+  /**
+  * @brief 
+  * @param locId
+  * @return 
+  */
   herr_t readDataRoot(hid_t locId);
+ 
+  /**
+  * @brief 
+  * @param locId
+  * @return 
+  */
   herr_t readDataDimensions(hid_t locId);
-  herr_t readDataRecords(hid_t fileId);
+ 
+  /**
+  * @brief 
+  * @param fileId
+  * @return 
+  */
+  herr_t readDataRecords(hid_t locId);
+ 
+  /**
+  * @brief 
+  * @param locId
+  * @return 
+  */
   herr_t readRequiredMetaData(hid_t locId);
+ 
+  /**
+  * @brief 
+  * @param locId
+  * @return 
+  */
   herr_t readUserMetaData(hid_t locId);
   
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
+  /**
+  * @brief 
+  * @param locId
+  * @param datasetPath
+  * @param key
+  * @param dims
+  * @return 
+  */
   template<typename T>
   int32 readPrimitiveAttribute( hid_t locId, const std::string &datasetPath, 
                                  const std::string &key, 
@@ -86,8 +145,28 @@ public:
   
 protected:
   // ----- Helper methods to read data dimensions or data records --------------
+  /**
+  * @brief 
+  * @param locId
+  * @param name
+  * @return 
+  */
   MXADataDimensionPtr _loadDataDimension(hid_t locId, std::string name);
+
+  /**
+  * @brief 
+  * @param gid
+  * @param parent
+  * @return 
+  */
   herr_t _traverseDataRecords( hid_t gid, MXADataRecordPtr parent);
+
+  /**
+  * @brief 
+  * @param gid
+  * @param name
+  * @return 
+  */
   MXADataRecordPtr _loadDataRecord(hid_t gid, std::string name);
   
   
