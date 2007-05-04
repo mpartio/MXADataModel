@@ -187,12 +187,13 @@ static herr_t writeVectorDataset (hid_t loc_id,
   }
   //Create the DataSpace
   std::vector<uint64>::size_type size = dims.size();
-  hsize_t _dims[size];
+  //std::vector<hsize_t> _dims(size, 0);
+  std::vector<hsize_t> _dims(size, 0);
   for (std::vector<uint64>::size_type i = 0; i < size; ++i)
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
-  sid = H5Screate_simple( size, _dims, NULL );
+  sid = H5Screate_simple( size, &(_dims.front()), NULL );
   if (sid < 0) 
   {
     return sid;
@@ -410,12 +411,13 @@ static herr_t writeVectorAttribute(hid_t loc_id,
   hsize_t* dimsPtr = 0x0;
 	//size mismatch between hsize_t and size_t
 	std::vector<uint64>::size_type _size = dims.size();
-	hsize_t _dims[ _size ];
+	//hsize_t _dims[ _size ];
+	std::vector<hsize_t> _dims(_size, 0);
 	for (std::vector<uint64>::size_type i = 0; i < _size; ++i) 
 	{
 		_dims[i] = static_cast<hsize_t>(dims[i]);
 	}
-	dimsPtr = _dims;
+	dimsPtr = &(_dims.front() );
 
   sid = H5Screate_simple( dims.size(), dimsPtr, NULL );
   if ( sid >= 0 ) {
@@ -772,7 +774,7 @@ static herr_t readVectorAttribute(hid_t loc_id,
       //Need to allocate the array size
       H5T_class_t type_class;
       size_t type_size;
-      std::vector<uint64_t> dims;
+      std::vector<uint64> dims;
       H5Lite::getAttributeInfo(loc_id, objName, attrName, dims, type_class, type_size, tid);
       hsize_t numElements = 1;
       for (std::vector<uint64>::iterator iter = dims.begin(); iter < dims.end(); ++iter )
