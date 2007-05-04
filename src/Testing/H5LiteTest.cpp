@@ -55,7 +55,7 @@ herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, hid_t &dataT
   hsize_t dimy = 3;
   int32 rank = 2;
   // Create the Dimensions
-  std::vector<uint64> dims;
+  std::vector<hsize_t> dims;
   dims.push_back(dimx);
   dims.push_back(dimy);
   
@@ -70,10 +70,10 @@ herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, hid_t &dataT
      std::cout << " - Failed - Could not write data to file." << std::endl;
      return err;; 
   }
-#if 1
+
   /* Now read the dataset into another vector and compare */
   std::vector<T> rData; //Create a vector to hold the data.
-  err = H5Lite::readVectorDataset( file_id, name, rData, dataType);
+  err = H5Lite::readVectorDataset( file_id, name, rData);
   if (err<0) {
     std::cout << " - Failed - Error Reading Data from File" << std::endl;
     return err;; 
@@ -85,8 +85,7 @@ herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, hid_t &dataT
     std::cout << " - Failed - Data Read from the file does not match the stored data." << std::endl;
     err = -1;
   }
-#endif
-  
+
   return err;
 }
 
@@ -94,7 +93,7 @@ herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, hid_t &dataT
 //  
 // -----------------------------------------------------------------------------
 template <typename T>
-herr_t testMakeDataset(hid_t &file_id, std::string name, hid_t &dataType, T type ) {
+herr_t testMakeDataset(hid_t &file_id, std::string name, T type ) {
   herr_t err = -1;
   hsize_t dimx = 2;
   hsize_t dimy = 3;
@@ -117,15 +116,28 @@ herr_t testMakeDataset(hid_t &file_id, std::string name, hid_t &dataType, T type
 
   /* Now read the dataset into another vector and compare */
   std::vector<T> rData; //Create a vector to hold the data.
-  err = H5Lite::readVectorDataset( file_id, name, rData, dataType);
+  err = H5Lite::readVectorDataset( file_id, name, rData);
   if (err<0) {
     std::cout << " - Failed - Error Reading Data from File" << std::endl;
-    return err;; 
+    return err;
   }
   if ( data == rData) {
     err = 0;
     std::cout << " - Passed" << std::endl;
   } else {
+  #if 0
+  	std::cout << "\nRead Data: " << std::endl;
+  	for (uint32 i = 0; i < rData.size(); ++i)
+  	{
+  		std::cout << rData[i] << " ";
+  	}
+  	
+  	std::cout << "\nWritten Data: " << std::endl;
+  	for (uint32 i = 0; i < data.size(); ++i)
+  	{
+  		std::cout << data[i] << " ";
+  	}
+  	#endif
     std::cout << " - Failed - Data Read from the file does not match the stored data." << std::endl;
     err = -1;
   }
@@ -270,20 +282,24 @@ void H5LiteTest() {
   //Create the Extra Groups
   hid_t sintGid = H5Gcreate(file_id, "Signed Int", 0);
   hid_t uintGid = H5Gcreate(file_id, "Unsigned Int", 0);
+  hid_t c99Gid = H5Gcreate(file_id, "Test C99", 0);
   herr_t err = H5Gclose(sintGid);
   err = H5Gclose(uintGid);
+  err = H5Gclose(c99Gid);
+  
   // ******************* Test Writing Data *************************************
   std::cout << logTime() << "----------- Testing Writing/Reading of Datasets -----------" << std::endl;
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT8",  H5T_NATIVE_INT8, MXATypes::Int8Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT8", H5T_NATIVE_UINT8, Uint8Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT16",   H5T_NATIVE_INT16, Int16Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT16", H5T_NATIVE_UINT16, Uint16Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT32", H5T_NATIVE_INT32, Int32Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT32", H5T_NATIVE_UINT32, Uint32Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT64",  H5T_NATIVE_INT64, Int64Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT64", H5T_NATIVE_UINT64, Uint64Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "H5T_NATIVE_FLOAT", H5T_NATIVE_FLOAT, Float32Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "H5T_NATIVE_DOUBLE", H5T_NATIVE_DOUBLE, Float64Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT64",   Int64Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT64",  Uint64Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT8",   Int8Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT8",  Uint8Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT16",    Int16Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT16",  Uint16Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT32",  Int32Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT32",  Uint32Type) >= 0);
+
+  BOOST_REQUIRE ( testMakeDataset(file_id, "H5T_NATIVE_FLOAT",  Float32Type) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "H5T_NATIVE_DOUBLE",  Float64Type) >= 0);
   BOOST_REQUIRE ( testMakeStringDataset(file_id)  >= 0);
  
   for (int i = 0; i < 1; ++i)
@@ -320,6 +336,19 @@ void H5LiteTest() {
   BOOST_REQUIRE ( testMakeAttribute(file_id, "H5T_NATIVE_DOUBLE",  Float64Type) >= 0);
   BOOST_REQUIRE ( testMakeStringAttribute(file_id)  >= 0);
 
+	// **************** Test using non MXA data types ****************************
+	// This may trip up the 32/64 bit implementations... 
+	std::cout << logTime() << "----------- Testing Writing/Reading of C99 Types -----------" << std::endl;
+	long int lTest = 0xabcdef00;
+	long unsigned int ulTest= 0x12345678;
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Test C99/long int",   lTest) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Test C99/long unsigned int",  ulTest) >= 0);
+  
+  int iTest = 0xabcdef00;
+	unsigned int uTest= 0x12345678;
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Test C99/int",   iTest) >= 0);
+  BOOST_REQUIRE ( testMakeDataset(file_id, "Test C99/unsigned int",  uTest) >= 0);
+  
   /* Close the file. */
   H5Fclose( file_id );
   std::cout << logTime() << "Testing Complete" << std::endl;

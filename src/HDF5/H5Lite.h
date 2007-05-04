@@ -62,29 +62,20 @@ static MXA_EXPORT herr_t closeId( hid_t obj_id, int32 obj_type );
 template<typename T>
 static std::string HDFTypeForPrimitiveAsStr(T value)
 {
-  if (typeid(value) == typeid(char)) return "H5T_NATIVE_INT8";
-  if (typeid(value) == typeid(signed char)) return "H5T_NATIVE_INT8";  
-  if (typeid(value) == typeid(unsigned char)) return "H5T_NATIVE_UINT8";
+  if (typeid(value) == typeid(int8)) return "H5T_NATIVE_INT8";
+  if (typeid(value) == typeid(uint8)) return "H5T_NATIVE_UINT8";
   
-  if (typeid(value) == typeid(short int)) return "H5T_NATIVE_INT16";
-  if (typeid(value) == typeid(signed short int)) return "H5T_NATIVE_INT16";
-  if (typeid(value) == typeid(unsigned short int)) return "H5T_NATIVE_UINT16";
+  if (typeid(value) == typeid(int16)) return "H5T_NATIVE_INT16";
+  if (typeid(value) == typeid(uint16)) return "H5T_NATIVE_UINT16";
   
-  if (typeid(value) == typeid(int)) return "H5T_NATIVE_INT32";
-  if (typeid(value) == typeid(signed int)) return "H5T_NATIVE_INT32";
-  if (typeid(value) == typeid(long int)) return "H5T_NATIVE_INT32";
-  if (typeid(value) == typeid(signed long int)) return "H5T_NATIVE_INT32";
+  if (typeid(value) == typeid(int32)) return "H5T_NATIVE_INT32";
+  if (typeid(value) == typeid(uint32)) return "H5T_NATIVE_UINT32";
   
-  if (typeid(value) == typeid(unsigned int)) return "H5T_NATIVE_UINT32";
-  if (typeid(value) == typeid(unsigned long int)) return "H5T_NATIVE_UINT32";
+  if (typeid(value) == typeid(int64)) return "H5T_NATIVE_INT64";
+  if (typeid(value) == typeid(uint64)) return "H5T_NATIVE_UINT64";
   
-  if (typeid(value) == typeid(long long int)) return "H5T_NATIVE_INT64";
-  if (typeid(value) == typeid(signed long long int)) return "H5T_NATIVE_INT64";
-  if (typeid(value) == typeid(unsigned long long int)) return "H5T_NATIVE_UINT64";
-  
-  
-  if (typeid(value) == typeid(float)) return "H5T_NATIVE_FLOAT";
-  if (typeid(value) == typeid(double)) return "H5T_NATIVE_DOUBLE";
+  if (typeid(value) == typeid(float32)) return "H5T_NATIVE_FLOAT";
+  if (typeid(value) == typeid(float64)) return "H5T_NATIVE_DOUBLE";
   
   std::cout << "Error: HDFTypeForPrimitiveAsStr - Unknown Type: " << typeid(value).name() << std::endl;
   return "";
@@ -99,29 +90,20 @@ static std::string HDFTypeForPrimitiveAsStr(T value)
 template<typename T>
 static hid_t HDFTypeForPrimitive(T value)
 {
-  if (typeid(value) == typeid(char)) return H5T_NATIVE_INT8;
-  if (typeid(value) == typeid(signed char)) return H5T_NATIVE_INT8;  
-  if (typeid(value) == typeid(unsigned char)) return H5T_NATIVE_UINT8;
+  if (typeid(value) == typeid(float32)) return H5T_NATIVE_FLOAT;
+  if (typeid(value) == typeid(float64)) return H5T_NATIVE_DOUBLE;
   
-  if (typeid(value) == typeid(short int)) return H5T_NATIVE_INT16;
-  if (typeid(value) == typeid(signed short int)) return H5T_NATIVE_INT16;
-  if (typeid(value) == typeid(unsigned short int)) return H5T_NATIVE_UINT16;
+  if (typeid(value) == typeid(int8)) return H5T_NATIVE_INT8;
+  if (typeid(value) == typeid(uint8)) return H5T_NATIVE_UINT8; 
   
-  if (typeid(value) == typeid(int)) return H5T_NATIVE_INT32;
-  if (typeid(value) == typeid(signed int)) return H5T_NATIVE_INT32;
-  if (typeid(value) == typeid(long int)) return H5T_NATIVE_INT32;
-  if (typeid(value) == typeid(signed long int)) return H5T_NATIVE_INT32;
+  if (typeid(value) == typeid(int16)) return H5T_NATIVE_INT16;
+  if (typeid(value) == typeid(uint16)) return H5T_NATIVE_UINT16; 
   
-  if (typeid(value) == typeid(unsigned int)) return H5T_NATIVE_UINT32;
-  if (typeid(value) == typeid(unsigned long int)) return H5T_NATIVE_UINT32;
+  if (typeid(value) == typeid(int32)) return H5T_NATIVE_INT32;
+  if (typeid(value) == typeid(uint32)) return H5T_NATIVE_UINT32; 
   
-  if (typeid(value) == typeid(long long int)) return H5T_NATIVE_INT64;
-  if (typeid(value) == typeid(signed long long int)) return H5T_NATIVE_INT64;
-  if (typeid(value) == typeid(unsigned long long int)) return H5T_NATIVE_UINT64;
-  
-  
-  if (typeid(value) == typeid(float)) return H5T_NATIVE_FLOAT;
-  if (typeid(value) == typeid(double)) return H5T_NATIVE_DOUBLE;
+  if (typeid(value) == typeid(int64)) return H5T_NATIVE_INT64;
+  if (typeid(value) == typeid(uint64)) return H5T_NATIVE_UINT64; 
   
   std::cout << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
   return -1;
@@ -203,7 +185,7 @@ static herr_t writeVectorDataset (hid_t loc_id,
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
-  sid = H5Screate_simple( dims.size(), _dims, NULL );
+  sid = H5Screate_simple( size, _dims, NULL );
   if (sid < 0) 
   {
     return sid;
@@ -589,15 +571,16 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
 template <typename T>
 static herr_t readVectorDataset(hid_t loc_id, 
                           const std::string& dsetName, 
-                          std::vector<T> &data,
-                          hid_t dataType) 
+                          std::vector<T> &data) 
 {
   hid_t   did;
   herr_t  err = 0;
   herr_t retErr = 0;
   hid_t spaceId;
-  
-  
+	hid_t dataType;
+	T test = 0xFF;
+  dataType = H5Lite::HDFTypeForPrimitive(test);
+  //std::cout << "HDF5 Data Type: " << H5Lite::HDFTypeForPrimitiveAsStr(test) << std::endl;
  /* Open the dataset. */
 // std::cout << "  Opening " << dsetName << " for data Retrieval.  " << std::endl;
   did = H5Dopen( loc_id, dsetName.c_str() );
@@ -617,8 +600,10 @@ static herr_t readVectorDataset(hid_t loc_id,
         for (std::vector<hsize_t>::iterator iter = dims.begin(); iter < dims.end(); ++iter ) {
           numElements = numElements * (*iter); 
         }
+       // std::cout << "NumElements: " << numElements << std::endl;
         //Resize the vector
         data.resize( static_cast<int>(numElements) );
+        for (uint32 i = 0; i<numElements; ++i) { data[i] = 555555555555;  }
         err = H5Dread(did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &( data.front() ) );
         if (err < 0) {
           std::cout << "Error Reading Data." << std::endl; 
