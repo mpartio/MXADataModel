@@ -20,6 +20,12 @@ SET (EXECUTABLE_OUTPUT_PATH
   "Single Directory for all Executables."
   )
 
+# ------- Enable the CTest testing. Use make test to run all tests ---------------
+OPTION(BUILD_TESTING "Build ParaView Complete Testing" ON)
+IF(BUILD_TESTING)
+  ENABLE_TESTING()
+ENDIF(BUILD_TESTING)
+
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
   ADD_DEFINITIONS(-DDEBUG)
@@ -132,7 +138,7 @@ IF ( MXA_USE_HDF5 )
     src/HDF5/H5Utilities.h
   )
   SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
-  SET(EXTRA_LIBS ${EXTRA_LIBS} ${HDF5_LIBRARIES})
+  SET(DEP_LIBS ${DEP_LIBS} ${HDF5_LIBRARIES})
 ENDIF ( MXA_USE_HDF5 )
 
 
@@ -152,7 +158,7 @@ IF(MXA_USE_TIFF)
 		)
 		
 		SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
-		SET(EXTRA_LIBS ${EXTRA_LIBS} ${TIFF_LIBRARIES})
+		SET(DEP_LIBS ${DEP_LIBS} ${TIFF_LIBRARIES})
 ENDIF (MXA_USE_TIFF)
 
 #--------- XML Sources ---------------------------------------------------
@@ -183,11 +189,11 @@ ENDIF (MXA_BUILD_SHARED_LIBS)
 
 
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
-TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${EXTRA_LIBS} ${Boost_LIBRARIES})
+TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} ${Boost_LIBRARIES})
 
 
 #ADD_EXECUTABLE(H5ResourceTest src/Misc/HDFResourceTest.cpp src/HDF5/H5Lite.cpp)
 #TARGET_LINK_LIBRARIES(H5ResourceTest ${HDF5_LIBRARIES})
 
-ADD_EXECUTABLE(Test src/Misc/test.cpp)
-TARGET_LINK_LIBRARIES(Test )
+#ADD_EXECUTABLE(Test src/Misc/test.cpp)
+#TARGET_LINK_LIBRARIES(Test )

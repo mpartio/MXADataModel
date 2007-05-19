@@ -20,6 +20,7 @@
 // C++ Includes
 #include <iostream>
 #include <vector>
+#include <map>
 
 //Boost Includes
 #include "boost/shared_ptr.hpp"
@@ -195,6 +196,25 @@ bool recordExists(MXADataModelPtr model, std::string recName)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
+void TestLookupTableGeneration()
+{
+  std::cout << "TestLookupTableGeneration Running...." << std::endl;
+  MXADataModelPtr modelPtr = createModel();
+  MXADataRecords records = modelPtr->getDataRecords();
+  NodeLookupTable lut;
+  MXANode::generateLUT(lut, records);
+  for (NodeLookupTable::iterator iter = lut.begin(); iter != lut.end(); ++iter )
+  {
+    //int32 guid = (*(iter)).first;
+    MXADataRecord* rec = dynamic_cast<MXADataRecord*>( (*(iter)).second.get() );
+    std::cout << (*(iter)).first << "  " << rec->getRecordName() << std::endl;
+  }
+  
+  
+}
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 void TestRetrieveDataRecords()
 { 
   std::cout << "TestRetrieveDataRecords Running...." << std::endl;
@@ -246,6 +266,7 @@ void ReReadTestModel()
     MXADataModelPtr rmodel  = MXADataModel::New();
     MXADataModel* model = rmodel.get();
     BOOST_REQUIRE ( model->readModel(inFile) >= 0);
+    model->printModel(std::cout, true);
     BOOST_REQUIRE ( model->writeModel(outFile) >= 0 );
     
     IODelegatePtr ioPtr;
@@ -275,5 +296,6 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test->add( BOOST_TEST_CASE( &ReReadTestModel), 0);
     test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );
     test->add( BOOST_TEST_CASE( &WriteXMLModelTest), 0);
+    test->add( BOOST_TEST_CASE( &TestLookupTableGeneration), 0);
     return test; 
 }

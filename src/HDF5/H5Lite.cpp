@@ -364,10 +364,9 @@ herr_t H5Lite::readStringDataset(hid_t loc_id, const std::string& dsetName, std:
     } else {
       data.append( &(buf.front()) ); //Append the string to the given string
     }
-    
-    CloseH5T(tid, err, retErr);
   }
   CloseH5D(did, err, retErr);
+  CloseH5T(tid, err, retErr);
   return retErr;
 }
 
