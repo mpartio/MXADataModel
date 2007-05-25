@@ -459,6 +459,7 @@ herr_t H5DataModelReader::readUserMetaData(hid_t locId)
       switch(attr_type) 
       {
       case H5T_STRING:
+        res.clear(); //Clear the string out first since we are reusing it
         err = H5Lite::readStringAttribute(locId, MXA::UserMetaDataPath, (*iter), res );
         if (err >= 0) {
           MXAAttributePtr attr = MXAAttribute::createAttribute((*iter), res);

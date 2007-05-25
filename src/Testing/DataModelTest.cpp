@@ -40,7 +40,7 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
   #define FILE_NAME_AFTER "C:\\WINDOWS\\Temp\\DataModelTest-After.h5"
   #define FILE_NAME_XML "C:\\WINDOWS\\Temp\\DataModelTest.xml"
 #else 
-  #define FILE_NAME_BEFORE "/tmp/DataModelTest-Before.h5"
+  #define FILE_NAME_BEFORE "/Users/mjackson/Desktop/DataModelTest-Before.h5"
   #define FILE_NAME_AFTER "/tmp/DataModelTest-After.h5"
   #define FILE_NAME_XML "/tmp/DataModelTest.xml"
 #endif
@@ -141,14 +141,15 @@ MXADataModelPtr createModel()
 {
 	  MXADataModelPtr modelPtr = MXADataModel::New();
 	  MXADataModel* model = modelPtr.get();
-	  model->setDataRoot(std::string("Our Experiment/Laboratory Data"));
+	  model->setDataRoot(std::string("TestDataset/DataIsHere"));
 	  model->setFileType(MXA::MXACurrentFileType);
 	  model->setFileVersion(MXA::MXACurrentFileVersion);
 
 	  // ---------- Test creation/addition of Data Dimensions
-	  MXADataDimensionPtr dim0 = MXADataDimension::New("Timestep", "TS", 0, 100, 0, 99, 1, 1);
-	  model->addDataDimension(dim0);
-	  MXADataDimensionPtr dim1 = model->addDataDimension("Slice", "slice", 1, 256, 0, 255, 1, 1);
+	  MXADataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 0, 30, 20, 50, 2, 1);
+	  MXADataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 1, 10, 1000, 5000, 500, 1);
+	  MXADataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS", 2, 100, 0, 99, 1, 1);
+	  MXADataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 3, 256, 0, 255, 1, 1);
 	  	  
 	  //Create Data Records
 	  MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
@@ -170,7 +171,7 @@ MXADataModelPtr createModel()
 	  std::map<std::string, std::string> md;
 	  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
 	  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
-	  md[MXA::MXA_DSET_NAME_TAG] = "OIM FIB Example Data Model";
+	  md[MXA::MXA_DSET_NAME_TAG] = "TESTING Example Data Model";
 	  md[MXA::MXA_DESCRIPTION_TAG] = "Just a test case showing how to organize OIM FIB data";
 	  md[MXA::MXA_PEDIGREE_TAG] = "Original";
 	  md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";

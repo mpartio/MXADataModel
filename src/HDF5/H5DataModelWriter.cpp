@@ -136,11 +136,13 @@ int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
   for (MXADataDimensions::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
   {
     dim = static_cast<MXADataDimension*> ( (*(iter)).get() ); //Get a reference to the raw pointer
+    //std::cout << "Writing DataDimension: " << dim->getDimensionName() << std::endl;
     dsetName = StringUtils::numToString( dim->getIndex() );
 
     // Create the dimension dataset
     int32 i = dim->getIndex();
-    H5Lite::writeScalarDataset(gid, dsetName,  i);
+    err = H5Lite::writeScalarDataset(gid, dsetName,  i);
+    if (err<0) { std::cout << "Error Writing DatasetName for DataDimension: " << dim->getDimensionName() << std::endl;;break;}
     
     i = dim->getCount();
     err = H5Lite::writeScalarAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_COUNT_TAG), i);

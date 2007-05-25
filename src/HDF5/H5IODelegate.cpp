@@ -21,7 +21,7 @@ H5IODelegate::H5IODelegate() :
 H5IODelegate::~H5IODelegate()
 {
   if (_fileId > 0) {
-   // std::cout << "H5IODelegate::~H5IODelegate()  Closing file.." << std::endl;   
+    std::cout << "H5IODelegate::~H5IODelegate()  Closing file.." << std::endl;   
     this->closeMXAFile();
   }
 }

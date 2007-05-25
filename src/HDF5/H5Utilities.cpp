@@ -8,10 +8,18 @@
 // C++ Includes
 #include <iostream>
 
+
+#define CheckValidLocId(locId)\
+  if (locId < 0 ) {std::cout << "Invalid HDF Location ID: " << locId << std::endl;return -1;}
+
+#define CloseH5T(tid, err, retError)\
+  err = H5Tclose(tid);\
+  if (err < 0 ) {std::cout << "Error closing DataType" << std::endl; retErr = err;}
+
+
 // *****************************************************************************************
 // * H5Utilities Implementation Methods
 // *****************************************************************************************
-
 
 // -----------------------------------------------------------------------------
 //  Returns the full path to the object referred to by the
@@ -353,6 +361,91 @@ std::list<std::string> H5Utilities::getAllAttributeNames(hid_t loc_id,
   return names;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+herr_t H5Utilities::readAllAttributes(hid_t fileId, std::string &datasetPath, MXAAttributes &attributes)
+{
+  CheckValidLocId(fileId);
+  herr_t err = -1;
+  herr_t retErr = -1;
+  hid_t typeId = -1;
+  H5T_class_t attr_type;
+  size_t attr_size;
+  std::string res;
+ 
+  std::vector<uint64> dims;  //Reusable for the loop
+  std::list<std::string> names = H5Utilities::getAllAttributeNames(fileId, datasetPath );
+
+  for (std::list<std::string>::iterator iter=names.begin(); iter != names.end(); iter++) 
+  {
+    err = H5Lite::getAttributeInfo(fileId, datasetPath, (*iter), dims, attr_type, attr_size, typeId);
+    if (err < 0) {
+      std::cout << "Error in getAttributeInfo method in readUserMetaData." << std::endl;
+    } else {
+      switch(attr_type) 
+      {
+      case H5T_STRING:
+        res.clear(); //Clear the string out first
+        err = H5Lite::readStringAttribute(fileId, datasetPath, (*iter), res );
+        if (err >= 0) {
+          MXAAttributePtr attr = MXAAttribute::createAttribute((*iter), res);
+          attributes.push_back(attr);
+        }
+        break;
+      case H5T_INTEGER:
+        //std::cout << "User Meta Data Type is Integer" << std::endl;
+        if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<uint8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<uint16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<uint32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<uint64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<int8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<int16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<int32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<int64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else {
+          std::cout << "Unknown Type: " << typeId << " at " <<  datasetPath << std::endl;
+          err = -1;
+        }
+        break;
+      case H5T_FLOAT:
+        if (attr_size == 4) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<float32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else if (attr_size == 8 ) {
+          MXAAttributePtr ptr = H5Utilities::readPrimitiveAttribute<float64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes.push_back(ptr);
+        } else {
+          std::cout << "Unknown Floating point type" << std::endl;
+          err = -1;
+        }
+        break;
+      default:
+        std::cout << "Error: readUserMetaData() Unknown attribute type: " << attr_type << std::endl;
+        H5Utilities::printHDFClassType(attr_type);
+      }
+      CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
+    }
+  }
+
+  return err;
+}
 
 
 
@@ -500,4 +593,6 @@ bool H5Utilities::isGroup(hid_t nodeId, std::string objName)   {
   }
   return isGroup;
 }
+
+
 

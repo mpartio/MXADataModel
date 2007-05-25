@@ -14,6 +14,9 @@
 
 #include "Headers/DLLExport.h"
 #include "Headers/MXATypes.h"
+#include "Headers/MXATypeDefs.h"
+#include "MXADataModel/MXAAttribute.h"
+#include "HDF5/H5Lite.h"
 
 // C++ Includes
 #include <map>
@@ -134,6 +137,8 @@ public:
    * @return Error Condition: Negative is error. Positive is success.
    */
   static MXA_EXPORT herr_t  createGroupsFromPath(std::string path, hid_t parent);
+  
+
 
   // -------------- HDF Attribute Methods ----------------------------
   /**
@@ -171,6 +176,51 @@ public:
   */
   static MXA_EXPORT std::map<std::string, std::string> getAttributesMap(hid_t objId, std::string obj_name);
   
+  /**
+   * @brief
+   * @param fileId
+   * @param datasetPath
+   * @param attributes
+   * @return
+   */
+  static MXA_EXPORT herr_t readAllAttributes(hid_t fileId, std::string &datasetPath, MXAAttributes &attributes);
+  
+/**
+  * @brief 
+  * @param locId
+  * @param datasetPath
+  * @param key
+  * @param dims
+  * @return 
+  */
+  template<typename T>
+  static MXA_EXPORT MXAAttributePtr readPrimitiveAttribute( hid_t locId, const std::string &datasetPath, 
+                                 const std::string &key, 
+                                 const std::vector<uint64> &dims)
+  {
+    herr_t err = -1;
+    MXAAttributePtr ptr;
+    if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
+    {
+      T data;
+      err = H5Lite::readScalarAttribute(locId, datasetPath, key, data);
+      if (err >= 0) {   
+        MXAAttributePtr attr = MXAAttribute::createAttribute(key, data);
+        return attr;
+      }
+    } 
+    else // Multi-Dimensional Data 
+    {
+      std::vector<T> data;
+      err = H5Lite::readVectorAttribute(locId, datasetPath, key, data);
+      if (err >= 0) {   
+        MXAAttributePtr attr = MXAAttribute::createAttribute(key, data, dims);
+        return attr;
+      }
+    }
+    return ptr;
+  }
+
   
 protected:
   H5Utilities() {}; //This is just a bunch of Static methods

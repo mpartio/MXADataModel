@@ -16,6 +16,13 @@
   err = H5Tclose(tid);\
   if (err < 0 ) {std::cout << "Error closing DataType" << std::endl; retErr = err;}
 
+#define HDF_ERROR_HANDLER_OFF\
+  herr_t (*_oldHDF_error_func)(void *);\
+  void *_oldHDF_error_client_data;\
+  H5Eget_auto(&_oldHDF_error_func, &_oldHDF_error_client_data);\
+  H5Eset_auto(NULL, NULL);
+
+#define HDF_ERROR_HANDLER_ON  H5Eset_auto(_oldHDF_error_func, _oldHDF_error_client_data);
 
 
 /*-------------------------------------------------------------------------
@@ -387,6 +394,8 @@ herr_t H5Lite::readStringAttribute(hid_t loc_id, const std::string& objName, con
  herr_t err = 0;
  herr_t retErr = 0;
  
+ HDF_ERROR_HANDLER_OFF;
+ 
   /* Get the type of object */
   err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
   if (err<0) {
@@ -423,7 +432,7 @@ herr_t H5Lite::readStringAttribute(hid_t loc_id, const std::string& objName, con
     }
    
  }
- 
+  HDF_ERROR_HANDLER_ON;
  return retErr;
 }
 
