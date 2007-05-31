@@ -59,7 +59,15 @@
 class H5Lite
 {
 public:
-
+  /**
+   * @brief Turns off the global error handler/reporting objects. Note that once
+   * they are turned off using this method they CAN NOT be turned back on. If you
+   * would like to turn them off for a piece of code then surround your code with
+   * the HDF_ERROR_HANDLER_OFF and HDF_ERROR_HANDLER_ON macros defined in 
+   * H5Lite.h
+   */
+  static MXA_EXPORT void disableErrorHandlers();
+  
 /**
  * @brief Opens and object for HDF5 operations
  * @param loc_id The parent object that holds the true object we want to open
@@ -951,8 +959,6 @@ static MXA_EXPORT hid_t getDatasetType(hid_t loc_id, const std::string &dsetName
 /**
  * @brief Get the information about a dataset.
  *
- * The dims array should already be allocated to hold all the dimensions which means prior to this
- * call you should have called a method to get the rank of the dataset.
  * @param loc_id The parent location of the Dataset 
  * @param dsetName The name of the dataset
  * @param dims A std::vector that will hold the sizes of the dimensions

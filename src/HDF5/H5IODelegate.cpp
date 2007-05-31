@@ -12,7 +12,10 @@ H5IODelegate::H5IODelegate() :
   _fileId(-1),
   _openFile("")
 {
-  
+#if RELEASE
+#warning HDF Error Handlers are OFF
+  HDF_ERROR_HANDLER_OFF;
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -21,7 +24,7 @@ H5IODelegate::H5IODelegate() :
 H5IODelegate::~H5IODelegate()
 {
   if (_fileId > 0) {
-    std::cout << "H5IODelegate::~H5IODelegate()  Closing file.." << std::endl;   
+    //std::cout << "H5IODelegate::~H5IODelegate()  Closing file.." << std::endl;   
     this->closeMXAFile();
   }
 }
