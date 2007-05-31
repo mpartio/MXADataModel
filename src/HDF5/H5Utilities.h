@@ -194,7 +194,7 @@ public:
   * @return 
   */
   template<typename T>
-  static MXA_EXPORT MXAAttributePtr readPrimitiveAttribute( hid_t locId, const std::string &datasetPath, 
+  static MXAAttributePtr readPrimitiveAttribute( hid_t locId, const std::string &datasetPath, 
                                  const std::string &key, 
                                  const std::vector<uint64> &dims)
   {

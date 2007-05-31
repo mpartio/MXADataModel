@@ -321,7 +321,7 @@ herr_t H5Lite::writeStringAttribute(hid_t loc_id,
       }
       else
       {
-        retErr = attr_id;
+        retErr = attr_type;
       }
       /* Close the object */
       err = H5Lite::closeId( obj_id, statbuf.type );
@@ -580,9 +580,10 @@ herr_t H5Lite::getDatasetInfo( hid_t loc_id,
     /* Get the Number of Dimensions */
     rank = H5Sget_simple_extent_ndims(sid);
     if ( rank > 0) {
-      hsize_t _dims[rank]; // allocate space for the dimensions
+     // hsize_t _dims[rank]; // allocate space for the dimensions
+      std::vector<hsize_t> _dims(rank, 0);
       /* Get dimensions */
-      err = H5Sget_simple_extent_dims( sid, _dims, NULL);
+      err = H5Sget_simple_extent_dims( sid, &(_dims.front() ), NULL);
       if ( err < 0 ) {
         std::cout << "Error Getting Simple Extents for dataset" << std::endl;
         retErr = err;
@@ -652,8 +653,9 @@ herr_t H5Lite::getAttributeInfo(hid_t loc_id,
         if (sid >= 0 ) 
         {
           rank = H5Sget_simple_extent_ndims( sid );
-		      hsize_t _dims[rank];
-          err = H5Sget_simple_extent_dims(sid, _dims, NULL );
+          std::vector<hsize_t> _dims(rank, 0);
+          /* Get dimensions */
+          err = H5Sget_simple_extent_dims( sid, &(_dims.front() ), NULL);
           if (err<0) {
             std::cout << "Error Getting Attribute dims" << std::endl;
             retErr = err; 

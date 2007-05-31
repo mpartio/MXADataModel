@@ -642,7 +642,7 @@ static herr_t readVectorDataset(hid_t loc_id,
   herr_t retErr = 0;
   hid_t spaceId;
 	hid_t dataType;
-	T test = 0xFF;
+	T test = 0x00;
   dataType = H5Lite::HDFTypeForPrimitive(test);
   if (dataType == -1)
   {
@@ -671,7 +671,7 @@ static herr_t readVectorDataset(hid_t loc_id,
        // std::cout << "NumElements: " << numElements << std::endl;
         //Resize the vector
         data.resize( static_cast<int>(numElements) );
-        for (uint32 i = 0; i<numElements; ++i) { data[i] = 55555555;  }
+       // for (uint32 i = 0; i<numElements; ++i) { data[i] = 55555555;  }
         err = H5Dread(did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &( data.front() ) );
         if (err < 0) {
           std::cout << "Error Reading Data." << std::endl; 
