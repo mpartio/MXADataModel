@@ -11,3 +11,5 @@
 //TODO: Review the Qt based design from Shawn and decide what the best course of action is.
 
 //TODO: Review the Qt Based data importer for design and implementation
+
+//TODO: Compile LibTIFF on Windows XP and compile against this library
