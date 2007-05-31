@@ -26,6 +26,30 @@
 //TODO: Add test for attributeInfo
 //TODO: Add test for datasetInfo
 
+#define CloseH5A(aid, err, retError)\
+   err = H5Aclose( attr_id );\
+   if (err<0) {std::cout << "Error Closing Attribute." << std::endl;retErr = err;}
+
+#define CloseH5D(did, err, retError)\
+  err = H5Dclose(did);\
+  if (err < 0) { std::cout << "Error Closing Dataset." << std::endl; retError = err;}
+
+#define CloseH5S(sid, err, retError)\
+  err = H5Sclose(sid); \
+  if ( err < 0) {std::cout << "Error closing Dataspace." << std::endl;retErr = err;}
+
+#define CloseH5T(tid, err, retError)\
+  err = H5Tclose(tid);\
+  if (err < 0 ) {std::cout << "Error closing DataType" << std::endl; retErr = err;}
+
+#define HDF_ERROR_HANDLER_OFF\
+  herr_t (*_oldHDF_error_func)(void *);\
+  void *_oldHDF_error_client_data;\
+  H5Eget_auto(&_oldHDF_error_func, &_oldHDF_error_client_data);\
+  H5Eset_auto(NULL, NULL);
+
+#define HDF_ERROR_HANDLER_ON  H5Eset_auto(_oldHDF_error_func, _oldHDF_error_client_data);
+
 /**
  * @brief Class to bring together some high level methods to read/write data to HDF5 files.
  * @class H5Lite
@@ -458,7 +482,10 @@ static herr_t writeVectorAttribute(hid_t loc_id,
       retErr = err;
     }
   }
-  
+  else 
+  {
+    retErr = sid;
+  }
   /* Close the object */
   err = H5Lite::closeId( obj_id, statbuf.type );
   if ( err < 0 ) {
@@ -556,6 +583,10 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
       std::cout << "Error Closing Dataspace" << std::endl;
       retErr = err;
     }
+  } 
+  else
+  {
+    retErr = sid;
   }
   
   /* Close the object */
@@ -645,6 +676,10 @@ static herr_t readVectorDataset(hid_t loc_id,
         retErr = err;
       }
     }
+    else
+    {
+      retErr = spaceId;
+    }
     err = H5Dclose( did );
     if (err < 0 ) {
       std::cout << "Error Closing Dataset" << std::endl;
@@ -705,6 +740,10 @@ static herr_t readScalarDataset(hid_t loc_id,
         std::cout << "Error Closing Data Space" << std::endl;
         retErr = err;
       }
+    }
+    else
+    {
+      retErr = spaceId;
     }
     err = H5Dclose( did );
     if (err < 0 ) {
@@ -793,6 +832,10 @@ static herr_t readVectorAttribute(hid_t loc_id,
         std::cout << "Error Closing Attribute" << std::endl;
         retErr = err;
       }
+    } 
+    else
+    {
+      retErr = attr_id;
     }
     err = H5Lite::closeId( obj_id, statbuf.type );
     if ( err < 0 ) {
@@ -853,6 +896,10 @@ static herr_t  readScalarAttribute(hid_t loc_id,
         retErr = err;
       }
     }
+    else 
+    {
+      retErr = attr_id;
+    }
     err = H5Lite::closeId( obj_id, statbuf.type );
     if ( err < 0 ) {
      std::cout << "Error Closing Object" << std::endl;
@@ -889,6 +936,17 @@ static MXA_EXPORT hid_t getAttributeNDims(hid_t loc_id, const std::string& objNa
  * @param rank (out) Number of dimensions is store into this variable
  */
 static MXA_EXPORT hid_t getDatasetNDims(hid_t loc_id, const std::string& objName, hid_t &rank);
+
+/**
+ * @brief Returns the H5T value for a given dataset.
+ * 
+ * Returns the type of data stored in the dataset. You MUST use H5Tclose(tid) 
+ * on the returned value or resource leaks will occur.
+ * @param loc_id A Valid HDF5 file or group id.
+ * @param dsetName Path to the dataset
+ * @return 
+ */
+static MXA_EXPORT hid_t getDatasetType(hid_t loc_id, const std::string &dsetName);
 
 /**
  * @brief Get the information about a dataset.

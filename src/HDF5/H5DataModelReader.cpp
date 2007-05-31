@@ -448,7 +448,8 @@ herr_t H5DataModelReader::readUserMetaData(hid_t locId)
   std::string res;
  
   std::vector<uint64> dims;  //Reusable for the loop
-  std::list<std::string> names = H5Utilities::getAllAttributeNames(locId, MXA::UserMetaDataPath );
+  std::list<std::string> names;
+  err = H5Utilities::getAllAttributeNames(locId, MXA::UserMetaDataPath, names );
 
   for (std::list<std::string>::iterator iter=names.begin(); iter != names.end(); iter++) 
   {

@@ -158,7 +158,7 @@ public:
   * @param objId
   * @return 
   */
-  static MXA_EXPORT std::list<std::string> getAllAttributeNames(hid_t objId);
+  static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, std::list<std::string> &names);
 
   /**
   * @brief 
@@ -166,7 +166,7 @@ public:
   * @param std::stringobj_name
   * @return 
   */
-  static MXA_EXPORT std::list<std::string> getAllAttributeNames(hid_t objId, std::string obj_name);
+  static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, std::string obj_name, std::list<std::string> &names);
 
   /**
   * @brief 
@@ -183,7 +183,7 @@ public:
    * @param attributes
    * @return
    */
-  static MXA_EXPORT herr_t readAllAttributes(hid_t fileId, std::string &datasetPath, MXAAttributes &attributes);
+  static MXA_EXPORT herr_t readAllAttributes(hid_t fileId, const std::string &datasetPath, MXAAttributes &attributes);
   
 /**
   * @brief 

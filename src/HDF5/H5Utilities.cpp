@@ -71,26 +71,26 @@ hid_t H5Utilities::openHDF5Object(hid_t loc_id, std::string objName)
   int32 obj_type;
   hid_t obj_id;
   herr_t err=0;
-
+  HDF_ERROR_HANDLER_OFF;
   err = getObjectType(loc_id, objName, &obj_type);
   if (err < 0) {
-    std::cout << "Error: Unable to get object type for object: " 
-	      << objName << std::endl;
+    std::cout << "Error: Unable to get object type for object: " << objName << std::endl;
+    HDF_ERROR_HANDLER_ON;
     return -1;
   }
 
   switch (obj_type) {
-  case H5G_GROUP:
-    obj_id = H5Gopen(loc_id, objName.c_str());
-    break;
-  case H5G_DATASET:
-    obj_id = H5Dopen(loc_id, objName.c_str());
-    break;
-  default:
-    std::cout << "Unknonwn HDF Type: " << obj_type << std::endl;
-    obj_id = -1;
+    case H5G_GROUP:
+      obj_id = H5Gopen(loc_id, objName.c_str());
+      break;
+    case H5G_DATASET:
+      obj_id = H5Dopen(loc_id, objName.c_str());
+      break;
+    default:
+      std::cout << "Unknonwn HDF Type: " << obj_type << std::endl;
+      obj_id = -1;
   }
-
+  HDF_ERROR_HANDLER_ON;
   return obj_id;
 }
 
@@ -321,9 +321,10 @@ bool H5Utilities::probeForAttribute(hid_t loc_id, std::string obj_name,
 
 // Returns a std::list of all attribute names attached to the object
 //  referred to by obj_id
-std::list<std::string> H5Utilities::getAllAttributeNames(hid_t obj_id)
+herr_t H5Utilities::getAllAttributeNames(hid_t obj_id, std::list<std::string> &results)
 {
-  std::list<std::string> results;
+  if (obj_id < 0) { return -1; }
+  herr_t err = -1;
   int32 num_attrs;
   hid_t attr_id;
   size_t name_size;
@@ -336,35 +337,36 @@ std::list<std::string> H5Utilities::getAllAttributeNames(hid_t obj_id)
     std::vector<char> attr_name(name_size * sizeof(char), 0);
     H5Aget_name(attr_id, name_size, &(attr_name.front() ) );
     results.push_back(std::string( &(attr_name.front() ) ) );
-    H5Aclose(attr_id);
+    err = H5Aclose(attr_id);
   }
 
-  return results;
+  return err;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-std::list<std::string> H5Utilities::getAllAttributeNames(hid_t loc_id, 
-					       std::string obj_name)
+ herr_t H5Utilities::getAllAttributeNames(hid_t loc_id, 
+					                 std::string obj_name, std::list<std::string> &names)
 {
-  hid_t obj_id;
-  std::list<std::string> names;
+  hid_t obj_id = -1;
+  herr_t err = -1;
+  names.clear();
 
   obj_id = openHDF5Object(loc_id, obj_name);
   if (obj_id < 0) {
-    return names;
+    return obj_id;
   }
-  names = getAllAttributeNames(obj_id); 
-  closeHDF5Object(obj_id);
+  err = getAllAttributeNames(obj_id, names); 
+  err = closeHDF5Object(obj_id);
 
-  return names;
+  return err;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5Utilities::readAllAttributes(hid_t fileId, std::string &datasetPath, MXAAttributes &attributes)
+herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPath, MXAAttributes &attributes)
 {
   CheckValidLocId(fileId);
   herr_t err = -1;
@@ -375,7 +377,8 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, std::string &datasetPath, MX
   std::string res;
  
   std::vector<uint64> dims;  //Reusable for the loop
-  std::list<std::string> names = H5Utilities::getAllAttributeNames(fileId, datasetPath );
+  std::list<std::string> names;
+  err = H5Utilities::getAllAttributeNames(fileId, datasetPath, names );
 
   for (std::list<std::string>::iterator iter=names.begin(); iter != names.end(); iter++) 
   {
@@ -463,7 +466,8 @@ std::map<std::string, std::string> H5Utilities::getAttributesMap(hid_t loc_id, s
   MXATypes::Int32Vector ires;
   MXATypes::Float32Vector fres;
   std::vector<uint64> dims;  //Reusable for the loop
-  std::list<std::string> names = getAllAttributeNames(loc_id, obj_name);
+  std::list<std::string> names;
+  err = getAllAttributeNames(loc_id, obj_name, names);
   std::list<std::string>::iterator iter;
   for (iter=names.begin(); iter != names.end(); iter++) 
   {

@@ -1,28 +1,6 @@
 #include "H5Lite.h"
 
-#define CloseH5A(aid, err, retError)\
-   err = H5Aclose( attr_id );\
-   if (err<0) {std::cout << "Error Closing Attribute." << std::endl;retErr = err;}
 
-#define CloseH5D(did, err, retError)\
-  err = H5Dclose(did);\
-  if (err < 0) { std::cout << "Error Closing Dataset." << std::endl; retError = err;}
-
-#define CloseH5S(sid, err, retError)\
-  err = H5Sclose(sid); \
-  if ( err < 0) {std::cout << "Error closing Dataspace." << std::endl;retErr = err;}
-
-#define CloseH5T(tid, err, retError)\
-  err = H5Tclose(tid);\
-  if (err < 0 ) {std::cout << "Error closing DataType" << std::endl; retErr = err;}
-
-#define HDF_ERROR_HANDLER_OFF\
-  herr_t (*_oldHDF_error_func)(void *);\
-  void *_oldHDF_error_client_data;\
-  H5Eget_auto(&_oldHDF_error_func, &_oldHDF_error_client_data);\
-  H5Eset_auto(NULL, NULL);
-
-#define HDF_ERROR_HANDLER_ON  H5Eset_auto(_oldHDF_error_func, _oldHDF_error_client_data);
 
 
 /*-------------------------------------------------------------------------
@@ -333,6 +311,10 @@ herr_t H5Lite::writeStringAttribute(hid_t loc_id,
         }
         CloseH5T(attr_type, err, retErr);
       }
+      else
+      {
+        retErr = attr_id;
+      }
       /* Close the object */
       err = H5Lite::closeId( obj_id, statbuf.type );
       if (err < 0) {
@@ -424,13 +406,16 @@ herr_t H5Lite::readStringAttribute(hid_t loc_id, const std::string& objName, con
         CloseH5T(attr_type, err, retErr);
       }  
       CloseH5A(attr_id, err, retErr);      
+    } 
+    else 
+    {
+      retErr = attr_id;
     }
     err = H5Lite::closeId( obj_id, statbuf.type );
     if (err<0) {
       std::cout << "Error Closing Object ID" << std::endl;
       retErr = err;
     }
-   
  }
   HDF_ERROR_HANDLER_ON;
  return retErr;
@@ -521,6 +506,27 @@ herr_t H5Lite::getAttributeNDims(hid_t loc_id, const std::string& objName,
  }
  
  return retErr;
+}
+
+// -----------------------------------------------------------------------------
+//  Returns the type of data stored in the dataset. You MUST use H5Tclose(tid) 
+//  on the returned value or resource leaks will occur.
+// -----------------------------------------------------------------------------
+hid_t H5Lite::getDatasetType(hid_t loc_id, const std::string &dsetName)
+{
+  herr_t err, retErr;
+  hid_t did = -1;
+  /* Open the dataset. */
+  if ( (did = H5Dopen( loc_id, dsetName.c_str() )) < 0 )
+  return -1;
+
+  /* Get an identifier for the datatype. */
+  hid_t tid =  H5Dget_type( did );
+  CloseH5D(did, err, retErr);
+  if (retErr < 0)
+    return static_cast<hid_t>(retErr);
+  
+  return tid;
 }
 
 // -----------------------------------------------------------------------------
