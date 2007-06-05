@@ -462,8 +462,7 @@ herr_t H5TiffIO::_read24BitTiff(TIFF *in, hid_t groupId, string &datasetName)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, 
-					     string img_dataset_name)
+int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, const string &img_dataset_name)
 {
   herr_t err = 0;
   int32 dimRank;

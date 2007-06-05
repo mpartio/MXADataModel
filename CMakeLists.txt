@@ -45,23 +45,28 @@ ENDIF(NOT Boost_FOUND)
 INCLUDE_DIRECTORIES( "${PROJECT_SOURCE_DIR}/src"  ${INCLUDE_DIRECTORIES} )
 
 #-- Include the MXADataModel Testing Sources
-SUBDIRS(${PROJECT_SOURCE_DIR}/src/Testing)
+ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR})
 
 #-- Include the Examples Directory
-SUBDIRS(${PROJECT_SOURCE_DIR}/src/Examples)
+# This is not used at this time due to the source being old and out of date.
+ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR})
 
-# ----------  Build Qt Data Model  -----------------------
-OPTION (MXA_BUILD_Qt_MODULES "Builds the Qt Data Model" OFF)
-IF ( MXA_BUILD_Qt_MODULES )
-  SUBDIRS(src/QtMXADataModel)
-ENDIF ( MXA_BUILD_Qt_MODULES )
+# Build shared libraries
+OPTION (MXA_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+SET (LIB_TYPE STATIC)
+IF (MXA_BUILD_SHARED_LIBS)
+  SET (LIB_TYPE SHARED)
+  IF (WIN32)
+    ADD_DEFINITIONS("-DMXA_BUILD_SHARED_LIBS")
+  ENDIF (WIN32)
+ENDIF (MXA_BUILD_SHARED_LIBS)
 
 # ------- Set up the MHDataModel Project Source Files -----------
 # with SET() command you can change variables or define new ones
 # here we define MXADATAMODEL_SRCS variable that contains a list 
 # of all .cpp files note that we don't need \ at the end of line
 SET( MXADATAMODEL_SRCS
-	src/MXADataModel/MXAAttribute.cpp
+  src/MXADataModel/MXAAttribute.cpp
   src/MXADataModel/MXANode.cpp
   src/MXADataModel/MXADataDimension.cpp
   src/MXADataModel/MXADataRecord.cpp
@@ -105,18 +110,26 @@ SET (MXADATAMODEL_HEADERS
   src/XML/XMLDataModelWriter.h
   src/Utilities/StringUtils.h
   )
-  
+
+# Build with the HDF5 Libraries Enabled. This is the default 
 OPTION (MXA_USE_HDF5 "Compiles Sources dependent on HDF5 Libraries" ON)
 IF ( MXA_USE_HDF5 )
-
-  # ---------- Find the HDF Libraries ---------------------------
+  # ---------- Find the HDF Libraries - DO NOT use the High Level APIs from the HDF5
+  # group as those API's will not compile correctly under windows --------------
   SET (HDF5_USE_HIGH_LEVEL FALSE)
   INCLUDE( ${PROJECT_SOURCE_DIR}/CMake/FindHDF.cmake )
   IF(NOT HDF5_FOUND)
     MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
   ENDIF(NOT HDF5_FOUND)
-  
-  ADD_DEFINITIONS(-DHDF5_MODULES_ON)
+  # Enable the HDF5_MODULES_ON when using the HDF dynamic libraries
+
+  IF (MXA_BUILD_SHARED_LIBS)
+    ADD_DEFINITIONS(-DHDF5_MODULES_ON)
+      IF (WIN32)
+        ADD_DEFINITIONS(-D_HDF5USEDLL_)
+        ADD_DEFINITIONS(-DMXA_BUILD_SHARED_LIBS)
+      ENDIF (WIN32)
+  ENDIF (MXA_BUILD_SHARED_LIBS)
   
   # ---------- Include the HDF5 Dependant source in the Build -------------
   SET( MXA_HDF5_SRCS
@@ -171,21 +184,12 @@ SET( MXA_XML_SRCS
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
 # ---------- Set up the Project Options -----------------------
-# Build shared libraries
-OPTION (MXA_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
-SET (LIB_TYPE STATIC)
-IF (MXA_BUILD_SHARED_LIBS)
-  SET (LIB_TYPE SHARED)
-  IF (WIN32)
-    ADD_DEFINITIONS("-D_HDF5USEDLL_")
-    ADD_DEFINITIONS("-DMXA_BUILD_SHARED_LIBS")
-  ENDIF (WIN32)
-ENDIF (MXA_BUILD_SHARED_LIBS)
+
 
 IF(WIN32)
  SET(GUI_TYPE WIN32)
- ADD_DEFINITIONS(-DNODEFAULTLIB:library)
- SET (${QT_LIBRARIES} qtmain ${QT_LIBRARIES})
+ #ADD_DEFINITIONS(-DNODEFAULTLIB:library)
+ #SET (${QT_LIBRARIES} qtmain ${QT_LIBRARIES})
 ENDIF(WIN32)
 
 # ----- OS X specific build settings

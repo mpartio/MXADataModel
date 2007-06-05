@@ -30,7 +30,7 @@ namespace TiffIOConst {
   const std::string TiffExtension(".tiff");
 }
 
-//#define H5IM_INTERLACE_PIXEL "INTERLACE_PIXEL"
+
 const std::string H5IM_INTERLACE_PIXEL("INTERLACE_PIXEL");
 
 /**
@@ -49,10 +49,10 @@ class MXA_EXPORT H5TiffIO
   /**
    * @brief imports a Tiff image into the MHDataModel
    * 
-   * @param filename
-   * @param groupdId
-   * @param datasetName
-   * @param asGrayscale
+   * @param filename The absolute path to the Tiff file
+   * @param groupdId The HDF Group/FileId to store the imported data
+   * @param datasetName The Name of the HDF5 dataset to store the data
+   * @param asGrayscale Should the tiff be stored as a grayscale image
    * @return Error < 0 Error 
    */
   herr_t importTiff(string filename, hid_t groupId, 
@@ -90,16 +90,16 @@ class MXA_EXPORT H5TiffIO
    * @param in The Tiff Image
    * @return element from tiffImageClasses enum
    */
-  int32 _determineTiffImageClass(TIFF *);
+  int32 _determineTiffImageClass(TIFF *in);
   
   
   /**
-   * @brief
-   * @param hid_t
-   * @param string
-   * @return
+   * @brief Determines the value of the "Class" attribute for the image
+   * @param hid_t The HDF5 file id
+   * @param string The path to the dataset
+   * @return One of the enumerated types from tiffImageClasses. 
    */
-  int32 _determineTiffOutputImageClass(hid_t, string);
+  int32 _determineTiffOutputImageClass(hid_t fileId, const string &img_dataset_name);
   
   
   /**
@@ -115,15 +115,15 @@ class MXA_EXPORT H5TiffIO
   herr_t _read8BitTiff( TIFF *, hid_t, string &);
   
   /**
-   * @brief
-   * @param image
-   * @param fileId
-   * @param img_dataset_name
-   * @param data
-   * @param width
-   * @param height
-   * @param numpalettes
-   * @return
+   * @brief Writes an 8bit tiff file into an HDF5 dataset
+   * @param image The TIFF image pointer
+   * @param fileId The HDF5 File Id
+   * @param img_dataset_name The name of the HDF5 dataset
+   * @param data The tiff data to be written
+   * @param width The width of the image
+   * @param height The height of the image
+   * @param numpalettes The number of palettes for the iamge
+   * @return Standard HDF5 error condition
    */
   herr_t _write8BitTiff(TIFF *image, hid_t fileId, 
         string img_dataset_name,
@@ -146,14 +146,14 @@ class MXA_EXPORT H5TiffIO
   herr_t _readGrayscaleTiff(TIFF *, hid_t, string &);
   
   /**
-   * @brief
-   * @param image
-   * @param fileId
-   * @param img_dataset_name
-   * @param data
-   * @param width
-   * @param height
-   * @return
+   * @brief Writes a tiff image as a grayscale image HDF5 dataset 
+   * @param image The TIFF image pointer
+   * @param fileId The HDF5 File Id
+   * @param img_dataset_name The name of the HDF5 dataset
+   * @param data The tiff data to be written
+   * @param width The width of the image
+   * @param height The height of the image
+   * @return Standard HDF5 error condition
    */
   herr_t _writeGrayscaleTiff(TIFF *image,
                              unsigned char *data, 

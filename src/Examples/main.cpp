@@ -10,15 +10,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //TODO: Rewrite the DataImport Examples
-
+#include "DataImport/SimpleImportExample.h"
 #include <iostream>
 
 int main (int argc, char *argv[])
 {
-#warning Examples are not implemented yet
-	std::cout << "This test does nothing." << std::endl;
- //SimpleImportExample simple;
- //simple.run();
+
+ std::cout << "This test does nothing." << std::endl;
+ SimpleImportExample simple;
+ simple.run();
  
  //ComplexImportExample complex;
  //complex.run();

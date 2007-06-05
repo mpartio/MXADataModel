@@ -27,7 +27,7 @@ IF (MXA_BUILD_DATAIMPORT_EXAMPLE)
     DataImport/ComplexImportExample.h
     DataImport/ExampleImportDelegate.h
     DataImport/SimpleImportExample.h
-	  )
+    )
 	
 	ADD_EXECUTABLE ( DataImportExample ${DATA_IMPORT_SRCS} ${DATA_IMPORT_HEADERS} )
 	
