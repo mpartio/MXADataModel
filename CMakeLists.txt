@@ -45,11 +45,11 @@ ENDIF(NOT Boost_FOUND)
 INCLUDE_DIRECTORIES( "${PROJECT_SOURCE_DIR}/src"  ${INCLUDE_DIRECTORIES} )
 
 #-- Include the MXADataModel Testing Sources
-ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR})
+ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
 
 #-- Include the Examples Directory
 # This is not used at this time due to the source being old and out of date.
-ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR})
+ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
 
 # Build shared libraries
 OPTION (MXA_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
@@ -184,12 +184,8 @@ SET( MXA_XML_SRCS
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
 # ---------- Set up the Project Options -----------------------
-
-
 IF(WIN32)
  SET(GUI_TYPE WIN32)
- #ADD_DEFINITIONS(-DNODEFAULTLIB:library)
- #SET (${QT_LIBRARIES} qtmain ${QT_LIBRARIES})
 ENDIF(WIN32)
 
 # ----- OS X specific build settings
@@ -201,9 +197,19 @@ ENDIF(WIN32)
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} ${Boost_LIBRARIES})
 
-
-#ADD_EXECUTABLE(H5ResourceTest src/Misc/HDFResourceTest.cpp src/HDF5/H5Lite.cpp)
-#TARGET_LINK_LIBRARIES(H5ResourceTest ${HDF5_LIBRARIES})
-
-#ADD_EXECUTABLE(Test src/Misc/test.cpp)
-#TARGET_LINK_LIBRARIES(Test )
+#--- Set up the installation Code for Make Install
+INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} LIBRARY DESTINATION lib)
+SET (INSTALL_INCLUDES 
+  src/MXADataModel
+  src/HDF5
+  src/Headers
+  src/Interfaces
+  src/Utilities
+  src/XML
+  )
+INSTALL(DIRECTORY ${INSTALL_INCLUDES}  DESTINATION include/MXADataModel
+  PATTERN "CVS" EXCLUDE
+  PATTERN "*.c*" EXCLUDE
+  )
+  
+  
