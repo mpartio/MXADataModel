@@ -48,8 +48,10 @@ INCLUDE_DIRECTORIES( "${PROJECT_SOURCE_DIR}/src"  ${INCLUDE_DIRECTORIES} )
 ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
 
 #-- Include the Examples Directory
-# This is not used at this time due to the source being old and out of date.
-ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
+OPTION(BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
+IF(BUILD_EXAMPLES)
+    ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
+ENDIF(BUILD_EXAMPLES)
 
 # Build shared libraries
 OPTION (MXA_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
@@ -111,7 +113,8 @@ SET (MXADATAMODEL_HEADERS
   src/Utilities/StringUtils.h
   )
 
-# Build with the HDF5 Libraries Enabled. This is the default 
+# Build with the HDF5 Libraries Enabled. This is the default
+SET(HDF5_SUPPORT "0")
 OPTION (MXA_USE_HDF5 "Compiles Sources dependent on HDF5 Libraries" ON)
 IF ( MXA_USE_HDF5 )
   # ---------- Find the HDF Libraries - DO NOT use the High Level APIs from the HDF5
@@ -152,9 +155,10 @@ IF ( MXA_USE_HDF5 )
   )
   SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
   SET(DEP_LIBS ${DEP_LIBS} ${HDF5_LIBRARIES})
+  SET(HDF5_SUPPORT "1")
 ENDIF ( MXA_USE_HDF5 )
 
-
+SET (TIFF_SUPPORT "0")
 # ------------------ Check for and Include Tif Lib dependent code --------------
 OPTION(MXA_USE_TIFF "Compiles source code that depends on having the Tif Lib installed" ON)
 IF(MXA_USE_TIFF)
@@ -170,8 +174,9 @@ IF(MXA_USE_TIFF)
 		src/HDF5/H5TiffImportDelegate.h
 		)
 		
-		SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
-		SET(DEP_LIBS ${DEP_LIBS} ${TIFF_LIBRARIES})
+	SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
+	SET(DEP_LIBS ${DEP_LIBS} ${TIFF_LIBRARIES})
+	SET (TIFF_SUPPORT "1")
 ENDIF (MXA_USE_TIFF)
 
 #--------- XML Sources ---------------------------------------------------
@@ -193,12 +198,17 @@ ENDIF(WIN32)
 #  SET (OSX_EMBEDDED_LIBRARY ON)
 #ENDIF ( APPLE )
 
+#-- Configure the Header file and then add the Binary Directory to the Includes list
+CONFIGURE_FILE(${MXADataModel_SOURCE_DIR}/src/Headers/MXAConfiguration.h.in
+               ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
+#-- Add the MXADataModel Library
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} ${Boost_LIBRARIES})
 
 #--- Set up the installation Code for Make Install
-INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} LIBRARY DESTINATION lib)
+INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 SET (INSTALL_INCLUDES 
   src/MXADataModel
   src/HDF5

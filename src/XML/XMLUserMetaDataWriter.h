@@ -51,7 +51,7 @@ public:
     template<typename T>
     int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, T value)
     {
-      int32 size = sizeof(value);
+      int32 size = sizeof(T);
       std::string sType = StringUtils::typeForPrimitive(value);
       std::ofstream &stream = *(_ofstreamPtr.get());
       stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" << 1 <<  "\" type=\"" << sType << "\">\n";
@@ -73,7 +73,7 @@ public:
       std::ofstream &stream = *(_ofstreamPtr.get());
       std::string sType = StringUtils::typeForPrimitive(value.front());
       stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" ;
-      T typesize = value.front();
+     // T typesize = value.front();
       
       int32 size = dims.size();
       for (int i = 0; i < size; ++i)
@@ -93,7 +93,7 @@ public:
         {
           stream << "\n" << indent(5);
         }
-        if (sizeof(typesize) != 1 )
+        if (sizeof(T) != 1 )
           stream  << value[i];
         else
           stream  << static_cast<int32>(value[i]);
@@ -113,6 +113,7 @@ public:
       // -----------------------------------------------------------------------------  
      int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::string &value)
      {
+       locationId = 0; // Keeps Compiler Quiet
        std::ofstream &stream = *(_ofstreamPtr.get());
 //       int32 size = value.size();
        stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" << 1 <<  "\" type=\"string\">\n";

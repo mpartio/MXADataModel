@@ -973,7 +973,10 @@ static MXA_EXPORT herr_t getDatasetInfo( hid_t loc_id,
                               size_t &type_size );
 
 /**
- * @brief Returns the information about an attribute
+ * @brief Returns the information about an attribute.
+ * You must close the attributeType argument or resource leaks will occur. Use
+ *  H5Tclose(tid); after your call to this method if you do not need the id for
+ *   anything.
  * @param loc_id
  * @param objName
  * @param attr_name

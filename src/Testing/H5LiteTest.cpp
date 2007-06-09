@@ -45,6 +45,11 @@ using boost::unit_test::test_suite;
 
 using namespace MXATypes;
 
+test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] );
+herr_t testMakeStringDataset(hid_t file_id);
+herr_t testMakeStringAttribute(hid_t file_id);
+void H5LiteTest();
+
 // -----------------------------------------------------------------------------
 //  Uses Raw Pointers to save data to the data file
 // -----------------------------------------------------------------------------
@@ -256,14 +261,13 @@ herr_t testMakeStringAttribute(hid_t file_id) {
   std::string dsetName ("H5T_STR_NULLTERM");
   std::string testAttribute("Test_Attribute");
   std::string strData ("Some data for the Attribute");
-  int32 size = strData.size();
+
   std::cout << "WriteAttribute->H5T_STR_NULLTERM: ";
   err = H5Lite::writeStringAttribute(file_id, dsetName, testAttribute, strData);
   
-  
   std::string rData;
   err = H5Lite::readStringAttribute(file_id, dsetName, testAttribute, rData);
-   size = rData.size();
+  //int32 size = rData.size();
    if ( strData == rData) {
     std::cout << " - Passed" << std::endl;
   } else { 
@@ -285,8 +289,23 @@ void H5LiteTest() {
   hid_t uintGid = H5Gcreate(file_id, "Unsigned Int", 0);
   hid_t c99Gid = H5Gcreate(file_id, "Test C99", 0);
   herr_t err = H5Gclose(sintGid);
+  if (err < 0)
+  {
+    std::cout << "Error closing Group sintGid" << std::endl;
+    return;
+  }
   err = H5Gclose(uintGid);
+  if (err < 0)
+  {
+    std::cout << "Error closing Group uintGid" << std::endl;
+    return;
+  }
   err = H5Gclose(c99Gid);
+  if (err < 0)
+  {
+    std::cout << "Error closing Group c99Gid" << std::endl;
+    return;
+  }
   
   // ******************* Test Writing Data *************************************
   std::cout << logTime() << "----------- Testing Writing/Reading of Datasets -----------" << std::endl;

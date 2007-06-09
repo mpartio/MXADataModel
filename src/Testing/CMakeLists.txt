@@ -35,79 +35,30 @@ SET (HDF5_USE_HIGH_LEVEL FALSE)
 
 IF (BUILD_TESTING)
 
-# -------- Data Model Test
-SET (MXADATAMODEL_TEST_SRCS
-  DataModelTest.cpp
-)
-ADD_EXECUTABLE ( DataModelTest ${MXADATAMODEL_TEST_SRCS} )
-TARGET_LINK_LIBRARIES ( DataModelTest MXADataModel ${Boost_LIBRARIES})
-ADD_TEST(DataModelTest ${EXECUTABLE_OUTPUT_PATH}/DataModelTest)
-
-# ------ DataImport Test
-SET (MXADATAIMPORT_TEST_SRCS
-  DataImportTest.cpp
-)
-ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} )
-TARGET_LINK_LIBRARIES ( DataImportTest  ${MXADATAMODEL_LIB_NAME} ${Boost_LIBRARIES})
-ADD_TEST(DataImportTest ${EXECUTABLE_OUTPUT_PATH}/DataImportTest)
-
-
-# ------- H5Lite Test
-SET (H5LITE_TEST_SRCS
-  H5LiteTest.cpp
-)
-ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
-TARGET_LINK_LIBRARIES (H5LiteTest MXADataModel ${HDF5_LIBRARIES} ${Boost_LIBRARIES})
-ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
+    # -------- Data Model Test
+    SET (MXADATAMODEL_TEST_SRCS
+      DataModelTest.cpp
+    )
+    ADD_EXECUTABLE ( DataModelTest ${MXADATAMODEL_TEST_SRCS} )
+    TARGET_LINK_LIBRARIES ( DataModelTest MXADataModel ${Boost_LIBRARIES})
+    ADD_TEST(DataModelTest ${EXECUTABLE_OUTPUT_PATH}/DataModelTest)
+    
+    # ------ DataImport Test
+    SET (MXADATAIMPORT_TEST_SRCS
+      DataImportTest.cpp
+    )
+    ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} )
+    TARGET_LINK_LIBRARIES ( DataImportTest  ${MXADATAMODEL_LIB_NAME} ${Boost_LIBRARIES})
+    ADD_TEST(DataImportTest ${EXECUTABLE_OUTPUT_PATH}/DataImportTest)
+    
+    
+    # ------- H5Lite Test
+    SET (H5LITE_TEST_SRCS
+      H5LiteTest.cpp
+    )
+    ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
+    TARGET_LINK_LIBRARIES (H5LiteTest MXADataModel ${HDF5_LIBRARIES} ${Boost_LIBRARIES})
+    ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
 
 ENDIF (BUILD_TESTING)
 
-#--- Data Model Test Program --------------------
-#OPTION (MXA_BUILD_DATAMODEL_TEST "Builds a Program to test the User meta data read/write classes" OFF)
-#IF ( MXA_BUILD_DATAMODEL_TEST )
-#  SET (MXADATAMODEL_TEST_SRCS
-#    DataModelTest.cpp
-#  )
-#  
-#  ADD_EXECUTABLE ( DataModelTest ${MXADATAMODEL_TEST_SRCS} )
-#  TARGET_LINK_LIBRARIES ( DataModelTest 
-#    MXADataModel
-#    ${Boost_LIBRARIES}
-#  )
-#  
-#  ADD_TEST(DataModelTest ${EXECUTABLE_OUTPUT_PATH}/DataModelTest)
-#ENDIF ( MXA_BUILD_DATAMODEL_TEST )
-
-#---- Data Import Test Program -----------------------
-#OPTION (MXA_BUILD_DATAIMPORT_TEST "Builds a Program to test the User meta data read/write classes" OFF)
-#IF ( MXA_BUILD_DATAIMPORT_TEST )
-#  SET (MXADATAIMPORT_TEST_SRCS
-#    DataImportTest.cpp
-#  )
-#
-#  ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} )
-#  TARGET_LINK_LIBRARIES ( DataImportTest 
-#    ${MXADATAMODEL_LIB_NAME}
-#    ${Boost_LIBRARIES}
-#  )
-#  ADD_TEST(DataImportTest ${EXECUTABLE_OUTPUT_PATH}/DataImportTest)
-#ENDIF ( MXA_BUILD_DATAIMPORT_TEST )
-#
-##------------------- Build the HD5Lite Testing ---------------
-#IF ( MXA_USE_HDF5 )
-#  OPTION(MXA_BUILD_H5LITE_TEST "Builds a program that tests the H5Lite methods" OFF)
-#  IF ( MXA_BUILD_H5LITE_TEST )
-#    SET (H5LITE_TEST_SRCS
-#      H5LiteTest.cpp
-#    )
-#  
-#    ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
-#    TARGET_LINK_LIBRARIES ( 
-# H5LiteTest
-# MXADataModel
-#    ${HDF5_LIBRARIES}
-# ${Boost_LIBRARIES}
-#    )
-#     ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest) 
-#  ENDIF ( MXA_BUILD_H5LITE_TEST )
-#ENDIF ( MXA_USE_HDF5 )

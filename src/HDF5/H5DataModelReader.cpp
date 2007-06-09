@@ -41,14 +41,21 @@ H5DataModelReader::~H5DataModelReader()
 // -----------------------------------------------------------------------------
 herr_t H5DataModelReader::readDataModel(hid_t locId)
 {
-  if ( (readFileType(locId)) < 0 ) return false;
-  if ( ( readFileVersion(locId)) < 0) return false;
-  if (( readDataRoot(locId)) < 0) return false;
-  if (( readDataDimensions(locId)) < 0) return false;
-  if (( readDataRecords(locId) ) < 0) return false;
-  if (( readRequiredMetaData(locId) ) < 0) return false;
-  if (( readUserMetaData(locId) ) < 0) return false;
-  
+  if ( (readFileType(locId)) < 0)
+    return false;
+  if ( (readFileVersion(locId)) < 0)
+    return false;
+  if ( (readDataRoot(locId)) < 0)
+    return false;
+  if ( (readDataDimensions(locId)) < 0)
+    return false;
+  if ( (readDataRecords(locId)) < 0)
+    return false;
+  if ( (readRequiredMetaData(locId) ) < 0)
+    return false;
+  if ( (readUserMetaData(locId) ) < 0)
+    return false;
+
   return true;
 }
 
