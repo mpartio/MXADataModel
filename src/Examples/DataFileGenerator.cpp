@@ -34,7 +34,7 @@ herr_t DataFileGenerator::generate()
     std::cout << logTime() << "Error writing Data Model" << std::endl;
     return err;
   }
-  ImportSimpleData(model, this->_filePath);
+  //ImportSimpleData(model, this->_filePath);
   return err;
 }
 
@@ -43,7 +43,7 @@ herr_t DataFileGenerator::generate()
 //  Creates a DataImport class and some DataSources that then delegate out to 
 //  an instance of an IDataImportDelegate to do the actual import of data.
 // -----------------------------------------------------------------------------
-herr_t DataFileGenerator::ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
+herr_t DataFileGenerator::storeData(MXADataModelPtr model, std::string outputFilePath)
 {
   //Create the DataImport Class
   MXADataImportPtr dataImport( new MXADataImport() );
@@ -122,9 +122,9 @@ herr_t DataFileGenerator::ImportSimpleData(MXADataModelPtr model, std::string ou
       dataImport->addDataSource(ds2);
     }
   }
-  
+
+    
   // Import the Data into the HDF5 File
-  //std::cout << "IMPORTING DATA NOW" << std::endl;
   herr_t err = dataImport->import();
  // std::cout << logTime() << "err=" << err << std::endl;
   if (err < 0)
@@ -142,27 +142,9 @@ MXADataModelPtr DataFileGenerator::createSimpleModel()
 {
     MXADataModelPtr modelPtr = MXADataModel::New();
     MXADataModel* model = modelPtr.get();
-    model->setDataRoot(std::string("Our Experiment/Laboratory Data"));
+    model->setDataRoot( DataGen::DataRoot );
     model->setFileType(MXA::MXACurrentFileType);
     model->setFileVersion(MXA::MXACurrentFileVersion);
-
-    // ---------- Create 2 Data Dimensions
-    MXADataDimensionPtr dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
-    model->addDataDimension(dim0);
-    MXADataDimensionPtr dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
-    model->addDataDimension(dim1);
-        
-    // ---------- Create Data Records
-    MXADataRecordPtr rec1 = MXADataRecord::New(0, std::string("DataRecordContainer"), std::string("DRC1") );
-    model->addDataRecord(rec1);
-    
-    // ---------- Create Data Records with Parents
-    MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Test Data"), std::string("Test Data") );
-    model->addDataRecord(rec2, rec1);
-    MXADataRecordPtr rec3 = MXADataRecord::New(0, std::string("Scalar"), std::string("Scalar Data") );
-    model->addDataRecord(rec3, rec2);   
-    MXADataRecordPtr rec4 = MXADataRecord::New(1, std::string("2D Array"), std::string("Vector Data") );
-    model->addDataRecord(rec4, rec2);
 
     // ---------- Create the Required MetaData 
     std::map<std::string, std::string> md;
@@ -176,7 +158,50 @@ MXADataModelPtr DataFileGenerator::createSimpleModel()
     md[MXA::MXA_RELEASE_TAG] = "90312901291239012390";
     model->setRequiredMetaData(md);
     
+    // ---------- Create 2 Data Dimensions
+    MXADataDimensionPtr dim0 = MXADataDimension::New( DataGen::Dimension1, DataGen::Dimension1, 0, 2, 1, 2, 1, 1);
+    model->addDataDimension(dim0);
+    MXADataDimensionPtr dim1 = MXADataDimension::New(DataGen::Dimension2, DataGen::Dimension2, 1, 3, 1, 3, 1, 1);
+    model->addDataDimension(dim1);
+     
+    //Create the DataImport Class
+    MXADataImportPtr dataImport( new MXADataImport() );
+    // Set the HDF5 Output file to write all the data into
+    dataImport->setOutputFilePath(_filePath);
+    // Set the MXADataModel Object into the dataImport Object
+    dataImport->setDataModel(modelPtr);
+    
+    
+    // ---------- Create Data Records
+    MXADataRecordPtr tableRec = MXADataRecord::New(0, DataGen::TableRec, DataGen::TableRec );
+    model->addDataRecord(tableRec); // Add a top level Record
+    
+    // Add all the Data for this record
+    MXADataRecordPtr int8Rec = MXADataRecord::New(0, DataGen::Int8Rec, DataGen::Int8Rec );
+    this->createAndStore(model, int8Rec, dataImport, MXATypes::Int8Type);
+
+
+    
+    // Write the model to the HDF5 File
+    err = model->writeModel(this->_filePath, false); //Leave the file open for the import
+    if (err < 0)
+    {
+      std::cout << logTime() << "Error writing Data Model" << std::endl;
+      return err;
+    }
+      
+    //std::cout << "IMPORTING DATA NOW" << std::endl;
+    herr_t err = dataImport->import();
+   // std::cout << logTime() << "err=" << err << std::endl;
+    if (err < 0)
+    {
+      std::cout << logTime() << "Error Populating the H5 data file with test data" << std::endl;
+    }
+    return err;
     return modelPtr;
 }
+
+
+
 
 
