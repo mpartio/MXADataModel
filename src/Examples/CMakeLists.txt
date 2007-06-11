@@ -14,6 +14,18 @@ SET (EXECUTABLE_OUTPUT_PATH
   "Single Directory for all Executables."
   )
 
+OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
+IF(BUILD_VTK_HDF5)
+     #-- Find VTK packages -----------------------------------------
+    FIND_PACKAGE(VTK REQUIRED)
+    INCLUDE(${VTK_USE_FILE})
+    
+    # List the kits from VTK that are needed by this project.
+    SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
+    
+    SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
+    SET(HDF5_VTK_BRIDGE "1")
+ENDIF(BUILD_VTK_HDF5) 
 
 SET (GETDATA_SRCS
   GetDataExample.cpp
@@ -21,11 +33,12 @@ SET (GETDATA_SRCS
 )
 
 
-ADD_EXECUTABLE ( GetDataExample ${GETDATA_SRCS}  )
+ADD_EXECUTABLE ( GetDataExample ${GETDATA_SRCS} )
 
 TARGET_LINK_LIBRARIES ( GetDataExample
   MXADataModel
   ${HDF5_LIBRARIES}
+  ${DEP_LIBS} 
 )
 
 

@@ -115,6 +115,7 @@ SET (MXADATAMODEL_HEADERS
 
 # Build with the HDF5 Libraries Enabled. This is the default
 SET(HDF5_SUPPORT "0")
+SET(HDF5_VTK_BRIDGE "0")
 OPTION (MXA_USE_HDF5 "Compiles Sources dependent on HDF5 Libraries" ON)
 IF ( MXA_USE_HDF5 )
   # ---------- Find the HDF Libraries - DO NOT use the High Level APIs from the HDF5
@@ -153,13 +154,30 @@ IF ( MXA_USE_HDF5 )
     src/HDF5/H5Image.h
     src/HDF5/H5Utilities.h
   )
-  SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
+  
+
   SET(DEP_LIBS ${DEP_LIBS} ${HDF5_LIBRARIES})
   SET(HDF5_SUPPORT "1")
+  OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
+  IF(BUILD_VTK_HDF5)
+    #-- Find VTK packages -----------------------------------------
+    FIND_PACKAGE(VTK REQUIRED)
+    INCLUDE(${VTK_USE_FILE})
+    
+    # List the kits from VTK that are needed by this project.
+    SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
+    
+    SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} src/HDF5/vtkHDF5.cpp)
+    SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} src/HDF5/vtkHDF5.h)
+    SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
+    SET(HDF5_VTK_BRIDGE "1")
+  ENDIF (BUILD_VTK_HDF5)
+  #-- Finally include all the sources and headers from the HDf5 and vtk sections
+  SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
 ENDIF ( MXA_USE_HDF5 )
 
-SET (TIFF_SUPPORT "0")
 # ------------------ Check for and Include Tif Lib dependent code --------------
+SET (TIFF_SUPPORT "0")
 OPTION(MXA_USE_TIFF "Compiles source code that depends on having the Tif Lib installed" ON)
 IF(MXA_USE_TIFF)
 
@@ -203,9 +221,9 @@ CONFIGURE_FILE(${MXADataModel_SOURCE_DIR}/src/Headers/MXAConfiguration.h.in
                ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
-#-- Add the MXADataModel Library
+#-- Add the MXADataModel Library and link to needed libraries-------------------
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
-TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} ${Boost_LIBRARIES})
+TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} ${Boost_LIBRARIES} )
 
 #--- Set up the installation Code for Make Install
 INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
