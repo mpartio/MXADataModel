@@ -29,7 +29,7 @@ ENDIF(BUILD_VTK_HDF5)
 
 SET (GETDATA_SRCS
   GetDataExample.cpp
-  DataFileGenerator.cpp
+  ../Testing/DataFileGenerator.cpp
 )
 
 

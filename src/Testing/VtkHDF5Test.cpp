@@ -6,7 +6,7 @@
 #include "MXADataModel/MXADataRecord.h"
 #include "HDF5/H5Lite.h"
 #include "HDF5/vtkHDF5.h"
-#include "Examples/DataFileGenerator.h"
+#include "Testing/DataFileGenerator.h"
 
 //-- HDF5 Includes
 #include <hdf5.h>
@@ -49,8 +49,7 @@ herr_t test()
   indices.push_back(1);
   indices.push_back(1);
   // We also know the exact path to the Data Record, so lets use it to retrieve the Data Record from the Model
-  MXADataRecordPtr
-      record = modelPtr->getDataRecordByPath("DataRecordContainer/Test Data/2D Array");
+  MXADataRecordPtr record = modelPtr->getDataRecordByPath(DataGen::TableRec + "/" + DataGen::Uint8Rec);
   if (NULL == record.get())
   {
     std::cout << logTime() << "Error getting '2D Array' Data Record"

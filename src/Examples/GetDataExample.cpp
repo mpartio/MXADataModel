@@ -10,8 +10,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "Headers/LogTime.h"
-#include "DataFileGenerator.h"
-
+#include "Testing/DataFileGenerator.h"
+#include <hdf5.h>
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files
@@ -19,7 +19,7 @@
 #if defined (_WIN32)
   #define FILE_NAME "C:\\WINDOWS\\Temp\\GetDataExample.h5"
 #else 
-  #define FILE_NAME "/tmp/GetDataExample.h5"
+  #define FILE_NAME "/Users/mjackson/Desktop/GetDataExample.h5"
 #endif
 
 
@@ -38,6 +38,7 @@ int main(int argc, char **argv)
   dfg.setFilePath(outputFile);
   err = dfg.generate();
   
+#if 0
   //First load the Data file
   MXADataModelPtr modelPtr = MXADataModel::New();
   modelPtr->readModel(outputFile, false); // We pass 'false' so the file will stay open
@@ -101,6 +102,8 @@ int main(int argc, char **argv)
     std::cout << logTime() << "Error Retrieving Dataset info for " << dsetPath << std::endl;
     return -1;
   }
+#endif
+  std::cout << logTime() << "------------- GetData Example Complete ------------ " << std::endl;
   
   return 0;
 }

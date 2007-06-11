@@ -76,7 +76,7 @@ IF (BUILD_TESTING)
     # ------- Vtk to HDF5 Bridge test
     SET (VTK_HDF5_SRCS
       VtkHDF5Test.cpp
-      ../Examples/DataFileGenerator.cpp
+      DataFileGenerator.cpp
     )
     ADD_EXECUTABLE( vtkHDF5Test ${VTK_HDF5_SRCS} )
     TARGET_LINK_LIBRARIES (vtkHDF5Test MXADataModel  ${HDF5_LIBRARIES} ${Boost_LIBRARIES} ${vtkLocal_LIBS})
