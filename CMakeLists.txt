@@ -158,7 +158,7 @@ IF ( MXA_USE_HDF5 )
 
   SET(DEP_LIBS ${DEP_LIBS} ${HDF5_LIBRARIES})
   SET(HDF5_SUPPORT "1")
-  OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
+  OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
   IF(BUILD_VTK_HDF5)
     #-- Find VTK packages -----------------------------------------
     FIND_PACKAGE(VTK REQUIRED)
