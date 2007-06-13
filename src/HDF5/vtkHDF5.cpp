@@ -89,12 +89,12 @@ int vtkHDF5::getScalarType(hid_t loc_id, const std::string &datasetPath)
   err = H5Lite::getDatasetInfo(loc_id, datasetPath, dims, classType, typeSize);
   if (err < 0)
   {
-    std::cout << DEBUG_OUT() << logTime() << "Error Retrieving Dataset Info at line " << __LINE__ << std::endl;
+    std::cout << DEBUG_OUT(logTime) << "Error Retrieving Dataset Info at line " << __LINE__ << std::endl;
     return err;
   }
   hid_t typeId = H5Lite::getDatasetType(loc_id, datasetPath);
   if (typeId < 0) { 
-    std::cout << DEBUG_OUT() << logTime() << "Error getting type id for data set" << std::endl; 
+    std::cout << DEBUG_OUT(logTime) << "Error getting type id for data set" << std::endl; 
     return -1; 
    }
   
@@ -196,7 +196,7 @@ hid_t vtkHDF5::HDFTypeForVTKType(int value)
   if ( value == VTK_TYPE_INT8) return H5T_NATIVE_INT64;
   if ( value == VTK_TYPE_UINT64) return H5T_NATIVE_UINT64; 
   
-  std::cout << DEBUG_OUT() <<  "Error: HDFTypeForPrimitive - Unknown Type: " << value << " Consult vtkType.h for more information."<< std::endl;
+  std::cout << DEBUG_OUT(logTime) <<  "Error: HDFTypeForPrimitive - Unknown Type: " << value << " Consult vtkType.h for more information."<< std::endl;
 
   return -1;
 }
@@ -209,7 +209,7 @@ herr_t vtkHDF5::_readVtkImageDataSet(hid_t loc_id, const std::string &dsetName, 
 {
   if ( NULL == imgData )
   {
-    std::cout << DEBUG_OUT() << logTime() << "Error: imgData pointer was NULL." << std::endl;
+    std::cout << DEBUG_OUT(logTime) << "Error: imgData pointer was NULL." << std::endl;
   }
   void* dataPtr = imgData->GetScalarPointer();  
   //unsigned char *data = static_cast < unsigned char* > ( imgData->GetScalarPointer( ) );

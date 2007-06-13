@@ -22,7 +22,49 @@
 #include <string>
 //#include <stdlib.h>
 
+#if 1
+/*-------------------------------------------------------------------------
+ * Function: find_palette
+ *
+ * Purpose: operator function used by H5LT_find_palette
+ *
+ * Return:
+ *
+ * Programmer: Pedro Vicente, pvn@ncsa.uiuc.edu
+ *
+ * Date: May 28, 2001
+ *
+ * Comments:
+ *
+ * Modifications:
+ *
+ *-------------------------------------------------------------------------
+ */
+static herr_t find_palette( hid_t loc_id, const char *name, void  *op_data )
+{
 
+ /* Define a default zero value for return. This will cause the iterator to continue if
+  * the palette attribute is not found yet.
+  */
+
+ int32 ret = 0;
+
+ /* Shut compiler */
+ loc_id=loc_id;
+ op_data=op_data;
+
+ /* Define a positive value for return value if the attribute was found. This will
+  * cause the iterator to immediately return that positive value,
+  * indicating short-circuit success
+  */
+
+ if( strcmp( name, "PALETTE" ) == 0 )
+  ret = 1;
+
+
+ return ret;
+}
+#endif
 
 /*-------------------------------------------------------------------------
  * Function: H5IMmake_image_8bit
@@ -43,20 +85,20 @@
  *
  *-------------------------------------------------------------------------
  */
-herr_t H5Image::H5IMmake_image_8bit( hid_t loc_id,
+herr_t H5Image::makeGrayScaleImage( hid_t loc_id,
                             std::string datasetName,
                             hsize_t width,
                             hsize_t height,
                             const unsigned char *buffer )
 {
- int32      rank = 3;
- hsize_t  dims[3];
+ int32      rank = 2;
+ hsize_t  dims[2];
  //herr_t err = -1;
  
   /* Initialize the image dimensions */
  dims[0] = height;
  dims[1] = width;
- dims[2] = 1;
+ //dims[2] = 1;
 
  /* Make the dataset */
  if (H5Lite::writeDataset(loc_id, datasetName, rank, dims, buffer) < 0 )
@@ -67,11 +109,11 @@ herr_t H5Image::H5IMmake_image_8bit( hid_t loc_id,
   return -1;
 
  /* Attach the VERSION attribute */
- if ( H5Lite::writeStringAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::PalVersionValue) ) < 0 )
+ if ( H5Lite::writeScalarAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageWhiteIsZero), 0 ) < 0 )
   return -1;
 
  /* Attach the IMAGE_SUBCLASS attribute */
- if ( H5Lite::writeStringAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::ImageIndexed) ) < 0 )
+ if ( H5Lite::writeStringAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::ImageGrayScale) ) < 0 )
   return -1;
 
  return 0;
@@ -142,7 +184,7 @@ herr_t H5Image::H5IMmake_image_24bit( hid_t loc_id,
   return -1;
 
  /* Attach the VERSION attribute */
- if ( H5Lite::writeScalarAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::PalVersionValue) ) < 0 )
+ if ( H5Lite::writeScalarAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::PalVersion), const_cast<std::string&>(H5ImageConst::PalVersionValue) ) < 0 )
   return -1;
 
  /* Attach the IMAGE_SUBCLASS attribute */

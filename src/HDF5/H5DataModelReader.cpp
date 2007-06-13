@@ -255,7 +255,6 @@ herr_t H5DataModelReader::readDataRecords(hid_t fileId)
     std::cout << "Invalid HDF FileId: " << fileId << std::endl;
     return -1;
   }
-  //MXADataModel* model = this->_dataModel.get();
   herr_t err = -1;
   hid_t recId = -1;
   // Open the Data Records Group

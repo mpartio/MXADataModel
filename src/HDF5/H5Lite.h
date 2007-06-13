@@ -165,19 +165,6 @@ static MXA_EXPORT herr_t findDataset( hid_t loc_id, const std::string& name );
 /**
  * @brief Creates a Dataset with the given name at the location defined by loc_id
  * 
- * The permissible types that can be used for dataType are:
- * <ul>
- * <li>H5T_NATIVE_INT8</li>
- * <li>H5T_NATIVE_UINT8</li>
- * <li>H5T_NATIVE_INT16</li>
- * <li>H5T_NATIVE_UINT16</li>
- * <li>H5T_NATIVE_INT32</li>
- * <li>H5T_NATIVE_UINT32</li>
- * <li>H5T_NATIVE_INT64</li>
- * <li>H5T_NATIVE_UINT64</li>
- * <li>H5T_NATIVE_FLOAT</li>
- * <li>H5T_NATIVE_DOUBLE</li>
- * </ul>
  * 
  * @param loc_id The Parent location to store the data
  * @param dsetName The name of the dataset
@@ -235,6 +222,71 @@ static herr_t writeVectorDataset (hid_t loc_id,
   if ( did >= 0 ) 
   {
     err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &(data.front()) );
+    if (err < 0 ) {
+      std::cout << "Error Writing Data" << std::endl;
+      retErr = err;
+    }
+    err = H5Dclose( did );
+    if (err < 0) {
+      std::cout << "Error Closing Dataset." << std::endl;
+      retErr = err;
+    }
+  } else {
+    retErr = did;
+  }
+  /* Terminate access to the data space. */
+  err= H5Sclose( sid );
+  if (err< 0) {
+    std::cout << "Error Closing Dataspace" << std::endl;
+    retErr = err; 
+  }
+  return retErr;
+}
+
+/**
+ * @brief
+ * @param loc_id
+ * @param dsetName
+ * @param dims
+ * @param data
+ * @return
+ */
+template <typename T>
+static herr_t writePointerDataset (hid_t loc_id, 
+                            const std::string& dsetName,
+                            int32   rank,
+                            uint64* dims, 
+                            T* data)
+{
+
+  herr_t err    = -1;
+  hid_t did     = -1;
+  hid_t sid     = -1;
+  herr_t retErr = 0;
+
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(data[0]);
+  if(dataType == -1)
+  {
+    return -1;
+  }
+  //Create the DataSpace
+  std::vector<uint64>::size_type size = static_cast<std::vector<uint64>::size_type>(rank);
+
+  std::vector<hsize_t> _dims(size, 0);
+  for (int32 i = 0; i < rank; ++i)
+  {
+    _dims[i] = static_cast<hsize_t>(dims[i]);
+  }
+  sid = H5Screate_simple( size, &(_dims.front()), NULL );
+  if (sid < 0) 
+  {
+    return sid;
+  }
+  // Create the Dataset
+  did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
+  if ( did >= 0 ) 
+  {
+    err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
     if (err < 0 ) {
       std::cout << "Error Writing Data" << std::endl;
       retErr = err;
@@ -606,6 +658,51 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
   return retErr;  
 }
 
+/**
+ * @brief Reads data from the HDF5 File into a preallocated array.
+ * @param loc_id The parent location that contains the dataset to read
+ * @param dsetname The name of the dataset to read
+ * @param data A Pointer to the PreAllocated Array of Data
+ * @return Standard HDF error condition
+ */
+template <typename T>
+static herr_t readPointerDataset(hid_t loc_id, 
+                                const std::string& dsetName, 
+                                T* data) 
+{
+  hid_t did;
+  herr_t err = 0;
+  herr_t retErr = 0;
+  hid_t dataType = 0;
+  T test = 0x00;
+  dataType = H5Lite::HDFTypeForPrimitive(test);
+  if (dataType == -1)
+  {
+    return -1;
+  }
+  did = H5Dopen( loc_id, dsetName.c_str() );
+  if ( did < 0 )
+  {
+    std::cout << " Error opening Dataset: " << did << std::endl;
+    return -1;
+  }
+  if ( did >= 0 )
+  {
+    err = H5Dread(did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
+    if (err < 0)
+    {
+      std::cout << "Error Reading Data." << std::endl;
+      retErr = err;
+    }
+    err = H5Dclose( did );
+    if (err < 0 )
+    {
+      std::cout << "Error Closing Dataset id" << std::endl;
+      retErr = err;
+    }
+  }
+  return retErr;
+}
 
 
 /**
@@ -617,20 +714,6 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
  * will size it for you.
  * @param dataType An H5T_Type constant. See the notes below.
  * @return Standard HDF error condition
- * 
- * <b>The permissible types that can be used for dataType are:</b>
- * <ul>
- * <li>H5T_NATIVE_INT8</li>
- * <li>H5T_NATIVE_UINT8</li>
- * <li>H5T_NATIVE_INT16</li>
- * <li>H5T_NATIVE_UINT16</li>
- * <li>H5T_NATIVE_INT32</li>
- * <li>H5T_NATIVE_UINT32</li>
- * <li>H5T_NATIVE_INT64</li>
- * <li>H5T_NATIVE_UINT64</li>
- * <li>H5T_NATIVE_FLOAT</li>
- * <li>H5T_NATIVE_DOUBLE</li>
- * </ul>
  */
 template <typename T>
 static herr_t readVectorDataset(hid_t loc_id, 

@@ -1,5 +1,20 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2007, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
+
 #ifndef _MXA_H5IMAGE_H
 #define _MXA_H5IMAGE_H
+
+//TODO: Reimplement Indexed image read/write
+//TODO: Check other methods to conform to latest H5IM Spec
+//TODO: Add ImageSpec Version attribute
 
 //MXA Includes
 #include "Headers/DLLExport.h"
@@ -67,7 +82,7 @@ static MXA_EXPORT herr_t H5IM_find_palette( hid_t loc_id);
 * @param buffer
 * @return 
 */
-static MXA_EXPORT herr_t H5IMmake_image_8bit( hid_t loc_id,
+static MXA_EXPORT herr_t makeGrayScaleImage( hid_t loc_id,
                             std::string datasetName,
                             hsize_t width,
                             hsize_t height,
@@ -214,48 +229,6 @@ static MXA_EXPORT herr_t H5IMis_palette( hid_t loc_id,
 
 };
 
-
-/*-------------------------------------------------------------------------
- * Function: find_palette
- *
- * Purpose: operator function used by H5LT_find_palette
- *
- * Return:
- *
- * Programmer: Pedro Vicente, pvn@ncsa.uiuc.edu
- *
- * Date: May 28, 2001
- *
- * Comments:
- *
- * Modifications:
- *
- *-------------------------------------------------------------------------
- */
-static herr_t find_palette( hid_t loc_id, const char *name, void  *op_data )
-{
-
- /* Define a default zero value for return. This will cause the iterator to continue if
-  * the palette attribute is not found yet.
-  */
-
- int32 ret = 0;
-
- /* Shut compiler */
- loc_id=loc_id;
- op_data=op_data;
-
- /* Define a positive value for return value if the attribute was found. This will
-  * cause the iterator to immediately return that positive value,
-  * indicating short-circuit success
-  */
-
- if( strcmp( name, "PALETTE" ) == 0 )
-  ret = 1;
-
-
- return ret;
-}
 
 
 

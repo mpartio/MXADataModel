@@ -19,7 +19,7 @@
 #if defined (_WIN32)
   #define FILE_NAME "C:\\WINDOWS\\Temp\\GetDataExample.h5"
 #else 
-  #define FILE_NAME "/Users/mjackson/Desktop/GetDataExample.h5"
+  #define FILE_NAME "/tmp/GetDataExample.h5"
 #endif
 
 

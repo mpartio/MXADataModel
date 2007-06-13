@@ -1,9 +1,9 @@
 
-//-- MHD Headers
+//-- MXA Headers
 #include "H5Lite.h"
 #include "H5Image.h"
 #include "H5TiffIO.h"
-
+#include "Headers/LogTime.h"
 
 //-- STL Headers
 #include <iostream>
@@ -148,7 +148,7 @@ herr_t H5TiffIO::_readGrayscaleTiff(TIFF *in, hid_t groupId,
   }
   
   // Store byte array to HDF5 File
-  err = H5Image::H5IMmake_image_8bit(groupId, datasetName, width, height, (unsigned char *)raster );
+  err = H5Image::makeGrayScaleImage(groupId, datasetName, width, height, (unsigned char *)raster );
   if (err<0) {
     std::cout << "Error storing Image data with H5IM API:  datasetName: "
 	      << datasetName << std::endl; 
@@ -192,11 +192,20 @@ herr_t H5TiffIO::_readGrayscaleTiff(TIFF *in, hid_t groupId,
 // ---------------------------------------------------------------------
 herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName) 
 {
+  herr_t err = 0;
+  
+  if (true)
+  {
+    std::cout << DEBUG_OUT(logTime) << "Indexed Color Images are not supported." << std::endl;
+    return -1;
+  }
+
+  
+#if 0
   uint32* raster;     /* retrieve RGBA image */
   uint32  width, height;    /* image width & height */
   uint16  bitspersample;
-  herr_t err = 0;
-  
+
   std::cout << "Importing 8bit color palette tiff image" << std::endl;
   
   TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
@@ -339,7 +348,7 @@ herr_t H5TiffIO::_read8BitTiff( TIFF *in, hid_t groupId, string &datasetName)
     std::cout << "Error setting display origin" << std::endl;
     return -1;
   }
-
+#endif
   return err;
 }
 

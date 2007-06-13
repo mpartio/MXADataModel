@@ -244,6 +244,15 @@ int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, MXADataRecords &records
     s = rec->getAltName();
     err = H5Lite::writeStringAttribute(gid, dsetName, const_cast<std::string&>(MXA::MXA_ALT_NAME_TAG), s );
     if (err<0) {std::cout << "Error Writing Attribute " << MXA::MXA_ALT_NAME_TAG << std::endl; break;}
+#if 0 
+    H5AttributeWriter attrWriter;
+    MXAAttributes attributes = rec->getUserDefinedAttributes();
+    for (std::vector<MXAAttributePtr>::iterator iter = attributes.begin(); iter != attributes.end(); ++iter )
+    {
+      (*(iter))->write(gid, dsetName, attrWriter);
+    }
+    std::cout << logTime() << "Done writing Record: " << rec->getRecordName() << std::endl;
+#endif
   }
   return err;
 }

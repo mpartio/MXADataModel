@@ -40,7 +40,7 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
   #define FILE_NAME_AFTER "C:\\WINDOWS\\Temp\\DataModelTest-After.h5"
   #define FILE_NAME_XML "C:\\WINDOWS\\Temp\\DataModelTest.xml"
 #else 
-  #define FILE_NAME_BEFORE "/Users/mjackson/Desktop/DataModelTest-Before.h5"
+  #define FILE_NAME_BEFORE "/tmp/DataModelTest-Before.h5"
   #define FILE_NAME_AFTER "/tmp/DataModelTest-After.h5"
   #define FILE_NAME_XML "/tmp/DataModelTest.xml"
 #endif
@@ -154,6 +154,8 @@ MXADataModelPtr createModel()
 	  //Create Data Records
 	  MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
 	  model->addDataRecord(rec0);
+	//  rec0->addUserDefinedAttribute("Rendering Hint", RenderHint::ImageGrayScale);
+	  
 	  MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
 	  model->addDataRecord(rec1);
 	  //Create Data Records with Parents
