@@ -33,7 +33,7 @@ SET (HDF5_USE_HIGH_LEVEL FALSE)
       ENDIF (WIN32)
   ENDIF (MXA_BUILD_SHARED_LIBS)
 
-OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
+OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
 IF(BUILD_VTK_HDF5)
      #-- Find VTK packages -----------------------------------------
     FIND_PACKAGE(VTK REQUIRED)
@@ -73,14 +73,15 @@ IF (BUILD_TESTING)
     TARGET_LINK_LIBRARIES (H5LiteTest MXADataModel ${HDF5_LIBRARIES} ${Boost_LIBRARIES} ${vtkLocal_LIBS})
     ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
     
-    # ------- Vtk to HDF5 Bridge test
-    SET (VTK_HDF5_SRCS
-      VtkHDF5Test.cpp
-      DataFileGenerator.cpp
-    )
-    ADD_EXECUTABLE( vtkHDF5Test ${VTK_HDF5_SRCS} )
-    TARGET_LINK_LIBRARIES (vtkHDF5Test MXADataModel  ${HDF5_LIBRARIES} ${Boost_LIBRARIES} ${vtkLocal_LIBS})
-    ADD_TEST(vtkHDF5Test ${EXECUTABLE_OUTPUT_PATH}/vtkHDF5Test)
-    
+    IF(BUILD_VTK_HDF5)
+        # ------- Vtk to HDF5 Bridge test
+        SET (VTK_HDF5_SRCS
+          VtkHDF5Test.cpp
+          DataFileGenerator.cpp
+        )
+        ADD_EXECUTABLE( vtkHDF5Test ${VTK_HDF5_SRCS} )
+        TARGET_LINK_LIBRARIES (vtkHDF5Test MXADataModel  ${HDF5_LIBRARIES} ${Boost_LIBRARIES} ${vtkLocal_LIBS})
+        ADD_TEST(vtkHDF5Test ${EXECUTABLE_OUTPUT_PATH}/vtkHDF5Test)
+    ENDIF(BUILD_VTK_HDF5)
 ENDIF (BUILD_TESTING)
 
