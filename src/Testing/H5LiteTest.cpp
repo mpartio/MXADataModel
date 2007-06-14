@@ -54,20 +54,22 @@ void H5LiteTest();
 template <typename T>
 herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, T type ) {
   herr_t err = 1;
-  uint64 dimx = 2;
-  uint64 dimy = 3;
+  int32 dimx = 2;
+  int32 dimy = 3;
   int32 rank = 2;
   // Create the Dimensions
   uint64 dims[2];
   dims[0] = dimx; dims[1] = dimy;
   
   /* Make dataset char */
-  T data[dimx*dimy];
-  for (uint i = 0; i < (dimx*dimy); ++i) {
+  int32 tSize = dimx * dimy;
+ // T data[dimx*dimy];
+  std::vector<T> data(tSize);
+  for (int32 i = 0; i < tSize; ++i) {
     data[i] = static_cast<T>(type * i * 5);
   }
   //std::cout << "Write/Read->Vector: " << name;
-  err = H5Lite::writeDataset( file_id, name, rank, dims, data );
+  err = H5Lite::writePointerDataset( file_id, name, rank, dims, &(data.front()) );
   if (err<0) {
      std::cout << " - Failed - Could not write data to file." << std::endl;
      return err;; 
@@ -75,14 +77,15 @@ herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, T type ) {
 
   /* Now read the dataset into another vector and compare */
 
-  T rData[dimx*dimy];
-  err = H5Lite::readPointerDataset( file_id, name, rData);
+  //T rData[dimx*dimy];
+  std::vector<T> rData(tSize);
+  err = H5Lite::readPointerDataset( file_id, name, &(rData.front() ) );
   if (err<0) {
     std::cout << " - Failed - Error Reading Data from File" << std::endl;
     return err;; 
   }
   
-  if ( (std::memcmp(data, rData, (dimx*dimy))) == 0) {
+  if ( (std::memcmp(&(data.front()), &(rData.front() ), tSize)) == 0) {
     err = 0;
    // std::cout << " - Passed" << std::endl;
   } else {

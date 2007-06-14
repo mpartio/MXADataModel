@@ -235,9 +235,13 @@ SET (INSTALL_INCLUDES
   src/Utilities
   src/XML
   )
+  
+INSTALL ( FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h DESTINATION include/MXADataModel/Headers )
+  
 INSTALL(DIRECTORY ${INSTALL_INCLUDES}  DESTINATION include/MXADataModel
   PATTERN "CVS" EXCLUDE
   PATTERN "*.c*" EXCLUDE
+  PATTERN "*.in" EXCLUDE
   )
   
   
