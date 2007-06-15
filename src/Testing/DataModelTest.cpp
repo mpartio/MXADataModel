@@ -269,7 +269,7 @@ void ReReadTestModel()
     MXADataModelPtr rmodel  = MXADataModel::New();
     MXADataModel* model = rmodel.get();
     BOOST_REQUIRE ( model->readModel(inFile) >= 0);
-    model->printModel(std::cout, true);
+   // model->printModel(std::cout, true);
     BOOST_REQUIRE ( model->writeModel(outFile) >= 0 );
     
     IODelegatePtr ioPtr;

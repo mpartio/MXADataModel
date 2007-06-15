@@ -17,7 +17,8 @@
 //-- Boost includes
 #include <boost/test/unit_test.hpp>
 
-using boost::unit_test::test_suite;
+//using boost::unit_test::test_suite;
+using namespace boost::unit_test;
 
 
 #if defined (_WIN32)
@@ -365,11 +366,12 @@ void H5LiteTest() {
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
-    test_suite* test= BOOST_TEST_SUITE( "H5Lite Tests" );
-    //test->add( new DataModelTest () );
-    
-    test->add( BOOST_TEST_CASE( &H5LiteTest), 0);
-
-    return test; 
+    //test_suite* test= BOOST_TEST_SUITE( "H5Lite Tests" );
+    framework::master_test_suite().p_name.value = "H5Lite Tests";
+    // register the test case in test tree and specify number of expected failures so
+    // this example will pass at runtime. We expect 2 errors: one from failed check and 
+    // one from memory acces violation
+    framework::master_test_suite().add( BOOST_TEST_CASE( &H5LiteTest), 0);
+    return 0; 
 }
 

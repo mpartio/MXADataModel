@@ -24,8 +24,7 @@
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>
-
-using boost::unit_test::test_suite;
+using namespace boost::unit_test;
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files
@@ -201,9 +200,12 @@ int DataImportTest ()
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
-    test_suite* test= BOOST_TEST_SUITE( "Data Import Tests" );
-    test->add( BOOST_TEST_CASE( &DataImportTest), 0);
-    return test; 
+  framework::master_test_suite().p_name.value = "Unit test example 03";
+
+   // with explicit registration we could specify a test case timeout
+   framework::master_test_suite().add( BOOST_TEST_CASE( &DataImportTest ), 0, /* timeout */ 2 );
+
+   return 0;
 }
 
 
