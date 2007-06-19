@@ -10,6 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //--MXA Includes
+#include <MXAConfiguration.h>
 #include "Headers/LogTime.h"
 #include "Headers/MXATypes.h"
 #include "HDF5/H5Lite.h"

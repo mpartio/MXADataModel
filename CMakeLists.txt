@@ -42,7 +42,9 @@ ENDIF(NOT Boost_FOUND)
 
 
 # Extend the include path to include the MXADataModel source directory
-INCLUDE_DIRECTORIES( "${PROJECT_SOURCE_DIR}/src"  ${INCLUDE_DIRECTORIES} )
+INCLUDE_DIRECTORIES( "${PROJECT_SOURCE_DIR}/src" )
+# ----- Also include our binary directory as some headers are generated into that directory
+INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
 
 #-- Include the MXADataModel Testing Sources
 ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
@@ -203,8 +205,6 @@ SET( MXA_XML_SRCS
   src/XMLTools/MHDXML.cpp
 )  
 
-# - Combine all the source files together -----------------------------
-SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
 # ---------- Set up the Project Options -----------------------
 IF(WIN32)
@@ -219,7 +219,12 @@ ENDIF(WIN32)
 #-- Configure the Header file and then add the Binary Directory to the Includes list
 CONFIGURE_FILE(${MXADataModel_SOURCE_DIR}/src/Headers/MXAConfiguration.h.in
                ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
+SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfiguration.h  )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
+LINK_DIRECTORIES(${Boost_LIBRARY_DIR}) 
+
+# - Combine all the source files together -----------------------------
+SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
 #-- Add the MXADataModel Library and link to needed libraries-------------------
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
