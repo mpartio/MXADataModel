@@ -77,7 +77,6 @@ SET( MXADATAMODEL_SRCS
   src/MXADataModel/MXADataModel.cpp
   src/MXADataModel/MXADataSource.cpp
   src/MXADataModel/MXADataImport.cpp
-  src/XML/XMLDataModelWriter.cpp
 )
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
@@ -111,7 +110,6 @@ SET (MXADATAMODEL_HEADERS
   src/MXADataModel/MXADataRecord.h
   src/MXADataModel/MXADataSource.h
   src/MXADataModel/MXANode.h
-  src/XML/XMLDataModelWriter.h
   src/Utilities/StringUtils.h
   )
 
@@ -200,10 +198,37 @@ IF(MXA_USE_TIFF)
 ENDIF (MXA_USE_TIFF)
 
 #--------- XML Sources ---------------------------------------------------
-SET( MXA_XML_SRCS
-  src/XMLTools/MHDXMLGenerator.cpp
-  src/XMLTools/MHDXML.cpp
-)  
+SET (XML_SUPPORT "0")
+OPTION(MXA_USE_XML "Adds Ability to read/write models to XML Files" ON)
+IF (MXA_USE_XML)
+    FIND_PACKAGE(EXPAT REQUIRED)
+    IF ( NOT EXPAT_FOUND )
+       MESSAGE(FATAL_ERROR "Expat was not found. Set the include/lib manually. The XML Functionality depends on it")
+    ENDIF ( NOT EXPAT_FOUND)
+   
+    SET ( MXA_XML_SRCS
+        src/XML/ExpatParser.cpp
+        src/XML/ExpatEvtHandler.cpp
+        #src/XML/XMLEvtHandler.cpp
+        src/XML/XMLIODelegate.cpp
+        src/XML/XMLDataModelWriter.cpp
+        src/XML/XMLDataModelReader.cpp
+    )
+    
+    SET (MXA_XML_HEADERS
+        src/XML/ExpatParser.h
+        src/XML/ExpatEvtHandler.h
+       # src/XML/XMLEvtHandler.h
+        src/XML/XMLIODelegate.h
+        src/XML/XMLDataModelWriter.h
+        src/XML/XMLDataModelReader.h
+        src/XML/XMLUserMetaDataWriter.h
+    )
+    
+    SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
+    SET(DEP_LIBS ${DEP_LIBS} ${EXPAT_LIBRARIES})
+    SET (XML_SUPPORT "1")
+ENDIF(MXA_USE_XML)
 
 
 # ---------- Set up the Project Options -----------------------

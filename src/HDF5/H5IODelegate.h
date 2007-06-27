@@ -53,7 +53,7 @@ public:
   * @param closeWhenFinished
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
-  int32 writeModelToFile(std::string fileName, MXADataModel* model, bool closeWhenFinished=false);
+  int32 writeModelToFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished=false);
   
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
@@ -62,7 +62,7 @@ public:
   * @param closeWhenFinished
   * is returned.
   */
-  int32 readModelFromFile(std::string fileName, MXADataModel* model, bool closeWhenFinished=false);
+  int32 readModelFromFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished=false);
 
   /**
    * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model

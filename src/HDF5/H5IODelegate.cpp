@@ -33,7 +33,7 @@ H5IODelegate::~H5IODelegate()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXATypes::MXAError H5IODelegate::writeModelToFile(std::string fileName, MXADataModel* model, bool closeWhenFinished)
+MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished)
 {
   
   int32 success = -1;
@@ -63,7 +63,7 @@ MXATypes::MXAError H5IODelegate::writeModelToFile(std::string fileName, MXADataM
 //  Opens the file and then reads the data model from the file. Then closes the
 //  when reading is complete.
 // -----------------------------------------------------------------------------
-MXATypes::MXAError H5IODelegate::readModelFromFile(std::string fileName, MXADataModel* model, bool closeWhenFinished)
+MXATypes::MXAError H5IODelegate::readModelFromFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished)
 {
   //Open the HDF File
   _fileId = openMXAFile(fileName, true);
@@ -88,7 +88,6 @@ MXATypes::MXAError H5IODelegate::readModelFromFile(std::string fileName, MXAData
 // -----------------------------------------------------------------------------
 bool H5IODelegate::supportedMXAFileVersion(float version)
 {
-  //FIXME: Change this to a constant
   if (version == MXA::MXACurrentFileVersion) {
     return true;
   } else {
@@ -178,8 +177,8 @@ hid_t H5IODelegate::openMXAFile(std::string filename, bool readOnly)
     return _fileId;
   }
 
-  //TODO: Inline the File Type and File Version Checks.
-  //TODO: Sanity Check the DataModel for FileType/Version and Data Model Groups and subgroups.
+//TODO: Inline the File Type and File Version Checks.
+//TODO: Sanity Check the DataModel for FileType/Version and Data Model Groups and subgroups.
   // Make sure this is an HDF5 file
   if (! isMXAFile(_fileId)) {
     closeMXAFile();

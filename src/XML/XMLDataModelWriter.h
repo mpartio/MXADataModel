@@ -19,6 +19,7 @@
 #include "Interfaces/IDataDimension.h"
 #include "Interfaces/IDataRecordWriter.h"
 #include "Interfaces/IDataRecord.h"
+#include "XML/XMLIODelegate.h"
 
 //-- STL Headers
 #include <iostream>
@@ -27,7 +28,7 @@
 
 class MXANode;
 
-
+//FIXME: Document this class!!!
 /**
  * @brief
  * @author 
@@ -41,10 +42,10 @@ class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter,
 {
 
 public:
-  XMLDataModelWriter( MXADataModel* dataModel, const std::string &fileName );
+  XMLDataModelWriter(IFileIODelegate* ioDelegate, MXADataModel* dataModel, const std::string &fileName);
   virtual ~XMLDataModelWriter();
 
-  int32 writeModelToFile(int32 fileId);
+  int32 writeModelToFile(int32 NOT_USED);
 
   int32 writeDataModelTemplate(int32 uniqueId);
   int32 writeDataDimensions(int32 uniqueId);
@@ -65,7 +66,7 @@ protected:
   static void _replaceAll(std::string&, std::string, std::string);
   static std::string escapedText(const std::string &value);
   static std::string escapedAttribute(const std::string &value);
-  void _openTag(std::string, int, bool, std::map<std::string, std::string>, bool allupper=true);
+  void _openTag(std::string, int, bool, std::map<std::string, std::string>);
   void _openTag(std::string, int, bool group=true);
   void _closeGroupTag(std::string, int);
 
@@ -73,8 +74,11 @@ protected:
 private:
   //H5IODelegate* _ioDelegate;
   MXADataModel* _dataModel;
+  XMLIODelegate* _ioDelegate;
+  const std::string _fileName;
+  
   boost::shared_ptr<std::ofstream> _ofstreamPtr;
-  std::string _fileName;
+  
   
   XMLDataModelWriter(const XMLDataModelWriter&);   //Copy Constructor Not Implemented
   void operator=(const XMLDataModelWriter&); //Copy Assignment Not Implemented

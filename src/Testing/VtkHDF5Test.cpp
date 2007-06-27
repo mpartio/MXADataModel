@@ -46,8 +46,8 @@ herr_t test()
 
   // We know that the data dimensions have ranges of 1->2 and 1->3, so lets get the data for the first index of each one.
   std::vector<int32> indices;
-  indices.push_back(1);
-  indices.push_back(1);
+  indices.push_back(1); // Time step 1
+  indices.push_back(1); // Slice number
   // We also know the exact path to the Data Record, so lets use it to retrieve the Data Record from the Model
   MXADataRecordPtr record = modelPtr->getDataRecordByPath(DataGen::TableRec + "/" + DataGen::Uint8Rec);
   if (NULL == record.get())

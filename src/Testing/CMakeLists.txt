@@ -17,6 +17,7 @@ SET (EXECUTABLE_OUTPUT_PATH
 # ----------- Find the Boost stuff
 SET (Boost_USE_UNIT_TEST_FRAMEWORK TRUE)
 SET (Boost_USE_TEST_EXEC_MONITOR TRUE)
+SET (Boost_USE_SERIALIZATION TRUE)
 INCLUDE(${PROJECT_SOURCE_DIR}/../../CMake/FindBoost.cmake)
 LINK_DIRECTORIES(${Boost_LIBRARY_DIR})
 
@@ -77,8 +78,17 @@ IF (BUILD_TESTING)
     TARGET_LINK_LIBRARIES (H5LiteTest MXADataModel ${HDF5_LIBRARIES} ${Boost_LIBRARIES} ${vtkLocal_LIBS})
     ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
     
+    # ----- XML Serialization Test
+#    SET (XML_SERIALIZATION_TEST_SRCS
+        
+ #   )
+  #  ADD_EXECUTABLE(XMLSerializationTest ${XML_SERIALIZATION_TEST_SRCS} )
+   # TARGET_LINK_LIBRARIES( XMLSerializationTest MXADataModel ${HDF5_LIBRARIES}  ${Boost_LIBRARIES} )
+    #ADD_TEST(XMLSerializationTest ${EXECUTABLE_OUTPUT_PATH}/XMLSerializationTest)
+    
+    
+    # ------- Vtk to HDF5 Bridge test
     IF(BUILD_VTK_HDF5)
-        # ------- Vtk to HDF5 Bridge test
         SET (VTK_HDF5_SRCS
           VtkHDF5Test.cpp
           DataFileGenerator.cpp

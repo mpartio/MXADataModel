@@ -55,9 +55,9 @@ herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id, const std::string &datasetPath, 
   }
 
   imgData->SetScalarType(scalarType);
-  //TODO: Look for an Attribute that would tell us the spacing
+//TODO: Look for an Attribute that would tell us the spacing
   imgData->SetSpacing( 1.0, 1.0, 1.0);
-  //TODO: Look for an attribute that would tell us the origin
+//TODO: Look for an attribute that would tell us the origin
   imgData->SetOrigin( 0.0, 0.0, 0.0);
   imgData->SetDimensions(xDim, yDim, zDim );
   imgData->SetNumberOfScalarComponents(1);

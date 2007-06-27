@@ -8,6 +8,7 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
+#include <MXAConfiguration.h>
 #include "Headers/MXATypeDefs.h"
 #include "MXADataModel/MXAConstants.h"
 #include "MXADataModel/MXANode.h"
@@ -16,6 +17,9 @@
 #include "MXADataModel/MXADataDimension.h"
 #include "MXADataModel/MXADataRecord.h"
 #include "HDF5/H5IODelegate.h"
+#if XML_SUPPORT
+#include "XML/XMLIODelegate.h"
+#endif
 
 // C++ Includes
 #include <iostream>
@@ -141,12 +145,12 @@ MXADataModelPtr createModel()
 {
 	  MXADataModelPtr modelPtr = MXADataModel::New();
 	  MXADataModel* model = modelPtr.get();
-	  model->setDataRoot(std::string("TestDataset/DataIsHere"));
+	  model->setDataRoot(std::string("DataModelTest/Data/Root/Is/Here"));
 	  model->setFileType(MXA::MXACurrentFileType);
 	  model->setFileVersion(MXA::MXACurrentFileVersion);
 
 	  // ---------- Test creation/addition of Data Dimensions
-	  MXADataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 0, 30, 20, 50, 2, 1);
+	  MXADataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 0, 15, 20, 50, 2, 1);
 	  MXADataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 1, 10, 1000, 5000, 500, 1);
 	  MXADataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS", 2, 100, 0, 99, 1, 1);
 	  MXADataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 3, 256, 0, 255, 1, 1);
@@ -165,9 +169,17 @@ MXADataModelPtr createModel()
 	  model->addDataRecord(rec3, rec1);
 	  MXADataRecordPtr rec4 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
 	  model->addDataRecord(rec4, rec1);
+	  
+	   MXADataRecordPtr rec5 = MXADataRecord::New(2, std::string("Order Parameters 2"), std::string("OP 2") );
+	    model->addDataRecord(rec5);
+	    //Create Data Records with Parents
+	    MXADataRecordPtr rec6 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
+	    model->addDataRecord(rec6, rec5);
+	    MXADataRecordPtr rec7 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
+	    model->addDataRecord(rec7, rec5);
+	    MXADataRecordPtr rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
+	    model->addDataRecord(rec8, rec5);
 
-	  //Test adding duplicate Child entry
-	  //rec1->addChild(rec3);
 
 	  //Create the Required MetaData 
 	  std::map<std::string, std::string> md;
@@ -282,10 +294,33 @@ void ReReadTestModel()
 // -----------------------------------------------------------------------------
 void WriteXMLModelTest()
 {
-  std::cout << "WriteXMLModelTest Running...." << std::endl;
+#if XML_SUPPORT
+  std::cout << "Writing Model as XML...." << std::endl;
   MXADataModelPtr model = createModel();
   std::string xmlFile(FILE_NAME_XML);
-  BOOST_REQUIRE ( model->writeModelToXML(xmlFile) >= 0);
+
+  XMLIODelegate iodelegate; // Create on the stack
+  BOOST_REQUIRE ( iodelegate.writeModelToFile(xmlFile, model.get(), true) >= 0);
+  
+//TODO: Compare this output with SOMETHING?.. or this test is invalid
+#else 
+  std::cout << "XML Testing is DISABLED because XML support was NOT compiled into the MXADataModel Library" << std::endl;
+#endif
+}
+
+void ReadXMLModelTest()
+{
+#if XML_SUPPORT
+  std::cout << "Reading MXA Model from XML File... " << std::endl;
+  std::string xmlFile(FILE_NAME_XML);
+  MXADataModelPtr model = MXADataModel::New();
+  XMLIODelegate iodelegate; // Create on the stack
+  BOOST_REQUIRE ( iodelegate.readModelFromFile(xmlFile, model.get(), true) >= 0);
+  model->printModel(std::cout, 1);
+#else
+  std::cout << "XML Testing is DISABLED because XML support was NOT compiled into the MXADataModel Library" << std::endl;
+#endif
+  
 }
 
 // -----------------------------------------------------------------------------
@@ -299,6 +334,7 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test->add( BOOST_TEST_CASE( &ReReadTestModel), 0);
     test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );
     test->add( BOOST_TEST_CASE( &WriteXMLModelTest), 0);
-    test->add( BOOST_TEST_CASE( &TestLookupTableGeneration), 0);
+    test->add( BOOST_TEST_CASE( &ReadXMLModelTest), 0); // This TEST MUST be after the XML Write test. We will be reading the output from the write test
+    //test->add( BOOST_TEST_CASE( &TestLookupTableGeneration), 0);
     return test; 
 }
