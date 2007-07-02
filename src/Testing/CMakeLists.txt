@@ -78,15 +78,6 @@ IF (BUILD_TESTING)
     TARGET_LINK_LIBRARIES (H5LiteTest MXADataModel ${HDF5_LIBRARIES} ${Boost_LIBRARIES} ${vtkLocal_LIBS})
     ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
     
-    # ----- XML Serialization Test
-#    SET (XML_SERIALIZATION_TEST_SRCS
-        
- #   )
-  #  ADD_EXECUTABLE(XMLSerializationTest ${XML_SERIALIZATION_TEST_SRCS} )
-   # TARGET_LINK_LIBRARIES( XMLSerializationTest MXADataModel ${HDF5_LIBRARIES}  ${Boost_LIBRARIES} )
-    #ADD_TEST(XMLSerializationTest ${EXECUTABLE_OUTPUT_PATH}/XMLSerializationTest)
-    
-    
     # ------- Vtk to HDF5 Bridge test
     IF(BUILD_VTK_HDF5)
         SET (VTK_HDF5_SRCS
@@ -97,5 +88,14 @@ IF (BUILD_TESTING)
         TARGET_LINK_LIBRARIES (vtkHDF5Test MXADataModel  ${HDF5_LIBRARIES} ${Boost_LIBRARIES} ${vtkLocal_LIBS})
         ADD_TEST(vtkHDF5Test ${EXECUTABLE_OUTPUT_PATH}/vtkHDF5Test)
     ENDIF(BUILD_VTK_HDF5)
+    
+    
+    SET (XML_TEST_SRCS
+        XMLTest.cpp
+        )
+    ADD_EXECUTABLE( XMLTest ${XML_TEST_SRCS} )
+    TARGET_LINK_LIBRARIES (XMLTest MXADataModel  ${HDF5_LIBRARIES} ${Boost_LIBRARIES} )
+    ADD_TEST(XMLTest ${EXECUTABLE_OUTPUT_PATH}/XMLTest)      
+            
 ENDIF (BUILD_TESTING)
 

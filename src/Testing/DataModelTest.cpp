@@ -17,9 +17,7 @@
 #include "MXADataModel/MXADataDimension.h"
 #include "MXADataModel/MXADataRecord.h"
 #include "HDF5/H5IODelegate.h"
-#if XML_SUPPORT
-#include "XML/XMLIODelegate.h"
-#endif
+
 
 // C++ Includes
 #include <iostream>
@@ -184,6 +182,8 @@ MXADataModelPtr createModel()
 	  //Create the Required MetaData 
 	  std::map<std::string, std::string> md;
 	  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
+	  BOOST_REQUIRE( (model->setRequiredMetaData(md)) < 0 ); // SHould Fail at this point
+	  
 	  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
 	  md[MXA::MXA_DSET_NAME_TAG] = "TESTING Example Data Model";
 	  md[MXA::MXA_DESCRIPTION_TAG] = "Just a test case showing how to organize OIM FIB data";
@@ -191,9 +191,32 @@ MXADataModelPtr createModel()
 	  md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
 	  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
 	  md[MXA::MXA_RELEASE_TAG] = "AFRL/WS07-0476";
-	  model->setRequiredMetaData(md);
 	  
-	  // Create User Defined MetaData
+	  BOOST_REQUIRE( (model->setRequiredMetaData(md)) >= 0 ); // SHould Pass at this point
+	  
+	  // Test setting the Required MetaData by individual strings
+	  std::string researcherName("");
+	  std::string dateCreated("");
+    std::string datasetName("");
+    std::string description("");
+    std::string distributionRights("");
+    std::string releaseNumber("");
+    std::string pedigree("");
+    std::string derivedSrcFile("");
+	       
+	  BOOST_REQUIRE ( (model->setRequiredMetaData(researcherName, dateCreated, datasetName, description, distributionRights, releaseNumber, pedigree, derivedSrcFile)) < 0);
+   
+	  researcherName = "Mike Jackson";
+    dateCreated = "2006:12:24 15:34.51";
+    datasetName = "TESTING Example Data Model";
+    description = "Just a test case showing how to organize OIM FIB data";
+    distributionRights = "Unlimited";
+    releaseNumber = "AFRL/WS07-0476";
+    pedigree = "Original";
+    derivedSrcFile = "Original Data Files";
+    
+    BOOST_REQUIRE ( (model->setRequiredMetaData(researcherName, dateCreated, datasetName, description, distributionRights, releaseNumber, pedigree, derivedSrcFile)) >= 0);
+	  // Create User Defined MetaData;
 	  CreateAttributes( model );
 	  return modelPtr;
 }
@@ -289,39 +312,7 @@ void ReReadTestModel()
   }
 }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-void WriteXMLModelTest()
-{
-#if XML_SUPPORT
-  std::cout << "Writing Model as XML...." << std::endl;
-  MXADataModelPtr model = createModel();
-  std::string xmlFile(FILE_NAME_XML);
 
-  XMLIODelegate iodelegate; // Create on the stack
-  BOOST_REQUIRE ( iodelegate.writeModelToFile(xmlFile, model.get(), true) >= 0);
-  
-//TODO: Compare this output with SOMETHING?.. or this test is invalid
-#else 
-  std::cout << "XML Testing is DISABLED because XML support was NOT compiled into the MXADataModel Library" << std::endl;
-#endif
-}
-
-void ReadXMLModelTest()
-{
-#if XML_SUPPORT
-  std::cout << "Reading MXA Model from XML File... " << std::endl;
-  std::string xmlFile(FILE_NAME_XML);
-  MXADataModelPtr model = MXADataModel::New();
-  XMLIODelegate iodelegate; // Create on the stack
-  BOOST_REQUIRE ( iodelegate.readModelFromFile(xmlFile, model.get(), true) >= 0);
-  model->printModel(std::cout, 1);
-#else
-  std::cout << "XML Testing is DISABLED because XML support was NOT compiled into the MXADataModel Library" << std::endl;
-#endif
-  
-}
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
@@ -333,8 +324,7 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test->add( BOOST_TEST_CASE( &WriteTestModel), 0);
     test->add( BOOST_TEST_CASE( &ReReadTestModel), 0);
     test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );
-    test->add( BOOST_TEST_CASE( &WriteXMLModelTest), 0);
-    test->add( BOOST_TEST_CASE( &ReadXMLModelTest), 0); // This TEST MUST be after the XML Write test. We will be reading the output from the write test
+
     //test->add( BOOST_TEST_CASE( &TestLookupTableGeneration), 0);
     return test; 
 }

@@ -310,7 +310,11 @@ void XMLDataModelReader::onRequired_MDStartTag(const XML_Char* name, const XML_C
   for (int i = 0; attrs[i]; i += 2) {
     attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
   }
+  //Verify that each piece of the Required MetaData is present
   
+  
+  
+  this->_dataModel->setRequiredMetaData(attrMap);
 }
 
 // -----------------------------------------------------------------------------
