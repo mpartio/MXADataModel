@@ -33,6 +33,7 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
   #define FILE_NAME_XML "C:\\WINDOWS\\Temp\\DataModelTest.xml"
 #else 
   #define FILE_NAME_XML "/tmp/MXA_XMLTest.xml"
+#define FILE_NAME_XML_IN "XMLTest.xml"
 #endif
 
 // -----------------------------------------------------------------------------
@@ -85,8 +86,8 @@ void CreateAttributes(MXADataModel* model)
     
     //Create vector attributes
     std::vector<uint64> dims;
-    dims.push_back(3);
-    dims.push_back(3);
+    dims.push_back(5);
+    dims.push_back(2);
     
     // integers
     MakeVectorAttribute( i8, "Vector Int8", dims, model);
@@ -200,11 +201,11 @@ void WriteXMLModelTest()
 void ReadXMLModelTest()
 {
   std::cout << "Reading MXA Model from XML File... " << std::endl;
-  std::string xmlFile(FILE_NAME_XML);
+  std::string xmlFile(FILE_NAME_XML_IN);
   MXADataModelPtr model = MXADataModel::New();
   XMLIODelegate iodelegate; // Create on the stack
   BOOST_REQUIRE ( iodelegate.readModelFromFile(xmlFile, model.get(), true) >= 0);
-  model->printModel(std::cout, 1);
+ // model->printModel(std::cout, 1);
 }
 
 // -----------------------------------------------------------------------------
@@ -212,8 +213,6 @@ void ReadXMLModelTest()
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
-
-    
     test->add( BOOST_TEST_CASE( &WriteXMLModelTest), 0);
     test->add( BOOST_TEST_CASE( &ReadXMLModelTest), 0); // This TEST MUST be after the XML Write test. We will be reading the output from the write test
     return test; 

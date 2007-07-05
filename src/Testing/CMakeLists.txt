@@ -18,13 +18,13 @@ SET (EXECUTABLE_OUTPUT_PATH
 SET (Boost_USE_UNIT_TEST_FRAMEWORK TRUE)
 SET (Boost_USE_TEST_EXEC_MONITOR TRUE)
 SET (Boost_USE_SERIALIZATION TRUE)
-INCLUDE(${PROJECT_SOURCE_DIR}/../../CMake/FindBoost.cmake)
+INCLUDE(${PROJECT_SOURCE_DIR}/../../Resources/FindBoost.cmake)
 LINK_DIRECTORIES(${Boost_LIBRARY_DIR})
 
 
 
 SET (HDF5_USE_HIGH_LEVEL FALSE)
-  INCLUDE( ${PROJECT_SOURCE_DIR}/../../CMake/FindHDF.cmake )
+  INCLUDE( ${PROJECT_SOURCE_DIR}/../../Resources/FindHDF.cmake )
   IF(NOT HDF5_FOUND)
     MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
   ENDIF(NOT HDF5_FOUND)

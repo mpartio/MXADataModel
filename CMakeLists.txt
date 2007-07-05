@@ -35,7 +35,7 @@ ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
 # ---------- Find Boost Headers/Libraries -----------------------
 SET (Boost_USE_FILESYSTEM TRUE)
-INCLUDE (${PROJECT_SOURCE_DIR}/CMake/FindBoost.cmake)
+INCLUDE (${PROJECT_SOURCE_DIR}/Resources/FindBoost.cmake)
 IF(NOT Boost_FOUND)
   MESSAGE(FATAL_ERROR "Boost was not found. ${Boost_DIR_MESSAGE}")
 ENDIF(NOT Boost_FOUND)
@@ -121,7 +121,7 @@ IF ( MXA_USE_HDF5 )
   # ---------- Find the HDF Libraries - DO NOT use the High Level APIs from the HDF5
   # group as those API's will not compile correctly under windows --------------
   SET (HDF5_USE_HIGH_LEVEL FALSE)
-  INCLUDE( ${PROJECT_SOURCE_DIR}/CMake/FindHDF.cmake )
+  INCLUDE( ${PROJECT_SOURCE_DIR}/Resources/FindHDF.cmake )
   IF(NOT HDF5_FOUND)
     MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
   ENDIF(NOT HDF5_FOUND)
@@ -209,7 +209,6 @@ IF (MXA_USE_XML)
     SET ( MXA_XML_SRCS
         src/XML/ExpatParser.cpp
         src/XML/ExpatEvtHandler.cpp
-        #src/XML/XMLEvtHandler.cpp
         src/XML/XMLIODelegate.cpp
         src/XML/XMLDataModelWriter.cpp
         src/XML/XMLDataModelReader.cpp
@@ -218,7 +217,6 @@ IF (MXA_USE_XML)
     SET (MXA_XML_HEADERS
         src/XML/ExpatParser.h
         src/XML/ExpatEvtHandler.h
-       # src/XML/XMLEvtHandler.h
         src/XML/XMLIODelegate.h
         src/XML/XMLDataModelWriter.h
         src/XML/XMLDataModelReader.h
@@ -236,10 +234,7 @@ IF(WIN32)
  SET(GUI_TYPE WIN32)
 ENDIF(WIN32)
 
-# ----- OS X specific build settings
-#IF ( APPLE )
-#  SET (OSX_EMBEDDED_LIBRARY ON)
-#ENDIF ( APPLE )
+
 
 #-- Configure the Header file and then add the Binary Directory to the Includes list
 CONFIGURE_FILE(${MXADataModel_SOURCE_DIR}/src/Headers/MXAConfiguration.h.in
@@ -254,6 +249,15 @@ SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 #-- Add the MXADataModel Library and link to needed libraries-------------------
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} ${Boost_LIBRARIES} )
+# ----- OS X specific build settings
+IF ( APPLE )
+#  SET (OSX_EMBEDDED_LIBRARY ON)
+  SET_TARGET_PROPERTIES (${MXADATAMODEL_LIB_NAME}
+    PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib
+    )
+    
+ENDIF ( APPLE )
+
 
 #--- Set up the installation Code for Make Install
 INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)

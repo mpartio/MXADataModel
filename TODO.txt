@@ -1,9 +1,0 @@
-//TODO: Import Model from XML
-    Do we try to find a library that does this or create our own basic parser
-//TODO: Test Export/Import of XML Model
-
-//TODO: Write Data Import Example that imports images (tiffs) into HDF5
-
-//TODO: Reimplement the HDF5-IM API set using the specification from the HDF group
-
-//TODO: Compile LibTIFF on Windows XP and compile against this library

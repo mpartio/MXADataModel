@@ -13,7 +13,9 @@
 XMLDataModelReader::XMLDataModelReader(IFileIODelegate* ioDelegate, MXADataModel* dataModel, const std::string &fileName) :
 _dataModel(dataModel),
 _fileName(fileName),
-_xmlParseError(0)
+_xmlParseError(0),
+_cdata(""),
+_parseData(false)
 {
   _ioDelegate  = static_cast<XMLIODelegate*>(ioDelegate);
 }
@@ -38,6 +40,7 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
   parser.EnableElementHandler();
   parser.EnableCharacterDataHandler();
 
+
   // Load the XML file.
   FILE*  fh    = fopen(_fileName.c_str(), "r");
   if (NULL == fh)
@@ -47,7 +50,7 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
   }
   bool   atEnd = false;
   size_t nRead;
-  while (!atEnd)
+  while (!atEnd && this->_xmlParseError >= 0)
   {
     // Read a block from the XML file and pass it to the parser
     nRead = fread(buf, 1, BUFFER_SIZE, fh);
@@ -56,9 +59,16 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
   }
   fclose(fh);
   
-  return _xmlParseError;
+  return this->_xmlParseError;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+int32 XMLDataModelReader::getParseError() 
+{
+  return this->_xmlParseError;
+}
 
 // -----------------------------------------------------------------------------
 //  
@@ -174,6 +184,19 @@ void XMLDataModelReader::OnEndElement(const XML_Char* name)
     }
 } // End OnEndElement(...)
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void XMLDataModelReader::OnCharacterData(const XML_Char* data, int len)
+{
+ // std::cout << "------------------------------------------------" << std::endl;
+ // std::cout << "Character Data: " << data << std::endl;
+ // std::cout << "------------------------------------------------" << std::endl;
+  if (this->_parseData)
+  {
+    this->_cdata.append(data, len);
+  }
+}
 
 // -----------------------------------------------------------------------------
 // Method fired when encountering starting of Tag <File_Root> 
@@ -298,7 +321,7 @@ void XMLDataModelReader::onSignalStartTag(const XML_Char* name, const XML_Char**
 void XMLDataModelReader::onMeta_DataStartTag(const XML_Char* name, const XML_Char** attrs)
 {
   //FIXME: Finish Implementing this 
-    // printf("Starting %s\n", name); 
+   //  printf("Starting %s\n", name); 
 }
 
 // -----------------------------------------------------------------------------
@@ -311,10 +334,11 @@ void XMLDataModelReader::onRequired_MDStartTag(const XML_Char* name, const XML_C
     attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
   }
   //Verify that each piece of the Required MetaData is present
-  
-  
-  
-  this->_dataModel->setRequiredMetaData(attrMap);
+  if (this->_dataModel->setRequiredMetaData(attrMap) < 0 ) 
+  {
+    std::cout << "Error: Not all Required Meta Data was found in the file." << std::endl;
+    this->_xmlParseError = -1;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -322,8 +346,11 @@ void XMLDataModelReader::onRequired_MDStartTag(const XML_Char* name, const XML_C
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onUserDefined_MDStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-  //FIXME: Finish Implementing this 
-    // printf("Starting %s\n", name); 
+  //TODO: Not sure we need to actually implement anything here
+//     std::cout << "Starting " << name << std::endl;
+//     for (int i = 0; attrs[i]; i += 2) {
+//       printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
+//     }
 }
 
 // -----------------------------------------------------------------------------
@@ -332,9 +359,37 @@ void XMLDataModelReader::onUserDefined_MDStartTag(const XML_Char* name, const XM
 void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_Char** attrs)
 {
   //FIXME: Finish Implementing this
-  //FIXME: Will need to implement the CDATA section here
-    // printf("Starting %s\n", name); 
+  // Attributes are: 'key', 'dims', 'type'
+    std::cout << "---------------UserMetaDataStart----------------------" << std::endl;
+    std::cout << "Tag: " << name << std::endl;
+     for (int i = 0; attrs[i]; i += 2) {
+       printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
+     }
+     std::cout << "\n   Data Start   " << std::endl;
+     // Store the key, dims, and type in iVars for use when the tag closes
+     
+     this->_cdata.clear();
+     this->_parseData = true;
 }
+
+// -----------------------------------------------------------------------------
+// Method fired when encountering the End of Tag <UserMetaData> 
+// -----------------------------------------------------------------------------
+void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
+{
+  
+  //FIXME: Start Here
+  // Use the iVars where the key, dims and type were stored to create a new 
+  // MXAAttribute.
+  // Use a StringStream to read in the data based on the type
+  // Probably some sort of template for this
+  // Maybe an IAttributeReader Class
+  std::cout << this->_cdata << std::endl;
+  std::cout << "   Data End   " << std::endl;
+  std::cout << "---------------UserMetaDataEnd----------------------" << std::endl;
+  this->_parseData = false;
+}
+
 
 //______________________________________________________________________________
 //------------------------------------------------------------------------------
@@ -428,7 +483,7 @@ void XMLDataModelReader::onSignal_GroupEndTag(const XML_Char* name)
 {
   MXADataRecord* rec = static_cast<MXADataRecord*>( _currentParentRecord->getParent().lock().get() );
   _currentParentRecord.reset( rec ); // Set this as the current Parent Record
-  printf("Ending %s\n", name); 
+  //printf("Ending %s\n", name); 
 }
 
 
@@ -441,13 +496,5 @@ void XMLDataModelReader::onUserDefined_MDEndTag(const XML_Char* name)
     // printf("Ending %s\n", name); 
 }
 
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag <UserMetaData> 
-// -----------------------------------------------------------------------------
-void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
-{
-
-    // printf("Ending %s\n", name); 
-}
 
 

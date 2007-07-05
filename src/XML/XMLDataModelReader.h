@@ -55,15 +55,20 @@ public:
   
   // Over ride from ExpatEvtHandler class
   void OnEndElement(const XML_Char* name);
-	  
+	
+  void OnCharacterData(const XML_Char* data, int len);
+  
+  int32 getParseError();
 	  
 	  
 private:
-  XMLIODelegate* _ioDelegate;
-  MXADataModel* _dataModel;
+  XMLIODelegate*    _ioDelegate;
+  MXADataModel*     _dataModel;
   const std::string _fileName;
-  int32 _xmlParseError;
-  MXADataRecordPtr _currentParentRecord;
+  int32             _xmlParseError;
+  MXADataRecordPtr  _currentParentRecord;
+  std::string       _cdata;
+  bool              _parseData;
 
   
   XMLDataModelReader(const XMLDataModelReader&);   //Copy Constructor Not Implemented

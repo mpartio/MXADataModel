@@ -86,6 +86,35 @@ static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int32
 static MXA_EXPORT herr_t closeId( hid_t obj_id, int32 obj_type );
 
 /**
+ * @brief Given one of the HDF Types as a string, this will return the HDF Type
+ * as an hid_t value.
+ * @param value The HDF_Type as a string
+ * @return the hid_t value for the given type. -1 if the string does not match a type.
+ */
+static hid_t HDFTypeFromString(const std::string &value)
+{
+  if (value.compare("H5T_NATIVE_INT8") == 0) return H5T_NATIVE_INT8;
+  if (value.compare("H5T_NATIVE_UINT8") == 0) return H5T_NATIVE_UINT8;
+  
+  if (value.compare("H5T_NATIVE_INT16") == 0) return H5T_NATIVE_INT16;
+  if (value.compare("H5T_NATIVE_UINT16") == 0) return H5T_NATIVE_UINT16;
+  
+  if (value.compare("H5T_NATIVE_INT32") == 0) return H5T_NATIVE_INT32;
+  if (value.compare("H5T_NATIVE_UINT32") == 0) return H5T_NATIVE_UINT32;
+  
+  if (value.compare("H5T_NATIVE_INT64") == 0) return H5T_NATIVE_INT64;
+  if (value.compare("H5T_NATIVE_UINT64") == 0) return H5T_NATIVE_UINT64;
+  
+  if (value.compare("H5T_NATIVE_FLOAT") == 0) return H5T_NATIVE_FLOAT;
+  if (value.compare("H5T_NATIVE_DOUBLE") == 0) return H5T_NATIVE_DOUBLE;
+  
+  std::cout << "Error: HDFTypeFromString - Unknown Type: " << value << std::endl;
+  return -1;
+}
+
+
+
+/**
 * @brief Returns the HDF Type for a given primitive value. 
  * @param value A value to use. Can be anything. Just used to get the type info
  * from
