@@ -1,0 +1,87 @@
+#!/bin/bash
+cd "@EXECUTABLE_OUTPUT_PATH@"
+
+dylib=".dylib"
+FULL_VERSION=".4.2.2"
+MAJOR="4"
+MINOR="2"
+BUGFIX="2"
+
+PLUGIN_PATH="@executable_path/../PlugIns"
+FRAMEWORK_PATH="@executable_path/../Frameworks"
+
+DEBUG=0
+
+TAR_FLAG=
+if [ "x$DEBUG" = "x1" ]; then
+  echo "<<<<<<<<<<<<<< Fixing RPATHS for libraries >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+fi
+
+mkdir -p "@OS_X_APP_NAME@.app/Contents/PlugIns"
+
+#exit
+
+QT_LIB_DIR="@QT_LIBRARY_DIR@"
+QT_BIN_DIR="$(dirname @QT_MOC_EXECUTABLE@)"
+
+
+#-- We only want the libQt*.4.dylib libraries into the PlugIns Directory
+for a in @DEP_QT_LIBS@ ; do
+  LIBS=`ls ${QT_LIB_DIR}/*${a}*.${MAJOR}.dylib`
+  for lib in ${LIBS}; do
+    cp "${lib}" "@OS_X_APP_NAME@.app/Contents/PlugIns/."
+  done
+done
+
+
+EXECUTABLES="@OS_X_APP_NAME@.app/Contents/MacOS/@OS_X_APP_NAME@"
+
+if [ "x$DEBUG" = "x1" ]; then
+  echo " >>> Fixing Qt dylibs <<< "
+fi
+for a in @OS_X_APP_NAME@.app/Contents/PlugIns/*.dylib; do
+  file=$(basename ${a})
+  if [ "x$DEBUG" = "x1" ]; then
+    echo " Working on ${a}"
+    echo " Changing id to ${PLUGIN_PATH}/${file}"
+  fi
+  #-- Sets the 'id' of this library or the rpath
+  install_name_tool -id ${PLUGIN_PATH}/${file} "${a}"
+  
+  #-- now set the paths of the other Qt libs that this Qt lib is dependant on 
+  for lib in @OS_X_APP_NAME@.app/Contents/PlugIns/*.dylib; do
+    subfile=$(basename ${lib})
+    if [ "x$DEBUG" = "x1" ]; then
+      echo "  Looking to change ${subfile}"
+    fi
+    install_name_tool -change ${QT_LIB_DIR}/${subfile} ${PLUGIN_PATH}/${subfile} "${a}"
+  done 
+  if [ "x$DEBUG" = "x1" ]; then
+    echo ""
+  fi
+done
+
+#-- Now change the rpaths in the Executable
+if [ "x$DEBUG" = "x1" ]; then
+  echo " >>> Fixing Executable <<< "
+fi
+for a in "${EXECUTABLES}"; do
+  file=$(basename ${a})
+  if [ "x$DEBUG" = "x1" ]; then
+    echo " Working on ${a}"
+  fi
+  
+  #-- now set the paths of the other Qt libs that this Qt lib is dependant on 
+  for lib in @OS_X_APP_NAME@.app/Contents/PlugIns/*.dylib; do
+    subfile=$(basename ${lib})
+    if [ "x$DEBUG" = "x1" ]; then
+      echo "  Looking to change ${subfile}"
+    fi
+    install_name_tool -change ${QT_LIB_DIR}/${subfile} ${PLUGIN_PATH}/${subfile} "${a}"
+  done 
+  if [ "x$DEBUG" = "x1" ]; then
+    echo ""
+  fi
+done
+
+
