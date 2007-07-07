@@ -31,6 +31,7 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 // -----------------------------------------------------------------------------
 #if defined (_WIN32)
   #define FILE_NAME_XML "C:\\WINDOWS\\Temp\\DataModelTest.xml"
+#define FILE_NAME_XML_IN "XMLTest.xml"
 #else 
   #define FILE_NAME_XML "/tmp/MXA_XMLTest.xml"
 #define FILE_NAME_XML_IN "XMLTest.xml"

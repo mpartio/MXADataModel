@@ -532,9 +532,10 @@ herr_t H5TiffIO::exportTiff(hid_t fileId, string filename,
     return err;
   }
 
-  hsize_t dSize = width * height;
-  unsigned char data[dSize];
-  err = H5Image::H5IMread_image(fileId, img_dataset_name, data);
+  std::vector<uint8>::size_type dSize = static_cast<std::vector<uint8>::size_type> (width * height);
+  //unsigned char data[dSize];
+  std::vector<uint8> data(dSize);
+  err = H5Image::H5IMread_image(fileId, img_dataset_name, &(data.front() ) );
   if (err < 0) {
     std::cout << "Error reading image data" << std::endl;
     return err;
@@ -550,10 +551,10 @@ herr_t H5TiffIO::exportTiff(hid_t fileId, string filename,
   
   switch (imageClass) {
   case GrayscaleTiffImage:
-    err = _writeGrayscaleTiff(out, data, width, height);
+    err = _writeGrayscaleTiff(out, &(data.front() ), width, height);
     break;
   case PaletteColorTiffImage:
-    err = _write8BitTiff(out, fileId, img_dataset_name, data, width, 
+    err = _write8BitTiff(out, fileId, img_dataset_name, &(data.front() ), width, 
 			 height, numpalettes);
     break;
   case RGBFullColorTiffImage:
@@ -575,7 +576,7 @@ herr_t H5TiffIO::exportTiff(hid_t fileId, string filename,
 //  
 // -----------------------------------------------------------------------------
 herr_t H5TiffIO::_writeGrayscaleTiff(TIFF *image,
-                                     unsigned char *data, 
+                                     uint8* data, 
                                      hsize_t width, 
                                      hsize_t height)
 {
@@ -592,7 +593,8 @@ herr_t H5TiffIO::_writeGrayscaleTiff(TIFF *image,
   TIFFSetField(image, TIFFTAG_PHOTOMETRIC, 1);
 
   // Write the information to the file
-  err = TIFFWriteEncodedStrip(image, 0, data, width * height);
+  tsize_t area = static_cast<tsize_t>(width* height);
+  err = TIFFWriteEncodedStrip(image, 0, data, area);
   return err;
 }
 
@@ -618,20 +620,24 @@ herr_t H5TiffIO::_write8BitTiff(TIFF *image,
   }
 
   // Read the color map
-  int32 numRows = pal_dims[0];
-  int32 palRank = numRows * pal_dims[1];
-  unsigned char colorMap[palRank];
-  err = H5Image::H5IMget_palette(fileId, img_dataset_name, 0, colorMap);
+  hsize_t numRows = pal_dims[0];
+  std::vector<uint8>::size_type palRank = static_cast<std::vector<uint8>::size_type> (numRows * pal_dims[1]);
+  //unsigned char colorMap[palRank];
+  std::vector<uint8> colorMap(palRank);
+  err = H5Image::H5IMget_palette(fileId, img_dataset_name, 0, &(colorMap.front() ) );
   if (err < 0) {
     std::cout << "Error getting color palette" << std::endl;
     return err;
   }
   int32 cRank = (int) palRank / 3;
-  uint16 dRed[cRank], dGreen[cRank], dBlue[cRank];
-  
+  //uint16 dRed[cRank], dGreen[cRank], dBlue[cRank];
+  std::vector<uint16> dRed(cRank);
+  std::vector<uint16> dGreen(cRank);
+  std::vector<uint16> dBlue(cRank);
+
   int32 index;
-  for (int i=0; i<palRank; i=i+3) {
-    index = (int) i/3;
+  for (unsigned int i=0; i<palRank; i=i+3) {
+    index = (unsigned int)( i/3 );
     dRed[index] = (uint16) colorMap[i] * 256;
     dGreen[index] = (uint16) colorMap[i+1] * 256;
     dBlue[index] = (uint16) colorMap[i+2] * 256;
@@ -652,7 +658,7 @@ herr_t H5TiffIO::_write8BitTiff(TIFF *image,
   TIFFSetField(image, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);  
 
   // Write the information to the file
-  err = TIFFWriteEncodedStrip(image, 0, data, width * height);
+  err = TIFFWriteEncodedStrip(image, 0, data, static_cast<tsize_t>(width * height) );
 
   return err;
 
