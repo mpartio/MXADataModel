@@ -67,9 +67,12 @@ private:
   const std::string _fileName;
   int32             _xmlParseError;
   MXADataRecordPtr  _currentParentRecord;
-  std::string       _cdata;
+  std::string       _userAttributeData;
   bool              _parseData;
-
+  std::string       _userMDKey;
+  std::string       _userMDDims;
+  std::string       _userMDType;
+  ExpatParser*      _parser;
   
   XMLDataModelReader(const XMLDataModelReader&);   //Copy Constructor Not Implemented
   void operator=(const XMLDataModelReader&); //Copy Assignment Not Implemented

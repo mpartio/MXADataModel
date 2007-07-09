@@ -17,12 +17,19 @@ namespace MXA_XML {
     const std::string Meta_Data ("Meta_Data");
     const std::string Required_MD ("Required_MD");
     const std::string UserDefined_MD ("UserDefined_MD");
-    const std::string UserMetaData ("UserMetaData");
+    
     
     namespace Attribute {
       const std::string Name("Name");
       const std::string AltName("Alt_Name");
-      
+    }
+    
+    namespace UserMetaData
+    {
+      const std::string Tag ("UserMetaData");
+      const std::string Key ("key");
+      const std::string Dims("dims");
+      const std::string Type("type");
     }
 
     

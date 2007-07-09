@@ -13,6 +13,7 @@
 
 //-- MXA Includes
 #include "Interfaces/IAttributeWriter.h"
+#include "XML/XMLConstants.h"
 
 //-- boost includes
 #include <boost/shared_ptr.hpp>
@@ -54,7 +55,7 @@ public:
       int32 size = sizeof(T);
       std::string sType = StringUtils::typeForPrimitive(value);
       std::ofstream &stream = *(_ofstreamPtr.get());
-      stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" << 1 <<  "\" type=\"" << sType << "\">\n";
+      stream << indent(5) << "<UserMetaData " << MXA_XML::UserMetaData::Key << "=\"" << key << "\" dims=\"" << 1 <<  "\" type=\"" << sType << "\">\n";
       if (size != 1) {
         stream << indent(5) << value;
       } else {

@@ -118,7 +118,8 @@ div.entry
    border: solid 1px #8c92a2;
  }
  
- .cell_header {
+ .cell_header 
+ {
     background: #d1d0ff;
     color: black;
     font: bold 12pt Bitstream Vera Sans, Lucida, Helvetica, Arial, sans-serif;

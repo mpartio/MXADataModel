@@ -1,4 +1,3 @@
-#include "XMLDataModelReader.h"
 #include "XML/XMLDataModelReader.h"
 
 
@@ -14,10 +13,14 @@ XMLDataModelReader::XMLDataModelReader(IFileIODelegate* ioDelegate, MXADataModel
 _dataModel(dataModel),
 _fileName(fileName),
 _xmlParseError(0),
-_cdata(""),
-_parseData(false)
+_userAttributeData(""),
+_parseData(false),
+_userMDKey(""),
+_userMDDims(""),
+_userMDType("")
 {
   _ioDelegate  = static_cast<XMLIODelegate*>(ioDelegate);
+  _parser = NULL;
 }
 // -----------------------------------------------------------------------------
 //  
@@ -36,6 +39,7 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
 
   // Create and initialise an instance of the parser.
   ExpatParser parser( dynamic_cast<ExpatEvtHandler*>( this ) );
+  this->_parser = &parser;
   parser.Create(NULL, NULL);
   parser.EnableElementHandler();
   parser.EnableCharacterDataHandler();
@@ -120,7 +124,7 @@ void XMLDataModelReader::OnStartElement(const XML_Char* name, const XML_Char** a
     {
           onUserDefined_MDStartTag(name, attrs);
     }
-    else if ( currentTag.compare(MXA_XML::UserMetaData) == 0 )
+    else if ( currentTag.compare(MXA_XML::UserMetaData::Tag) == 0 )
     {
           onUserMetaDataStartTag(name, attrs);
     }
@@ -178,7 +182,7 @@ void XMLDataModelReader::OnEndElement(const XML_Char* name)
     {
           onUserDefined_MDEndTag(name);
     }
-    else if ( currentTag.compare(MXA_XML::UserMetaData) == 0 )
+    else if ( currentTag.compare(MXA_XML::UserMetaData::Tag) == 0 )
     {
           onUserMetaDataEndTag(name);
     }
@@ -194,7 +198,7 @@ void XMLDataModelReader::OnCharacterData(const XML_Char* data, int len)
  // std::cout << "------------------------------------------------" << std::endl;
   if (this->_parseData)
   {
-    this->_cdata.append(data, len);
+    this->_userAttributeData.append(data, len);
   }
 }
 
@@ -360,16 +364,40 @@ void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_
 {
   //FIXME: Finish Implementing this
   // Attributes are: 'key', 'dims', 'type'
+  this->_userMDKey.clear();
+  this->_userMDDims.clear();
+  this->_userMDType.clear();
     std::cout << "---------------UserMetaDataStart----------------------" << std::endl;
     std::cout << "Tag: " << name << std::endl;
      for (int i = 0; attrs[i]; i += 2) {
        printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
+       if ( MXA_XML::UserMetaData::Key.compare(attrs[i]) == 0 )
+       {
+         this->_userMDKey = attrs[i];
+       }
+       else if (MXA_XML::UserMetaData::Dims.compare(attrs[i]) == 0)
+       {
+         this->_userMDDims = attrs[i];
+       }
+       else if (MXA_XML::UserMetaData::Type.compare(attrs[i]) == 0)
+       {
+         this->_userMDType = attrs[i];
+       } else {
+         std::cout << "Unknow Attribute in " << MXA_XML::UserMetaData::Tag << " tag." << std::endl;
+       }
      }
      std::cout << "\n   Data Start   " << std::endl;
      // Store the key, dims, and type in iVars for use when the tag closes
+     // Check all three required Attributes are valid
+     if (this->_userMDKey.empty() || this->_userMDDims.empty() || this->_userMDType.empty() )
+     {
+       this->_xmlParseError = -1;
+       std::cout << "One of the Required Attributes for tag " << MXA_XML::UserMetaData::Tag << " is missing and line " <<
+       this->_parser->GetCurrentLineNumber() << ", column " << this->_parser->GetCurrentColumnNumber() << std::endl;
+     }
      
-     this->_cdata.clear();
-     this->_parseData = true;
+     this->_userAttributeData.clear(); //Clear the User MetaData String
+     this->_parseData = true; // We want to parse all character from now until this is set to false
 }
 
 // -----------------------------------------------------------------------------
@@ -384,10 +412,10 @@ void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
   // Use a StringStream to read in the data based on the type
   // Probably some sort of template for this
   // Maybe an IAttributeReader Class
-  std::cout << this->_cdata << std::endl;
+  std::cout << this->_userAttributeData << std::endl;
   std::cout << "   Data End   " << std::endl;
   std::cout << "---------------UserMetaDataEnd----------------------" << std::endl;
-  this->_parseData = false;
+  this->_parseData = false; // Stop parsing character data
 }
 
 

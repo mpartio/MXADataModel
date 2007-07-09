@@ -654,7 +654,7 @@ herr_t H5TiffIO::_write8BitTiff(TIFF *image,
 
   TIFFSetField(image, TIFFTAG_COMPRESSION, 1);
   TIFFSetField(image, TIFFTAG_PHOTOMETRIC, 3);
-  TIFFSetField(image, TIFFTAG_COLORMAP, dRed, dGreen, dBlue);
+  TIFFSetField(image, TIFFTAG_COLORMAP, &(dRed.front()), &(dGreen.front() ), &(dBlue.front() ) );
   TIFFSetField(image, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);  
 
   // Write the information to the file
