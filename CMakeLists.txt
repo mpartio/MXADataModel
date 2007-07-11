@@ -21,7 +21,7 @@ SET (EXECUTABLE_OUTPUT_PATH
   )
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
-OPTION(BUILD_TESTING "Build ParaView Complete Testing" ON)
+OPTION(BUILD_TESTING "Build libTiff Complete Testing" ON)
 IF(BUILD_TESTING)
   ENABLE_TESTING()
 ENDIF(BUILD_TESTING)
@@ -181,21 +181,21 @@ SET (TIFF_SUPPORT "0")
 OPTION(MXA_USE_TIFF "Compiles source code that depends on having the Tif Lib installed" ON)
 IF(MXA_USE_TIFF)
 
-	FIND_PACKAGE(TIFF REQUIRED)
-	SET(MXA_HDF5_TIFF_SRCS
-		src/HDF5/H5TiffIO.cpp
-		src/HDF5/H5TiffImportDelegate.cpp
-		)
-		
-	SET(MXA_HDF5_TIFF_HEADERS
-		src/HDF5/H5TiffIO.h
-		src/HDF5/H5TiffImportDelegate.h
-		)
-		
-	SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
-	SET(DEP_LIBS ${DEP_LIBS} ${TIFF_LIBRARIES})
-	INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
-	SET (TIFF_SUPPORT "1")
+    FIND_PACKAGE(TIFF REQUIRED)
+    SET(MXA_HDF5_TIFF_SRCS
+        src/HDF5/H5TiffIO.cpp
+        src/HDF5/H5TiffImportDelegate.cpp
+        )
+        
+    SET(MXA_HDF5_TIFF_HEADERS
+        src/HDF5/H5TiffIO.h
+        src/HDF5/H5TiffImportDelegate.h
+        )
+        
+    SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
+    SET(DEP_LIBS ${DEP_LIBS} ${TIFF_LIBRARIES})
+    INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
+    SET (TIFF_SUPPORT "1")
 ENDIF (MXA_USE_TIFF)
 
 #--------- XML Sources ---------------------------------------------------
@@ -278,6 +278,6 @@ INSTALL(DIRECTORY ${INSTALL_INCLUDES}  DESTINATION include/MXADataModel
   PATTERN "CVS" EXCLUDE
   PATTERN "*.c*" EXCLUDE
   PATTERN "*.in" EXCLUDE
-  )
+)
   
   
