@@ -117,9 +117,9 @@ public:
        locationId = 0; // Keeps Compiler Quiet
        std::ofstream &stream = *(_ofstreamPtr.get());
 //       int32 size = value.size();
-       stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" << 1 <<  "\" type=\"string\">\n";
-       stream << indent(5) << value << "\n";
-       stream << indent(5) << "</UserMetaData>\n";
+       stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" << 1 <<  "\" type=\"H5T_STRING\">";
+       stream << value;
+       stream << indent(0) << "</UserMetaData>\n";
        return 1;
      }
 

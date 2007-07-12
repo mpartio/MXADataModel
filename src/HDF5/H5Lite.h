@@ -109,6 +109,8 @@ static hid_t HDFTypeFromString(const std::string &value)
   if (value.compare("H5T_NATIVE_FLOAT") == 0) return H5T_NATIVE_FLOAT;
   if (value.compare("H5T_NATIVE_DOUBLE") == 0) return H5T_NATIVE_DOUBLE;
   
+  if (value.compare("H5T_STRING") == 0) return H5T_STRING;
+  
   std::cout << "Error: HDFTypeFromString - Unknown Type: " << value << std::endl;
   return -1;
 }

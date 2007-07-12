@@ -17,6 +17,7 @@
 #include "Headers/DLLExport.h"
 #include "MXADataModel/MXADataModel.h"
 #include "Interfaces/IDataModelReader.h"
+#include "HDF5/H5Lite.h"
 #include "XML/XMLIODelegate.h"
 #include "XML/ExpatParser.h"
 #include "XML/XMLConstants.h"
@@ -60,7 +61,69 @@ public:
   
   int32 getParseError();
 	  
-	  
+  /**
+  * @brief Parses a string from the XML file that is data encoded as space delimited values
+  * @param dims The dimensions of the data set
+  * @return Error Code. Zero or positive is success.
+  */
+  template<typename T>
+  int32 readPrimitiveAttribute( const std::vector<uint64> &dims)
+  {
+    //std::cout << logTime() << "readPrimitiveAttribute: " << this->_userMDKey << std::endl;
+    herr_t err = 1;
+    std::istringstream istream (this->_userAttributeData);
+    uint64 size = 1;
+    for (std::vector<uint64>::const_iterator iter = dims.begin(); iter != dims.end(); ++iter )
+    {
+      size *= *iter;
+    }
+    
+    if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
+    {
+      std::cout << logTime() << "  Scalar Value" << std::endl;
+      T data;
+      while(istream.good() )
+      {
+        istream >> data;
+      }
+      if (err >= 0) {   
+        MXAAttributePtr attr = MXAAttribute::createAttribute(this->_userMDKey, data);
+        this->_dataModel->addUserMetaData(attr);
+      }
+    } 
+    else // Multi-Dimensional Data 
+    {
+     // std::cout << logTime() << "  Vector Value" << std::endl;
+      std::vector<T> data;
+      T temp;
+      int tmp;
+      if (sizeof(T) == 1) // If we try to read a 'char' then the stream will only read a single char from the file, not what we want
+      {
+        while( (istream >> tmp).good() )
+        {
+          data.push_back( static_cast<T>(tmp) );
+        }
+      }
+      else 
+      {
+        while ( (istream >> temp).good() )
+        {
+          data.push_back(temp);
+        }
+      }
+
+      if (data.size() == size)
+      {
+        MXAAttributePtr attr = MXAAttribute::createAttribute(this->_userMDKey, data, dims);
+        this->_dataModel->addUserMetaData(attr);
+      } else {
+        err = -1;
+      }
+    }
+    return err;
+  } 
+  
+  
 private:
   XMLIODelegate*    _ioDelegate;
   MXADataModel*     _dataModel;

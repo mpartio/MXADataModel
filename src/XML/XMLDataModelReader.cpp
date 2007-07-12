@@ -1,5 +1,9 @@
+
+
+#include "Headers/LogTime.h"
 #include "XML/XMLDataModelReader.h"
 
+#include <sstream>
 
 #include <boost/shared_ptr.hpp>
 
@@ -62,7 +66,7 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
     parser.Parse(buf, nRead, atEnd);
   }
   fclose(fh);
-  
+  std::cout << logTime() << "xmlParseError was: " << this->_xmlParseError << std::endl;
   return this->_xmlParseError;
 }
 
@@ -367,32 +371,32 @@ void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_
   this->_userMDKey.clear();
   this->_userMDDims.clear();
   this->_userMDType.clear();
-    std::cout << "---------------UserMetaDataStart----------------------" << std::endl;
-    std::cout << "Tag: " << name << std::endl;
+//    std::cout << "---------------UserMetaDataStart----------------------" << std::endl;
+//    std::cout << "Tag: " << name << std::endl;
      for (int i = 0; attrs[i]; i += 2) {
-       printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
+       //printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
        if ( MXA_XML::UserMetaData::Key.compare(attrs[i]) == 0 )
        {
-         this->_userMDKey = attrs[i];
+         this->_userMDKey = attrs[i+1];
        }
        else if (MXA_XML::UserMetaData::Dims.compare(attrs[i]) == 0)
        {
-         this->_userMDDims = attrs[i];
+         this->_userMDDims = attrs[i+1];
        }
        else if (MXA_XML::UserMetaData::Type.compare(attrs[i]) == 0)
        {
-         this->_userMDType = attrs[i];
+         this->_userMDType = attrs[i+1];
        } else {
-         std::cout << "Unknow Attribute in " << MXA_XML::UserMetaData::Tag << " tag." << std::endl;
+         std::cout << "Unknown Attribute in " << MXA_XML::UserMetaData::Tag << " tag." << std::endl;
        }
      }
-     std::cout << "\n   Data Start   " << std::endl;
+ //    std::cout << "\n   Data Start   " << std::endl;
      // Store the key, dims, and type in iVars for use when the tag closes
      // Check all three required Attributes are valid
      if (this->_userMDKey.empty() || this->_userMDDims.empty() || this->_userMDType.empty() )
      {
        this->_xmlParseError = -1;
-       std::cout << "One of the Required Attributes for tag " << MXA_XML::UserMetaData::Tag << " is missing and line " <<
+       std::cout << "One of the Required Attributes for tag " << MXA_XML::UserMetaData::Tag << " is missing at line " <<
        this->_parser->GetCurrentLineNumber() << ", column " << this->_parser->GetCurrentColumnNumber() << std::endl;
      }
      
@@ -405,18 +409,54 @@ void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
 {
+  if (this->_xmlParseError < 0) return;
+ //  std::cout << this->_userAttributeData << std::endl;
+//  std::cout << "   Data End   " << std::endl;
+//  std::cout << "---------------UserMetaDataEnd----------------------" << std::endl;
+  if ( this->_userMDType.compare("H5T_STRING") == 0 )
+  {
+    this->_dataModel->addUserMetaData(this->_userMDKey, this->_userAttributeData);
+  }
+  else 
+  {
+    std::vector<uint64> dims;
+    uint64 temp = 0;
+    std::istringstream istream (this->_userMDDims);
+    while(istream.good() )
+    {
+      istream >> temp;
+      dims.push_back(temp);
+    }    
+    hid_t typeId = H5Lite::HDFTypeFromString(this->_userMDType);
+    if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
+      this->_xmlParseError = readPrimitiveAttribute<uint8>( dims);
+    } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
+      this->_xmlParseError = readPrimitiveAttribute<uint16>( dims);
+    } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
+      this->_xmlParseError = readPrimitiveAttribute<uint32>( dims);
+    } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
+      this->_xmlParseError = readPrimitiveAttribute<uint64>( dims);
+    } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
+      this->_xmlParseError = readPrimitiveAttribute<int8>( dims);
+    } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
+      this->_xmlParseError = readPrimitiveAttribute<int16>( dims);
+    } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
+      this->_xmlParseError = readPrimitiveAttribute<int32>( dims); 
+    } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
+      this->_xmlParseError = readPrimitiveAttribute<int64>( dims);
+    } else if ( H5Tequal(typeId, H5T_NATIVE_FLOAT)  ) {
+      this->_xmlParseError = readPrimitiveAttribute<float>( dims);
+    } else if ( H5Tequal(typeId, H5T_NATIVE_DOUBLE)  ) {
+      this->_xmlParseError = readPrimitiveAttribute<double>( dims);
+    } else {
+      std::cout << "Unknown Type: " << typeId << " for a read value of " << this->_userMDType << std::endl;
+      this->_xmlParseError = -1;
+    }
+  }
   
-  //FIXME: Start Here
-  // Use the iVars where the key, dims and type were stored to create a new 
-  // MXAAttribute.
-  // Use a StringStream to read in the data based on the type
-  // Probably some sort of template for this
-  // Maybe an IAttributeReader Class
-  std::cout << this->_userAttributeData << std::endl;
-  std::cout << "   Data End   " << std::endl;
-  std::cout << "---------------UserMetaDataEnd----------------------" << std::endl;
   this->_parseData = false; // Stop parsing character data
 }
+
 
 
 //______________________________________________________________________________
