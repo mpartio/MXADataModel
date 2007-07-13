@@ -45,7 +45,7 @@ namespace H5ImageConst
     const std::string PalColorMap("PAL_COLORMAP");
     const std::string PalType("PAL_TYPE");
     const std::string Standard8("STANDARD8");
-    const std::string RGB("RGB");
+    const std::string RGB_COLOR("RGB");
     const std::string PalVersionValue("1.2");
     const std::string ImageGrayScale("IMAGE_GRAYSCALE");
     const std::string ImageWhiteIsZero("IMAGE_WHITE_IS_ZERO");

@@ -1,5 +1,8 @@
 # set project's name
 PROJECT( MXADataModel )
+IF (NOT DEFINED MXA_SOURCE_DIR)
+    SET (MXA_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+ENDIF(NOT DEFINED MXA_SOURCE_DIR)
 
 # - Check to see if any other project is redefining the library names
 IF ( NOT DEFINED  MXADATAMODEL_LIB_NAME)
@@ -42,17 +45,17 @@ ENDIF(NOT Boost_FOUND)
 
 
 # Extend the include path to include the MXADataModel source directory
-INCLUDE_DIRECTORIES( "${PROJECT_SOURCE_DIR}/src" )
+INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
 # ----- Also include our binary directory as some headers are generated into that directory
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
 
 #-- Include the MXADataModel Testing Sources
-ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
+ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
 
 #-- Include the Examples Directory
 OPTION(BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
 IF(BUILD_EXAMPLES)
-    ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
+    ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
 ENDIF(BUILD_EXAMPLES)
 
 # Build shared libraries
@@ -70,47 +73,47 @@ ENDIF (MXA_BUILD_SHARED_LIBS)
 # here we define MXADATAMODEL_SRCS variable that contains a list 
 # of all .cpp files note that we don't need \ at the end of line
 SET( MXADATAMODEL_SRCS
-  src/MXADataModel/MXAAttribute.cpp
-  src/MXADataModel/MXANode.cpp
-  src/MXADataModel/MXADataDimension.cpp
-  src/MXADataModel/MXADataRecord.cpp
-  src/MXADataModel/MXADataModel.cpp
-  src/MXADataModel/MXADataSource.cpp
-  src/MXADataModel/MXADataImport.cpp
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXAAttribute.cpp
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXANode.cpp
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataDimension.cpp
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataRecord.cpp
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataModel.cpp
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataSource.cpp
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataImport.cpp
 )
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
 SET (MXADATAMODEL_HEADERS
-  src/Headers/LogTime.h
-  src/Headers/DLLExport.h
-  src/Headers/MXATypeDefs.h
-  src/Headers/MXATypes.h
-  src/Headers/MXAErrorDefinitions.h
-  src/Interfaces/IAttribute.h
-  src/Interfaces/IAttributeHelper.h
-  src/Interfaces/IAttributeWriter.h
-  src/Interfaces/IDataDimension.h
-  src/Interfaces/IDataDimensionWriter.h
-  src/Interfaces/IDataImport.h
-  src/Interfaces/IDataImportDelegate.h
-  src/Interfaces/IDataModel.h
-  src/Interfaces/IDataModelReader.h
-  src/Interfaces/IDataModelWriter.h
-  src/Interfaces/IDataRecord.h
-  src/Interfaces/IDataRecordWriter.h
-  src/Interfaces/IDataSource.h
-  src/Interfaces/IFileIODelegate.h
-  src/Interfaces/INode.h
-  src/MXADataModel/AttributeHelpers.h
-  src/MXADataModel/MXAAttribute.h
-  src/MXADataModel/MXAConstants.h
-  src/MXADataModel/MXADataDimension.h
-  src/MXADataModel/MXADataImport.h
-  src/MXADataModel/MXADataModel.h
-  src/MXADataModel/MXADataRecord.h
-  src/MXADataModel/MXADataSource.h
-  src/MXADataModel/MXANode.h
-  src/Utilities/StringUtils.h
+  ${MXA_SOURCE_DIR}/src/Headers/LogTime.h
+  ${MXA_SOURCE_DIR}/src/Headers/DLLExport.h
+  ${MXA_SOURCE_DIR}/src/Headers/MXATypeDefs.h
+  ${MXA_SOURCE_DIR}/src/Headers/MXATypes.h
+  ${MXA_SOURCE_DIR}/src/Headers/MXAErrorDefinitions.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IAttribute.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IAttributeHelper.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IAttributeWriter.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataDimension.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataDimensionWriter.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataImport.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataImportDelegate.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataModel.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataModelReader.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataModelWriter.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataRecord.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataRecordWriter.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IDataSource.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/IFileIODelegate.h
+  ${MXA_SOURCE_DIR}/src/Interfaces/INode.h
+  ${MXA_SOURCE_DIR}/src/MXADataModel/AttributeHelpers.h
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXAAttribute.h
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXAConstants.h
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataDimension.h
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataImport.h
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataModel.h
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataRecord.h
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataSource.h
+  ${MXA_SOURCE_DIR}/src/MXADataModel/MXANode.h
+  ${MXA_SOURCE_DIR}/src/Utilities/StringUtils.h
   )
 
 # Build with the HDF5 Libraries Enabled. This is the default
@@ -137,22 +140,22 @@ IF ( MXA_USE_HDF5 )
   
   # ---------- Include the HDF5 Dependant source in the Build -------------
   SET( MXA_HDF5_SRCS
-    src/HDF5/H5Image.cpp
-    src/HDF5/H5Lite.cpp
-    src/HDF5/H5Utilities.cpp
-    src/HDF5/H5IODelegate.cpp
-    src/HDF5/H5DataModelReader.cpp
-    src/HDF5/H5DataModelWriter.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5Image.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5Utilities.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5IODelegate.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.cpp
   )
   
   SET(MXA_HDF5_HEADERS 
-    src/HDF5/H5AttributeWriter.h
-    src/HDF5/H5DataModelReader.h
-    src/HDF5/H5DataModelWriter.h
-    src/HDF5/H5IODelegate.h
-    src/HDF5/H5Lite.h
-    src/HDF5/H5Image.h
-    src/HDF5/H5Utilities.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5AttributeWriter.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5IODelegate.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5Image.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5Utilities.h
   )
   
 
@@ -167,8 +170,8 @@ IF ( MXA_USE_HDF5 )
     # List the kits from VTK that are needed by this project.
     SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
     
-    SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} src/HDF5/vtkHDF5.cpp)
-    SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} src/HDF5/vtkHDF5.h)
+    SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} ${MXA_SOURCE_DIR}/src/HDF5/vtkHDF5.cpp)
+    SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} ${MXA_SOURCE_DIR}/src/HDF5/vtkHDF5.h)
     SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
     SET(HDF5_VTK_BRIDGE "1")
   ENDIF (BUILD_VTK_HDF5)
@@ -183,13 +186,13 @@ IF(MXA_USE_TIFF)
 
     FIND_PACKAGE(TIFF REQUIRED)
     SET(MXA_HDF5_TIFF_SRCS
-        src/HDF5/H5TiffIO.cpp
-        src/HDF5/H5TiffImportDelegate.cpp
+        ${MXA_SOURCE_DIR}/src/HDF5/H5TiffIO.cpp
+        ${MXA_SOURCE_DIR}/src/HDF5/H5TiffImportDelegate.cpp
         )
         
     SET(MXA_HDF5_TIFF_HEADERS
-        src/HDF5/H5TiffIO.h
-        src/HDF5/H5TiffImportDelegate.h
+        ${MXA_SOURCE_DIR}/src/HDF5/H5TiffIO.h
+        ${MXA_SOURCE_DIR}/src/HDF5/H5TiffImportDelegate.h
         )
         
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
@@ -208,20 +211,20 @@ IF (MXA_USE_XML)
     ENDIF ( NOT EXPAT_FOUND)
    
     SET ( MXA_XML_SRCS
-        src/XML/ExpatParser.cpp
-        src/XML/ExpatEvtHandler.cpp
-        src/XML/XMLIODelegate.cpp
-        src/XML/XMLDataModelWriter.cpp
-        src/XML/XMLDataModelReader.cpp
+        ${MXA_SOURCE_DIR}/src/XML/ExpatParser.cpp
+        ${MXA_SOURCE_DIR}/src/XML/ExpatEvtHandler.cpp
+        ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.cpp
+        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.cpp
+        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.cpp
     )
     
     SET (MXA_XML_HEADERS
-        src/XML/ExpatParser.h
-        src/XML/ExpatEvtHandler.h
-        src/XML/XMLIODelegate.h
-        src/XML/XMLDataModelWriter.h
-        src/XML/XMLDataModelReader.h
-        src/XML/XMLUserMetaDataWriter.h
+        ${MXA_SOURCE_DIR}/src/XML/ExpatParser.h
+        ${MXA_SOURCE_DIR}/src/XML/ExpatEvtHandler.h
+        ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.h
+        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.h
+        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.h
+        ${MXA_SOURCE_DIR}/src/XML/XMLUserMetaDataWriter.h
     )
     
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
@@ -239,7 +242,7 @@ ENDIF(WIN32)
 
 
 #-- Configure the Header file and then add the Binary Directory to the Includes list
-CONFIGURE_FILE(${MXADataModel_SOURCE_DIR}/src/Headers/MXAConfiguration.h.in
+CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Headers/MXAConfiguration.h.in
                ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
 SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfiguration.h  )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
@@ -269,12 +272,12 @@ INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME}
     )
     
 SET (INSTALL_INCLUDES 
-  src/MXADataModel
-  src/HDF5
-  src/Headers
-  src/Interfaces
-  src/Utilities
-  src/XML
+  ${MXA_SOURCE_DIR}/src/MXADataModel
+  ${MXA_SOURCE_DIR}/src/HDF5
+  ${MXA_SOURCE_DIR}/src/Headers
+  ${MXA_SOURCE_DIR}/src/Interfaces
+  ${MXA_SOURCE_DIR}/src/Utilities
+  ${MXA_SOURCE_DIR}/src/XML
   )
   
 INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h DESTINATION include/MXADataModel/Headers )
