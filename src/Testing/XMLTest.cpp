@@ -30,11 +30,11 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 //  Define where to put our temporary files
 // -----------------------------------------------------------------------------
 #if defined (_WIN32)
-  #define FILE_NAME_XML_OUT "C:\\WINDOWS\\Temp\\DataModelTest.xml"
-#define FILE_NAME_XML_IN "XMLTest.xml"
+  #define XML_TEST_FILE "C:\\WINDOWS\\Temp\\XML_Test.xml"
+#define MASTER_XML_FILE "C:\\WINDOWS\\Temp\\XMLMaster.xml"
 #else 
-  #define FILE_NAME_XML_OUT "XMLTest_ReWrite.xml"
-  #define FILE_NAME_XML_IN "Resources/XMLTest.xml"
+  #define XML_TEST_FILE "/tmp/XML_Test.xml"
+  #define MASTER_XML_FILE "/tmp/XMLMaster.xml"
 #endif
 
 // -----------------------------------------------------------------------------
@@ -184,30 +184,52 @@ MXADataModelPtr createModel()
     return modelPtr;
 }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-void WriteXMLModelTest()
+void GenerateMasterXMLFile()
 {
   std::cout << "Writing Model as XML...." << std::endl;
   MXADataModelPtr model = createModel();
-  std::string xmlFile(FILE_NAME_XML_OUT);
+  std::string xmlFile(MASTER_XML_FILE);
 
   XMLIODelegate iodelegate; // Create on the stack
   BOOST_REQUIRE ( iodelegate.writeModelToFile(xmlFile, model.get(), true) >= 0);
-  
-//FIXME: Compare this output with SOMETHING?.. or this test is invalid
 }
 
-void ReadXMLModelTest()
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void XMLModelTest()
 {
-  std::cout << "Reading MXA Model from XML File... " << std::endl;
-  std::string xmlFile(FILE_NAME_XML_IN);
+  //std::cout << "Reading MXA Model from XML File... " << std::endl;
+  std::string xmlFile(MASTER_XML_FILE);
   MXADataModelPtr model = MXADataModel::New();
   XMLIODelegate iodelegate; // Create on the stack
   BOOST_REQUIRE ( iodelegate.readModelFromFile(xmlFile, model.get(), true) >= 0);
-  BOOST_REQUIRE ( iodelegate.writeModelToFile(FILE_NAME_XML_OUT, model.get(), true) >= 0);
-  //FIXME: Read the files into a char buffer and compare the buffers. The should be exactly the same or this test fails
+  BOOST_REQUIRE ( iodelegate.writeModelToFile(XML_TEST_FILE, model.get(), true) >= 0);
+  
+  // Now compare the xml files
+  std::vector<char> inData;
+  std::vector<char> outData;
+  FILE* fp = fopen(MASTER_XML_FILE, "r");
+  if( NULL != fp)
+  {
+    char buf[1024];
+    while(size_t len = fread(buf, 1, sizeof(buf), fp))
+      inData.insert(inData.end(), buf, buf + len);
+    fclose(fp);
+    fp = NULL;
+  }
+  
+  fp = fopen(XML_TEST_FILE, "r");
+  if( NULL != fp)
+  {
+    char buf[1024];
+    while(size_t len = fread(buf, 1, sizeof(buf), fp))
+      outData.insert(outData.end(), buf, buf + len);
+    fclose(fp);
+    fp = NULL;
+  }
+  
+  BOOST_REQUIRE (inData == outData);
 }
 
 // -----------------------------------------------------------------------------
@@ -215,8 +237,8 @@ void ReadXMLModelTest()
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
-    test->add( BOOST_TEST_CASE( &WriteXMLModelTest), 0);
-    test->add( BOOST_TEST_CASE( &ReadXMLModelTest), 0); // This TEST MUST be after the XML Write test. We will be reading the output from the write test
+    test->add( BOOST_TEST_CASE( &GenerateMasterXMLFile), 0);
+    test->add( BOOST_TEST_CASE( &XMLModelTest), 0);
     return test; 
 }
 

@@ -80,16 +80,26 @@ public:
     
     if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
     {
-      std::cout << logTime() << "  Scalar Value" << std::endl;
-      T data;
-      while(istream.good() )
+      //std::cout << logTime() << "  Scalar Value" << std::endl;
+      T temp;
+      int tmp;
+      if (sizeof(T) == 1) // If we try to read a 'char' then the stream will only read a single char from the file, not what we want
       {
-        istream >> data;
+        if ( (istream >> tmp).good() )
+        {
+          MXAAttributePtr attr = MXAAttribute::createAttribute(this->_userMDKey, static_cast<T>(tmp) );
+          this->_dataModel->addUserMetaData(attr);
+        }
       }
-      if (err >= 0) {   
-        MXAAttributePtr attr = MXAAttribute::createAttribute(this->_userMDKey, data);
-        this->_dataModel->addUserMetaData(attr);
+      else 
+      {
+        if ( (istream >> temp).good() )
+        {
+          MXAAttributePtr attr = MXAAttribute::createAttribute(this->_userMDKey, temp);
+          this->_dataModel->addUserMetaData(attr);
+        }
       }
+            
     } 
     else // Multi-Dimensional Data 
     {

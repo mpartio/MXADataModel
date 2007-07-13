@@ -66,7 +66,7 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
     parser.Parse(buf, nRead, atEnd);
   }
   fclose(fh);
-  std::cout << logTime() << "xmlParseError was: " << this->_xmlParseError << std::endl;
+ // std::cout << logTime() << "xmlParseError was: " << this->_xmlParseError << std::endl;
   return this->_xmlParseError;
 }
 
