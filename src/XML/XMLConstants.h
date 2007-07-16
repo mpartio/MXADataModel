@@ -1,10 +1,20 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2007, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef XMLCONSTANTS_H_
 #define XMLCONSTANTS_H_
 
 #include <string>
 
 
-// Our namespace for XML Constants
+// Namespace for XML Constants
 namespace MXA_XML {
     const std::string File_Root ("File_Root");
     const std::string Data_Model ("Data_Model");
@@ -33,7 +43,7 @@ namespace MXA_XML {
     }
 
     
-} // End Namespace
+} // End Namespace MXA_XML
 
 
 

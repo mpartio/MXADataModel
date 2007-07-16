@@ -11,13 +11,12 @@
 #ifndef _XMLEvtHandler_H_
 #define _XMLEvtHandler_H_
 
+//-- MXA Includes
 #include "Headers/MXATypes.h"
-
-//-- MXA XML Includes
 #include "XML/ExpatParser.h"
 #include "XML/XMLConstants.h"
 
-
+// -- STL Includes
 #include <string>
 
 
@@ -125,5 +124,7 @@ private:
   XMLEvtHandler(const XMLEvtHandler&); //Copy Constructor Not Implemented
   void operator=(const XMLEvtHandler&); //Copy Assignment Not Implemented
 }; // End Class XMLEvtHandler
+
+
 #endif /* _XMLEvtHandler_H_ */
 

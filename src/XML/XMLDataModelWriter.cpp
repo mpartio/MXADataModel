@@ -44,7 +44,7 @@ int32 XMLDataModelWriter::writeModelToFile(int32 NOT_USED)
 
   _openTag(MXA_XML::File_Root, 0);
   _openTag(MXA_XML::Data_Model, 1);
-  _saveDataRoot(2);
+  _writeDataRoot(2);
   writeDataDimensions(2);
   writeDataRecords(2);
   _closeGroupTag(MXA_XML::Data_Model, 1);
@@ -181,7 +181,7 @@ void XMLDataModelWriter::_closeGroupTag(std::string tagName, int32 depth)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void XMLDataModelWriter::_saveDataRoot(int depth)
+void XMLDataModelWriter::_writeDataRoot(int depth)
 {
   std::map<std::string, std::string> attrs;
   attrs[MXA_XML::Attribute::Name] = _dataModel->getDataRoot();

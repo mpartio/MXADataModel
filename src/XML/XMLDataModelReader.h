@@ -11,8 +11,6 @@
 #ifndef XMLDATAMODELREADER_H_
 #define XMLDATAMODELREADER_H_
 
-
-
 //MXA Includes
 #include "Headers/DLLExport.h"
 #include "MXADataModel/MXADataModel.h"
@@ -24,12 +22,12 @@
 
 
 /**
- * @brief This class is responsible for the actual reading of the data model
- * from an XML file
+ * @brief This class is a concrete implementation of the IDataModelReader abstract
+ * class. This class is responsible for reading a data model from an XML File
  * @author Mike Jackson
  * @date June 2007
  * @version 1.0
- *   XMLDataModelReader.h
+ * @class XMLDataModelReader XMLDataModelReader.h
  */
 class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,
                                        public ExpatEvtHandler
@@ -42,9 +40,9 @@ public:
 //  IDataModelReader Implementation
 // -----------------------------------------------------------------------------
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief Reads the Data Model from an XML File/
+  * @param NOT_USED
+  * @return Error: Negative is error Condition
   */
 	int32 readDataModel(int32 NOT_USED) ;
  
@@ -59,6 +57,9 @@ public:
 	
   void OnCharacterData(const XML_Char* data, int len);
   
+  /**
+   * @brief Returns the current parser error.
+   */
   int32 getParseError();
 	  
   /**

@@ -104,8 +104,8 @@ private:
     XMLIODelegate(const XMLIODelegate&);   //Copy Constructor Not Implemented
     void operator=(const XMLIODelegate&); //Copy Assignment Not Implemented
     
-    std::string _openFile;
-    int32 _fileId;
+    std::string _openFile; // The value of the currently opened file
+    int32 _fileId;  // The value of the currently opened file id - Not used for XML
 };
 
 #endif /*XMLIODELEGATE_H_*/
