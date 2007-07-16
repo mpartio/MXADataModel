@@ -182,8 +182,6 @@ MXADataModelPtr createModel()
 	  //Create the Required MetaData 
 	  std::map<std::string, std::string> md;
 	  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
-	  BOOST_REQUIRE( (model->setRequiredMetaData(md)) < 0 ); // SHould Fail at this point
-	  
 	  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
 	  md[MXA::MXA_DSET_NAME_TAG] = "TESTING Example Data Model";
 	  md[MXA::MXA_DESCRIPTION_TAG] = "Just a test case showing how to organize OIM FIB data";
@@ -192,33 +190,61 @@ MXADataModelPtr createModel()
 	  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
 	  md[MXA::MXA_RELEASE_TAG] = "AFRL/WS07-0476";
 	  
-	  BOOST_REQUIRE( (model->setRequiredMetaData(md)) >= 0 ); // SHould Pass at this point
-	  
-	  // Test setting the Required MetaData by individual strings
-	  std::string researcherName("");
-	  std::string dateCreated("");
-    std::string datasetName("");
-    std::string description("");
-    std::string distributionRights("");
-    std::string releaseNumber("");
-    std::string pedigree("");
-    std::string derivedSrcFile("");
-	       
-	  BOOST_REQUIRE ( (model->setRequiredMetaData(researcherName, dateCreated, datasetName, description, distributionRights, releaseNumber, pedigree, derivedSrcFile)) < 0);
-   
-	  researcherName = "Mike Jackson";
-    dateCreated = "2006:12:24 15:34.51";
-    datasetName = "TESTING Example Data Model";
-    description = "Just a test case showing how to organize OIM FIB data";
-    distributionRights = "Unlimited";
-    releaseNumber = "AFRL/WS07-0476";
-    pedigree = "Original";
-    derivedSrcFile = "Original Data Files";
-    
-    BOOST_REQUIRE ( (model->setRequiredMetaData(researcherName, dateCreated, datasetName, description, distributionRights, releaseNumber, pedigree, derivedSrcFile)) >= 0);
+	  BOOST_REQUIRE( (model->setRequiredMetaData(md)) >= 0 ); // Should Pass at this point
+	 
 	  // Create User Defined MetaData;
 	  CreateAttributes( model );
 	  return modelPtr;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void TestRequiredMetaData()
+{
+  std::cout << "TestRequiredMetaData Running...." << std::endl;
+  MXADataModelPtr model = createModel();
+  //Create the Required MetaData 
+  std::map<std::string, std::string> md;
+  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
+  BOOST_REQUIRE( (model->setRequiredMetaData(md)) < 0 ); // SHould Fail at this point
+  
+  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
+  md[MXA::MXA_DSET_NAME_TAG] = "TESTING Example Data Model";
+  md[MXA::MXA_DESCRIPTION_TAG] = "Just a test case showing how to organize OIM FIB data";
+  md[MXA::MXA_PEDIGREE_TAG] = "Original";
+  md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
+  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
+  md[MXA::MXA_RELEASE_TAG] = "AFRL/WS07-0476";
+  
+  BOOST_REQUIRE( (model->setRequiredMetaData(md)) >= 0 ); // Should Pass at this point
+  
+  // Test setting the Required MetaData by individual strings
+  std::string researcherName("");
+  std::string dateCreated("");
+  std::string datasetName("");
+  std::string description("");
+  std::string distributionRights("");
+  std::string releaseNumber("");
+  std::string pedigree("");
+  std::string derivedSrcFile("");
+       
+  BOOST_REQUIRE ( 
+           (model->setRequiredMetaData(researcherName, dateCreated, 
+                                       datasetName, description, distributionRights, 
+                                       releaseNumber, pedigree, derivedSrcFile)) < 0
+                );
+ 
+  researcherName = "Mike Jackson";
+  dateCreated = "2006:12:24 15:34.51";
+  datasetName = "TESTING Example Data Model";
+  description = "Just a test case showing how to organize OIM FIB data";
+  distributionRights = "Unlimited";
+  releaseNumber = "AFRL/WS07-0476";
+  pedigree = "Original";
+  derivedSrcFile = "Original Data Files";
+  
+  BOOST_REQUIRE ( (model->setRequiredMetaData(researcherName, dateCreated, datasetName, description, distributionRights, releaseNumber, pedigree, derivedSrcFile)) >= 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -273,6 +299,64 @@ void TestRetrieveDataRecords()
   BOOST_REQUIRE( recordExists(model, "///") == false);
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void TestDataDimensionMethods()
+{
+  std::cout << "TestDataDimensionMethods Running...." << std::endl;
+  MXADataModelPtr model = createModel(); // Created on the stack
+  int32 error = 0;
+  
+  MXADataDimension* dim0 = model->getDataDimension(0);
+  MXADataDimension* dim1 = model->getDataDimension(1);
+  MXADataDimension* dim2 = model->getDataDimension(2);
+  MXADataDimension* dim3 = model->getDataDimension(3);
+  MXADataDimension* dimNull = model->getDataDimension(4);
+  BOOST_REQUIRE(dim0 != NULL);
+  BOOST_REQUIRE(dim1 != NULL);
+  BOOST_REQUIRE(dim2 != NULL);
+  BOOST_REQUIRE(dim3 != NULL);
+  BOOST_REQUIRE(dimNull == NULL); // The last one should be NULL because it does NOT exist
+
+  //Test removing by index
+  error = model->removeDataDimension(3); // Remove the last Dimension
+  BOOST_REQUIRE( error > 0);
+  MXADataDimension* test = model->getDataDimension(2);
+  BOOST_REQUIRE(test != dim3);
+  BOOST_REQUIRE(model->getDataDimensions().size() == 3);
+  
+  error = model->removeDataDimension(4); // Remove the last Dimension
+  BOOST_REQUIRE( error < 0);
+  BOOST_REQUIRE(model->getDataDimensions().size() == 3);
+  
+  //Test Removing the Dimension by Pointer
+  error = model->removeDataDimension(dim0);
+  BOOST_REQUIRE( error > 0);
+  BOOST_REQUIRE(dim0 == NULL);
+  BOOST_REQUIRE(model->getDataDimensions().size() == 2);
+  test = model->getDataDimension(0);
+  BOOST_REQUIRE(dim0 != test);
+  MXADataDimensionPtr dim5 = MXADataDimension::New("Volume Fraction", "Vol Frac", 0, 15, 20, 50, 2, 1);
+  test = dim5.get();
+  error = model->removeDataDimension( test ); //Try to remove a Pointer that was never added to the model
+  BOOST_REQUIRE( error < 0);
+  BOOST_REQUIRE(model->getDataDimensions().size() == 2);
+  
+  test = NULL;
+  error = model->removeDataDimension(test); //Try to remove a Null Pointer
+  BOOST_REQUIRE( error < 0);
+  BOOST_REQUIRE(model->getDataDimensions().size() == 2);
+  
+  //Test Removing by Name
+  error = model->removeDataDimension("Random Seed");
+  BOOST_REQUIRE( error > 0);
+  BOOST_REQUIRE(model->getDataDimensions().size() == 1);
+  
+  error = model->removeDataDimension("Junk");
+  BOOST_REQUIRE( error < 0);
+  BOOST_REQUIRE(model->getDataDimensions().size() == 1);
+}
 
 // -----------------------------------------------------------------------------
 //  
@@ -324,7 +408,9 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test->add( BOOST_TEST_CASE( &WriteTestModel), 0);
     test->add( BOOST_TEST_CASE( &ReReadTestModel), 0);
     test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );
-
+    test->add( BOOST_TEST_CASE( &TestDataDimensionMethods), 0 );
+    test->add( BOOST_TEST_CASE( &TestRequiredMetaData), 0);
+    
     //test->add( BOOST_TEST_CASE( &TestLookupTableGeneration), 0);
     return test; 
 }

@@ -812,6 +812,7 @@ static herr_t readVectorDataset(hid_t loc_id,
     }
     else
     {
+      std::cout << "Error Opening SpaceID" << std::endl;
       retErr = spaceId;
     }
     err = H5Dclose( did );
