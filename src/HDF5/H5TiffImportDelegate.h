@@ -13,10 +13,10 @@
 
 
 //-- MXA Includes
-#include "Headers/DLLExport.h"
-#include "Headers/MXATypes.h"
-#include "Headers/MXATypeDefs.h"
-#include "Interfaces/IDataImportDelegate.h"
+#include "Common/DLLExport.h"
+#include "Common/MXATypes.h"
+#include "Common/MXATypeDefs.h"
+#include "Base/IDataImportDelegate.h"
 
 // Include Boost Headers
 #include <boost/filesystem/path.hpp>

@@ -2,7 +2,7 @@
 #ifndef _HDF5AttributeWriter_h_
 #define _HDF5AttributeWriter_h_
 
-#include "Interfaces/IAttributeWriter.h"
+#include "Base/IAttributeWriter.h"
 #include "HDF5/H5Lite.h"
 
 #include <vector>

@@ -12,10 +12,10 @@
 #define _HDF5UTILITIES_H_
 
 
-#include "Headers/DLLExport.h"
-#include "Headers/MXATypes.h"
-#include "Headers/MXATypeDefs.h"
-#include "MXADataModel/MXAAttribute.h"
+#include "Common/DLLExport.h"
+#include "Common/MXATypes.h"
+#include "Common/MXATypeDefs.h"
+#include "Core/MXAAttribute.h"
 #include "HDF5/H5Lite.h"
 
 // C++ Includes

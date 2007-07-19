@@ -15,9 +15,9 @@
 
 
 //MXA Includes
-#include "Headers/DLLExport.h"
-#include "MXADataModel/MXADataModel.h"
-#include "Interfaces/IDataModelReader.h"
+#include "Common/DLLExport.h"
+#include "Core/MXADataModel.h"
+#include "Base/IDataModelReader.h"
 #include "HDF5/H5IODelegate.h"
 
 

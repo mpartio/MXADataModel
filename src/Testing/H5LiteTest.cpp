@@ -11,8 +11,8 @@
 
 //--MXA Includes
 #include <MXAConfiguration.h>
-#include "Headers/LogTime.h"
-#include "Headers/MXATypes.h"
+#include "Common/LogTime.h"
+#include "Common/MXATypes.h"
 #include "HDF5/H5Lite.h"
 
 //-- Boost includes

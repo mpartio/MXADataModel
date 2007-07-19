@@ -12,9 +12,9 @@
 #define _HDFWRITER_H_
 
 // MXA Includes
-#include "Headers/DLLExport.h"
-#include "Interfaces/IDataModelWriter.h"
-#include "MXADataModel/MXADataModel.h"
+#include "Common/DLLExport.h"
+#include "Base/IDataModelWriter.h"
+#include "Core/MXADataModel.h"
 #include "HDF5/H5IODelegate.h"
 
 //-- STL Headers

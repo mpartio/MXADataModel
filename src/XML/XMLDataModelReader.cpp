@@ -1,6 +1,6 @@
 
 
-#include "Headers/LogTime.h"
+#include "Common/LogTime.h"
 #include "XML/XMLDataModelReader.h"
 
 #include <sstream>

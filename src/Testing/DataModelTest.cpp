@@ -9,13 +9,13 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include <MXAConfiguration.h>
-#include "Headers/MXATypeDefs.h"
-#include "MXADataModel/MXAConstants.h"
-#include "MXADataModel/MXANode.h"
-#include "MXADataModel/MXAAttribute.h"
-#include "MXADataModel/MXADataModel.h"
-#include "MXADataModel/MXADataDimension.h"
-#include "MXADataModel/MXADataRecord.h"
+#include "Common/MXATypeDefs.h"
+#include "Core/MXAConstants.h"
+#include "Core/MXANode.h"
+#include "Core/MXAAttribute.h"
+#include "Core/MXADataModel.h"
+#include "Core/MXADataDimension.h"
+#include "Core/MXADataRecord.h"
 #include "HDF5/H5IODelegate.h"
 
 

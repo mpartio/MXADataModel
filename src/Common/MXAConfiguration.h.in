@@ -1,0 +1,15 @@
+#ifndef SYSTEMCONFIGURATION_H_IN_
+#define SYSTEMCONFIGURATION_H_IN_
+// This file is used as an input. DO NOT INCLUDE this file directly.
+
+
+
+#define HDF5_SUPPORT @HDF5_SUPPORT@
+
+#define TIFF_SUPPORT @TIFF_SUPPORT@
+
+#define HDF5_VTK_BRIDGE @HDF5_VTK_BRIDGE@
+
+#define XML_SUPPORT @XML_SUPPORT@
+
+#endif /*SYSTEMCONFIGURATION_H_IN_*/

@@ -10,8 +10,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <MXAConfiguration.h>
-#include "Headers/MXATypeDefs.h"
-#include "MXADataModel/MXADataModel.h"
+#include "Common/MXATypeDefs.h"
+#include "Core/MXADataModel.h"
 #include "XML/XMLIODelegate.h"
 
 #include <string>

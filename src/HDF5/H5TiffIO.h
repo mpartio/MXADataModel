@@ -12,7 +12,7 @@
 #define _MHDTIFFIO_H_
 
 //-- MXA Headers
-#include "Headers/DLLExport.h"
+#include "Common/DLLExport.h"
 
 //-- HDF Headers
 #include "hdf5.h"

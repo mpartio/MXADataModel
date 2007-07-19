@@ -11,9 +11,9 @@
 #ifndef XMLIODELEGATE_H_
 #define XMLIODELEGATE_H_
 
-#include "Headers/MXATypeDefs.h"
-#include "Headers/DLLExport.h"
-#include "Interfaces/IFileIODelegate.h"
+#include "Common/MXATypeDefs.h"
+#include "Common/DLLExport.h"
+#include "Base/IFileIODelegate.h"
 
 #include <string>
 

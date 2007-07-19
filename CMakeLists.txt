@@ -73,46 +73,46 @@ ENDIF (MXA_BUILD_SHARED_LIBS)
 # here we define MXADATAMODEL_SRCS variable that contains a list 
 # of all .cpp files note that we don't need \ at the end of line
 SET( MXADATAMODEL_SRCS
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXAAttribute.cpp
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXANode.cpp
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataDimension.cpp
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataRecord.cpp
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataModel.cpp
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataSource.cpp
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataImport.cpp
+  ${MXA_SOURCE_DIR}/src/Core/MXAAttribute.cpp
+  ${MXA_SOURCE_DIR}/src/Core/MXANode.cpp
+  ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.cpp
+  ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.cpp
+  ${MXA_SOURCE_DIR}/src/Core/MXADataModel.cpp
+  ${MXA_SOURCE_DIR}/src/Core/MXADataSource.cpp
+  ${MXA_SOURCE_DIR}/src/Core/MXADataImport.cpp
 )
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
 SET (MXADATAMODEL_HEADERS
-  ${MXA_SOURCE_DIR}/src/Headers/LogTime.h
-  ${MXA_SOURCE_DIR}/src/Headers/DLLExport.h
-  ${MXA_SOURCE_DIR}/src/Headers/MXATypeDefs.h
-  ${MXA_SOURCE_DIR}/src/Headers/MXATypes.h
-  ${MXA_SOURCE_DIR}/src/Headers/MXAErrorDefinitions.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IAttribute.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IAttributeHelper.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IAttributeWriter.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataDimension.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataDimensionWriter.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataImport.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataImportDelegate.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataModel.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataModelReader.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataModelWriter.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataRecord.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataRecordWriter.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IDataSource.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/IFileIODelegate.h
-  ${MXA_SOURCE_DIR}/src/Interfaces/INode.h
-  ${MXA_SOURCE_DIR}/src/MXADataModel/AttributeHelpers.h
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXAAttribute.h
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXAConstants.h
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataDimension.h
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataImport.h
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataModel.h
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataRecord.h
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXADataSource.h
-  ${MXA_SOURCE_DIR}/src/MXADataModel/MXANode.h
+  ${MXA_SOURCE_DIR}/src/Common/LogTime.h
+  ${MXA_SOURCE_DIR}/src/Common/DLLExport.h
+  ${MXA_SOURCE_DIR}/src/Common/MXATypeDefs.h
+  ${MXA_SOURCE_DIR}/src/Common/MXATypes.h
+  ${MXA_SOURCE_DIR}/src/Common/MXAErrorDefinitions.h
+  ${MXA_SOURCE_DIR}/src/Base/IAttribute.h
+  ${MXA_SOURCE_DIR}/src/Base/IAttributeHelper.h
+  ${MXA_SOURCE_DIR}/src/Base/IAttributeWriter.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataDimension.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataDimensionWriter.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataImport.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataImportDelegate.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataModel.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataModelReader.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataModelWriter.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataRecord.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataRecordWriter.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataSource.h
+  ${MXA_SOURCE_DIR}/src/Base/IFileIODelegate.h
+  ${MXA_SOURCE_DIR}/src/Base/INode.h
+  ${MXA_SOURCE_DIR}/src/Core/AttributeHelpers.h
+  ${MXA_SOURCE_DIR}/src/Core/MXAAttribute.h
+  ${MXA_SOURCE_DIR}/src/Core/MXAConstants.h
+  ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.h
+  ${MXA_SOURCE_DIR}/src/Core/MXADataImport.h
+  ${MXA_SOURCE_DIR}/src/Core/MXADataModel.h
+  ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.h
+  ${MXA_SOURCE_DIR}/src/Core/MXADataSource.h
+  ${MXA_SOURCE_DIR}/src/Core/MXANode.h
   ${MXA_SOURCE_DIR}/src/Utilities/StringUtils.h
   )
 
@@ -242,7 +242,7 @@ ENDIF(WIN32)
 
 
 #-- Configure the Header file and then add the Binary Directory to the Includes list
-CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Headers/MXAConfiguration.h.in
+CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
                ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
 SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfiguration.h  )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")

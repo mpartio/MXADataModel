@@ -33,7 +33,7 @@
 
 
 //MXA Includes
-#include "Headers/DLLExport.h"
+#include "Common/DLLExport.h"
 #include "expat.h"
 
 

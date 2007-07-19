@@ -12,7 +12,7 @@
 #define _XMLEvtHandler_H_
 
 //-- MXA Includes
-#include "Headers/MXATypes.h"
+#include "Common/MXATypes.h"
 #include "XML/ExpatParser.h"
 #include "XML/XMLConstants.h"
 

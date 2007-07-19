@@ -2,10 +2,10 @@
 #define ANYDATADELEGATE_H_
 
 
-#include "Headers/MXATypes.h"
-#include "Headers/MXATypeDefs.h"
-#include "Interfaces/IDataImportDelegate.h"
-#include "MXADataModel/MXADataModel.h"
+#include "Common/MXATypes.h"
+#include "Common/MXATypeDefs.h"
+#include "Base/IDataImportDelegate.h"
+#include "Core/MXADataModel.h"
 
 
 

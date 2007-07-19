@@ -12,13 +12,13 @@
 #define _XML_DATAMODEL_WRITER_H_
 
 // MXA Includes
-#include "Headers/DLLExport.h"
-#include "MXADataModel/MXADataModel.h"
-#include "Interfaces/IDataModelWriter.h"
-#include "Interfaces/IDataDimensionWriter.h"
-#include "Interfaces/IDataDimension.h"
-#include "Interfaces/IDataRecordWriter.h"
-#include "Interfaces/IDataRecord.h"
+#include "Common/DLLExport.h"
+#include "Core/MXADataModel.h"
+#include "Base/IDataModelWriter.h"
+#include "Base/IDataDimensionWriter.h"
+#include "Base/IDataDimension.h"
+#include "Base/IDataRecordWriter.h"
+#include "Base/IDataRecord.h"
 #include "XML/XMLIODelegate.h"
 
 //-- STL Headers

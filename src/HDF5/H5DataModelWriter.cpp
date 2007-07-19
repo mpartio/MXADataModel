@@ -14,8 +14,8 @@
 #include "HDF5/H5Lite.h"
 #include "HDF5/H5Utilities.h"
 #include "HDF5/H5AttributeWriter.h"
-#include "Headers/LogTime.h"
-#include "MXADataModel/MXADataModel.h"
+#include "Common/LogTime.h"
+#include "Core/MXADataModel.h"
 #include "Utilities/StringUtils.h"
 
 // -----------------------------------------------------------------------------

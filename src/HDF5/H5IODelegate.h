@@ -12,8 +12,8 @@
 #define _HDF5MODELCODEC_H_
 
 //-- MXA Includes
-#include "Headers/DLLExport.h"
-#include "Interfaces/IFileIODelegate.h"
+#include "Common/DLLExport.h"
+#include "Base/IFileIODelegate.h"
 
 
 //-- HDF Headers

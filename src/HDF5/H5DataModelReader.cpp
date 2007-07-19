@@ -2,8 +2,8 @@
 #include "HDF5/H5Lite.h"
 #include "HDF5/H5Utilities.h"
 #include "HDF5/H5DataModelReader.h"
-#include "MXADataModel/MXAConstants.h"
-#include "MXADataModel/MXAAttribute.h"
+#include "Core/MXAConstants.h"
+#include "Core/MXAAttribute.h"
 #include "Utilities/StringUtils.h"
 
 //-- STL Headers

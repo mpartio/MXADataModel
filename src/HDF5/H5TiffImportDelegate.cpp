@@ -3,11 +3,11 @@
 #include "H5TiffImportDelegate.h"
 
 //-- MXA Includes
-#include "Headers/MXAErrorDefinitions.h"
-#include "Headers/LogTime.h"
-#include "Interfaces/IFileIODelegate.h"
-#include "MXADataModel/MXADataModel.h"
-#include "MXADataModel/MXADataSource.h"
+#include "Common/MXAErrorDefinitions.h"
+#include "Common/LogTime.h"
+#include "Base/IFileIODelegate.h"
+#include "Core/MXADataModel.h"
+#include "Core/MXADataSource.h"
 #include "HDF5/H5Lite.h"
 #include "HDF5/H5Utilities.h"
 #include "HDF5/H5TiffIO.h"

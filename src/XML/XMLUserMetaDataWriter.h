@@ -12,7 +12,7 @@
 #define _XML_USERATTRIBUTE_WRITER_H_
 
 //-- MXA Includes
-#include "Interfaces/IAttributeWriter.h"
+#include "Base/IAttributeWriter.h"
 #include "XML/XMLConstants.h"
 
 //-- boost includes

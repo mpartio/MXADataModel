@@ -12,16 +12,16 @@
 #define DATAFILEGENERATOR_H_
 
 
-#include "Headers/MXATypes.h"
-#include "Headers/MXATypeDefs.h"
-#include "Headers/LogTime.h"
-#include "Interfaces/IDataImportDelegate.h"
-#include "Interfaces/IFileIODelegate.h"
-#include "MXADataModel/MXADataModel.h"
-#include "MXADataModel/MXADataDimension.h"
-#include "MXADataModel/MXADataRecord.h"
-#include "MXADataModel/MXADataImport.h"
-#include "MXADataModel/MXADataSource.h"
+#include "Common/MXATypes.h"
+#include "Common/MXATypeDefs.h"
+#include "Common/LogTime.h"
+#include "Base/IDataImportDelegate.h"
+#include "Base/IFileIODelegate.h"
+#include "Core/MXADataModel.h"
+#include "Core/MXADataDimension.h"
+#include "Core/MXADataRecord.h"
+#include "Core/MXADataImport.h"
+#include "Core/MXADataSource.h"
 
 #include "HDF5/H5Lite.h"
 #include "HDF5/H5Utilities.h"

@@ -11,9 +11,9 @@
 #ifndef _HDF5_LITE_H_
 #define _HDF5_LITE_H_
 
-#include "Headers/DLLExport.h"
-#include "Headers/MXATypes.h"
-#include "Headers/LogTime.h"
+#include "Common/DLLExport.h"
+#include "Common/MXATypes.h"
+#include "Common/LogTime.h"
 
 //-- STL Headers
 #include <string>
@@ -1146,8 +1146,8 @@ protected:
 #ifndef _HDF5_LITE_H_
 #define _HDF5_LITE_H_
 
-#include "Headers/DLLExport.h"
-#include "Headers/MXATypes.h"
+#include "Common/DLLExport.h"
+#include "Common/MXATypes.h"
 
 //-- STL Headers
 #include <string>
