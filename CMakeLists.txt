@@ -272,10 +272,10 @@ INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME}
     )
     
 SET (INSTALL_INCLUDES 
-  ${MXA_SOURCE_DIR}/src/MXADataModel
+  ${MXA_SOURCE_DIR}/src/Core
   ${MXA_SOURCE_DIR}/src/HDF5
-  ${MXA_SOURCE_DIR}/src/Headers
-  ${MXA_SOURCE_DIR}/src/Interfaces
+  ${MXA_SOURCE_DIR}/src/Common
+  ${MXA_SOURCE_DIR}/src/Base
   ${MXA_SOURCE_DIR}/src/Utilities
   ${MXA_SOURCE_DIR}/src/XML
   )
