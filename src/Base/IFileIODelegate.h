@@ -15,7 +15,7 @@
 //TODO: Refreshing a model from a file on system
 //TODO: Overwrite model if file exists? Would wipe out data in that file
 //TODO: Overwrite file if file exists on write? Need boolean to control this
-//TODO: Append to an existing file
+//TODO: Append to an existing file?
 
 //MXA Includes
 #include "Common/DLLExport.h"
@@ -70,11 +70,7 @@ public:
    * @return True if the file is MXA based
    */
   virtual bool isMXAFile(std::string fileName) = 0;
-  
-  /**
-   * @brief Is the file identified by the given identifier an MXA Base data file
-   */
-  virtual bool isMXAFile(int32 identifier) = 0;
+
 
   /**
    * @brief Opens an existing MXA Data File. IE an HDF5 file with the proper data model
@@ -85,13 +81,14 @@ public:
    */
   virtual int32 openMXAFile(std::string, bool readOnly=false) = 0;
  
+#if 0
   /**
-   * @brief Creates a new blank HDF5 file
+   * @brief Creates a new blank file with the basics of the data model filled in
    * @param fileName The path + filename to create. At least the parent path must exist
-   * @return HDF5 unique file id.
+   * @return Error code or ID. Positive value is Success. Negative is error
    */
   virtual int32 createMXAFile(std::string fileName) = 0;
-  
+#endif
   /**
    * @brief Closes the currently open file
    */

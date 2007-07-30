@@ -19,9 +19,6 @@
 // -- STL Includes
 #include <string>
 
-
-
-//TODO: Write better documentation
 /**
  * @brief This class is responsible 
  * @author Mike Jackson

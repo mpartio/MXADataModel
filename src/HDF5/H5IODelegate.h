@@ -11,6 +11,8 @@
 #ifndef _HDF5MODELCODEC_H_
 #define _HDF5MODELCODEC_H_
 
+//TODO: Sanity Check the DataModel for FileType/Version and Data Model Groups and subgroups.
+
 //-- MXA Includes
 #include "Common/DLLExport.h"
 #include "Base/IFileIODelegate.h"
@@ -76,11 +78,6 @@ public:
    * @return True if the file is MXA based
    */
   bool isMXAFile(std::string fileName);
-  
-  /**
-   * @brief Is the file identified by the given identifier an MXA Base data file
-   */
-  bool isMXAFile(int32 identifier);
 
   /**
    * @brief Opens an existing MXA Data File. IE an HDF5 file with the proper data model
@@ -90,14 +87,7 @@ public:
    * @return HDF5 file id
    */
   hid_t openMXAFile(std::string filename, bool readOnly=false);
-  
-  /**
-   * @brief Creates a new blank HDF5 file
-   * @param fileName The path + filename to create. At least the parent path must exist
-   * @return HDF5 unique file id.
-   */
-  hid_t createMXAFile(std::string fileName);
-  
+
   /**
    * @brief Closes the currently open file
    */
@@ -124,6 +114,11 @@ private:
     
     hid_t _fileId;
     std::string _openFile;
+    
+    /**
+     * @brief Is the file identified by the given identifier an MXA Base data file
+     */
+    bool isMXAFile(int32 identifier);
 };
 
 

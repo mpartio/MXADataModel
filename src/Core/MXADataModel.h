@@ -13,7 +13,7 @@
 
 
 //TODO: Remove DataRecord using Pointer or String Name
-//TODO: Write test to add/remove Dimensions
+
 //TODO: openFile (Filename, delegate)
 //TODO: options to overwrite file, bail on file existance or overwrite current model
 

@@ -79,13 +79,6 @@ public:
 	  int32 openMXAFile(std::string, bool readOnly=false) ;
 	 
 	  /**
-	   * @brief Creates a new blank HDF5 file
-	   * @param fileName The path + filename to create. At least the parent path must exist
-	   * @return HDF5 unique file id.
-	   */
-	  int32 createMXAFile(std::string fileName) ;
-	  
-	  /**
 	   * @brief Closes the currently open file
 	   */
 	  void  closeMXAFile() ;

@@ -1,5 +1,6 @@
 //-- MXA Headers
 #include <MXAConfiguration.h>
+#include "Common/LogTime.h"
 #include "Base/IFileIODelegate.h"
 #include "Core/MXADataModel.h"
 #include "Utilities/StringUtils.h"
@@ -638,71 +639,68 @@ std::string MXADataModel::generatePathToDataset ( std::vector<int32> &indices,  
 // -----------------------------------------------------------------------------
 MXATypes::MXAError MXADataModel::validateRequiredMetaData(MXARequiredMetaData &requiredMetaData)
 {
-  //TODO: Write buffered output to capture all the missing meta data values
   MXATypes::MXAError err = 0;
+  std::string errorString("Required Meta Data Missing:\n");
   MXARequiredMetaData::iterator iter = requiredMetaData.find(MXA::MXA_CREATOR_TAG);
   if (requiredMetaData.end() == iter )
   {
-    std::cout << "Required MetaData Value for Key: "<< MXA::MXA_CREATOR_TAG
-        << " Not Found."<< std::endl;
-    return -1;
+    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_CREATOR_TAG).append(" Not Found.\n");
+    err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_DATE_TAG);
   if (requiredMetaData.end() == iter )
   {
-    std::cout << "Required MetaData Value for Key: "<< MXA::MXA_DATE_TAG
-        << " Not Found."<< std::endl;
-    return -1;
+    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_DATE_TAG).append(" Not Found.").append("\n");
+    err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_DERIVED_SRC_TAG);
   if (requiredMetaData.end() == iter )
   {
-    std::cout << "Required MetaData Value for Key: "<< MXA::MXA_DERIVED_SRC_TAG
-        << " Not Found."<< std::endl;
-    return -1;
+    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_DERIVED_SRC_TAG).append(" Not Found.").append("\n");
+    err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_DESCRIPTION_TAG);
   if (requiredMetaData.end() == iter )
   {
-    std::cout << "Required MetaData Value for Key: "<< MXA::MXA_DESCRIPTION_TAG
-        << " Not Found."<< std::endl;
-    return -1;
+    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_DESCRIPTION_TAG).append(" Not Found.").append("\n");
+    err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_RIGHTS_TAG);
   if (requiredMetaData.end() == iter )
   {
-    std::cout << "Required MetaData Value for Key: "<< MXA::MXA_RIGHTS_TAG
-        << " Not Found."<< std::endl;
-    return -1;
+    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_RIGHTS_TAG).append(" Not Found.").append("\n");
+    err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_DSET_NAME_TAG);
   if (requiredMetaData.end() == iter )
   {
-    std::cout << "Required MetaData Value for Key: "<< MXA::MXA_DSET_NAME_TAG
-        << " Not Found."<< std::endl;
-    return -1;
+    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_DSET_NAME_TAG).append(" Not Found.").append("\n");
+    err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_PEDIGREE_TAG);
   if (requiredMetaData.end() == iter )
   {
-    std::cout << "Required MetaData Value for Key: "<< MXA::MXA_PEDIGREE_TAG
-        << " Not Found."<< std::endl;
-    return -1;
+    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_PEDIGREE_TAG).append(" Not Found.").append("\n");
+    err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_RELEASE_TAG);
   if (requiredMetaData.end() == iter )
   {
-    std::cout << "Required MetaData Value for Key: "<< MXA::MXA_RELEASE_TAG
-        << " Not Found."<< std::endl;
-    return -1;
+    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_RELEASE_TAG).append(" Not Found.").append("\n");
+    err = -1;
   }
+  if (err < 0)
+  {
+    std::cout << logTime() << errorString << std::endl;
+  }
+  
   return err;
 }
 

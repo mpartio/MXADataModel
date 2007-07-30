@@ -97,38 +97,24 @@ int32 XMLIODelegate::openMXAFile(std::string filename, bool readOnly)
 }
 
 // -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-//TODO: XMLIODelegate::createMXAFile(std::string filename)
-int32 XMLIODelegate::createMXAFile(std::string filename)
-{
-  int32 err = -1;
-  
-  return err;
-}
-
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-//TODO: XMLIODelegate::closeMXAFile() 
+//  This is a no-op because we read the XML file and then always close the file
+// ----------------------------------------------------------------------------- 
 void XMLIODelegate::closeMXAFile() 
 {
  
 }
 
-
-/**
- * @brief Returns the HDF file id of the currently open file
- */
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 int32 XMLIODelegate::getOpenFileId()
 {
   return _fileId;
 }
 
-/**
- * @brief Returns the currently open filename as an absolute path
- */
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 std::string XMLIODelegate::getOpenFileName()
 {
   return this->_openFile;

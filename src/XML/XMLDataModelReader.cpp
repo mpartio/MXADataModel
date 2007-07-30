@@ -328,8 +328,7 @@ void XMLDataModelReader::onSignalStartTag(const XML_Char* name, const XML_Char**
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onMeta_DataStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-  //FIXME: Finish Implementing this 
-   //  printf("Starting %s\n", name); 
+
 }
 
 // -----------------------------------------------------------------------------
@@ -354,11 +353,7 @@ void XMLDataModelReader::onRequired_MDStartTag(const XML_Char* name, const XML_C
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onUserDefined_MDStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-  //TODO: Not sure we need to actually implement anything here
-//     std::cout << "Starting " << name << std::endl;
-//     for (int i = 0; attrs[i]; i += 2) {
-//       printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
-//     }
+
 }
 
 // -----------------------------------------------------------------------------
@@ -366,7 +361,6 @@ void XMLDataModelReader::onUserDefined_MDStartTag(const XML_Char* name, const XM
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-  //FIXME: Finish Implementing this
   // Attributes are: 'key', 'dims', 'type'
   this->_userMDKey.clear();
   this->_userMDDims.clear();

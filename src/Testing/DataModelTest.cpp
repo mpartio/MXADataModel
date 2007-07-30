@@ -8,6 +8,10 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
+
+//TODO: Write test to add/remove Dimensions
+
+
 #include <MXAConfiguration.h>
 #include "Common/MXATypeDefs.h"
 #include "Core/MXAConstants.h"

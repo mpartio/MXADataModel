@@ -212,15 +212,7 @@ MXADataDimensionPtr H5DataModelReader::_loadDataDimension(hid_t loc_id, std::str
   }
   #endif
 
- /* std::cout << "Creating DataDimension Object: " << dimName << "\n"
-	    << "  ALTNAME: " << altName << "\n"
-	    << "  LUID: " << dim_order 
-	    << "  COUNT: " << count 
-	    << "  INCREMENT: " << increment
-	    << "  START: " << start_val
-	    << "  END: " << end_val << std::endl;
-*/
-  // Collect the dataset Attributes (all as strings)
+// Collect the dataset Attributes (all as strings)
 //TODO: Read any extra attributes from the data dimension entry
  // std::map<std::string, std::string> attributes = H5Utilities::getAttributesMap(loc_id, name);
   

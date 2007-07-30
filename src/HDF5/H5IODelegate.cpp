@@ -39,7 +39,7 @@ MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName, M
   int32 success = -1;
   _fileId = -1;
   //Create the HDF File
-  _fileId = this->createMXAFile(fileName);
+  _fileId = H5Fcreate(fileName.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
   if (_fileId < 0)
   {
     std::cout << "Error Creating new MXA File" << std::endl;
@@ -99,7 +99,6 @@ bool H5IODelegate::supportedMXAFileVersion(float version)
 // Returns true if the file referred to by fileId is an HDF5
 //  compliant file (has the correct file type and version)
 // -----------------------------------------------------------------------------
-//TODO: Clean this up
 bool H5IODelegate::isMXAFile(hid_t fileId)
 {
   herr_t err=0;
@@ -135,8 +134,9 @@ bool H5IODelegate::isMXAFile(hid_t fileId)
 }
 
 // -----------------------------------------------------------------------------
-// Returns true if the file referred to by filename is an HDF5
+// Returns true if the file referred to by filename is an MXA
 //  compliant file (has the correct file type and version)
+// -----------------------------------------------------------------------------
 //TODO: Clean this up
 bool H5IODelegate::isMXAFile(std::string filename)
 {
@@ -177,8 +177,7 @@ hid_t H5IODelegate::openMXAFile(std::string filename, bool readOnly)
     return _fileId;
   }
 
-//TODO: Inline the File Type and File Version Checks.
-//TODO: Sanity Check the DataModel for FileType/Version and Data Model Groups and subgroups.
+
   // Make sure this is an HDF5 file
   if (! isMXAFile(_fileId)) {
     closeMXAFile();
@@ -192,18 +191,8 @@ hid_t H5IODelegate::openMXAFile(std::string filename, bool readOnly)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-hid_t H5IODelegate::createMXAFile(std::string filename)
-{
-  return H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
-}
-
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
 void H5IODelegate::closeMXAFile() 
 {
-  //std::cout << logTime() << "H5IODelegate::closeMXAFile  _fileId: " << _fileId << std::endl;
   if (_fileId < 0) {  // fileId isn't open
     return;
   }
@@ -214,22 +203,18 @@ void H5IODelegate::closeMXAFile()
 			      H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
   if (num_open > 0) {
     std::cout << "WARNING: Some IDs weren't closed. Closing them."  << std::endl;
- //   hid_t *attr_ids;
-//    attr_ids = (hid_t *)malloc(num_open * sizeof(hid_t));
     std::vector<hid_t> attr_ids(num_open, 0);
     H5Fget_obj_ids(_fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |
 		   H5F_OBJ_DATATYPE | H5F_OBJ_ATTR, 
 		   num_open, &(attr_ids.front()) );
     for (int i=0; i<num_open; i++) {
-      
       H5Utilities::closeHDF5Object(attr_ids[i]);
     }
-
   }
     
   herr_t err = H5Fclose(_fileId);
   if (err < 0) {
-    std::cout << "H5IODelegate::closeMXAFile(): H5Fclose() caused error " << err << std::endl;
+    std::cout << logTime() << "H5IODelegate::closeMXAFile(): H5Fclose() caused error " << err << std::endl;
   }
   this->_fileId = -1;
   this->_openFile = "";
