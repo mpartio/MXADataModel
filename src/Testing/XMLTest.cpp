@@ -184,6 +184,9 @@ MXADataModelPtr createModel()
     return modelPtr;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 void GenerateMasterXMLFile()
 {
   std::cout << "Writing Model as XML...." << std::endl;

@@ -68,10 +68,20 @@ static std::string typeForPrimitive(T value)
 //  
 // -----------------------------------------------------------------------------
 template <typename T>
-static bool stringToNum(T& t,const std::string& s, std::ios_base& (*f)(std::ios_base&))
+static bool stringToNum(T &t, const std::string &s, std::ios_base& (*f)(std::ios_base&))
 {
   std::istringstream iss(s);
   return !(iss >> f >> t).fail();
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template <typename T>
+static bool stringToNum(T &t, const std::string &s)
+{
+  std::istringstream iss(s);
+  return !(iss >> t).fail();
 }
 
 // -----------------------------------------------------------------------------

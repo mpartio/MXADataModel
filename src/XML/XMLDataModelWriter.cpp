@@ -42,12 +42,20 @@ int32 XMLDataModelWriter::writeModelToFile(int32 NOT_USED)
   stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
        << "<!DOCTYPE File_Root SYSTEM \"http://materials.cmu.edu/degraef/mhd_0.4.dtd\">\n";
 
+  std::map<std::string, std::string> attrs;
+  attrs[MXA_XML::File_Type] = _dataModel->getFileType();
+  std::stringstream sstream;
+  sstream << _dataModel->getFileVersion(); 
+  attrs[MXA_XML::File_Version] = sstream.str();
+ // attrs["Something"] = "Bad bad bad";
   _openTag(MXA_XML::File_Root, 0);
-  _openTag(MXA_XML::Data_Model, 1);
+
+  _openTag(MXA_XML::Data_Model, 1, true, attrs);
   _writeDataRoot(2);
   writeDataDimensions(2);
   writeDataRecords(2);
   _closeGroupTag(MXA_XML::Data_Model, 1);
+  
   _openTag(MXA_XML::Meta_Data, 1);
   writeRequiredMetaData(2);
   writeUserMetaData(2);
@@ -166,8 +174,6 @@ void XMLDataModelWriter::_openTag(std::string tagName, int32 depth, bool group)
   _openTag(tagName, depth, group, attrs);
 }
 
-
-
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -176,7 +182,6 @@ void XMLDataModelWriter::_closeGroupTag(std::string tagName, int32 depth)
   std::ofstream &stream = *(_ofstreamPtr.get());
   stream << indent(depth) << "</" << tagName << ">" << "\n";
 }
-
 
 // -----------------------------------------------------------------------------
 //  

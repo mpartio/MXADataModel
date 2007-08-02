@@ -219,9 +219,27 @@ void XMLDataModelReader::onFile_RootStartTag(const XML_Char* name, const XML_Cha
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onData_ModelStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-  this->_dataModel->setFileVersion(MXA::MXACurrentFileVersion);
-  this->_dataModel->setFileType(MXA::MXACurrentFileType);
-    // printf("Starting %s\n", name); 
+ // this->_dataModel->setFileVersion(MXA::MXACurrentFileVersion);
+//  this->_dataModel->setFileType(MXA::MXACurrentFileType);
+  
+  for (int i = 0; attrs[i]; i += 2)
+  {
+    //printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
+    if (MXA_XML::File_Type.compare(attrs[i]) == 0)
+    {
+      this->_dataModel->setFileType ( attrs[i+1] );
+    }
+    else if (MXA_XML::File_Version.compare(attrs[i]) == 0)
+    {
+      float fileVersion;
+      StringUtils::stringToNum<float>(fileVersion, attrs[i+1]);
+      this->_dataModel->setFileVersion(fileVersion);
+    }
+    else
+    {
+      std::cout << "Ignoring Unknown Attribute in <"<< MXA_XML::Data_Model << "> " << attrs[i] << "=" << attrs[i+1] << std::endl;
+    }
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -365,37 +383,44 @@ void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_
   this->_userMDKey.clear();
   this->_userMDDims.clear();
   this->_userMDType.clear();
-//    std::cout << "---------------UserMetaDataStart----------------------" << std::endl;
-//    std::cout << "Tag: " << name << std::endl;
-     for (int i = 0; attrs[i]; i += 2) {
-       //printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
-       if ( MXA_XML::UserMetaData::Key.compare(attrs[i]) == 0 )
-       {
-         this->_userMDKey = attrs[i+1];
-       }
-       else if (MXA_XML::UserMetaData::Dims.compare(attrs[i]) == 0)
-       {
-         this->_userMDDims = attrs[i+1];
-       }
-       else if (MXA_XML::UserMetaData::Type.compare(attrs[i]) == 0)
-       {
-         this->_userMDType = attrs[i+1];
-       } else {
-         std::cout << "Unknown Attribute in " << MXA_XML::UserMetaData::Tag << " tag." << std::endl;
-       }
-     }
- //    std::cout << "\n   Data Start   " << std::endl;
-     // Store the key, dims, and type in iVars for use when the tag closes
-     // Check all three required Attributes are valid
-     if (this->_userMDKey.empty() || this->_userMDDims.empty() || this->_userMDType.empty() )
-     {
-       this->_xmlParseError = -1;
-       std::cout << "One of the Required Attributes for tag " << MXA_XML::UserMetaData::Tag << " is missing at line " <<
-       this->_parser->GetCurrentLineNumber() << ", column " << this->_parser->GetCurrentColumnNumber() << std::endl;
-     }
-     
-     this->_userAttributeData.clear(); //Clear the User MetaData String
-     this->_parseData = true; // We want to parse all character from now until this is set to false
+  //    std::cout << "---------------UserMetaDataStart----------------------" << std::endl;
+  //    std::cout << "Tag: " << name << std::endl;
+  for (int i = 0; attrs[i]; i += 2)
+  {
+    //printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
+    if (MXA_XML::UserMetaData::Key.compare(attrs[i]) == 0)
+    {
+      this->_userMDKey = attrs[i+1];
+    }
+    else if (MXA_XML::UserMetaData::Dims.compare(attrs[i]) == 0)
+    {
+      this->_userMDDims = attrs[i+1];
+    }
+    else if (MXA_XML::UserMetaData::Type.compare(attrs[i]) == 0)
+    {
+      this->_userMDType = attrs[i+1];
+    }
+    else
+    {
+      std::cout << "Unknown Attribute in "<< MXA_XML::UserMetaData::Tag
+          << " tag."<< std::endl;
+    }
+  }
+  //    std::cout << "\n   Data Start   " << std::endl;
+  // Store the key, dims, and type in iVars for use when the tag closes
+  // Check all three required Attributes are valid
+  if (this->_userMDKey.empty() || this->_userMDDims.empty()
+      || this->_userMDType.empty() )
+  {
+    this->_xmlParseError = -1;
+    std::cout << "One of the Required Attributes for tag "
+        << MXA_XML::UserMetaData::Tag << " is missing at line "
+        <<this->_parser->GetCurrentLineNumber() << ", column "
+        << this->_parser->GetCurrentColumnNumber() << std::endl;
+  }
+
+  this->_userAttributeData.clear(); //Clear the User MetaData String
+  this->_parseData = true; // We want to parse all character from now until this is set to false
 }
 
 // -----------------------------------------------------------------------------

@@ -39,9 +39,9 @@ ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 # ---------- Find Boost Headers/Libraries -----------------------
 SET (Boost_USE_FILESYSTEM TRUE)
 INCLUDE (${PROJECT_SOURCE_DIR}/Resources/FindBoost.cmake)
-IF(NOT Boost_FOUND)
-  MESSAGE(FATAL_ERROR "Boost was not found. ${Boost_DIR_MESSAGE}")
-ENDIF(NOT Boost_FOUND)
+#IF(NOT Boost_FOUND)
+#  MESSAGE(FATAL_ERROR "Boost was not found. ${Boost_DIR_MESSAGE}")
+#ENDIF(NOT Boost_FOUND)
 
 
 # Extend the include path to include the MXADataModel source directory

@@ -27,6 +27,8 @@ namespace MXA_XML {
     const std::string Meta_Data ("Meta_Data");
     const std::string Required_MD ("Required_MD");
     const std::string UserDefined_MD ("UserDefined_MD");
+    const std::string File_Type("File_Type");
+    const std::string File_Version("File_Version");
     
     
     namespace Attribute {

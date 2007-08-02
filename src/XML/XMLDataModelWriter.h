@@ -95,6 +95,13 @@ public:
   int32 writeUserMetaData(int32 indentDepth);
   
   /**
+   * @brief Writes the File Type and File version tags
+   * @param indentDepth The number of spaces to indent this section of XML
+   * @return Error Code: negative is error condition
+   */
+  int32 _writeMXAInfo(int depth);
+  
+  /**
    * @brief Writes the data root to the XML file
    * @param indentDepth The number of spaced to indent this section of XML
    */

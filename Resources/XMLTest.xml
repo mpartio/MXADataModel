@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE File_Root SYSTEM "http://materials.cmu.edu/degraef/mhd_0.4.dtd">
 <File_Root>
-  <Data_Model>
+  <Data_Model File_Type="MHD" File_Version="0.4">
     <Data_Root Name="DataModelTest/Data/Root/Is/Here/" />
     <Data_Dimensions>
   <Dimension Alt_Name="Vol Frac" Count="15" End_Value="50" Increment="2" Index="0" Name="Volume Fraction" Start_Value="20" Uniform="1" />
