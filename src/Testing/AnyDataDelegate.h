@@ -17,7 +17,7 @@ class AnyDataDelegate: public IDataImportDelegate
 {
   
   public: 
-    AnyDataDelegate(std::vector<uint64> dims) 
+    AnyDataDelegate(std::vector<hsize_t> dims) 
     {
       this->_dims = dims;
     }
@@ -34,7 +34,7 @@ class AnyDataDelegate: public IDataImportDelegate
       H5Utilities::createGroupsFromPath(parentPath, fileId);
       //Create data
       unsigned long int numElements = 1;
-      for (std::vector<uint64>::iterator iter = _dims.begin(); iter != _dims.end(); ++iter )
+      for (std::vector<hsize_t>::iterator iter = _dims.begin(); iter != _dims.end(); ++iter )
       {
         numElements += numElements * (*iter);
       }
@@ -51,7 +51,7 @@ class AnyDataDelegate: public IDataImportDelegate
     }
   
   private:
-    std::vector<uint64> _dims;
+    std::vector<hsize_t> _dims;
 };
 
 

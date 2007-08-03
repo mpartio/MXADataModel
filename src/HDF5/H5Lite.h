@@ -224,7 +224,7 @@ static MXA_EXPORT herr_t findDataset( hid_t loc_id, const std::string& name );
 template <typename T>
 static herr_t writeVectorDataset (hid_t loc_id, 
                             const std::string& dsetName, 
-                            std::vector<uint64> &dims, 
+                            std::vector<hsize_t> &dims, 
                             std::vector<T> &data)
 {
   herr_t err = -1;

@@ -107,7 +107,7 @@ herr_t testMakeDataset(hid_t &file_id, std::string name, T type ) {
   hsize_t dimx = 2;
   hsize_t dimy = 3;
   // Create the Dimensions
-  std::vector<uint64> dims;
+  std::vector<hsize_t> dims;
   dims.push_back(dimx);
   dims.push_back(dimy);
   

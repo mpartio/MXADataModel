@@ -65,21 +65,21 @@ herr_t DataFileGenerator::generate()
     // Create some Scalar Data
     MXADataRecordPtr scalarRec = MXADataRecord::New(1, DataGen::ScalarRec, DataGen::ScalarRec);
     modelPtr->addDataRecord(scalarRec);
-    std::vector<uint64> scalarDims;
+    std::vector<hsize_t> scalarDims;
     scalarDims.push_back(1);
     err = this->makeRecords(modelPtr, dataImport, scalarRec, scalarDims);
     
     // ---------- Create top level Data Record to hold the vector data
     MXADataRecordPtr tableRec = MXADataRecord::New(0, DataGen::TableRec, DataGen::TableRec );
     modelPtr->addDataRecord(tableRec); // Add a top level Record
-    std::vector<uint64> tableDims;
+    std::vector<hsize_t> tableDims;
     tableDims.push_back(10); tableDims.push_back(10);
     err = this->makeRecords(modelPtr, dataImport, tableRec, tableDims);
     
     // Create some Scalar Data
     MXADataRecordPtr volumeRec = MXADataRecord::New(2, DataGen::VolumeRec, DataGen::VolumeRec);
     modelPtr->addDataRecord(volumeRec);
-    std::vector<uint64> volumeDims;
+    std::vector<hsize_t> volumeDims;
     volumeDims.push_back(10); volumeDims.push_back(10); volumeDims.push_back(10);
     err = this->makeRecords(modelPtr, dataImport, volumeRec, volumeDims);    
     
@@ -107,7 +107,7 @@ herr_t DataFileGenerator::generate()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t DataFileGenerator::makeRecords(MXADataModelPtr modelPtr, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<uint64> dims) 
+herr_t DataFileGenerator::makeRecords(MXADataModelPtr modelPtr, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims) 
 {
 
   // Add all the Data for this record

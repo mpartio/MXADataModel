@@ -74,7 +74,7 @@ public:
 	
 	herr_t generate();
 	
-	herr_t DataFileGenerator::makeRecords(MXADataModelPtr model, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<uint64> dims); 
+	herr_t DataFileGenerator::makeRecords(MXADataModelPtr model, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims); 
 	
 /**
  * @brief
@@ -86,7 +86,7 @@ public:
  */
 	template<typename T>
 	herr_t createAndStore(MXADataModelPtr model, MXADataRecordPtr rec, 
-	    MXADataImportPtr dataImport, T type, std::vector<uint64> tableDims)
+	    MXADataImportPtr dataImport, T type, std::vector<hsize_t> tableDims)
 	{
 
 	  // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
