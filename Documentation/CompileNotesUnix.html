@@ -39,6 +39,10 @@ Compile Notes for OS X & Unix Systems
     </p>
     <p>Use CMake to generate Makefiles for your platform. If you are running OS X and you 
     want Xcode projects have CMake geneate those projects for you.</p>
+    
+    <p>When linking against Boost, prefer to use the static, multi-threaded versions of the boost libraries. There seems
+    to be a bug where linking against the unit_test_framework dynamic library will cause either segmentation faults
+    or the tests will not run properly</p>
 </td></tr>
 </table>
 </body>
