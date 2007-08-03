@@ -159,6 +159,7 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     SET(BOOST_LIBRARIES_SUFFIXES
         "-1_34_1"
         "-gcc-mt"
+        "-gcc34-mt"
         "-gcc41-mt"
         "-mt-1_34_1"
     )
