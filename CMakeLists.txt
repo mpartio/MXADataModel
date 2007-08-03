@@ -38,11 +38,14 @@ ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
 # ---------- Find Boost Headers/Libraries -----------------------
 SET (Boost_USE_FILESYSTEM TRUE)
-INCLUDE (${PROJECT_SOURCE_DIR}/Resources/FindBoost.cmake)
-#IF(NOT Boost_FOUND)
-#  MESSAGE(FATAL_ERROR "Boost was not found. ${Boost_DIR_MESSAGE}")
-#ENDIF(NOT Boost_FOUND)
 
+SET (BOOST_MXA_LIBS "")
+SET (Boost_FIND_REQUIRED TRUE)
+SET (Boost_FIND_QUIETLY TRUE)
+INCLUDE (${PROJECT_SOURCE_DIR}/Resources/FindBoost-alt.cmake)
+SET (BOOST_MXA_LIBS ${BOOST_MXA_LIBS} ${BOOST_FILESYSTEM_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} )
+INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
+LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS}) 
 
 # Extend the include path to include the MXADataModel source directory
 INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
@@ -246,14 +249,15 @@ CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
                ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
 SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfiguration.h  )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
-LINK_DIRECTORIES(${Boost_LIBRARY_DIR}) 
+
 
 # - Combine all the source files together -----------------------------
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
 #-- Add the MXADataModel Library and link to needed libraries-------------------
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
-TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} ${Boost_LIBRARIES} )
+TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} ${BOOST_MXA_LIBS} )
+
 # ----- OS X specific build settings
 IF ( APPLE )
 #  SET (OSX_EMBEDDED_LIBRARY ON)

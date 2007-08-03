@@ -239,9 +239,11 @@ void XMLModelTest()
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
+  std::cout << "Started" << std::endl;
     test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
     test->add( BOOST_TEST_CASE( &GenerateMasterXMLFile), 0);
     test->add( BOOST_TEST_CASE( &XMLModelTest), 0);
+    std::cout << "Ending" << std::endl;
     return test; 
 }
 
