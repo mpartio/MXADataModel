@@ -20,7 +20,7 @@
 //------------------------------------------------------------
 namespace MXA {
   
-  const std::string MXACurrentFileType("MHD");
+  const std::string MXACurrentFileType("MXA");
   const float  MXACurrentFileVersion = 0.4f;
 
   // Defines the paths within the MXA Model Heirarchy
@@ -69,30 +69,48 @@ namespace MXA {
   const std::string MXA_DATE_TAG("Date");
   const std::string MXA_DSET_NAME_TAG("Name");
   const std::string MXA_DESCRIPTION_TAG("Description");
+
+// -----------------------------------------------------------------------------
+//  Pedigree is either Original OR Derived
+// -----------------------------------------------------------------------------
   const std::string MXA_PEDIGREE_TAG("Pedigree");
-  const std::string MXA_DERIVED_SRC_TAG("Original_Source_File");
-  const std::string MXA_RIGHTS_TAG("Distribution_Rights");
-  const std::string MXA_RELEASE_TAG("Release_Number");
-#if 0
-  // XML File Tags
-  const std::string MXA_XML_FILE_ROOT("File_Root");
-  const std::string MXA_XML_DATA_MODEL("Data_Model");
-  const std::string MXA_XML_DATA_ROOT("Data_Root");
-  const std::string MXA_XML_NAME_ATTR("NAME");
-  const std::string MXA_XML_ALT_NAME_ATTR("ALT_NAME");
-  const std::string MXA_XML_DATA_DIMENSIONS_GROUP("Data_Dimensions");
-  const std::string MXA_XML_DATA_DIMENSION("Dimension");
-  const std::string MXA_XML_DATA_RECORDS_GROUP("Data_Records");
-  const std::string MXA_XML_SIGNAL_GROUP("Signal_Group");
-  const std::string MXA_XML_SIGNAL("Signal");
-  const std::string MXA_XML_META_DATA("Meta_Data");
-  const std::string MXA_XML_REQUIRED_META_DATA("Required_MD");
-  const std::string MXA_XML_USER_META_DATA("UserDefined_MD");
-#endif
+  //Constants for the Pedigree Meta Data Value - Should be one of these
+  const std::string MXA_PEDIGREE_ORIGINAL_VALUE("Original");
+  const std::string MXA_PEDIGREE_DERIVED_VALUE("Derived");
+
   
+// -----------------------------------------------------------------------------
+//  If the pedigree is derived then the value of Original_Source_File tag is
+//   the file path and name to the original data other wise use Not Applicable
+//   [MXA_NOT_APPLICABLE_VALUE] as the value
+// -----------------------------------------------------------------------------
+  const std::string MXA_DERIVED_SRC_TAG("Original_Source_File");
+  
+// -----------------------------------------------------------------------------
+//  Distribution rights are either Unlimited or Limited. If Limited then the 
+//  Release Limitation should contain a description of the nature of the limitation, 
+//  ie, who imposed the limitation, what groups CAN have possession of the data or what groups
+//  can NOT be in possession of the data.
+// -----------------------------------------------------------------------------
+  const std::string MXA_RIGHTS_TAG("Distribution_Rights");
+  //Constants for predefined values related to the Distribution Rights tag
+  const std::string MXA_RIGHTS_RELEASE_VALUE("Unlimited");
+  const std::string MXA_RIGHTS_RELEASE_VALUE("Limited");  
+  const std::string MXA_RELEASE_LIMITATION_TAG("Release_Limitation");
+  
+// -----------------------------------------------------------------------------
+//  Some organizations assign a tracking value to data that is publicly released.
+//   That value should be placed in this tag otherwise use the [MXA_NOT_APPLICABLE_VALUE]
+//   default value.
+// -----------------------------------------------------------------------------
+  const std::string MXA_RELEASE_NUMBER_TAG("Release_Number");
+  const std::string MXA_NOT_APPLICABLE_VALUE("Not Applicable");  
+
+
+
+
   /* These are tags that can be used in configuration files for data import
    * or other purposes. Use these constants to get the correct tag. */
-
   const std::string MD_Creator("REQ_MD_CREATOR");
   const std::string MD_DateCreated("REQ_MD_DATE_CREATED");
   const std::string MD_DatasetName("REQ_MD_DATASET_NAME");  
