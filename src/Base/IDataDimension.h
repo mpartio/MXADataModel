@@ -11,6 +11,7 @@
 #ifndef IDATADIMENSION_H_
 #define IDATADIMENSION_H_
 
+#include "Common/MXATypes.h"
 #include "Common/DLLExport.h"
 #include "Base/IDataDimensionWriter.h"
 
@@ -27,6 +28,8 @@ class MXA_EXPORT IDataDimension
   public:
     IDataDimension() {};
     virtual ~IDataDimension() {};
+    
+    typedef int32 size_type;
     
     /**
      * @brief Setter for property Index
@@ -131,7 +134,29 @@ class MXA_EXPORT IDataDimension
       * @return Error condition.
       */
      virtual int32 writeDimension(IDataDimensionWriter* writer) = 0;
-
+     
+     /**
+      * @brief Returns the maximum value that the Start Value can have */
+     virtual IDataDimension::size_type  maxStartValue() = 0;
+     
+     /** @brief Returns the maximum value that the End Value can have  */
+     virtual IDataDimension::size_type  maxEndValue() = 0;
+     
+     /** @brief Returns the Maximun Increment value */
+     virtual IDataDimension::size_type  maxIncrement() = 0;
+     
+     /** @brief returns the maximum value that the Count can be */
+     virtual IDataDimension::size_type  maxCount() = 0;
+     
+     
+     /**
+      * @brief Checks some basic properties of the model to make sure they are
+      * set correctly.
+      * @param message String to hold messages concerning errors/omissions from
+      * the model
+      * @return True if the model passes the basic checks
+      */
+     virtual bool isValid(std::string &message) = 0;
  
   private:
     IDataDimension(const IDataDimension&);    //Not Implemented

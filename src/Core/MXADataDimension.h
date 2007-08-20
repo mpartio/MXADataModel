@@ -20,11 +20,15 @@
 
 #include "boost/shared_ptr.hpp"
 
+#include <limits>
+
+
 /**
- * @brief
- * @author 
- * @date
- * @version
+ * @brief A concrete implementation of the IDataDimension Abstract Class.
+ * 
+ * @author Mike Jackson @ IMTS.us 
+ * @date March 2007
+ * @version 1.0
  *  
  */
 class  MXA_EXPORT MXADataDimension : public IDataDimension, public MXANode
@@ -150,6 +154,21 @@ public:
   void setNodeName(std::string nodeName);
   // Print out the node information to the console
   void printNode(std::ostream& os, int32 indent);
+  
+  /**
+   * @brief Returns the maximum value that the Start Value can have */
+  IDataDimension::size_type maxStartValue() { return std::numeric_limits<int32>::max(); }
+  
+  /** @brief Returns the maximum value that the End Value can have  */
+  IDataDimension::size_type  maxEndValue() { return std::numeric_limits<int32>::max(); }
+  
+  /** @brief Returns the Maximun Increment value */
+  IDataDimension::size_type  maxIncrement() { return std::numeric_limits<int32>::max(); }
+  
+  /** @brief returns the maximum value that the Count can be */
+  IDataDimension::size_type  maxCount() { return std::numeric_limits<int32>::max(); }
+  
+  bool isValid(std::string &message);
 
 protected:
   MXADataDimension();

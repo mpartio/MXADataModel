@@ -288,6 +288,11 @@ class MXA_EXPORT IDataModel
     virtual MXATypes::MXAError readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished=false) = 0;
    
     
+    /**
+     * @brief Performs some basic checks to make sure the model is valid.
+     * @param message String to store messages relating to errors/omissions about the model
+     */
+    virtual bool isValid(std::string &message) = 0;
 
   private:
     IDataModel(const IDataModel&); //Not Implemented

@@ -21,7 +21,7 @@ using namespace MXA;
 MXADataModel::MXADataModel() :
 _fileVersion(0.0),
 _fileType(""),
-_dataRoot(""),
+_dataRoot("/"),
 _researcherName(""),
 _datasetDateCreated(""),
 _derivedSourceFile(""),
@@ -376,28 +376,13 @@ MXATypes::MXAError MXADataModel::setRequiredMetaData(std::string researcherName,
               std::string derivedSrcFile)
 {
   
-  if (researcherName.empty()) return -1;
   _researcherName = researcherName;
-  
-  if (dateCreated.empty()) return -1;
   _datasetDateCreated = dateCreated;
-  
-  if (derivedSrcFile.empty()) return -1;
   _derivedSourceFile = derivedSrcFile;
-  
-  if (description.empty()) return -1;
   _datasetDescription = description;
-  
-  if (distributionRights.empty()) return -1;
   _distributionRights = distributionRights;
-  
-  if (datasetName.empty()) return -1;
   _datasetName = datasetName;
-  
-  if (pedigree.empty()) return -1;
   _datasetPedigree = pedigree;
-  
-  if (releaseNumber.empty()) return -1;
   _datasetPublicReleaseNumber = releaseNumber;
   return 1;
 }
@@ -407,10 +392,10 @@ MXATypes::MXAError MXADataModel::setRequiredMetaData(std::string researcherName,
 // -----------------------------------------------------------------------------
 MXATypes::MXAError MXADataModel::setRequiredMetaData(std::map<std::string, std::string> &requiredMetaData)
 {
-  
-  if ( MXADataModel::validateRequiredMetaData(requiredMetaData) )
+  std::string message;
+  if ( MXADataModel::validateRequiredMetaData(requiredMetaData, message) < 0)
   {
-    return -1;
+    std::cout << "Meta Data did not Validate." << std::endl;
   }
   
   this->_researcherName = requiredMetaData[MXA::MXA_CREATOR_TAG];
@@ -636,71 +621,158 @@ std::string MXADataModel::generatePathToDataset ( std::vector<int32> &indices,  
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::validateRequiredMetaData(MXARequiredMetaData &requiredMetaData)
+MXATypes::MXAError MXADataModel::validateRequiredMetaData(MXARequiredMetaData &requiredMetaData, std::string &message)
 {
   MXATypes::MXAError err = 0;
-  std::string errorString("Required Meta Data Missing:\n");
+
   MXARequiredMetaData::iterator iter = requiredMetaData.find(MXA::MXA_CREATOR_TAG);
   if (requiredMetaData.end() == iter )
   {
-    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_CREATOR_TAG).append(" Not Found.\n");
+    message.append("Required MetaData Value for Key: ").append(MXA::MXA_CREATOR_TAG).append(" Not Found.\n");
     err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_DATE_TAG);
   if (requiredMetaData.end() == iter )
   {
-    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_DATE_TAG).append(" Not Found.").append("\n");
+    message.append("Required MetaData Value for Key: ").append(MXA::MXA_DATE_TAG).append(" Not Found.").append("\n");
     err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_DERIVED_SRC_TAG);
   if (requiredMetaData.end() == iter )
   {
-    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_DERIVED_SRC_TAG).append(" Not Found.").append("\n");
+    message.append("Required MetaData Value for Key: ").append(MXA::MXA_DERIVED_SRC_TAG).append(" Not Found.").append("\n");
     err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_DESCRIPTION_TAG);
   if (requiredMetaData.end() == iter )
   {
-    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_DESCRIPTION_TAG).append(" Not Found.").append("\n");
+    message.append("Required MetaData Value for Key: ").append(MXA::MXA_DESCRIPTION_TAG).append(" Not Found.").append("\n");
     err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_RIGHTS_TAG);
   if (requiredMetaData.end() == iter )
   {
-    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_RIGHTS_TAG).append(" Not Found.").append("\n");
+    message.append("Required MetaData Value for Key: ").append(MXA::MXA_RIGHTS_TAG).append(" Not Found.").append("\n");
     err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_DSET_NAME_TAG);
   if (requiredMetaData.end() == iter )
   {
-    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_DSET_NAME_TAG).append(" Not Found.").append("\n");
+    message.append("Required MetaData Value for Key: ").append(MXA::MXA_DSET_NAME_TAG).append(" Not Found.").append("\n");
     err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_PEDIGREE_TAG);
   if (requiredMetaData.end() == iter )
   {
-    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_PEDIGREE_TAG).append(" Not Found.").append("\n");
+    message.append("Required MetaData Value for Key: ").append(MXA::MXA_PEDIGREE_TAG).append(" Not Found.").append("\n");
     err = -1;
   }
 
   iter = requiredMetaData.find(MXA::MXA_RELEASE_NUMBER_TAG);
   if (requiredMetaData.end() == iter )
   {
-    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_RELEASE_NUMBER_TAG).append(" Not Found.").append("\n");
+    message.append("Required MetaData Value for Key: ").append(MXA::MXA_RELEASE_NUMBER_TAG).append(" Not Found.").append("\n");
     err = -1;
-  }
-  if (err < 0)
-  {
-    std::cout << logTime() << errorString << std::endl;
   }
   
   return err;
+}
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+bool MXADataModel::isValid(std::string &message)
+{
+  bool valid = true;
+  if (this->_fileVersion == 0.0)
+  {
+    valid = false;
+    message.append("File Version is Unset.\n");
+  }
+  
+  if (this->_fileType.empty())
+  {
+    valid = false;
+    message.append("File Type is not set.\n");
+  }
+  
+  if ( this->_dataDimensions.size() == 0) 
+  {
+    valid = false;
+    message.append("Model does not have any Data Dimensions. There should be at least one.\n");
+  }
+  
+  if (this->_dataRecords.size() == 0)
+  {
+    valid = false;
+    message.append("Model does not have any Data Records. There should be at least one.\n");
+  }
+  
+  if (this->_dataRoot.empty())
+  {
+    message.append("The data root property is empty. It should really to set to something. The default is '/'.\n");
+  }
+  
+  for (MXADataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
+    MXADataDimension* dim = NULL;
+    dim = static_cast<MXADataDimension*>((*(iter)).get());
+    if ( dim->isValid(message) == false )
+    {
+      valid = false;
+    }
+  }
+  
+  if (_researcherName.empty() )
+  {
+    valid = false;
+    message.append("Required Meta Data {_researcherName} missing value.\n");
+  }
+  
+  if (_datasetDateCreated.empty() )
+  {
+    valid = false;
+    message.append("Required Meta Data {_datasetDateCreated} missing value.\n");
+  }
+  
+  if (_derivedSourceFile.empty() )
+  {
+    valid = false;
+    message.append("Required Meta Data {_derivedSourceFile} missing value.\n");
+  }
+  
+  if (_datasetDescription.empty() )
+  {
+    valid = false;
+    message.append("Required Meta Data {_datasetDescription} missing value.\n");
+  }
+  
+  if (_distributionRights.empty() )
+  {
+    valid = false;
+    message.append("Required Meta Data {_distributionRights} missing value.\n");
+  }
+  
+  if (_datasetPedigree.empty() )
+  {
+    valid = false;
+    message.append("Required Meta Data {_datasetPedigree} missing value.\n");
+  }
+  
+  if (_datasetPublicReleaseNumber.empty() )
+  {
+    valid = false;
+    message.append("Required Meta Data {_datasetPublicReleaseNumber} missing value.\n");
+  }
+
+  std::cout << message << std::endl;
+  return valid;
 }
 
 

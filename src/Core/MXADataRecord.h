@@ -122,6 +122,15 @@ public:
   //--- Over Ride from the MXANode Base class
   void setNodeName(std::string nodeName);
 
+  /**
+   * @brief Checks some basic properties of the model to make sure they are
+   * set correctly.
+   * @param message String to hold messages concerning errors/omissions from
+   * the model
+   * @return True if the model passes the basic checks
+   */
+  bool isValid(std::string &message);
+  
   
 protected:
   MXADataRecord();

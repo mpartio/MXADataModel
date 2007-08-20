@@ -66,9 +66,10 @@ class MXA_EXPORT MXADataModel : public IDataModel
   /**
    * @brief Validates that all the required Meta data is not empty
    * @param requiredMetaData
+   * @param message String to store messages regarding missing field
    * @return Error - Negative is error. Zero or Positive is success
    */
-  static MXATypes::MXAError validateRequiredMetaData(std::map<std::string, std::string> &requiredMetaData);
+  static MXATypes::MXAError validateRequiredMetaData(std::map<std::string, std::string> &requiredMetaData, std::string &message);
   
   /**
    * @brief Returns the MXA File version that the model adheres to
@@ -342,7 +343,14 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return The hdf5 path
    */
    std::string generatePathToDataset ( std::vector<int32> &indices, MXADataRecord* record);
-
+   
+   /**
+    * @brief Performs some basic checks to make sure the model is valid.
+    * @param message String to store messages relating to errors/omissions about the model
+    */
+   bool isValid(std::string &message);
+   
+   
   private:
    MXADataModel(const MXADataModel&);   //Copy Constructor Not Implemented
    void operator=(const MXADataModel&); //Copy Assignment Not Implemented

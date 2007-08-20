@@ -5,11 +5,11 @@
 // -----------------------------------------------------------------------------
 MXADataDimension::MXADataDimension() :
 MXANode(MXANode::Dimension, std::string("-1")),
-_index(-1),
-_count(0),
-_startValue(0),
-_endValue(0),
-_increment(0),
+_index(std::numeric_limits<int32>::max()),
+_count(std::numeric_limits<int32>::max()),
+_startValue(std::numeric_limits<int32>::max()),
+_endValue(std::numeric_limits<int32>::max()),
+_increment(std::numeric_limits<int32>::max()),
 _uniform(1),
 _dimensionName(""),
 _altName("")
@@ -106,5 +106,34 @@ int32 MXADataDimension::writeDimension(IDataDimensionWriter* writer)
   return writer->writeDataDimension(this);
 }
 
-
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+bool MXADataDimension::isValid(std::string &message)
+{
+  int32 limit = std::numeric_limits<int32>::max();
+  bool valid = true;
+  if (limit == this->_startValue || 
+      limit == this->_endValue ||
+      limit == this->_increment ||
+      limit == this->_count)
+  {
+    valid = false;
+    message.append("One of [start value, end value, increment or count] was not initialized.\n");
+  }
+  
+  if (this->_endValue < this->_startValue )
+  {
+    valid = false;
+    message.append("End Value is Less than the Start Value.\n");
+  }
+  
+  if (this->_dimensionName.empty() || this->_altName.empty())
+  {
+    valid = false;
+    message.append("Either the Dimension Name or the Alt Name is empty. Both are required to have a value.\n");
+  }
+  
+  return valid;
+}
 

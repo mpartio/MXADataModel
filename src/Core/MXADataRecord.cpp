@@ -126,6 +126,20 @@ int32 MXADataRecord::writeRecord(IDataRecordWriter* writer)
   return writer->writeDataRecord(this);
 }
 
-
-
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+bool MXADataRecord::isValid(std::string &message)
+{
+  bool valid = true;
+  if (this->_recordName.empty() || this->_altName.empty())
+  {
+    valid = false;
+    message.append("Either the Data Record Name or the Alt Name is empty. Both are required to have a value.\n");
+  }
+  return valid;
+}
 

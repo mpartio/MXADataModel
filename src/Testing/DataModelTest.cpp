@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //TODO: Write test to add/remove Dimensions
-
+//TODO: Test to check validity of Model/Dimensions
 
 #include <MXAConfiguration.h>
 #include "Common/MXATypeDefs.h"
@@ -145,14 +145,25 @@ void CreateAttributes(MXADataModel* model)
 // -----------------------------------------------------------------------------
 MXADataModelPtr createModel()
 {
-	  MXADataModelPtr modelPtr = MXADataModel::New();
+	  std::string errorMessage;
+    MXADataModelPtr modelPtr = MXADataModel::New();
+	  
+	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 	  MXADataModel* model = modelPtr.get();
 	  model->setDataRoot(std::string("DataModelTest/Data/Root/Is/Here"));
+	  errorMessage.clear();
+	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 	  model->setFileType(MXA::MXACurrentFileType);
+	  errorMessage.clear();
+	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 	  model->setFileVersion(MXA::MXACurrentFileVersion);
+	  errorMessage.clear();
+	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
 	  // ---------- Test creation/addition of Data Dimensions
 	  MXADataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 0, 15, 20, 50, 2, 1);
+	  errorMessage.clear();
+	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 	  MXADataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 1, 10, 1000, 5000, 500, 1);
 	  MXADataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS", 2, 100, 0, 99, 1, 1);
 	  MXADataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 3, 256, 0, 255, 1, 1);
@@ -160,7 +171,6 @@ MXADataModelPtr createModel()
 	  //Create Data Records
 	  MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
 	  model->addDataRecord(rec0);
-	//  rec0->addUserDefinedAttribute("Rendering Hint", RenderHint::ImageGrayScale);
 	  
 	  MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
 	  model->addDataRecord(rec1);
@@ -181,7 +191,9 @@ MXADataModelPtr createModel()
 	    model->addDataRecord(rec7, rec5);
 	    MXADataRecordPtr rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
 	    model->addDataRecord(rec8, rec5);
-
+	    
+    errorMessage.clear();
+    BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
 	  //Create the Required MetaData 
 	  std::map<std::string, std::string> md;
@@ -194,8 +206,10 @@ MXADataModelPtr createModel()
 	  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
 	  md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
 	  
-	  BOOST_REQUIRE( (model->setRequiredMetaData(md)) >= 0 ); // Should Pass at this point
-	 
+	  int32 err = -1;
+	  err = model->setRequiredMetaData(md);
+	  errorMessage.clear();
+	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == true );
 	  // Create User Defined MetaData;
 	  CreateAttributes( model );
 	  return modelPtr;
@@ -206,22 +220,10 @@ MXADataModelPtr createModel()
 // -----------------------------------------------------------------------------
 void TestRequiredMetaData()
 {
+  int32 err = -1;
+  std::string errorMessage;
   std::cout << "TestRequiredMetaData Running...." << std::endl;
   MXADataModelPtr model = createModel();
-  //Create the Required MetaData 
-  std::map<std::string, std::string> md;
-  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
-  BOOST_REQUIRE( (model->setRequiredMetaData(md)) < 0 ); // SHould Fail at this point
-  
-  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
-  md[MXA::MXA_DSET_NAME_TAG] = "TESTING Example Data Model";
-  md[MXA::MXA_DESCRIPTION_TAG] = "Just a test case showing how to organize OIM FIB data";
-  md[MXA::MXA_PEDIGREE_TAG] = "Original";
-  md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
-  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
-  md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
-  
-  BOOST_REQUIRE( (model->setRequiredMetaData(md)) >= 0 ); // Should Pass at this point
   
   // Test setting the Required MetaData by individual strings
   std::string researcherName("");
@@ -232,13 +234,33 @@ void TestRequiredMetaData()
   std::string releaseNumber("");
   std::string pedigree("");
   std::string derivedSrcFile("");
-       
-  BOOST_REQUIRE ( 
-           (model->setRequiredMetaData(researcherName, dateCreated, 
-                                       datasetName, description, distributionRights, 
-                                       releaseNumber, pedigree, derivedSrcFile)) < 0
-                );
- 
+  
+  err = model->setRequiredMetaData(researcherName, dateCreated, 
+                                   datasetName, description, distributionRights, 
+                                   releaseNumber, pedigree, derivedSrcFile);
+  errorMessage.clear();
+  BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
+  
+  
+  //Create the Required MetaData 
+  std::map<std::string, std::string> md;
+  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
+  err = model->setRequiredMetaData(md);
+  errorMessage.clear();
+  BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
+  
+  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
+  md[MXA::MXA_DSET_NAME_TAG] = "TESTING Example Data Model";
+  md[MXA::MXA_DESCRIPTION_TAG] = "Just a test case showing how to organize OIM FIB data";
+  md[MXA::MXA_PEDIGREE_TAG] = "Original";
+  md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
+  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
+  md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
+  
+  err = model->setRequiredMetaData(md);
+  errorMessage.clear();
+  BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
+
   researcherName = "Mike Jackson";
   dateCreated = "2006:12:24 15:34.51";
   datasetName = "TESTING Example Data Model";
@@ -248,7 +270,11 @@ void TestRequiredMetaData()
   pedigree = "Original";
   derivedSrcFile = "Original Data Files";
   
-  BOOST_REQUIRE ( (model->setRequiredMetaData(researcherName, dateCreated, datasetName, description, distributionRights, releaseNumber, pedigree, derivedSrcFile)) >= 0);
+  err = model->setRequiredMetaData(researcherName, dateCreated, 
+                                   datasetName, description, distributionRights, 
+                                   releaseNumber, pedigree, derivedSrcFile);
+  errorMessage.clear();
+  BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
 }
 
 // -----------------------------------------------------------------------------
