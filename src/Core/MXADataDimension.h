@@ -32,6 +32,8 @@ class  MXA_EXPORT MXADataDimension : public IDataDimension, public MXANode
 
 public:
   
+  
+  
   /**
   * @brief Used to create a new MXANode
   * @param type The Type of Node this is going to be

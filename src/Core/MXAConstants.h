@@ -94,8 +94,8 @@ namespace MXA {
 // -----------------------------------------------------------------------------
   const std::string MXA_RIGHTS_TAG("Distribution_Rights");
   //Constants for predefined values related to the Distribution Rights tag
-  const std::string MXA_RIGHTS_RELEASE_VALUE("Unlimited");
-  const std::string MXA_RIGHTS_RELEASE_VALUE("Limited");  
+  const std::string MXA_RIGHTS_UNLIMITED_VALUE("Unlimited");
+  const std::string MXA_RIGHTS_LIMITED_VALUE("Limited");  
   const std::string MXA_RELEASE_LIMITATION_TAG("Release_Limitation");
   
 // -----------------------------------------------------------------------------

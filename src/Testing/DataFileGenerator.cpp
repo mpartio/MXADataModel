@@ -46,7 +46,7 @@ herr_t DataFileGenerator::generate()
     md[MXA::MXA_PEDIGREE_TAG] = "Original";
     md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
     md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
-    md[MXA::MXA_RELEASE_TAG] = "90312901291239012390";
+    md[MXA::MXA_RELEASE_NUMBER_TAG] = "90312901291239012390";
     model->setRequiredMetaData(md);
     
     // ---------- Create 2 Data Dimensions

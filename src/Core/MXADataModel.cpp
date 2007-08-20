@@ -420,7 +420,7 @@ MXATypes::MXAError MXADataModel::setRequiredMetaData(std::map<std::string, std::
   this->_distributionRights = requiredMetaData[MXA::MXA_RIGHTS_TAG];
   this->_datasetName = requiredMetaData[MXA::MXA_DSET_NAME_TAG];
   this->_datasetPedigree = requiredMetaData[MXA::MXA_PEDIGREE_TAG];
-  this->_datasetPublicReleaseNumber = requiredMetaData[MXA::MXA_RELEASE_TAG];
+  this->_datasetPublicReleaseNumber = requiredMetaData[MXA::MXA_RELEASE_NUMBER_TAG];
   
   return 1;
 }
@@ -438,7 +438,7 @@ void MXADataModel::getRequiredMetaData(std::map<std::string, std::string> &requi
   requiredMetaData[MXA::MXA_RIGHTS_TAG] = this->_distributionRights;
   requiredMetaData[MXA::MXA_DSET_NAME_TAG] = this->_datasetName;
   requiredMetaData[MXA::MXA_PEDIGREE_TAG] = this->_datasetPedigree;
-  requiredMetaData[MXA::MXA_RELEASE_TAG] = this->_datasetPublicReleaseNumber;
+  requiredMetaData[MXA::MXA_RELEASE_NUMBER_TAG] = this->_datasetPublicReleaseNumber;
 }
 
 // -----------------------------------------------------------------------------
@@ -591,7 +591,6 @@ MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, bool cl
 // -----------------------------------------------------------------------------
 MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished)
 {
-//TODO: Better way to check for invalid ioDelegate
   if (ioDelegate.get() != NULL)
   {
     return ioDelegate->writeModelToFile(fileName, this, closeWhenFinished);
@@ -690,10 +689,10 @@ MXATypes::MXAError MXADataModel::validateRequiredMetaData(MXARequiredMetaData &r
     err = -1;
   }
 
-  iter = requiredMetaData.find(MXA::MXA_RELEASE_TAG);
+  iter = requiredMetaData.find(MXA::MXA_RELEASE_NUMBER_TAG);
   if (requiredMetaData.end() == iter )
   {
-    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_RELEASE_TAG).append(" Not Found.").append("\n");
+    errorString.append("Required MetaData Value for Key: ").append(MXA::MXA_RELEASE_NUMBER_TAG).append(" Not Found.").append("\n");
     err = -1;
   }
   if (err < 0)

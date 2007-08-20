@@ -422,7 +422,7 @@ herr_t H5DataModelReader::readRequiredMetaData(hid_t locId)
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
-  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_RELEASE_TAG, releaseNumber);
+  err = H5Lite::readStringAttribute(locId, MXA::RequiredMetaDataPath, MXA::MXA_RELEASE_NUMBER_TAG, releaseNumber);
   if (err < 0) { 
     std::cout << "Error reading data record name value" << std::endl;
     return -1;

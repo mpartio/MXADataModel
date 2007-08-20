@@ -219,9 +219,6 @@ void XMLDataModelReader::onFile_RootStartTag(const XML_Char* name, const XML_Cha
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onData_ModelStartTag(const XML_Char* name, const XML_Char** attrs)
 {
- // this->_dataModel->setFileVersion(MXA::MXACurrentFileVersion);
-//  this->_dataModel->setFileType(MXA::MXACurrentFileType);
-  
   for (int i = 0; attrs[i]; i += 2)
   {
     //printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
@@ -247,12 +244,10 @@ void XMLDataModelReader::onData_ModelStartTag(const XML_Char* name, const XML_Ch
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onData_RootStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-// There should only be 1 attribute: Name="lskdfsldkfj"
   if ( NULL != attrs[0] && NULL != attrs[1])
   {
     this->_dataModel->setDataRoot(attrs[1]);
   }
-    // printf("Starting %s\n", name); 
 }
 
 // -----------------------------------------------------------------------------
@@ -260,7 +255,6 @@ void XMLDataModelReader::onData_RootStartTag(const XML_Char* name, const XML_Cha
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onData_DimensionsStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-    // printf("Starting %s\n", name); 
 }
 
 // -----------------------------------------------------------------------------

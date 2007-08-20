@@ -176,7 +176,7 @@ MXADataModelPtr createModel()
     md[MXA::MXA_PEDIGREE_TAG] = "Original";
     md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
     md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
-    md[MXA::MXA_RELEASE_TAG] = "AFRL/WS07-0476";
+    md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
     model->setRequiredMetaData(md);
     
     // Create User Defined MetaData
