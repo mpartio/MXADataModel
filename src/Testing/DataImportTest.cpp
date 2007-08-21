@@ -147,8 +147,8 @@ MXADataModelPtr createSimpleModel()
 	  MXADataModelPtr modelPtr = MXADataModel::New();
 	  MXADataModel* model = modelPtr.get();
 	  model->setDataRoot(std::string("Our Experiment/Laboratory Data"));
-	  model->setFileType(MXA::MXACurrentFileType);
-	  model->setFileVersion(MXA::MXACurrentFileVersion);
+	  model->setModelType(MXA::MXACurrentFileType);
+	  model->setModelVersion(MXA::MXACurrentFileVersion);
 
 	  // ---------- Create 2 Data Dimensions
 	  MXADataDimensionPtr dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);

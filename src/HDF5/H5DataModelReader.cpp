@@ -41,9 +41,9 @@ H5DataModelReader::~H5DataModelReader()
 // -----------------------------------------------------------------------------
 herr_t H5DataModelReader::readDataModel(hid_t locId)
 {
-  if ( (readFileType(locId)) < 0)
+  if ( (readModelType(locId)) < 0)
     return false;
-  if ( (readFileVersion(locId)) < 0)
+  if ( (readModelVersion(locId)) < 0)
     return false;
   if ( (readDataRoot(locId)) < 0)
     return false;
@@ -62,18 +62,18 @@ herr_t H5DataModelReader::readDataModel(hid_t locId)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readFileType(hid_t locId)
+herr_t H5DataModelReader::readModelType(hid_t locId)
 {
   herr_t err = -1;
   std::string fileType;
-  err = H5Lite::readStringDataset(locId, MXA::FileTypePath, fileType);
+  err = H5Lite::readStringAttribute(locId, MXA::DataModelPath, MXA::ModelType, fileType);
   if(err < 0)
   {
     std::cout << "Error Reading FileType from HDF5 File" << std::endl;
   }
   else 
   {
-    _dataModel->setFileType(fileType);
+    _dataModel->setModelType(fileType);
   }
   return err;
 }
@@ -81,18 +81,18 @@ herr_t H5DataModelReader::readFileType(hid_t locId)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readFileVersion(hid_t locId)
+herr_t H5DataModelReader::readModelVersion(hid_t locId)
 {
   herr_t err = -1;
-  float32 fileVersion;
-  err = H5Lite::readScalarDataset(locId, MXA::FileVersionPath, fileVersion);
+  float32 modelVersion;
+  err = H5Lite::readScalarAttribute(locId, MXA::DataModel, MXA::ModelVersion, modelVersion);
   if(err < 0)
   {
-    std::cout << "Error Reading FileVersion from HDF5 File" << std::endl;
+    std::cout << "Error Reading modelVersion from HDF5 File" << std::endl;
   }
   else 
   {
-    _dataModel->setFileVersion(fileVersion);
+    _dataModel->setModelVersion(modelVersion);
   }
   return err;
 }

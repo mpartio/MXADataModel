@@ -24,7 +24,7 @@
 // C++ Headers
 #include <string>
 
-//-- HDF Headers
+// HDF Headers
 #include "hdf5.h"
 
 
@@ -64,14 +64,14 @@ public:
   * @param locId
   * @return 
   */
-  herr_t readFileType(hid_t locId);
+  herr_t readModelType(hid_t locId);
  
   /**
   * @brief 
   * @param locId
   * @return 
   */
-  herr_t readFileVersion(hid_t locId);
+  herr_t readModelVersion(hid_t locId);
  
   /**
   * @brief 

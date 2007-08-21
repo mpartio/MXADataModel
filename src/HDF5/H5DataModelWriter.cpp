@@ -82,19 +82,29 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
   
   err = 0;
   //Write the File Version
-  float32 version = _dataModel->getFileVersion();
-  err = H5Lite::writeScalarDataset(fileId, const_cast<std::string&>(MXA::FileVersionPath), version);
-  if (err < 0) {
-    std::cout << "Error Writing File Version to HDF File" << std::endl;
+  hid_t modelGroupId = H5Gopen(fileId, MXA::DataModelPath.c_str());
+  if (modelGroupId < 0)
+  {
+    err = -1;
+    std::cout << logTime() << "Error Opening 'Data Model' Group." << std::endl;
     return err;
+  } 
+  else 
+  {
+    std::string fType = _dataModel->getModelType();
+    err = H5Lite::writeStringAttribute(fileId, MXA::DataModel.c_str(), MXA::ModelType, fType);
+    if (err < 0) {
+      std::cout << logTime() << "Error Writing Model Type to Data Model Group as Attribute." << std::endl;
+    }
+    float32 version = _dataModel->getModelVersion();
+    err = H5Lite::writeScalarAttribute(fileId, MXA::DataModel, MXA::ModelVersion, version);
+    if (err < 0)
+    {
+      std::cout << logTime() << "Error Writing Model Version to Data Model Group as Attribute." << std::endl;
+    }
   }
-  //Write the File Type
-  std::string fType = _dataModel->getFileType();
-  err = H5Lite::writeStringDataset(fileId, const_cast<std::string&>(MXA::FileTypePath), fType );
-  if (err < 0) {
-    std::cout << "Error Writing File Type to HDF File" << std::endl;
-    return err;
-  }
+  err = H5Gclose(modelGroupId);
+  if (err < 0) { std::cout << DEBUG_OUT(logTime) << "Error Closing 'Data Model' Group" << std::endl; return err; }
   
   //Write the data root
   std::string dataRoot = _dataModel->getDataRoot();
@@ -106,7 +116,6 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
   }
   
   // Create the HDF5 Group structure for the actual Data Root
-//  H5Utilities::createPathGroups(fileId, _dataModel->getDataRoot());
   err = H5Utilities::createGroupsFromPath(_dataModel->getDataRoot(), fileId);
   if (err < 0) 
   {

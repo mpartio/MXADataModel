@@ -66,7 +66,12 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
     parser.Parse(buf, nRead, atEnd);
   }
   fclose(fh);
- // std::cout << logTime() << "xmlParseError was: " << this->_xmlParseError << std::endl;
+  std::string message;
+  if (this->_dataModel->isValid(message) == false )
+  {
+    std::cout << message << std::endl;
+  }
+  
   return this->_xmlParseError;
 }
 
@@ -222,15 +227,15 @@ void XMLDataModelReader::onData_ModelStartTag(const XML_Char* name, const XML_Ch
   for (int i = 0; attrs[i]; i += 2)
   {
     //printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
-    if (MXA_XML::File_Type.compare(attrs[i]) == 0)
+    if (MXA_XML::Model_Type.compare(attrs[i]) == 0)
     {
-      this->_dataModel->setFileType ( attrs[i+1] );
+      this->_dataModel->setModelType ( attrs[i+1] );
     }
-    else if (MXA_XML::File_Version.compare(attrs[i]) == 0)
+    else if (MXA_XML::Model_Version.compare(attrs[i]) == 0)
     {
       float fileVersion;
       StringUtils::stringToNum<float>(fileVersion, attrs[i+1]);
-      this->_dataModel->setFileVersion(fileVersion);
+      this->_dataModel->setModelVersion(fileVersion);
     }
     else
     {
@@ -267,6 +272,8 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
       attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
     }
     int32 index, count, start, end, increment, uniform = 0;
+    //FIXME: This code is no longer valid because these are now OPTIONAL tags
+#warning All this needs to be fixed
     StringUtils::stringToNum(index, attrMap[MXA::MXA_INDEX_TAG], std::dec);
     StringUtils::stringToNum(count, attrMap[MXA::MXA_COUNT_TAG], std::dec);
     StringUtils::stringToNum(start, attrMap[MXA::MXA_START_VALUE_TAG], std::dec);

@@ -105,8 +105,8 @@ bool H5IODelegate::isMXAFile(hid_t fileId)
   
   // Check the Type
   std::string ftype;
-  err = H5Lite::readStringDataset(fileId, const_cast<std::string&>(MXA::FileTypePath), ftype);
-  //std::cout << logTime() << "Err: " << err << std::endl;
+  err = H5Lite::readStringAttribute(fileId, MXA::DataModelPath, MXA::ModelType, ftype);
+  
   if ( (ftype != MXA::MXACurrentFileType) ) {
     std::cout << "NOT an MXA formatted HDF5 File. Type should be " << MXA::MXACurrentFileType << " but I found:" << ftype << std::endl;
     return false;
@@ -118,7 +118,7 @@ bool H5IODelegate::isMXAFile(hid_t fileId)
   }
   // Check the Version
   float32 fileVersion;
-  err = H5Lite::readScalarDataset(fileId, MXA::FileVersionPath, fileVersion);
+  err = H5Lite::readScalarAttribute(fileId, MXA::DataModel, MXA::ModelVersion, fileVersion);
   
   if (! supportedMXAFileVersion(fileVersion)) {
     std::cout << "Not a supported MXA Formatted HDF5 File. File Version should be " << MXA::MXACurrentFileVersion << " but I found: "  << fileVersion << std::endl;
@@ -129,7 +129,7 @@ bool H5IODelegate::isMXAFile(hid_t fileId)
     std::cout << logTime() << "H5IODelegate::isMXAFile: Error Getting the File Version. Look for other log messages" << err << std::endl;
     return false;
   }
-  //std::cout << "Supported FILE TYPE: " << ftype << " Version: " << fileVersion << std::endl;
+
   return true;
 }
 

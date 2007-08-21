@@ -40,7 +40,7 @@
 #include <list>
 #include <map>
 
-//Include Boost Headers
+//-- Boost Headers
 #include "boost/shared_ptr.hpp"
 #include "boost/weak_ptr.hpp"
 
@@ -75,20 +75,20 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Returns the MXA File version that the model adheres to
    * @return MXA API Version
    */
-  float getFileVersion();
-  void setFileVersion(float version);
+  float getModelVersion();
+  void setModelVersion(float version);
 
   /**
    * @brief Returns the type of file, should be MHD or MXA
    */
-  std::string getFileType();
+  std::string getModelType();
 
   /**
    * @brief Sets the file type. Should be MHD or MXA
    * @param 
    * @return
    */
-  void setFileType(const std::string &fileType);
+  void setModelType(const std::string &fileType);
 
   /**
    * @brief Sets the "Data Root"

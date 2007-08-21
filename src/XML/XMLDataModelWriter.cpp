@@ -43,10 +43,10 @@ int32 XMLDataModelWriter::writeModelToFile(int32 NOT_USED)
        << "<!DOCTYPE File_Root SYSTEM \"http://materials.cmu.edu/degraef/mhd_0.4.dtd\">\n";
 
   std::map<std::string, std::string> attrs;
-  attrs[MXA_XML::File_Type] = _dataModel->getFileType();
+  attrs[MXA_XML::Model_Type] = _dataModel->getModelType();
   std::stringstream sstream;
-  sstream << _dataModel->getFileVersion(); 
-  attrs[MXA_XML::File_Version] = sstream.str();
+  sstream << _dataModel->getModelVersion(); 
+  attrs[MXA_XML::Model_Version] = sstream.str();
  // attrs["Something"] = "Bad bad bad";
   _openTag(MXA_XML::File_Root, 0);
 

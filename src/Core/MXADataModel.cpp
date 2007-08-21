@@ -60,7 +60,7 @@ MXADataModel::~MXADataModel()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataModel::setFileVersion(float version) 
+void MXADataModel::setModelVersion(float version) 
 {
   this->_fileVersion= version;
 }
@@ -68,7 +68,7 @@ void MXADataModel::setFileVersion(float version)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-float MXADataModel::getFileVersion() 
+float MXADataModel::getModelVersion() 
 {
   return this->_fileVersion;
 }
@@ -76,15 +76,15 @@ float MXADataModel::getFileVersion()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataModel::setFileType(const std::string &fileType)
+void MXADataModel::setModelType(const std::string &modelType)
 {
-  this->_fileType = fileType;
+  this->_fileType = modelType;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-std::string MXADataModel::getFileType()
+std::string MXADataModel::getModelType()
 {
   return MXA::MXACurrentFileType;
 }
@@ -457,8 +457,8 @@ MXAUserMetaData&  MXADataModel::getUserMetaData()
 void MXADataModel::printModel(std::ostream& os, int32 indent)
 {
   os << _indent(indent) << "---------XMA DataModel---------" << std::endl;
-  os << _indent(indent) << "FileVersion: " << getFileVersion() << std::endl;
-  os << _indent(indent) << "FileType: " << getFileType() << std::endl;
+  os << _indent(indent) << "FileVersion: " << getModelVersion() << std::endl;
+  os << _indent(indent) << "FileType: " << getModelType() << std::endl;
   os << _indent(indent) << "DataModel" << std::endl;
   indent++;
   os << _indent(indent) << "DataRoot: " << getDataRoot() << std::endl;
@@ -771,7 +771,6 @@ bool MXADataModel::isValid(std::string &message)
     message.append("Required Meta Data {_datasetPublicReleaseNumber} missing value.\n");
   }
 
-  std::cout << message << std::endl;
   return valid;
 }
 

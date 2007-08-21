@@ -34,8 +34,8 @@ herr_t DataFileGenerator::generate()
     MXADataModelPtr modelPtr = MXADataModel::New();
     MXADataModel* model = modelPtr.get();
     model->setDataRoot( DataGen::DataRoot );
-    model->setFileType(MXA::MXACurrentFileType);
-    model->setFileVersion(MXA::MXACurrentFileVersion);
+    model->setModelType(MXA::MXACurrentFileType);
+    model->setModelVersion(MXA::MXACurrentFileVersion);
 
     // ---------- Create the Required MetaData 
     std::map<std::string, std::string> md;

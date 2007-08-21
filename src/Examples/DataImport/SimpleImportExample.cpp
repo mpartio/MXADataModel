@@ -50,13 +50,13 @@ void SimpleImportExample::run()
   // Set the file version 
   //  Note - this should NOT be called in most cases - the default
   //   value is the currently supported version (currently 0.4)
-  model->setFileVersion( MXA::MXACurrentFileVersion );
+  model->setModelVersion( MXA::MXACurrentFileVersion );
 
   // Set the file type
   //  Note - this should NOT be called in most cases - the default
   //   value is the currently supported file version (currently MHD or XMDA)
   //  Note - case does matter  (on TO DO list)
-  model->setFileType( MXA::MXACurrentFileType );
+  model->setModelType( MXA::MXACurrentFileType );
 
   
   // For setting the required meta data you have a couple options

@@ -24,8 +24,8 @@ namespace MXA {
   const float  MXACurrentFileVersion = 0.4f;
 
   // Defines the paths within the MXA Model Heirarchy
-  const std::string FileVersion("File Version");
-  const std::string FileType("File Type");
+  const std::string ModelVersion("Model Version");
+  const std::string ModelType("Model Type");
   const std::string DataModel("Data Model");
   const std::string DataRoot("Data Root");
   const std::string DataDimensions("Data Dimensions");
@@ -35,8 +35,8 @@ namespace MXA {
   const std::string UserMetaData("User Defined");
   
   // Defines the paths within the MXA Model Heirarchy
-  const std::string FileVersionPath("File Version");
-  const std::string FileTypePath("File Type");
+  const std::string ModelVersionPath("Model Version");
+  const std::string ModelTypePath("Model Type");
   const std::string DataModelPath("Data Model");
   const std::string DataRootPath("Data Model/Data Root");
   const std::string DataDimensionsPath("Data Model/Data Dimensions");

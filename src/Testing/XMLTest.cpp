@@ -132,8 +132,8 @@ MXADataModelPtr createModel()
     MXADataModelPtr modelPtr = MXADataModel::New();
     MXADataModel* model = modelPtr.get();
     model->setDataRoot(std::string("DataModelTest/Data/Root/Is/Here"));
-    model->setFileType(MXA::MXACurrentFileType);
-    model->setFileVersion(MXA::MXACurrentFileVersion);
+    model->setModelType(MXA::MXACurrentFileType);
+    model->setModelVersion(MXA::MXACurrentFileVersion);
 
     // ---------- Test creation/addition of Data Dimensions
     MXADataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 0, 15, 20, 50, 2, 1);

@@ -42,24 +42,24 @@ class MXA_EXPORT IDataModel
      * @brief Returns the MXA File version that the model adheres to
      * @return MXA API Version
      */
-    virtual float getFileVersion() = 0;
+    virtual float getModelVersion() = 0;
     
     /**
     * @brief Sets the File Version of the MXA data file
     * @param version The API Version we are going to write
     */
-    virtual void setFileVersion(float version) = 0;
+    virtual void setModelVersion(float version) = 0;
 
     /**
      * @brief Returns the type of file, should be MHD or MXA
      */
-    virtual std::string getFileType() = 0;
+    virtual std::string getModelType() = 0;
 
     /**
     * @brief Returns the file type for the MXA Data File
     * @param fileType The filetype (should be MXA)
     */
-    virtual void setFileType(const std::string &fileType) = 0;
+    virtual void setModelType(const std::string &fileType) = 0;
 
     
     //------------------------------------------------------------

@@ -153,10 +153,10 @@ MXADataModelPtr createModel()
 	  model->setDataRoot(std::string("DataModelTest/Data/Root/Is/Here"));
 	  errorMessage.clear();
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
-	  model->setFileType(MXA::MXACurrentFileType);
+	  model->setModelType(MXA::MXACurrentFileType);
 	  errorMessage.clear();
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
-	  model->setFileVersion(MXA::MXACurrentFileVersion);
+	  model->setModelVersion(MXA::MXACurrentFileVersion);
 	  errorMessage.clear();
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
