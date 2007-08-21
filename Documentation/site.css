@@ -111,7 +111,7 @@ div.entry
 { 
    color: #000; 
    font-family: Arial, Helvetica;
-   background: #f1f2f6;
+   background: #f5f7fa;
    margin: 8px;
    padding: 4px;
    vertical-align: 0;
@@ -139,10 +139,10 @@ div.entry
     color: black;
     font: 11pt Verdana, Arial, Helvetica, sans-serif;
     text-decoration: none;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 15px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 5px;
     padding-left: 15px;
-    vertical-align:top;
+    vertical-align: middle;
  }
  
