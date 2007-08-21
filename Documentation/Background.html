@@ -7,6 +7,7 @@
 <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
 <meta content="All By Hand" name="generator">
 <meta content="max-age=0, must-revalidate" http-equiv="Cache-Control">
+<script type="text/javascript" src="Navigation.js"></script>
 </head>
 <body>
 
@@ -21,55 +22,39 @@ Background Information
 <tr>
 <!-- Begin Navigation Table Cell -->
 <td class="nav_table_cell">
-<div class="nav_inactive"><a href="index.html">Home</a></div>
-<div class="nav_active"><a href="Background.html">Background</a></div>
-
-
-
-<div class="nav_inactive"><a href="Todo.html">Todo list</a></div>
-<div class="nav_inactive"><a href="SystemRequirements.html">System Requirements</a></div>
-<div class="nav_inactive"><a href="CompileNotesXP.html">Compile (XP)</a></div>
-<div class="nav_inactive"><a href="CompileNotesUnix.html">Compile (Unix)</a></div>
-<div class="nav_inactive"><a href="UsingMXAInOtherProjects.html">MXA as External Library</a></div>
-<div class="nav_inactive"><a href="../DoxygenDocs/html/index.html">Doxygen API</a></div>
+<div  id="NavigationDiv" > </div>
+<script type="text/javascript">document.getElementById('NavigationDiv').innerHTML=navigationCells('Background');
+</script>
 </td>
 <!-- End Navigation Table Cell -->
 
-<!--  Start Content Table Cell -->
+<!--  Start Page Content -->
 <td class="content">
-  <ol>
-  <li>Many Files problem / lots of Data</li>
-  <li>Organizing Data</li>
-  <li>HDF5/Data Storage</li>
-  <li>Data Model</li>
-  <li>Data Storage</li>
-  </ol>
-  
-  <b>Section 1: Too Many Files</b>
-  <p> While doing research many data files are usuall created. Typically these files are 
+  <h4>Section 1: Too Many Files</h4>
+ While doing research many data files are usuall created. Typically these files are 
   stored in a mish-mash of folders scattered about a users computer system. Important 
   information about the experiment may or may not follow the data. Losing this meta data
   may render the actual data useless to the researcher. Each of these files could be 
-  stored in different formats which can be either proprietary or opensource</p>
+  stored in different formats which can be either proprietary or opensource
   
-  <b>Section 2: Data Organization</b>
-  <p>The goal of the MXA project is to allow the researcher to gather all the information and
+  <h4>Section 2: Data Organization</h4>
+ The goal of the MXA project is to allow the researcher to gather all the information and
   data that pertains to a particular experiment and store that information in a single
   location in an open format. Thus allowing the researcher to easily share data with thier
-  peers for further analysis.</p>
+  peers for further analysis.
   
-  <b>Section 3: HDF5</b>
-  <p>HDF5 is a scientific file format under ongoing development at UIUC. The HDF format
+  <h4>Section 3: Data Storage & HDF5</h4>
+  HDF5 is a scientific file format under ongoing development at UIUC. The HDF format
   was originally designed to store data being produced on High Performance Computing (HPC)
   systems. After a number of revisions to the HDF specification a complete rewrite was under taken
    to solve some of the limiting issues that had arisen during production use. The latest
    revisiion is version 5, or HDF5. This file format organizes data in a "Directed Graph" which in
    its simplest form can be used in a heirarchical fashion. Any type of data can be stored
    into the file in any organization that the researcher desires. In this way the HDF5
-   format is a highly flexible storage format in which to store vast amounts of data.</p>
+   format is a highly flexible storage format in which to store vast amounts of data.
   
-  <b>Section 4: Data Model</b>
-  <p>The concept of a "Data Model" is introduced in order to bring some consistancy to
+  <h4>Section 4: Data Model</h4>
+  The concept of a "Data Model" is introduced in order to bring some consistancy to
   the layout of the data within an HDF5 file. The data model consists of 3 main parts and tries to
   follow generally accepted experimental methods.
   <ol>
@@ -91,7 +76,9 @@ automated processes.</p>
 </p>
 
 
-</td></tr>
+</td>
+<!-- End Page Content -->
+</tr>
 </table>
 </body>
 </html>
