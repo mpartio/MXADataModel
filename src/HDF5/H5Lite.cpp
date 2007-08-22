@@ -542,7 +542,7 @@ hid_t H5Lite::getDatasetType(hid_t loc_id, const std::string &dsetName)
 // -----------------------------------------------------------------------------
 herr_t H5Lite::getDatasetInfo( hid_t loc_id,
                              const std::string& dsetName,
-                             std::vector<uint64> &dims,
+                             std::vector<hsize_t> &dims,
                              H5T_class_t &classType,
                              size_t &sizeType )
 {
