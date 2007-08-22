@@ -98,7 +98,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   BOOST_REQUIRE(dim1 != NULL); // Used for Boost Unit Test Framework
   
   // Create a DataRecord entry for the Data Model
-  MXADataRecordPtr record = model->getDataRecordByPath("DataRecordContainer/Test Data/Deep Nested Data");
+  MXADataRecordPtr record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
   BOOST_REQUIRE(NULL != record.get()); // Used for Boost Unit Test Framework
 
   // Set the start/end/increment values for each Data Dimension

@@ -67,7 +67,7 @@ int main(int argc, char **argv)
   std::vector<int32> indices;
   indices.push_back(1); indices.push_back(1);
   // We also know the exact path to the Data Record, so lets use it to retrieve the Data Record from the Model
-  MXADataRecordPtr record = modelPtr->getDataRecordByPath(DataGen::TableRec + "/" + DataGen::Float32Rec);
+  MXADataRecordPtr record = modelPtr->getDataRecordByNamedPath(DataGen::TableRec + "/" + DataGen::Float32Rec);
   if (NULL == record.get() )
   {
     std::cout << logTime() << "Error getting '2D Array' Data Record" << std::endl;
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
   
   //If you know nothing of the datatype then you will have to interrogate the dataset
   // to find out... 
-  uint32 type_size = 0;
+  //uint32 type_size = 0;
  // H5T_class_t type_class = -1;
  // err = H5Lite::getDatasetInfo(fileId, dsetPath, dims, type_class, type_size);
   if (err < 0)

@@ -1,5 +1,9 @@
 PROJECT (MXAExamples)
 
+
+
+
+
 # ---------- Setup output Directories -------------------------
 SET (LIBRARY_OUTPUT_PATH
   ${PROJECT_BINARY_DIR}/Bin
@@ -13,6 +17,9 @@ SET (EXECUTABLE_OUTPUT_PATH
   CACHE PATH
   "Single Directory for all Executables."
   )
+
+INCLUDE_DIRECTORIES(${MXA_SOURCE_DIR}/src)
+
 
 OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
 IF(BUILD_VTK_HDF5)
@@ -34,13 +41,17 @@ SET (GETDATA_SRCS
 
 
 ADD_EXECUTABLE ( GetDataExample ${GETDATA_SRCS} )
-
 TARGET_LINK_LIBRARIES ( GetDataExample
   MXADataModel
   ${HDF5_LIBRARIES}
   ${DEP_LIBS} 
 )
 
+# ------------------------------------------------------------------------------
+#  Add Executable for Example 1
+# ------------------------------------------------------------------------------
+ADD_EXECUTABLE(Example1 Example1/Example1.cpp)
+TARGET_LINK_LIBRARIES(Example1 MXADataModel ${HDF5_LIBRARIES})
 
 
 

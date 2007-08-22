@@ -58,11 +58,9 @@ void MXADataRecord::setNodeName(std::string nodeName)
 
 void MXADataRecord::printNode(std::ostream& os, int32 indent)
 {
-  //os << _indent(indent) << "---------- MXADataRecord Node ------------------" << std::endl;
   os << _indent(indent) << "*-Record Name: " << this->_recordName << std::endl;
   os << _indent(indent) << " |-Alternate Name: " << this->_altName << std::endl;
   os << _indent(indent) << " |-Display Name: " << this->_nodeName << std::endl;
- // os << _indent(indent) << "Type: " << this->getNodeTypeString() << std::endl;
   os << _indent(indent) << " |-LUID: " << this->_luid << std::endl;
   os << _indent(indent) << " |-GUID: " << this->getGuid() << std::endl;
 #if 0
@@ -71,8 +69,6 @@ void MXADataRecord::printNode(std::ostream& os, int32 indent)
     os << _indent(indent) << " |- Attribute: " << std::endl;
   }
 #endif
-  
-  //os << _indent(indent) << "Children:" << std::endl;
   if (this->hasChildren() ) { indent++;}
   for (MXANodeChildren::iterator iter = _children.begin(); iter != _children.end(); ++iter)
   {
@@ -126,9 +122,6 @@ int32 MXADataRecord::writeRecord(IDataRecordWriter* writer)
   return writer->writeDataRecord(this);
 }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------

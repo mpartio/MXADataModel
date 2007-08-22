@@ -61,7 +61,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Static method to create a new blank model.
    * @return A boost shard_ptr to the newly created model
    */
-  static MXADataModelPtr New();
+  static MXADataModelPtr New(float modelVersion = 0.4f, const std::string &type = MXA::MXACurrentFileType);
   
   /**
    * @brief Validates that all the required Meta data is not empty
@@ -91,10 +91,16 @@ class MXA_EXPORT MXADataModel : public IDataModel
   void setModelType(const std::string &fileType);
 
   /**
+   * @brief Sets the model type and version to the latest supported by this API
+   */
+  void setDefaultTypeAndVersion();
+  
+  /**
    * @brief Sets the "Data Root"
    * @param  dataRoot
    */
   void setDataRoot(const std::string &dataRoot);
+  
   /**
    * @brief Returns the Data Root Value
    * @return
@@ -190,13 +196,16 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param parent The parent data record
    * @return
    */
-  MXADataRecordPtr getDataRecordByPath(std::string path, MXADataRecord* parent=NULL);
+  MXADataRecordPtr getDataRecordByNamedPath(std::string path, MXADataRecord* parent=NULL);
   
   /**
-   * @brief Creates a lookup table using the GUID of the Data Record as the Key
-   * @param lut The Lookup Table to populate
+   * @brief Returns a Data Record based on an internal path representation
+   * @param path
+   * @param parent
+   * @return
    */
-  void createDataRecordLUT(std::map<int64, MXADataRecordPtr> &lut);
+  MXADataRecordPtr getDataRecordByInternalPath(std::string path, MXADataRecord* parent=NULL);
+
   
   /**
    * @brief Sets the required meta data fields

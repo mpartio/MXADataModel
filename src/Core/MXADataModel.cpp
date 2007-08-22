@@ -41,9 +41,11 @@ _datasetPublicReleaseNumber("")
 // -----------------------------------------------------------------------------
 //  Static New Method to construct a Model
 // -----------------------------------------------------------------------------
-MXADataModelPtr MXADataModel::New()
+MXADataModelPtr MXADataModel::New(float modelVersion, const std::string &type)
 {
   MXADataModelPtr model(new MXADataModel());
+  model->setModelVersion(modelVersion);
+  model->setModelType(type);
   return model;
 }
 
@@ -89,7 +91,14 @@ std::string MXADataModel::getModelType()
   return MXA::MXACurrentFileType;
 }
 
-
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void MXADataModel::setDefaultTypeAndVersion()
+{
+  this->_fileType = MXA::MXACurrentFileType;
+  this->_fileVersion = MXA::MXACurrentFileVersion;
+}
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -279,7 +288,7 @@ MXADataRecords& MXADataModel::getDataRecords()
 // -----------------------------------------------------------------------------
 //  Gets an MXADataRecord by the path given
 // -----------------------------------------------------------------------------
-MXADataRecordPtr MXADataModel::getDataRecordByPath(std::string path, MXADataRecord* parent)
+MXADataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, MXADataRecord* parent)
 {
  // std::cout << "Looking for Path: " << path << std::endl;
   // Remove any trailing slash in the path
@@ -302,7 +311,6 @@ MXADataRecordPtr MXADataModel::getDataRecordByPath(std::string path, MXADataReco
   
   if (path.size() == 0) 
   {
-  //  std::cout << "  Removal of front and trailing slashes caused string length to be 0" << std::endl;
     return rec; // The path that was passed in was only a slash.. 
   }
   
@@ -318,6 +326,7 @@ MXADataRecordPtr MXADataModel::getDataRecordByPath(std::string path, MXADataReco
   {
      records = parent->getChildren();
   }
+  
   for (MXADataRecords::iterator iter = records.begin(); iter != records.end(); ++iter)
   {
     currentRec = static_cast<MXADataRecord*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
@@ -341,7 +350,7 @@ MXADataRecordPtr MXADataModel::getDataRecordByPath(std::string path, MXADataReco
       } 
       else
       {
-        rec = getDataRecordByPath(second, currentRec);
+        rec = getDataRecordByNamedPath(second, currentRec);
         if (rec.get() != NULL)
         {
           break;
@@ -353,14 +362,79 @@ MXADataRecordPtr MXADataModel::getDataRecordByPath(std::string path, MXADataReco
 }
 
 // -----------------------------------------------------------------------------
-//  
+//  Gets an MXADataRecord by the path given
 // -----------------------------------------------------------------------------
-void MXADataModel::createDataRecordLUT(std::map<int64, MXADataRecordPtr> &lut)
+MXADataRecordPtr MXADataModel::getDataRecordByInternalPath(std::string path, MXADataRecord* parent)
 {
- 
-  std::cout << "WARNING: createDataRecordLUT() is NOT implemented yet" << std::endl;
-  return;
-     
+ // std::cout << "Looking for Path: " << path << std::endl;
+  // Remove any trailing slash in the path
+  MXADataRecord* currentRec = NULL;
+  boost::shared_ptr<MXADataRecord> rec;
+
+  // remove any front slash
+  std::string::size_type pos = path.find_first_of("/", 0);
+  if ( 0 == pos ) 
+  {
+    path = path.substr(1, path.size());
+  }
+  
+  //Remove any trailing slash
+  pos = path.find_last_of("/");
+  if ( pos == (path.size() - 1) ) // slash was in the last position
+  {
+    path = path.substr(0, pos);
+  }
+  
+  if (path.size() == 0) 
+  {
+    return rec; // The path that was passed in was only a slash.. 
+  }
+  
+
+  std::string first;
+  std::string second;
+  MXADataRecords records;
+  if ( NULL == parent) // No parent, so start at the top
+  {
+    records = this->_dataRecords;
+  }
+  else 
+  {
+     records = parent->getChildren();
+  }
+  
+  for (MXADataRecords::iterator iter = records.begin(); iter != records.end(); ++iter)
+  {
+    currentRec = static_cast<MXADataRecord*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
+    std::string recName = StringUtils::numToString( currentRec->getLuid() );
+    pos = path.find_first_of("/", 0);
+    if (pos == std::string::npos) // No slash found
+    {
+      first = path;
+      second = "";
+    } 
+    else 
+    {
+      first = path.substr(0, pos);
+      second = path.substr(pos, path.size());
+    }
+    if ( first.compare(recName) == 0)
+    {
+      if (second.empty()) // Only return if we are ath the end of the path
+      { 
+        return boost::dynamic_pointer_cast<MXADataRecord>(*iter);
+      } 
+      else
+      {
+        rec = getDataRecordByInternalPath(second, currentRec);
+        if (rec.get() != NULL)
+        {
+          break;
+        }
+      }
+    }
+  }
+  return rec;
 }
 
 // -----------------------------------------------------------------------------
@@ -717,7 +791,8 @@ bool MXADataModel::isValid(std::string &message)
   
   if (this->_dataRoot.empty())
   {
-    message.append("The data root property is empty. It should really to set to something. The default is '/'.\n");
+    message.append("The 'Data Root' property is empty..\n");
+    valid = false;
   }
   
   for (MXADataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {

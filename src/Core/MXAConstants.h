@@ -51,7 +51,6 @@ namespace MXA {
   const std::string MXA_ALT_NAME_TAG("Alt_Name");
 
   // Data Dimension Tags
- // const std::string MXA_ORDER_TAG("Order");
   const std::string MXA_COUNT_TAG("Count");
   const std::string MXA_START_VALUE_TAG("Start_Value");
   const std::string MXA_END_VALUE_TAG("End_Value");

@@ -97,7 +97,6 @@ public:
     this->_nodeName = StringUtils::numToString(this->_luid);
   }
 
-
   /**
    * @brief Prints the Data Record to the provided stream
    */
@@ -109,7 +108,7 @@ public:
   std::string generatePath();
   
   /**
-   * @brief Generates the internal HDF5 path only to this dimensions parent
+   * @brief Generates the internal HDF5 path only to this records parent
    */
   std::string generateParentPath();
   

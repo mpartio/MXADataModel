@@ -14,6 +14,7 @@
 #include "Common/LogTime.h"
 #include "Common/MXATypes.h"
 #include "HDF5/H5Lite.h"
+#include "HDF5/H5Utilities.h"
 
 //-- Boost includes
 #include <boost/test/unit_test.hpp>
@@ -356,6 +357,13 @@ void H5LiteTest() {
   BOOST_REQUIRE ( testMakeAttribute(file_id, "H5T_NATIVE_DOUBLE",  Float64Type) >= 0);
   BOOST_REQUIRE ( testMakeStringAttribute(file_id)  >= 0);
 
+  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 1", file_id) >= 0);
+  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 2/", file_id) >= 0);
+  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 3/", file_id) >= 0);
+  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/", file_id) < 0);
+  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 4/Test Path 7", file_id) >= 0);
+  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 5/Test Path 8/", file_id) >= 0);
+  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 6/Test Path 9/", file_id) >= 0);
   
   /* Close the file. */
   H5Fclose( file_id );

@@ -61,7 +61,10 @@ class MXA_EXPORT IDataModel
     */
     virtual void setModelType(const std::string &fileType) = 0;
 
-    
+    /**
+     * @brief This will set the default model version and type
+     */
+    virtual void setDefaultTypeAndVersion() = 0;
     //------------------------------------------------------------
     /**
     * @brief Sets the Data Root Value
@@ -158,14 +161,24 @@ class MXA_EXPORT IDataModel
     * records is in a Tree structure.
     */
     virtual MXADataRecords& getDataRecords() = 0;
+    
     /**
-    * @brief Returns a Data Record by using a given path
+    * @brief Returns a Data Record that is found by giving the full path using the actual names of the data record(s)
     * @param path The path to the data record to return
     * @param parent The parent of the Data Record to return. If this is NULL then the 
     * search will start at the top level of the data records.
     * @return Boost::shared_ptr to the data record object
     */
-    virtual MXADataRecordPtr getDataRecordByPath(std::string path, MXADataRecord* parent=NULL) = 0;
+    virtual MXADataRecordPtr getDataRecordByNamedPath(std::string path, MXADataRecord* parent=NULL) = 0;
+    
+    /**
+    * @brief Returns a Data Record that is found by giving the full path using the internal names of the data record(s)
+    * @param path The path to the data record to return
+    * @param parent The parent of the Data Record to return. If this is NULL then the 
+    * search will start at the top level of the data records.
+    * @return Boost::shared_ptr to the data record object
+    */
+    virtual MXADataRecordPtr getDataRecordByInternalPath(std::string path, MXADataRecord* parent=NULL) = 0;
     
     //------------- Required Meta Data Methods -----------------------------------
     /**

@@ -282,8 +282,16 @@ void TestRequiredMetaData()
 // -----------------------------------------------------------------------------
 bool recordExists(MXADataModelPtr model, std::string recName)
 {
-  MXADataRecordPtr rec =model->getDataRecordByPath(recName);
-  //std::cout << (rec.get()==NULL ? false:true) << " --> " << recName << std::endl;
+  MXADataRecordPtr rec = model->getDataRecordByNamedPath(recName);
+  return rec;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+bool recordInternalPathExists(MXADataModelPtr model, std::string recName)
+{
+  MXADataRecordPtr rec = model->getDataRecordByInternalPath(recName);
   return rec;
 }
 
@@ -299,13 +307,11 @@ void TestLookupTableGeneration()
   MXANode::generateLUT(lut, records);
   for (NodeLookupTable::iterator iter = lut.begin(); iter != lut.end(); ++iter )
   {
-    //int32 guid = (*(iter)).first;
     MXADataRecord* rec = dynamic_cast<MXADataRecord*>( (*(iter)).second.get() );
     std::cout << (*(iter)).first << "  " << rec->getRecordName() << std::endl;
   }
-  
-  
 }
+
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -327,6 +333,18 @@ void TestRetrieveDataRecords()
   BOOST_REQUIRE( recordExists(model, "/") == false);
   BOOST_REQUIRE( recordExists(model, "//") == false);
   BOOST_REQUIRE( recordExists(model, "///") == false);
+  
+
+  BOOST_REQUIRE( recordInternalPathExists(model, "") == false);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/") == false);
+  BOOST_REQUIRE( recordInternalPathExists(model, "//") == false);
+  BOOST_REQUIRE( recordInternalPathExists(model, "///") == false);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/2") == true);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/0/2") == false);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/2/0") == true);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/2/0/") == true);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/2/3/") == false);
+  
 }
 
 // -----------------------------------------------------------------------------
