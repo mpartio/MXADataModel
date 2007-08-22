@@ -20,7 +20,7 @@
 #include "XML/ExpatParser.h"
 #include "XML/XMLConstants.h"
 
-
+typedef  std::map<std::string, std::string>        XMLAttributeMap;
 /**
  * @brief This class is a concrete implementation of the IDataModelReader abstract
  * class. This class is responsible for reading a data model from an XML File

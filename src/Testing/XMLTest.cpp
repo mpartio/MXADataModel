@@ -31,10 +31,12 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 // -----------------------------------------------------------------------------
 #if defined (_WIN32)
   #define XML_TEST_FILE "C:\\WINDOWS\\Temp\\XML_Test.xml"
-#define MASTER_XML_FILE "C:\\WINDOWS\\Temp\\XMLMaster.xml"
+  #define MASTER_XML_FILE "C:\\WINDOWS\\Temp\\XMLMaster.xml"
+  #define XML_TEMPLATE_TEST_FILE "C:\\WINDOWS\\Temp\\XML_Template_Test_File.xml"
 #else 
   #define XML_TEST_FILE "/tmp/XML_Test.xml"
   #define MASTER_XML_FILE "/tmp/XMLMaster.xml"
+  #define XML_TEMPLATE_TEST_FILE "/tmp/XML_Template_Test_File.xml"
 #endif
 
 // -----------------------------------------------------------------------------
@@ -187,6 +189,71 @@ MXADataModelPtr createModel()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
+MXADataModelPtr createModelTemplate()
+{
+    MXADataModelPtr modelPtr = MXADataModel::New();
+    MXADataModel* model = modelPtr.get();
+    model->setDataRoot(std::string("DataModelTest/Data/Root/Is/Here"));
+    model->setModelType(MXA::MXACurrentFileType);
+    model->setModelVersion(MXA::MXACurrentFileVersion);
+
+    // ---------- Test creation/addition of Data Dimensions
+    MXADataDimensionPtr dim0 = MXADataDimension::New("Volume Fraction", "Vol Frac");
+    MXADataDimensionPtr dim1 = MXADataDimension::New("Random Seed", "Rnd Seed");
+    MXADataDimensionPtr dim2 = MXADataDimension::New("Timestep", "TS");
+    MXADataDimensionPtr dim3 = MXADataDimension::New("Slice", "slice");
+        
+    model->addDataDimension(dim0);
+    model->addDataDimension(dim1);
+    model->addDataDimension(dim2);
+    model->addDataDimension(dim3);
+    
+    //Create Data Records
+    MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
+    model->addDataRecord(rec0);
+  //  rec0->addUserDefinedAttribute("Rendering Hint", RenderHint::ImageGrayScale);
+    
+    MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
+    model->addDataRecord(rec1);
+    //Create Data Records with Parents
+    MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
+    model->addDataRecord(rec2, rec1);
+    MXADataRecordPtr rec3 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
+    model->addDataRecord(rec3, rec1);
+    MXADataRecordPtr rec4 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
+    model->addDataRecord(rec4, rec1);
+    
+     MXADataRecordPtr rec5 = MXADataRecord::New(2, std::string("Order Parameters 2"), std::string("OP 2") );
+      model->addDataRecord(rec5);
+      //Create Data Records with Parents
+      MXADataRecordPtr rec6 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
+      model->addDataRecord(rec6, rec5);
+      MXADataRecordPtr rec7 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
+      model->addDataRecord(rec7, rec5);
+      MXADataRecordPtr rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
+      model->addDataRecord(rec8, rec5);
+
+
+    //Create the Required MetaData 
+    std::map<std::string, std::string> md;
+    md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
+    md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
+    md[MXA::MXA_DSET_NAME_TAG] = "TESTING Example Data Model";
+    md[MXA::MXA_DESCRIPTION_TAG] = "Just a test case showing how to organize OIM FIB data";
+    md[MXA::MXA_PEDIGREE_TAG] = "Original";
+    md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
+    md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
+    md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
+    model->setRequiredMetaData(md);
+    
+    // Create User Defined MetaData
+    CreateAttributes( model );
+    return modelPtr;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 void GenerateMasterXMLFile()
 {
   std::cout << "Writing Model as XML...." << std::endl;
@@ -236,6 +303,28 @@ void XMLModelTest()
 }
 
 // -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void XMLTemplateTest()
+{
+  std::string templateFile (XML_TEMPLATE_TEST_FILE);
+  MXADataModelPtr model = createModelTemplate();
+  XMLIODelegate xmlWriter;
+  BOOST_REQUIRE ( xmlWriter.writeModelToFile(templateFile, model.get(), true) >= 0);
+#warning Compare this file to some master file
+  MXADataModelPtr readModel = MXADataModel::New();
+  XMLIODelegate xmlReader; // Create on the stack
+  BOOST_REQUIRE ( xmlReader.readModelFromFile(templateFile, readModel.get(), true) >= 0);
+  std::string errorMessage;
+  BOOST_REQUIRE ( readModel->isValid(errorMessage) == false);
+ 
+#warning Run through each Dimension and set the properties and revalidate
+  
+  
+}
+
+
+// -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
@@ -243,6 +332,7 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
     test->add( BOOST_TEST_CASE( &GenerateMasterXMLFile), 0);
     test->add( BOOST_TEST_CASE( &XMLModelTest), 0);
+    test->add (BOOST_TEST_CASE( &XMLTemplateTest), 0);
     std::cout << "Ending" << std::endl;
     return test; 
 }

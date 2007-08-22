@@ -267,19 +267,21 @@ void XMLDataModelReader::onData_DimensionsStartTag(const XML_Char* name, const X
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-    std::map<std::string, std::string> attrMap;
+#warning All this needs extensive testing
+    XMLAttributeMap attrMap;
     for (int i = 0; attrs[i]; i += 2) {
       attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
     }
-    int32 index, count, start, end, increment, uniform = 0;
-    //FIXME: This code is no longer valid because these are now OPTIONAL tags
-#warning All this needs to be fixed
-    StringUtils::stringToNum(index, attrMap[MXA::MXA_INDEX_TAG], std::dec);
-    StringUtils::stringToNum(count, attrMap[MXA::MXA_COUNT_TAG], std::dec);
-    StringUtils::stringToNum(start, attrMap[MXA::MXA_START_VALUE_TAG], std::dec);
-    StringUtils::stringToNum(end, attrMap[MXA::MXA_END_VALUE_TAG], std::dec);
-    StringUtils::stringToNum(increment, attrMap[MXA::MXA_INCREMENT_TAG], std::dec);
-    StringUtils::stringToNum(uniform, attrMap[MXA::MXA_UNIFORM_TAG], std::dec);
+    int32  start, end, increment = std::numeric_limits<int32>::max();
+    int32  index, count, uniform = std::numeric_limits<int32>::min();
+    
+    //Check for each Attribute. If the attribute was in the list then parse its value
+    if ( attrMap.find(MXA::MXA_INDEX_TAG) != attrMap.end() ) { StringUtils::stringToNum(index, attrMap[MXA::MXA_INDEX_TAG], std::dec); }
+    if ( attrMap.find(MXA::MXA_COUNT_TAG) != attrMap.end() ) { StringUtils::stringToNum(count, attrMap[MXA::MXA_COUNT_TAG], std::dec);  }
+    if ( attrMap.find(MXA::MXA_START_VALUE_TAG) != attrMap.end() ) { StringUtils::stringToNum(start, attrMap[MXA::MXA_START_VALUE_TAG], std::dec);  }
+    if ( attrMap.find(MXA::MXA_END_VALUE_TAG) != attrMap.end() ) { StringUtils::stringToNum(end, attrMap[MXA::MXA_END_VALUE_TAG], std::dec);  }
+    if ( attrMap.find(MXA::MXA_INCREMENT_TAG) != attrMap.end() ) { StringUtils::stringToNum(increment, attrMap[MXA::MXA_INCREMENT_TAG], std::dec);  }
+    if ( attrMap.find(MXA::MXA_UNIFORM_TAG) != attrMap.end() ) { StringUtils::stringToNum(uniform, attrMap[MXA::MXA_UNIFORM_TAG], std::dec); }
     
     MXADataDimensionPtr dim = MXADataDimension::New( attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG], index, count, start, end, increment, uniform);
     this->_dataModel->addDataDimension(dim);

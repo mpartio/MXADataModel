@@ -148,6 +148,11 @@ class MXA_EXPORT IDataDimension
      /** @brief returns the maximum value that the Count can be */
      virtual IDataDimension::size_type  maxCount() = 0;
      
+     /**
+      * @brief Returns is a property, like count, increment.. is equal to either the
+      * maximum or minimum value for its type, indicating that the value is uninitialized.
+      */
+     virtual bool isPropertyInitialized(int32 value) = 0;
      
      /**
       * @brief Checks some basic properties of the model to make sure they are

@@ -50,6 +50,7 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] );
 herr_t testMakeStringDataset(hid_t file_id);
 herr_t testMakeStringAttribute(hid_t file_id);
 void H5LiteTest();
+MXADataModelPtr createModelTemplate();
 
 // -----------------------------------------------------------------------------
 //  Uses Raw Pointers to save data to the data file

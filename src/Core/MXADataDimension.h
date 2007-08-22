@@ -45,7 +45,12 @@ public:
   * @return A Boost SharedPointer to the MXANode Object
   */
   static MXADataDimensionPtr New(std::string name, std::string altName, 
-        int32 index, int32 count, int32 startValue, int32 endValue, int32 increment, int32 uniform
+        int32 index = std::numeric_limits<int32>::min(), 
+        int32 count = std::numeric_limits<int32>::min(),
+        int32 startValue  = std::numeric_limits<int32>::max(),
+        int32 endValue = std::numeric_limits<int32>::max(),
+        int32 increment = std::numeric_limits<int32>::max(),
+        int32 uniform = std::numeric_limits<int32>::min()
   );
 
 //  #warning Add another static constructor that takes no args.
@@ -167,6 +172,16 @@ public:
   
   /** @brief returns the maximum value that the Count can be */
   IDataDimension::size_type  maxCount() { return std::numeric_limits<int32>::max(); }
+  
+  /** @brief   */
+  bool isPropertyInitialized(int32 value)
+  {
+    if (value == std::numeric_limits<int32>::max() ||
+        value == std::numeric_limits<int32>::min() )
+      { return false; }
+    
+    return true;
+  }
   
   bool isValid(std::string &message);
 

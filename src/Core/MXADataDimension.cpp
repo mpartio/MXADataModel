@@ -5,12 +5,12 @@
 // -----------------------------------------------------------------------------
 MXADataDimension::MXADataDimension() :
 MXANode(MXANode::Dimension, std::string("-1")),
-_index(std::numeric_limits<int32>::max()),
-_count(std::numeric_limits<int32>::max()),
+_index(std::numeric_limits<int32>::min()),
+_count(std::numeric_limits<int32>::min()),
 _startValue(std::numeric_limits<int32>::max()),
 _endValue(std::numeric_limits<int32>::max()),
 _increment(std::numeric_limits<int32>::max()),
-_uniform(1),
+_uniform(std::numeric_limits<int32>::min()),
 _dimensionName(""),
 _altName("")
 {
@@ -111,15 +111,24 @@ int32 MXADataDimension::writeDimension(IDataDimensionWriter* writer)
 // -----------------------------------------------------------------------------
 bool MXADataDimension::isValid(std::string &message)
 {
-  int32 limit = std::numeric_limits<int32>::max();
+  int32 limitMax = std::numeric_limits<int32>::max();
+  int32 limitMin = std::numeric_limits<int32>::min();
+  
   bool valid = true;
-  if (limit == this->_startValue || 
-      limit == this->_endValue ||
-      limit == this->_increment ||
-      limit == this->_count)
+  if (limitMax == this->_startValue || 
+      limitMax == this->_endValue ||
+      limitMax == this->_increment)
   {
     valid = false;
-    message.append("One of [start value, end value, increment or count] was not initialized.\n");
+    message.append("One of [start value, end value, increment] was not initialized.\n");
+  }
+  
+  if (limitMin == this->_count ||
+      limitMin == this->_uniform ||
+      limitMin == this->_index)
+  {
+    valid = false;
+    message.append("One of [count, index or uniform] was not initialized.\n");
   }
   
   if (this->_endValue < this->_startValue )

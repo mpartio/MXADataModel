@@ -270,33 +270,36 @@ int32 XMLDataModelWriter::writeUserMetaData(int32 depth)
 // -----------------------------------------------------------------------------
 int32 XMLDataModelWriter::writeDataDimension(IDataDimension* dim)
 {
-  
   std::map<std::string, std::string> attrs;
   attrs[MXA::MXA_NAME_TAG] = dim->getDimensionName();
   attrs[MXA::MXA_ALT_NAME_TAG] = dim->getAltName();
   
-  attrs[MXA::MXA_INDEX_TAG] = StringUtils::numToString(dim->getIndex() );
   //Check for uninitialized values since these are all optional. If any of them 
   // are NOT initialized then do not write them to the file.
-  if (dim->getStartValue() != dim->maxStartValue())
+  if (dim->isPropertyInitialized( dim->getStartValue() ) )
   {
     attrs[MXA::MXA_START_VALUE_TAG] = StringUtils::numToString(dim->getStartValue() );
   }
-  if (dim->getEndValue() != dim->maxEndValue())
+  if ( dim->isPropertyInitialized(dim->getEndValue() ) )
   {
     attrs[MXA::MXA_END_VALUE_TAG] = StringUtils::numToString(dim->getEndValue() );
   }
-  if (dim->getIncrement() != dim->maxIncrement())
+  if (dim->isPropertyInitialized(dim->getIncrement()))
   {
     attrs[MXA::MXA_INCREMENT_TAG] = StringUtils::numToString(dim->getIncrement() );
   }
-  
-  if (dim->getCount() != dim->maxCount() )
+  if (dim->isPropertyInitialized(dim->getCount()) )
   {
     attrs[MXA::MXA_COUNT_TAG] = StringUtils::numToString(dim->getCount() );
   }
-    
-  attrs[MXA::MXA_UNIFORM_TAG] = StringUtils::numToString(dim->getUniform() );
+  if (dim->isPropertyInitialized(dim->getIndex() ) )
+  {
+    attrs[MXA::MXA_INDEX_TAG] = StringUtils::numToString(dim->getIndex() );
+  }
+  if (dim->isPropertyInitialized(dim->getUniform() ) )
+  {
+    attrs[MXA::MXA_UNIFORM_TAG] = StringUtils::numToString(dim->getUniform() );
+  }
   _openTag(MXA_XML::Dimension, 1, false, attrs);
   return 1;
 }
