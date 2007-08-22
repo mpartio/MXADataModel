@@ -269,6 +269,18 @@ int32 H5Utilities::createGroupsFromPath(std::string path, hid_t parent)
 
   
   pos = path.find_first_of("/", 0);
+  if (pos == std::string::npos) // Only one element in the path
+  {
+    gid = H5Utilities::createGroup(parent, path);
+    if (gid < 0)
+    {
+      std::cout << "Error creating group '" << path << "' for group id " << gid << std::endl;
+      return gid;
+    }
+    err = H5Gclose(gid);
+    return err;
+  }
+  
   while (pos != std::string::npos )
   {
     first = path.substr(0, pos);
