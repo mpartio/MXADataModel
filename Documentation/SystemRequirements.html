@@ -29,12 +29,35 @@ MXA Data Model Documentation
 <!-- End Navigation Table Cell -->
 <td class="content">
 <ul>
-<li><a href="http://www.cmake.org">CMake </a></li>
-<li><a href="http://hdf.ncsa.uiuc.edu/">HDF5 version 1.6.5</a></li>
-<li><a href="http://www.remotesensing.org/libtiff/">Tiff Library</a></li>
-<li><a href="http://expat.sourceforge.net/">Expat XML Library</a></li>
-<li><a href="http://www.boost.org">Boost 1.34.1</a></li>
+<li><a href="http://www.cmake.org">CMake</a> - Compile or otherwise install on your system.</li>
+<li><a href="http://hdf.ncsa.uiuc.edu/">HDF5 version 1.6.5</a> - This is the latest stable production version. When the next version is released the MXA
+code base will be updated. You can download version 1.6.5 from our CVS server <a href="http://titanium.imts.us/viewvc/Task_7/hdf5-165.tar.gz?view=tar">here.</a>
+<br> Currently the MXA Data Model does NOT employ the inline compression available in the HDF5 library. Because of this, you will NOT need to have 'szip' installed
+ on your system. You only need the HDF5 library compiled and installed. Some platforms prefer the static libraries, some prefer the dynamic library.
+</li>
+<li><a href="http://www.remotesensing.org/libtiff/">Tiff Library</a> - Needed for reading Tiff images. We have created a CMake build system for libTiff. You can download 
+a tar ball of the source directory <a href="http://titanium.imts.us/viewvc/Task_7/tiff.tar.gz?view=tar">here</a></li>
+<li><a href="http://expat.sourceforge.net/">Expat XML Library</a> - The current version of expat that is utilized is 2.0.1. We have created a CMake based build system
+for expat. You can download the source tree from our cvs repository <a href="http://titanium.imts.us/viewvc/Task_7/expat.tar.gz?view=tar">here</a>.</li>
+<li><a href="http://www.boost.org">Boost 1.34.1</a> - This is the earliest version that has been tested. There were some bug fixes for OS X compilation in the 1.34.1 series
+so this the earliest relase that is being used at this time. For compiling MXA Data Model you only need the headers from Boost. None of the actual boost libraries are utilized
+in the MXA Data Model code base. Other projects that use the MXA Data Model code base DO utilized the 'FileSystem' and 'Program Options' libraries from boost. If you choose
+to build the "Testing" target of the MXA Data Model code then you will need the Boost Unit Test Framework libraries.</li>
+<li><a href="http://www.vtk.org">VTK</a> - There are some optional bindings for VTK in the MXA Source code. These are optional to build. If you do build them VTK version
+5 is required.</li>
 </ul>
+
+I would suggest compiling in the following order:
+<ol>
+<li>Tiff</li>
+<li>Expat</li>
+<li>Boost</li>
+<li>HDF5</li>
+<li>VTK - Only if you need to use VTK from the MXA Data Model</li>
+<li>MXADataModel</li>
+</ol>
+
+
 <br/>
 
 <!-- Begin OS / Compiler Tested Combinations -->
