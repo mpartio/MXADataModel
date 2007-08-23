@@ -19,6 +19,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <map>
 
 //-- HDF Headers
 #include "hdf5.h"
@@ -600,6 +601,11 @@ static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
                               const std::string& attrName, 
                               const std::string& data);
 
+
+
+static MXA_EXPORT herr_t H5Lite::writeStringAttributes(hid_t loc_id,
+                                     const std::string &objName,
+                                     const std::map<std::string, std::string> &attributes);
 /**
  * @brief Writes an attribute to the given object. This method is designed with
  * a Template parameter that represents a primitive value. If you need to write

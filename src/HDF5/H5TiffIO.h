@@ -13,6 +13,7 @@
 
 //-- MXA Headers
 #include "Common/DLLExport.h"
+#include "Base/ITiffTagExtractor.h"
 
 //-- HDF Headers
 #include "hdf5.h"
@@ -43,7 +44,7 @@ class MXA_EXPORT H5TiffIO
 {
  public:
   explicit H5TiffIO(hid_t fileId);
-  virtual ~H5TiffIO() {};
+  virtual ~H5TiffIO();
   
   void setFileId(hid_t fileId) { this->_fileId = fileId; }
   /**
@@ -68,10 +69,12 @@ class MXA_EXPORT H5TiffIO
    */
   herr_t exportTiff(hid_t, string, string);
 
-    
+  void extractTiffTagContents(ITiffTagExtractor* extractor);
+  
  protected:
    
    hid_t _fileId; 
+   TIFF* _tiff;
    
   enum tiffImageClasses {
     UnknownTiffImage = -1,

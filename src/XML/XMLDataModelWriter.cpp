@@ -145,6 +145,7 @@ std::string XMLDataModelWriter::_toUpper(const std::string str)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
+//TODO: Change the attributes to pass-by-reference
 void XMLDataModelWriter::_openTag(std::string tagName, int32 depth, bool group,
                                   std::map<std::string, std::string> attributes )
 {

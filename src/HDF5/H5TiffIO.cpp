@@ -13,8 +13,19 @@
 H5TiffIO::H5TiffIO(hid_t fileId) :
   _fileId(fileId)
 {
+  _tiff = NULL;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+H5TiffIO::~H5TiffIO()
+{
+  if ( NULL != _tiff)
+  {
+    (void) TIFFClose(_tiff);
+  }
+}
 
 // -------------------------------------------------------------------------
 // Read the tiff file
@@ -22,43 +33,51 @@ H5TiffIO::H5TiffIO(hid_t fileId) :
 herr_t H5TiffIO::importTiff(string filename, hid_t groupId, 
 			     string datasetName, bool asGrayscale)   
 {
-  TIFF *in;
+  if (NULL != _tiff)
+  {
+    (void) TIFFClose(_tiff); // Close any open tiff file first
+  }
+  
   herr_t err = 0;
   
-  in = TIFFOpen(filename.c_str(), "r");
-  if (in == NULL) {
+  _tiff = TIFFOpen(filename.c_str(), "r");
+  if (_tiff == NULL) {
     std::cout << "Error Opening Tiff file with Absolute Path:\n    " 
 	      << filename << std::endl;
     return (herr_t) -1;
   }
-
+  
   if (asGrayscale) {
-    err = _readGrayscaleTiff(in, groupId, datasetName);
+    err = _readGrayscaleTiff(_tiff, groupId, datasetName);
   } else {
-    int32 imageClass = _determineTiffImageClass(in);
+    int32 imageClass = _determineTiffImageClass(_tiff);
 
     switch (imageClass) {
     case GrayscaleTiffImage:
-      err = _readGrayscaleTiff(in, groupId, datasetName);
+      err = _readGrayscaleTiff(_tiff, groupId, datasetName);
       break;
     case PaletteColorTiffImage:  
-      err = _read8BitTiff( in, groupId, datasetName);
+      err = _read8BitTiff( _tiff, groupId, datasetName);
       break;
     case RGBFullColorTiffImage:
-      err = _read24BitTiff(in, groupId, datasetName);
+      err = _read24BitTiff(_tiff, groupId, datasetName);
       break;
     default:
-      std::cout << "importTiff ERROR: Unsupported TIFF image type:" 
-		<< imageClass << std::endl;
+      std::cout << "importTiff ERROR: Unsupported TIFF image type:" << imageClass << std::endl;
       err = -1;
     }
   }
 
-  (void) TIFFClose(in);
   return err;
 }
-    
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void H5TiffIO::extractTiffTagContents(ITiffTagExtractor* extractor)
+{
+  extractor->extractTagContents(_tiff);
+}
 
 // ---------------------------------------------------------------------
 //  determines the TIFF Image Class type

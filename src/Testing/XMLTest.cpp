@@ -307,6 +307,7 @@ void XMLModelTest()
 // -----------------------------------------------------------------------------
 void XMLTemplateTest()
 {
+#warning Thoroughly test the reading of the Data Dimensions from XML files that have optional tags missing
   std::string templateFile (XML_TEMPLATE_TEST_FILE);
   MXADataModelPtr model = createModelTemplate();
   XMLIODelegate xmlWriter;

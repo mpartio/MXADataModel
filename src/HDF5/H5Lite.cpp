@@ -246,8 +246,24 @@ herr_t H5Lite::writeStringDataset (hid_t loc_id, const std::string& dsetName, co
   return retErr;
 }
 
-
-
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+herr_t H5Lite::writeStringAttributes(hid_t loc_id,
+                                     const std::string &objName,
+                                     const std::map<std::string, std::string> &attributes)
+{
+  herr_t err = 0;
+  for ( std::map<std::string, std::string>::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter ) {
+    err = H5Lite::writeStringAttribute(loc_id, objName, (*(iter)).first, (*(iter)).second);
+    if (err < 0)
+    {
+      return err;
+    }
+  }
+  return err;
+}
+                                     
 // -----------------------------------------------------------------------------
 //  Writes a string to an HDF5 Attribute
 // -----------------------------------------------------------------------------

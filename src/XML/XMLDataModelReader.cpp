@@ -267,7 +267,6 @@ void XMLDataModelReader::onData_DimensionsStartTag(const XML_Char* name, const X
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-#warning All this needs extensive testing
     XMLAttributeMap attrMap;
     for (int i = 0; attrs[i]; i += 2) {
       attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
