@@ -6,16 +6,14 @@
 <!ELEMENT Data_Records (Signal|Signal_Group)+>
 <!ELEMENT Signal EMPTY>
 <!ELEMENT Signal_Group (Signal|Signal_Group)+>
-<!ELEMENT File_Type (#PCDATA)>
-<!ELEMENT File_Version (#PCDATA)>
 <!ELEMENT Meta_Data (Required_MD,UserDefined_MD)>
 <!ELEMENT Required_MD EMPTY>
 <!ELEMENT UserDefined_MD EMPTY>
 
 <!ATTLIST Data_Root Name CDATA #REQUIRED>
 <!ATTLIST Data_Model 
-    File_Type CDATA #REQUIRED
-    File_Version CDATA #REQUIRED>
+    Model_Type CDATA #REQUIRED
+    Model_Version CDATA #REQUIRED>
 <!ATTLIST Dimension 
     Name CDATA #REQUIRED
     Alt_Name CDATA #REQUIRED
@@ -24,8 +22,7 @@
     Increment CDATA #IMPLIED
     Index CDATA #IMPLIED
     Start_Value CDATA #IMPLIED
-    Uniform CDATA #IMPLIED
-    >
+    Uniform CDATA #IMPLIED>
 <!ATTLIST Signal 
     Name CDATA #REQUIRED
     Alt_Name CDATA #REQUIRED>
@@ -37,8 +34,8 @@
     Date CDATA #REQUIRED
     Name CDATA #REQUIRED
     Description CDATA #REQUIRED
-    Pedigree (Original|Derived) #DEFAULT "Original" 
-    Original_Source_File CDATA #DEFAULT "Not Applicable"
-    Distribution_Rights (Limited|Unlimited) #DEFAULT "Unlimited"
-    Release_Limitation CDATA #DEFAULT "Not Applicable"
-    Release_Number CDATA #DEFAULT "Not Applicable">
+    Pedigree (Original|Derived) "Original" 
+    Original_Source_File CDATA "Not Applicable"
+    Distribution_Rights (Limited|Unlimited) "Unlimited"
+    Release_Limitation CDATA "Not Applicable"
+    Release_Number CDATA "Not Applicable">

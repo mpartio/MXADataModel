@@ -1,7 +1,10 @@
-#include "MXADataImport.h"
+#include "Core/MXADataImport.h"
 #include "Common/LogTime.h"
 #include "Base/IDataImportDelegate.h"
 #include "Core/MXADataSource.h"
+#include "Core/MXADataModel.h"
+
+
 #include <iostream>
 
 // -----------------------------------------------------------------------------
@@ -20,24 +23,22 @@ MXADataImport::~MXADataImport ( ) { }
 // -----------------------------------------------------------------------------
 int32 MXADataImport::import()
 {
-  //std::cout << "MXADataImport: Importing Data...." << std::endl;
   int32 err = 1;
-  for (DataSources::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
+  for (IDataSources::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
   {
-    err = (*(iter)).get()->getImportDelegate()->importDataSource( *iter, this->getDataModel() );
+    err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataModel );
     if ( err < 0 )
     {
       break;
     }
   }
-  //std::cout << logTime() << "...MXADataImport: Finished Importing Data: " << err << std::endl;
   return err;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataImport::addDataSource (MXADataSourcePtr dataSource ) {
+void MXADataImport::addDataSource (IDataSourcePtr dataSource ) {
   this->_dataSources.push_back(dataSource);
 }
 
@@ -59,28 +60,28 @@ std::string MXADataImport::getOutputFilePath ( ) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataImport::setDataModel ( boost::shared_ptr<MXADataModel> new_var ) {
+void MXADataImport::setDataModel ( boost::shared_ptr<IDataModel> new_var ) {
   _dataModel = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXADataModelPtr MXADataImport::getDataModel ( ) {
+IDataModelPtr MXADataImport::getDataModel ( ) {
   return _dataModel;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataImport::setDataSources ( std::vector<MXADataSourcePtr> &new_var ) {
+void MXADataImport::setDataSources ( IDataSources &new_var ) {
   _dataSources = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-std::vector<MXADataSourcePtr> MXADataImport::getDataSources ( ) {
+IDataSources MXADataImport::getDataSources ( ) {
   return _dataSources;
 }
 

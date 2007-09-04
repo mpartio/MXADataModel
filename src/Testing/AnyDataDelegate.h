@@ -9,9 +9,13 @@
 
 
 
-// -----------------------------------------------------------------------------
-//  Class to allow any type of data to be created and stored in an HDF5 File
-// -----------------------------------------------------------------------------
+/**
+* @brief  Template Class to allow any type of data to be created and stored in an HDF5 File
+* @author Mike Jackson
+* @date June 2007
+* @version 1.0
+* @class AnyDataDelegate AnyDataDelegate.h src/Test/AnyDataDelegate.h
+*/
 template <typename T>
 class AnyDataDelegate: public IDataImportDelegate
 {
@@ -24,7 +28,13 @@ class AnyDataDelegate: public IDataImportDelegate
     
     virtual ~AnyDataDelegate() {};
     
-    int32 importDataSource(MXADataSourcePtr dataSource, MXADataModelPtr model)
+    /**
+     * @brief  Imports the data from the datasource object into the HDF5 data file
+     * @param dataSource Valid IDataSource Object
+     * @param model The MXA DataModel Object
+     * @return error condition. Negative is error.
+     */
+    int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
     {
       std::string path ( dataSource->generateInternalPath() );
     //  std::cout << logTime() << "VectorDataDelegate::importDataSource() " << path << std::endl;

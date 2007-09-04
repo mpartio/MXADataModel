@@ -31,6 +31,9 @@
 
 #include <string>
 
+/** @namespace DataGen
+ * @brief Used for the test data generation classes
+ */
 namespace DataGen
 {
   const std::string DataRoot("DataFileGenerator/Data");
@@ -59,10 +62,10 @@ namespace DataGen
  * Among those datasets imported into the data file include scalar and vector
  * versions of all the signed/unsigned integer types and 32/64 bit floating data.
  * See the source code for more information regarding the file layout
- * @class
- * @author
- * @date
- * @version
+ * @class DataFileGenerator DataFileGenerator.h src/Testing/DataFileGenerator.h
+ * @author Mike Jackson
+ * @date July 2007
+ * @version 1.0
  */
 class DataFileGenerator
 {
@@ -70,18 +73,35 @@ public:
 	DataFileGenerator();
 	virtual ~DataFileGenerator();
 	
+	/**
+	 * @brief Sets the FilePath iVar
+	 * @param filePath The path to the file
+	 */
 	void setFilePath(const std::string &filePath);
 	
+	/**
+	 * @brief Generates the test data
+	 * @return Error Condition
+	 */
 	herr_t generate();
 	
+	/**
+	 * @brief Makes the Data Records for the data model
+	 * @param model The MXA Data Model
+	 * @param dataImport The IDataImport object
+	 * @param parentRec The parent Data record to use for the newly created Data Record
+	 * @param dims Valus for the Data Dimensions
+	 * @return Error condition
+	 */
 	herr_t DataFileGenerator::makeRecords(MXADataModelPtr model, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims); 
 	
 /**
- * @brief
- * @param model
- * @param rec
- * @param dataImport
- * @param type
+ * @brief Creates Data and stores the data in the HDF5 file
+ * @param model The MXA Data Model
+ * @param rec The data record for this data set
+ * @param dataImport The IDataImport object
+ * @param type The type of data
+ * @param tableDims The dimensions of the Table
  * @return
  */
 	template<typename T>
@@ -166,7 +186,7 @@ public:
 // -----------------------------------------------------------------------------
 //  Implemented Method from the IDataImportDelegate interface 
 // -----------------------------------------------------------------------------
-  int32 importDataSource(MXADataSourcePtr dataSource, MXADataModelPtr model)
+  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
   {
     
     std::string path ( dataSource->generateInternalPath() );

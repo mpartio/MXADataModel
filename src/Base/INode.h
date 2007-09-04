@@ -56,29 +56,27 @@ class MXA_EXPORT INode
     
     /// Accessor for NodeType iVar
     /**
-    * @brief 
-    * @param nodeType
+    * @brief Sets the Node Type
+    * @param nodeType The type of node, from the Type Enumeration
     */
     virtual void setNodeType(int32 nodeType) = 0;
 
     /**
-    * @brief 
-    * @param getNodeType(
-    * @return 
+    * @brief Gets the node type.
+    * @return The node type
     */
     virtual int32 getNodeType() = 0;
 
     /**
-    * @brief 
-    * @param getNodeTypeString(
-    * @return 
+    * @brief Returns the node type as a string
+    * @return The Node type as a string
     */
     virtual std::string getNodeTypeString() = 0;
     
     /**
-    * @brief 
-    * @param nodeType
-    * @return 
+    * @brief Static function to return a human readable string of the Node Type
+    * @param nodeType One of the Type Enumerations
+    * @return String description of the node type
     */
     static std::string getNodeTypeAsString(int32 nodeType)
     {
@@ -120,28 +118,26 @@ class MXA_EXPORT INode
  
 
     /**
-    * @brief 
-    * @param nodeName
+    * @brief Sets the node name 
+    * @param nodeName The name to give to this node
     */
     virtual void setNodeName(std::string nodeName) = 0;
 
     /**
-    * @brief 
-    * @return 
+    * @brief Returns the Name of this node
     */
     virtual std::string getNodeName() = 0;
 
     /// Accessor for Parent iVar
     /**
-    * @brief 
-    * @param parent
+    * @brief Sets the Parent node
+    * @param parent The Parent node for this node
     */
     virtual void setParent(MXANodeWeakPtr parent) = 0;
 
 
     /**
-    * @brief 
-    * @return 
+    * @brief Returns the Parent Node
     */
     virtual MXANodeWeakPtr getParent() = 0;
     
@@ -158,83 +154,72 @@ class MXA_EXPORT INode
     virtual int32 getUniqueId() = 0;
     
     /**
-     * @brief
+     * @brief Resets the GUID value for this node
      */
     virtual void resetGUIDValue() = 0;
 
     // Children Methods
     /**
-    * @brief 
-    * @return 
+    * @brief Returns the number of Children of this node
     */
     virtual int getNumChildren() const = 0;
 
 
     /**
-    * @brief 
-    * @return 
+    * @brief Returns TRUE if this node has children
     */
     virtual bool hasChildren() const = 0;  
 
     /**
-    * @brief 
-    * @param child
+    * @brief Adds a child to this node
+    * @param child The child to add to this node
     */
     virtual void addChild(MXANodePtr child) = 0;
 
     /**
-    * @brief 
-    * @param index
+    * @brief Removes a child from this node
+    * @param index The index of the child to remove
     */
     virtual void removeChild(int index) = 0;
 
     /**
-    * @brief 
-    * @param child
+    * @brief Removes the given child from this node
+    * @param child The child to remove
     */
     virtual void removeChild(MXANodePtr child) = 0;
 
     /**
-    * @brief 
-    * @param child
-    * @return 
+    * @brief Returns the index of a specific child
+    * @param child The child object whose index we are interested in
     */
     virtual int indexOfChild(MXANodePtr child) = 0;
     
     /**
-    * @brief 
-    * @param child
-    * @return 
+    * @brief Returns the index of a specific child
+    * @param child The child object whose index we are interested in
     */
     virtual int32 indexOfChild(MXANode* child) = 0;
 
     /**
-    * @brief
-    * @param index
-    * @return
+    * @brief Returns a specific child of this node based on a given index
+    * @param index The index of the child to return
+    * @return The index of the child
     */
     virtual MXANodePtr getChildAt(int32 index) = 0;
     
     /**
-    * @brief 
-    * @return 
+    * @brief Returns a reference to the children of this node
     */
     virtual MXANodeChildren& getChildren() = 0;
 
 
     /**
-    * @brief 
-    * @param attrName
+    * @brief Removes an Attribute from this node
+    * @param attrName The name of the attribute to remove
     */
     virtual void removeAttribute(std::string attrName) = 0;
     
-    
-  protected:
-    
-    
-  private:
-    //INode(const INode&);    //Not Implemented
-    //void operator=(const INode&); //Not Implemented
+
 };
 
 #endif /*_IMXANODE_H_*/

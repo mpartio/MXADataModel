@@ -28,10 +28,12 @@
 
 
 /**
- * @brief
- * @author
- * @date
- * @version
+ * @brief Concrete implementation of the IDataImport abstract class and controls the main 
+ * import loop.
+ * 
+ * @author Mike Jackson
+ * @date April 2007
+ * @version 1.0
  *  
  */
 class MXA_EXPORT MXADataImport : public IDataImport
@@ -66,31 +68,31 @@ public:
    * Set the value of m_dataModel
    * @param new_var the new value of m_dataModel
    */
-  void setDataModel ( MXADataModelPtr dataModel );
+  void setDataModel ( IDataModelPtr dataModel );
 
   /**
    * Get the value of m_dataModel
    * @return the value of m_dataModel
    */
-  MXADataModelPtr getDataModel ( );
+  IDataModelPtr getDataModel ( );
 
 
   /**
    * Set the value of m_dataSources
    * @param new_var the new value of m_dataSources
    */
-  void setDataSources ( std::vector<MXADataSourcePtr> &datasources );
+  void setDataSources ( IDataSources &datasources );
 
   /**
    * Get the value of m_dataSources
    * @return the value of m_dataSources
    */
-  std::vector<MXADataSourcePtr> getDataSources ( );
+  IDataSources getDataSources ( );
 
   /**
    * @param  dataSource The datasource to add to the list
    */
-  void addDataSource (MXADataSourcePtr dataSource );
+  void addDataSource (IDataSourcePtr dataSource );
 
   /** @brief Imports the data into the data file
   * @return Error Condition. Zero or Positive is Success
@@ -98,18 +100,13 @@ public:
   int32 import();
 
 private:
-
-  // private attributes
-  //  
-
-  std::string                   _outputFilePath;
-  MXADataModelPtr               _dataModel;
-  std::vector<MXADataSourcePtr> _dataSources;
+  std::string                 _outputFilePath;
+  IDataModelPtr               _dataModel;
+  IDataSources                _dataSources;
 
   MXADataImport(const MXADataImport&);   //Copy Constructor Not Implemented
   void operator=(const MXADataImport&); //Copy Assignment Not Implemented
-  
-
+ 
 };
 
 #endif // MXADATAIMPORT_H

@@ -38,8 +38,12 @@
 
 
 /**
- * Base class for event handlers.
- */
+* @class ExpatEvtHandler ExpatEvtHandler.h src/XML/ExpatEvtHandler.h
+* @brief Base class to handle Expat Events 
+* @author Keith Gaughan
+* @date 2004
+* @version
+*/
 class MXA_EXPORT ExpatEvtHandler
 {
 public:

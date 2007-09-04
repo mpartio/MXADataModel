@@ -18,7 +18,10 @@
 #include <map>
 
 
-
+/**
+ * @brief Stores some constants just for use in the example import code
+ * @namespace ExampleConstants
+ */
 namespace ExampleConstants {
   const std::string TimestepAltName("Timestep");
   const std::string TimestepName("Timestep");
@@ -35,10 +38,10 @@ namespace ExampleConstants {
 
 /**
 * @class ComplexImportExample ComplexImportExample.h UnitTests/ModelConstructionEx/ComplexImportExample.h
-* @brief 
-* @author
-* @date
-* @version
+* @brief Shows a more involved example of importing data into the MXA file format
+* @author Mike Jackson
+* @date May 2007
+* @version 1.0
 */
 class ComplexImportExample
 {

@@ -21,10 +21,11 @@ class MXAAttribute;
 class IFileIODelegate;
 
 /**
- * @brief
- * @author
- * @date
- * @version
+ * @brief Abstract class that formally defines the interface that subclasses must
+ * implement to be able to write data models to files or other media
+ * @author Mike Jackson
+ * @date March 2007
+ * @version 1.0
  *  
  */
 class MXA_EXPORT IDataModelWriter 

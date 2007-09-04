@@ -44,31 +44,31 @@ class MXA_EXPORT IDataImport
      * Set the value of m_dataModel
      * @param dataModel the new value of m_dataModel
      */
-    virtual void setDataModel ( MXADataModelPtr dataModel ) = 0;
+    virtual void setDataModel ( IDataModelPtr dataModel ) = 0;
 
     /**
      * Get the value of m_dataModel
      * @return the value of m_dataModel
      */
-    virtual MXADataModelPtr getDataModel ( ) = 0;
+    virtual IDataModelPtr getDataModel ( ) = 0;
 
 
     /**
      * Set the value of m_dataSources
      * @param datasources the new value of m_dataSources
      */
-    virtual void setDataSources ( std::vector<MXADataSourcePtr> &datasources ) = 0;
+    virtual void setDataSources ( IDataSources &datasources ) = 0;
 
     /**
      * Get the value of m_dataSources
      * @return the value of m_dataSources
      */
-    virtual std::vector<MXADataSourcePtr> getDataSources ( ) = 0;
+    virtual IDataSources getDataSources ( ) = 0;
 
     /**
      * @param  dataSource The datasource to add to the list
      */
-    virtual void addDataSource (MXADataSourcePtr dataSource ) = 0;
+    virtual void addDataSource (IDataSourcePtr dataSource ) = 0;
 
     /** @brief Imports the data into the data file
     * @return Error Condition. Zero or Positive is Success

@@ -30,8 +30,9 @@
 class MXADataRecord;
 
 /**
-  * class MXADataSource
-  * This class holds the information needed to read data from a source and store
+  * @class MXADataSource MXADataSource.h src/Core/MXADataSource.h
+  * 
+  * @brief This class holds the information needed to read data from a source and store
   * that data into the underlying data storage for the MXA Data Model (HDF5 or XML)
   */
 
@@ -39,12 +40,12 @@ class MXA_EXPORT MXADataSource : public IDataSource
 {
 public:
   /**
-   * Empty Constructor
+   * @brief Empty Constructor
    */
   MXADataSource ( );
 
   /**
-   * Empty Destructor
+   * @brief Empty Destructor
    */
   virtual ~MXADataSource ( );
 
@@ -65,65 +66,65 @@ public:
   std::string generateInternalPath ( std::vector<int32> &indices);
   
   /**
-   * Set the value of m_dataRecord
-   * @param new_var the new value of m_dataRecord
+   * @brief Set the value of _dataRecord
+   * @param new_var the new value of _dataRecord
    */
   void setDataRecord ( MXADataRecordPtr dataRecord );
 
   /**
-   * Get the value of m_dataRecord
-   * @return the value of m_dataRecord
+   * @brief Get the value of _dataRecord
+   * @return the value of _dataRecord
    */
   MXADataRecordPtr getDataRecord ( );
 
 
   /**
-   * Set the value of m_sourcePath
-   * @param new_var the new value of m_sourcePath
+   * @brief Set the value of _sourcePath
+   * @param new_var the new value of _sourcePath
    */
   void setSourcePath ( std::string sourcePath );
 
   /**
-   * Get the value of m_sourcePath
-   * @return the value of m_sourcePath
+   * @brief Get the value of _sourcePath
+   * @return the value of _sourcePath
    */
   std::string getSourcePath ( );
 
 
   /**
-   * Set the value of m_importDelegate
-   * @param new_var the new value of m_importDelegate
+   * @brief Set the value of _importDelegate
+   * @param new_var the new value of _importDelegate
    */
   void setImportDelegate ( IDataImportDelegatePtr dataParser );
 
   /**
-   * Get the value of m_importDelegate
-   * @return the value of m_importDelegate
+   * @brief Get the value of _importDelegate
+   * @return the value of _importDelegate
    */
   IDataImportDelegatePtr getImportDelegate ( );
 
 
   /**
-   * Set the value of m_dataModel
-   * @param new_var the new value of m_dataModel
+   * @brief Set the value of mdataModel
+   * @param new_var the new value of _dataModel
    */
   void setDataModel ( MXADataModelPtr dataModel );
 
   /**
-   * Get the value of m_dataModel
-   * @return the value of m_dataModel
+   * @brief Get the value of _dataModel
+   * @return the value of _dataModel
    */
   MXADataModelPtr getDataModel ( );
 
 
   /**
-   * Set the value of m_dimensionValues
-   * @param new_var the new value of m_dimensionValues
+   * @brief Set the value of _dimensionValues
+   * @param new_var the new value of _dimensionValues
    */
   void setDimensionValues ( std::vector<int32> new_var );
 
   /**
-   * Get the value of m_dimensionValues
+   * @brief Get the value of m_dimensionValues
    * @return the value of m_dimensionValues
    */
   std::vector<int32> getDimensionValues ( );
@@ -136,8 +137,6 @@ private:
   MXADataModelPtr               _dataModel;
   std::vector<int32>            _dimensionValues;
 
-
-private:
   MXADataSource(const MXADataSource&);   //Copy Constructor Not Implemented
   void operator=(const MXADataSource&); //Copy Assignment Not Implemented
 

@@ -2,11 +2,17 @@
 #define EXAMPLEIMPORTDELEGATE_H_
 
 
-#include "MXADataModel/AbstractDataParserDelegate.h"
+#include "Base/IDataImportDelegate.h"
 
 
-
-class ExampleImportDelegate : public AbstractDataParserDelegate
+/**
+* @class ExampleImportDelegate ExampleImportDelegate.h src/Examples/DataImport/ExampleImportDelegate.h
+* @brief An example of how to write a basic IDataImportDelegate class 
+* @author Mike Jackson
+* @date April 2007
+* @version 1.0
+*/
+class ExampleImportDelegate : public IDataImportDelegate
 {
 public:
 	ExampleImportDelegate();

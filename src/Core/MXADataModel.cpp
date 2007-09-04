@@ -56,7 +56,7 @@ MXADataModelPtr MXADataModel::New(float modelVersion, const std::string &type)
 // -----------------------------------------------------------------------------
 MXADataModel::~MXADataModel() 
 {
-//	std::cout << "$-$-$-$-$ MXADataModel Destructor $-$-$-$-$" << std::endl;
+	//std::cout << "$-$-$-$-$ MXADataModel Destructor $-$-$-$-$" << std::endl;
 }
 
 // -----------------------------------------------------------------------------

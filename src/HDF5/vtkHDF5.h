@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2007, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef VTKHDF5_H_
 #define VTKHDF5_H_
 
@@ -9,6 +19,13 @@
 
 #include <string>
 
+/**
+* @class vtkHDF5 vtkHDF5.h src/HDF5/vtkHDF5.h
+* @brief Bridge code to read HDF5 data objects into vtk data structures 
+* @author Mike Jackson
+* @date June 2007
+* @version 1.0
+*/
 class  vtkHDF5
 {
 public:

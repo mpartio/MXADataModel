@@ -54,7 +54,7 @@ public:
 // -----------------------------------------------------------------------------
 //  Implemented Method from the IDataImportDelegate interface 
 // -----------------------------------------------------------------------------
-  int32 importDataSource(MXADataSourcePtr dataSource, MXADataModelPtr model)
+  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
   {
     std::string path ( dataSource->generateInternalPath() );
     uint32 pos = path.find_last_of("/");
@@ -135,7 +135,6 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   //std::cout << "IMPORTING DATA NOW" << std::endl;
   int32 err = dataImport->import();
   BOOST_REQUIRE(err >= 0); // Used for Boost Unit Test Framework
-  
 }
 
 
@@ -193,6 +192,7 @@ int DataImportTest ()
   MXADataModelPtr model = createSimpleModel();
   BOOST_REQUIRE(model->writeModel(outputFile, false) >= 0); //Leave the file open for the import
   ImportSimpleData(model, outputFile);
+
   return 0;
 }
 

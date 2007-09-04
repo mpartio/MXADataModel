@@ -34,9 +34,9 @@ public:
   virtual ~IDataModelReader(){};
 
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief Reads the data model from the file
+  * @param locId The HDF5 ID or other unique ID of the file
+  * @return Standard Error Condition
   */
   virtual int32 readDataModel(int32 locId) = 0;
 

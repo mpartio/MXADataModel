@@ -17,6 +17,11 @@
 
 #include "Common/MXATypes.h"
 
+/** @file MXATypeDefs.h
+ * @brief This file contains many common typdefs used through out the MXA Source code
+ */
+
+
 class MXADataModel;
 class MXANode;
 class MXAAttribute;
@@ -26,19 +31,28 @@ class MXADataSource;
 class MXADataImport;
 class IDataImportDelegate;
 class IFileIODelegate;
+class IDataSource;
+class IDataModel;
+class IDataDimension;
+class IDataRecord;
 
 
-typedef  boost::shared_ptr<MXADataModel>           MXADataModelPtr;
+typedef  boost::shared_ptr<MXADataModel>           MXADataModelPtr; /**< MXADataModel wrapped in a Boost Shared Pointer*/
+typedef  boost::shared_ptr<IDataModel>             IDataModelPtr;
 typedef  boost::shared_ptr<MXANode>                MXANodePtr;
 typedef  boost::shared_ptr<MXAAttribute>           MXAAttributePtr;
 typedef  boost::shared_ptr<MXADataRecord>          MXADataRecordPtr;
+typedef  boost::shared_ptr<IDataRecord>            IDataRecordPtr;
 typedef  boost::shared_ptr<MXADataDimension>       MXADataDimensionPtr;
+typedef  boost::shared_ptr<IDataDimension>         IDataDimensionPtr;
 typedef  boost::shared_ptr<IFileIODelegate>        IODelegatePtr;
 typedef  std::vector<MXAAttributePtr>              MXAUserMetaData;
 typedef  std::vector<MXAAttributePtr>              MXAAttributes;
 
 typedef  boost::shared_ptr<MXADataSource>          MXADataSourcePtr;
+typedef  boost::shared_ptr<IDataSource>            IDataSourcePtr;
 typedef  std::vector<MXADataSourcePtr>             DataSources;
+typedef  std::vector<IDataSourcePtr>               IDataSources;
 typedef  boost::shared_ptr<IDataImportDelegate>    IDataImportDelegatePtr;
 typedef  boost::shared_ptr<MXADataImport>          MXADataImportPtr;
 

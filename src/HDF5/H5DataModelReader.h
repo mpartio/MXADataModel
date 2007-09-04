@@ -53,68 +53,68 @@ public:
   
   // Loading Methods
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief Reads the Data model 
+  * @param locId The HDF5 file or group id
+  * @return Standard HDF5 Error Condition
   */
   herr_t readDataModel(hid_t locId);
  
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief Reads the model type
+  * @param locId The HDF5 file or group id
+  * @return Standard HDF5 Error Condition 
   */
   herr_t readModelType(hid_t locId);
  
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief reads the model version
+  * @param locId The HDF5 file or group id
+  * @return Standard HDF5 Error Condition 
   */
   herr_t readModelVersion(hid_t locId);
  
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief reads the data root
+  * @param locId The HDF5 file or group id
+  * @return Standard HDF5 Error Condition 
   */
   herr_t readDataRoot(hid_t locId);
  
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief reads the data dimensions
+  * @param locId The HDF5 file or group id
+  * @return Standard HDF5 Error Condition 
   */
   herr_t readDataDimensions(hid_t locId);
  
   /**
-  * @brief 
+  * @brief reads the data records
   * @param fileId
-  * @return 
+  * @return Standard HDF5 Error Condition 
   */
   herr_t readDataRecords(hid_t locId);
  
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief reads the required meta data
+  * @param locId The HDF5 file or group id
+  * @return Standard HDF5 Error Condition 
   */
   herr_t readRequiredMetaData(hid_t locId);
  
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief reads the user meta data
+  * @param locId The HDF5 file or group id
+  * @return Standard HDF5 Error Condition 
   */
   herr_t readUserMetaData(hid_t locId);
   
   /**
-  * @brief 
-  * @param locId
-  * @param datasetPath
-  * @param key
-  * @param dims
-  * @return 
+  * @brief Reads a Primitive Value that will be assigned to a named attribute
+  * @param locId The HDF5 file or group id
+  * @param datasetPath The path to the dataset to read
+  * @param key The attribute key to read
+  * @param dims The dimensions of the attribute
+  * @return Standard HDF5 Error Condition 
   */
   template<typename T>
   int32 readPrimitiveAttribute( hid_t locId, const std::string &datasetPath, 
@@ -146,26 +146,26 @@ public:
 protected:
   // ----- Helper methods to read data dimensions or data records --------------
   /**
-  * @brief 
-  * @param locId
-  * @param name
-  * @return 
+  * @brief Reads a single Data Dimension from the HDF5 data file
+  * @param locId The HDF5 file or group id
+  * @param name The name of the dimension to read
+  * @return IDataDimension Shared Pointer
   */
   MXADataDimensionPtr _loadDataDimension(hid_t locId, std::string name);
 
   /**
-  * @brief 
-  * @param gid
-  * @param parent
-  * @return 
+  * @brief Recursive method that traverses the tree of Data Records
+  * @param gid The Group ID
+  * @param parent The Parent Data Record
+  * @return Standard HDF5 Error Condition
   */
   herr_t _traverseDataRecords( hid_t gid, MXADataRecordPtr parent);
 
   /**
-  * @brief 
-  * @param gid
-  * @param name
-  * @return 
+  * @brief Reads a Data Record from the HDF5 data file
+  * @param gid The GUID to assign to the Data Record
+  * @param name The Name of the data record
+  * @return IDataRecord shared pointer
   */
   MXADataRecordPtr _loadDataRecord(hid_t gid, std::string name);
   

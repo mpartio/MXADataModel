@@ -40,8 +40,14 @@ public:
   
   /**
   * @brief Used to create a new MXANode
-  * @param type The Type of Node this is going to be
-  * @param nodeName The Name of this node
+   * @param name The name for the Data Dimensions
+   * @param altName An Alternate Name for the Data Dimension
+   * @param index The index of this dimension
+   * @param count The total number of 
+   * @param startValue The value this dimension starts at
+   * @param endValue The ending value (inclusive) this dimension ends at
+   * @param increment The value to increment the dimension when iterating
+   * @param uniform Are the values uniform across the start to end values
   * @return A Boost SharedPointer to the MXANode Object
   */
   static MXADataDimensionPtr New(std::string name, std::string altName, 

@@ -79,16 +79,16 @@ class MXA_EXPORT MXADataModel : public IDataModel
   void setModelVersion(float version);
 
   /**
-   * @brief Returns the type of file, should be MHD or MXA
+   * @brief Returns the type of file, should be MXA
+   * @return The Model Type. Should be MXA::CurrentModelType
    */
   std::string getModelType();
 
   /**
    * @brief Sets the file type. Should be MHD or MXA
-   * @param 
-   * @return
+   * @param modelType The Model Type for this model. Typically it should be MXA::CurrentModelType
    */
-  void setModelType(const std::string &fileType);
+  void setModelType(const std::string &modelType);
 
   /**
    * @brief Sets the model type and version to the latest supported by this API
@@ -116,6 +116,14 @@ class MXA_EXPORT MXADataModel : public IDataModel
 
   /**
    * @brief Creates and adds a new Data Dimension to the Model
+   * @param name The name for the Data Dimensions
+   * @param altName An Alternate Name for the Data Dimension
+   * @param index The index of this dimension
+   * @param count The total number of 
+   * @param startValue The value this dimension starts at
+   * @param endValue The ending value (inclusive) this dimension ends at
+   * @param increment The value to increment the dimension when iterating
+   * @param uniform Are the values uniform across the start to end values
    * @return A boost::shared_ptr to the newly created Data Dimension
    */
   MXADataDimensionPtr addDataDimension(std::string name, std::string altName,
@@ -234,23 +242,22 @@ class MXA_EXPORT MXADataModel : public IDataModel
 
   /**
    * @brief Adds an entry in the User Meta Data record
-   * @param  umd
-   * @return
+   * @param  umd An MXAAttribute object
    */
   void addUserMetaData ( MXAAttributePtr umd);
   
   /**
    * @brief Adds a Meta Data entry to the User Meta Data Record
-* @param 
-* @return
-*/
+   * @param key The key to use for the user meta data
+   * @param value The value of the attribute 
+   */
   void addUserMetaData(const std::string &key, const std::string &value);
   
   /**
    * @brief Adds a user meta data entry
-* @param key The key for the entry
-* @param value The value of the entry
-*/
+  * @param key The key for the entry
+  * @param value The value of the entry
+  */
   template<typename T>
   void addUserMetaData(std::string key, T value)
   {
@@ -397,13 +404,6 @@ class MXA_EXPORT MXADataModel : public IDataModel
    */
    std::string _indent(int indent);
    
-   /**
-    * @brief
-    * @param lut
-    * @param records
-    */
-   void _traverseForLUT(std::map<int64, MXADataRecordPtr> &lut, MXADataRecords &records);
-  
 };
 
 

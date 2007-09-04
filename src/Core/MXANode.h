@@ -30,11 +30,12 @@
 
 
 /**
-* @class MXANode MXANode.h MXANode.h
-* @brief 
-* @author
-* @date
-* @version
+* @class MXANode MXANode.h src/Core/MXANode.h
+* @brief This class is a concrete implementation of the INode abstract class. It is meant to 
+* be subclassed by other classes that need to maintain parent/child relationships
+* @author Mike Jackson
+* @date March 2007
+* @version 1.0
 */
 class MXA_EXPORT MXANode : public INode
 {

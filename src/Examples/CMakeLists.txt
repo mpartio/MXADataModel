@@ -1,9 +1,5 @@
 PROJECT (MXAExamples)
 
-
-
-
-
 # ---------- Setup output Directories -------------------------
 SET (LIBRARY_OUTPUT_PATH
   ${PROJECT_BINARY_DIR}/Bin
@@ -36,7 +32,7 @@ ENDIF(BUILD_VTK_HDF5)
 
 SET (GETDATA_SRCS
   GetDataExample.cpp
-  ../Testing/DataFileGenerator.cpp
+  ${MXA_SOURCE_DIR}/src/Testing/DataFileGenerator.cpp
 )
 
 

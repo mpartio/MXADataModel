@@ -34,6 +34,12 @@
 #include "expat.h"
 #include "XML/ExpatEvtHandler.h"
 
+/**
+* @class ExpatParser ExpatParser.h src/XML/ExpatParser.h
+* @brief A C++ wrapper around the Expat parser library.
+* @date 2004
+* @version
+*/
 class MXA_EXPORT ExpatParser
 {
 private:
