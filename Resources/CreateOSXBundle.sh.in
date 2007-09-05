@@ -1,9 +1,5 @@
 #!/bin/bash
-#  $Id: CreateOSXBundle.sh.in,v 1.2 2007/09/05 20:37:58 jacksonm Exp $
-# $Log: CreateOSXBundle.sh.in,v $
-# Revision 1.2  2007/09/05 20:37:58  jacksonm
-# Basic Testing of automatic commits
-#
+#  $Revision: 1.3 $
 
 
 cd "@EXECUTABLE_OUTPUT_PATH@"
