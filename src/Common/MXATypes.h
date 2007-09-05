@@ -8,15 +8,16 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Basic types.
-//
-///////////////////////////////////////////////////////////////////////////////
-
 #ifndef MXA_BASIC_TYPES_H_
 #define MXA_BASIC_TYPES_H_
+
+/**
+ * @file MXATypes.h
+ * @brief Contains the typedefs for all the common integer and floating point
+ * prinitives that are used in the MXA Code Base
+ * @version $Version$
+ */
+
 
 // C++ Includes
 #include <vector>
