@@ -15,7 +15,7 @@
  * @file MXATypes.h
  * @brief Contains the typedefs for all the common integer and floating point
  * prinitives that are used in the MXA Code Base
- * @version $Version$
+ * @version $Revision: 1.3 $
  */
 
 
