@@ -63,14 +63,14 @@ IDataImportDelegatePtr MXADataSource::getImportDelegate ( ) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataSource::setDataModel ( MXADataModelPtr new_var ) {
+void MXADataSource::setDataModel ( IDataModelPtr new_var ) {
   _dataModel = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXADataModelPtr MXADataSource::getDataModel ( ) {
+IDataModelPtr MXADataSource::getDataModel ( ) {
   return _dataModel;
 }
 

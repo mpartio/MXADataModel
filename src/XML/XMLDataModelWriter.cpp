@@ -200,9 +200,9 @@ void XMLDataModelWriter::_writeDataRoot(int depth)
 int32 XMLDataModelWriter::writeDataDimensions(int32 depth)
 {
   _openTag(MXA_XML::Data_Dimensions, depth);
-  MXADataDimensions dimensions = _dataModel->getDataDimensions();
+  IDataDimensions dimensions = _dataModel->getDataDimensions();
   MXADataDimension* dim;
-  for (MXADataDimensions::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
+  for (IDataDimensions::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
   {
     dim = static_cast<MXADataDimension*> ( (*(iter)).get() );
     dim->writeDimension(this);

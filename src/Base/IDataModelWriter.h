@@ -16,7 +16,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-class MXADataModel;
+class IDataModel;
 class MXAAttribute;
 class IFileIODelegate;
 
@@ -32,8 +32,8 @@ class MXA_EXPORT IDataModelWriter
 {
 
 public:
-  IDataModelWriter(IFileIODelegate* ioDelegate, MXADataModel* dataModel){};
-  virtual ~IDataModelWriter(){};
+  IDataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel){};
+  virtual ~IDataModelWriter() {};
   
   /**
   * @brief writes the model to the given file

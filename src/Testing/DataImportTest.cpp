@@ -91,10 +91,10 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   IDataImportDelegatePtr delegatePtr( new H5ImportTestDelegate());
   
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
-  MXADataDimension* dim0 = model->getDataDimension(0); // Get the first Dimension, since there is only one this works
+  MXADataDimension* dim0 = static_cast<MXADataDimension*>(model->getDataDimension(0) ); // Get the first Dimension, since there is only one this works
   BOOST_REQUIRE(dim0 != NULL); // Used for Boost Unit Test Framework
   
-  MXADataDimension* dim1 = model->getDataDimension(1);
+  MXADataDimension* dim1 = static_cast<MXADataDimension*>(model->getDataDimension(1) );
   BOOST_REQUIRE(dim1 != NULL); // Used for Boost Unit Test Framework
   
   // Create a DataRecord entry for the Data Model

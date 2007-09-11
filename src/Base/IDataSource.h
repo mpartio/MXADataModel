@@ -68,13 +68,13 @@ public:
     * Set the value of m_dataModel
     * @param new_var the new value of m_dataModel
     */
-   virtual void setDataModel ( MXADataModelPtr dataModel ) = 0;
+   virtual void setDataModel ( IDataModelPtr dataModel ) = 0;
 
    /**
     * Get the value of m_dataModel
     * @return the value of m_dataModel
     */
-   virtual MXADataModelPtr getDataModel ( ) = 0;
+   virtual IDataModelPtr getDataModel ( ) = 0;
 
 
    /**

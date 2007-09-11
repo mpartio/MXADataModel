@@ -594,6 +594,11 @@ bool H5Utilities::isGroup(hid_t nodeId, std::string objName)   {
   herr_t err = -1;
   H5G_stat_t statbuf;
   err = H5Gget_objinfo(nodeId, objName.c_str(), false, &statbuf);
+  if (err < 0)
+  {
+    std::cout << DEBUG_OUT(logTime) << "Error in methd H5Gget_objinfo" << std::endl;
+    return false;
+  }
   switch (statbuf.type) {
     case H5G_GROUP:
       isGroup = true;

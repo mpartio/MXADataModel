@@ -83,7 +83,7 @@ class MXA_EXPORT IDataModel
     * @param dimension The IDataDimension to add to the model
     * @param setIndex Automatically set the index for this Dimension. Default is false
     */
-    virtual void addDataDimension(MXADataDimensionPtr dimension, bool setIndex=false) = 0;
+    virtual void addDataDimension(IDataDimensionPtr dimension, bool setIndex=false) = 0;
     
     /**
     * @brief Adds a Data Dimension by declaring all the values of the data dimension
@@ -97,16 +97,11 @@ class MXA_EXPORT IDataModel
     * @param uniform Are the indices uniform
     * @return A boost::shared_ptr to the newly created DataDimension Object
     */
-    virtual MXADataDimensionPtr addDataDimension(std::string name, std::string altName,
+    virtual IDataDimensionPtr addDataDimension(std::string name, std::string altName,
                                     int32 index, int32 count, int32 startValue, 
                                     int32 endValue, int32 increment, int32 uniform) = 0;
 
-    /**
-    * @brief Removes a Data dimension from the model
-    * @param dimension The Data Dimension to remove
-    * @return Standard HDF5 Error Condition
-    */
-    virtual int32 removeDataDimension(MXADataDimension* &dimension) = 0;
+    
     /**
     * @brief Removes a Data dimension using the index of the dimension
     * @param index The index of the data dimension to remove
@@ -118,13 +113,13 @@ class MXA_EXPORT IDataModel
     * @brief Returns the data dimensions of the Model in a std::vector
     * @return 
     */
-    virtual MXADataDimensions& getDataDimensions() = 0;
+    virtual IDataDimensions& getDataDimensions() = 0;
     /**
     * @brief Returns a specific Data Dimension from the model
     * @param index The index to return
     * @return A Pointer to the data dimension or NULL if there is an error
     */
-    virtual MXADataDimension* getDataDimension(int32 index) = 0;
+    virtual IDataDimension* getDataDimension(int32 index) = 0;
     /**
     * @brief Returns a specific Data Dimension from the model. Technically Data
     * dimensions could have the same names as Data Dimensions are only differentiated
@@ -133,7 +128,7 @@ class MXA_EXPORT IDataModel
     * @param dimName The name of the data dimension
     * @return A Pointer to the data dimension or NULL if there is an error
     */
-    virtual MXADataDimension* getDataDimension(std::string dimName) = 0;
+    virtual IDataDimension* getDataDimension(std::string dimName) = 0;
     
     /**
      * @brief Returns the number of data dimensions in the model

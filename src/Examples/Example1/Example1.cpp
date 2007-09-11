@@ -219,9 +219,9 @@ void exportModelToXML(MXADataModel* model)
 void listDataDimensions(MXADataModel* model)
 {
   //We can now get a list of the Data Dimensions and print out various properties for each
-   MXADataDimensions dims = model->getDataDimensions();
+   IDataDimensions dims = model->getDataDimensions();
    MXADataDimension* dim = NULL; // Use a Pointer to make the code a bit easier to read
-   for (MXADataDimensions::iterator iter = dims.begin(); iter != dims.end(); ++iter )
+   for (IDataDimensions::iterator iter = dims.begin(); iter != dims.end(); ++iter )
    {
      dim = static_cast<MXADataDimension*>((*(iter)).get() );
      if (NULL == dim)

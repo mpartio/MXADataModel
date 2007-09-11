@@ -29,6 +29,7 @@ class MXADataRecord;
 class MXADataDimension;
 class MXADataSource;
 class MXADataImport;
+class IDataImport;
 class IDataImportDelegate;
 class IFileIODelegate;
 class IDataSource;
@@ -51,13 +52,15 @@ typedef  std::vector<MXAAttributePtr>              MXAAttributes;
 
 typedef  boost::shared_ptr<MXADataSource>          MXADataSourcePtr;
 typedef  boost::shared_ptr<IDataSource>            IDataSourcePtr;
-typedef  std::vector<MXADataSourcePtr>             DataSources;
+typedef  std::vector<MXADataSourcePtr>             MXADataSources;
 typedef  std::vector<IDataSourcePtr>               IDataSources;
 typedef  boost::shared_ptr<IDataImportDelegate>    IDataImportDelegatePtr;
 typedef  boost::shared_ptr<MXADataImport>          MXADataImportPtr;
+typedef  boost::shared_ptr<IDataImport>            IDataImportPtr;
 
 
-typedef  std::vector<MXANodePtr>                   MXADataDimensions;
+typedef  std::vector<MXADataDimensionPtr>          MXADataDimensions;
+typedef  std::vector<IDataDimensionPtr>            IDataDimensions;
 typedef  std::vector<MXANodePtr>                   MXADataRecords;
 typedef  std::vector<MXANodePtr>                   MXANodes;
 

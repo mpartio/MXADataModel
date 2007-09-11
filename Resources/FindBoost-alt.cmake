@@ -60,6 +60,33 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     boost-1_33
   )
 
+    SET(BOOST_INCLUDE_SEARCH_DIRS
+      $ENV{BOOSTINCLUDEDIR}
+      $ENV{BOOST_ROOT}/include
+      C:/boost/include
+      "C:/Program Files/boost/boost_1_34_1"
+      "C:/Program Files/boost/boost_1_33_1"
+      # D: is very often the cdrom drive, IF you don't have a
+      # cdrom inserted it will popup a very annoying dialog
+      #D:/boost/include
+      /usr/include
+      /usr/local/include
+      /opt/local/include
+      /sw/include
+    )
+    
+    SET(BOOST_LIBRARIES_SEARCH_DIRS
+      $ENV{BOOSTLIBDIR}
+      $ENV{BOOST_ROOT}/lib
+      C:/boost/lib
+      "C:/Program Files/boost/boost_1_34_1  /lib"
+      "C:/Program Files/boost/boost_1_33_1/lib"
+      /usr/lib
+      /usr/local/lib
+      /opt/local/lib
+      /sw/lib
+    )
+    
   IF (WIN32)
     # In windows, automatic linking is performed, so you do not have to specify the libraries.
     # If you are linking to a dynamic runtime, then you can choose to link to either a static or a
@@ -75,33 +102,6 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     # BOOST_LIB_DIAGNOSTIC will cause the auto-linking code to emit a #pragma MESSAGE each time
     # a library is selected for linking.
     SET(BOOST_LIB_DIAGNOSTIC_DEFINITIONS "-DBOOST_LIB_DIAGNOSTIC")
-
-    SET(BOOST_INCLUDE_SEARCH_DIRS
-      $ENV{BOOSTINCLUDEDIR}
-      $ENV{BOOST_ROOT}/include
-      C:/boost/include
-      "C:/Program Files/boost/boost_1_34_0"
-      "C:/Program Files/boost/boost_1_33_1"
-      # D: is very often the cdrom drive, IF you don't have a
-      # cdrom inserted it will popup a very annoying dialog
-      #D:/boost/include
-      /usr/include
-      /usr/local/include
-      /opt/local/include
-      /sw/include
-    )
-
-    SET(BOOST_LIBRARIES_SEARCH_DIRS
-      $ENV{BOOSTLIBDIR}
-      $ENV{BOOST_ROOT}/lib
-      C:/boost/lib
-      "C:/Program Files/boost/boost_1_34_0/lib"
-      "C:/Program Files/boost/boost_1_33_1/lib"
-      /usr/lib
-      /usr/local/lib
-      /opt/local/lib
-      /sw/lib
-    )
 
     IF (MSVC71)
       IF (CMAKE_BUILD_TYPE STREQUAL Debug)
@@ -173,16 +173,8 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     PATH_SUFFIXES
       ${BOOST_PATH_SUFFIX}
   )
-
-  # On Apple, Prefer the Dynamic Libraries
-  IF (APPLE)
-    SET (BOOST_SUFFIX_LIST ${BOOST_LIBRARIES_SUFFIXES} "")
-  ELSE (APPLE)
-    SET (BOOST_SUFFIX_LIST "" ${BOOST_LIBRARIES_SUFFIXES})
-  ENDIF (APPLE)
   
-  
-  FOREACH (TMP_BOOST_LIBRARIES_SUFFIX ${BOOST_SUFFIX_LIST} )
+  FOREACH (TMP_BOOST_LIBRARIES_SUFFIX "" ${BOOST_LIBRARIES_SUFFIXES} )
     
     FIND_LIBRARY(BOOST_DATE_TIME_LIBRARY 
         boost_date_time${TMP_BOOST_LIBRARIES_SUFFIX}

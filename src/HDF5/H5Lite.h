@@ -603,7 +603,7 @@ static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
 
 
 
-static MXA_EXPORT herr_t H5Lite::writeStringAttributes(hid_t loc_id,
+static MXA_EXPORT herr_t writeStringAttributes(hid_t loc_id,
                                      const std::string &objName,
                                      const std::map<std::string, std::string> &attributes);
 /**

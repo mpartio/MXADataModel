@@ -108,13 +108,13 @@ public:
    * @brief Set the value of mdataModel
    * @param new_var the new value of _dataModel
    */
-  void setDataModel ( MXADataModelPtr dataModel );
+  void setDataModel ( IDataModelPtr dataModel );
 
   /**
    * @brief Get the value of _dataModel
    * @return the value of _dataModel
    */
-  MXADataModelPtr getDataModel ( );
+  IDataModelPtr getDataModel ( );
 
 
   /**
@@ -134,7 +134,7 @@ private:
   MXADataRecordPtr              _dataRecord;
   std::string                   _sourcePath;
   IDataImportDelegatePtr        _dataImportDelegate;
-  MXADataModelPtr               _dataModel;
+  IDataModelPtr                 _dataModel;
   std::vector<int32>            _dimensionValues;
 
   MXADataSource(const MXADataSource&);   //Copy Constructor Not Implemented

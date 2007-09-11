@@ -77,7 +77,7 @@ void H5TiffImportDelegate::setDataModel(MXADataModelPtr model) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5TiffImportDelegate::importDataSource(MXADataSourcePtr dataSource, MXADataModelPtr model)
+int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
 {
   herr_t err = -1;
   // Make sure the file Exists first before we go much further

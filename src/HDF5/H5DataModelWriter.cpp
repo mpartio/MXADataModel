@@ -140,9 +140,9 @@ int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
   
   std::string dsetName;
   
-  MXADataDimensions dimensions = _dataModel->getDataDimensions();
+  IDataDimensions dimensions = _dataModel->getDataDimensions();
   MXADataDimension* dim;
-  for (MXADataDimensions::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
+  for (IDataDimensions::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
   {
     dim = static_cast<MXADataDimension*> ( (*(iter)).get() ); //Get a reference to the raw pointer
     //std::cout << "Writing DataDimension: " << dim->getDimensionName() << std::endl;

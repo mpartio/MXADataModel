@@ -209,6 +209,16 @@ static MXA_EXPORT bool endsWith(std::string &base, std::string ending) {
   return   ( pos != std::string::npos);
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+static MXA_EXPORT std::string indent(int depth)
+{
+  const int32 indentSize = 2;
+  return std::string(indentSize * depth, ' ');
+}
+
+
 };
 
 

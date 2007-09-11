@@ -1,5 +1,6 @@
 #!/bin/bash
-#  $Revision: 1.3 $
+#  $Id: CreateOSXBundle.sh.in,v 1.4 2007/09/11 15:10:56 jacksonm Exp $
+#  $Revision: 1.4 $
 
 
 cd "@EXECUTABLE_OUTPUT_PATH@"

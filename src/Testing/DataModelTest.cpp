@@ -161,12 +161,12 @@ MXADataModelPtr createModel()
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
 	  // ---------- Test creation/addition of Data Dimensions
-	  MXADataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 0, 15, 20, 50, 2, 1);
+	  IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 0, 15, 20, 50, 2, 1);
 	  errorMessage.clear();
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
-	  MXADataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 1, 10, 1000, 5000, 500, 1);
-	  MXADataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS", 2, 100, 0, 99, 1, 1);
-	  MXADataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 3, 256, 0, 255, 1, 1);
+	  IDataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 1, 10, 1000, 5000, 500, 1);
+	  IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS", 2, 100, 0, 99, 1, 1);
+	  IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 3, 256, 0, 255, 1, 1);
 	  	  
 	  //Create Data Records
 	  MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
@@ -356,11 +356,11 @@ void TestDataDimensionMethods()
   MXADataModelPtr model = createModel(); // Created on the stack
   int32 error = 0;
   
-  MXADataDimension* dim0 = model->getDataDimension(0);
-  MXADataDimension* dim1 = model->getDataDimension(1);
-  MXADataDimension* dim2 = model->getDataDimension(2);
-  MXADataDimension* dim3 = model->getDataDimension(3);
-  MXADataDimension* dimNull = model->getDataDimension(4);
+  MXADataDimension* dim0 = static_cast<MXADataDimension*>(model->getDataDimension(0) );
+  MXADataDimension* dim1 = static_cast<MXADataDimension*>(model->getDataDimension(1) );
+  MXADataDimension* dim2 = static_cast<MXADataDimension*>(model->getDataDimension(2) );
+  MXADataDimension* dim3 = static_cast<MXADataDimension*>(model->getDataDimension(3) );
+  MXADataDimension* dimNull = static_cast<MXADataDimension*>(model->getDataDimension(4) );
   BOOST_REQUIRE(dim0 != NULL);
   BOOST_REQUIRE(dim1 != NULL);
   BOOST_REQUIRE(dim2 != NULL);
@@ -370,7 +370,7 @@ void TestDataDimensionMethods()
   //Test removing by index
   error = model->removeDataDimension(3); // Remove the last Dimension
   BOOST_REQUIRE( error > 0);
-  MXADataDimension* test = model->getDataDimension(2);
+  MXADataDimension* test = static_cast<MXADataDimension*>(model->getDataDimension(2) );
   BOOST_REQUIRE(test != dim3);
   BOOST_REQUIRE(model->getDataDimensions().size() == 3);
   
@@ -378,32 +378,15 @@ void TestDataDimensionMethods()
   BOOST_REQUIRE( error < 0);
   BOOST_REQUIRE(model->getDataDimensions().size() == 3);
   
-  //Test Removing the Dimension by Pointer
-  error = model->removeDataDimension(dim0);
-  BOOST_REQUIRE( error > 0);
-  BOOST_REQUIRE(dim0 == NULL);
-  BOOST_REQUIRE(model->getDataDimensions().size() == 2);
-  test = model->getDataDimension(0);
-  BOOST_REQUIRE(dim0 != test);
-  MXADataDimensionPtr dim5 = MXADataDimension::New("Volume Fraction", "Vol Frac", 0, 15, 20, 50, 2, 1);
-  test = dim5.get();
-  error = model->removeDataDimension( test ); //Try to remove a Pointer that was never added to the model
-  BOOST_REQUIRE( error < 0);
-  BOOST_REQUIRE(model->getDataDimensions().size() == 2);
-  
-  test = NULL;
-  error = model->removeDataDimension(test); //Try to remove a Null Pointer
-  BOOST_REQUIRE( error < 0);
-  BOOST_REQUIRE(model->getDataDimensions().size() == 2);
-  
-  //Test Removing by Name
+  //Test Removing by Name - This Dimension does exits and should decrement the count by 1
   error = model->removeDataDimension("Random Seed");
   BOOST_REQUIRE( error > 0);
-  BOOST_REQUIRE(model->getDataDimensions().size() == 1);
+  BOOST_REQUIRE(model->getDataDimensions().size() == 2);
   
+  // Test removing a Dimension by name that does NOT exist.
   error = model->removeDataDimension("Junk");
   BOOST_REQUIRE( error < 0);
-  BOOST_REQUIRE(model->getDataDimensions().size() == 1);
+  BOOST_REQUIRE(model->getDataDimensions().size() == 2);
 }
 
 // -----------------------------------------------------------------------------

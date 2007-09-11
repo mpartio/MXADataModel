@@ -50,10 +50,10 @@ int main(int argc, char **argv)
     return -1;
   }
   // Now we can interrogate the model to get some information
-  MXADataDimensions dims = modelPtr->getDataDimensions();
+  IDataDimensions dims = modelPtr->getDataDimensions();
   MXADataDimension* dim = NULL;
   //Loop over the Data Dimensions and print each one to std::cout
-  for (MXADataDimensions::iterator iter = dims.begin(); iter != dims.end(); ++iter )
+  for (IDataDimensions::iterator iter = dims.begin(); iter != dims.end(); ++iter )
   {
     dim = static_cast<MXADataDimension*>((*(iter)).get() );
     if (NULL == dim)

@@ -55,7 +55,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
 
  public:
    MXADataModel();
-  virtual ~MXADataModel();
+   virtual ~MXADataModel();
 
   /**
    * @brief Static method to create a new blank model.
@@ -112,7 +112,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param dimension
    * @param setIndex Sets the Index for the Dimension. Default is false.
    */
-  void addDataDimension(MXADataDimensionPtr dimension, bool setIndex=false);
+  void addDataDimension(IDataDimensionPtr dimension, bool setIndex=false);
 
   /**
    * @brief Creates and adds a new Data Dimension to the Model
@@ -126,17 +126,11 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param uniform Are the values uniform across the start to end values
    * @return A boost::shared_ptr to the newly created Data Dimension
    */
-  MXADataDimensionPtr addDataDimension(std::string name, std::string altName,
+  IDataDimensionPtr addDataDimension(std::string name, std::string altName,
       int32 index, int32 count, int32 startValue,
       int32 endValue, int32 increment, int32 uniform);
 
-  /**
-   * @brief Removes a Data Dimension from the Model using pointer comparison. The
-   * passed in dimension shared_ptr will have its wrapped pointer set to NULL
-   * if the deletion succeeds.
-   * @param  dimension The Data Dimension object to remove
-   */
-  int32 removeDataDimension(MXADataDimension* &dimension);
+
 
   /**
    * @brief Removes a data dimension by index
@@ -155,21 +149,21 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Returns the vector of Data Dimenions
    * @return
    */
-  MXADataDimensions& getDataDimensions();
+  IDataDimensions& getDataDimensions();
 
   /**
    * @brief Returns a Data dimension object given an index
    * @param index
    * @return
    */
-  MXADataDimension* getDataDimension(int32 index);
+  IDataDimension* getDataDimension(int32 index);
 
   /**
    * @brief Returns a Data Dimension object given the name of the data dimension
    * @param dimName
    * @return
    */
-  MXADataDimension* getDataDimension(std::string dimName);
+  IDataDimension* getDataDimension(std::string dimName);
   
   /**
    * @brief
@@ -377,7 +371,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    //Holds the 'path' to the root of the actual data in the data portion of the file
    std::string    _dataRoot;
    // Holds a vector of data dimensions
-   MXADataDimensions _dataDimensions;
+   IDataDimensions _dataDimensions;
    //Holds a vector of hierarchacally ordered Data Records
    MXADataRecords    _dataRecords;
 

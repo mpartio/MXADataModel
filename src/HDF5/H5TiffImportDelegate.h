@@ -43,7 +43,7 @@ public:
   /**
   * @brief Implementation from the IDataImportDelegate class
   */
-  int32 importDataSource(MXADataSourcePtr dataSource, MXADataModelPtr model);
+  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model);
   
   /**
    * @brief Sets the pointer to the DataModel

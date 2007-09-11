@@ -31,7 +31,7 @@
  * @version 1.0
  *  
  */
-class  MXA_EXPORT MXADataDimension : public IDataDimension, public MXANode
+class  MXA_EXPORT MXADataDimension : public IDataDimension
 {
 
 public:
@@ -202,7 +202,9 @@ protected:
   int32 _uniform;
   std::string _dimensionName;
   std::string _altName;
-
+  std::string _nodeName;
+  std::string _nodeType;
+  
 private:
     MXADataDimension(const MXADataDimension&);   //Copy Constructor Not Implemented
     void operator=(const MXADataDimension&); //Copy Assignment Not Implemented

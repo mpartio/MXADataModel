@@ -1,10 +1,11 @@
 #include "MXADataDimension.h"
+#include "Utilities/StringUtils.h"
+
 
 // -----------------------------------------------------------------------------
 //  Constructor
 // -----------------------------------------------------------------------------
 MXADataDimension::MXADataDimension() :
-MXANode(MXANode::Dimension, std::string("-1")),
 _index(std::numeric_limits<int32>::min()),
 _count(std::numeric_limits<int32>::min()),
 _startValue(std::numeric_limits<int32>::max()),
@@ -12,7 +13,8 @@ _endValue(std::numeric_limits<int32>::max()),
 _increment(std::numeric_limits<int32>::max()),
 _uniform(std::numeric_limits<int32>::min()),
 _dimensionName(""),
-_altName("")
+_altName(""),
+_nodeType("Dimension")
 {
   
 }
@@ -26,8 +28,7 @@ MXADataDimensionPtr MXADataDimension::New(std::string name, std::string altName,
 {
   MXADataDimension* dim = new MXADataDimension();
   MXADataDimensionPtr dimension(dim);
-  dimension->_setWeakPtr(boost::weak_ptr<MXANode>(dimension)); // Set the Weak Pointer
-  dimension->setNodeType(MXANode::Dimension);
+
   dim->setIndex(index);
   dim->setCount(count);
   dim->setStartValue(startValue);
@@ -85,16 +86,16 @@ void MXADataDimension::setNodeName(std::string nodeName)
 // -----------------------------------------------------------------------------
 void MXADataDimension::printNode(std::ostream& os, int32 indent)
 {
-  os << _indent(indent) << "*-Dimension Name: " << this->_dimensionName << std::endl;
-  os << _indent(indent) << " |-Alternate Name: " << this->_altName << std::endl;
-  os << _indent(indent) << " |-Display Name: " << this->_nodeName << std::endl;
-  os << _indent(indent) << " |-Type: " << this->getNodeTypeString() << std::endl;
-  os << _indent(indent) << " |-Index: " << this->_index << std::endl;
-  os << _indent(indent) << " |-StartValue: " << this->_startValue << std::endl;
-  os << _indent(indent) << " |-EndValue: " << this->_endValue << std::endl;
-  os << _indent(indent) << " |-Count: " << this->_count << std::endl;
-  os << _indent(indent) << " |-Increment: " << this->_increment << std::endl;
-  os << _indent(indent) << " |-Uniform: " << this->_uniform << std::endl;
+  os << StringUtils::indent(indent) << "*-Dimension Name: " << this->_dimensionName << std::endl;
+  os << StringUtils::indent(indent) << " |-Alternate Name: " << this->_altName << std::endl;
+  os << StringUtils::indent(indent) << " |-Display Name: " << this->_nodeName << std::endl;
+  os << StringUtils::indent(indent) << " |-Type: " << this->_nodeType << std::endl;
+  os << StringUtils::indent(indent) << " |-Index: " << this->_index << std::endl;
+  os << StringUtils::indent(indent) << " |-StartValue: " << this->_startValue << std::endl;
+  os << StringUtils::indent(indent) << " |-EndValue: " << this->_endValue << std::endl;
+  os << StringUtils::indent(indent) << " |-Count: " << this->_count << std::endl;
+  os << StringUtils::indent(indent) << " |-Increment: " << this->_increment << std::endl;
+  os << StringUtils::indent(indent) << " |-Uniform: " << this->_uniform << std::endl;
 
 }
 
@@ -145,4 +146,6 @@ bool MXADataDimension::isValid(std::string &message)
   
   return valid;
 }
+
+
 

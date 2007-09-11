@@ -74,7 +74,7 @@ class NumberAttributeHelper : public IAttributeHelper
     
     void convert(std::stringstream &sstream)
     {
-      int32 size = sizeof(T);
+      size_t size = sizeof(T);
       if (size != 1) {
         sstream << _value;
       } else {
