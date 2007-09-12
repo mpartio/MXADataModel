@@ -11,14 +11,14 @@
 #include "Common/MXATypes.h"
 #include "Common/MXATypeDefs.h"
 #include "Common/LogTime.h"
-#include "Base/IDataImportDelegate.h"
+#include "Base/IImportDelegate.h"
 #include "Base/IFileIODelegate.h"
 #include "Core/MXADataModel.h"
 #include "Core/MXADataDimension.h"
 #include "Core/MXADataRecord.h"
 #include "Core/MXADataImport.h"
 #include "Core/MXADataSource.h"
-
+#include "Testing/H5ImportTest.h"
 #include "HDF5/H5Lite.h"
 #include "HDF5/H5Utilities.h"
 
@@ -38,40 +38,6 @@ using namespace boost::unit_test;
 #endif
 
 
-/**
-*  @brief This class is used to show simply how to write some data into an HDF5 file.
-*  Some of the features of the IDataImportDelegate are not shown. This class
-*  will simply write a single value to the HDF5 file.
-* @author Mike Jackson
-* @date April 2007
-*/
-class H5ImportTestDelegate: public IDataImportDelegate
-{
-public:
-  H5ImportTestDelegate(){};
-  virtual ~H5ImportTestDelegate(){};
-
-// -----------------------------------------------------------------------------
-//  Implemented Method from the IDataImportDelegate interface 
-// -----------------------------------------------------------------------------
-  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
-  {
-    std::string path ( dataSource->generateInternalPath() );
-    uint32 pos = path.find_last_of("/");
-    std::string parentPath ( path.substr(0, pos)  );
-    int32 value = 55;
-    hid_t fileId = model->getIODelegate()->getOpenFileId();
-    H5Utilities::createGroupsFromPath(parentPath,  fileId);
-    //Write the Data to the HDF5 File
-    return H5Lite::writeScalarDataset(fileId, path, value);
-  }
-  
-private:
-  H5ImportTestDelegate(const H5ImportTestDelegate&);   //Copy Constructor Not Implemented
-  void operator=(const H5ImportTestDelegate&); //Copy Assignment Not Implemented
-  
-};
-
 
 
 // -----------------------------------------------------------------------------
@@ -88,7 +54,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   dataImport->setDataModel(model);
   
   // Create an Import Delegate to use for the DataSources
-  IDataImportDelegatePtr delegatePtr( new H5ImportTestDelegate());
+  IImportDelegatePtr delegatePtr( new H5ImportTestDelegate());
   
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
   MXADataDimension* dim0 = static_cast<MXADataDimension*>(model->getDataDimension(0) ); // Get the first Dimension, since there is only one this works

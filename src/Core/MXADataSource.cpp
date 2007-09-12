@@ -49,14 +49,14 @@ std::string MXADataSource::getSourcePath ( ) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataSource::setImportDelegate ( IDataImportDelegatePtr new_var ) {
+void MXADataSource::setImportDelegate ( IImportDelegatePtr new_var ) {
   _dataImportDelegate = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IDataImportDelegatePtr MXADataSource::getImportDelegate ( ) {
+IImportDelegatePtr MXADataSource::getImportDelegate ( ) {
   return _dataImportDelegate;
 }
 

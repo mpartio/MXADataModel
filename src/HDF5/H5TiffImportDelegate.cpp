@@ -69,7 +69,7 @@ void H5TiffImportDelegate::setImportAsGrayScale(bool value)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void H5TiffImportDelegate::setDataModel(MXADataModelPtr model) {
+void H5TiffImportDelegate::setDataModel(IDataModelPtr model) {
   this->_modelPtr = model; 
 }
 

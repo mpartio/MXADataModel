@@ -26,6 +26,14 @@ public:
    virtual std::string generateInternalPath ( ) = 0;
 
    /**
+    * @brief Generates the internal path that is used by the underlying data storage
+    * mechanism to place the data into the hierarchy
+    * @param indices A new set of indices to use to generate the paths
+    * @return The generated internal path. Empty if there was an error.
+    */
+   virtual std::string generateInternalPath ( std::vector<int32> &indices) = 0;
+   
+   /**
     * Set the value of m_dataRecord
     * @param new_var the new value of m_dataRecord
     */
@@ -55,13 +63,13 @@ public:
     * Set the value of m_importDelegate
     * @param new_var the new value of m_importDelegate
     */
-   virtual void setImportDelegate ( IDataImportDelegatePtr dataParser ) = 0;
+   virtual void setImportDelegate ( IImportDelegatePtr dataParser ) = 0;
 
    /**
     * Get the value of m_importDelegate
     * @return the value of m_importDelegate
     */
-   virtual IDataImportDelegatePtr getImportDelegate ( ) = 0;
+   virtual IImportDelegatePtr getImportDelegate ( ) = 0;
 
 
    /**

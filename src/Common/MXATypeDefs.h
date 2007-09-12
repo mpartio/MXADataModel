@@ -32,17 +32,18 @@ class MXADataDimension;
 class MXADataSource;
 class MXADataImport;
 class IDataImport;
-class IDataImportDelegate;
+class IImportDelegate;
 class IFileIODelegate;
 class IDataSource;
 class IDataModel;
 class IDataDimension;
 class IDataRecord;
 class IAttribute;
+class AbstractImportDelegateFactory;
+class ImportDelegateManager;
 
 
-
-typedef  boost::shared_ptr<MXADataModel>           MXADataModelPtr; /**< MXADataModel wrapped in a Boost Shared Pointer*/
+typedef  boost::shared_ptr<MXADataModel>           MXADataModelPtr;
 typedef  boost::shared_ptr<IDataModel>             IDataModelPtr;
 
 typedef  boost::shared_ptr<MXAAttribute>           MXAAttributePtr;
@@ -55,14 +56,18 @@ typedef  std::map<std::string, std::string>        MXARequiredMetaData;
 
 typedef  boost::shared_ptr<IFileIODelegate>        IODelegatePtr;
 
-
+// Importing of Data related 
 typedef  boost::shared_ptr<MXADataSource>          MXADataSourcePtr;
 typedef  boost::shared_ptr<IDataSource>            IDataSourcePtr;
 typedef  std::vector<MXADataSourcePtr>             MXADataSources;
 typedef  std::vector<IDataSourcePtr>               IDataSources;
-typedef  boost::shared_ptr<IDataImportDelegate>    IDataImportDelegatePtr;
 typedef  boost::shared_ptr<MXADataImport>          MXADataImportPtr;
 typedef  boost::shared_ptr<IDataImport>            IDataImportPtr;
+typedef  boost::shared_ptr<IImportDelegate>                IImportDelegatePtr;
+typedef  boost::shared_ptr<AbstractImportDelegateFactory>  AbstractImportDelegateFactoryPtr;
+typedef  boost::shared_ptr<ImportDelegateManager>          ImportDelegateManagerPtr;
+//typedef  boost::shared_ptr<ImportDelegateFactory>          ImportDelegateFactoryPtr;
+typedef  std::vector<AbstractImportDelegateFactoryPtr>     AbstractImportDelegateFactories;
 
 // Data Dimension typedefs
 typedef  boost::shared_ptr<MXADataDimension>       MXADataDimensionPtr;
@@ -78,5 +83,9 @@ typedef  boost::weak_ptr<IDataRecord>              IDataRecordWeakPtr;
 typedef  std::vector<IDataRecordPtr>               IDataRecords;
 typedef  std::vector<MXADataRecordPtr>             MXADataRecords;
 typedef  std::map<int32, IDataRecordPtr>           IDataRecordLookupTable;
+
+
+
+
 
 

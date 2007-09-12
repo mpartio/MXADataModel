@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  <!DOCTYPE Data_Import SYSTEM "http://materials.cmu.edu/degraef/mxa_import.dtd">  -->
+<!DOCTYPE Data_Import SYSTEM "mxa_import.dtd">
+<Data_Import>
+
+	<!-- Load a Template Model from an XML file -->
+	<Data_Model
+		Template_File="/Users/mjackson/Workspace/MXAImport/Resources/ModelTemplate.xml">
+		<!-- Define the dimensions  -->
+		<Data_Dimensions>
+			<Dimension Alt_Name="Tilt Series" Count="7" End_Value="7000"
+				Increment="1000" Index="0" Name="Tilt" Start_Value="1000"
+				Uniform="1" />
+			<Dimension Alt_Name="FIB Slice" Count="183" End_Value="182"
+				Increment="1" Index="1" Name="Slice" Start_Value="0" Uniform="1" />
+
+		</Data_Dimensions>
+	</Data_Model>
+
+	<!--  Define the Output file to store the data -->
+	<Output_File Absolute_Path="/tmp/XML_Based_Data_Import_Test.h5" />
+
+	<!--  Define the data sources for each Data Record and Dimension Values
+		/Users/mjackson/Task_7/Data/Mike-Uchic-Data/IN100_25JUN04_DISC1/7000_Series/7000.tif
+		Data_Record needs to be the full path to the Data Record 
+		Source_Type is the quick description of the contents of the file. This should
+		be from a known list of types that are supported or supplied by the user. -->
+	<Implicit_Data_Source Data_Record="Secondary Electron Image"
+		Source_Type="TIFF">
+		<File_Path>
+			<Text_Part
+				Text="/Users/mjackson/Task_7/Data/Mike-Uchic-Data/IN100_25JUN04_DISC1/" />
+			<Index_Part Padding_Char="0" 
+			 Total_Char_Length="4"
+				Numeric_Type="Integer" 
+				Data_Dimension="Tilt" />
+			<Text_Part Text="_Series/" />
+			<Index_Part Padding_Char="0" 
+			 Total_Char_Length="4"
+				Numeric_Type="Integer" 
+				Data_Dimension="Slice" />
+			<Text_Part Text=".tif" />
+		</File_Path>
+	</Implicit_Data_Source>
+
+	<!-- We can also explicitly declare each source file to be imported -->
+	<Explicit_Data_Source DataDimension_Values="7000 0"
+		Data_Record="Secondary Electron Image"
+		File_Path="/Users/mjackson/Task_7/Data/Mike-Uchic-Data/IN100_25JUN04_DISC1/7000_Series/7000.tif" />
+
+	<Explicit_Data_Source DataDimension_Values="7000 1"
+		Data_Record="Secondary Electron Image"
+		File_Path="/Users/mjackson/Task_7/Data/Mike-Uchic-Data/IN100_25JUN04_DISC1/7000_Series/7001.tif" />
+
+
+</Data_Import>

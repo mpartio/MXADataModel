@@ -15,7 +15,7 @@
 #include "Common/MXATypes.h"
 #include "Common/MXATypeDefs.h"
 #include "Common/LogTime.h"
-#include "Base/IDataImportDelegate.h"
+#include "Base/IImportDelegate.h"
 #include "Base/IFileIODelegate.h"
 #include "Core/MXADataModel.h"
 #include "Core/MXADataDimension.h"
@@ -27,7 +27,8 @@
 #include "HDF5/H5Utilities.h"
 
 #include "Testing/AnyDataDelegate.h"
-
+#include "Testing/ScalarDataImport.h"
+#include "Testing/VectorDataImport.h"
 
 #include <string>
 
@@ -134,8 +135,8 @@ public:
 	     int32 dim1Increment = dim1->getIncrement();
 	     
 	     // These are the actual dimensions of the data
-	     IDataImportDelegate* delegate = new AnyDataDelegate<T>(tableDims);
-	     boost::shared_ptr<IDataImportDelegate> delegatePtr (delegate);
+	     IImportDelegate* delegate = new AnyDataDelegate<T>(tableDims);
+	     IImportDelegatePtr delegatePtr (delegate);
 	     
 	     // Create a nested loop to create the necessary DataSource objects that will
 	     //  be used to import the data into the HDF5 file
@@ -170,85 +171,7 @@ private:
 };
 
 
-/**
-*  @brief This class is used to show simply how to write some data into an HDF5 file.
-*  Some of the features of the IDataImportDelegate are not shown. This class
-*  will simply write a single value to the HDF5 file.
-* @author Mike Jackson
-* @date April 2007
-*/
-class ScalarDataDelegate: public IDataImportDelegate
-{
-public:
-  ScalarDataDelegate(){};
-  virtual ~ScalarDataDelegate(){};
 
-// -----------------------------------------------------------------------------
-//  Implemented Method from the IDataImportDelegate interface 
-// -----------------------------------------------------------------------------
-  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
-  {
-    
-    std::string path ( dataSource->generateInternalPath() );
-  //  std::cout << logTime() << "ScalarDataDelegate::importDataSource() " << path << std::endl;
-    uint32 pos = path.find_last_of("/");
-    std::string parentPath ( path.substr(0, pos)  );
-    int32 value = 55;
-    hid_t fileId = model->getIODelegate()->getOpenFileId();
-    H5Utilities::createGroupsFromPath(parentPath,  fileId);
-    //Write the Data to the HDF5 File
-    return H5Lite::writeScalarDataset(fileId, path, value);
-  }
-  
-private:
-  ScalarDataDelegate(const ScalarDataDelegate&);   //Copy Constructor Not Implemented
-  void operator=(const ScalarDataDelegate&); //Copy Assignment Not Implemented
-  
-};
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-class VectorDataDelegate: public IDataImportDelegate
-{
-public:
-  VectorDataDelegate(){};
-  virtual ~VectorDataDelegate(){};
-
-// -----------------------------------------------------------------------------
-//  Implemented Method from the IDataImportDelegate interface 
-// -----------------------------------------------------------------------------
-  int32 importDataSource(MXADataSourcePtr dataSource, MXADataModelPtr model)
-  {
-    std::string path ( dataSource->generateInternalPath() );
-  //  std::cout << logTime() << "VectorDataDelegate::importDataSource() " << path << std::endl;
-    uint32 pos = path.find_last_of("/");
-    std::string parentPath ( path.substr(0, pos)  );
-    hid_t fileId = model->getIODelegate()->getOpenFileId();
-    H5Utilities::createGroupsFromPath(parentPath, fileId);
-    //Create data in a 2x5 table
-    std::vector<hsize_t> dims;
-    dims.push_back(128);
-    dims.push_back(128);
-    dims.push_back(128);
-    std::vector<uint8> data;
-    for (int i = 0; i < 128; ++i)
-    {
-      for (int j = 0; j < 128; ++j)
-      {
-        for (int k = 0; k < 128; ++k)
-        data.push_back( (i*j *k) * 255);
-      }
-    }
-    
-    return H5Lite::writeVectorDataset(fileId, path, dims, data);
-  }
-  
-private:
-  VectorDataDelegate(const VectorDataDelegate&);   //Copy Constructor Not Implemented
-  void operator=(const VectorDataDelegate&); //Copy Assignment Not Implemented
-  
-};
 
 
 #endif /*DATAFILEGENERATOR_H_*/

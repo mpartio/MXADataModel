@@ -82,6 +82,7 @@ SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Core/MXADataModel.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataSource.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataImport.cpp
+  ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.cpp
 )
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
@@ -97,7 +98,7 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Base/IDataDimension.h
   ${MXA_SOURCE_DIR}/src/Base/IDataDimensionWriter.h
   ${MXA_SOURCE_DIR}/src/Base/IDataImport.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataImportDelegate.h
+  ${MXA_SOURCE_DIR}/src/Base/IImportDelegate.h
   ${MXA_SOURCE_DIR}/src/Base/IDataModel.h
   ${MXA_SOURCE_DIR}/src/Base/IDataModelReader.h
   ${MXA_SOURCE_DIR}/src/Base/IDataModelWriter.h
@@ -114,8 +115,9 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Core/MXADataModel.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataSource.h
- # ${MXA_SOURCE_DIR}/src/Core/MXANode.h
   ${MXA_SOURCE_DIR}/src/Utilities/StringUtils.h
+  ${MXA_SOURCE_DIR}/src/DataImport/AbstractImportDelegateFactory.h
+  ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.h
   )
 
 # Build with the HDF5 Libraries Enabled. This is the default
@@ -218,6 +220,7 @@ IF (MXA_USE_XML)
         ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.cpp
         ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.cpp
         ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.cpp
+        ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.cpp
     )
     
     SET (MXA_XML_HEADERS
@@ -227,6 +230,7 @@ IF (MXA_USE_XML)
         ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.h
         ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.h
         ${MXA_SOURCE_DIR}/src/XML/XMLUserMetaDataWriter.h
+        ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.h
     )
     
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})

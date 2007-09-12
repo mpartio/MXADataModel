@@ -4,7 +4,7 @@
 
 #include "Common/MXATypes.h"
 #include "Common/MXATypeDefs.h"
-#include "Base/IDataImportDelegate.h"
+#include "Base/IImportDelegate.h"
 #include "Core/MXADataModel.h"
 
 
@@ -17,7 +17,7 @@
 * @class AnyDataDelegate AnyDataDelegate.h src/Test/AnyDataDelegate.h
 */
 template <typename T>
-class AnyDataDelegate: public IDataImportDelegate
+class AnyDataDelegate: public IImportDelegate
 {
   
   public: 

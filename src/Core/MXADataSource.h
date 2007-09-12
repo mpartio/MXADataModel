@@ -95,13 +95,13 @@ public:
    * @brief Set the value of _importDelegate
    * @param new_var the new value of _importDelegate
    */
-  void setImportDelegate ( IDataImportDelegatePtr dataParser );
+  void setImportDelegate ( IImportDelegatePtr dataParser );
 
   /**
    * @brief Get the value of _importDelegate
    * @return the value of _importDelegate
    */
-  IDataImportDelegatePtr getImportDelegate ( );
+  IImportDelegatePtr getImportDelegate ( );
 
 
   /**
@@ -133,7 +133,7 @@ private:
 
   IDataRecordPtr                _dataRecord;
   std::string                   _sourcePath;
-  IDataImportDelegatePtr        _dataImportDelegate;
+  IImportDelegatePtr            _dataImportDelegate;
   IDataModelPtr                 _dataModel;
   std::vector<int32>            _dimensionValues;
 

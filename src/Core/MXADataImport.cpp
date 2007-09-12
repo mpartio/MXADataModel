@@ -1,6 +1,6 @@
 #include "Core/MXADataImport.h"
 #include "Common/LogTime.h"
-#include "Base/IDataImportDelegate.h"
+#include "Base/IImportDelegate.h"
 #include "Core/MXADataSource.h"
 #include "Core/MXADataModel.h"
 

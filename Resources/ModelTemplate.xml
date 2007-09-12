@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE File_Root SYSTEM "http://titanium.imts.us/viewvc/Task_7/MXADataModel/Resources/mxa_0.4.dtd">
+<File_Root>
+  <Data_Model Model_Type="MXA" Model_Version="0.4">
+    <Data_Root Name="OIMFIB/Data/" />
+    <Data_Dimensions>
+  <Dimension Alt_Name="Tilt Series" Count="7" End_Value="7000" Increment="1000" Index="0" Name="Tilt" Start_Value="1000" Uniform="1" />
+  <Dimension Alt_Name="FIB Slice" Count="183" End_Value="182" Increment="1" Index="1" Name="Slice" Start_Value="0" Uniform="1" />
+    </Data_Dimensions>
+    <Data_Records>
+      <Signal Alt_Name="Secondary Electron Image" Name="Secondary Electron Image" />
+    <Signal_Group Alt_Name="EBSD" Name="EBSD">
+      <Signal Alt_Name="Image Quality" Name="Image Quality" />
+      <Signal Alt_Name="Confidence Index" Name="Confidence Index" />
+      <Signal Alt_Name="Phase" Name="Phase" />
+    <Signal_Group Alt_Name="Euler Angles" Name="Euler Angles">
+      <Signal Alt_Name="phi1" Name="phi1" />
+      <Signal Alt_Name="phi" Name="phi" />
+      <Signal Alt_Name="phi2" Name="phi2" />
+    </Signal_Group>
+    </Signal_Group>
+    </Data_Records>
+  </Data_Model>
+  <Meta_Data>
+    <Required_MD Creator="Mike Uchic" 
+    Date="June 25 2005" 
+    Description="These are images that were created during a FIB experiment" 
+    Distribution_Rights="Publicly Released" 
+    Name="OIM FIB IN100 Data" 
+    Original_Source_File="Individual tiff images and ANG files collected from the instrument" 
+    Pedigree="Generated at WPAFB/AFRL/MLLM" 
+    Release_Number="WS-AFRL-12300IDNVD" />
+    <UserDefined_MD>
+  </UserDefined_MD>
+  </Meta_Data>
+</File_Root>
