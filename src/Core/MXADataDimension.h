@@ -14,7 +14,6 @@
 #include "Common/MXATypes.h"
 #include "Common/MXATypeDefs.h"
 #include "Base/IDataDimension.h"
-#include "Core/MXANode.h"
 #include "Core/MXAConstants.h"
 #include "Utilities/StringUtils.h"
 

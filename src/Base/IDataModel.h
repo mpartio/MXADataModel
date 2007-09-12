@@ -140,7 +140,7 @@ class MXA_EXPORT IDataModel
     * @brief Adds a data Record to the model
     * @param record The record to add to the model
     */
-    virtual void addDataRecord(MXADataRecordPtr record) = 0;
+    virtual void addDataRecord(IDataRecordPtr record) = 0;
     /**
     * @brief Adds a Data record to the model using the given parent argument as
     * the record's parent object
@@ -149,13 +149,13 @@ class MXA_EXPORT IDataModel
     * Note that this is equivelent to just setting the parnet of the record manually.
     * this is provided for convenience and consistancy.
     */
-    virtual void addDataRecord(MXADataRecordPtr record, MXADataRecordPtr parent) = 0;
+    virtual void addDataRecord(IDataRecordPtr record, IDataRecordPtr parent) = 0;
     
     /**
     * @brief Returns the Data Records from the model. The natural form of the 
     * records is in a Tree structure.
     */
-    virtual MXADataRecords& getDataRecords() = 0;
+    virtual IDataRecords& getDataRecords() = 0;
     
     /**
     * @brief Returns a Data Record that is found by giving the full path using the actual names of the data record(s)
@@ -164,7 +164,7 @@ class MXA_EXPORT IDataModel
     * search will start at the top level of the data records.
     * @return Boost::shared_ptr to the data record object
     */
-    virtual MXADataRecordPtr getDataRecordByNamedPath(std::string path, MXADataRecord* parent=NULL) = 0;
+    virtual IDataRecordPtr getDataRecordByNamedPath(std::string path, IDataRecord* parent=NULL) = 0;
     
     /**
     * @brief Returns a Data Record that is found by giving the full path using the internal names of the data record(s)
@@ -173,7 +173,7 @@ class MXA_EXPORT IDataModel
     * search will start at the top level of the data records.
     * @return Boost::shared_ptr to the data record object
     */
-    virtual MXADataRecordPtr getDataRecordByInternalPath(std::string path, MXADataRecord* parent=NULL) = 0;
+    virtual IDataRecordPtr getDataRecordByInternalPath(std::string path, IDataRecord* parent=NULL) = 0;
     
     //------------- Required Meta Data Methods -----------------------------------
     /**

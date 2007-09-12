@@ -15,7 +15,6 @@
 #include <MXAConfiguration.h>
 #include "Common/MXATypeDefs.h"
 #include "Core/MXAConstants.h"
-#include "Core/MXANode.h"
 #include "Core/MXAAttribute.h"
 #include "Core/MXADataModel.h"
 #include "Core/MXADataDimension.h"
@@ -44,11 +43,9 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 #if defined (_WIN32)
   #define FILE_NAME_BEFORE "C:\\WINDOWS\\Temp\\DataModelTest-Before.h5"
   #define FILE_NAME_AFTER "C:\\WINDOWS\\Temp\\DataModelTest-After.h5"
-  #define FILE_NAME_XML "C:\\WINDOWS\\Temp\\DataModelTest.xml"
 #else 
   #define FILE_NAME_BEFORE "/tmp/DataModelTest-Before.h5"
   #define FILE_NAME_AFTER "/tmp/DataModelTest-After.h5"
-  #define FILE_NAME_XML "/tmp/DataModelTest.xml"
 #endif
 
 
@@ -168,9 +165,7 @@ MXADataModelPtr createModel()
 	  IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS", 2, 100, 0, 99, 1, 1);
 	  IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 3, 256, 0, 255, 1, 1);
 	  	  
-	  //Create Data Records
-	  MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
-	  model->addDataRecord(rec0);
+
 	  
 	  MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
 	  model->addDataRecord(rec1);
@@ -182,8 +177,8 @@ MXADataModelPtr createModel()
 	  MXADataRecordPtr rec4 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
 	  model->addDataRecord(rec4, rec1);
 	  
-	   MXADataRecordPtr rec5 = MXADataRecord::New(2, std::string("Order Parameters 2"), std::string("OP 2") );
-	    model->addDataRecord(rec5);
+	   MXADataRecordPtr rec5 = MXADataRecord::New(3, std::string("Order Parameters 2"), std::string("OP 2") );
+	    model->addDataRecord(rec5, rec1);
 	    //Create Data Records with Parents
 	    MXADataRecordPtr rec6 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
 	    model->addDataRecord(rec6, rec5);
@@ -191,7 +186,11 @@ MXADataModelPtr createModel()
 	    model->addDataRecord(rec7, rec5);
 	    MXADataRecordPtr rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
 	    model->addDataRecord(rec8, rec5);
-	    
+	  
+    //Create Data Records
+    MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
+    model->addDataRecord(rec0);
+      
     errorMessage.clear();
     BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
@@ -282,8 +281,8 @@ void TestRequiredMetaData()
 // -----------------------------------------------------------------------------
 bool recordExists(MXADataModelPtr model, std::string recName)
 {
-  MXADataRecordPtr rec = model->getDataRecordByNamedPath(recName);
-  return rec;
+  IDataRecordPtr rec = model->getDataRecordByNamedPath(recName);
+  return (rec.get() != NULL) ? true : false;
 }
 
 // -----------------------------------------------------------------------------
@@ -291,8 +290,8 @@ bool recordExists(MXADataModelPtr model, std::string recName)
 // -----------------------------------------------------------------------------
 bool recordInternalPathExists(MXADataModelPtr model, std::string recName)
 {
-  MXADataRecordPtr rec = model->getDataRecordByInternalPath(recName);
-  return rec;
+  IDataRecordPtr rec = model->getDataRecordByInternalPath(recName);
+  return (rec.get() != NULL) ? true : false;
 }
 
 // -----------------------------------------------------------------------------
@@ -302,10 +301,10 @@ void TestLookupTableGeneration()
 {
   std::cout << "TestLookupTableGeneration Running...." << std::endl;
   MXADataModelPtr modelPtr = createModel();
-  MXADataRecords records = modelPtr->getDataRecords();
-  NodeLookupTable lut;
-  MXANode::generateLUT(lut, records);
-  for (NodeLookupTable::iterator iter = lut.begin(); iter != lut.end(); ++iter )
+  IDataRecords records = modelPtr->getDataRecords();
+  IDataRecordLookupTable lut;
+  MXADataRecord::generateLUT(lut, records);
+  for (IDataRecordLookupTable::iterator iter = lut.begin(); iter != lut.end(); ++iter )
   {
     MXADataRecord* rec = dynamic_cast<MXADataRecord*>( (*(iter)).second.get() );
     std::cout << (*(iter)).first << "  " << rec->getRecordName() << std::endl;
@@ -319,16 +318,20 @@ void TestRetrieveDataRecords()
 { 
   std::cout << "TestRetrieveDataRecords Running...." << std::endl;
   MXADataModelPtr model = createModel();
-  BOOST_REQUIRE( recordExists(model, "/Composition") == true);
-  BOOST_REQUIRE( recordExists(model, "/Composition") == true);
-  BOOST_REQUIRE( recordExists(model, "/Composition/") == true);
-  BOOST_REQUIRE( recordExists(model, "Composition/") == true);
-  BOOST_REQUIRE( recordExists(model, "/Composition/Eta1") == false);
   BOOST_REQUIRE( recordExists(model, "/Order Parameters/Eta1/") == true);
   BOOST_REQUIRE( recordExists(model, "Order Parameters/Eta1") == true);
   BOOST_REQUIRE( recordExists(model, "/Order Parameters/Eta1") == true);
   BOOST_REQUIRE( recordExists(model, "Order Parameters/Eta1/") == true);
   BOOST_REQUIRE( recordExists(model, "Order Parameters/Eta1/Junk") == false);
+  BOOST_REQUIRE( recordExists(model, "Order Parameters/Order Parameters 2/Junk") == false);
+  BOOST_REQUIRE( recordExists(model, "Order Parameters/Order Parameters 2/Eta1") == true);
+  BOOST_REQUIRE( recordExists(model, "Order Parameters/Order Parameters 2/") == true);
+  BOOST_REQUIRE( recordExists(model, "/Composition") == true);
+  BOOST_REQUIRE( recordExists(model, "/Composition") == true);
+  BOOST_REQUIRE( recordExists(model, "/Composition/") == true);
+  BOOST_REQUIRE( recordExists(model, "Composition/") == true);
+  BOOST_REQUIRE( recordExists(model, "/Composition/Eta1") == false);
+
   BOOST_REQUIRE( recordExists(model, "") == false);
   BOOST_REQUIRE( recordExists(model, "/") == false);
   BOOST_REQUIRE( recordExists(model, "//") == false);
@@ -339,11 +342,14 @@ void TestRetrieveDataRecords()
   BOOST_REQUIRE( recordInternalPathExists(model, "/") == false);
   BOOST_REQUIRE( recordInternalPathExists(model, "//") == false);
   BOOST_REQUIRE( recordInternalPathExists(model, "///") == false);
-  BOOST_REQUIRE( recordInternalPathExists(model, "/2") == true);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/1") == true);
   BOOST_REQUIRE( recordInternalPathExists(model, "/0/2") == false);
-  BOOST_REQUIRE( recordInternalPathExists(model, "/2/0") == true);
-  BOOST_REQUIRE( recordInternalPathExists(model, "/2/0/") == true);
-  BOOST_REQUIRE( recordInternalPathExists(model, "/2/3/") == false);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/0/0") == false);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/0/1/") == false);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/0/3/") == false);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/1/3/") == true);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/1/3/0") == true);
+  BOOST_REQUIRE( recordInternalPathExists(model, "/1/3/3") == false);
   
 }
 
@@ -401,6 +407,7 @@ void WriteTestModel()
   BOOST_REQUIRE (model->writeModel(fileName) >= 0 );
   IODelegatePtr ioPtr;
   BOOST_REQUIRE ( model->writeModel(fileName, ioPtr) < 0);
+
 }
 
 // -----------------------------------------------------------------------------

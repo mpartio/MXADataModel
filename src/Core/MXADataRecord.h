@@ -17,12 +17,14 @@
 #include "Common/MXATypeDefs.h"
 #include "Base/IDataRecord.h"
 #include "Base/IDataRecordWriter.h"
-#include "Core/MXANode.h"
 #include "Core/MXAConstants.h"
 #include "Utilities/StringUtils.h"
+#include "Core/MXAAttribute.h"
 
 //Include Boost Headers
 #include "boost/shared_ptr.hpp"
+#include "boost/weak_ptr.hpp"
+#include "boost/tuple/tuple.hpp"
 
 /**
  * @brief This class holds the required and any extended information about a
@@ -32,11 +34,22 @@
  * @version 1.0
  *  
  */
-class MXA_EXPORT MXADataRecord :  public IDataRecord, public MXANode
+class MXA_EXPORT MXADataRecord :  public IDataRecord
 {
 
+  static int32 _uniqueGUIDValue;
+  
 public:  
- /**
+  /**
+  * @brief Creates a flat look up table using the GUID of the data record as the
+   * key and the boost::Shared_ptr as the value
+   * @param lut The look up table to be populated.
+   * @param records The MXADataRecords to use as the tree
+   */
+  static void generateLUT(IDataRecordLookupTable &lut, IDataRecords &nodes);
+  
+  
+  /**
   * @brief Used to create a new MXANode
   * @param type The Type of Node this is going to be
   * @param nodeName The Name of this node
@@ -97,11 +110,7 @@ public:
     this->_nodeName = StringUtils::numToString(this->_luid);
   }
 
-  /**
-   * @brief Prints the Data Record to the provided stream
-   */
-  void printNode(std::ostream& os, int32 indentSize=0);
-  
+ 
   /**
    * @brief Generates the path to this data record in terms of an internal HDF path
    */
@@ -117,9 +126,6 @@ public:
    * @param writer The IDataRecordWriter object to use to write this data record
    */
   int32 writeRecord(IDataRecordWriter* writer);
-  
-  //--- Over Ride from the MXANode Base class
-  void setNodeName(std::string nodeName);
 
   /**
    * @brief Checks some basic properties of the model to make sure they are
@@ -129,7 +135,63 @@ public:
    * @return True if the model passes the basic checks
    */
   bool isValid(std::string &message);
+
+  /**
+    * @brief Setter for property guid
+   * @param aValue The new value to set for property guid
+   */
+  void setUniqueId(int32 aValue) { _uniqueId = aValue; }
   
+  /**
+    * @brief Getter for property guid
+   * @return The value of guid
+   */
+  int32 getUniqueId() { return _uniqueId; }
+  
+  /**
+    * @brief
+   */
+  void resetGUIDValue();
+  
+  /**
+    * @brief
+   */
+  static int32 nextGUIDValue();
+  
+  /// Accessor for Parent iVar
+  void setParent(IDataRecordWeakPtr parent);
+  IDataRecordWeakPtr getParent();
+  
+  // Children Methods
+  int32 getNumChildren() const;
+  bool hasChildren() const;
+  void addChild(IDataRecordPtr child);
+  void removeChild(int index);
+  void removeChild(IDataRecord* child);
+  int32 indexOfChild(IDataRecord* child);
+
+  IDataRecordPtr getChildAt(int32 index);
+  IDataRecords& getChildren();
+  
+  // Template Method for native types
+  template<typename T>
+    void setAttribute(std::string key, T value)
+  {
+      boost::any v(value);
+      MXAAttributePtr attr = MXAAttribute::createAttribute(key, v);
+      _nodeAttributes[key] = attr;
+  }
+  
+  // Removes the Attribute
+  void removeAttribute(std::string);
+  
+  // Utilities
+  void printDataRecordTree(int32 depth=0);
+  virtual void printDataRecord(std::ostream& os, int32 indentSize=0);
+  
+  
+  // -------- Needed for Parent Child relationship ------------
+  void _setWeakPtr(IDataRecordWeakPtr weakPtr);
   
 protected:
   MXADataRecord();
@@ -138,6 +200,15 @@ protected:
   std::string _recordName;
   std::string _altName;
 
+  // --------------- IDataRecord Related Variables
+  // Node Name
+  std::string _nodeName;
+  int32 _uniqueId;
+  IDataRecordWeakPtr _selfPtr;
+  IDataRecordWeakPtr _parent;
+  IDataRecords _children;
+  MXAAttributeMap _nodeAttributes;
+  
 private:
     MXADataRecord(const MXADataRecord&);   //Copy Constructor Not Implemented
     void operator=(const MXADataRecord&); //Copy Assignment Not Implemented

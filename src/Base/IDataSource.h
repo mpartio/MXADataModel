@@ -29,13 +29,13 @@ public:
     * Set the value of m_dataRecord
     * @param new_var the new value of m_dataRecord
     */
-   virtual void setDataRecord ( MXADataRecordPtr dataRecord ) = 0;
+   virtual void setDataRecord ( IDataRecordPtr dataRecord ) = 0;
 
    /**
     * Get the value of m_dataRecord
     * @return the value of m_dataRecord
     */
-   virtual MXADataRecordPtr getDataRecord ( ) = 0;
+   virtual IDataRecordPtr getDataRecord ( ) = 0;
 
 
    /**

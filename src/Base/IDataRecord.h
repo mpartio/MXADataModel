@@ -22,7 +22,7 @@ class IDataRecordWriter;
  * @version 1.0
  *  
  */
-class MXA_EXPORT IDataRecord
+class MXA_EXPORT IDataRecord 
 {
   public:
     IDataRecord() {};
@@ -77,10 +77,6 @@ class MXA_EXPORT IDataRecord
      */
      virtual int32 getGuid() = 0;
      
-    
-    // Over ride from Superclass 
-     virtual void setNodeName(std::string nodeName) = 0;
-     virtual void printNode(std::ostream& os, int32 indentSize=0) = 0;
           
      virtual std::string generatePath()  = 0;
      virtual std::string generateParentPath()  = 0;
@@ -95,6 +91,112 @@ class MXA_EXPORT IDataRecord
       * @return True if the model passes the basic checks
       */
      virtual bool isValid(std::string &message) = 0;
+     
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+    /// Accessor for Parent iVar
+    /**
+    * @brief Sets the Parent node
+    * @param parent The Parent node for this node
+    */
+    virtual void setParent(IDataRecordWeakPtr parent) = 0;
+
+
+    /**
+    * @brief Returns the Parent Node
+    */
+    virtual IDataRecordWeakPtr getParent() = 0;
+    
+    /**
+    * @brief Setter for property guid
+    * @param aValue The new value to set for property guid
+    */
+    virtual void setUniqueId(int32 aValue) = 0;
+    
+    /**
+    * @brief Getter for property guid
+    * @return The value of guid
+    */
+    virtual int32 getUniqueId() = 0;
+    
+    /**
+     * @brief Resets the GUID value for this node
+     */
+    virtual void resetGUIDValue() = 0;
+
+    // Children Methods
+    /**
+    * @brief Returns the number of Children of this node
+    */
+    virtual int getNumChildren() const = 0;
+
+
+    /**
+    * @brief Returns TRUE if this node has children
+    */
+    virtual bool hasChildren() const = 0;  
+
+    /**
+    * @brief Adds a child to this node
+    * @param child The child to add to this node
+    */
+    virtual void addChild(IDataRecordPtr child) = 0;
+
+    /**
+    * @brief Removes a child from this node
+    * @param index The index of the child to remove
+    */
+    virtual void removeChild(int index) = 0;
+
+    /**
+    * @brief Removes the given child from this node
+    * @param child The child to remove
+    */
+    virtual void removeChild(IDataRecord* child) = 0;
+
+  
+    /**
+    * @brief Returns the index of a specific child
+    * @param child The child object whose index we are interested in
+    */
+    virtual int32 indexOfChild(IDataRecord* child) = 0;
+
+    /**
+    * @brief Returns a specific child of this node based on a given index
+    * @param index The index of the child to return
+    * @return The index of the child
+    */
+    virtual IDataRecordPtr getChildAt(int32 index) = 0;
+    
+    /**
+    * @brief Returns a reference to the children of this node
+    */
+    virtual IDataRecords& getChildren() = 0;
+
+
+    /**
+    * @brief Removes an Attribute from this node
+    * @param attrName The name of the attribute to remove
+    */
+    virtual void removeAttribute(std::string attrName) = 0;
+    
+
+    /**
+    * @brief prints the node and the children of this node
+    * @param depth The amount of indentation space
+    */
+    virtual void printDataRecordTree(int32 depth=0) = 0;
+    
+    /**
+    * @brief prints the node and the children of this node
+    * @param os An ostream to print the node to
+    * @param indentSize The amount of indentation space
+    */
+    virtual void printDataRecord(std::ostream& os, int32 indentSize=0) = 0;
+
+     
+     
      
   protected:
     

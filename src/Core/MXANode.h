@@ -8,6 +8,8 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
+#error Nothing should be including this file
+
 #ifndef _MHDNODE_H_
 #define _MHDNODE_H_
 

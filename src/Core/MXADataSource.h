@@ -69,13 +69,13 @@ public:
    * @brief Set the value of _dataRecord
    * @param new_var the new value of _dataRecord
    */
-  void setDataRecord ( MXADataRecordPtr dataRecord );
+  void setDataRecord ( IDataRecordPtr dataRecord );
 
   /**
    * @brief Get the value of _dataRecord
    * @return the value of _dataRecord
    */
-  MXADataRecordPtr getDataRecord ( );
+  IDataRecordPtr getDataRecord ( );
 
 
   /**
@@ -131,7 +131,7 @@ public:
   
 private:
 
-  MXADataRecordPtr              _dataRecord;
+  IDataRecordPtr                _dataRecord;
   std::string                   _sourcePath;
   IDataImportDelegatePtr        _dataImportDelegate;
   IDataModelPtr                 _dataModel;

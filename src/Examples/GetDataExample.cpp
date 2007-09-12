@@ -67,7 +67,7 @@ int main(int argc, char **argv)
   std::vector<int32> indices;
   indices.push_back(1); indices.push_back(1);
   // We also know the exact path to the Data Record, so lets use it to retrieve the Data Record from the Model
-  MXADataRecordPtr record = modelPtr->getDataRecordByNamedPath(DataGen::TableRec + "/" + DataGen::Float32Rec);
+  IDataRecordPtr record = modelPtr->getDataRecordByNamedPath(DataGen::TableRec + "/" + DataGen::Float32Rec);
   if (NULL == record.get() )
   {
     std::cout << logTime() << "Error getting '2D Array' Data Record" << std::endl;

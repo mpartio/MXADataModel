@@ -38,7 +38,14 @@ XMLDataModelReader::~XMLDataModelReader()
 //  
 // -----------------------------------------------------------------------------
 int32 XMLDataModelReader::readDataModel(int32 locId)
-{
+{ 
+//  std::cout << "XMLDataModelReader::readDataModel -> Data Records Size: " << this->_dataModel->getDataRecords().size() << std::endl;
+  if ( this->_dataModel->getDataRecords().size() != 0 )
+  {
+    std::cout << "XMLDataModelReader::readDataModel - The data model has Data Records. This will turn out to be bad. YOU should be" 
+    << " supplying a data model that is clean" << std::endl;
+    return -1;
+  }
   char buf[BUFFER_SIZE];
 
   // Create and initialise an instance of the parser.
@@ -47,7 +54,6 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
   parser.Create(NULL, NULL);
   parser.EnableElementHandler();
   parser.EnableCharacterDataHandler();
-
 
   // Load the XML file.
   FILE*  fh    = fopen(_fileName.c_str(), "r");
@@ -69,9 +75,13 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
   std::string message;
   if (this->_dataModel->isValid(message) == false )
   {
-    std::cout << message << std::endl;
+    _xmlParseError = -1;
   }
   
+//  std::cout << logTime() << "XMLDataModelReader::readDataModel Printing Data Records" << std::endl;
+//  std::cout << logTime() << "XMLDataModelReader::readDataModel  Data Records Size: " << this->_dataModel->getDataRecords().size() << std::endl;
+//  this->_dataModel->printDataRecords(std::cout, 1);
+//  std::cout << logTime() << "XMLDataModelReader::readDataModel  Done Printing Data Records" << std::endl;
   return this->_xmlParseError;
 }
 
@@ -293,6 +303,8 @@ void XMLDataModelReader::onData_RecordsStartTag(const XML_Char* name, const XML_
 {
   MXADataRecord* nullRecord = NULL;
   _currentParentRecord.reset(nullRecord); // Make the parent NULL since we are at the top level
+  //std::cout << "XMLDataModelReader::onData_RecordsStartTag Data Records Size: " << this->_dataModel->getDataRecords().size() << std::endl;
+  this->_indent = 1;
   // printf("Starting %s\n", name); 
 }
 
@@ -301,13 +313,17 @@ void XMLDataModelReader::onData_RecordsStartTag(const XML_Char* name, const XML_
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onSignal_GroupStartTag(const XML_Char* name, const XML_Char** attrs)
 {
-   std::map<std::string, std::string> attrMap;
+  ++_indent;
+  std::map<std::string, std::string> attrMap;
   for (int i = 0; attrs[i]; i += 2) {
     attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
   }
+  //std::cout << StringUtils::indent(_indent) << "XMLDataModelReader::onSignal_GroupStartTag: " << attrMap[MXA::MXA_NAME_TAG] << " " << this->_dataModel->getDataRecords().size() << std::endl;
+
   int32 luid = -1;
   if (NULL == _currentParentRecord.get() )
   {
+    //std::cout << StringUtils::indent(_indent) << "_currentParentRecord was NULL" << std::endl;
     luid = static_cast<int32>( this->_dataModel->getDataRecords().size() ); // This is actually an UNSIGNED int.. 
   }
   else 
@@ -315,9 +331,17 @@ void XMLDataModelReader::onSignal_GroupStartTag(const XML_Char* name, const XML_
     luid = _currentParentRecord->getNumChildren();
   }
   MXADataRecordPtr record = MXADataRecord::New( luid, attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG] );
-  this->_dataModel->addDataRecord(record, _currentParentRecord); 
-  _currentParentRecord = record; // Set this as the current Parent Record
   
+  if (_currentParentRecord.get() != NULL)
+  {
+    _dataModel->addDataRecord(record, _currentParentRecord);
+  }
+  else 
+  {
+    _dataModel->addDataRecord(record); 
+  }
+  _currentParentRecord = record; // Set this as the current Parent Record
+
 }
 
 // -----------------------------------------------------------------------------
@@ -325,21 +349,33 @@ void XMLDataModelReader::onSignal_GroupStartTag(const XML_Char* name, const XML_
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onSignalStartTag(const XML_Char* name, const XML_Char** attrs)
 {
+  ++_indent;
   std::map<std::string, std::string> attrMap;
   for (int i = 0; attrs[i]; i += 2) {
     attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
   }
+ // std::cout << StringUtils::indent(_indent) << "XMLDataModelReader::onSignalStartTag: " << attrMap[MXA::MXA_NAME_TAG] << " " << this->_dataModel->getDataRecords().size() << std::endl;
+
   int32 luid = -1;
   if (NULL == _currentParentRecord.get() )
   {
+  //  std::cout << StringUtils::indent(_indent) << "_currentParentRecord was NULL" << std::endl;
     luid = static_cast<int32>( this->_dataModel->getDataRecords().size() ); // This is actually an UNSIGNED int.. 
   }
   else 
   {
     luid = _currentParentRecord->getNumChildren();
   }
+  
   MXADataRecordPtr record = MXADataRecord::New( luid, attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG] );
-  this->_dataModel->addDataRecord(record, _currentParentRecord);
+  if (_currentParentRecord.get() != NULL)
+  {
+    _dataModel->addDataRecord(record, _currentParentRecord);
+  }
+  else 
+  {
+    _dataModel->addDataRecord(record); 
+  }  
 }
 
 
@@ -561,7 +597,7 @@ void XMLDataModelReader::onRequired_MDEndTag(const XML_Char* name)
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onSignalEndTag(const XML_Char* name)
 {
-
+  --_indent;
     // printf("Ending %s\n", name); 
 }
 
@@ -570,8 +606,8 @@ void XMLDataModelReader::onSignalEndTag(const XML_Char* name)
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onSignal_GroupEndTag(const XML_Char* name)
 {
-  MXADataRecord* rec = static_cast<MXADataRecord*>( _currentParentRecord->getParent().lock().get() );
-  _currentParentRecord.reset( rec ); // Set this as the current Parent Record
+  --_indent;
+  _currentParentRecord = _currentParentRecord->getParent().lock();
   //printf("Ending %s\n", name); 
 }
 

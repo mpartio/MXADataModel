@@ -21,14 +21,14 @@ MXADataSource::~MXADataSource ( ) { }
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataSource::setDataRecord ( MXADataRecordPtr new_var ) {
+void MXADataSource::setDataRecord ( IDataRecordPtr new_var ) {
   _dataRecord = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXADataRecordPtr MXADataSource::getDataRecord ( ) {
+IDataRecordPtr MXADataSource::getDataRecord ( ) {
   return _dataRecord;
 }
 

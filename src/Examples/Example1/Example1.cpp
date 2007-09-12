@@ -241,9 +241,9 @@ void listDataRecords(MXADataModel* model)
   // We can get a list of Data Records and print out the top level records.
   // Note that Data Records are stored in a tree structure, so without any type of 
   // tree traversal, this code will only print the top level records.
-  MXADataRecords records = model->getDataRecords();
+  IDataRecords records = model->getDataRecords();
   MXADataRecord* rec = NULL; //Create a convenience pointer
-  for (MXADataRecords::iterator iter = records.begin(); iter != records.end(); ++iter ) {
+  for (IDataRecords::iterator iter = records.begin(); iter != records.end(); ++iter ) {
     rec = static_cast<MXADataRecord*>( (*(iter)).get() );
     std::cout << "Data Record: " << rec->getRecordName() << std::endl;
   }

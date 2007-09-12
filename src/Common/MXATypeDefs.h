@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 #include <map>
+
+//-- Boost Includes
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
@@ -36,19 +38,23 @@ class IDataSource;
 class IDataModel;
 class IDataDimension;
 class IDataRecord;
+class IAttribute;
+
 
 
 typedef  boost::shared_ptr<MXADataModel>           MXADataModelPtr; /**< MXADataModel wrapped in a Boost Shared Pointer*/
 typedef  boost::shared_ptr<IDataModel>             IDataModelPtr;
-typedef  boost::shared_ptr<MXANode>                MXANodePtr;
+
 typedef  boost::shared_ptr<MXAAttribute>           MXAAttributePtr;
-typedef  boost::shared_ptr<MXADataRecord>          MXADataRecordPtr;
-typedef  boost::shared_ptr<IDataRecord>            IDataRecordPtr;
-typedef  boost::shared_ptr<MXADataDimension>       MXADataDimensionPtr;
-typedef  boost::shared_ptr<IDataDimension>         IDataDimensionPtr;
-typedef  boost::shared_ptr<IFileIODelegate>        IODelegatePtr;
-typedef  std::vector<MXAAttributePtr>              MXAUserMetaData;
+typedef  boost::shared_ptr<IAttribute>             IAttributePtr;
 typedef  std::vector<MXAAttributePtr>              MXAAttributes;
+typedef  std::vector<IAttributePtr>                IAttributes;
+typedef  std::map<std::string, MXAAttributePtr>    MXAAttributeMap;
+typedef  std::vector<MXAAttributePtr>              MXAUserMetaData;
+typedef  std::map<std::string, std::string>        MXARequiredMetaData;
+
+typedef  boost::shared_ptr<IFileIODelegate>        IODelegatePtr;
+
 
 typedef  boost::shared_ptr<MXADataSource>          MXADataSourcePtr;
 typedef  boost::shared_ptr<IDataSource>            IDataSourcePtr;
@@ -58,19 +64,19 @@ typedef  boost::shared_ptr<IDataImportDelegate>    IDataImportDelegatePtr;
 typedef  boost::shared_ptr<MXADataImport>          MXADataImportPtr;
 typedef  boost::shared_ptr<IDataImport>            IDataImportPtr;
 
-
+// Data Dimension typedefs
+typedef  boost::shared_ptr<MXADataDimension>       MXADataDimensionPtr;
+typedef  boost::shared_ptr<IDataDimension>         IDataDimensionPtr;
 typedef  std::vector<MXADataDimensionPtr>          MXADataDimensions;
 typedef  std::vector<IDataDimensionPtr>            IDataDimensions;
-typedef  std::vector<MXANodePtr>                   MXADataRecords;
-typedef  std::vector<MXANodePtr>                   MXANodes;
 
-typedef  std::map<std::string, MXAAttributePtr>    Attributes;
-
-
-typedef  boost::weak_ptr<MXANode>                  MXANodeWeakPtr;
-typedef  std::vector<MXANodePtr>                   MXANodeChildren;
-typedef  std::map<int32, MXANodePtr>               NodeLookupTable;
-typedef  std::map<std::string, std::string>        MXARequiredMetaData;
-
+// Data Record Typedefs
+typedef  boost::shared_ptr<IDataRecord>            IDataRecordPtr;
+typedef  boost::shared_ptr<MXADataRecord>          MXADataRecordPtr;
+typedef  boost::weak_ptr<MXADataRecord>            MXADataRecordWeakPtr;
+typedef  boost::weak_ptr<IDataRecord>              IDataRecordWeakPtr;
+typedef  std::vector<IDataRecordPtr>               IDataRecords;
+typedef  std::vector<MXADataRecordPtr>             MXADataRecords;
+typedef  std::map<int32, IDataRecordPtr>           IDataRecordLookupTable;
 
 

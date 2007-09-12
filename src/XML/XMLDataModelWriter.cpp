@@ -40,7 +40,7 @@ int32 XMLDataModelWriter::writeModelToFile(int32 NOT_USED)
   
   
   stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-       << "<!DOCTYPE File_Root SYSTEM \"http://materials.cmu.edu/degraef/mhd_0.4.dtd\">\n";
+       << "<!DOCTYPE File_Root SYSTEM \"http://titanium.imts.us/viewvc/Task_7/MXADataModel/Resources/mxa_0.4.dtd\">\n";
 
   std::map<std::string, std::string> attrs;
   attrs[MXA_XML::Model_Type] = _dataModel->getModelType();
@@ -217,10 +217,10 @@ int32 XMLDataModelWriter::writeDataDimensions(int32 depth)
 int32 XMLDataModelWriter::writeDataRecords(int32 depth)
 {
   _openTag(MXA_XML::Data_Records, depth);
-  MXADataRecords records =  _dataModel->getDataRecords();
+  IDataRecords records =  _dataModel->getDataRecords();
   MXADataRecord* rec;
   int32 err = 0;
-  for ( MXADataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
+  for ( IDataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
   {
     rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
     err = rec->writeRecord(this);
@@ -316,11 +316,11 @@ int32 XMLDataModelWriter::writeDataRecord(IDataRecord* record)
   attrs[MXA_XML::Attribute::Name] = record->getRecordName();
   attrs[MXA_XML::Attribute::AltName] = record->getAltName();
 
-  if ( dynamic_cast<INode*>(record)->hasChildren() ) {
+  if ( dynamic_cast<IDataRecord*>(record)->hasChildren() ) {
     _openTag(MXA_XML::Signal_Group, depth - 1, true, attrs);
     MXADataRecord* rec;
-    MXANodeChildren records = dynamic_cast<INode*>(record)->getChildren();
-    for ( MXADataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
+    IDataRecords records = dynamic_cast<IDataRecord*>(record)->getChildren();
+    for ( IDataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
     {
       rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
       err = rec->writeRecord(this);

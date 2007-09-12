@@ -148,27 +148,6 @@ IDataDimensionPtr MXADataModel::addDataDimension(std::string name, std::string a
   return dim;
 }
 
-#if 0
-// -----------------------------------------------------------------------------
-//  Removes a Data Dimension from this list
-// -----------------------------------------------------------------------------
-int32 MXADataModel::removeDataDimension(IDataDimension* &dimension)
-{
-  int32 success = -1;
-  for (IDataDimensions::iterator iter = _dataDimensions.begin(); iter != _dataDimensions.end(); ++iter)
-  {
-    if ( (*(iter)).get() == dimension ) 
-    {
-      _dataDimensions.erase( iter );
-      dimension = NULL; // Set the incoming pointer to NULL because it will be invalid after this operation
-      success = 1;
-      break;
-    }
-  }
-  return success;
-}
-#endif
-
 // -----------------------------------------------------------------------------
 //  Removes a Data Dimension from this list using the index into the vector
 // -----------------------------------------------------------------------------
@@ -258,7 +237,7 @@ int32 MXADataModel::getNumberOfDataDimensions()
 // -----------------------------------------------------------------------------
 //  Adds a Data Record to the top level of the DataRecords Group
 // -----------------------------------------------------------------------------
-void MXADataModel::addDataRecord(MXADataRecordPtr record)
+void MXADataModel::addDataRecord(IDataRecordPtr record)
 {
   this->_dataRecords.push_back(record);
 }
@@ -267,7 +246,7 @@ void MXADataModel::addDataRecord(MXADataRecordPtr record)
 //  Simply adds the record as a child of the parent. By adding it to an existing
 //   parent in the hierarchy, the record will become part of the hierarchy
 // -----------------------------------------------------------------------------
-void MXADataModel::addDataRecord(MXADataRecordPtr record, MXADataRecordPtr parent)
+void MXADataModel::addDataRecord(IDataRecordPtr record, IDataRecordPtr parent)
 {
   if (NULL != parent.get() )
   {
@@ -282,7 +261,7 @@ void MXADataModel::addDataRecord(MXADataRecordPtr record, MXADataRecordPtr paren
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXADataRecords& MXADataModel::getDataRecords()
+IDataRecords& MXADataModel::getDataRecords()
 {
   return this->_dataRecords;
 }
@@ -290,13 +269,14 @@ MXADataRecords& MXADataModel::getDataRecords()
 // -----------------------------------------------------------------------------
 //  Gets an MXADataRecord by the path given
 // -----------------------------------------------------------------------------
-MXADataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, MXADataRecord* parent)
+IDataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, IDataRecord* parentPtr)
 {
  // std::cout << "Looking for Path: " << path << std::endl;
   // Remove any trailing slash in the path
   MXADataRecord* currentRec = NULL;
-  boost::shared_ptr<MXADataRecord> rec;
-
+  IDataRecordPtr rec;
+  IDataRecord* parent = static_cast<IDataRecord*>(parentPtr);
+  
   // remove any front slash
   std::string::size_type pos = path.find_first_of("/", 0);
   if ( 0 == pos ) 
@@ -319,7 +299,7 @@ MXADataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, MXADat
 
   std::string first;
   std::string second;
-  MXADataRecords records;
+  IDataRecords records;
   if ( NULL == parent) // No parent, so start at the top
   {
     records = this->_dataRecords;
@@ -329,7 +309,7 @@ MXADataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, MXADat
      records = parent->getChildren();
   }
   
-  for (MXADataRecords::iterator iter = records.begin(); iter != records.end(); ++iter)
+  for (IDataRecords::iterator iter = records.begin(); iter != records.end(); ++iter)
   {
     currentRec = static_cast<MXADataRecord*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
     std::string recName = currentRec->getRecordName();
@@ -346,7 +326,7 @@ MXADataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, MXADat
     }
     if ( first.compare(recName) == 0)
     {
-      if (second.empty()) // Only return if we are ath the end of the path
+      if (second.empty()) // Only return if we are at the end of the path
       { 
         return boost::dynamic_pointer_cast<MXADataRecord>(*iter);
       } 
@@ -366,12 +346,12 @@ MXADataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, MXADat
 // -----------------------------------------------------------------------------
 //  Gets an MXADataRecord by the path given
 // -----------------------------------------------------------------------------
-MXADataRecordPtr MXADataModel::getDataRecordByInternalPath(std::string path, MXADataRecord* parent)
+IDataRecordPtr MXADataModel::getDataRecordByInternalPath(std::string path, IDataRecord* parent)
 {
  // std::cout << "Looking for Path: " << path << std::endl;
   // Remove any trailing slash in the path
-  MXADataRecord* currentRec = NULL;
-  boost::shared_ptr<MXADataRecord> rec;
+  IDataRecord* currentRec = NULL;
+  IDataRecordPtr rec;
 
   // remove any front slash
   std::string::size_type pos = path.find_first_of("/", 0);
@@ -395,7 +375,7 @@ MXADataRecordPtr MXADataModel::getDataRecordByInternalPath(std::string path, MXA
 
   std::string first;
   std::string second;
-  MXADataRecords records;
+  IDataRecords records;
   if ( NULL == parent) // No parent, so start at the top
   {
     records = this->_dataRecords;
@@ -405,7 +385,7 @@ MXADataRecordPtr MXADataModel::getDataRecordByInternalPath(std::string path, MXA
      records = parent->getChildren();
   }
   
-  for (MXADataRecords::iterator iter = records.begin(); iter != records.end(); ++iter)
+  for (IDataRecords::iterator iter = records.begin(); iter != records.end(); ++iter)
   {
     currentRec = static_cast<MXADataRecord*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
     std::string recName = StringUtils::numToString( currentRec->getLuid() );
@@ -424,11 +404,11 @@ MXADataRecordPtr MXADataModel::getDataRecordByInternalPath(std::string path, MXA
     {
       if (second.empty()) // Only return if we are ath the end of the path
       { 
-        return boost::dynamic_pointer_cast<MXADataRecord>(*iter);
+        return boost::dynamic_pointer_cast<IDataRecord>(*iter);
       } 
       else
       {
-        rec = getDataRecordByInternalPath(second, currentRec);
+        rec = getDataRecordByInternalPath(second, static_cast<IDataRecord*>(currentRec) );
         if (rec.get() != NULL)
         {
           break;
@@ -532,16 +512,16 @@ MXAUserMetaData&  MXADataModel::getUserMetaData()
 // -----------------------------------------------------------------------------
 void MXADataModel::printModel(std::ostream& os, int32 indent)
 {
-  os << _indent(indent) << "---------XMA DataModel---------" << std::endl;
-  os << _indent(indent) << "FileVersion: " << getModelVersion() << std::endl;
-  os << _indent(indent) << "FileType: " << getModelType() << std::endl;
-  os << _indent(indent) << "DataModel" << std::endl;
+  os << StringUtils::indent(indent) << "--------- MXA DataModel---------" << std::endl;
+  os << StringUtils::indent(indent) << "FileVersion: " << getModelVersion() << std::endl;
+  os << StringUtils::indent(indent) << "FileType: " << getModelType() << std::endl;
+  os << StringUtils::indent(indent) << "DataModel" << std::endl;
   indent++;
-  os << _indent(indent) << "DataRoot: " << getDataRoot() << std::endl;
-  os << _indent(indent) << "Data Dimensions" << std::endl;
+  os << StringUtils::indent(indent) << "DataRoot: " << getDataRoot() << std::endl;
+  os << StringUtils::indent(indent) << "Data Dimensions [" << this->_dataDimensions.size() << "]" << std::endl;
   printDataDimensions(os, ++indent);
   indent--;
-  os << _indent(indent) << "Data Records" << std::endl;
+  os << StringUtils::indent(indent) << "Data Records" << std::endl;
   printDataRecords(os, indent + 1);
   printRequiredMetaData(os, indent);
   printUserMetaData(os, indent);
@@ -552,9 +532,18 @@ void MXADataModel::printModel(std::ostream& os, int32 indent)
 // -----------------------------------------------------------------------------
 void MXADataModel::printDataRecords(std::ostream& os, int32 indent)
 {
-  for (MXADataRecords::iterator iter = _dataRecords.begin(); iter != _dataRecords.end(); ++iter)
+  IDataRecord* rec = NULL;
+  IDataRecordPtr ptr;
+  for (IDataRecords::iterator iter = _dataRecords.begin(); iter != _dataRecords.end(); ++iter)
   {
-    (*(iter))->printNode(os, indent);
+    ptr = (*iter);
+    rec = ptr.get();
+    if ( rec == NULL)
+    {
+      std::cout << "MXADataRecord Pointer was NULL" << std::endl;
+      continue;
+    }
+    rec->printDataRecord(os, indent);
   }
 }
 
@@ -577,9 +566,9 @@ void MXADataModel::printDataDimensions(std::ostream& os, int32 indent)
 // -----------------------------------------------------------------------------
 void MXADataModel::printRequiredMetaData(std::ostream& os, int32 indent)
 {
-  std::string ind = _indent(indent);
+  std::string ind = StringUtils::indent(indent);
   os << ind << "Required Meta Data" << std::endl;
-  ind = _indent(indent + 1);
+  ind = StringUtils::indent(indent + 1);
   os << ind << "Researcher Name: " << _researcherName << std::endl;
   os << ind << "Date Created: " << _datasetDateCreated << std::endl;
   os << ind << "Derived Source File: " << _derivedSourceFile << std::endl;
@@ -595,24 +584,15 @@ void MXADataModel::printRequiredMetaData(std::ostream& os, int32 indent)
 // -----------------------------------------------------------------------------
 void MXADataModel::printUserMetaData(std::ostream& os, int32 indent)
 {
-  os << _indent(indent) << "User Meta Data" << std::endl;
+  os << StringUtils::indent(indent) << "User Meta Data" << std::endl;
   MXAAttribute* attr;
   for (MXAUserMetaData::iterator iter = _userMetaData.begin(); iter != _userMetaData.end(); ++iter)
   {
     attr = (*iter).get();
-    os << _indent(indent + 1) << attr->getKey() << " ---> " << attr->valueToString() << std::endl;
+    os << StringUtils::indent(indent + 1) << attr->getKey() << " ---> " << attr->valueToString() << std::endl;
   }
 }
 
-
-// -----------------------------------------------------------------------------
-//  Creates an indentation string
-// -----------------------------------------------------------------------------
-std::string MXADataModel::_indent(int depth)
-{
-  const int32 indentSize = 2;
-  return std::string(indentSize * depth, ' ');
-}
 
 // -----------------------------------------------------------------------------
 //  Reads the datamodel from the filename given using the defualt IODelegatePtr
@@ -682,7 +662,7 @@ IODelegatePtr MXADataModel::getIODelegate()
 // -----------------------------------------------------------------------------
 //  Use a new set of indices to generate a path
 // -----------------------------------------------------------------------------
-std::string MXADataModel::generatePathToDataset ( std::vector<int32> &indices,  MXADataRecord* record) 
+std::string MXADataModel::generatePathToDataset ( std::vector<int32> &indices,  IDataRecord* record) 
 {
   std::string path;
   //Put the data root on first

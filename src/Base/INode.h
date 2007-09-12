@@ -8,6 +8,7 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
+#error NOTHING SHOULD BE INCLUDING THIS FILE
 #ifndef _IMXANODE_H_
 #define _IMXANODE_H_
 
@@ -133,13 +134,13 @@ class MXA_EXPORT INode
     * @brief Sets the Parent node
     * @param parent The Parent node for this node
     */
-    virtual void setParent(MXANodeWeakPtr parent) = 0;
+    virtual void setParent(INodeWeakPtr parent) = 0;
 
 
     /**
     * @brief Returns the Parent Node
     */
-    virtual MXANodeWeakPtr getParent() = 0;
+    virtual INodeWeakPtr getParent() = 0;
     
     /**
     * @brief Setter for property guid
@@ -174,7 +175,7 @@ class MXA_EXPORT INode
     * @brief Adds a child to this node
     * @param child The child to add to this node
     */
-    virtual void addChild(MXANodePtr child) = 0;
+    virtual void addChild(INodePtr child) = 0;
 
     /**
     * @brief Removes a child from this node
@@ -186,31 +187,26 @@ class MXA_EXPORT INode
     * @brief Removes the given child from this node
     * @param child The child to remove
     */
-    virtual void removeChild(MXANodePtr child) = 0;
+    virtual void removeChild(INode* child) = 0;
 
+  
     /**
     * @brief Returns the index of a specific child
     * @param child The child object whose index we are interested in
     */
-    virtual int indexOfChild(MXANodePtr child) = 0;
-    
-    /**
-    * @brief Returns the index of a specific child
-    * @param child The child object whose index we are interested in
-    */
-    virtual int32 indexOfChild(MXANode* child) = 0;
+    virtual int32 indexOfChild(INode* child) = 0;
 
     /**
     * @brief Returns a specific child of this node based on a given index
     * @param index The index of the child to return
     * @return The index of the child
     */
-    virtual MXANodePtr getChildAt(int32 index) = 0;
+    virtual INodePtr getChildAt(int32 index) = 0;
     
     /**
     * @brief Returns a reference to the children of this node
     */
-    virtual MXANodeChildren& getChildren() = 0;
+    virtual INodes& getChildren() = 0;
 
 
     /**
@@ -220,6 +216,19 @@ class MXA_EXPORT INode
     virtual void removeAttribute(std::string attrName) = 0;
     
 
+    /**
+    * @brief prints the node and the children of this node
+    * @param depth The amount of indentation space
+    */
+    virtual void printNodeTree(int32 depth=0) = 0;
+    
+    /**
+    * @brief prints the node and the children of this node
+    * @param os An ostream to print the node to
+    * @param indentSize The amount of indentation space
+    */
+    virtual void printNode(std::ostream& os, int32 indentSize=0) = 0;
+  
 };
 
 #endif /*_IMXANODE_H_*/

@@ -98,7 +98,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   BOOST_REQUIRE(dim1 != NULL); // Used for Boost Unit Test Framework
   
   // Create a DataRecord entry for the Data Model
-  MXADataRecordPtr record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
+  IDataRecordPtr record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
   BOOST_REQUIRE(NULL != record.get()); // Used for Boost Unit Test Framework
 
   // Set the start/end/increment values for each Data Dimension
@@ -187,7 +187,7 @@ MXADataModelPtr createSimpleModel()
 // -----------------------------------------------------------------------------
 int DataImportTest ()
 {
-  std::cout << logTime() << "----- Running DataImport Test ------------- " << std::endl;
+  //std::cout << logTime() << "----- Running DataImport Test ------------- " << std::endl;
   std::string outputFile(FILE_NAME_BEFORE);
   MXADataModelPtr model = createSimpleModel();
   BOOST_REQUIRE(model->writeModel(outputFile, false) >= 0); //Leave the file open for the import
@@ -200,12 +200,9 @@ int DataImportTest ()
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
-  framework::master_test_suite().p_name.value = "Unit test example 03";
-
-   // with explicit registration we could specify a test case timeout
-   framework::master_test_suite().add( BOOST_TEST_CASE( &DataImportTest ), 0, /* timeout */ 2 );
-
-   return 0;
+  test_suite* test = BOOST_TEST_SUITE ( "Data Import Test");
+  test->add( BOOST_TEST_CASE (&DataImportTest),0);
+   return test;
 }
 
 

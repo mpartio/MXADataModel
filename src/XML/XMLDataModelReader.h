@@ -140,13 +140,15 @@ private:
   MXADataModel*     _dataModel;
   const std::string _fileName;
   int32             _xmlParseError;
-  MXADataRecordPtr  _currentParentRecord;
+  IDataRecordPtr    _currentParentRecord;
   std::string       _userAttributeData;
   bool              _parseData;
   std::string       _userMDKey;
   std::string       _userMDDims;
   std::string       _userMDType;
   ExpatParser*      _parser;
+  
+  int               _indent;
   
   XMLDataModelReader(const XMLDataModelReader&);   //Copy Constructor Not Implemented
   void operator=(const XMLDataModelReader&); //Copy Assignment Not Implemented

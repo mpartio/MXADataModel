@@ -1,12 +1,12 @@
 #include "MXADataRecord.h"
 
-
+// Set the initial value of the _uniqueGUIDValue
+int MXADataRecord::_uniqueGUIDValue(0);
 
 // -----------------------------------------------------------------------------
 //  Constructor
 // -----------------------------------------------------------------------------
 MXADataRecord::MXADataRecord() :
-MXANode(MXANode::Record, std::string("-1")),
 _luid(0),
 _recordName(""),
 _altName("")
@@ -21,10 +21,9 @@ MXADataRecordPtr MXADataRecord::New(int luid, std::string name, std::string altN
 {
   MXADataRecord* rec = new MXADataRecord();
   MXADataRecordPtr record(rec);
-  record->_setWeakPtr(boost::weak_ptr<MXANode>(record)); // Set the Weak Pointer
-  //rec->setNodeName(name);
+  record->_setWeakPtr(boost::weak_ptr<IDataRecord>(record)); // Set the Weak Pointer
   rec->setLuid(luid);
-  rec->setGuid( MXANode::nextGUIDValue() );
+  rec->setGuid( MXADataRecord::nextGUIDValue() );
   rec->setRecordName(name);
   rec->setAltName(altName);
   return record;
@@ -37,18 +36,22 @@ MXADataRecord::~MXADataRecord()
 {
 }
 
+
 // -----------------------------------------------------------------------------
-//  Over ride from Superclass so we can keep the index and nodename in sync
+//  
 // -----------------------------------------------------------------------------
-void MXADataRecord::setNodeName(std::string nodeName)
+void MXADataRecord::generateLUT(IDataRecordLookupTable &lut, IDataRecords &nodes)
 {
-  this->_nodeName = nodeName;
-  int32 i = 0;
-  if ( StringUtils::stringToNum<int>(i, this->_nodeName, std::dec) )
+  for ( IDataRecords::iterator iter = nodes.begin(); iter < nodes.end(); ++iter )
   {
-    this->_luid = i;
-  } else {
-    std::cout << "ERROR: A NodeName for a DataRecord was set using a value that can not be converted to an integer. DataRecord Node names are represented by integers. You supplied " << nodeName << std::endl;
+    //  rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
+    IDataRecordPtr node =  ( *(iter) );
+    lut[node->getUniqueId()] = node;
+    if (node->hasChildren() ) {
+      // std::cout << "Creating Group for " << rec->getRecordName() << std::endl;
+      IDataRecords children = node->getChildren();
+      MXADataRecord::generateLUT( lut, children );
+    } 
   }
 }
 
@@ -56,23 +59,36 @@ void MXADataRecord::setNodeName(std::string nodeName)
 //  
 // -----------------------------------------------------------------------------
 
-void MXADataRecord::printNode(std::ostream& os, int32 indent)
+void MXADataRecord::printDataRecord(std::ostream& os, int32 indent)
 {
-  os << _indent(indent) << "*-Record Name: " << this->_recordName << std::endl;
-  os << _indent(indent) << " |-Alternate Name: " << this->_altName << std::endl;
-  os << _indent(indent) << " |-Display Name: " << this->_nodeName << std::endl;
-  os << _indent(indent) << " |-LUID: " << this->_luid << std::endl;
-  os << _indent(indent) << " |-GUID: " << this->getGuid() << std::endl;
+  os << StringUtils::indent(indent) << "*-Record Name: " << this->_recordName << std::endl;
+  os << StringUtils::indent(indent) << " |-Alternate Name: " << this->_altName << std::endl;
+  os << StringUtils::indent(indent) << " |-Display Name: " << this->_nodeName << std::endl;
+  os << StringUtils::indent(indent) << " |-LUID: " << this->_luid << std::endl;
+  os << StringUtils::indent(indent) << " |-GUID: " << this->getGuid() << std::endl;
 #if 0
   for (MXAAttributes::iterator iter = _attributes.begin(); iter != _attributes.end(); ++iter )
   {
-    os << _indent(indent) << " |- Attribute: " << std::endl;
+    os << StringUtils::indent(indent) << " |- Attribute: " << std::endl;
   }
 #endif
   if (this->hasChildren() ) { indent++;}
-  for (MXANodeChildren::iterator iter = _children.begin(); iter != _children.end(); ++iter)
+  for (IDataRecords::iterator iter = _children.begin(); iter != _children.end(); ++iter)
   {
-    (*(iter))->printNode(os, indent);
+    (*(iter))->printDataRecord(os, indent);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void MXADataRecord::printDataRecordTree(int32 depth)
+{
+  if ( this->hasChildren() ) {
+    IDataRecords::const_iterator iter;
+    for (iter=this->_children.begin(); iter!=this->_children.end(); iter++) {
+      (*iter)->printDataRecordTree(depth+1);
+    }
   }
 }
 
@@ -85,13 +101,11 @@ std::string MXADataRecord::generatePath()
 {
   std::string path;
   path =  StringUtils::numToString(this->_luid);
-  MXANodePtr parent = this->_parent.lock();
-  MXADataRecordPtr parentPtr = boost::dynamic_pointer_cast<MXADataRecord>(parent);
-  while( parent.get() != NULL )
+  MXADataRecord* parent = dynamic_cast<MXADataRecord*>( this->_parent.lock().get() );
+  while( NULL != parent )
   {
-    path =  StringUtils::numToString(parentPtr->getLuid() ) + "/" + path;
-    parent = parentPtr->getParent().lock();
-    parentPtr = boost::dynamic_pointer_cast<MXADataRecord>(parent);
+    path =  StringUtils::numToString(parent->getLuid() ) + "/" + path;
+    parent = dynamic_cast<MXADataRecord*>(parent->getParent().lock().get() );
   }
   return path;
 }
@@ -102,14 +116,12 @@ std::string MXADataRecord::generatePath()
 std::string MXADataRecord::generateParentPath()
 {
   std::string path;
-  //path =  StringUtils::numToString(this->_luid);
-  MXANodePtr parent = this->_parent.lock();
-  MXADataRecordPtr parentPtr = boost::dynamic_pointer_cast<MXADataRecord>(parent);
-  while( parent.get() != NULL )
+
+  MXADataRecord* parent = dynamic_cast<MXADataRecord*>( this->_parent.lock().get() );
+  while( NULL != parent )
   {
-    path =  StringUtils::numToString(parentPtr->getLuid() ) + "/" + path;
-    parent = parentPtr->getParent().lock();
-    parentPtr = boost::dynamic_pointer_cast<MXADataRecord>(parent);
+    path =  StringUtils::numToString(parent->getLuid() ) + "/" + path;
+    parent = dynamic_cast<MXADataRecord*>(parent->getParent().lock().get() );
   }
   return path;
 }
@@ -135,4 +147,162 @@ bool MXADataRecord::isValid(std::string &message)
   }
   return valid;
 }
+
+
+// -----------------------------------------------------------------------------
+//  This is used to set a weak ptr to itself. The weak ptr is then used when 
+//  another node needs to set this object as its parent. If we did NOT use a weak
+//  ptr and used a shared ptr then we would end up with a cyclic reference and the
+//  object would never get deleted because the ref count would never hit zero
+// -----------------------------------------------------------------------------
+void MXADataRecord::_setWeakPtr(IDataRecordWeakPtr weakPtr)
+{
+  this->_selfPtr = weakPtr; 
+}
+
+// -----------------------------------------------------------------------------
+//  Used for Unique Ids
+// -----------------------------------------------------------------------------
+void MXADataRecord::resetGUIDValue()
+{
+  _uniqueGUIDValue = 0;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+int32 MXADataRecord::nextGUIDValue()
+{
+  return MXADataRecord::_uniqueGUIDValue++;
+}
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void MXADataRecord::setParent(IDataRecordWeakPtr parent)
+{
+  this->_parent = parent;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+IDataRecordWeakPtr MXADataRecord::getParent()
+{
+  return this->_parent;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+int MXADataRecord::getNumChildren() const
+{
+  return this->_children.size();
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+bool MXADataRecord::hasChildren() const
+{
+  return (this->_children.size() != 0);
+}
+
+// -----------------------------------------------------------------------------
+//  Adds a child ONLY if it is NOT already inserted into the children vector
+// -----------------------------------------------------------------------------
+void MXADataRecord::addChild(IDataRecordPtr child)
+{
+  child->setParent(this->_selfPtr);
+  bool alreadyInserted = false;
+  for (IDataRecords::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
+  {
+    if ( (*(iter)).get() == child.get() ) //Compare the raw pointers
+    {
+      alreadyInserted = true;
+      break;
+    }
+  }
+  if (alreadyInserted == false) {
+    this->_children.push_back(child);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void MXADataRecord::removeChild(int index)
+{
+  IDataRecords::iterator iter = this->_children.begin() + index;
+  this->_children.erase(iter);
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void MXADataRecord::removeChild(IDataRecord* child)
+{
+  for (IDataRecords::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
+  {
+    if ( (*(iter)).get() == child )
+    {
+      this->_children.erase(iter);
+      break;
+    }
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+int32 MXADataRecord::indexOfChild(IDataRecord* child)
+{
+  int32 retVal = -1;
+  for (IDataRecords::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
+  {
+    if ( (*(iter)).get() == child )
+    {
+      retVal = iter - this->_children.begin();
+      break;
+    }
+  }
+  return retVal;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+IDataRecordPtr MXADataRecord::getChildAt(int32 index)
+{
+  if (static_cast<uint32>(index) < this->_children.size())
+    return this->_children[index];
+    else {
+      //std::cout << "MXADataRecord(GUID): " << this->getUniqueId() << " Num Children: " << this->_children.size() << "  Index:" << index << std::endl;
+    }
+   MXADataRecordPtr ptr;
+   return ptr;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+IDataRecords& MXADataRecord::getChildren()
+{
+  return this->_children;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void MXADataRecord::removeAttribute(std::string label)
+{
+  _nodeAttributes.erase(label);
+}
+
+
+
+
+
 

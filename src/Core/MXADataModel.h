@@ -31,7 +31,6 @@
 #include "Common/MXATypeDefs.h"
 #include "Base/IDataModel.h"
 #include "Core/MXAConstants.h"
-#include "Core/MXANode.h"
 #include "Core/MXADataDimension.h"
 #include "Core/MXADataRecord.h"
 
@@ -175,7 +174,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Adds a Data Record given a DataRecord shared pointer
    * @param record
    */
-  void addDataRecord(MXADataRecordPtr record);
+  void addDataRecord(IDataRecordPtr record);
 
   /**
    * @brief Adds a Data Record to the model with the given parent record as the data
@@ -184,13 +183,13 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param parent The parent of the data record
    * @return
    */
-  void addDataRecord(MXADataRecordPtr record, MXADataRecordPtr parent);
+  void addDataRecord(IDataRecordPtr record, IDataRecordPtr parent);
 
   /**
    * @brief Returns the Hierarchy of Data Records
    * @return
    */
-  MXADataRecords& getDataRecords();
+  IDataRecords& getDataRecords();
 
   /**
    * @brief Returns a Data Record object from the given path
@@ -198,7 +197,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param parent The parent data record
    * @return
    */
-  MXADataRecordPtr getDataRecordByNamedPath(std::string path, MXADataRecord* parent=NULL);
+  IDataRecordPtr getDataRecordByNamedPath(std::string path, IDataRecord* parent=NULL);
   
   /**
    * @brief Returns a Data Record based on an internal path representation
@@ -206,7 +205,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param parent
    * @return
    */
-  MXADataRecordPtr getDataRecordByInternalPath(std::string path, MXADataRecord* parent=NULL);
+  IDataRecordPtr getDataRecordByInternalPath(std::string path, IDataRecord* parent=NULL);
 
   
   /**
@@ -352,7 +351,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param record The MXADataRecord to generate the path to
    * @return The hdf5 path
    */
-   std::string generatePathToDataset ( std::vector<int32> &indices, MXADataRecord* record);
+   std::string generatePathToDataset ( std::vector<int32> &indices, IDataRecord* record);
    
    /**
     * @brief Performs some basic checks to make sure the model is valid.
@@ -373,7 +372,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    // Holds a vector of data dimensions
    IDataDimensions _dataDimensions;
    //Holds a vector of hierarchacally ordered Data Records
-   MXADataRecords    _dataRecords;
+   IDataRecords    _dataRecords;
 
    //Fields to hold the Required Meta Data Fields
    std::string _researcherName ;
@@ -390,13 +389,6 @@ class MXA_EXPORT MXADataModel : public IDataModel
    
    // The default delegate to use to write the model to a file
    IODelegatePtr _ioDelegate;
-   
-  /**
-   * @brief Creates indentation spaces for printing output
-   * @param indent The number of spaces to use for the indentation
-   * @return The String containing the spaces
-   */
-   std::string _indent(int indent);
    
 };
 

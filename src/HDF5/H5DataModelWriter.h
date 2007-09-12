@@ -94,7 +94,7 @@ protected:
 * @param records
 * @return
 */
-  int32 _traverseDataRecords(hid_t gid,  MXADataRecords &records);
+  int32 _traverseDataRecords(hid_t gid,  IDataRecords &records);
   
 private:
   H5IODelegate* _ioDelegate;

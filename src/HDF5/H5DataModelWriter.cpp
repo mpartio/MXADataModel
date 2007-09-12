@@ -194,21 +194,25 @@ int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
 int32 H5DataModelWriter::writeDataRecords(hid_t fileId)
 {
   hid_t gid = H5Utilities::openHDF5Object(fileId, MXA::DataRecordsPath);
+  int32 retErr = 0;
+  herr_t err = 0;
   if (gid < 0) {
     std::cout << "ERROR getting data records group" << std::endl;
     return gid;
   } 
   
-  MXADataRecords cc =  _dataModel->getDataRecords();
-  _traverseDataRecords(gid, cc );
-  H5Utilities::closeHDF5Object(gid);
-  return gid;
+  IDataRecords cc =  _dataModel->getDataRecords();
+  err = _traverseDataRecords(gid, cc );
+  if (err < 0) { retErr = err; }
+  err = H5Utilities::closeHDF5Object(gid);
+  if (err < 0) { retErr = err; }
+  return retErr;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, MXADataRecords &records) 
+int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, IDataRecords &records) 
 {
 //#error Start here and test the writing of the file so far.....
   MXADataRecord* rec;
@@ -217,21 +221,31 @@ int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, MXADataRecords &records
   herr_t err = 0;
   int32 i = 0;
   //std::cout << "Traversing Data Record" << std::endl;
-  for ( MXADataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
+  for ( IDataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
   {
-
     rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
+    //std::cout << "Writing '" << rec->getRecordName()  << "'" << std::endl;
     dsetName = StringUtils::numToString( rec->getLuid() );
-    
+   // std::cout << "Writing '" << rec->getRecordName()  << "' as '" << dsetName << "'" << std::endl;
     if (rec->hasChildren() ) {
-     // std::cout << "Creating Group for " << rec->getRecordName() << std::endl;
+     // std::cout << "Creating Group for '" << rec->getRecordName()  << "' as '" << dsetName << "'" << std::endl;
       recGrpId = H5Utilities::createGroup(gid, dsetName);
-      MXANodeChildren children = rec->getChildren();
+      if (recGrpId < 0)
+      {
+        std::cout << "Error Creating Group for Writing HDF5 file" << std::endl;
+        err = recGrpId;
+        break;
+      }
+      IDataRecords children = rec->getChildren();
       
-      _traverseDataRecords( recGrpId, children );
+      err = _traverseDataRecords( recGrpId, children );
       H5Utilities::closeHDF5Object(recGrpId);
+      if (err < 0) { 
+        break; 
+      }
+
     } else {
-     // std::cout << "Writing Data Record for " << rec->getRecordName() << std::endl;
+   //   std::cout << "Writing Data Record for " << rec->getRecordName() << std::endl;
       i = rec->getLuid();
       err = H5Lite::writeScalarDataset(gid, dsetName, i);
       if (err<0) {std::cout << "Error Writing Data Model Record " << dsetName << std::endl; break;}

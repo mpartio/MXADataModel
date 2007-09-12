@@ -77,7 +77,6 @@ ENDIF (MXA_BUILD_SHARED_LIBS)
 # of all .cpp files note that we don't need \ at the end of line
 SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Core/MXAAttribute.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXANode.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataModel.cpp
@@ -115,7 +114,7 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Core/MXADataModel.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataSource.h
-  ${MXA_SOURCE_DIR}/src/Core/MXANode.h
+ # ${MXA_SOURCE_DIR}/src/Core/MXANode.h
   ${MXA_SOURCE_DIR}/src/Utilities/StringUtils.h
   )
 
