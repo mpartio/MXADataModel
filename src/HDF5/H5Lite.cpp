@@ -538,18 +538,22 @@ herr_t H5Lite::getAttributeNDims(hid_t loc_id, const std::string& objName,
 // -----------------------------------------------------------------------------
 hid_t H5Lite::getDatasetType(hid_t loc_id, const std::string &dsetName)
 {
-  herr_t err, retErr;
+  herr_t err = 0;
+  herr_t retErr = 0;
   hid_t did = -1;
   /* Open the dataset. */
   if ( (did = H5Dopen( loc_id, dsetName.c_str() )) < 0 )
-  return -1;
-
+  {
+	std::cout << "H5Lite::getDatasetType: Error Could not get a Dataset ID" << std::endl;
+	return -1;
+  }
   /* Get an identifier for the datatype. */
   hid_t tid =  H5Dget_type( did );
   CloseH5D(did, err, retErr);
   if (retErr < 0)
+  {
     return static_cast<hid_t>(retErr);
-  
+  }
   return tid;
 }
 
