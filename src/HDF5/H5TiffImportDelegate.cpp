@@ -79,6 +79,7 @@ void H5TiffImportDelegate::setDataModel(IDataModelPtr model) {
 // -----------------------------------------------------------------------------
 int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
 {
+  std::cout << "H5TiffImportDelegate::importDataSource:  Importing as grayscale->" << this->_importAsGrayScale << std::endl;
   herr_t err = -1;
   // Make sure the file Exists first before we go much further
   FileSystem::path sourcePath ( dataSource->getSourcePath() ); //create a boost::filesystem::path object

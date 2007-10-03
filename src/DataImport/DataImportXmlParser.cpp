@@ -1,8 +1,11 @@
 
 #include "Base/IDataSource.h"
+#include "Base/IImportDelegate.h"
 #include "Core/MXADataSource.h"
+#include "Core/MXADataImport.h"
 #include "Common/LogTime.h"
 #include "DataImportXmlParser.h"
+#include "DataImport/ImportDelegateManager.h"
 #include "Utilities/StringUtils.h"
 #include "XML/XMLIODelegate.h"
 #include "HDF5/H5IODelegate.h"
@@ -26,40 +29,150 @@ DataImportXmlParser::~DataImportXmlParser()
 {
 }
 
+// *****************************************************************************
+// *************** IDataImport Implementation **********************************
+// *****************************************************************************
+
+
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int DataImportXmlParser::parseXMLFile()
+int32 DataImportXmlParser::import()
 {
-  //Sanity Checks
-
-  if (this->_xmlFilename.empty() ) { return -1; }
+  MXATypes::MXAError err = 1;
   
-  if (NULL != this->_dataModel.get() ) 
+  if (this->_xmlFilename.empty() )
   {
-    IDataModel* nullModel = NULL;
-    this->_dataModel.reset(nullModel); // Effectively frees the previous model if there was one
+    std::cout << "Input XML File must be set." << std::endl;
+    return -3;
   }
-#if 0
-  Not sure that I want/need this section - Depends what I do with the IDataImport API
-  if (NULL != this->_dataImport.get() )
+  
+  // Create a new Data Model
+  this->_dataModel =  MXADataModel::New();
+  
+  // Parse the XML Configuration file
+  err = this->_parseXMLFile();
+  if (err < 0)
   {
-    IDataImport* nullDataImport = NULL;
-    this->_dataImport.reset(nullDataImport);
+    return err;
   }
-#endif
+  // Now create the Output file and leave it open
+  this->_dataModel->writeModel(this->_outputFilePath, false);
+  
+  
+  std::cout << "Starting Import loop.... " << std::endl;
+  // Finally try to run the import loop
+  for (IDataSources::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
+  {
+    err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataModel );
+    if ( err < 0 )
+    {
+      break;
+    }
+  }
+  
+  // The H5 output file will be closed by the MXADataModel Destructor
+  
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void DataImportXmlParser::addDataSource (IDataSourcePtr dataSource ) {
+  this->_dataSources.push_back(dataSource);
+}
+
+ 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void DataImportXmlParser::setOutputFilePath ( std::string new_var ) {
+  _outputFilePath = new_var;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+std::string DataImportXmlParser::getOutputFilePath ( ) {
+  return _outputFilePath;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void DataImportXmlParser::setDataModel ( boost::shared_ptr<IDataModel> new_var ) {
+  _dataModel = new_var;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+IDataModelPtr DataImportXmlParser::getDataModel ( ) {
+  return _dataModel;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void DataImportXmlParser::setDataSources ( IDataSources &new_var ) {
+  _dataSources = new_var;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+IDataSources DataImportXmlParser::getDataSources ( ) {
+  return _dataSources;
+}
+
+
+
+// *****************************************************************************
+// *************** Private Method Implementations ******************************
+// *****************************************************************************
+
+// -----------------------------------------------------------------------------
+int DataImportXmlParser::_loadDataModelFromTemplateFile(std::string &modelFile)
+{
+  //std::cout << logTime() << "---------------- IMPORTING DATA MODEL TEMPLATE ------------------" << std::endl;
+  MXATypes::MXAError err = -1;
+  if ( StringUtils::endsWith(modelFile, std::string(".xml") ) )
+  {
+    //XMLIODelegate reader;
+    IODelegatePtr reader (new XMLIODelegate);
+    err = this->_dataModel->readModel(modelFile, reader, true);
+    //err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true);
+    if (err < 0)
+    {
+      std::cout << logTime() << "Error Reading DataModel from File: " << modelFile << std::endl;
+    }
+    else 
+    {
+      //this->_dataModel->printModel(std::cout, 1);
+    }
+    return err;
+  }
+  else 
+  {
+    H5IODelegate reader;
+    err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true);
+    return err;
+  }
+  //std::cout << logTime() << "---------------- IMPORTING DATA MODEL TEMPLATE COMPLETE------------------" << std::endl;
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+int DataImportXmlParser::_parseXMLFile()
+{
+
   // Clear any error messages that have been hanging around from previous imports
   _errorMessage.clear();
   
-  //Create a new IDataModel object
-  this->_dataModel.reset( new MXADataModel);
-  //Set the model into the IDataImport object
-  this->_dataImport->setDataModel(this->_dataModel);
-  
-  
   char buf[BUFFER_SIZE];
   // Create and initialise an instance of the parser.
-  ExpatParser parser( dynamic_cast<ExpatEvtHandler*>( this ) );
+  ExpatParser parser( static_cast<ExpatEvtHandler*>( this ) );
   //this->_parser = &parser;
   parser.Create(NULL, NULL);
   parser.EnableElementHandler();
@@ -113,7 +226,7 @@ void DataImportXmlParser::OnStartElement(const XML_Char* name, const XML_Char** 
     }
     else if ( currentTag.compare(MXA_DataImport::FilePath) == 0 )
     {
-          start_FilePath_Tag(name, attrs);
+          start_File_Path_Tag(name, attrs);
     }
     else if ( currentTag.compare(MXA_DataImport::Implicit_Data_Source) == 0 )
     {
@@ -163,7 +276,7 @@ void DataImportXmlParser::OnEndElement(const XML_Char* name)
     }
     else if ( currentTag.compare(MXA_DataImport::FilePath) == 0 )
     {
-          end_FilePath_Tag(name);
+          end_File_Path_Tag(name);
     }
     else if ( currentTag.compare(MXA_DataImport::Implicit_Data_Source) == 0 )
     {
@@ -184,14 +297,32 @@ void DataImportXmlParser::OnEndElement(const XML_Char* name)
 } // End OnEndElement(...)
 
 
+// ******************** Starting Data_Dimensions **************************************
+void DataImportXmlParser::start_Data_Dimensions_Tag(const XML_Char* name, const XML_Char** attrs)
+{
+    // std::cout << "Starting " << std::string(name) << std::endl;
+}
 
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'Data_Model' 
-// -----------------------------------------------------------------------------
+void DataImportXmlParser::end_Data_Dimensions_Tag(const XML_Char* name)
+{
+    // std::cout << "Ending " << std::string(name) << std::endl;
+}
+
+// ******************** Starting Data_Import **************************************
+void DataImportXmlParser::start_Data_Import_Tag(const XML_Char* name, const XML_Char** attrs)
+{
+    // std::cout << "Starting " << std::string(name) << std::endl;
+}
+
+void DataImportXmlParser::end_Data_Import_Tag(const XML_Char* name)
+{
+    // std::cout << "Ending " << std::string(name) << std::endl;
+}
+
+// ******************** Starting Data_Model **************************************
 void DataImportXmlParser::start_Data_Model_Tag(const XML_Char* name, const XML_Char** attrs)
 {
     //std::cout << "Start <" << name << "> Tag" << std::endl;
-    int err = 0;
     for (int i = 0; attrs[i]; i += 2)
     {
       if (MXA_DataImport::Attr_Template_File.compare( attrs[i] ) == 0)
@@ -210,9 +341,12 @@ void DataImportXmlParser::start_Data_Model_Tag(const XML_Char* name, const XML_C
     }
 }
 
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'Dimension' 
-// -----------------------------------------------------------------------------
+void DataImportXmlParser::end_Data_Model_Tag(const XML_Char* name)
+{
+    // std::cout << "Ending " << std::string(name) << std::endl;
+}
+
+// ******************** Starting Dimension **************************************
 void DataImportXmlParser::start_Dimension_Tag(const XML_Char* name, const XML_Char** attrs)
 {
     //std::cout << "Start <" << name << "> Tag" << std::endl; 
@@ -244,39 +378,12 @@ void DataImportXmlParser::start_Dimension_Tag(const XML_Char* name, const XML_Ch
     }
 }
 
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'Data_Dimensions' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::start_Data_Dimensions_Tag(const XML_Char* name, const XML_Char** attrs)
+void DataImportXmlParser::end_Dimension_Tag(const XML_Char* name)
 {
-
-    printf("Starting %s\n", name); 
+    // std::cout << "Ending " << std::string(name) << std::endl;
 }
 
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'Data_Import' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::start_Data_Import_Tag(const XML_Char* name, const XML_Char** attrs)
-{
-
-    //std::cout << "Start <" << name << "> Tag" << std::endl; 
-}
-
-
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'Implicit_Data_Source' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::start_Implicit_Data_Source_Tag(const XML_Char* name, const XML_Char** attrs)
-{
-
-    //std::cout << "Start <" << name << "> Tag" << std::endl; 
-}
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'Explicit_Data_Source' 
-// -----------------------------------------------------------------------------
+// ******************** Starting Explicit_Data_Source **************************************
 void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, const XML_Char** attrs)
 {
   // Read the attributes into a map for easier look up
@@ -288,13 +395,14 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
   // Get the Data Record and the File Path from the attributes
   std::string dataRecordPath (attrMap[MXA_DataImport::Attr_Data_Record] );
   std::string sourceFilePath (attrMap[MXA_DataImport::Attr_File_Path]);
-  
+  std::string sourceType (attrMap[MXA_DataImport::Attr_Source_Type]);
   //Read the Data Dimension Values
   std::istringstream istream ( attrMap[MXA_DataImport::Attr_DataDimension_Values] );
   std::vector<int> dimValues;
   int temp;
-  while ( (istream >> temp).good() )
+  while ( istream.good() )
   {
+    istream >> temp;
     dimValues.push_back(temp);
   }
   
@@ -313,44 +421,61 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
   ds->setDimensionValues(dimValues);
   ds->setDataRecord(recordPtr);
   ds->setSourcePath(sourceFilePath);
-#warning FIX THIS
-  //  ds->setImportDelegate(tiffImportDelegatePtr); <=== This needs to be figured out
-  ds->setDataModel(this->_dataModel);
-  this->_dataImport->addDataSource(ds);
-        
+
+  
+  ImportDelegateManagerPtr idManagerPtr = ImportDelegateManager::instance();
+  IImportDelegatePtr importDelegatePtr = idManagerPtr->newDataImportDelegate(sourceType);
+  if (importDelegatePtr.get() != NULL )
+  {
+    ds->setImportDelegate(importDelegatePtr);
+    ds->setDataModel(this->_dataModel);
+    this->addDataSource(ds);
+  } else {
+    std::cout << "Could not locate an ImportDelegate for Source_Type '" << sourceType << "'" << std::endl;
+    this->_xmlParseError = -1;
+  }
 }
 
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'FilePath' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::start_FilePath_Tag(const XML_Char* name, const XML_Char** attrs)
+
+void DataImportXmlParser::end_Explicit_Data_Source_Tag(const XML_Char* name)
 {
-
-    //std::cout << "Start <" << name << "> Tag" << std::endl; 
+    // std::cout << "Ending " << std::string(name) << std::endl;
 }
 
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'Index_Part' 
-// -----------------------------------------------------------------------------
+// ******************** Starting File_Path **************************************
+void DataImportXmlParser::start_File_Path_Tag(const XML_Char* name, const XML_Char** attrs)
+{
+    // std::cout << "Starting " << std::string(name) << std::endl;
+}
+
+void DataImportXmlParser::end_File_Path_Tag(const XML_Char* name)
+{
+    // std::cout << "Ending " << std::string(name) << std::endl;
+}
+
+// ******************** Starting Implicit_Data_Source **************************************
+void DataImportXmlParser::start_Implicit_Data_Source_Tag(const XML_Char* name, const XML_Char** attrs)
+{
+     std::cout << "Starting " << std::string(name) << std::endl;
+}
+
+void DataImportXmlParser::end_Implicit_Data_Source_Tag(const XML_Char* name)
+{
+     std::cout << "Ending " << std::string(name) << std::endl;
+}
+
+// ******************** Starting Index_Part **************************************
 void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_Char** attrs)
 {
-
-    //std::cout << "Start <" << name << "> Tag" << std::endl; 
+    // std::cout << "Starting " << std::string(name) << std::endl;
 }
 
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'Text_Part' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::start_Text_Part_Tag(const XML_Char* name, const XML_Char** attrs)
+void DataImportXmlParser::end_Index_Part_Tag(const XML_Char* name)
 {
-
-    //std::cout << "Start <" << name << "> Tag" << std::endl; 
+    // std::cout << "Ending " << std::string(name) << std::endl;
 }
 
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering starting of Tag 'Output_File' 
-// -----------------------------------------------------------------------------
+// ******************** Starting Output_File **************************************
 void DataImportXmlParser::start_Output_File_Tag(const XML_Char* name, const XML_Char** attrs)
 {
   std::string absoluteFilePath;
@@ -368,7 +493,7 @@ void DataImportXmlParser::start_Output_File_Tag(const XML_Char* name, const XML_
   // Check to make sure the file path was found
   if (absoluteFilePath.empty() == false )
   {
-    this->_dataImport->setOutputFilePath(absoluteFilePath);
+    this->setOutputFilePath(absoluteFilePath);
   } 
   else 
   {
@@ -377,132 +502,22 @@ void DataImportXmlParser::start_Output_File_Tag(const XML_Char* name, const XML_
   }
 }
 
-// *****************************************************************************
-// *****************************************************************************
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'Data_Dimensions' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::end_Data_Dimensions_Tag(const XML_Char* name)
-{
-  printf("Ending %s\n", name); 
-}
-
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'Dimension' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::end_Dimension_Tag(const XML_Char* name)
-{
-
-    //std::cout << "End <" << name << "> Tag" << std::endl; 
-}
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'Data_Import' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::end_Data_Import_Tag(const XML_Char* name)
-{
-
-    //std::cout << "End <" << name << "> Tag" << std::endl; 
-}
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'Data_Model' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::end_Data_Model_Tag(const XML_Char* name)
-{
-
-    //std::cout << "End <" << name << "> Tag" << std::endl; 
-}
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'Implicit_Data_Source' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::end_Implicit_Data_Source_Tag(const XML_Char* name)
-{
-
-    //std::cout << "End <" << name << "> Tag" << std::endl; 
-}
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'Explicit_Data_Source' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::end_Explicit_Data_Source_Tag(const XML_Char* name)
-{
-
-    //std::cout << "End <" << name << "> Tag" << std::endl; 
-}
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'FilePath' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::end_FilePath_Tag(const XML_Char* name)
-{
-
-    //std::cout << "End <" << name << "> Tag" << std::endl; 
-}
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'Index_Part' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::end_Index_Part_Tag(const XML_Char* name)
-{
-
-    //std::cout << "End <" << name << "> Tag" << std::endl; 
-}
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'Text_Part' 
-// -----------------------------------------------------------------------------
-void DataImportXmlParser::end_Text_Part_Tag(const XML_Char* name)
-{
-
-    //std::cout << "End <" << name << "> Tag" << std::endl; 
-}
-
-
-// -----------------------------------------------------------------------------
-// Method fired when encountering the End of Tag 'Output_File' 
-// -----------------------------------------------------------------------------
 void DataImportXmlParser::end_Output_File_Tag(const XML_Char* name)
 {
-//    printf("Ending %s\n", name); 
+    // std::cout << "Ending " << std::string(name) << std::endl;
 }
 
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-int DataImportXmlParser::_loadDataModelFromTemplateFile(std::string &modelFile)
+// ******************** Starting Text_Part **************************************
+void DataImportXmlParser::start_Text_Part_Tag(const XML_Char* name, const XML_Char** attrs)
 {
-  std::cout << logTime() << "---------------- IMPORTING DATA MODEL TEMPLATE ------------------" << std::endl;
-  MXATypes::MXAError err = -1;
-  if ( StringUtils::endsWith(modelFile, std::string(".xml") ) )
-  {
-    //XMLIODelegate reader;
-    IODelegatePtr reader (new XMLIODelegate);
-    err = this->_dataModel->readModel(modelFile, reader, true);
-    //err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true);
-    if (err < 0)
-    {
-      std::cout << logTime() << "Error Reading DataModel from File: " << modelFile << std::endl;
-    }
-    else 
-    {
-      this->_dataModel->printModel(std::cout, 1);
-    }
-    return err;
-  }
-  else 
-  {
-    H5IODelegate reader;
-    err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true);
-    return err;
-  }
-  std::cout << logTime() << "---------------- IMPORTING DATA MODEL TEMPLATE COMPLETE------------------" << std::endl;
-  return err;
+    // std::cout << "Starting " << std::string(name) << std::endl;
 }
+
+void DataImportXmlParser::end_Text_Part_Tag(const XML_Char* name)
+{
+    // std::cout << "Ending " << std::string(name) << std::endl;
+}
+
 
 
 

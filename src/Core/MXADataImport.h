@@ -52,6 +52,15 @@ public:
   virtual ~MXADataImport ( );
 
   /**
+   * @brief Static method to create a new MXADataImport Object
+   * @return boost shared pointer wrapping an MXADataImport Object pointer
+   */
+  static IDataImportPtr New()
+  {
+    return IDataImportPtr( new MXADataImport );
+  }
+  
+  /**
    * Set the value of m_outputFilePath
    * @param new_var the new value of m_outputFilePath
    */

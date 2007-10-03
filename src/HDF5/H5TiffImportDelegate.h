@@ -81,7 +81,7 @@ private:
 // Declare our constant in a namespace
 namespace H5TiffImportDelegateFactory_Detail
 {
-  const std::string ClassName("H5TiffImportDelegate");
+  const std::string ClassName("H5TiffImport");
 }
 
 // -----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ namespace H5TiffImportDelegateFactory_Detail
 * @brief Factory Class to generate H5TiffImportDelegate Objects
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
 {
@@ -109,9 +109,7 @@ class H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
    * @param dataSource The data source to import
    * @return A new boost shared pointer to H5TiffImportDelegate
    */
-  IImportDelegatePtr newDataImportDelegate (const std::string &className,
-                                                IDataModelPtr dataModel,
-                                                IDataSourcePtr dataSource)
+  IImportDelegatePtr newDataImportDelegate (const std::string &className )
   {
     IImportDelegatePtr delegate; // Creates a Null Shared Pointer
     if ( className.compare( H5TiffImportDelegateFactory_Detail::ClassName ) == 0)

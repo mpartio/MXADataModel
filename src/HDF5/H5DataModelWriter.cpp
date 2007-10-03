@@ -51,7 +51,7 @@ int32 H5DataModelWriter::writeModelToFile(hid_t fileId)
 //  std::cout << "Writing User MetaData...." << std::endl;printf("\n");
   if ( writeUserMetaData(fileId) < 0) return -1;
 //  std::cout << "Done Writing Model" << std::endl;printf("\n");
-  return true;
+  return 1;
 }
 
 

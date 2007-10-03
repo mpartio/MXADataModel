@@ -69,7 +69,7 @@ static herr_t find_palette( hid_t loc_id, const char *name, void  *op_data )
 /*-------------------------------------------------------------------------
  * Function: H5IMmake_image_8bit
  *
- * Purpose: Creates and writes an image an 8 bit image
+ * Purpose: Creates and writes an image as an 8 bit image
  *
  * Return: Success: 0, Failure: -1
  *
@@ -146,56 +146,55 @@ herr_t H5Image::makeGrayScaleImage( hid_t loc_id,
  *-------------------------------------------------------------------------
  */
 
-herr_t H5Image::H5IMmake_image_24bit( hid_t loc_id,
-                             std::string datasetName,
-                             hsize_t width,
-                             hsize_t height,
-                             const std::string &interlace,
-                             const unsigned char *buffer )
+herr_t H5Image::H5IMmake_image_24bit(hid_t loc_id, std::string datasetName, hsize_t width, hsize_t height, const std::string &interlace, const unsigned char *buffer)
 {
- int32      rank = 3;
- hsize_t  dims[3];
+  int32 rank = 3;
+  hsize_t dims[3];
 
- /* Initialize the image dimensions */
+  /* Initialize the image dimensions */
 
- if ( interlace == H5ImageConst::InterlacePixel )
- {
-  /* Number of color planes is defined as the third dimension */
-  dims[0] = height;
-  dims[1] = width;
-  dims[2] = 3;
- }
- else
- if ( interlace == H5ImageConst::InterlacePlane )
- {
-  /* Number of color planes is defined as the first dimension */
-  dims[0] = 3;
-  dims[1] = height;
-  dims[2] = width;
- }
- else return -1;
+  if (interlace == H5ImageConst::InterlacePixel)
+  {
+    /* Number of color planes is defined as the third dimension */
+    dims[0] = height;
+    dims[1] = width;
+    dims[2] = 3;
+  }
+  else if (interlace == H5ImageConst::InterlacePlane)
+  {
+    /* Number of color planes is defined as the first dimension */
+    dims[0] = 3;
+    dims[1] = height;
+    dims[2] = width;
+  }
+  else
+  {
+    return -1;
+  }
 
- /* Make the dataset */
- if ( H5Lite::writeDataset( loc_id, datasetName, rank, dims, buffer ) < 0 )
-  return -1;
+  /* Make the dataset */
+  if (H5Lite::writeDataset(loc_id, datasetName, rank, dims, buffer) < 0)
+    return -1;
 
- /* Attach the CLASS attribute */
- if ( H5Lite::writeStringAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageClass), const_cast<std::string&>(H5ImageConst::Image) ) < 0 )
-  return -1;
+  /* Attach the CLASS attribute */
+  if (H5Lite::writeStringAttribute(loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageClass), const_cast<std::string&>(H5ImageConst::Image) ) < 0)
+    return -1;
 
- /* Attach the VERSION attribute */
- if ( H5Lite::writeScalarAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::PalVersion), const_cast<std::string&>(H5ImageConst::PalVersionValue) ) < 0 )
-  return -1;
+  /* Attach the VERSION attribute */
+  if (H5Lite::writeStringAttribute(loc_id, datasetName, const_cast<std::string&>(H5ImageConst::PalVersion), const_cast<std::string&>(H5ImageConst::PalVersionValue) )
+      < 0)
+    return -1;
 
- /* Attach the IMAGE_SUBCLASS attribute */
- if ( H5Lite::writeStringAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::ImageTrueColor) ) < 0 )
-  return -1;
+  /* Attach the IMAGE_SUBCLASS attribute */
+  if (H5Lite::writeStringAttribute(loc_id, datasetName, const_cast<std::string&>(H5ImageConst::ImageSubclass), const_cast<std::string&>(H5ImageConst::ImageTrueColor) )
+      < 0)
+    return -1;
 
- /* Attach the INTERLACE_MODE attribute. This attributes is only for true color images */
- if ( H5Lite::writeStringAttribute( loc_id, datasetName, const_cast<std::string&>(H5ImageConst::InterlaceMode), const_cast<std::string&>(interlace) ) < 0 )
-  return -1;
+  /* Attach the INTERLACE_MODE attribute. This attributes is only for true color images */
+  if (H5Lite::writeStringAttribute(loc_id, datasetName, const_cast<std::string&>(H5ImageConst::InterlaceMode), const_cast<std::string&>(interlace) ) < 0)
+    return -1;
 
- return 0;
+  return 0;
 
 }
 
@@ -254,151 +253,135 @@ herr_t H5Image::H5IM_find_palette( hid_t loc_id )
  *-------------------------------------------------------------------------
  */
 
-herr_t H5Image::H5IMget_image_info( hid_t loc_id,
-                     std::string datasetName,
-                     hsize_t *width,
-                     hsize_t *height,
-                     hsize_t *planes,
-                     std::string interlace,
-                     hssize_t *npals )
+herr_t H5Image::H5IMget_image_info(hid_t loc_id, std::string datasetName, hsize_t *width, hsize_t *height, hsize_t *planes, std::string &interlace, hssize_t *npals)
 {
- hid_t   did, sid;
- hsize_t dims[3];
- hid_t   attr_id;
- hid_t   attr_type;
- int32     has_attr;
- hid_t   attr_space_id;
- hid_t   attr_class;
- int32     has_pal;
+  hid_t did, sid;
+  hsize_t dims[3];
+  hid_t attr_id;
+  hid_t attr_type;
+  int32 hasInterlaceMode;
+  hid_t attr_space_id;
+  hid_t attr_class;
+  int32 has_pal;
+  herr_t retErr = 0;
+  herr_t err = 0;
 
- /*assume initially we have no palettes attached*/
- *npals = 0;
+  /*assume initially we have no palettes attached*/
+  *npals = 0;
 
- /* Open the dataset. */
- if ( (did = H5Dopen( loc_id, datasetName.c_str() )) < 0 )
-  return -1;
-
- /* Try to find the attribute "INTERLACE_MODE" on the >>image<< dataset */
- has_attr = H5Lite::findAttribute( did, H5ImageConst::InterlaceMode.c_str() );
-
- /* It exists, get it */
- if ( has_attr == 1 )
- {
-
-  if ( (attr_id = H5Aopen_name( did, H5ImageConst::InterlaceMode.c_str() )) < 0 )
-   goto out;
-
-  if ( (attr_type = H5Aget_type( attr_id )) < 0 )
-   goto out;
-
-  if ( H5Aread( attr_id, attr_type, (void *)interlace.c_str() ) < 0 )
-   goto out;
-
-  if ( H5Tclose( attr_type )  < 0 )
-   goto out;
-
-  if ( H5Aclose( attr_id )  < 0 )
-   goto out;
- }
-
- /* Get the dataspace handle */
- if ( (sid = H5Dget_space( did )) < 0 )
-  goto out;
-
- /* Get dimensions */
- if ( H5Sget_simple_extent_dims( sid, dims, NULL) < 0 )
-  goto out;
-
- /* Initialize the image dimensions */
-
- if ( has_attr == 1 )
- /* This is a 24 bit image */
- {
-
-  if ( interlace == H5ImageConst::InterlacePixel )
+  /* Open the dataset. */
+  did = H5Dopen(loc_id, datasetName.c_str() );
+  if (did < 0)
   {
-   /* Number of color planes is defined as the third dimension */
-   *height = dims[0];
-   *width  = dims[1];
-   *planes = dims[2];
+    return did;
   }
-  else
-  if ( interlace == H5ImageConst::InterlacePlane )
+  /* Try to find the attribute "INTERLACE_MODE" on the >>image<< dataset */
+  hasInterlaceMode = H5Lite::findAttribute(did, H5ImageConst::InterlaceMode);
+  interlace.clear();
+  char interlaceBuffer[32];
+::  memset(interlaceBuffer, 0, sizeof(interlaceBuffer)); // Zero out the buffer
+  /* It exists, get it */
+  if (hasInterlaceMode == 1)
   {
-   /* Number of color planes is defined as the first dimension */
-   *planes = dims[0];
-   *height = dims[1];
-   *width  = dims[2];
+    err = H5Lite::readStringAttribute(loc_id, datasetName, H5ImageConst::InterlaceMode, interlace);
   }
-  else return -1;
- }
- else
- /* This is a 8 bit image */
- {
-  *height = dims[0];
-  *width  = dims[1];
-  *planes = dims[2];
- }
+  if (err < 0)
+  { retErr = err;}
 
- /* Close */
- if ( H5Sclose( sid ) < 0 )
-  goto out;
-
-
- /* Get number of palettes */
-
-
- /* Try to find the attribute const_cast<std::string&>(H5ImageConst::Palette) on the >>image<< dataset */
- has_pal = H5IM_find_palette( did );
-
- if ( has_pal ==  1 )
- {
-
-  if ( (attr_id = H5Aopen_name( did, H5ImageConst::Palette.c_str() ) ) < 0 )
-   goto out;
-
-  if ( (attr_type = H5Aget_type( attr_id )) < 0 )
-   goto out;
-
-  if ( (attr_class = H5Tget_class( attr_type )) < 0 )
-   goto out;
-
-  /* Check if it is really a reference */
-
-  if ( attr_class == H5T_REFERENCE )
+  /* Get the dataspace handle */
+  sid = H5Dget_space(did);
+  if (sid >= 0)
   {
+    /* Get dimensions */
+    err = H5Sget_simple_extent_dims(sid, dims, NULL);
+    if ( err >= 0)
+    {
+      /* Initialize the image dimensions */
+      if (hasInterlaceMode == 1)
+      /* This is a 24 bit image */
+      {
+        if (H5ImageConst::InterlacePixel.compare(interlace) == 0)
+        {
+          /* Number of color planes is defined as the third dimension */
+          *height = dims[0];
+          *width = dims[1];
+          *planes = dims[2];
+        }
+        else if (H5ImageConst::InterlacePlane.compare(interlace) == 0)
+        {
+          /* Number of color planes is defined as the first dimension */
+          *planes = dims[0];
+          *height = dims[1];
+          *width = dims[2];
+        }
+        else
+        {
+          retErr = err;
+        }
+      }
+      else
+      /* This is a 8 bit image */
+      {
+        *height = dims[0];
+        *width = dims[1];
+        *planes = dims[2];
+      }
+    }
+    else
+    {
+      retErr = err;
+    }
+    /* Close */
+    err = H5Sclose(sid);
+    if (err < 0)
+    {
+      retErr = err;
+    }
+  }
+  /* Get number of palettes */
+  /* Try to find the attribute const_cast<std::string&>(H5ImageConst::Palette) on the >>image<< dataset */
+  has_pal = H5IM_find_palette( did );
 
-   /* Get the reference(s) */
+  if ( has_pal == 1 )
+  {
+    attr_id = H5Aopen_name( did, H5ImageConst::Palette.c_str() );
+    if ( attr_id >= 0 )
+    {
+      attr_type = H5Aget_type( attr_id );
+      if ( attr_type >= 0 )
+      {
+        attr_class = H5Tget_class( attr_type );
+        if ( attr_class == H5T_REFERENCE )
+        {
+          /* Get the reference(s) */
+          attr_space_id = H5Aget_space( attr_id );
+          if ( attr_space_id < 0 )
+          {
+            *npals = H5Sget_simple_extent_npoints( attr_space_id );
+            err = H5Sclose( attr_space_id );
+            if ( err < 0 )
+            { retErr = err;}
+          }
 
-   if ( (attr_space_id = H5Aget_space( attr_id )) < 0 )
-    goto out;
+        } /* H5T_REFERENCE */
 
-   *npals = H5Sget_simple_extent_npoints( attr_space_id );
+        err = H5Tclose( attr_type );
+        if ( err < 0 )
+        { retErr = err;}
+      }
+      /* Close the attribute. */
+      err = H5Aclose( attr_id );
+      if ( err < 0 )
+      { retErr = err;}
+    }
 
-   if ( H5Sclose( attr_space_id ) < 0 )
-    goto out;
+  }
 
-  } /* H5T_REFERENCE */
-
-  if ( H5Tclose( attr_type ) < 0 )
-   goto out;
-
-  /* Close the attribute. */
-  if ( H5Aclose( attr_id ) < 0 )
-   goto out;
-
- }
-
- /* End access to the dataset and release resources used by it. */
- if ( H5Dclose( did ) < 0 )
-  goto out;
-
- return 0;
-
-out:
- H5Dclose( did );
- return -1;
-
+  /* End access to the dataset and release resources used by it. */
+  err = H5Dclose( did );
+  if (err < 0)
+  { retErr = err;}
+  return retErr;
 }
 
 

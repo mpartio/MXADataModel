@@ -104,6 +104,17 @@ class MXA_EXPORT H5TiffIO
    */
   int32 _determineTiffOutputImageClass(hid_t fileId, const string &img_dataset_name);
   
+  /**
+   * @brief Reads a grayscale tiff file and stores the image as raw 
+   *  8 bit values in the given dataset inside the give group.
+   * 
+   * @param in The Tiff Image
+   * @param groupId The HDF location identifier of the group into which
+   *       to store the image data
+   * @param datasetName The name to store the data under in the HDF5 file.
+   * @return Error < 0 Error 
+   */
+  herr_t _importGrayscaleTiffImage(TIFF *, hid_t, string &);
   
   /**
    * @brief Reads a grayscale tiff file and stores the image as raw 
@@ -115,54 +126,7 @@ class MXA_EXPORT H5TiffIO
    * @param datasetName The name to store the data under in the HDF5 file.
    * @return Error < 0 Error 
    */
-  herr_t _read8BitTiff( TIFF *, hid_t, string &);
-  
-  /**
-   * @brief Writes an 8bit tiff file into an HDF5 dataset
-   * @param image The TIFF image pointer
-   * @param fileId The HDF5 File Id
-   * @param img_dataset_name The name of the HDF5 dataset
-   * @param data The tiff data to be written
-   * @param width The width of the image
-   * @param height The height of the image
-   * @param numpalettes The number of palettes for the iamge
-   * @return Standard HDF5 error condition
-   */
-  herr_t _write8BitTiff(TIFF *image, hid_t fileId, 
-        string img_dataset_name,
-        unsigned char *data, hsize_t width,
-        hsize_t height,
-        hssize_t numpalettes);
-  
-  
-
-  /**
-   * @brief Reads a grayscale tiff file and stores the image as raw 
-   *  8 bit values in the given dataset inside the give group.
-   * 
-   * @param in The Tiff Image
-   * @param groupId The HDF location identifier of the group into which
-   *       to store the image data
-   * @param datasetName The name to store the data under in the HDF5 file.
-   * @return Error < 0 Error 
-   */
-  herr_t _readGrayscaleTiff(TIFF *, hid_t, string &);
-  
-  /**
-   * @brief Writes a tiff image as a grayscale image HDF5 dataset 
-   * @param image The TIFF image pointer
-   * @param fileId The HDF5 File Id
-   * @param img_dataset_name The name of the HDF5 dataset
-   * @param data The tiff data to be written
-   * @param width The width of the image
-   * @param height The height of the image
-   * @return Standard HDF5 error condition
-   */
-  herr_t _writeGrayscaleTiff(TIFF *image,
-                             unsigned char *data, 
-                             hsize_t width, 
-                             hsize_t height);
-  
+  herr_t _importPaletteColorTiff( TIFF *, hid_t, string &);
   
   /**
    * @brief Reads a true color tiff file and stores the image as raw 
@@ -174,8 +138,58 @@ class MXA_EXPORT H5TiffIO
    * @param datasetName The name to store the data under in the HDF5 file.
    * @return Error < 0 Error 
    */
-  herr_t _read24BitTiff(TIFF *, hid_t, string &);
+  herr_t _importRGBFullColorTiff(TIFF *, hid_t, string &);
   
+#if 0
+  We are not currently supporting the export of Tiff images with palettes. You 
+  should be exporting the image as RGBA instead
+  /**
+   * @brief Writes an 8bit tiff file into an HDF5 dataset
+   * @param image The TIFF image pointer
+   * @param fileId The HDF5 File Id
+   * @param img_dataset_name The name of the HDF5 dataset
+   * @param data The tiff data to be written
+   * @param width The width of the image
+   * @param height The height of the image
+   * @param numpalettes The number of palettes for the iamge
+   * @return Standard HDF5 error condition
+   */
+  herr_t _export8BitTiff(TIFF *image, hid_t fileId, 
+        string img_dataset_name,
+        unsigned char *data, hsize_t width,
+        hsize_t height,
+        hssize_t numpalettes);
+
+#endif
+  
+
+
+  
+  /**
+   * @brief Writes a tiff image as a grayscale image HDF5 dataset 
+   * @param image The TIFF image pointer
+   * @param fileId The HDF5 File Id
+   * @param img_dataset_name The name of the HDF5 dataset
+   * @param data The tiff data to be written
+   * @param width The width of the image
+   * @param height The height of the image
+   * @return Standard HDF5 error condition
+   */
+  herr_t _exportGrayScaleTiff(TIFF *image,
+                             unsigned char *data, 
+                             hsize_t width, 
+                             hsize_t height);
+  
+  
+
+  herr_t _exportRGBFullColorTiff(TIFF* out, 
+                                hid_t fileId,
+                                const std::string &img_dataset_name, 
+                                hsize_t width,
+                                hsize_t height,
+                                hsize_t planes, 
+                                hssize_t numpalettes, 
+                                const std::string &interlace);
 
     
  private:

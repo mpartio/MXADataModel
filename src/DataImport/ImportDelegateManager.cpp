@@ -39,7 +39,7 @@ ImportDelegateManagerPtr ImportDelegateManager::instance()
 // -----------------------------------------------------------------------------
 IImportDelegatePtr ImportDelegateManager::newDataImportDelegate(const std::string &classname)
 {
-  std::cout << "ImportDelegateManager::newDataImportDelegate -> Trying to create ImportDelegate for '" << classname << "'" << std::endl;
+  //std::cout << "ImportDelegateManager::newDataImportDelegate -> Trying to create ImportDelegate for '" << classname << "'" << std::endl;
   IImportDelegatePtr importDelegate;
   for (AbstractImportDelegateFactories::iterator iter = _factories.begin(); iter != _factories.end(); ++iter ) {
     std::string cn = (*(iter)).get()->delegateClassName();

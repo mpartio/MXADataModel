@@ -74,7 +74,7 @@ public:
 static MXA_EXPORT herr_t H5IM_find_palette( hid_t loc_id);
 
 /**
-* @brief Creates and writes an image an 8 bit image
+* @brief Creates and writes an image as an 8 bit image
 * @param loc_id HDF5 File or Group ID
 * @param datasetName The name of the data set
 * @param width The Width of the image in pixels
@@ -122,7 +122,7 @@ static MXA_EXPORT herr_t H5IMget_image_info( hid_t loc_id,
                      hsize_t *width,
                      hsize_t *height,
                      hsize_t *planes,
-                     std::string interlace,
+                     std::string &interlace,
                      hssize_t *npals );
 
 /**
