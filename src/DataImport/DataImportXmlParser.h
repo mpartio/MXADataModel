@@ -34,7 +34,7 @@ namespace MXA_DataImport {
   const std::string Data_Model ("Data_Model");
   const std::string Dimension ("Dimension");
   const std::string Explicit_Data_Source ("Explicit_Data_Source");
-  const std::string FilePath ("FilePath");
+  const std::string File_Path ("File_Path");
   const std::string Implicit_Data_Source ("Implicit_Data_Source");
   const std::string Index_Part ("Index_Part");
   const std::string Output_File ("Output_File");
@@ -45,8 +45,13 @@ namespace MXA_DataImport {
   const std::string Attr_Absolute_Path ("Absolute_Path");
   const std::string Attr_DataDimension_Values ("DataDimension_Values");
   const std::string Attr_Data_Record ("Data_Record");
-  const std::string Attr_File_Path ("File_Path");
+  const std::string Attr_Text("Text");
   const std::string Attr_Source_Type ("Source_Type");
+  const std::string Attr_Padding_Char ("Padding_Char");
+  const std::string Attr_Total_Char_Length("Total_Char_Length");
+  const std::string Attr_Numeric_Type("Numeric_Type");
+  const std::string Attr_Data_Dimension("Data_Dimension");
+  
 } // End Namespace
 
 typedef  std::map<std::string, std::string>        XMLAttributeMap;
@@ -57,7 +62,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 * @brief 
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -157,10 +162,21 @@ private:
   std::string        _errorMessage;
   ExpatParser*       _parser;
   
+
+  std::vector<IDataDimension*>            _implDataDimensions;
+  std::map<IDataDimension*, std::string>  _implPathMap;
+
+  IDataRecordPtr                          _implDataRecord;
+  std::string                             _implSourceType;
+  std::string                             _implPathPart;
+  
   
   DataImportXmlParser(const DataImportXmlParser&); //Copy Constructor Not Implemented
   void operator=(const DataImportXmlParser&); //Copy Assignment Not Implemented
 
+  void _createDataSource(std::string pathTemplate, std::vector<IDataDimension*>::size_type index, std::vector<int> &dimVals);
+
+  
   //---------- Methods that are called for each starting and ending tag --------
   /** @brief Method that will be called when the 'Data_Dimensions' tag is found.  */
     void start_Data_Dimensions_Tag(const XML_Char* name, const XML_Char** attrs);

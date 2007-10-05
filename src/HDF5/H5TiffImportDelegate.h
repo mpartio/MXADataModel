@@ -19,10 +19,14 @@
 #include "Base/IImportDelegate.h"
 #include "DataImport/AbstractImportDelegateFactory.h"
 
-// Include Boost Headers
-#include <boost/filesystem/path.hpp>
 // C++ STL headers
 #include <string>
+#include <iostream>
+
+
+// Include Boost Headers
+#include <boost/filesystem/path.hpp>
+
 
 //-- Forward Declare the MXADataModel Class
 class MXADataModel;
@@ -92,13 +96,17 @@ namespace H5TiffImportDelegateFactory_Detail
 * @brief Factory Class to generate H5TiffImportDelegate Objects
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
 {
   public:
-    H5TiffImportDelegateFactory() {}
-    virtual ~H5TiffImportDelegateFactory() {}
+    H5TiffImportDelegateFactory() :
+      _fileNotFoundIsError(false),
+      _importAsGrayScale(false)
+    {}
+    
+    virtual ~H5TiffImportDelegateFactory() { }
     
     
   /**
@@ -114,7 +122,10 @@ class H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
     IImportDelegatePtr delegate; // Creates a Null Shared Pointer
     if ( className.compare( H5TiffImportDelegateFactory_Detail::ClassName ) == 0)
     {
-      delegate.reset ( new H5TiffImportDelegate() );
+      H5TiffImportDelegate* d = new H5TiffImportDelegate();
+      delegate.reset ( d );
+      d->setFileNotFoundIsError(this->_fileNotFoundIsError);
+      d->setImportAsGrayScale(this->_importAsGrayScale);
     }
     return delegate;
   }
@@ -127,7 +138,29 @@ class H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
     return H5TiffImportDelegateFactory_Detail::ClassName;
   }
   
+  /**
+  * @brief 
+  * @param value
+  */
+  void setFileNotFoundIsError(bool value)
+  {
+    this->_fileNotFoundIsError = value;
+  }
+
+  /**
+  * @brief 
+  * @param value
+  */
+  void setImportAsGrayScale(bool value)
+  {
+    this->_importAsGrayScale = value;
+  }
+  
   private:
+    
+    bool _fileNotFoundIsError;
+    bool _importAsGrayScale;
+    
     H5TiffImportDelegateFactory(const H5TiffImportDelegateFactory&);    //Not Implemented
     void operator=(const H5TiffImportDelegateFactory&);  //Not Implemented
 };

@@ -161,7 +161,7 @@ herr_t H5Lite::findAttribute( hid_t loc_id, const std::string& attrName )
 {
 
  uint32 attr_num;
- herr_t       ret;
+ herr_t ret = 0;
 
  attr_num = 0;
  ret = H5Aiterate( loc_id, &attr_num, find_attr, (void *)(attrName.c_str()) );
@@ -175,7 +175,7 @@ herr_t H5Lite::findAttribute( hid_t loc_id, const std::string& attrName )
 herr_t H5Lite::findDataset( hid_t loc_id, const std::string& dsetName )
 {
 
- herr_t  ret;
+ herr_t  ret = 0;
 
  ret = H5Giterate( loc_id, ".", 0, find_dataset, (void*)(dsetName.c_str() ) );
 
@@ -191,8 +191,8 @@ herr_t H5Lite::writeStringDataset (hid_t loc_id, const std::string& dsetName, co
 {
   hid_t   did=-1;
   hid_t   sid=-1;
-  hid_t   tid;
-  size_t  size;
+  hid_t   tid = -1;
+  size_t  size = 0;
   herr_t err = -1;
   herr_t retErr = 0;
 
@@ -276,7 +276,7 @@ herr_t H5Lite::writeStringAttribute(hid_t loc_id,
   hid_t      attr_space_id;
   hid_t      attr_id;
   hid_t      obj_id;
-  int32        has_attr;
+  int32      has_attr;
   H5G_stat_t statbuf;
   size_t     attr_size;
   herr_t err = 0;
@@ -356,7 +356,7 @@ herr_t H5Lite::writeStringAttribute(hid_t loc_id,
 herr_t H5Lite::readStringDataset(hid_t loc_id, const std::string& dsetName, std::string &data) {
   hid_t did; // dataset id
   hid_t tid; //type id
-  herr_t err;
+  herr_t err = 0;
   herr_t retErr = 0;
   hsize_t size;
   
@@ -544,8 +544,7 @@ hid_t H5Lite::getDatasetType(hid_t loc_id, const std::string &dsetName)
   /* Open the dataset. */
   if ( (did = H5Dopen( loc_id, dsetName.c_str() )) < 0 )
   {
-	std::cout << "H5Lite::getDatasetType: Error Could not get a Dataset ID" << std::endl;
-	return -1;
+     return -1;
   }
   /* Get an identifier for the datatype. */
   hid_t tid =  H5Dget_type( did );

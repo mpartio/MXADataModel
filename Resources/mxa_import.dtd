@@ -36,5 +36,6 @@
 <!ATTLIST Explicit_Data_Source
 	DataDimension_Values CDATA #REQUIRED
 	File_Path CDATA #REQUIRED
-	Data_Record CDATA #REQUIRED>
+	Data_Record CDATA #REQUIRED
+	Source_Type CDATA #IMPLIED>
 	
