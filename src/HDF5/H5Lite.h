@@ -11,9 +11,9 @@
 #ifndef _HDF5_LITE_H_
 #define _HDF5_LITE_H_
 
-#include "Common/DLLExport.h"
-#include "Common/MXATypes.h"
-#include "Common/LogTime.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypes.h>
+#include <Common/LogTime.h>
 
 //-- STL Headers
 #include <string>
@@ -22,7 +22,7 @@
 #include <map>
 
 //-- HDF Headers
-#include "hdf5.h"
+#include <hdf5.h>
 
 //TODO: Add tests for the find* methods
 //TODO: Add test for attributeInfo
@@ -57,7 +57,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.33 $
+ * @version $Revision: 1.34 $
  */
 class H5Lite
 {

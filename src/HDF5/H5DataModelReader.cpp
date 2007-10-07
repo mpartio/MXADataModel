@@ -1,10 +1,10 @@
 //-- MXA Headers
-#include "HDF5/H5Lite.h"
-#include "HDF5/H5Utilities.h"
-#include "HDF5/H5DataModelReader.h"
-#include "Core/MXAConstants.h"
-#include "Core/MXAAttribute.h"
-#include "Utilities/StringUtils.h"
+#include <HDF5/H5Lite.h>
+#include <HDF5/H5Utilities.h>
+#include <HDF5/H5DataModelReader.h>
+#include <Core/MXAConstants.h>
+#include <Core/MXAAttribute.h>
+#include <Utilities/StringUtils.h>
 
 //-- STL Headers
 #include <iostream>

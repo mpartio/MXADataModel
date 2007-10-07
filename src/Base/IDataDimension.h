@@ -11,16 +11,16 @@
 #ifndef IDATADIMENSION_H_
 #define IDATADIMENSION_H_
 
-#include "Common/MXATypes.h"
-#include "Common/DLLExport.h"
-#include "Base/IDataDimensionWriter.h"
+#include <Common/MXATypes.h>
+#include <Common/DLLExport.h>
+#include <Base/IDataDimensionWriter.h>
 
 
 /**
  * @brief The formal interface description for a DataDimension
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  *  
  */
 class MXA_EXPORT IDataDimension 

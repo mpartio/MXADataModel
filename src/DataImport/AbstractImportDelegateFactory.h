@@ -1,8 +1,8 @@
 #ifndef ABSTRACTFACTORY_H_
 #define ABSTRACTFACTORY_H_
 
-#include "Common/DLLExport.h"
-#include "Common/MXATypeDefs.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypeDefs.h>
 #include <string>
 
 

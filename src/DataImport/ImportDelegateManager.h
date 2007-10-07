@@ -1,7 +1,7 @@
 #ifndef IMPORTDELEGATEMANAGER_H_
 #define IMPORTDELEGATEMANAGER_H_
 
-#include "Common/MXATypeDefs.h"
+#include <Common/MXATypeDefs.h>
 
 
 
@@ -10,7 +10,7 @@
 * @brief 
 * @author
 * @date
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class ImportDelegateManager
 {

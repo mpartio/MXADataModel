@@ -12,17 +12,17 @@
 #define _HDFWRITER_H_
 
 // MXA Includes
-#include "Common/DLLExport.h"
-#include "Base/IDataModelWriter.h"
-#include "Core/MXADataModel.h"
-#include "HDF5/H5IODelegate.h"
+#include <Common/DLLExport.h>
+#include <Base/IDataModelWriter.h>
+#include <Core/MXADataModel.h>
+#include <HDF5/H5IODelegate.h>
 
 //-- STL Headers
 #include <iostream>
 #include <string>
 
 //-- HDF Headers
-#include "hdf5.h"
+#include <hdf5.h>
 
 //Forward Declare classes
 class H5IODelegate;
@@ -33,7 +33,7 @@ class MXANode;
  * @brief Writes the DataModel to an HDF5 file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  *  
  */
 class MXA_EXPORT H5DataModelWriter : public IDataModelWriter

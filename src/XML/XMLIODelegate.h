@@ -11,9 +11,9 @@
 #ifndef XMLIODELEGATE_H_
 #define XMLIODELEGATE_H_
 
-#include "Common/MXATypeDefs.h"
-#include "Common/DLLExport.h"
-#include "Base/IFileIODelegate.h"
+#include <Common/MXATypeDefs.h>
+#include <Common/DLLExport.h>
+#include <Base/IFileIODelegate.h>
 
 #include <string>
 
@@ -22,7 +22,7 @@
  * supports reading/writing of the data model and data to and from XML files.
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *  
  */
 class MXA_EXPORT XMLIODelegate : public IFileIODelegate

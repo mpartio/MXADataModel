@@ -1,16 +1,16 @@
 //-- MXA Headers
 #include <MXAConfiguration.h>
-#include "Common/LogTime.h"
-#include "Base/IFileIODelegate.h"
-#include "Core/MXADataModel.h"
-#include "Utilities/StringUtils.h"
-#include "XML/XMLDataModelWriter.h"
+#include <Common/LogTime.h>
+#include <Base/IFileIODelegate.h>
+#include <Core/MXADataModel.h>
+#include <Utilities/StringUtils.h>
+#include <XML/XMLDataModelWriter.h>
 
 //-- Standard Library Headers
 #include <iostream>
 
 #if HDF5_SUPPORT
-#include "HDF5/H5IODelegate.h"
+#include <HDF5/H5IODelegate.h>
 #endif
 
 using namespace MXA;

@@ -1,16 +1,16 @@
 
 
-#include "H5TiffImportDelegate.h"
+#include <HDF5/H5TiffImportDelegate.h>
 
 //-- MXA Includes
-#include "Common/MXAErrorDefinitions.h"
-#include "Common/LogTime.h"
-#include "Base/IFileIODelegate.h"
-#include "Core/MXADataModel.h"
-#include "Core/MXADataSource.h"
-#include "HDF5/H5Lite.h"
-#include "HDF5/H5Utilities.h"
-#include "HDF5/H5TiffIO.h"
+#include <Common/MXAErrorDefinitions.h>
+#include <Common/LogTime.h>
+#include <Base/IFileIODelegate.h>
+#include <Core/MXADataModel.h>
+#include <Core/MXADataSource.h>
+#include <HDF5/H5Lite.h>
+#include <HDF5/H5Utilities.h>
+#include <HDF5/H5TiffIO.h>
 
 //-- STL Includes
 #include <iostream>

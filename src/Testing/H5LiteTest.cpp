@@ -11,10 +11,10 @@
 
 //--MXA Includes
 #include <MXAConfiguration.h>
-#include "Common/LogTime.h"
-#include "Common/MXATypes.h"
-#include "HDF5/H5Lite.h"
-#include "HDF5/H5Utilities.h"
+#include <Common/LogTime.h>
+#include <Common/MXATypes.h>
+#include <HDF5/H5Lite.h>
+#include <HDF5/H5Utilities.h>
 
 //-- Boost includes
 #include <boost/test/unit_test.hpp>

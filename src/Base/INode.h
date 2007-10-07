@@ -13,8 +13,8 @@
 #define _IMXANODE_H_
 
 //-- MXA includes
-#include "Common/DLLExport.h"
-#include "Common/MXATypeDefs.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypeDefs.h>
 //-- STL Includes
 #include <string>
 
@@ -24,7 +24,7 @@
  * data structure
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  *  
  */
 class MXA_EXPORT INode 

@@ -13,17 +13,17 @@
 #define MXADATAIMPORT_H
 
 //-- MXA Includes
-#include "Common/DLLExport.h"
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Base/IDataImport.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Base/IDataImport.h>
 
 //-- STL Headers
 #include <string>
 #include <vector>
 
 //Include Boost Headers
-#include "boost/shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 
 
@@ -33,7 +33,7 @@
  * 
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *  
  */
 class MXA_EXPORT MXADataImport : public IDataImport

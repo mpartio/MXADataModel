@@ -19,13 +19,13 @@
  */
 
 //-- MXA Includes
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Common/LogTime.h"
-#include "Core/MXADataModel.h"
-#include "XML/XMLIODelegate.h"
-#include "HDF5/H5Lite.h"
-#include "HDF5/H5Utilities.h"
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Common/LogTime.h>
+#include <Core/MXADataModel.h>
+#include <XML/XMLIODelegate.h>
+#include <HDF5/H5Lite.h>
+#include <HDF5/H5Utilities.h>
 
 // HDF5 Include
 #include <hdf5.h>

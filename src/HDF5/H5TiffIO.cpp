@@ -1,9 +1,9 @@
 
 //-- MXA Headers
-#include "H5Lite.h"
-#include "H5Image.h"
-#include "H5TiffIO.h"
-#include "Common/LogTime.h"
+#include <HDF5/H5Lite.h>
+#include <HDF5/H5Image.h>
+#include <HDF5/H5TiffIO.h>
+#include <Common/LogTime.h>
 
 //-- STL Headers
 #include <iostream>

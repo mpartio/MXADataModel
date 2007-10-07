@@ -12,9 +12,9 @@
 #define _XMLEvtHandler_H_
 
 //-- MXA Includes
-#include "Common/MXATypes.h"
-#include "XML/ExpatParser.h"
-#include "XML/XMLConstants.h"
+#include <Common/MXATypes.h>
+#include <XML/ExpatParser.h>
+#include <XML/XMLConstants.h>
 
 // -- STL Includes
 #include <string>
@@ -23,7 +23,7 @@
  * @brief This class is responsible 
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *   XMLEvtHandler.h
  */
 class MXA_EXPORT XMLEvtHandler : public ExpatEvtHandler

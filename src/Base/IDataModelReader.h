@@ -12,8 +12,8 @@
 #ifndef IDATAMODELREADER_H_
 #define IDATAMODELREADER_H_
 
-#include "Common/DLLExport.h"
-#include "Common/MXATypes.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypes.h>
 
 class MXADataModel;
 class IMXAFileIODelegate;
@@ -23,7 +23,7 @@ class IMXAFileIODelegate;
  * a data model to a file.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  *  
  */
 class MXA_EXPORT IDataModelReader 

@@ -1,12 +1,12 @@
 
 
 
-#include "ExampleImportDelegate.h"
-#include "MXAHDFInterface.h"
-#include "MXADataModel/HDFTools/ImageIO/MHDTiffIO.h"
-//#include "StringUtilities.h"
+#include <ExampleImportDelegate.h>
+#include <MXAHDFInterface.h>
+#include <MXADataModel/HDFTools/ImageIO/MHDTiffIO.h>
+//#include <StringUtilities.h>
 
-#include "hdf5.h"
+#include <hdf5.h>
 
 #include <iostream>
 

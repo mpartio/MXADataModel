@@ -15,7 +15,7 @@
 
 #include <hdf5.h>
 
-#include "vtkImageData.h"
+#include <vtkImageData.h>
 
 #include <string>
 
@@ -24,7 +24,7 @@
 * @brief Bridge code to read HDF5 data objects into vtk data structures 
 * @author Mike Jackson
 * @date June 2007
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class  vtkHDF5
 {

@@ -13,25 +13,25 @@
 
 //TODO: Add ability to append any type of attribute to this Data Record
 
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Base/IDataRecord.h"
-#include "Base/IDataRecordWriter.h"
-#include "Core/MXAConstants.h"
-#include "Utilities/StringUtils.h"
-#include "Core/MXAAttribute.h"
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Base/IDataRecord.h>
+#include <Base/IDataRecordWriter.h>
+#include <Core/MXAConstants.h>
+#include <Utilities/StringUtils.h>
+#include <Core/MXAAttribute.h>
 
 //Include Boost Headers
-#include "boost/shared_ptr.hpp"
-#include "boost/weak_ptr.hpp"
-#include "boost/tuple/tuple.hpp"
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
 
 /**
  * @brief This class holds the required and any extended information about a
  * data record. Data records can have any number of children but only one parent.
  * @author  Mike Jackson
  * @date March 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *  
  */
 class MXA_EXPORT MXADataRecord :  public IDataRecord

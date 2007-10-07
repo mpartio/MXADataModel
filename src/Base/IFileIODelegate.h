@@ -18,9 +18,9 @@
 //TODO: Append to an existing file?
 
 //MXA Includes
-#include "Common/DLLExport.h"
-#include "Common/MXATypes.h"
-#include "Core/MXADataModel.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypes.h>
+#include <Core/MXADataModel.h>
 
 //-- STL Includes
 #include <string>
@@ -32,7 +32,7 @@ class MXADataModel;
  * to serialize/deserialize the model from a data file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  *   IMXADataModelCode.h
  */
 class MXA_EXPORT IFileIODelegate

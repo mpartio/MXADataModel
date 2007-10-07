@@ -14,10 +14,10 @@
 #define _MHDNODE_H_
 
 //MXA Includes
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Base/INode.h"
-#include "MXAAttribute.h"
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Base/INode.h>
+#include <MXAAttribute.h>
 
 //-- C++ Headers
 #include <string>
@@ -26,9 +26,9 @@
 #include <map>
 
 //Include Boost Headers
-#include "boost/shared_ptr.hpp"
-#include "boost/weak_ptr.hpp"
-#include "boost/tuple/tuple.hpp"
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
 
 
 /**
@@ -37,7 +37,7 @@
 * be subclassed by other classes that need to maintain parent/child relationships
 * @author Mike Jackson
 * @date March 2007
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class MXA_EXPORT MXANode : public INode
 {

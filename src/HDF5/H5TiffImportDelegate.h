@@ -13,11 +13,11 @@
 
 
 //-- MXA Includes
-#include "Common/DLLExport.h"
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Base/IImportDelegate.h"
-#include "DataImport/AbstractImportDelegateFactory.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Base/IImportDelegate.h>
+#include <DataImport/AbstractImportDelegateFactory.h>
 
 // C++ STL headers
 #include <string>
@@ -39,7 +39,7 @@ namespace FileSystem = boost::filesystem;
  * @author Mike Jackson
  * @date April 2007
  * @header HDF5/H5TiffImportDelegate.h
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 class MXA_EXPORT H5TiffImportDelegate : public IImportDelegate
 {
@@ -97,7 +97,7 @@ namespace H5TiffImportDelegateFactory_Detail
 * @brief Factory Class to generate H5TiffImportDelegate Objects
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 */
 class H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
 {

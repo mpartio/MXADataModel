@@ -15,8 +15,8 @@
 * This code has been modified by Mike Jackson at IMTS to allow for better    *
 *  integration into C++ environments.                                        *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-#include "HDF5/H5Image.h"
-#include "HDF5/H5Lite.h"
+#include <HDF5/H5Image.h>
+#include <HDF5/H5Lite.h>
 
 //-- STL Includes
 #include <string>

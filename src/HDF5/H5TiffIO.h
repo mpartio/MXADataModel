@@ -12,14 +12,14 @@
 #define _MHDTIFFIO_H_
 
 //-- MXA Headers
-#include "Common/DLLExport.h"
-#include "Base/ITiffTagExtractor.h"
+#include <Common/DLLExport.h>
+#include <Base/ITiffTagExtractor.h>
 
 //-- HDF Headers
-#include "hdf5.h"
+#include <hdf5.h>
 
 //-- TIFF Headers
-#include "tiffio.h"
+#include <tiffio.h>
 
 //-- STL Headers
 #include <string>
@@ -38,7 +38,7 @@ const std::string H5IM_INTERLACE_PIXEL("INTERLACE_PIXEL");
 * @brief General IO class for TIFF images
 * @author Mike Jackson/Shawn Nicholson
 * @date March 2007
-* @version $Revision: 1.9 $
+* @version $Revision: 1.10 $
 */
 class MXA_EXPORT H5TiffIO 
 {

@@ -12,7 +12,7 @@
 #define STRINGUTILITIES_H_
 
 //-- MXA Includes
-#include "Common/DLLExport.h"
+#include <Common/DLLExport.h>
 
 
 //-- STL Includes
@@ -28,7 +28,7 @@
  
 /**
  * @brief Just some convenience utilities for dealing with strings
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  */
 class StringUtils {
   

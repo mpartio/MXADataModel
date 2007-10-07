@@ -28,7 +28,7 @@
  *  5. This notice may not be removed or altered.
  */
 
-#include "XML/ExpatEvtHandler.h"
+#include <XML/ExpatEvtHandler.h>
 
 ExpatEvtHandler::ExpatEvtHandler()
 {

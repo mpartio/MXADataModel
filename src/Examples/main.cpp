@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //TODO: Rewrite the DataImport Examples
-#include "DataImport/SimpleImportExample.h"
+#include <DataImport/SimpleImportExample.h>
 #include <iostream>
 
 int main (int argc, char *argv[])

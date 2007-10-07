@@ -12,11 +12,11 @@
 #define _HDF5UTILITIES_H_
 
 
-#include "Common/DLLExport.h"
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Core/MXAAttribute.h"
-#include "HDF5/H5Lite.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Core/MXAAttribute.h>
+#include <HDF5/H5Lite.h>
 
 // C++ Includes
 #include <map>
@@ -24,13 +24,13 @@
 #include <string>
 
 //-- HDF Headers
-#include "hdf5.h"
+#include <hdf5.h>
 
 /**
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 class H5Utilities
 {

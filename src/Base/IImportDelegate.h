@@ -2,8 +2,8 @@
 #define IIMPORTDELEGATE_H_
 
 
-#include "Common/DLLExport.h"
-#include "Common/MXATypeDefs.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypeDefs.h>
 
 
 /**
@@ -11,7 +11,7 @@
  * a delegate to import data sources into HDF5 data files.
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *  
  */
 class MXA_EXPORT IImportDelegate

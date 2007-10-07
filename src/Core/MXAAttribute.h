@@ -12,11 +12,11 @@
 #define _MXAATTRIBUTE_H
 
 //Include MXA Headers
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Base/IDataModelWriter.h"
-#include "Base/IAttribute.h"
-#include "Core/AttributeHelpers.h"
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Base/IDataModelWriter.h>
+#include <Base/IAttribute.h>
+#include <Core/AttributeHelpers.h>
 
 // C++ includes
 #include <string>
@@ -37,7 +37,7 @@ typedef boost::any Any;
  * entries in the data model
  * @author mjackson
  * @date Mar 28, 2007
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 class MXA_EXPORT MXAAttribute : public IAttribute
 {

@@ -12,23 +12,23 @@
 #define DATAFILEGENERATOR_H_
 
 
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Common/LogTime.h"
-#include "Base/IImportDelegate.h"
-#include "Base/IFileIODelegate.h"
-#include "Core/MXADataModel.h"
-#include "Core/MXADataDimension.h"
-#include "Core/MXADataRecord.h"
-#include "Core/MXADataImport.h"
-#include "Core/MXADataSource.h"
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Common/LogTime.h>
+#include <Base/IImportDelegate.h>
+#include <Base/IFileIODelegate.h>
+#include <Core/MXADataModel.h>
+#include <Core/MXADataDimension.h>
+#include <Core/MXADataRecord.h>
+#include <Core/MXADataImport.h>
+#include <Core/MXADataSource.h>
 
-#include "HDF5/H5Lite.h"
-#include "HDF5/H5Utilities.h"
+#include <HDF5/H5Lite.h>
+#include <HDF5/H5Utilities.h>
 
-#include "Testing/AnyDataDelegate.h"
-#include "Testing/ScalarDataImport.h"
-#include "Testing/VectorDataImport.h"
+#include <Testing/AnyDataDelegate.h>
+#include <Testing/ScalarDataImport.h>
+#include <Testing/VectorDataImport.h>
 
 #include <string>
 
@@ -66,7 +66,7 @@ namespace DataGen
  * @class DataFileGenerator DataFileGenerator.h src/Testing/DataFileGenerator.h
  * @author Mike Jackson
  * @date July 2007
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 class DataFileGenerator
 {

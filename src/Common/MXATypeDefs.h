@@ -17,7 +17,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
-#include "Common/MXATypes.h"
+#include <Common/MXATypes.h>
 
 /** @file MXATypeDefs.h
  * @brief This file contains many common typdefs used through out the MXA Source code

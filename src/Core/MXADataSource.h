@@ -13,17 +13,17 @@
 #define MXADATASOURCE_H
 
 //-- MXA Headers
-#include "Common/DLLExport.h"
-#include "Common/MXATypeDefs.h"
-#include "Common/MXATypes.h"
-#include "Base/IDataSource.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypeDefs.h>
+#include <Common/MXATypes.h>
+#include <Base/IDataSource.h>
 
 //-- STL Headers
 #include <string>
 #include <vector>
 
 //Include Boost Headers
-#include "boost/shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 
 // Forward declare classes
@@ -34,7 +34,7 @@ class MXADataRecord;
   * 
   * @brief This class holds the information needed to read data from a source and store
   * that data into the underlying data storage for the MXA Data Model (HDF5 or XML)
-  * @version $Revision: 1.7 $
+  * @version $Revision: 1.8 $
   */
 
 class MXA_EXPORT MXADataSource : public IDataSource

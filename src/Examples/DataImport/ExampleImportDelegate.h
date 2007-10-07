@@ -2,7 +2,7 @@
 #define EXAMPLEIMPORTDELEGATE_H_
 
 
-#include "Base/IDataImportDelegate.h"
+#include <Base/IDataImportDelegate.h>
 
 
 /**
@@ -10,7 +10,7 @@
 * @brief An example of how to write a basic IDataImportDelegate class 
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class ExampleImportDelegate : public IDataImportDelegate
 {

@@ -16,8 +16,8 @@
 
 
 //-- MXA Includes
-#include "Common/DLLExport.h"
-#include "Common/MXATypes.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypes.h>
 
 //-- STL Includes
 #include <string>
@@ -29,7 +29,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  *  
  */
 class MXA_EXPORT IDataModel

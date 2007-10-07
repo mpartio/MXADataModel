@@ -33,8 +33,8 @@
 
 
 //MXA Includes
-#include "Common/DLLExport.h"
-#include "expat.h"
+#include <Common/DLLExport.h>
+#include <expat.h>
 
 
 /**
@@ -42,7 +42,7 @@
 * @brief Base class to handle Expat Events 
 * @author Keith Gaughan
 * @date 2004
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT ExpatEvtHandler
 {

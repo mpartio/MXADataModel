@@ -12,17 +12,17 @@
 #define _ATTRIBUTEHELPERS_H_
 
 // MXA inludes
-#include "Common/DLLExport.h"
-#include "Common/MXATypes.h"
-#include "Base/IAttributeHelper.h"
-#include "Base/IAttributeWriter.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypes.h>
+#include <Base/IAttributeHelper.h>
+#include <Base/IAttributeWriter.h>
 
 // STL Includes
 #include <sstream>
 
 /**
  * @brief Some helper classes for Attributes
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 

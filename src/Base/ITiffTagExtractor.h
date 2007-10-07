@@ -1,7 +1,7 @@
 #ifndef ITIFFTAGEXTRACTOR_H_
 #define ITIFFTAGEXTRACTOR_H_
 
-#include "tiffio.h"
+#include <tiffio.h>
 
 /**
 * @class ITiffTagExtractor ITiffTagExtractor.h Base/ITiffTagExtractor.h
@@ -9,7 +9,7 @@
 * specific Tiff Tags from the image file
 * @author Mike Jackson
 * @date Aug 2007
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT ITiffTagExtractor
 {

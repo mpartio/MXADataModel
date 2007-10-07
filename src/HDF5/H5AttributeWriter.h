@@ -2,15 +2,15 @@
 #ifndef _HDF5AttributeWriter_h_
 #define _HDF5AttributeWriter_h_
 
-#include "Base/IAttributeWriter.h"
-#include "HDF5/H5Lite.h"
+#include <Base/IAttributeWriter.h>
+#include <HDF5/H5Lite.h>
 
 #include <vector>
 
 /**
 * @brief Writes Attributes for a dataset to an HDF5 data file
 * @author Mike Jackson
-* @version $Revision: 1.10 $
+* @version $Revision: 1.11 $
 * @date March 2007
 */
 class MXA_EXPORT H5AttributeWriter : public IAttributeWriter

@@ -1,5 +1,5 @@
-#include "MXADataDimension.h"
-#include "Utilities/StringUtils.h"
+#include <Core/MXADataDimension.h>
+#include <Utilities/StringUtils.h>
 
 
 // -----------------------------------------------------------------------------

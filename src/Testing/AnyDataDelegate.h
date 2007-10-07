@@ -2,10 +2,10 @@
 #define ANYDATADELEGATE_H_
 
 
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Base/IImportDelegate.h"
-#include "Core/MXADataModel.h"
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Base/IImportDelegate.h>
+#include <Core/MXADataModel.h>
 
 
 
@@ -13,7 +13,7 @@
 * @brief  Template Class to allow any type of data to be created and stored in an HDF5 File
 * @author Mike Jackson
 * @date June 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 * @class AnyDataDelegate AnyDataDelegate.h src/Test/AnyDataDelegate.h
 */
 template <typename T>

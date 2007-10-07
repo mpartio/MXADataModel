@@ -12,8 +12,8 @@
 #define SCALARDATAIMPORT_H_
 
 
-#include "Common/MXATypeDefs.h"
-#include "DataImport/AbstractImportDelegateFactory.h"
+#include <Common/MXATypeDefs.h>
+#include <DataImport/AbstractImportDelegateFactory.h>
 
 #include <string>
 
@@ -23,7 +23,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class ScalarDataDelegate: public IImportDelegate
 {

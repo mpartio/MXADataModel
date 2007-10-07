@@ -28,8 +28,8 @@
  *  5. This notice may not be removed or altered.
  */
 
-#include "XML/ExpatParser.h"
-#include "expat.h"
+#include <XML/ExpatParser.h>
+#include <expat.h>
 #include <assert.h>
 #include <string.h>
 

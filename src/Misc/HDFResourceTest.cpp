@@ -4,10 +4,10 @@
 #include <iostream>
 #include <vector>
 
-#include "hdf5.h"
+#include <hdf5.h>
 
-#include "HDF5/H5Lite.h"
-#include "Headers/LogTime.h"
+#include <HDF5/H5Lite.h>
+#include <Headers/LogTime.h>
 
 /* If we define CLOSE_FILE = 1, then the H5 file is closed and reopened each time through the loop
 * If CLOSE_FILE= 0 then the file is left open the entire run.

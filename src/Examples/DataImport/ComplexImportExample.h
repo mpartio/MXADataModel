@@ -11,7 +11,7 @@
 #ifndef COMPLEXIMPORTEXAMPLE_H_
 #define COMPLEXIMPORTEXAMPLE_H_
 
-#include "MXADataModel/MXADataModel.h"
+#include <MXADataModel/MXADataModel.h>
 
 
 #include <string>
@@ -41,7 +41,7 @@ namespace ExampleConstants {
 * @brief Shows a more involved example of importing data into the MXA file format
 * @author Mike Jackson
 * @date May 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class ComplexImportExample
 {

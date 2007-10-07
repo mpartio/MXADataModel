@@ -11,13 +11,13 @@
 #ifndef _MXADATAMODELNODE_H_
 #define _MXADATAMODELNODE_H_
 
-#include "Common/MXATypes.h"
-#include "Common/MXATypeDefs.h"
-#include "Base/IDataDimension.h"
-#include "Core/MXAConstants.h"
-#include "Utilities/StringUtils.h"
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Base/IDataDimension.h>
+#include <Core/MXAConstants.h>
+#include <Utilities/StringUtils.h>
 
-#include "boost/shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
 
 #include <limits>
 
@@ -27,7 +27,7 @@
  * 
  * @author Mike Jackson @ IMTS.us 
  * @date March 2007
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  *  
  */
 class  MXA_EXPORT MXADataDimension : public IDataDimension

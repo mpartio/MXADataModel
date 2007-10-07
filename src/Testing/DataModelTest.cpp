@@ -13,13 +13,13 @@
 //TODO: Test to check validity of Model/Dimensions
 
 #include <MXAConfiguration.h>
-#include "Common/MXATypeDefs.h"
-#include "Core/MXAConstants.h"
-#include "Core/MXAAttribute.h"
-#include "Core/MXADataModel.h"
-#include "Core/MXADataDimension.h"
-#include "Core/MXADataRecord.h"
-#include "HDF5/H5IODelegate.h"
+#include <Common/MXATypeDefs.h>
+#include <Core/MXAConstants.h>
+#include <Core/MXAAttribute.h>
+#include <Core/MXADataModel.h>
+#include <Core/MXADataDimension.h>
+#include <Core/MXADataRecord.h>
+#include <HDF5/H5IODelegate.h>
 
 
 // C++ Includes
@@ -28,8 +28,8 @@
 #include <map>
 
 //Boost Includes
-#include "boost/shared_ptr.hpp"
-#include "boost/weak_ptr.hpp"
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/test/unit_test.hpp>
 
 using boost::unit_test::test_suite;

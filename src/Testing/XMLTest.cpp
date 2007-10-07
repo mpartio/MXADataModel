@@ -10,16 +10,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <MXAConfiguration.h>
-#include "Common/MXATypeDefs.h"
-#include "Core/MXADataModel.h"
-#include "XML/XMLIODelegate.h"
+#include <Common/MXATypeDefs.h>
+#include <Core/MXADataModel.h>
+#include <XML/XMLIODelegate.h>
 
 #include <string>
 
 
 //Boost Includes
-#include "boost/shared_ptr.hpp"
-#include "boost/weak_ptr.hpp"
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/test/unit_test.hpp>
 
 using boost::unit_test::test_suite;

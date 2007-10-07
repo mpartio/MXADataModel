@@ -1,4 +1,4 @@
-#include "MXADataRecord.h"
+#include <Core/MXADataRecord.h>
 
 // Set the initial value of the _uniqueGUIDValue
 int MXADataRecord::_uniqueGUIDValue(0);

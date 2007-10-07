@@ -17,14 +17,14 @@
 //TODO: Add ImageSpec Version attribute
 
 //MXA Includes
-#include "Common/DLLExport.h"
-#include "Common/MXATypes.h"
+#include <Common/DLLExport.h>
+#include <Common/MXATypes.h>
 
 //-- STL headers
 #include <string>
 
 //-- HDF5 Header
-#include "hdf5.h"
+#include <hdf5.h>
 
 namespace H5ImageConst
 {
@@ -60,7 +60,7 @@ namespace H5ImageConst
 /**
 * @brief Reimplementation of the H5IM API from the HDF5 High Level API set.
 * @date April 2007
-* @version $Revision: 1.9 $
+* @version $Revision: 1.10 $
 */
 class H5Image
 {

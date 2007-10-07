@@ -11,7 +11,7 @@
 #ifndef _IMXAATTRIBUTE_H_
 #define _IMXAATTRIBUTE_H_
 
-#include "Common/DLLExport.h"
+#include <Common/DLLExport.h>
 
 
 /**
@@ -19,7 +19,7 @@
  * templated.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *  
  */
 class MXA_EXPORT IAttribute 

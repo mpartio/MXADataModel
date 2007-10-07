@@ -27,12 +27,12 @@
 
 
 //-- MXA Headers
-#include "Common/MXATypeDefs.h"
-#include "Common/MXATypeDefs.h"
-#include "Base/IDataModel.h"
-#include "Core/MXAConstants.h"
-#include "Core/MXADataDimension.h"
-#include "Core/MXADataRecord.h"
+#include <Common/MXATypeDefs.h>
+#include <Common/MXATypeDefs.h>
+#include <Base/IDataModel.h>
+#include <Core/MXAConstants.h>
+#include <Core/MXADataDimension.h>
+#include <Core/MXADataRecord.h>
 
 
 //-- STL Headers
@@ -40,14 +40,14 @@
 #include <map>
 
 //-- Boost Headers
-#include "boost/shared_ptr.hpp"
-#include "boost/weak_ptr.hpp"
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 /**
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  * @class MXADataModel MXADataModel.h MXADataModel/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
