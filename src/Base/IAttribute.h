@@ -19,7 +19,7 @@
  * templated.
  * @author Mike Jackson
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.2 $
  *  
  */
 class MXA_EXPORT IAttribute 
