@@ -29,7 +29,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.7 $
  *  
  */
 class MXA_EXPORT IDataModel

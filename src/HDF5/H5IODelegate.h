@@ -34,7 +34,7 @@ class H5DataModelWriter;
  * supports reading/writing of the data model and data to and from HDF5 files.
  * @author Mike Jackson
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.13 $
  *  
  */
 class MXA_EXPORT H5IODelegate : public IFileIODelegate

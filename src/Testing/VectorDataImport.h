@@ -12,7 +12,7 @@
 * @brief 
 * @author
 * @date
-* @version
+* @version $Revision: 1.3 $
 */
 class VectorDataDelegate: public IImportDelegate
 {

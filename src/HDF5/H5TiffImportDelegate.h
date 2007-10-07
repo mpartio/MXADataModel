@@ -39,6 +39,7 @@ namespace FileSystem = boost::filesystem;
  * @author Mike Jackson
  * @date April 2007
  * @header HDF5/H5TiffImportDelegate.h
+ * @version $Revision: 1.8 $
  */
 class MXA_EXPORT H5TiffImportDelegate : public IImportDelegate
 {
@@ -96,7 +97,7 @@ namespace H5TiffImportDelegateFactory_Detail
 * @brief Factory Class to generate H5TiffImportDelegate Objects
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 class H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
 {

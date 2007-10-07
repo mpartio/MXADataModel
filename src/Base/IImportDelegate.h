@@ -11,7 +11,7 @@
  * a delegate to import data sources into HDF5 data files.
  * @author Mike Jackson
  * @date April 2007
- * @version 1.0
+ * @version $Revision: 1.2 $
  *  
  */
 class MXA_EXPORT IImportDelegate

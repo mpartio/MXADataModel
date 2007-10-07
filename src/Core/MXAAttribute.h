@@ -37,7 +37,7 @@ typedef boost::any Any;
  * entries in the data model
  * @author mjackson
  * @date Mar 28, 2007
- * @version 
+ * @version $Revision: 1.2 $
  */
 class MXA_EXPORT MXAAttribute : public IAttribute
 {

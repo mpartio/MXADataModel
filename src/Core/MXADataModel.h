@@ -47,6 +47,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
+ * @version $Revision: 1.10 $
  * @class MXADataModel MXADataModel.h MXADataModel/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel

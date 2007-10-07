@@ -57,6 +57,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
+ * @version $Revision: 1.33 $
  */
 class H5Lite
 {

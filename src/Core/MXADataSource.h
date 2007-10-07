@@ -34,6 +34,7 @@ class MXADataRecord;
   * 
   * @brief This class holds the information needed to read data from a source and store
   * that data into the underlying data storage for the MXA Data Model (HDF5 or XML)
+  * @version $Revision: 1.7 $
   */
 
 class MXA_EXPORT MXADataSource : public IDataSource

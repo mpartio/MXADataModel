@@ -26,7 +26,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
  * class. This class is responsible for reading a data model from an XML File
  * @author Mike Jackson
  * @date June 2007
- * @version 1.0
+ * @version $Revision: 1.11 $
  * @class XMLDataModelReader XMLDataModelReader.h
  */
 class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,

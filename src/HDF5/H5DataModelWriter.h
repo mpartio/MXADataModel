@@ -33,7 +33,7 @@ class MXANode;
  * @brief Writes the DataModel to an HDF5 file
  * @author Mike Jackson
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.10 $
  *  
  */
 class MXA_EXPORT H5DataModelWriter : public IDataModelWriter

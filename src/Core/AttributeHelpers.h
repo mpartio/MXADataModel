@@ -20,6 +20,12 @@
 // STL Includes
 #include <sstream>
 
+/**
+ * @brief Some helper classes for Attributes
+ * @version $Revision: 1.3 $
+ */
+
+
 // -----------------------------------------------------------------------------
 //  Used for Strings
 // -----------------------------------------------------------------------------

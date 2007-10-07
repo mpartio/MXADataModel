@@ -10,7 +10,7 @@
 * @brief 
 * @author
 * @date
-* @version
+* @version $Revision: 1.2 $
 */
 class ImportDelegateManager
 {

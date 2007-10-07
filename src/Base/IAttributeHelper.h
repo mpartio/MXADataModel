@@ -20,7 +20,7 @@
  * 
  * @author Mike Jackson
  * @date Mach 2007
- * @version 1.0
+ * @version $Revision: 1.2 $
  *   MXADataModel/IAttributeHelper.h
  */
 class MXA_EXPORT IAttributeHelper 

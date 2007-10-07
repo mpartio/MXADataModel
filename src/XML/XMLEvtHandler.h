@@ -23,7 +23,7 @@
  * @brief This class is responsible 
  * @author Mike Jackson
  * @date June 2007
- * @version 1.0
+ * @version $Revision: 1.6 $
  *   XMLEvtHandler.h
  */
 class MXA_EXPORT XMLEvtHandler : public ExpatEvtHandler

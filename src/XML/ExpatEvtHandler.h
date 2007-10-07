@@ -42,7 +42,7 @@
 * @brief Base class to handle Expat Events 
 * @author Keith Gaughan
 * @date 2004
-* @version
+* @version $Revision: 1.4 $
 */
 class MXA_EXPORT ExpatEvtHandler
 {

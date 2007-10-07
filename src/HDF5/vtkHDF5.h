@@ -24,7 +24,7 @@
 * @brief Bridge code to read HDF5 data objects into vtk data structures 
 * @author Mike Jackson
 * @date June 2007
-* @version 1.0
+* @version $Revision: 1.3 $
 */
 class  vtkHDF5
 {

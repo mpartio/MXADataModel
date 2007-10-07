@@ -33,7 +33,7 @@
  * 
  * @author Mike Jackson
  * @date April 2007
- * @version 1.0
+ * @version $Revision: 1.5 $
  *  
  */
 class MXA_EXPORT MXADataImport : public IDataImport

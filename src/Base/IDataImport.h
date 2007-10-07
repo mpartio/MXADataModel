@@ -18,7 +18,7 @@
  * a class to import data into the underlying data storage.
  * @author Mike Jackson 
  * @date April 2007
- * @version 1.0
+ * @version $Revision: 1.3 $
  *  
  */
 class MXA_EXPORT IDataImport 

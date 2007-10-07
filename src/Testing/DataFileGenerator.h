@@ -66,7 +66,7 @@ namespace DataGen
  * @class DataFileGenerator DataFileGenerator.h src/Testing/DataFileGenerator.h
  * @author Mike Jackson
  * @date July 2007
- * @version 1.0
+ * @version $Revision: 1.7 $
  */
 class DataFileGenerator
 {

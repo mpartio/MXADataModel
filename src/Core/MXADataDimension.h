@@ -27,7 +27,7 @@
  * 
  * @author Mike Jackson @ IMTS.us 
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.8 $
  *  
  */
 class  MXA_EXPORT MXADataDimension : public IDataDimension

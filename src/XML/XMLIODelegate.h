@@ -22,7 +22,7 @@
  * supports reading/writing of the data model and data to and from XML files.
  * @author Mike Jackson
  * @date June 2007
- * @version 1.0
+ * @version $Revision: 1.6 $
  *  
  */
 class MXA_EXPORT XMLIODelegate : public IFileIODelegate

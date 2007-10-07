@@ -60,6 +60,7 @@ namespace H5ImageConst
 /**
 * @brief Reimplementation of the H5IM API from the HDF5 High Level API set.
 * @date April 2007
+* @version $Revision: 1.9 $
 */
 class H5Image
 {

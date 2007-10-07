@@ -31,7 +31,7 @@
  * data record. Data records can have any number of children but only one parent.
  * @author  Mike Jackson
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.6 $
  *  
  */
 class MXA_EXPORT MXADataRecord :  public IDataRecord

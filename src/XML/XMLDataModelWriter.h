@@ -34,7 +34,7 @@ class MXANode;
  * the data model to an XML file
  * @author  Mike Jackson
  * @date June 2007
- * @version 1.0
+ * @version $Revision: 1.11 $
  *  
  */
 class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter, 

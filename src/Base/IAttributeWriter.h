@@ -20,7 +20,7 @@
  * @brief Writes an IAttribute to the underlying data storage.
  * @author Mike Jackson
  * @date march 2007
- * @version 1.0
+ * @version $Revision: 1.2 $
  *  
  */
 class MXA_EXPORT IAttributeWriter

@@ -10,6 +10,7 @@
 /**
 * @brief Writes Attributes for a dataset to an HDF5 data file
 * @author Mike Jackson
+* @version $Revision: 1.10 $
 * @date March 2007
 */
 class MXA_EXPORT H5AttributeWriter : public IAttributeWriter

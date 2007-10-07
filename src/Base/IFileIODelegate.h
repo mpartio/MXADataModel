@@ -32,7 +32,7 @@ class MXADataModel;
  * to serialize/deserialize the model from a data file
  * @author Mike Jackson
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.4 $
  *   IMXADataModelCode.h
  */
 class MXA_EXPORT IFileIODelegate

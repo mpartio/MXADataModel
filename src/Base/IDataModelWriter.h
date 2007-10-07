@@ -25,7 +25,7 @@ class IFileIODelegate;
  * implement to be able to write data models to files or other media
  * @author Mike Jackson
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.5 $
  *  
  */
 class MXA_EXPORT IDataModelWriter 

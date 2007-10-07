@@ -23,7 +23,7 @@
  * @brief This class writes User meta data from the data model to an xml file
  * @author Mike Jackson
  * @date June 2007
- * @version 1.0
+ * @version $Revision: 1.10 $
  *  
  */
 class MXA_EXPORT XMLUserMetaDataWriter : public IAttributeWriter

@@ -25,7 +25,11 @@
 
 
 //TODO: Create Test Suite for these Methods
-  
+ 
+/**
+ * @brief Just some convenience utilities for dealing with strings
+ * @version $Revision: 1.9 $
+ */
 class StringUtils {
   
 public:

@@ -22,6 +22,7 @@
  * was to combine this with the boost::shared_ptr and create a
  * std::stack<boost::shared_ptr<IH5Operations*> >. That way you can just 'pop'
  * each pointer from the stack and the destructor would be called on the object.
+ * @version $Revision: 1.4 $
  */
 class IH5Operations
 {

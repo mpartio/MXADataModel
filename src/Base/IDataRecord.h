@@ -19,7 +19,7 @@ class IDataRecordWriter;
  * @brief Abstract class defining the DataRecord public interface
  * @author Mike Jackson
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.5 $
  *  
  */
 class MXA_EXPORT IDataRecord 

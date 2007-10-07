@@ -13,6 +13,11 @@
 
 #include <string>
 
+/**
+ * @brief Constants for dealing with MXA XML files
+ * @version $Revision: 1.6 $
+ */
+
 
 // Namespace for XML Constants
 namespace MXA_XML {

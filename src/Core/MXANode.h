@@ -37,7 +37,7 @@
 * be subclassed by other classes that need to maintain parent/child relationships
 * @author Mike Jackson
 * @date March 2007
-* @version 1.0
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT MXANode : public INode
 {

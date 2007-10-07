@@ -23,6 +23,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
+* @version $Revision: 1.3 $
 */
 class ScalarDataDelegate: public IImportDelegate
 {

@@ -23,7 +23,7 @@ class IMXAFileIODelegate;
  * a data model to a file.
  * @author Mike Jackson
  * @date March 2007
- * @version 1.0
+ * @version $Revision: 1.3 $
  *  
  */
 class MXA_EXPORT IDataModelReader 

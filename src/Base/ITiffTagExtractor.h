@@ -9,7 +9,7 @@
 * specific Tiff Tags from the image file
 * @author Mike Jackson
 * @date Aug 2007
-* @version 1.0
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT ITiffTagExtractor
 {

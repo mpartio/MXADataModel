@@ -10,7 +10,7 @@
 * @brief An example of how to write a basic IDataImportDelegate class 
 * @author Mike Jackson
 * @date April 2007
-* @version 1.0
+* @version $Revision: 1.4 $
 */
 class ExampleImportDelegate : public IDataImportDelegate
 {
