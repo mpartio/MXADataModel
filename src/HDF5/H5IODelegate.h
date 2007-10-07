@@ -50,8 +50,8 @@ public:
 // -----------------------------------------------------------------------------
   
   /** @brief Writes the Model to a data file
-  * @param filename The name of the file (and path if needed) to write the model to
-  * @param model The Model to serialize
+  * @param fileName The name of the file (and path if needed) to write the model to
+  * @param model The Model to write to disk
   * @param closeWhenFinished
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
@@ -59,6 +59,7 @@ public:
   
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
+  * @param model The IDataModel Object to Read from
   * @return A pointer to a new'ed MXADataModel Object. It is up to the Programmer to
   * release the Object. If an Error occurs during the reading, then a NULL pointer
   * @param closeWhenFinished
@@ -77,7 +78,7 @@ public:
    * @param fileName The data file to check
    * @return True if the file is MXA based
    */
-  bool isMXAFile(std::string fileName);
+  bool isMXAFile(const std::string &fileName);
 
   /**
    * @brief Opens an existing MXA Data File. IE an HDF5 file with the proper data model
@@ -118,7 +119,7 @@ private:
     /**
      * @brief Is the file identified by the given identifier an MXA Base data file
      */
-    bool isMXAFile(int32 identifier);
+    bool isMXAFile(hid_t fileId);
 };
 
 

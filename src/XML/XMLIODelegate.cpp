@@ -77,7 +77,7 @@ bool XMLIODelegate::isMXAFile(int32 fileId)
 // Returns true if the file referred to by filename is an HDF5
 //  compliant file (has the correct file type and version)
 //TODO: Implement XMLIODelegate::isMXAFile(std::string filename)
-bool XMLIODelegate::isMXAFile(std::string filename)
+bool XMLIODelegate::isMXAFile(const std::string &filename)
 {
   MXATypes::MXAError err=0;
   // We can check wellformedness of the XML

@@ -138,9 +138,9 @@ bool H5IODelegate::isMXAFile(hid_t fileId)
 //  compliant file (has the correct file type and version)
 // -----------------------------------------------------------------------------
 //TODO: Clean this up
-bool H5IODelegate::isMXAFile(std::string filename)
+bool H5IODelegate::isMXAFile(const std::string &fileName)
 {
-  hid_t fileId = openMXAFile(filename, true);
+  hid_t fileId = openMXAFile(fileName, true);
   if (fileId < 0) {
     return false;
   }

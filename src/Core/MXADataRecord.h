@@ -44,15 +44,16 @@ public:
   * @brief Creates a flat look up table using the GUID of the data record as the
    * key and the boost::Shared_ptr as the value
    * @param lut The look up table to be populated.
-   * @param records The MXADataRecords to use as the tree
+   * @param nodes The IDataRecords to use as the tree
    */
   static void generateLUT(IDataRecordLookupTable &lut, IDataRecords &nodes);
   
   
   /**
   * @brief Used to create a new MXANode
-  * @param type The Type of Node this is going to be
-  * @param nodeName The Name of this node
+  * @param luid The Type of Node this is going to be
+  * @param name The Name of this node
+  * @param altName The Alternate name for the Data Record.
   * @return A Boost SharedPointer to the MXANode Object
   */
   static MXADataRecordPtr New(int luid, std::string name, std::string altName);

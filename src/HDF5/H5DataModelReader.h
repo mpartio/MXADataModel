@@ -89,7 +89,7 @@ public:
  
   /**
   * @brief reads the data records
-  * @param fileId
+  * @param locId
   * @return Standard HDF5 Error Condition 
   */
   herr_t readDataRecords(hid_t locId);

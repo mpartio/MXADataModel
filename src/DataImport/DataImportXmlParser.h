@@ -62,7 +62,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 * @brief 
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -105,7 +105,7 @@ public:
   //------------------- IDataImport Methods ------------------------------------
   /**
    * Set the value of m_outputFilePath
-   * @param new_var the new value of m_outputFilePath
+   * @param outputFilePath the new value of m_outputFilePath
    */
   void setOutputFilePath ( std::string outputFilePath );
 
@@ -118,7 +118,7 @@ public:
 
   /**
    * Set the value of m_dataModel
-   * @param new_var the new value of m_dataModel
+   * @param dataModel the new value of m_dataModel
    */
   void setDataModel ( IDataModelPtr dataModel );
 
@@ -131,7 +131,7 @@ public:
 
   /**
    * Set the value of m_dataSources
-   * @param new_var the new value of m_dataSources
+   * @param datasources the new value of m_dataSources
    */
   void setDataSources ( IDataSources &datasources );
 

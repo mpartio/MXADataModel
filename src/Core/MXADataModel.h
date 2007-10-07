@@ -210,7 +210,14 @@ class MXA_EXPORT MXADataModel : public IDataModel
   
   /**
    * @brief Sets the required meta data fields
-   * @param 
+   * @param researcherName
+   * @param dateCreated
+   * @param datasetName
+   * @param description
+   * @param distributionRights
+   * @param releaseNumber
+   * @param pedigree
+   * @param derivedSrcFile
    * @return
    */
   MXATypes::MXAError setRequiredMetaData( std::string researcherName, std::string dateCreated,
@@ -328,7 +335,6 @@ class MXA_EXPORT MXADataModel : public IDataModel
   /**
    * @brief Reads the data model from the file using the internal IODelegate object
    * @param fileName The filename of the file to write the model to
-   * @param ioDelegate Use the provided IODelegate instead of the internal IODelegate
    * @param closeWhenFinished Tells the underlying IODelegate to close the file cutting off
    * access to the file. If you need to write more to the file, set this to 'true'
    * @return

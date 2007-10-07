@@ -49,7 +49,7 @@ class MXA_EXPORT MXANode : public INode
     * @brief Creates a flat look up table using the GUID of the data record as the
     * key and the boost::Shared_ptr as the value
     * @param lut The look up table to be populated.
-    * @param records The MXADataRecords to use as the tree
+    * @param node 
     */
    static void generateLUT(std::map<int32, MXANodePtr> &lut, std::vector<MXANodePtr> &node);
    

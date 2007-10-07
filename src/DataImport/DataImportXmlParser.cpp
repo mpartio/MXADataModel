@@ -141,7 +141,6 @@ int DataImportXmlParser::_loadDataModelFromTemplateFile(std::string &modelFile)
   MXATypes::MXAError err = -1;
   if ( StringUtils::endsWith(modelFile, std::string(".xml") ) )
   {
-    //XMLIODelegate reader;
     IODelegatePtr reader (new XMLIODelegate);
     err = this->_dataModel->readModel(modelFile, reader, true);
     //err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true);

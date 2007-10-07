@@ -35,7 +35,7 @@ public:
    
    /**
     * Set the value of m_dataRecord
-    * @param new_var the new value of m_dataRecord
+    * @param dataRecord the new value of m_dataRecord
     */
    virtual void setDataRecord ( IDataRecordPtr dataRecord ) = 0;
 
@@ -48,7 +48,7 @@ public:
 
    /**
     * Set the value of m_sourcePath
-    * @param new_var the new value of m_sourcePath
+    * @param sourcePath the new value of m_sourcePath
     */
    virtual void setSourcePath ( std::string sourcePath ) = 0;
 
@@ -61,7 +61,7 @@ public:
 
    /**
     * Set the value of m_importDelegate
-    * @param new_var the new value of m_importDelegate
+    * @param dataParser the new value of m_importDelegate
     */
    virtual void setImportDelegate ( IImportDelegatePtr dataParser ) = 0;
 
@@ -74,7 +74,7 @@ public:
 
    /**
     * Set the value of m_dataModel
-    * @param new_var the new value of m_dataModel
+    * @param dataModel the new value of m_dataModel
     */
    virtual void setDataModel ( IDataModelPtr dataModel ) = 0;
 

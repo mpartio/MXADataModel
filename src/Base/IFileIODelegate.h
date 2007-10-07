@@ -43,8 +43,9 @@ public:
   virtual ~IFileIODelegate(){};
   
   /** @brief Writes the Model to a data file
-  * @param filename The name of the file (and path if needed) to write the model to
+  * @param fileName The name of the file (and path if needed) to write the model to
   * @param model The Model to serialize
+  * @param closeWhenFinished Close the file when this operation is complete
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
   virtual int32 writeModelToFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished=false) = 0;
@@ -52,6 +53,7 @@ public:
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
   * @param model The model to read the information into
+  * @param closeWhenFinished Close the file when this operation is complete
   * @return A pointer to a new'ed MXADataModel Object. It is up to the Programmer to
   * release the Object. If an Error occurs during the reading, then a NULL pointer
   * is returned.
@@ -69,7 +71,7 @@ public:
    * @param fileName The data file to check
    * @return True if the file is MXA based
    */
-  virtual bool isMXAFile(std::string fileName) = 0;
+  virtual bool isMXAFile(const std::string &fileName) = 0;
 
 
   /**
@@ -79,16 +81,8 @@ public:
    * @param readOnly True if you want the file opened as read only. False if you need to write something to the file
    * @return HDF5 file id
    */
-  virtual int32 openMXAFile(std::string, bool readOnly=false) = 0;
+  virtual int32 openMXAFile(std::string filename, bool readOnly=false) = 0;
  
-#if 0
-  /**
-   * @brief Creates a new blank file with the basics of the data model filled in
-   * @param fileName The path + filename to create. At least the parent path must exist
-   * @return Error code or ID. Positive value is Success. Negative is error
-   */
-  virtual int32 createMXAFile(std::string fileName) = 0;
-#endif
   /**
    * @brief Closes the currently open file
    */

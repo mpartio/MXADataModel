@@ -8,7 +8,7 @@
 #include <string>
 
 /**
-* @class VectorDataDelegate VectorDataDelegate.h Testing/VectorDataDelegate.h
+* @class VectorDataDelegate VectorDataImport.h Testing/VectorDataImport.h
 * @brief 
 * @author
 * @date
@@ -66,7 +66,7 @@ namespace VectorDataDelegateFactory_Detail
 }
 
 /**
-* @class VectorDataDelegateFactory VectorDataDelegateFactory.h Testing/VectorDataDelegateFactory.h
+* @class VectorDataDelegateFactory VectorDataImport.h Testing/VectorDataImport.h
 * @brief 
 * @author
 * @date

@@ -67,7 +67,7 @@ public:
   
   /**
    * @brief Set the value of _dataRecord
-   * @param new_var the new value of _dataRecord
+   * @param dataRecord the new value of _dataRecord
    */
   void setDataRecord ( IDataRecordPtr dataRecord );
 
@@ -80,7 +80,7 @@ public:
 
   /**
    * @brief Set the value of _sourcePath
-   * @param new_var the new value of _sourcePath
+   * @param sourcePath the new value of _sourcePath
    */
   void setSourcePath ( std::string sourcePath );
 
@@ -93,7 +93,7 @@ public:
 
   /**
    * @brief Set the value of _importDelegate
-   * @param new_var the new value of _importDelegate
+   * @param dataParser the new value of _importDelegate
    */
   void setImportDelegate ( IImportDelegatePtr dataParser );
 
@@ -106,7 +106,7 @@ public:
 
   /**
    * @brief Set the value of mdataModel
-   * @param new_var the new value of _dataModel
+   * @param dataModel the new value of _dataModel
    */
   void setDataModel ( IDataModelPtr dataModel );
 

@@ -60,11 +60,11 @@ namespace H5ImportTestDelegateFactory_Detail
 }
 
 /**
-* @class H5ImportTestDelegateFactory H5ImportTestDelegateFactory.h Testing/H5ImportTestDelegateFactory.h
+* @class H5ImportTestDelegateFactory H5ImportTest.h Testing/H5ImportTest.h
 * @brief Factory class to generate H5ImportTestDelegate objects
 * @author Mike Jackson
 * @date Sep 12, 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
 {

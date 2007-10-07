@@ -44,35 +44,35 @@ public:
   
   /**
   * @brief 
-  * @param fileId The unique ID of a file on the underlying filesystem
+  * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeDataModelTemplate(int32 uniqueId) = 0;
   
   /**
   * @brief 
-  * @param fileId The unique ID of a file on the underlying filesystem
+  * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeDataDimensions(int32 uniqueId) = 0;
   
   /**
   * @brief 
-  * @param fileId The unique ID of a file on the underlying filesystem
+  * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeDataRecords(int32 uniqueId) = 0;
   
   /**
   * @brief 
-  * @param fileId The unique ID of a file on the underlying filesystem
+  * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeRequiredMetaData(int32 uniqueId) = 0;
   
   /**
   * @brief 
-  * @param fileId The unique ID of a file on the underlying filesystem
+  * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeUserMetaData(int32 uniqueId) = 0;

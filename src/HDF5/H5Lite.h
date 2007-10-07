@@ -188,7 +188,7 @@ static hid_t HDFTypeForPrimitive(T value)
 static MXA_EXPORT herr_t findAttribute( hid_t loc_id, const std::string& attrName );
 
 /**
- * @brief
+ * @brief Finds a Data set given a data set name
  * @param loc_id The location to search
  * @param name The attribute to search for
  * @return Standard HDF5 Error condition
@@ -277,9 +277,10 @@ static herr_t writeVectorDataset (hid_t loc_id,
 }
 
 /**
- * @brief
+ * @brief Writes the data of a pointer to an HDF5 file
  * @param loc_id
  * @param dsetName
+ * @param rank
  * @param dims
  * @param data
  * @return
@@ -421,8 +422,6 @@ static herr_t writeDataset(hid_t loc_id,
  * @param loc_id The Parent location to store the data
  * @param dsetName The name of the dataset
  * @param value The value to write to the HDF5 dataset
- * @param data The data to write to the file
- * @param dataType
  * @return Standard HDF5 error conditions
  */
 template <typename T>
@@ -699,7 +698,7 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
 /**
  * @brief Reads data from the HDF5 File into a preallocated array.
  * @param loc_id The parent location that contains the dataset to read
- * @param dsetname The name of the dataset to read
+ * @param dsetName The name of the dataset to read
  * @param data A Pointer to the PreAllocated Array of Data
  * @return Standard HDF error condition
  */
@@ -757,7 +756,7 @@ static herr_t readPointerDataset(hid_t loc_id,
 /**
  * @brief Reads data from the HDF5 File
  * @param loc_id The parent location that contains the dataset to read
- * @param dsetname The name of the dataset to read
+ * @param dsetName The name of the dataset to read
  * @param data A std::vector<T>. Note the vector WILL be resized to fit the data.
  * The best idea is to just allocate the vector but not to size it. The method 
  * will size it for you.
@@ -917,7 +916,6 @@ static MXA_EXPORT herr_t readStringDataset(hid_t loc_id,
  * @param objName The name of the object to which the attribute is to be read
  * @param attrName The name of the Attribute to read
  * @param data The memory to store the data
- * @param dataType The H5T_Type of data
  * @return Standard HDF Error condition
  */
 template <typename T>

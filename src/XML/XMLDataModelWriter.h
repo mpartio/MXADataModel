@@ -96,7 +96,7 @@ public:
   
   /**
    * @brief Writes the File Type and File version tags
-   * @param indentDepth The number of spaces to indent this section of XML
+   * @param depth The number of spaces to indent this section of XML
    * @return Error Code: negative is error condition
    */
   int32 _writeMXAInfo(int depth);
@@ -129,9 +129,17 @@ protected:
   static void _replaceAll(std::string&, std::string, std::string);
   static std::string escapedText(const std::string &value);
   static std::string escapedAttribute(const std::string &value);
-  void _openTag(std::string, int, bool, std::map<std::string, std::string>);
-  void _openTag(std::string, int, bool group=true);
-  void _closeGroupTag(std::string, int);
+  
+  void _openTag(const std::string &tagName, 
+                int depth, 
+                bool group, 
+                std::map<std::string, std::string> &attributes);
+  
+  void _openTag(const std::string &tagName, 
+                int depth, 
+                bool group=true);
+  
+  void _closeGroupTag(const std::string &tagName, int32 depth);
 
   
 private:

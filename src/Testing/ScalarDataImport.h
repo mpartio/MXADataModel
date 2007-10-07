@@ -64,7 +64,7 @@ namespace ScalarDataDelegateFactory_Detail
 }
 
 /**
-* @class ScalarDataDelegateFactory ScalarDataDelegateFactory.h Testing/ScalarDataDelegateFactory.h
+* @class ScalarDataDelegateFactory ScalarDataIMport.h Testing/ScalarDataIMport.h
 * @brief 
 * @author
 * @date

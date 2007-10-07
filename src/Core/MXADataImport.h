@@ -62,7 +62,7 @@ public:
   
   /**
    * Set the value of m_outputFilePath
-   * @param new_var the new value of m_outputFilePath
+   * @param outputFilePath the new value of m_outputFilePath
    */
   void setOutputFilePath ( std::string outputFilePath );
 
@@ -75,7 +75,7 @@ public:
 
   /**
    * Set the value of m_dataModel
-   * @param new_var the new value of m_dataModel
+   * @param dataModel the new value of m_dataModel
    */
   void setDataModel ( IDataModelPtr dataModel );
 
@@ -88,7 +88,7 @@ public:
 
   /**
    * Set the value of m_dataSources
-   * @param new_var the new value of m_dataSources
+   * @param datasources the new value of m_dataSources
    */
   void setDataSources ( IDataSources &datasources );
 

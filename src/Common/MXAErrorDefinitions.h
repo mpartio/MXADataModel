@@ -59,7 +59,7 @@
 
 /**
  * @def MXA_ERROR_FILE_FORMAT_NOT_SUPPORTED
- * @breif General error when parsers or importers are trying to open a file that
+ * @brief General error when parsers or importers are trying to open a file that
  * the parser does not understand
  */
 #define MXA_ERROR_FILE_FORMAT_NOT_SUPPORTED -5008
