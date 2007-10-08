@@ -58,11 +58,12 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 
 
 /**
+* @brief This class will parse a Data Import XML configuration file using a SAX
+* like parsing algorithm based on the expat parser. 
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
-* @brief 
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {

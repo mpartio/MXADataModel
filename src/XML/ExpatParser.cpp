@@ -337,7 +337,7 @@ int ExpatParser::GetCurrentByteCount(void)
 	return XML_GetCurrentByteCount(m_parser);
 }
 
-const char* ExpatParser::GetInputContext(int* pOffset, int* pSize)
+const char* ExpatParser::GetInputContext(int32* pOffset, int32* pSize)
 {
 	assert(m_parser != NULL);
 	return XML_GetInputContext(m_parser, pOffset, pSize);
