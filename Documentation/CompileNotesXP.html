@@ -29,12 +29,12 @@ Compile Notes for Windows XP
 <!-- End Navigation Table Cell -->
 <td class="content">
 <div class="entry">
-    Download and install <a href="http://www.cmake.org">CMake</a> first. The proceed to build all the third
+    Download and install <a href="http://www.cmake.org">CMake</a> first. Then proceed to build all the third
     party libraries that are needed. See <a href="SystemRequirements.html">this page</a> for more information
     regarding the necessary libraries.
 
     <p>
-    Download boost 1.34.0 from www.boost.org. You will also need bjam.exe from boost.org.
+    Download boost 1.34.1 from www.boost.org. You will also need bjam.exe from boost.org.
     use the following to configure/build/install Boost
     bjam.exe --toolset=msvc --with-test --with-filesystem install
     Let this go for a looong time after which Boost will be installed into C:\Boost. If
@@ -49,9 +49,12 @@ Compile Notes for Windows XP
     to the installation path. Example, if you installed into C:\Library then set HDF_INSTALL to
     C:\Library
     <p>
-    <b>Tiff:</b> Tiff 3.8.2 provides a 'nmake' file to use on a command prompt. Use this to build 
+    <b>Tiff:</b> Tiff 3.8.2 provides a 'nmake' file to use on a command prompt. Use this to build Tiff or 
+    download from <a href="http://titanium.imts.us/viewvc/Task_7/tiff.tar.gz?view=tar"> here </a> to get a CMake version
+    of the tiff library.
     <p>
-    <b>Expat:</b> Version 2.0.1 Provides a .dsw file to compile. Use this to compile and install the library
+    <b>Expat:</b> Version 2.0.1 Provides a .dsw file to compile. Use this to compile and install the library. You can
+    download a CMake version of Expat from <a href="http://titanium.imts.us/viewvc/Task_7/expat.tar.gz?view=tar">here.</a>
     </div>
     
     <div class="entry">

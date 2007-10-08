@@ -347,15 +347,19 @@ void MXANode::setData(float node_data)
 
 #endif
 
-
-// Utilities
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 std::string MXANode::_indent(int depth)
 {
   const int32 indentSize = 2;
   return std::string(indentSize * depth, ' ');
 }
 
-std::string MXANode::getNodeTypeAsString(int node_type)
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+std::string MXANode::getNodeTypeAsString(int32 node_type)
 {
   switch(node_type) {
   case Root:
@@ -393,7 +397,9 @@ std::string MXANode::getNodeTypeAsString(int node_type)
   }
 }
 
-
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 void MXANode::printNodeTree(int32 depth)
 {
   std::cout << _indent(depth) << "Node(" << this->getNodeTypeString() << "): " << this->_nodeName << std::endl;

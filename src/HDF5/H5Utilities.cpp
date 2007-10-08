@@ -46,18 +46,17 @@ std::string H5Utilities::getObjectPath(hid_t loc_id, bool trim)
 // @brief Retrieves the HDF object type for obj_name at loc_id and stores
 //    it in the parameter obj_type passed in.
 // -----------------------------------------------------------------------------
-herr_t H5Utilities::getObjectType(hid_t loc_id, std::string objName, 
-				    int32 *obj_type)
+herr_t H5Utilities::getObjectType(hid_t objId, const std::string &objName, int32 *objType)
 {
   herr_t err=0;
   H5G_stat_t obj_info;
   
-  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &obj_info);
+  err = H5Gget_objinfo(objId, objName.c_str(), 1, &obj_info);
   if (err < 0) {
     return err;
   }
 
-  (* obj_type) = obj_info.type;
+  (* objType) = obj_info.type;
 
   return err;
 }
@@ -66,7 +65,7 @@ herr_t H5Utilities::getObjectType(hid_t loc_id, std::string objName,
 
 // Opens and returns the HDF object (since the HDF api requires
 //  different open and close methods for different types of objects
-hid_t H5Utilities::openHDF5Object(hid_t loc_id, std::string objName)
+hid_t H5Utilities::openHDF5Object(hid_t loc_id, const std::string &objName)
 {
   int32 obj_type;
   hid_t obj_id;
@@ -192,7 +191,7 @@ herr_t H5Utilities::getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<st
 
 
 // HDF Creation/Modification Methods
-hid_t H5Utilities::createGroup(hid_t loc_id, std::string group) 
+hid_t H5Utilities::createGroup(hid_t loc_id, const std::string &group) 
 {
   hid_t grp_id;
   herr_t err = -1;
@@ -224,13 +223,15 @@ hid_t H5Utilities::createGroup(hid_t loc_id, std::string group)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5Utilities::createGroupsFromPath(std::string path, hid_t parent)
+int32 H5Utilities::createGroupsFromPath(const std::string &pathToCheck, hid_t parent)
 {
   
   hid_t gid = 1;
   herr_t err = -1;
   std::string first;
   std::string second;
+  std::string path (pathToCheck); //make a copy of the input
+  
   
   if (parent <= 0) {
     std::cout << "Bad parent Id. Returning from createGroupsFromPath" << std::endl;
@@ -316,8 +317,8 @@ int32 H5Utilities::createGroupsFromPath(std::string path, hid_t parent)
 /*! @brief Returns true if there is an attribute named attr_name
  *   associated with obj_name at loc_id
  */
-bool H5Utilities::probeForAttribute(hid_t loc_id, std::string obj_name, 
-				    std::string attr_name)
+bool H5Utilities::probeForAttribute(hid_t loc_id, const std::string &obj_name, 
+    const std::string &attr_name)
 {
   herr_t err=0;
   int32 rank;
@@ -359,7 +360,8 @@ herr_t H5Utilities::getAllAttributeNames(hid_t obj_id, std::list<std::string> &r
 //  
 // -----------------------------------------------------------------------------
  herr_t H5Utilities::getAllAttributeNames(hid_t loc_id, 
-					                 std::string obj_name, std::list<std::string> &names)
+                                           const std::string &obj_name, 
+                                           std::list<std::string> &names)
 {
   hid_t obj_id = -1;
   herr_t err = -1;
@@ -466,7 +468,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPa
 
 // Returns a std::map with all of the attributes for obj_name 
 //  and their attribute values in a std::string std::map
-std::map<std::string, std::string> H5Utilities::getAttributesMap(hid_t loc_id, std::string obj_name)
+std::map<std::string, std::string> H5Utilities::getAttributesMap(hid_t loc_id, const std::string &obj_name)
 {	
   //AbstractKeyValuePtr attr(new StringAttribute(key, value));
   std::map<std::string, std::string> attributes;
@@ -589,7 +591,7 @@ herr_t H5Utilities::objectNameAtIndex(hid_t fileId, int32 idx, std::string &name
 // -----------------------------------------------------------------------------
 // Checks the given name object to see what type of HDF5 object it is.
 // -----------------------------------------------------------------------------
-bool H5Utilities::isGroup(hid_t nodeId, std::string objName)   {
+bool H5Utilities::isGroup(hid_t nodeId, const std::string &objName)   {
   bool isGroup = true;
   herr_t err = -1;
   H5G_stat_t statbuf;

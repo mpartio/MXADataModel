@@ -52,7 +52,7 @@ void ExpatEvtHandler::OnEndElement(const XML_Char* name)
 {
 }
 
-void ExpatEvtHandler::OnCharacterData(const XML_Char* data, int len)
+void ExpatEvtHandler::OnCharacterData(const XML_Char* data, int32 len)
 {
 }
 
@@ -72,7 +72,7 @@ void ExpatEvtHandler::OnEndCdataSection(void)
 {
 }
 
-void ExpatEvtHandler::OnDefault(const XML_Char* data, int len)
+void ExpatEvtHandler::OnDefault(const XML_Char* data, int32 len)
 {
 }
 

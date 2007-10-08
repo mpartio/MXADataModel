@@ -19,7 +19,7 @@ class IDataRecordWriter;
  * @brief Abstract class defining the DataRecord public interface
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *  
  */
 class MXA_EXPORT IDataRecord 
@@ -129,7 +129,7 @@ class MXA_EXPORT IDataRecord
     /**
     * @brief Returns the number of Children of this node
     */
-    virtual int getNumChildren() const = 0;
+    virtual int32 getNumChildren() const = 0;
 
 
     /**

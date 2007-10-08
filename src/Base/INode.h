@@ -24,7 +24,7 @@
  * data structure
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *  
  */
 class MXA_EXPORT INode 
@@ -163,7 +163,7 @@ class MXA_EXPORT INode
     /**
     * @brief Returns the number of Children of this node
     */
-    virtual int getNumChildren() const = 0;
+    virtual int32 getNumChildren() const = 0;
 
 
     /**

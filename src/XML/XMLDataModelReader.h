@@ -26,7 +26,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
  * class. This class is responsible for reading a data model from an XML File
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  * @class XMLDataModelReader XMLDataModelReader.h
  */
 class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,
@@ -55,7 +55,7 @@ public:
   // Over ride from ExpatEvtHandler class
   void OnEndElement(const XML_Char* name);
 	
-  void OnCharacterData(const XML_Char* data, int len);
+  void OnCharacterData(const XML_Char* data, int32 len);
   
   /**
    * @brief Returns the current parser error.
@@ -83,7 +83,7 @@ public:
     {
       //std::cout << logTime() << "  Scalar Value" << std::endl;
       T temp;
-      int tmp;
+      int32 tmp;
       if (sizeof(T) == 1) // If we try to read a 'char' then the stream will only read a single char from the file, not what we want
       {
         if ( (istream >> tmp).good() )
@@ -107,7 +107,7 @@ public:
      // std::cout << logTime() << "  Vector Value" << std::endl;
       std::vector<T> data;
       T temp;
-      int tmp;
+      int32 tmp;
       if (sizeof(T) == 1) // If we try to read a 'char' then the stream will only read a single char from the file, not what we want
       {
         while( (istream >> tmp).good() )
@@ -148,7 +148,7 @@ private:
   std::string       _userMDType;
   ExpatParser*      _parser;
   
-  int               _indent;
+  int32               _indent;
   
   XMLDataModelReader(const XMLDataModelReader&);   //Copy Constructor Not Implemented
   void operator=(const XMLDataModelReader&); //Copy Assignment Not Implemented

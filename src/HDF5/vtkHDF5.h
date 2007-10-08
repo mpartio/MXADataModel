@@ -24,7 +24,7 @@
 * @brief Bridge code to read HDF5 data objects into vtk data structures 
 * @author Mike Jackson
 * @date June 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class  vtkHDF5
 {
@@ -45,7 +45,7 @@ public:
    * @param dsetName The path/name to the data set
    * @return The VTK Type of the data.
    */
-  static MXA_EXPORT int getScalarType(hid_t loc_id, const std::string &dsetName);
+  static MXA_EXPORT int32 getScalarType(hid_t loc_id, const std::string &dsetName);
   
   static MXA_EXPORT herr_t getDataAsVTKImage(hid_t loc_id, const std::string &dsetName, vtkImageData* imgData);
   

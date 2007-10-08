@@ -33,6 +33,7 @@
 
 
 //MXA Includes
+#include <Common/MXATypes.h>
 #include <Common/DLLExport.h>
 #include <expat.h>
 
@@ -42,7 +43,7 @@
 * @brief Base class to handle Expat Events 
 * @author Keith Gaughan
 * @date 2004
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class MXA_EXPORT ExpatEvtHandler
 {
@@ -54,12 +55,12 @@ public:
   virtual void OnPostCreate(void);
   virtual void OnStartElement(const XML_Char* name, const XML_Char** attrs);
   virtual void OnEndElement(const XML_Char* name);
-  virtual void OnCharacterData(const XML_Char* data, int len);
+  virtual void OnCharacterData(const XML_Char* data, int32 len);
   virtual void OnProcessingInstruction(const XML_Char* target, const XML_Char* data);
   virtual void OnComment(const XML_Char* data);
   virtual void OnStartCdataSection(void);
   virtual void OnEndCdataSection(void);
-  virtual void OnDefault(const XML_Char* data, int len);
+  virtual void OnDefault(const XML_Char* data, int32 len);
   virtual bool OnUnknownEncoding(const XML_Char* name, XML_Encoding* pInfo);
   virtual void OnStartNamespaceDecl(const XML_Char* prefix, const XML_Char* uri);
   virtual void OnEndNamespaceDecl(const XML_Char* prefix);

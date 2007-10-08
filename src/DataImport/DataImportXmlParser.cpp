@@ -434,7 +434,7 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
   //Read the Data Dimension Values
   std::istringstream istream ( attrMap[MXA_DataImport::Attr_DataDimension_Values] );
   std::vector<int> dimValues;
-  int temp;
+  int32 temp;
   while ( istream.good() )
   {
     istream >> temp;

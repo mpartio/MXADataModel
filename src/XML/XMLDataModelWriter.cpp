@@ -76,16 +76,6 @@ int32 XMLDataModelWriter::writeDataModelTemplate(int32 uniqueId)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-std::string XMLDataModelWriter::indent(int depth)
-{
-  const int32 indentSize = 2;
-  return std::string(indentSize * depth, ' ');
-}
-
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
 void XMLDataModelWriter::_replaceAll(std::string &str, std::string search_str,
 				 std::string replace_str)
 {
@@ -145,12 +135,14 @@ std::string XMLDataModelWriter::_toUpper(const std::string str)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void XMLDataModelWriter::_openTag(const std::string &tagName, int32 depth, bool group,
+void XMLDataModelWriter::_openTag(const std::string &tagName, 
+                                  int32 depth, 
+                                  bool group,
                                   std::map<std::string, std::string> &attributes )
 {
   int32 numAttributes = attributes.size();
   std::ofstream &stream = *(_ofstreamPtr.get());
-  stream << indent(depth) << "<" << tagName;
+  stream << StringUtils::indent(depth) << "<" << tagName;
 
   if (numAttributes > 0) {
     std::string label, value;
@@ -180,13 +172,13 @@ void XMLDataModelWriter::_openTag(const std::string &tagName, int32 depth, bool 
 void XMLDataModelWriter::_closeGroupTag(const std::string &tagName, int32 depth)
 {
   std::ofstream &stream = *(_ofstreamPtr.get());
-  stream << indent(depth) << "</" << tagName << ">" << "\n";
+  stream << StringUtils::indent(depth) << "</" << tagName << ">" << "\n";
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void XMLDataModelWriter::_writeDataRoot(int depth)
+void XMLDataModelWriter::_writeDataRoot(int32 depth)
 {
   std::map<std::string, std::string> attrs;
   attrs[MXA_XML::Attribute::Name] = _dataModel->getDataRoot();

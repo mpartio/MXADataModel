@@ -34,7 +34,7 @@ class MXANode;
  * the data model to an XML file
  * @author  Mike Jackson
  * @date June 2007
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  *  
  */
 class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter, 
@@ -99,13 +99,13 @@ public:
    * @param depth The number of spaces to indent this section of XML
    * @return Error Code: negative is error condition
    */
-  int32 _writeMXAInfo(int depth);
+  int32 _writeMXAInfo(int32 depth);
   
   /**
    * @brief Writes the data root to the XML file
    * @param indentDepth The number of spaced to indent this section of XML
    */
-  void _writeDataRoot(int indentDepth);
+  void _writeDataRoot(int32 indentDepth);
 
   // --------IDataDimensionWriter Interface ----------------------
   /**
@@ -124,19 +124,18 @@ public:
   int32 writeDataRecord(IDataRecord* record);
 
 protected:
-  static std::string indent(int indent);
   static std::string _toUpper(const std::string value);
   static void _replaceAll(std::string&, std::string, std::string);
   static std::string escapedText(const std::string &value);
   static std::string escapedAttribute(const std::string &value);
   
   void _openTag(const std::string &tagName, 
-                int depth, 
+                int32 depth, 
                 bool group, 
                 std::map<std::string, std::string> &attributes);
   
   void _openTag(const std::string &tagName, 
-                int depth, 
+                int32 depth, 
                 bool group=true);
   
   void _closeGroupTag(const std::string &tagName, int32 depth);

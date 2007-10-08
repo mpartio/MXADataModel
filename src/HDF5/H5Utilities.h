@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  */
 class H5Utilities
 {
@@ -52,72 +52,71 @@ public:
   
   // -------------- HDF Indentifier Methods ----------------------------
   /**
-  * @brief 
-  * @param objId
-  * @param trim=false
-  * @return 
+  * @brief Retuirns the path to an object
+  * @param objId The HDF5 id of the object
+  * @param trim set to False to trim the path
+  * @return  The path to the object relative to the objId
   */
   static MXA_EXPORT std::string getObjectPath(hid_t objId, bool trim=false);
  
   /**
-  * @brief 
-  * @param objId
-  * @param datasetPath
-  * @param type
-  * @return 
+  * @brief Returns the hdf object type
+  * @param objId The hdf5 object id
+  * @param objName The path to the data set
+  * @param objType The type of the object
+  * @return  Negative value on error
   */
-  static MXA_EXPORT herr_t getObjectType(hid_t objId, std::string datasetPath, int *type);
+  static MXA_EXPORT herr_t getObjectType(hid_t objId, const std::string &objName, int32 *objType);
  
   /**
-  * @brief 
-  * @param fileId
-  * @param idx
-  * @param name
-  * @return 
+  * @brief Retrieves the object name for a given index
+  * @param fileId The hdf5 object id
+  * @param idx The index to retrieve the name for
+  * @param name The variable to store the name
+  * @return Negative value is error
   */
-  static MXA_EXPORT herr_t objectNameAtIndex(hid_t fileId, int idx, std::string &name);
+  static MXA_EXPORT herr_t objectNameAtIndex(hid_t fileId, int32 idx, std::string &name);
  
   /**
-  * @brief 
-  * @param nodeId
-  * @param objName
-  * @return 
+  * @brief Returns if a given hdf5 object is a group
+  * @param objId The hdf5 object that contains an object with name objName
+  * @param objName The name of the object to check
+  * @return True if the given hdf5 object id is a group
   */
-  static MXA_EXPORT bool isGroup(hid_t nodeId, std::string objName);
+  static MXA_EXPORT bool isGroup(hid_t objId, const std::string &objName);
   
 
   /**
-  * @brief 
-  * @param locId
-  * @param objectPath
-  * @return 
+  * @brief Opens an HDF5 object for hdf5 operations
+  * @param locId the Object id of the parent
+  * @param objectPath The path of the object to open
+  * @return The hdf5 id of the opened object. Negative value is error.
   */
-  static MXA_EXPORT hid_t openHDF5Object(hid_t locId, std::string objectPath);
+  static MXA_EXPORT hid_t openHDF5Object(hid_t locId, const std::string &objectPath);
 
   /**
-  * @brief 
-  * @param locId
-  * @return 
+  * @brief Closes the object id 
+  * @param locId The object id to close
+  * @return Negative value is error.
   */
   static MXA_EXPORT herr_t closeHDF5Object(hid_t locId);
 
 
   /**
-  * @brief 
-  * @param classT
-  * @return 
+  * @brief prints the class type of the given class
+  * @param classT The Class Type to print
   */
   static MXA_EXPORT void printHDFClassType(H5T_class_t classT);
 
   // -------------- HDF Group Methods ----------------------------
   /**
-  * @brief 
-  * @param groupId
-  * @param typeFilter
-  * @param list
+  * @brief Returns a list of child hdf5 objects for a given object id
+  * @param loc_id The parent hdf5 id
+  * @param typeFilter A filter to apply to the list
+  * @param names Variable to store the list
   * @return 
   */
-  static MXA_EXPORT herr_t getGroupObjects(hid_t groupId, int typeFilter, std::list<std::string> &list);
+  static MXA_EXPORT herr_t getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<std::string>& names);
   
   /**
    * @brief Creates a HDF Group by checking if the group already exists. If the 
@@ -127,76 +126,80 @@ public:
    * @param group The name of the group to create. Note that this group name should
    * not be any sort of 'path'. It should be a single group.
    */
-  static MXA_EXPORT hid_t createGroup(hid_t loc_id, std::string group);
+  static MXA_EXPORT hid_t createGroup(hid_t loc_id, const std::string &group);
   
   /**
    * @brief Given a path relative to the Parent ID, this method will create all
    * the intermediate groups if necessary.
-   * @param path The path to either create or ensure exists
+   * @param pathToCheck The path to either create or ensure exists.
    * @param parent The HDF unique id for the parent
    * @return Error Condition: Negative is error. Positive is success.
    */
-  static MXA_EXPORT herr_t  createGroupsFromPath(std::string path, hid_t parent);
+  static MXA_EXPORT herr_t  createGroupsFromPath(const std::string &pathToCheck, hid_t parent);
   
 
 
   // -------------- HDF Attribute Methods ----------------------------
   /**
-  * @brief 
-  * @param loc_id
-  * @param obj_name
-  * @param attr_name
-  * @return 
+  * @brief Looks for an attribute with a given name
+  * @param loc_id The objects Parent id
+  * @param obj_name The name of the object
+  * @param attr_name The attribute to look for (by name)
+  * @return True if the attribute exists.
   */
   static MXA_EXPORT bool probeForAttribute(hid_t loc_id, 
-                                            std::string obj_name, 
-                                            std::string attr_name);
+                                            const std::string &obj_name, 
+                                            const std::string &attr_name);
 
 
   /**
-  * @brief 
-  * @param objId
-  * @param names
-  * @return 
+  * @brief Returns a list of all the attribute names
+  * @param objId The parent object
+  * @param names Variable to hold the list of attribute names
+  * @return Negate value is error
   */
   static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, std::list<std::string> &names);
 
   /**
-  * @brief 
-  * @param objId
-  * @param std::stringobj_name
-  * @param names
-  * @return 
+  * @brief Returns a list of all the attribute names 
+  * @param objId The parent object
+  * @param obj_name The name of the object whose attribute names you want a list
+  * @param names Variable to hold the list of attribute names
+  * @return Negative value is error
   */
-  static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, std::string obj_name, std::list<std::string> &names);
+  static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, const std::string &obj_name, 
+                                                  std::list<std::string> &names);
 
   /**
-  * @brief 
-  * @param objId
-  * @param obj_name
-  * @return 
+  * @brief Returns a mapping of attribute names to attribute values. This is a pretty specialized 
+  * method and should be used with great care. The outcome of the method is undefined for any type
+  * of attribute except strings.
+  * @param objId The hdf5 id of the parent object
+  * @param obj_name The name of the object whose attributes you want a map of
+  * @return A std::map<string, string> of attribute names to values
   */
-  static MXA_EXPORT std::map<std::string, std::string> getAttributesMap(hid_t objId, std::string obj_name);
+  static MXA_EXPORT std::map<std::string, std::string> getAttributesMap(hid_t objId, const std::string &obj_name);
   
   /**
-   * @brief
-   * @param fileId
-   * @param datasetPath
-   * @param attributes
-   * @return
+   * @brief Returns a vector of IAttributes, one for each attribute of a given hdf5 object
+   * @param fileId The parent hdf5 id
+   * @param datasetPath The path to the hdf5 object whose attributes you want
+   * @param attributes Variable to store the attributes
+   * @return Negative value on error
    */
   static MXA_EXPORT herr_t readAllAttributes(hid_t fileId, const std::string &datasetPath, MXAAttributes &attributes);
   
 /**
-  * @brief 
-  * @param locId
-  * @param datasetPath
-  * @param key
-  * @param dims
-  * @return 
+  * @brief Reads data from an Attribute into an IAttributePtr
+  * @param locId The hdf5 object id of the parent
+  * @param datasetPath The path to the data set containing the attributes you want
+  * @param key The name of the attribute to read
+  * @param dims The dimensions of the attribute
+  * @return Boost shared pointer to the attribute
   */
   template<typename T>
-  static MXAAttributePtr readPrimitiveAttribute( hid_t locId, const std::string &datasetPath, 
+  static MXAAttributePtr readPrimitiveAttribute( hid_t locId, 
+                                  const std::string &datasetPath, 
                                  const std::string &key, 
                                  const std::vector<uint64> &dims)
   {

@@ -48,7 +48,7 @@ herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id, const std::string &datasetPath, 
     zDim = dims[2];
   }
 
-  int scalarType = vtkHDF5::getScalarType(loc_id, datasetPath);
+  int32 scalarType = vtkHDF5::getScalarType(loc_id, datasetPath);
   if (scalarType < 0)
   {
     return -1;
@@ -82,7 +82,7 @@ herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id, const std::string &datasetPath, 
 int vtkHDF5::getScalarType(hid_t loc_id, const std::string &datasetPath)
 {
   herr_t err = 1;
-  int scalarType = -1;
+  int32 scalarType = -1;
   H5T_class_t classType;
   size_t typeSize;
   std::vector<uint64> dims; // The dimensions of the data set

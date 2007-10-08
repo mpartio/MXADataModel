@@ -210,7 +210,7 @@ void XMLDataModelReader::OnEndElement(const XML_Char* name)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void XMLDataModelReader::OnCharacterData(const XML_Char* data, int len)
+void XMLDataModelReader::OnCharacterData(const XML_Char* data, int32 len)
 {
  // std::cout << "------------------------------------------------" << std::endl;
  // std::cout << "Character Data: " << data << std::endl;

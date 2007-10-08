@@ -37,7 +37,7 @@
 * be subclassed by other classes that need to maintain parent/child relationships
 * @author Mike Jackson
 * @date March 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class MXA_EXPORT MXANode : public INode
 {
@@ -49,9 +49,9 @@ class MXA_EXPORT MXANode : public INode
     * @brief Creates a flat look up table using the GUID of the data record as the
     * key and the boost::Shared_ptr as the value
     * @param lut The look up table to be populated.
-    * @param node 
+    * @param nodes The nodes to use in the lookup table
     */
-   static void generateLUT(std::map<int32, MXANodePtr> &lut, std::vector<MXANodePtr> &node);
+   static void generateLUT(std::map<int32, MXANodePtr> &lut, MXANodes &nodes);
    
    enum Type {
      Root,
@@ -90,7 +90,13 @@ class MXA_EXPORT MXANode : public INode
   void setNodeType(int32 nodeType);
   int32 getNodeType();
   std::string getNodeTypeString();
-  static std::string getNodeTypeAsString(int32 nodeType);
+  
+  /**
+   * @brief Returns the node type as a string
+   * @param node_type The type of node
+   * @return The node type as a string
+   */
+  static std::string getNodeTypeAsString(int32 node_type);
   
   
   /// Accessors for NodeName iVar

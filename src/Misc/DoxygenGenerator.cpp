@@ -7,16 +7,16 @@
 
 
   /**
-  * @brief 
-  * @param input
-  * @return 
+  * @brief Parses the input string
+  * @param input The string to parse.
+  * @return error condition
   */
   int parse(std::string input);
 
  /**
  * @brief General tool to strip spaces from both ends:
- * @param s
- * @return 
+ * @param s String to trim
+ * @return New trimmed string
  */
  std::string trim(const std::string& s) 
 {
@@ -31,10 +31,10 @@
 
 
 /**
-* @brief 
-* @param indent
-* @param params
-* @param retToken
+* @brief prints the output
+* @param indent The number of spaces to use as a 'soft tab'
+* @param params The params
+* @param retToken token for return
 */
 void doOutput(std::string indent, std::list<std::string> params, std::string retToken)
 {
@@ -52,11 +52,9 @@ void doOutput(std::string indent, std::list<std::string> params, std::string ret
  
  
 
-/**
-* @brief 
-* @param input
-* @return 
-*/
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 int parse(std::string input) {
   std::list<std::string> tokens;
   std::string retToken;
@@ -161,16 +159,12 @@ int parse(std::string input) {
 }
 
 
-/**
-* @brief 
-* @param argc
-* @param *argv
-* @return 
-*/
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 int main(int argc, char **argv) {
 
   std::string input (argv[1]);
-  //std::string input = "void Class::test () = 0 ;  ";
   parse(input);
   
  #if 0

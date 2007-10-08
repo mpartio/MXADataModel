@@ -57,7 +57,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.34 $
+ * @version $Revision: 1.35 $
  */
 class H5Lite
 {
@@ -204,7 +204,6 @@ static MXA_EXPORT herr_t findDataset( hid_t loc_id, const std::string& name );
  * @param dsetName The name of the dataset
  * @param dims The dimensions of the dataset
  * @param data The data to write to the file
- * @param dataType The HDF_Type of data
  * @return Standard HDF5 error conditions
  * 
  * The dimensions of the data sets are usually passed as both a "rank" and 
@@ -761,7 +760,6 @@ static herr_t readPointerDataset(hid_t loc_id,
  * @param data A std::vector<T>. Note the vector WILL be resized to fit the data.
  * The best idea is to just allocate the vector but not to size it. The method 
  * will size it for you.
- * @param dataType An H5T_Type constant. See the notes below.
  * @return Standard HDF error condition
  */
 template <typename T>

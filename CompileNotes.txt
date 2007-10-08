@@ -4,7 +4,7 @@ Requirements:
    Boost (Unit Test and File System) 
    
 Windows XP:
-    Download boost 1.34.0 from www.boost.org. You will also need bjam.exe from boost.org.
+    Download boost 1.34.1 from www.boost.org. You will also need bjam.exe from boost.org.
     use the following to configure/build/install Boost
     bjam.exe --toolset=msvc --with-test --with-filesystem install
     Let this go for a looong time after which Boost will be installed into C:\Boost. If

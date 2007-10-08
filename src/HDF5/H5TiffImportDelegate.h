@@ -35,11 +35,11 @@ class MXADataModel;
 namespace FileSystem = boost::filesystem;
 
 /**
- * @brief A generic Import Delegate that imports TIFF images into an HDF5 data file
+ * @brief A generic Import Delegate that imports TIFF images into an HDF5 data file.
  * @author Mike Jackson
  * @date April 2007
- * @header HDF5/H5TiffImportDelegate.h
- * @version $Revision: 1.9 $
+ * @class H5TiffImportDelegate HDF5/H5TiffImportDelegate.h HDF5/H5TiffImportDelegate.h
+ * @version $Revision: 1.10 $
  */
 class MXA_EXPORT H5TiffImportDelegate : public IImportDelegate
 {
@@ -59,14 +59,14 @@ public:
   void setDataModel(IDataModelPtr model);
   
   /**
-  * @brief 
-  * @param value
+  * @brief Sets the 'FileNotFoundIsError' flag.
+  * @param value If this is true then the import will abort if an input file can not be found
   */
   void setFileNotFoundIsError(bool value);
 
   /**
-  * @brief 
-  * @param value
+  * @brief Sets the 'ImportAsGrayScale' value
+  * @param value If TRUE, then the tiff file will be converted to Grayscale
   */
   void setImportAsGrayScale(bool value);
   
@@ -78,94 +78,6 @@ private:
   H5TiffImportDelegate(const H5TiffImportDelegate&);   //Copy Constructor Not Implemented
   void operator=(const H5TiffImportDelegate&); //Copy Assignment Not Implemented
 };
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-
-// Declare our constant in a namespace
-namespace H5TiffImportDelegateFactory_Detail
-{
-  const std::string ClassName("H5TiffImport");
-}
-
-// -----------------------------------------------------------------------------
-//  Factory Class to generate H5TiffImportDelegate Objects
-// -----------------------------------------------------------------------------
-/**
-* @class H5TiffImportDelegateFactory H5TiffImportDelegateFactory.h HDF5/H5TiffImportDelegateFactory.h
-* @brief Factory Class to generate H5TiffImportDelegate Objects
-* @author Mike Jackson
-* @date Sept 2007
-* @version $Revision: 1.9 $
-*/
-class H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
-{
-  public:
-    H5TiffImportDelegateFactory() :
-      _fileNotFoundIsError(false),
-      _importAsGrayScale(false)
-    {}
-    
-    virtual ~H5TiffImportDelegateFactory() { }
-    
-    
-  /**
-   * @brief This method will return a new instance of H5TiffImportDelegate provided
-   * the className matches.
-   * @param className The name of the Delegate class that will be returned
-   * @param dataModel The data model to use
-   * @param dataSource The data source to import
-   * @return A new boost shared pointer to H5TiffImportDelegate
-   */
-  IImportDelegatePtr newDataImportDelegate (const std::string &className )
-  {
-    IImportDelegatePtr delegate; // Creates a Null Shared Pointer
-    if ( className.compare( H5TiffImportDelegateFactory_Detail::ClassName ) == 0)
-    {
-      H5TiffImportDelegate* d = new H5TiffImportDelegate();
-      delegate.reset ( d );
-      d->setFileNotFoundIsError(this->_fileNotFoundIsError);
-      d->setImportAsGrayScale(this->_importAsGrayScale);
-    }
-    return delegate;
-  }
-  
-  /**
-   * @brief Returns the Classname of the delegate that this factory can create.
-   */
-  std::string delegateClassName()
-  {
-    return H5TiffImportDelegateFactory_Detail::ClassName;
-  }
-  
-  /**
-  * @brief 
-  * @param value
-  */
-  void setFileNotFoundIsError(bool value)
-  {
-    this->_fileNotFoundIsError = value;
-  }
-
-  /**
-  * @brief 
-  * @param value
-  */
-  void setImportAsGrayScale(bool value)
-  {
-    this->_importAsGrayScale = value;
-  }
-  
-  private:
-    
-    bool _fileNotFoundIsError;
-    bool _importAsGrayScale;
-    
-    H5TiffImportDelegateFactory(const H5TiffImportDelegateFactory&);    //Not Implemented
-    void operator=(const H5TiffImportDelegateFactory&);  //Not Implemented
-};
-
 
 
 #endif /*OFIMPORTDELEGATE_H_*/

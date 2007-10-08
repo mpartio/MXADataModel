@@ -30,8 +30,10 @@ H5TiffIO::~H5TiffIO()
 // -------------------------------------------------------------------------
 // Read the tiff file
 // -------------------------------------------------------------------------
-herr_t H5TiffIO::importTiff(string filename, hid_t groupId, 
-			     string datasetName, bool asGrayscale)   
+herr_t H5TiffIO::importTiff(const std::string &filename, 
+                            hid_t groupId, 
+                            const std::string &datasetName, 
+                            bool asGrayscale)   
 {
   if (NULL != _tiff)
   {
@@ -124,7 +126,7 @@ int H5TiffIO::_determineTiffImageClass(TIFF *in)
 // ---------------------------------------------------------------------
 // Reads a grayscale image into an HDF5 Image Dataset
 // ---------------------------------------------------------------------
-herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, string &datasetName)
+herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::string &datasetName)
 {
   uint32* raster;     /* retrieve RGBA image */
   uint32  width, height;    /* image width & height */
@@ -207,7 +209,7 @@ herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, string &data
 // ---------------------------------------------------------------------
 // Reads an 8bit color palette image into an HDF5 Image Dataset
 // ---------------------------------------------------------------------
-herr_t H5TiffIO::_importPaletteColorTiff( TIFF *in, hid_t groupId, string &datasetName) 
+herr_t H5TiffIO::_importPaletteColorTiff( TIFF *in, hid_t groupId, const std::string &datasetName) 
 {
   herr_t err = 0;
   
@@ -271,7 +273,7 @@ herr_t H5TiffIO::_importPaletteColorTiff( TIFF *in, hid_t groupId, string &datas
 // ---------------------------------------------------------------------
 // Reads a True Color image into an HDF5 24Bit Image data set
 // ---------------------------------------------------------------------
-herr_t H5TiffIO::_importRGBFullColorTiff(TIFF *in, hid_t groupId, string &datasetName)
+herr_t H5TiffIO::_importRGBFullColorTiff(TIFF *in, hid_t groupId, const std::string &datasetName)
 {
   uint32* raster;     /* retrieve RGBA image */
   uint32  width, height;    /* image width & height */
@@ -415,7 +417,7 @@ void H5TiffIO::_closePaletteCreatedDataset(hid_t fileId, hid_t groupId,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int H5TiffIO::_findColorMapIndex(int max, int32 imgR, int32 imgG, int32 imgB,
+int32 H5TiffIO::_findColorMapIndex(int max, int32 imgR, int32 imgG, int32 imgB,
          unsigned char *colorMap)
 {
   // note - colorMap is in the format for HDF5 which means it's a flat
@@ -433,8 +435,9 @@ int H5TiffIO::_findColorMapIndex(int max, int32 imgR, int32 imgG, int32 imgB,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5TiffIO::exportTiff(hid_t fileId, string filename, 
-			    string img_dataset_name)
+herr_t H5TiffIO::exportTiff(hid_t fileId, 
+                            const std::string &filename, 
+                            const std::string &img_dataset_name)
 {
   TIFF *out;
   herr_t err = 0;
@@ -568,7 +571,7 @@ herr_t H5TiffIO::_export8BitTiff(TIFF *image,
   std::vector<uint16> dBlue(cRank);
 
   int32 index;
-  for (unsigned int i=0; i<palRank; i=i+3) {
+  for (uint32 i=0; i<palRank; i=i+3) {
     index = (unsigned int)( i/3 );
     dRed[index] = (uint16) colorMap[i] * 256;
     dGreen[index] = (uint16) colorMap[i+1] * 256;

@@ -38,7 +38,7 @@
 * @class ExpatParser ExpatParser.h src/XML/ExpatParser.h
 * @brief A C++ wrapper around the Expat parser library.
 * @date 2004
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT ExpatParser
 {
@@ -180,7 +180,7 @@ public:
 	int  GetCurrentColumnNumber(void);
 	int  GetCurrentByteCount(void);
 
-	const char* GetInputContext(int* pOffset, int* pSize);
+	const char* GetInputContext(int32* pOffset, int32* pSize);
 	const XML_LChar* GetErrorString();
 
 	/*************************************************** Parser Interface **/

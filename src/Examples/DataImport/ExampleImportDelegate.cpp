@@ -29,8 +29,10 @@ ExampleImportDelegate::~ExampleImportDelegate()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 ExampleImportDelegate::encodeSourceToHDF5( hid_t fileId, std::string recordGroup,
-                            std::string recordName, std::string filePath)
+int32 ExampleImportDelegate::encodeSourceToHDF5( hid_t fileId, 
+                                                  const std::string &recordGroup,
+                                                  const std::string &recordName, 
+                                                  const std::string &filePath)
 {
   herr_t err = 0;
   hid_t gid = MXAHDFInterface::openHDF5Object(fileId, recordGroup);

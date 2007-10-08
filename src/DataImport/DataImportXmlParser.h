@@ -62,7 +62,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 * @brief 
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -236,14 +236,14 @@ private:
      * @param modelFile The xml or HDF5 file
      * @return Error condition
      */
-    int _loadDataModelFromTemplateFile(std::string &modelFile);
+    int32 _loadDataModelFromTemplateFile(std::string &modelFile);
     
     /**
      * @brief Does the actual work of parsing the xml file and creating all the
      * datasources for the import
      * @return Error condition
      */
-    int _parseXMLFile();
+    int32 _parseXMLFile();
     
 }; // End Class DataImportXmlParser
 

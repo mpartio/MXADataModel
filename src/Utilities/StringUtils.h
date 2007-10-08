@@ -28,7 +28,7 @@
  
 /**
  * @brief Just some convenience utilities for dealing with strings
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 class StringUtils {
   
@@ -216,10 +216,9 @@ static MXA_EXPORT bool endsWith(std::string &base, std::string ending) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-static MXA_EXPORT std::string indent(int depth)
+static MXA_EXPORT std::string indent(int32 depth)
 {
-  const int32 indentSize = 2;
-  return std::string(indentSize * depth, ' ');
+  return std::string(2 * depth, ' ');
 }
 
 

@@ -49,7 +49,7 @@ static void EndElementHandler(void* pUserData, const XML_Char* name)
 	ph->OnEndElement(name);
 }
 
-static void CharacterDataHandler(void* pUserData, const XML_Char* data, int len)
+static void CharacterDataHandler(void* pUserData, const XML_Char* data, int32 len)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	ph->OnCharacterData(data, len);
@@ -79,13 +79,13 @@ static void EndCdataSectionHandler(void* pUserData)
 	ph->OnEndCdataSection();
 }
 
-static void DefaultHandler(void* pUserData, const XML_Char* data, int len)
+static void DefaultHandler(void* pUserData, const XML_Char* data, int32 len)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	ph->OnDefault(data, len);
 }
 
-static int UnknownEncodingHandler(void* pUserData, const XML_Char* name, XML_Encoding* pInfo)
+static int32 UnknownEncodingHandler(void* pUserData, const XML_Char* name, XML_Encoding* pInfo)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	return ph->OnUnknownEncoding(name, pInfo) ? 1 : 0;
@@ -103,13 +103,13 @@ static void EndNamespaceDeclHandler(void* pUserData, const XML_Char* prefix)
 	ph->OnEndNamespaceDecl(prefix);
 }
 
-static void XmlDeclHandler(void* pUserData, const XML_Char* version, const XML_Char* encoding, int isStandalone)
+static void XmlDeclHandler(void* pUserData, const XML_Char* version, const XML_Char* encoding, int32 isStandalone)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	ph->OnXmlDecl(version, encoding, isStandalone != 0);
 }
 
-static void StartDoctypeDeclHandler(void* pUserData, const XML_Char* doctype, const XML_Char* sysId, const XML_Char* pubId, int hasInternalSubset)
+static void StartDoctypeDeclHandler(void* pUserData, const XML_Char* doctype, const XML_Char* sysId, const XML_Char* pubId, int32 hasInternalSubset)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	ph->OnStartDoctypeDecl(doctype, sysId, pubId, hasInternalSubset != 0);

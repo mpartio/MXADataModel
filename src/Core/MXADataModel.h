@@ -13,14 +13,11 @@
 
 
 //TODO: Remove DataRecord using Pointer or String Name
-
 //TODO: openFile (Filename, delegate)
 //TODO: options to overwrite file, bail on file existance or overwrite current model
 
 
 //------- Utility Methods
-//TODO: Generate Paths for each Element (unix/hdf style)
-//TODO: Find Dimension/Record based on Criteria
 //TODO: Method to copy the model from a file and write it to a new file
 //TODO: Static Method to Read from the various types of files (text, xml, H5) and create the model
 //TODO: Use Usul as a template to implement typeid macros that each class can use
@@ -47,8 +44,8 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.11 $
- * @class MXADataModel MXADataModel.h MXADataModel/MXADataModel.h
+ * @version $Revision: 1.12 $
+ * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
 {
@@ -69,7 +66,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param message String to store messages regarding missing field
    * @return Error - Negative is error. Zero or Positive is success
    */
-  static MXATypes::MXAError validateRequiredMetaData(std::map<std::string, std::string> &requiredMetaData, std::string &message);
+  static MXATypes::MXAError validateRequiredMetaData(MXARequiredMetaData &requiredMetaData, std::string &message);
   
   /**
    * @brief Returns the MXA File version that the model adheres to

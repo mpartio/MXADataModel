@@ -23,7 +23,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class H5ImportTestDelegate: public IImportDelegate
 {
@@ -52,7 +52,9 @@ private:
   
 };
 
-
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 
 // Declare our constant in a namespace
 namespace H5ImportTestDelegateFactory_Detail
@@ -65,7 +67,7 @@ namespace H5ImportTestDelegateFactory_Detail
 * @brief Factory class to generate H5ImportTestDelegate objects
 * @author Mike Jackson
 * @date Sep 12, 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
 {
