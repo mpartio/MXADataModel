@@ -1,5 +1,6 @@
 var pageNames = new Array()
 var pageFiles = new Array()
+var arraySize = 12
 pageNames[0] = "Home"
 pageFiles[0] = "index.html"
 pageNames[1] = "Background"
@@ -17,17 +18,20 @@ pageFiles[6] = "UsingMXAInOtherProjects.html"
 pageNames[7] = "XML Usage"
 pageFiles[7] = "XML_Usage.html"
 pageNames[8] = "Doxygen API"
-pageFiles[8] = "../API-Docs/html/index.html"
+pageFiles[8] = "../API-Docs/html/classes.html"
 pageNames[9] = "Examples"
 pageFiles[9] = "Examples.html"
-
+pageNames[10] = "How To Write a Data Import Delegate"
+pageFiles[10] = "HowToWriteDataImportDelegate.html"
+pageNames[11] = "Importing Data into HDF5 using MXA APIs"
+pageFiles[11] = "ImportingData.html"
 function navigationCells(activePage)
 {
 
 var innerHTML = ""; // = "<div class=\"nav_inactive\"><a href=\"" + pageFiles[0] + "\">" + pageNames[0] + "</a></div>";
 var i =0;
 var divclass = "nav_inactive";
-for (i = 0; i < 10; i=i+1)
+for (i = 0; i < arraySize; i=i+1)
 {
   if (pageNames[i] == activePage)
   {
