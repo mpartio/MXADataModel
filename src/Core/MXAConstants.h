@@ -66,6 +66,7 @@ namespace MXA {
   // Required Meta Data Tags
   const std::string MXA_CREATOR_TAG("Creator");
   const std::string MXA_DATE_TAG("Date");
+  const std::string MXA_DATE_TIME_FORMAT("yyyy/MM/dd HH:mm:ss");
   const std::string MXA_DSET_NAME_TAG("Name");
   const std::string MXA_DESCRIPTION_TAG("Description");
 

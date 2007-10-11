@@ -150,7 +150,7 @@ void XMLDataModelWriter::_openTag(const std::string &tagName,
     for (iter=attributes.begin(); iter!=attributes.end(); ++iter) {
       label = iter->first;
       value = escapedAttribute(iter->second);
-      stream << " " << label << "=" << value; 
+      stream << " " << label << "=" << value;
     }
   }
 

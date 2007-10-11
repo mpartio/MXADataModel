@@ -147,5 +147,17 @@ bool MXADataDimension::isValid(std::string &message)
   return valid;
 }
 
-
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+int32 MXADataDimension::calculateCount()
+{
+  // translate to 0
+  int32 end = _endValue - _startValue;
+  int32 count = end;
+  int32 inc = _increment;
+  count = (count/inc) + 1;
+  _count = count;
+  return _count;
+}
 

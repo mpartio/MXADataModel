@@ -20,7 +20,7 @@
  * @brief The formal interface description for a DataDimension
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *  
  */
 class MXA_EXPORT IDataDimension 
@@ -162,6 +162,12 @@ class MXA_EXPORT IDataDimension
       * @return True if the model passes the basic checks
       */
      virtual bool isValid(std::string &message) = 0;
+     
+     /**
+      * @brief This will force the count value to be calculated based on the 
+      * current start, end and increment values
+      */
+     virtual int32 calculateCount() = 0;
  
   private:
     IDataDimension(const IDataDimension&);    //Not Implemented

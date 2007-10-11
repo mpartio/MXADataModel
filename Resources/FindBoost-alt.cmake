@@ -60,32 +60,32 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     boost-1_33
   )
 
-    SET(BOOST_INCLUDE_SEARCH_DIRS
-      $ENV{BOOSTINCLUDEDIR}
-      $ENV{BOOST_ROOT}/include
-      C:/boost/include
-      "C:/Program Files/boost/boost_1_34_1"
-      "C:/Program Files/boost/boost_1_33_1"
-      # D: is very often the cdrom drive, IF you don't have a
-      # cdrom inserted it will popup a very annoying dialog
-      #D:/boost/include
-      /usr/include
-      /usr/local/include
-      /opt/local/include
-      /sw/include
-    )
-    
-    SET(BOOST_LIBRARIES_SEARCH_DIRS
-      $ENV{BOOSTLIBDIR}
-      $ENV{BOOST_ROOT}/lib
-      C:/boost/lib
-      "C:/Program Files/boost/boost_1_34_1  /lib"
-      "C:/Program Files/boost/boost_1_33_1/lib"
-      /usr/lib
-      /usr/local/lib
-      /opt/local/lib
-      /sw/lib
-    )
+  SET(BOOST_INCLUDE_SEARCH_DIRS
+    $ENV{BOOSTINCLUDEDIR}
+    $ENV{BOOST_ROOT}/include
+    C:/boost/include
+    "C:/Program Files/boost/boost_1_34_1"
+    "C:/Program Files/boost/boost_1_33_1"
+    # D: is very often the cdrom drive, IF you don't have a
+    # cdrom inserted it will popup a very annoying dialog
+    #D:/boost/include
+    /usr/include
+    /usr/local/include
+    /opt/local/include
+    /sw/include
+  )
+  
+  SET(BOOST_LIBRARIES_SEARCH_DIRS
+    $ENV{BOOSTLIBDIR}
+    $ENV{BOOST_ROOT}/lib
+    C:/boost/lib
+    "C:/Program Files/boost/boost_1_34_1  /lib"
+    "C:/Program Files/boost/boost_1_33_1/lib"
+    /usr/lib
+    /usr/local/lib
+    /opt/local/lib
+    /sw/lib
+  )
     
   IF (WIN32)
     # In windows, automatic linking is performed, so you do not have to specify the libraries.
@@ -464,7 +464,11 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
 
   IF (BOOST_FOUND)
     IF (NOT Boost_FIND_QUIETLY)
-      MESSAGE(STATUS "Found Boost: ${BOOST_LIBRARIES}")
+      MESSAGE(STATUS "Found The Following Boost Libraries:")
+      FOREACH (TMP_LIB  ${BOOST_LIBRARIES} )
+        MESSAGE (STATUS "  ${TMP_LIB}")
+      ENDFOREACH(TMP_LIB)
+      
     ENDIF(NOT Boost_FIND_QUIETLY)
   ELSE (BOOST_FOUND)
     IF (Boost_FIND_REQUIRED)

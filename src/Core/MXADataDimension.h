@@ -27,7 +27,7 @@
  * 
  * @author Mike Jackson @ IMTS.us 
  * @date March 2007
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  *  
  */
 class  MXA_EXPORT MXADataDimension : public IDataDimension
@@ -189,6 +189,8 @@ public:
   }
   
   bool isValid(std::string &message);
+  
+  int32 calculateCount();
 
 protected:
   MXADataDimension();

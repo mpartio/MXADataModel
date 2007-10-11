@@ -434,7 +434,60 @@ void ReReadTestModel()
   }
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void TestDimensionCount()
+{
+  std::cout << "Testing Dimension Count" << std::endl;
+  IDataDimensionPtr dim = MXADataDimension::New("Test", "Test", 0, 10, 0, 9, 1, 1);
+  int32 count = dim->calculateCount();
+  BOOST_REQUIRE(count == 10);
+  
+  dim->setStartValue(1);
+  count = dim->calculateCount();
+  BOOST_REQUIRE(count == 9);
+  
+  dim->setStartValue(2);
+  count = dim->calculateCount();
+  BOOST_REQUIRE(count == 8);
+  
+  dim->setStartValue(-1);
+  count = dim->calculateCount();
+  BOOST_REQUIRE(count == 11);
+  
+  
+  dim->setStartValue(-10);
+  count = dim->calculateCount();
+  BOOST_REQUIRE(count == 20);
+  
+  dim->setIncrement(3);
+  dim->setStartValue(0);
+  dim->setEndValue(8);
+  count = dim->calculateCount();
+  BOOST_REQUIRE(count == 3);
+  
+  dim->setEndValue(9);
+  count = dim->calculateCount();
+  BOOST_REQUIRE(count == 4);
+  
+  dim->setIncrement(2);
+  dim->setStartValue(0);
+  dim->setEndValue(8);
+  count = dim->calculateCount();
+  BOOST_REQUIRE(count == 5);
+ 
+  dim->setIncrement(3);
+  dim->setStartValue(1);
+  dim->setEndValue(30);
+  count = dim->calculateCount();
+  BOOST_REQUIRE(count == 10);
+  
+  dim->setEndValue(31);
+  count = dim->calculateCount();
+  BOOST_REQUIRE(count == 11);
 
+}
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
@@ -448,6 +501,7 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );
     test->add( BOOST_TEST_CASE( &TestDataDimensionMethods), 0 );
     test->add( BOOST_TEST_CASE( &TestRequiredMetaData), 0);
+    test->add (BOOST_TEST_CASE( &TestDimensionCount), 0);
     
     //test->add( BOOST_TEST_CASE( &TestLookupTableGeneration), 0);
     return test; 

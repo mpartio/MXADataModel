@@ -44,7 +44,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -218,11 +218,14 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param derivedSrcFile
    * @return
    */
-  MXATypes::MXAError setRequiredMetaData( std::string researcherName, std::string dateCreated,
-      std::string datasetName, std::string description,
+  MXATypes::MXAError setRequiredMetaData( std::string researcherName, 
+      std::string dateCreated,
+      std::string datasetName, 
+      std::string description,
       std::string distributionRights,
       std::string releaseNumber,
-      std::string pedigree, std::string derivedSrcFile);
+      std::string pedigree, 
+      std::string derivedSrcFile);
 
   /**
    * @brief Sets the Required Meta Data Fields given a std::map object

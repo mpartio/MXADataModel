@@ -147,6 +147,7 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5IODelegate.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.cpp
   )
   
   SET(MXA_HDF5_HEADERS 
@@ -157,6 +158,7 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5Image.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5Utilities.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.h
   )
   
 
@@ -268,7 +270,6 @@ IF ( APPLE )
     )
     
 ENDIF ( APPLE )
-
 
 
 #--- Set up the installation Code for Make Install
