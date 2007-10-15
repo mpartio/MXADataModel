@@ -115,8 +115,29 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Utilities/StringUtils.h
   ${MXA_SOURCE_DIR}/src/DataImport/AbstractImportDelegateFactory.h
   ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.h
-  )
+)
 
+
+#---------------------------------------------------------------------------
+# Adding Sources for EasyBMP Bitmap file reading functionality
+#---------------------------------------------------------------------------
+SET (MXA_EASYBMP_SRCS
+    ${MXA_SOURCE_DIR}/src/EasyBMP/BMFH.cpp
+    ${MXA_SOURCE_DIR}/src/EasyBMP/BMIH.cpp
+    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMP.cpp
+    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMPUtilities.cpp
+)
+
+SET (MXA_EASYBMP_HEADERS
+    ${MXA_SOURCE_DIR}/src/EasyBMP/BMFH.h
+    ${MXA_SOURCE_DIR}/src/EasyBMP/BMIH.h
+    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMP.h
+    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMPUtilities.h
+    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMP_DataStructures.h
+)
+#  SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_EASYBMP_SRCS} ${MXA_EASYBMP_HEADERS})
+  
+  
 # Build with the HDF5 Libraries Enabled. This is the default
 SET(HDF5_SUPPORT "0")
 SET(HDF5_VTK_BRIDGE "0")

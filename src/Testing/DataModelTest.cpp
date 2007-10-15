@@ -14,6 +14,7 @@
 
 #include <MXAConfiguration.h>
 #include <Common/MXATypeDefs.h>
+#include <Common/MXAEndian.h>
 #include <Core/MXAConstants.h>
 #include <Core/MXAAttribute.h>
 #include <Core/MXADataModel.h>
@@ -490,6 +491,19 @@ void TestDimensionCount()
 }
 
 // -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void TestEndianSwap()
+{
+  int32 value = 0xff000000;
+  std::cout << "Value Before: " << value << std::endl;
+  MXA::Endian::FromLittleToSystem::convert(value);
+  std::cout << "FromLittleToSystem: " << value << std::endl;
+  MXA::Endian::FromBigToSystem::convert(value);
+  std::cout << "FromBigToSystem: " << value << std::endl;
+}
+
+// -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
@@ -502,7 +516,7 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
     test->add( BOOST_TEST_CASE( &TestDataDimensionMethods), 0 );
     test->add( BOOST_TEST_CASE( &TestRequiredMetaData), 0);
     test->add (BOOST_TEST_CASE( &TestDimensionCount), 0);
-    
+    test->add (BOOST_TEST_CASE( &TestEndianSwap), 0);
     //test->add( BOOST_TEST_CASE( &TestLookupTableGeneration), 0);
     return test; 
 }
