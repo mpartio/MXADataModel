@@ -26,9 +26,13 @@
 
 using namespace std;
 
-namespace TiffIOConst {
-  const std::string TifExtension(".tif");
-  const std::string TiffExtension(".tiff");
+namespace MXA
+{
+  namespace Tiff
+  {
+    const std::string FileExtension(".tif");
+    const std::string TiffExtension(".tiff");
+  }
 }
 
 
@@ -38,7 +42,7 @@ const std::string H5IM_INTERLACE_PIXEL("INTERLACE_PIXEL");
 * @brief General IO class for TIFF images
 * @author Mike Jackson/Shawn Nicholson
 * @date March 2007
-* @version $Revision: 1.11 $
+* @version $Revision: 1.12 $
 */
 class MXA_EXPORT H5TiffIO 
 {

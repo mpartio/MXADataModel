@@ -30,7 +30,7 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
                   const std::string &datasetName, 
                   bool asGrayscale)
 {
-    // Put the bmp file parsing code here
+  // Put the bmp file parsing code here
   int32 err = 0;
   int32 width = 0;
   int32 height = 0;
@@ -81,6 +81,7 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, hid_t fileId, const s
   int32 err = 0;
   int32 width = 0;
   int32 height = 0;
+    
   // Collapse the data down to a single channel, that will end up
   //  being the grayscale values
   int32 pixel_count = width * height;

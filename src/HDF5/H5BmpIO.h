@@ -17,7 +17,7 @@ namespace MXA
  {
   namespace BMP
   {
-     const std::string BMPExtension(".bmp");
+     const std::string FileExtension(".bmp");
   }
 }
 
@@ -28,7 +28,7 @@ const std::string H5IM_INTERLACE_PIXEL("INTERLACE_PIXEL");
 * @brief General IO class for Bmp images
 * @author Mike Jackson/Herb Mullens
 * @date October 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT H5BmpIO 
 {

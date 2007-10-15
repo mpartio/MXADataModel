@@ -1,6 +1,6 @@
 
 
-#include <HDF5/H5TiffImportDelegate.h>
+#include <HDF5/H5BmpImportDelegate.h>
 
 //-- MXA Includes
 #include <Common/MXAErrorDefinitions.h>
@@ -10,7 +10,7 @@
 #include <Core/MXADataSource.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
-#include <HDF5/H5TiffIO.h>
+#include <HDF5/H5BmpIO.h>
 
 //-- STL Includes
 #include <iostream>
@@ -36,7 +36,7 @@ if ( err < 0 ) {\
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-H5TiffImportDelegate::H5TiffImportDelegate() :
+H5BmpImportDelegate::H5BmpImportDelegate() :
   _modelPtr(),
   _fileNotFoundIsError(true),
   _importAsGrayScale(false)
@@ -46,14 +46,14 @@ H5TiffImportDelegate::H5TiffImportDelegate() :
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-H5TiffImportDelegate::~H5TiffImportDelegate()
+H5BmpImportDelegate::~H5BmpImportDelegate()
 {
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void H5TiffImportDelegate::setFileNotFoundIsError(bool value)
+void H5BmpImportDelegate::setFileNotFoundIsError(bool value)
 {
   this->_fileNotFoundIsError = value;
 }
@@ -61,7 +61,7 @@ void H5TiffImportDelegate::setFileNotFoundIsError(bool value)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void H5TiffImportDelegate::setImportAsGrayScale(bool value)
+void H5BmpImportDelegate::setImportAsGrayScale(bool value)
 {
   this->_importAsGrayScale = value;
 }
@@ -69,7 +69,7 @@ void H5TiffImportDelegate::setImportAsGrayScale(bool value)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void H5TiffImportDelegate::setDataModel(IDataModelPtr model) {
+void H5BmpImportDelegate::setDataModel(IDataModelPtr model) {
   this->_modelPtr = model; 
 }
 
@@ -77,15 +77,15 @@ void H5TiffImportDelegate::setDataModel(IDataModelPtr model) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
+int32 H5BmpImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
 {
-  //std::cout << "H5TiffImportDelegate::importDataSource:  Importing as grayscale->" << this->_importAsGrayScale << std::endl;
+  //std::cout << "H5BmpImportDelegate::importDataSource:  Importing as grayscale->" << this->_importAsGrayScale << std::endl;
   herr_t err = -1;
   // Make sure the file Exists first before we go much further
   FileSystem::path sourcePath ( dataSource->getSourcePath() ); //create a boost::filesystem::path object
   if ( !FileSystem::exists(sourcePath) )
   {
-    std::cout << logTime() << "Error: Tiff image not found: " << sourcePath.native_file_string() << std::endl;
+    std::cout << logTime() << "Error: BMP image not found: " << sourcePath.native_file_string() << std::endl;
     if (_fileNotFoundIsError)
     {
       return MXA_ERROR_FILE_NOT_FOUND;
@@ -96,20 +96,18 @@ int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataMod
     }
   }
   
-  //Check for valid TIFF file extension - tif or tiff. 
+  //Check for valid BMP file extension - BMP or BMP. 
   std::string fileExt( boost::filesystem::extension(sourcePath) );
   std::transform ( fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower );
-  if ( fileExt != MXA::Tiff::TiffExtension )
+  if (fileExt != MXA::BMP::BMPExtension ) 
   {
-    if (fileExt != MXA::Tiff::FileExtension ) 
-    {
-      std::cout << logTime() << "Only import of Tiff images with extensions of 'tiff' or 'tif' are supported." << std::endl;
-      return MXA_ERROR_IMAGE_FORMAT_NOT_SUPPORTED; 
-    }
+    std::cout << logTime() << "Only import of BMP images with extensions of 'bmp' are supported." << std::endl;
+    return MXA_ERROR_IMAGE_FORMAT_NOT_SUPPORTED; 
   }
+
   
-  //Basic Checks are OK. Now Import the Tiff image into the HDF5 File
-  std::cout << logTime() << "Importing Tiff Image: " << dataSource->getSourcePath() << std::endl;
+  //Basic Checks are OK. Now Import the BMP image into the HDF5 File
+  std::cout << logTime() << "Importing BMP Image: " << dataSource->getSourcePath() << std::endl;
   // Close then reopen the file to get around an HDF5 performance issue
   std::string filename = model->getIODelegate()->getOpenFileName();
   model->getIODelegate()->closeMXAFile(); //Close the file
@@ -135,12 +133,12 @@ int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataMod
     return -1;
   }
   
-  //Read the Tiff and Import it into the HDF5 File
-  H5TiffIO tiffIO(fileId);
-  err = tiffIO.importTiff(dataSource->getSourcePath(), fileId, datasetPath, this->_importAsGrayScale);
+  //Read the BMP and Import it into the HDF5 File
+  H5BmpIO bmpIO(fileId);
+  err = bmpIO.importBMP(dataSource->getSourcePath(), fileId, datasetPath, this->_importAsGrayScale);
   if (err < 0) 
   {
-    std::cout << logTime() << "Error Importing Tiff Image: " << dataSource->getSourcePath() << std::endl;
+    std::cout << logTime() << "Error Importing BMP Image: " << dataSource->getSourcePath() << std::endl;
     return -1;
   }
   

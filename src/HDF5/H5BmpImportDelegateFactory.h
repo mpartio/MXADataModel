@@ -8,8 +8,9 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef H5TIFFIMPORTDELEGATEFACTORY_H_
-#define H5TIFFIMPORTDELEGATEFACTORY_H_
+#ifndef H5BMPIMPORTDELEGATEFACTORY_H_
+#define H5BMPIMPORTDELEGATEFACTORY_H_
+
 
 //-- MXA Includes
 #include <DataImport/AbstractImportDelegateFactory.h>
@@ -19,34 +20,37 @@
 
 
 // Declare our constant in a namespace
-namespace H5TiffImportDelegateFactory_Detail
+namespace H5BmpImport
 {
-  const std::string ClassName("H5TiffImport");
+  namespace Detail 
+  {
+    const std::string ClassName("H5BmpImport");
+  }
 }
 
 // -----------------------------------------------------------------------------
-//  Factory Class to generate H5TiffImportDelegate Objects
+//  Factory Class to generate H5BmpImportDelegate Objects
 // -----------------------------------------------------------------------------
 /**
-* @class H5TiffImportDelegateFactory H5TiffImportDelegateFactory.h HDF5/H5TiffImportDelegateFactory.h
-* @brief Factory Class to generate H5TiffImportDelegate Objects
+* @class H5BmpImportDelegateFactory H5BmpImportDelegateFactory.h HDF5/H5BmpImportDelegateFactory.h
+* @brief Factory Class to generate H5BmpImportDelegate Objects
 * @author Mike Jackson
-* @date Sept 2007
-* @version $Revision: 1.2 $
+* @date Oct 2007
+* @version $Revision: 1.1 $
 */
-class MXA_EXPORT H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
+class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFactory
 {
   public:
-    H5TiffImportDelegateFactory();
+    H5BmpImportDelegateFactory();
     
-    virtual ~H5TiffImportDelegateFactory();
+    virtual ~H5BmpImportDelegateFactory();
     
     
   /**
-   * @brief This method will return a new instance of H5TiffImportDelegate provided
+   * @brief This method will return a new instance of H5BmpImportDelegate provided
    * the className matches.
    * @param className The name of the Delegate class that will be returned
-   * @return A new boost shared pointer to H5TiffImportDelegate
+   * @return A new boost shared pointer to H5BmpImportDelegate
    */
   IImportDelegatePtr newDataImportDelegate (const std::string &className );
   
@@ -72,10 +76,11 @@ class MXA_EXPORT H5TiffImportDelegateFactory : public AbstractImportDelegateFact
     bool _fileNotFoundIsError;
     bool _importAsGrayScale;
     
-    H5TiffImportDelegateFactory(const H5TiffImportDelegateFactory&);    //Not Implemented
-    void operator=(const H5TiffImportDelegateFactory&);  //Not Implemented
+    H5BmpImportDelegateFactory(const H5BmpImportDelegateFactory&);    //Not Implemented
+    void operator=(const H5BmpImportDelegateFactory&);  //Not Implemented
 };
 
 
+};
 
-#endif /*H5TIFFIMPORTDELEGATEFACTORY_H_*/
+#endif /*H5BMPIMPORTDELEGATEFACTORY_H_*/
