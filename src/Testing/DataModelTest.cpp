@@ -495,12 +495,14 @@ void TestDimensionCount()
 // -----------------------------------------------------------------------------
 void TestEndianSwap()
 {
-  int32 value = 0xff000000;
-  std::cout << "Value Before: " << value << std::endl;
-  MXA::Endian::FromLittleToSystem::convert(value);
-  std::cout << "FromLittleToSystem: " << value << std::endl;
-  MXA::Endian::FromBigToSystem::convert(value);
-  std::cout << "FromBigToSystem: " << value << std::endl;
+  std::cout << "Testing Endian Swapping" << std::endl;
+  uint32 value = 0xAABBCCDD;
+  MXA::Endian::reverseBytes ( value );
+  BOOST_REQUIRE(0xDDCCBBAA == value);
+ 
+  uint16 value16 = 0xAABB;
+  MXA::Endian::reverseBytes( value16);
+  BOOST_REQUIRE(0xBBAA == value16);
 }
 
 // -----------------------------------------------------------------------------

@@ -64,7 +64,7 @@ IF (BUILD_TESTING)
       DataModelTest.cpp
     )
     ADD_EXECUTABLE ( DataModelTest ${MXADATAMODEL_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES ( DataModelTest MXADataModel ${BOOST_MXA_LIBS} ${vtkLocal_LIBS})
+    TARGET_LINK_LIBRARIES ( DataModelTest MXADataModel ${BOOST_MXA_LIBS})
     ADD_TEST(DataModelTest ${EXECUTABLE_OUTPUT_PATH}/DataModelTest)
     
     # ------ DataImport Test
@@ -72,7 +72,7 @@ IF (BUILD_TESTING)
       DataImportTest.cpp
     )
     ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES ( DataImportTest  ${MXADATAMODEL_LIB_NAME} ${BOOST_MXA_LIBS}  ${vtkLocal_LIBS})
+    TARGET_LINK_LIBRARIES ( DataImportTest  ${MXADATAMODEL_LIB_NAME} ${BOOST_MXA_LIBS})
     ADD_TEST(DataImportTest ${EXECUTABLE_OUTPUT_PATH}/DataImportTest)
     
     
@@ -81,8 +81,16 @@ IF (BUILD_TESTING)
       H5LiteTest.cpp
     )
     ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (H5LiteTest MXADataModel ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS}  ${vtkLocal_LIBS})
+    TARGET_LINK_LIBRARIES (H5LiteTest MXADataModel ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS} )
     ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
+    
+    # --------- BMP IO Test
+    SET (BMP_IO_TEST_SRCS
+        BmpIOTest.cpp
+    )
+    ADD_EXECUTABLE(BmpIOTest ${BMP_IO_TEST_SRCS})
+    TARGET_LINK_LIBRARIES (BmpIOTest MXADataModel ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS})
+    ADD_TEST(BmpIOTest ${EXECUTABLE_OUTPUT_PATH}/BmpIOTest)
     
     # ------- Vtk to HDF5 Bridge test
     IF(BUILD_VTK_HDF5)
@@ -102,6 +110,6 @@ IF (BUILD_TESTING)
     ADD_EXECUTABLE( XMLTest ${XML_TEST_SRCS} )
     TARGET_LINK_LIBRARIES (XMLTest MXADataModel  ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS} )
     ADD_TEST(XMLTest ${EXECUTABLE_OUTPUT_PATH}/XMLTest)      
-     ENDIF(MXA_USE_XML)       
+    ENDIF(MXA_USE_XML)       
 ENDIF (BUILD_TESTING)
 
