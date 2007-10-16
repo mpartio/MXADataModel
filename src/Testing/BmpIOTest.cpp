@@ -8,7 +8,7 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+#include <Common/MXATypes.h>
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>
