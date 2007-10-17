@@ -293,7 +293,7 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
     if ( attrMap.find(MXA::MXA_UNIFORM_TAG) != attrMap.end() ) { StringUtils::stringToNum(uniform, attrMap[MXA::MXA_UNIFORM_TAG], std::dec); }
     
     MXADataDimensionPtr dim = MXADataDimension::New( attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG], index, count, start, end, increment, uniform);
-    this->_dataModel->addDataDimension(dim);
+    this->_dataModel->insertDataDimension(dim, index);
 }
 
 // -----------------------------------------------------------------------------

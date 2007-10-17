@@ -35,7 +35,6 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
   int32 width = 0;
   int32 height = 0;
   uint8* rgbRaster; // This is an RGB array. 
-  uint8 rgbaRaster[width * height * 4]; // This is an ARGB array. Pick one
   
   err = _readBmpFile(filename, width, height, rgbRaster);
   if (err < 0)

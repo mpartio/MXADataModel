@@ -29,7 +29,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  *  
  */
 class MXA_EXPORT IDataModel
@@ -83,7 +83,7 @@ class MXA_EXPORT IDataModel
     * @param dimension The IDataDimension to add to the model
     * @param setIndex Automatically set the index for this Dimension. Default is false
     */
-    virtual void addDataDimension(IDataDimensionPtr dimension, bool setIndex=false) = 0;
+    virtual void addDataDimension(IDataDimensionPtr dimension ) = 0;
     
     /**
     * @brief Adds a Data Dimension by declaring all the values of the data dimension
@@ -98,9 +98,25 @@ class MXA_EXPORT IDataModel
     * @return A boost::shared_ptr to the newly created DataDimension Object
     */
     virtual IDataDimensionPtr addDataDimension(std::string name, std::string altName,
-                                    int32 index, int32 count, int32 startValue, 
+                                    int32 count, int32 startValue, 
                                     int32 endValue, int32 increment, int32 uniform) = 0;
 
+    
+    /**
+     * @brief Inserts a Data Dimension at a given index position. If Needed the
+     * internal data structure holding the Data Dimenions will be expanded.
+     * @param dimension The Data Dimension to Insert
+     * @param index The index to insert the Data Dimension at
+     * @return Error condition
+     */
+    virtual int32 insertDataDimension(IDataDimensionPtr dimension, int32 index) = 0;
+    
+    
+    /**
+     * @brief This method will remove any NULL Data Dimensions from the internal 
+     * data structure that holds the list of Data Dimensions
+     */
+    virtual void squeezeDataDimensions() = 0;
     
     /**
     * @brief Removes a Data dimension using the index of the dimension
@@ -109,6 +125,23 @@ class MXA_EXPORT IDataModel
     */
     virtual int32 removeDataDimension(int32 index) = 0;
     
+    /**
+     * @brief moves the data dimension at index 'fromIndex' to another index
+     * 'newIndex'
+     * @param fromIndex The current index of the data dimension to move
+     * @param toIndex The new index to place the data dimension at
+     * @return Error condition
+     */
+    virtual int32 moveDataDimension(int32 fromIndex, int32 toIndex) = 0;
+    
+    /**
+     * @brief Swaps a pair of Data Dimensions in the index list
+     * @param index1 The first Data Dimension
+     * @param index2 The second Data Dimension to swap with the first
+     * @return Error Condition
+     */
+    virtual int32 swapDataDimensions(int32 index1, int32 index2) = 0; 
+   
     /**
     * @brief Returns the data dimensions of the Model in a std::vector
     * @return 
@@ -188,11 +221,14 @@ class MXA_EXPORT IDataModel
     * @param pedigree More detailed information regarding the data, its collection methods, the instrumentation, and the research
     * @param derivedSrcFile Is this data derived from another data set or set of data files?
     */
-    virtual MXATypes::MXAError setRequiredMetaData( std::string researcherName, std::string dateCreated, 
-                              std::string datasetName, std::string description,
-                              std::string distributionRights,
-                              std::string releaseNumber,
-                              std::string pedigree, std::string derivedSrcFile) = 0;
+    virtual MXATypes::MXAError setRequiredMetaData( std::string researcherName, 
+                                                    std::string dateCreated, 
+                                                    std::string datasetName, 
+                                                    std::string description,
+                                                    std::string distributionRights,
+                                                    std::string releaseNumber,
+                                                    std::string pedigree, 
+                                                    std::string derivedSrcFile) = 0;
     /**
     * @brief Sets the required meta data using a std::map of keys/values
     * @param metadata The meta data

@@ -44,7 +44,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -105,11 +105,12 @@ class MXA_EXPORT MXADataModel : public IDataModel
   std::string getDataRoot();
 
   /**
-   * @brief Adds a Data Dimension to the Model
-   * @param dimension
+   * @brief Adds a Data Dimension to the end of the Data Dimension data structure
+   * thus making the index of the added dimension the largest of all the dimensions.
+   * @param dimension The IDataDimension to be added to the list of dimensions.
    * @param setIndex Sets the Index for the Dimension. Default is false.
    */
-  void addDataDimension(IDataDimensionPtr dimension, bool setIndex=false);
+  void addDataDimension(IDataDimensionPtr dimension);
 
   /**
    * @brief Creates and adds a new Data Dimension to the Model
@@ -124,11 +125,25 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return A boost::shared_ptr to the newly created Data Dimension
    */
   IDataDimensionPtr addDataDimension(std::string name, std::string altName,
-      int32 index, int32 count, int32 startValue,
+      int32 count, int32 startValue,
       int32 endValue, int32 increment, int32 uniform);
 
-
-
+  /**
+   * @brief Inserts a Data Dimension at a given index position. If Needed the
+   * internal data structure holding the Data Dimenions will be expanded by adding
+   * NULL data dimension pointers into the data structure.
+   * @param dimension The Data Dimension to Insert
+   * @param index The index to insert the Data Dimension at
+   * @return Error condition
+   */
+  int32 insertDataDimension(IDataDimensionPtr dimension, int32 index);
+  
+  /**
+   * @brief This method will remove any NULL Data Dimensions from the internal 
+   * data structure that holds the list of Data Dimensions
+   */
+  void MXADataModel::squeezeDataDimensions();
+  
   /**
    * @brief Removes a data dimension by index
    * @param index
@@ -141,6 +156,24 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return Error: Negative is error condition
    */
   int32 removeDataDimension(const std::string &dimensionName);
+  
+  /**
+   * @brief moves the data dimension at index 'fromIndex' to another index
+   * 'newIndex'. All Data Dimensions have new indices assigned to them after 
+   * this operation.
+   * @param fromIndex The current index of the data dimension to move
+   * @param toIndex The new index to place the data dimension at
+   * @return Error condition
+   */
+  int32 moveDataDimension(int32 fromIndex, int32 toIndex);
+  
+  /**
+   * @brief Swaps a pair of Data Dimensions in the index list
+   * @param index1 The first Data Dimension
+   * @param index2 The second Data Dimension to swap with the first
+   * @return Error Condition
+   */
+  int32 swapDataDimensions(int32 index1, int32 index2);
   
   /**
    * @brief Returns the vector of Data Dimenions

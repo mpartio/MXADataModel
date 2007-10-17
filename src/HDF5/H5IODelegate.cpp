@@ -137,7 +137,6 @@ bool H5IODelegate::isMXAFile(hid_t fileId)
 // Returns true if the file referred to by filename is an MXA
 //  compliant file (has the correct file type and version)
 // -----------------------------------------------------------------------------
-//TODO: Clean this up
 bool H5IODelegate::isMXAFile(const std::string &fileName)
 {
   hid_t fileId = openMXAFile(fileName, true);
@@ -151,7 +150,7 @@ bool H5IODelegate::isMXAFile(const std::string &fileName)
 
 // -----------------------------------------------------------------------------
 // Opens and returns an hdf file identifier
-//TODO: Clean this up
+// -----------------------------------------------------------------------------
 hid_t H5IODelegate::openMXAFile(std::string filename, bool readOnly)
 {
   // Suspend the HDF Error Handlers

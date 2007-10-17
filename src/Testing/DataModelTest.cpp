@@ -159,12 +159,12 @@ MXADataModelPtr createModel()
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
 	  // ---------- Test creation/addition of Data Dimensions
-	  IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 0, 15, 20, 50, 2, 1);
+	  IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
 	  errorMessage.clear();
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
-	  IDataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 1, 10, 1000, 5000, 500, 1);
-	  IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS", 2, 100, 0, 99, 1, 1);
-	  IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 3, 256, 0, 255, 1, 1);
+	  IDataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed",  10, 1000, 5000, 500, 1);
+	  IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS",  100, 0, 99, 1, 1);
+	  IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice",  256, 0, 255, 1, 1);
 	  	  
 
 	  

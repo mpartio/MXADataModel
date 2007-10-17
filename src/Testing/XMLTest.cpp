@@ -137,10 +137,10 @@ MXADataModelPtr createModel()
     model->setModelVersion(MXA::MXACurrentFileVersion);
 
     // ---------- Test creation/addition of Data Dimensions
-    IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 0, 15, 20, 50, 2, 1);
-    IDataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 1, 10, 1000, 5000, 500, 1);
-    IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS", 2, 100, 0, 99, 1, 1);
-    IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 3, 256, 0, 255, 1, 1); 
+    IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 15, 20, 50, 2, 1);
+    IDataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 10, 1000, 5000, 500, 1);
+    IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS",100, 0, 99, 1, 1);
+    IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 256, 0, 255, 1, 1); 
     
     //Create Data Records  
     MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
@@ -278,6 +278,10 @@ void XMLModelTest()
   MXADataModelPtr model = MXADataModel::New();
   XMLIODelegate iodelegate; // Create on the stack
   BOOST_REQUIRE ( iodelegate.readModelFromFile(xmlFile, model.get(), true) >= 0);
+  //model->printDataDimensions(std::cout, 2);
+  BOOST_REQUIRE (model->getNumberOfDataDimensions() == 4);
+  
+  
   BOOST_REQUIRE ( iodelegate.writeModelToFile(XML_TEST_FILE, model.get(), true) >= 0);
   
   // Now compare the xml files

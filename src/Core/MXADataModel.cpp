@@ -119,34 +119,80 @@ std::string MXADataModel::getDataRoot()
 // -----------------------------------------------------------------------------
 //  Adds a data dimension object to our internal list
 // -----------------------------------------------------------------------------
-void MXADataModel::addDataDimension(IDataDimensionPtr dimension, bool setIndex)
+void MXADataModel::addDataDimension(IDataDimensionPtr dimension)
 {
   this->_dataDimensions.push_back(dimension);
-  if (setIndex)
-  {
-    int32 index = this->_dataDimensions.size() - 1;
-    if (index < 0) { index = 0;}
-    dimension->setIndex(index);
-  }
+  int32 index = this->_dataDimensions.size() - 1;
+  if (index < 0) { index = 0;}
+  dimension->setIndex(index);
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
 IDataDimensionPtr MXADataModel::addDataDimension(std::string name, std::string altName,
-                                int32 index, int32 count, int32 startValue, 
+                                int32 count, int32 startValue, 
                                 int32 endValue, int32 increment, int32 uniform)
 {
+  int32 index = -1;
   MXADataDimensionPtr dim = 
     MXADataDimension::New(name, altName, index, count, startValue, endValue, increment, uniform);
   
   if (endValue == -1) {
     dim->setEndValue (startValue + (increment * (count - 1) ) );
   }
-
-  this->addDataDimension(dim, false);
+  dim->calculateCount();
+  this->addDataDimension(dim); // The index will be set correctly in this method
   return dim;
 }
+
+
+// -----------------------------------------------------------------------------
+//TODO: Write a Unit Test for this
+// -----------------------------------------------------------------------------
+int32 MXADataModel::insertDataDimension(IDataDimensionPtr dimension, int32 index)
+{
+  if(index < 0 ) { return -1; } // Trying to add a negative index.
+  if (static_cast<IDataDimensions::size_type>(index) >= this->_dataDimensions.size() )
+  {
+    this->_dataDimensions.resize( index ); // This may increase the size of the vector with Null wrapped shared pointers
+  }
+  IDataDimensions::iterator iter = this->_dataDimensions.begin();
+  this->_dataDimensions.insert(iter + index, dimension);
+  //Update the index value for each dimension
+  index = 0;
+  IDataDimension* dim;
+  for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
+    dim = (*iter).get();
+    if (NULL == dim) { continue; }
+    dim->setIndex(index);
+    ++index;
+  }
+  return 1;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void MXADataModel::squeezeDataDimensions()
+{
+  for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
+    if ( (*iter).get() == NULL)
+    {
+      this->_dataDimensions.erase(iter);
+      iter = this->_dataDimensions.begin();
+    }
+  }
+  int32 index = 0;
+  IDataDimension* dim;
+  for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
+    dim = (*iter).get();
+    if (NULL == dim) { continue; }
+    dim->setIndex(index);
+    ++index;
+  }
+}
+
 
 // -----------------------------------------------------------------------------
 //  Removes a Data Dimension from this list using the index into the vector
@@ -154,7 +200,7 @@ IDataDimensionPtr MXADataModel::addDataDimension(std::string name, std::string a
 int32 MXADataModel::removeDataDimension(int32 index)
 {
   int32 success = -1;
-  int32 i =0;
+  int32 i = 0;
   for (IDataDimensions::iterator iter = _dataDimensions.begin(); iter != _dataDimensions.end(); ++iter)
   {
     if ( index == i ) 
@@ -179,6 +225,7 @@ int32 MXADataModel::removeDataDimension(const std::string &dimensionName)
   for (IDataDimensions::iterator iter = _dataDimensions.begin(); iter != _dataDimensions.end(); ++iter)
   {
     dim = static_cast<MXADataDimension*>( (*(iter)).get() );
+    if (NULL == dim) { continue; }
     if (dim->getDimensionName().compare(dimensionName) == 0)
     {
       _dataDimensions.erase( iter );
@@ -188,6 +235,75 @@ int32 MXADataModel::removeDataDimension(const std::string &dimensionName)
     ++i;
   }
   return success;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int32 MXADataModel::moveDataDimension(int32 fromIndex, int32 toIndex)
+{
+  // Validate both indices
+  if (fromIndex < 0 || static_cast<IDataDimensions::size_type>(fromIndex) >= this->_dataDimensions.size() ||
+      toIndex < 0 || static_cast<IDataDimensions::size_type>(toIndex) >= this->_dataDimensions.size() )
+   {
+     std::cout << "Tried to move data dimension from index " << fromIndex <<
+     " to index " << toIndex << ". The valid range is 0 to " << this->_dataDimensions.size() - 1 << std::endl;
+     return -1;
+   }
+  if (fromIndex == toIndex) { return 1; } // Moving index to itself.
+  
+  IDataDimensionPtr src = this->_dataDimensions[fromIndex];
+  this->_dataDimensions.erase(this->_dataDimensions.begin() + fromIndex);
+  this->_dataDimensions.insert(this->_dataDimensions.begin() + toIndex, src);
+
+  //Update the index value for each dimension
+  int32 index = 0;
+  IDataDimension* dim;
+  for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
+    dim = (*iter).get();
+    if (NULL == dim) { continue; }
+    dim->setIndex(index);
+    ++index;
+  }
+
+  return 1;  
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+int32 MXADataModel::swapDataDimensions(int32 index1, int32 index2)
+{
+  if (index1 < 0 || static_cast<IDataDimensions::size_type>(index1) >= this->_dataDimensions.size() ||
+      index2 < 0 || static_cast<IDataDimensions::size_type>(index2) >= this->_dataDimensions.size() )
+   {
+     std::cout << "Tried to swap data dimensions " << index1 <<
+     " and " << index2 << ". The valid range is 0 to " << this->_dataDimensions.size() - 1 << std::endl;
+     return -1;
+   }
+  
+  if (index1 == index2)
+  {
+    return 1;
+  }
+  
+  IDataDimensionPtr src = this->_dataDimensions[index1];
+  IDataDimensionPtr dest = this->_dataDimensions[index2];
+  
+  this->_dataDimensions[index1] = dest;
+  this->_dataDimensions[index2] = src;
+  
+  //Update the index value for each dimension
+  int32 index = 0;
+  IDataDimension* dim;
+  for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
+    dim = (*iter).get();
+    if (NULL == dim) { continue; }
+    dim->setIndex(index);
+    ++index;
+  }
+  
+  return 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -219,6 +335,7 @@ IDataDimension* MXADataModel::getDataDimension(std::string dimName)
   MXADataDimension* currentDim = NULL;
   for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
     currentDim = static_cast<MXADataDimension*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
+    if (NULL == currentDim) { continue; }
     if (   currentDim->getDimensionName() == dimName  ) {
       return currentDim;
     }
@@ -556,6 +673,7 @@ void MXADataModel::printDataDimensions(std::ostream& os, int32 indent)
   for (IDataDimensions::iterator iter = _dataDimensions.begin(); iter != _dataDimensions.end(); ++iter)
   {
     dim = dynamic_cast<MXADataDimension*>( (*iter).get() );
+    if (NULL == dim) { continue; }
     dim->printNode(os, indent);
     //(*(iter))->printNode(os, indent);
   }  
@@ -599,11 +717,13 @@ void MXADataModel::printUserMetaData(std::ostream& os, int32 indent)
 // -----------------------------------------------------------------------------
 MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, bool closeWhenFinished)
 {
+  int32 err = -1;
   if (this->_ioDelegate.get() != NULL)
   {
-    return this->_ioDelegate->readModelFromFile(fileName, this, closeWhenFinished);
+    err =  this->_ioDelegate->readModelFromFile(fileName, this, closeWhenFinished);
+    this->squeezeDataDimensions(); // Remove extra NULL data dimensions
   }
-  return -1;
+  return err;
 }
 
 // -----------------------------------------------------------------------------
@@ -611,11 +731,13 @@ MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, bool clo
 // -----------------------------------------------------------------------------
 MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished)
 {
+  int32 err = -1;
   if (ioDelegate.get() != NULL)
   {
-    return ioDelegate->readModelFromFile(fileName, this, closeWhenFinished);
+    err = ioDelegate->readModelFromFile(fileName, this, closeWhenFinished);
+    this->squeezeDataDimensions(); // Remove extra NULL data dimensions
   } 
-  return -1;
+  return err;
 }
 
 // -----------------------------------------------------------------------------
@@ -625,6 +747,7 @@ MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, bool cl
 {
   if (this->_ioDelegate.get() != NULL)
   {
+    this->squeezeDataDimensions(); // Remove extra NULL data dimensions
     return this->_ioDelegate->writeModelToFile(fileName, this, closeWhenFinished);
   }
   return -1;
@@ -637,6 +760,7 @@ MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, IODeleg
 {
   if (ioDelegate.get() != NULL)
   {
+    this->squeezeDataDimensions(); // Remove extra NULL data dimensions
     return ioDelegate->writeModelToFile(fileName, this, closeWhenFinished);
   } 
   return -1;
@@ -780,9 +904,10 @@ bool MXADataModel::isValid(std::string &message)
     valid = false;
   }
   
+  MXADataDimension* dim = NULL;
   for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
-    MXADataDimension* dim = NULL;
     dim = static_cast<MXADataDimension*>((*(iter)).get());
+    if (NULL == dim) { continue; }
     if ( dim->isValid(message) == false )
     {
       valid = false;

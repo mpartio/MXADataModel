@@ -60,8 +60,8 @@ bool XMLIODelegate::supportedMXAFileVersion(float version)
 }
 
 // -----------------------------------------------------------------------------
-// Returns true if the file referred to by fileId is an HDF5
-//  compliant file (has the correct file type and version)
+// Returns true if the file referred to by fileId is an XML file that conforms
+// to the DTD for the MXA project compliant file (has the correct file type and version)
 // -----------------------------------------------------------------------------
 //TODO: Implement XMLIODelegate::isMXAFile(hid_t fileId)
 bool XMLIODelegate::isMXAFile(int32 fileId)
@@ -74,8 +74,9 @@ bool XMLIODelegate::isMXAFile(int32 fileId)
 }
 
 // -----------------------------------------------------------------------------
-// Returns true if the file referred to by filename is an HDF5
-//  compliant file (has the correct file type and version)
+// Returns true if the file referred to by fileId is an XML file that conforms
+// to the DTD for the MXA project compliant file (has the correct file type and version)
+// -----------------------------------------------------------------------------
 //TODO: Implement XMLIODelegate::isMXAFile(std::string filename)
 bool XMLIODelegate::isMXAFile(const std::string &filename)
 {
