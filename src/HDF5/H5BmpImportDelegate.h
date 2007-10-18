@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2007, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef H5BMPIMPORTDELEGATE_H_
 #define H5BMPIMPORTDELEGATE_H_
 
@@ -29,7 +39,7 @@ namespace FileSystem = boost::filesystem;
  * @author Mike Jackson
  * @date April 2007
  * @class H5BmpImportDelegate HDF5/H5BmpImportDelegate.h HDF5/H5BmpImportDelegate.h
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class MXA_EXPORT H5BmpImportDelegate : public IImportDelegate
 {
