@@ -31,7 +31,7 @@
  * data record. Data records can have any number of children but only one parent.
  * @author  Mike Jackson
  * @date March 2007
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  *  
  */
 class MXA_EXPORT MXADataRecord :  public IDataRecord
@@ -51,7 +51,7 @@ public:
   
   /**
   * @brief Used to create a new MXANode
-  * @param luid The Type of Node this is going to be
+  * @param luid The local unique Id for this record
   * @param name The Name of this node
   * @param altName The Alternate name for the Data Record.
   * @return A Boost SharedPointer to the MXANode Object

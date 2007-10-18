@@ -292,6 +292,11 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
     if ( attrMap.find(MXA::MXA_INCREMENT_TAG) != attrMap.end() ) { StringUtils::stringToNum(increment, attrMap[MXA::MXA_INCREMENT_TAG], std::dec);  }
     if ( attrMap.find(MXA::MXA_UNIFORM_TAG) != attrMap.end() ) { StringUtils::stringToNum(uniform, attrMap[MXA::MXA_UNIFORM_TAG], std::dec); }
     
+    if (uniform != 0 && uniform != 1)
+    {
+      std::cout << "uniform value is NOT valid for Dimension " << attrMap[MXA::MXA_NAME_TAG] << std::endl;
+      uniform = 1;
+    }
     MXADataDimensionPtr dim = MXADataDimension::New( attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG], index, count, start, end, increment, uniform);
     this->_dataModel->insertDataDimension(dim, index);
 }
