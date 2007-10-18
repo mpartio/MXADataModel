@@ -37,6 +37,7 @@ enum LOAD_TEXTUREBMP_RESULT {
   	int32 getHeight();
   	int32 getWidth();
   	int32 getNumberOfChannels();
+  	bool isGrayscaleImage();
   	LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
   private:
   	long bytesRead;
@@ -66,5 +67,6 @@ enum LOAD_TEXTUREBMP_RESULT {
   	void flipBitmap();
   	void convertToGrayscale();
   };
+  
   
 #endif
