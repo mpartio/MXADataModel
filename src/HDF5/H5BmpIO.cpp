@@ -42,7 +42,7 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
     return err;
   }
   
-  if (true == asGrayscale)
+  if (asGrayscale)
   {
      err =  _importGrayscaleBmpImage(rgbRaster, fileId, datasetName);
   } 
@@ -175,5 +175,10 @@ herr_t exportBmp(hid_t fileId,
 {
   // LEAVE THIS UNIMPLEMENTED FOR NOW
   return -1;
+}
+
+unsigned int checkShortSize()
+{
+	return sizeof(short)
 }
 
