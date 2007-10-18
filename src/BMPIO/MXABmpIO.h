@@ -38,17 +38,17 @@ enum LOAD_TEXTUREBMP_RESULT {
   	int32 getWidth();
   	int32 getNumberOfChannels();
   	LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
-  protected:
+  private:
+  	long bytesRead;
+  	// Palette used for paletted images during load.
+	uint8 palette[3][256];
   	int32 width;
   	int32 height;
   	int32 numChannels;
   	FILE* file;
   	MXABMPFileHeader fileHeader;
   	MXABMPDIBHeader dibHeader;
-  private:
-  	long bytesRead;
-  	// Palette used for paletted images during load.
-	uint8 palette[3][256];
+  	bool isGrayscale;
 
   	int32 read32BitValue();
   	int16 read16BitValue();
@@ -64,6 +64,7 @@ enum LOAD_TEXTUREBMP_RESULT {
   	LOAD_TEXTUREBMP_RESULT readBitmapData24Bit(uint8*);
   	bool handleEscapeCode(int, int*, int*, LOAD_TEXTUREBMP_RESULT*);
   	void flipBitmap();
+  	void convertToGrayscale();
   };
   
 #endif
