@@ -1,0 +1,144 @@
+#!/bin/bash
+
+# //TODO: Add Icon File and copy it to the bundle
+# This script attempts to copy needed 3rd party libraries and frameworks into 
+# the application bundle. It will then attempt to set the 'install_name' for 
+# each library so that it references either the PlugIns or Frameworks directory.
+# At this time testing has only been done with Qt 4.3 built as Frameworks. If you
+# build them as regular dylibs then this script is going to need to be cleaned up.
+# There is some support for dylibs but the script is known not to work at this
+# time. The Script will change the HDF5, TIFF, and Boost libraries. Each of these
+# libraries is assumed to have been built with some sort of rpath already. We are
+# dependant on that fact.
+
+BIN_DIR="@EXECUTABLE_OUTPUT_PATH@"
+cd ${BIN_DIR}
+
+dylib=".dylib"
+PLUGINS_DIR_NAME="Lib"
+QT_APPLICATION_APP_BUNDLE="@OS_X_APP_NAME@.app"
+QT_APPLICATION_APP_NAME="@OS_X_APP_NAME@.app/Contents/MacOS/@OS_X_APP_NAME@"
+PLUGINS_PATH="@OS_X_APP_NAME@.app/Contents/${PLUGINS_DIR_NAME}"
+FRAMEWORKS_PATH="@OS_X_APP_NAME@.app/Contents/Frameworks"
+RPATH_PLUGIN_PATH="@executable_path/../${PLUGINS_DIR_NAME}"
+RPATH_FRAMEWORK_PATH="@executable_path/../Frameworks"
+
+TIFF_LIBRARY="@TIFF_LIBRARY@"
+TIFF_LIB_NAME=$(basename ${TIFF_LIBRARY})
+
+HDF5_LIBRARY="@HDF5_LIBRARY@"
+HDF5_LIB_NAME=$(basename ${HDF5_LIBRARY})
+
+BOOST_FILESYSTEM_LIBRARY="@BOOST_FILESYSTEM_LIB@"
+if [[ ${BOOST_FILESYSTEM_LIBRARY} != "" ]]; 
+then
+BOOST_FILESYSTEM_LIB_NAME=$(basename ${BOOST_FILESYSTEM_LIBRARY})
+fi
+
+EXPAT_LIBRARY="@EXPAT_LIBRARY@"
+EXPAT_LIB_NAME=$(basename ${EXPAT_LIBRARY})
+
+DEBUG=0
+
+echo "*-----------------------------------------------------------*"
+echo "* Copying MXA Libaray and Support Libraries for ${QT_APPLICATION_APP_BUNDLE}"
+echo "* Located in ${BIN_DIR}"
+
+# Create the PlugIns and Frameworks Directories
+mkdir -p "${PLUGINS_PATH}"
+mkdir -p "${FRAMEWORKS_PATH}"
+
+# -----------------------------------------------------------------------------
+# Copy the MXADataModel Library into the App package and adjust all Rpaths
+# -----------------------------------------------------------------------------
+lib="lib@MXADATAMODEL_LIB_NAME@.dylib"
+path=$(dirname ${lib})
+file=$(basename ${lib})
+echo "* Copying MXA Library -->${lib}<-- into ${PLUGINS_DIR_NAME} Directory"
+cp "${lib}" "${PLUGINS_PATH}"
+# Change the internal rpath on the MXADataModel Library
+install_name_tool -id "${RPATH_PLUGIN_PATH}/${lib}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+# Change the Tiff Library
+install_name_tool -change "${TIFF_LIBRARY}" "${RPATH_PLUGIN_PATH}/${TIFF_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+# Change the HDF5 Lbrary
+install_name_tool -change "${HDF5_LIBRARY}" "${RPATH_PLUGIN_PATH}/${HDF5_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+# Change the Boost Filesystem library
+if [[ ${BOOST_FILESYSTEM_LIBRARY} != "" ]]; 
+then
+install_name_tool -change "${BOOST_FILESYSTEM_LIB_NAME}" "${RPATH_PLUGIN_PATH}/${BOOST_FILESYSTEM_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+fi
+# Change the MXADataViewer executable to have the proper rpath for the MXADataModel Library
+install_name_tool -change "${BIN_DIR}/${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+
+
+# -----------------------------------------------------------------------------
+# Copy the HDF5 Library into the App package and adjust all Rpaths
+# -----------------------------------------------------------------------------
+lib="${HDF5_LIBRARY}"
+path=$(dirname ${lib})
+file=$(basename ${lib})
+if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
+then 
+echo "* Copying HDF5 Library -->${HDF5_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
+cp "${lib}" "${BIN_DIR}/${PLUGINS_PATH}"
+# Change internal id of the HDF5 Library
+install_name_tool -id "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${PLUGINS_PATH}/${file}"
+# Change the MXADataViewer executable to have the proper rpath for the HDF5 Library
+install_name_tool -change "${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+fi
+
+
+# -----------------------------------------------------------------------------
+# Copy the Tiff Library into the App package and adjust all Rpaths
+# -----------------------------------------------------------------------------
+lib="${TIFF_LIBRARY}"
+path=$(dirname ${lib})
+file=$(basename ${lib})
+if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
+then
+echo "* Copying Tiff Library -->${TIFF_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
+cp "${lib}" "${BIN_DIR}/${PLUGINS_PATH}"
+# Change internal id of the HDF5 Library
+install_name_tool -id "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${PLUGINS_PATH}/${file}"
+# Change the MXADataViewer executable to have the proper rpath for the tiff Library
+install_name_tool -change "${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+fi
+
+# -----------------------------------------------------------------------------
+# Copy the Tiff Library into the App package and adjust all Rpaths
+# -----------------------------------------------------------------------------
+lib="${EXPAT_LIBRARY}"
+path=$(dirname ${lib})
+file=$(basename ${lib})
+if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
+then
+echo "* Copying Expat Library -->${EXPAT_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
+cp "${lib}" "${BIN_DIR}/${PLUGINS_PATH}"
+# Change internal id of the HDF5 Library
+install_name_tool -id "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${PLUGINS_PATH}/${file}"
+# Change the MXADataViewer executable to have the proper rpath for the Expat Library
+install_name_tool -change "${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+fi
+
+# -----------------------------------------------------------------------------
+# Copy the Boost Library into the App package and adjust all Rpaths
+# -----------------------------------------------------------------------------
+### Probably should pass in a list of Boost libraries and make a loop out of this
+if [[ ${BOOST_FILESYSTEM_LIBRARY} != "" ]]; 
+then
+  lib="${BOOST_FILESYSTEM_LIBRARY}"
+  path=$(dirname ${lib})
+  file=$(basename ${lib})
+  if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
+  then
+    echo "* Copying Boost Filesystem Library -->${BOOST_FILESYSTEM_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
+    cp "${BOOST_FILESYSTEM_LIBRARY}" "${BIN_DIR}/${PLUGINS_PATH}"
+    # Change internal id of the boost filesystem Library
+
+    install_name_tool -id "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${PLUGINS_PATH}/${file}"
+    # Change the MXADataViewer executable to have the proper rpath for the boost Library
+    install_name_tool -change "${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+  fi
+fi
+echo "*-----------------------------------------------------------*"
+echo ""
