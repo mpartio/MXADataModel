@@ -21,14 +21,11 @@ namespace MXA
   }
 }
 
-
-const std::string H5IM_INTERLACE_PIXEL("INTERLACE_PIXEL");
-
 /**
 * @brief General IO class for Bmp images
 * @author Mike Jackson/Herb Mullens
 * @date October 2007
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT H5BmpIO 
 {

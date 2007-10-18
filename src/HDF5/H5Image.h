@@ -26,8 +26,10 @@
 //-- HDF5 Header
 #include <hdf5.h>
 
-namespace H5ImageConst
+namespace MXA
 {
+ namespace H5Image
+ {
   // -----------------------------------------------------------------------------
   //  
   // -----------------------------------------------------------------------------
@@ -55,12 +57,12 @@ namespace H5ImageConst
     const std::string LowerLeft("LL");
     const std::string UpperRight("UR");
     const std::string LowerRight("LR");
+ }
 }
-
 /**
 * @brief Reimplementation of the H5IM API from the HDF5 High Level API set.
 * @date April 2007
-* @version $Revision: 1.10 $
+* @version $Revision: 1.11 $
 */
 class H5Image
 {

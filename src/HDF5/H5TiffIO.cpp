@@ -176,13 +176,13 @@ herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::s
   // Need to update the attributes to be correct for a grayscale image
   H5Lite::writeStringAttribute(groupId, 
                          datasetName, 
-                         const_cast<std::string&>(H5ImageConst::ImageSubclass), 
-                         const_cast<std::string&>(H5ImageConst::ImageGrayScale) );
- // H5LTset_attribute_string(groupId, datasetName.c_str(), H5ImageConst::ImageSubclass, H5ImageConst::ImageGrayScale);
+                         const_cast<std::string&>(MXA::H5Image::ImageSubclass), 
+                         const_cast<std::string&>(MXA::H5Image::ImageGrayScale) );
+ // H5LTset_attribute_string(groupId, datasetName.c_str(), MXA::H5Image::ImageSubclass, MXA::H5Image::ImageGrayScale);
   uint32 white_is_zero = 0;
   H5Lite::writeScalarAttribute(groupId, 
                          datasetName, 
-                         const_cast<std::string&>(H5ImageConst::ImageWhiteIsZero), 
+                         const_cast<std::string&>(MXA::H5Image::ImageWhiteIsZero), 
                          white_is_zero);
   
   // set the display origin 
@@ -192,8 +192,8 @@ herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::s
   //    "LR": (0,0) is at the lower right.
   err = H5Lite::writeStringAttribute(groupId, 
                                datasetName, 
-                               const_cast<std::string&>(H5ImageConst::DisplayOrigin), 
-                               const_cast<std::string&>(H5ImageConst::UpperLeft) );
+                               const_cast<std::string&>(MXA::H5Image::DisplayOrigin), 
+                               const_cast<std::string&>(MXA::H5Image::UpperLeft) );
   if (err < 0) {
     std::cout << "Error setting display origin" << std::endl;
     return -1;
@@ -334,7 +334,7 @@ int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, const string &img_dat
   herr_t err = 0;
   int32 dimRank;
 
-  err = H5Lite::getAttributeNDims(fileId, img_dataset_name, const_cast<std::string&>(H5ImageConst::ImageSubclass), dimRank);
+  err = H5Lite::getAttributeNDims(fileId, img_dataset_name, const_cast<std::string&>(MXA::H5Image::ImageSubclass), dimRank);
   if (err < 0) {
     return UnknownTiffImage;
   }
@@ -345,7 +345,7 @@ int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, const string &img_dat
   std::vector<uint64> dimensions;
   err = H5Lite::getAttributeInfo(fileId,
                                  img_dataset_name, 
-                                 const_cast<std::string&>(H5ImageConst::ImageSubclass), 
+                                 const_cast<std::string&>(MXA::H5Image::ImageSubclass), 
                                  dimensions, class_type, type_size, attrType );
   err = H5Tclose(attrType); 
   if (err < 0) {
@@ -355,15 +355,15 @@ int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, const string &img_dat
   if (class_type == H5T_STRING) {
     //char atStr[type_size];
     std::string atStr;
-    err = H5Lite::readStringAttribute(fileId, img_dataset_name, H5ImageConst::ImageSubclass, atStr);
+    err = H5Lite::readStringAttribute(fileId, img_dataset_name, MXA::H5Image::ImageSubclass, atStr);
 
     if (err < 0) {
       return UnknownTiffImage;
     }
 
-    if (atStr == H5ImageConst::ImageGrayScale) {
+    if (atStr == MXA::H5Image::ImageGrayScale) {
       return GrayscaleTiffImage;
-    } else if (atStr == H5ImageConst::ImageIndexed ) {
+    } else if (atStr == MXA::H5Image::ImageIndexed ) {
       return PaletteColorTiffImage;
     }
   }

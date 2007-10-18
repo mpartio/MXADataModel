@@ -1,8 +1,11 @@
 #include "H5BmpIO.h"
+
+
 //-- MXA Headers
+#include <Common/LogTime.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Image.h>
-#include <Common/LogTime.h>
+
 
 
 // -----------------------------------------------------------------------------
@@ -103,13 +106,13 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, hid_t fileId, const s
    // Need to update the attributes to be correct for a grayscale image
    H5Lite::writeStringAttribute(fileId, 
                           datasetName, 
-                          const_cast<std::string&>(H5ImageConst::ImageSubclass), 
-                          const_cast<std::string&>(H5ImageConst::ImageGrayScale) );
-  // H5LTset_attribute_string(groupId, datasetName.c_str(), H5ImageConst::ImageSubclass, H5ImageConst::ImageGrayScale);
+                          const_cast<std::string&>(MXA::H5Image::ImageSubclass), 
+                          const_cast<std::string&>(MXA::H5Image::ImageGrayScale) );
+  // H5LTset_attribute_string(groupId, datasetName.c_str(), MXA::H5Image::ImageSubclass, MXA::H5Image::ImageGrayScale);
    uint32 white_is_zero = 0;
    H5Lite::writeScalarAttribute(fileId, 
                           datasetName, 
-                          const_cast<std::string&>(H5ImageConst::ImageWhiteIsZero), 
+                          const_cast<std::string&>(MXA::H5Image::ImageWhiteIsZero), 
                           white_is_zero);
 
    // set the display origin 
@@ -119,8 +122,8 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, hid_t fileId, const s
    //    "LR": (0,0) is at the lower right.
    err = H5Lite::writeStringAttribute(fileId, 
                                 datasetName, 
-                                const_cast<std::string&>(H5ImageConst::DisplayOrigin), 
-                                const_cast<std::string&>(H5ImageConst::UpperLeft) );
+                                const_cast<std::string&>(MXA::H5Image::DisplayOrigin), 
+                                const_cast<std::string&>(MXA::H5Image::UpperLeft) );
    if (err < 0) {
      std::cout << "Error setting display origin" << std::endl;
      return -1;
@@ -157,7 +160,7 @@ herr_t H5BmpIO::_importRGBFullColorBmp(uint8* rgbRaster, hid_t fileId, const std
   // Store byte array to HDF5 File
   // SET THE INTERLACE MODE CORRECTLY - EITHER H5IM_INTERLACE_PIXEL OR H5IM_INTERLACE_PLANE
   err = H5Image::H5IMmake_image_24bit(fileId, datasetName, width, height,
-			                  H5IM_INTERLACE_PIXEL.c_str() , (unsigned char *)rgbRaster);
+			                  MXA::H5Image::InterlacePixel, (unsigned char *)rgbRaster);
   if (err<0) {
     std::cout << "Error storing 24 bit true color Image data with H5IM API. datasetName: " << datasetName << std::endl; 
   }
@@ -177,8 +180,11 @@ herr_t exportBmp(hid_t fileId,
   return -1;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 unsigned int checkShortSize()
 {
-	return sizeof(short)
+	return sizeof(short);
 }
 
