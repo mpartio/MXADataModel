@@ -11,9 +11,6 @@
 #ifndef _IMXADATAMODEL_H
 #define _IMXADATAMODEL_H
 
-//TODO: Add moveDataDimension method to swap Data Dimensions
-//TODO: Add removeDataRecord method
-
 
 //-- MXA Includes
 #include <Common/DLLExport.h>
@@ -29,7 +26,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  *  
  */
 class MXA_EXPORT IDataModel
@@ -81,15 +78,13 @@ class MXA_EXPORT IDataModel
     /**
     * @brief Adds a Data Dimension to the data model
     * @param dimension The IDataDimension to add to the model
-    * @param setIndex Automatically set the index for this Dimension. Default is false
     */
     virtual void addDataDimension(IDataDimensionPtr dimension ) = 0;
     
     /**
     * @brief Adds a Data Dimension by declaring all the values of the data dimension
     * @param name Name of the data dimension
-    * @param altName Alternate name of the data dimension
-    * @param index The index of the dimension
+    * @param altName An Alternate name for the data dimension
     * @param count The Number of entries this data dimension will have in the data file
     * @param startValue THe starting index of the entries
     * @param endValue The ending value (inclusive) of the entries
@@ -183,6 +178,13 @@ class MXA_EXPORT IDataModel
     * this is provided for convenience and consistancy.
     */
     virtual void addDataRecord(IDataRecordPtr record, IDataRecordPtr parent) = 0;
+    
+    /**
+     * @brief Removes the Data Record from the Model
+     * @param record The record to remove from the Data model
+     * @return Error Condition
+     */
+    virtual int32 removeDataRecord(IDataRecordPtr record) = 0;
     
     /**
     * @brief Returns the Data Records from the model. The natural form of the 

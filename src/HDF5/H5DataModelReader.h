@@ -11,9 +11,6 @@
 #ifndef _HDFREADER_H_
 #define _HDFREADER_H_
 
-//TODO: Read compliant Test File into a Data Model
-
-
 //MXA Includes
 #include <Common/DLLExport.h>
 #include <Core/MXADataModel.h>
@@ -33,7 +30,7 @@
  * from the HDF5 data file
  * @author Mike Jackson
  * @date Mar 2007
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  *   H5DataModelReader.h
  */
 class MXA_EXPORT H5DataModelReader : public IDataModelReader

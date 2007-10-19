@@ -294,7 +294,7 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
     
     if (uniform != 0 && uniform != 1)
     {
-      std::cout << "uniform value is NOT valid for Dimension " << attrMap[MXA::MXA_NAME_TAG] << std::endl;
+      // std::cout << "uniform value is NOT valid for Dimension " << attrMap[MXA::MXA_NAME_TAG] << std::endl;
       uniform = 1;
     }
     MXADataDimensionPtr dim = MXADataDimension::New( attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG], index, count, start, end, increment, uniform);

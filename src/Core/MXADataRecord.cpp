@@ -1,4 +1,5 @@
 #include <Core/MXADataRecord.h>
+#include <Common/LogTime.h>
 
 // Set the initial value of the _uniqueGUIDValue
 int MXADataRecord::_uniqueGUIDValue(0);
@@ -34,6 +35,7 @@ MXADataRecordPtr MXADataRecord::New(int luid, std::string name, std::string altN
 // -----------------------------------------------------------------------------
 MXADataRecord::~MXADataRecord()
 {
+  //std::cout << logTime() << "~MXADataRecord {" << this->_uniqueId << "}" << std::endl;
 }
 
 
@@ -253,6 +255,13 @@ void MXADataRecord::removeChild(IDataRecord* child)
   }
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void MXADataRecord::removeAllChildren()
+{
+  this->_children.clear();
+}
 
 // -----------------------------------------------------------------------------
 //  

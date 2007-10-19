@@ -273,7 +273,7 @@ void GenerateMasterXMLFile()
 // -----------------------------------------------------------------------------
 void XMLModelTest()
 {
-  std::cout << "XMLModelTest" << std::endl;
+  std::cout << "XMLModelTest Running..." << std::endl;
   std::string xmlFile(MASTER_XML_FILE);
   MXADataModelPtr model = MXADataModel::New();
   XMLIODelegate iodelegate; // Create on the stack
@@ -315,7 +315,7 @@ void XMLModelTest()
 // -----------------------------------------------------------------------------
 void XMLTemplateTest()
 {
-  std::cout << "XMLTemplateTest" << std::endl;
+  std::cout << "XMLTemplateTest Running..." << std::endl;
   std::string errorMessage;
   std::string templateFile (XML_TEMPLATE_TEST_FILE);
   MXADataModelPtr model = createModelTemplate();

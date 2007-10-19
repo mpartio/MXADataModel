@@ -148,7 +148,7 @@ IDataDimensionPtr MXADataModel::addDataDimension(std::string name, std::string a
 
 
 // -----------------------------------------------------------------------------
-//TODO: Write a Unit Test for this
+//
 // -----------------------------------------------------------------------------
 int32 MXADataModel::insertDataDimension(IDataDimensionPtr dimension, int32 index)
 {
@@ -378,6 +378,36 @@ void MXADataModel::addDataRecord(IDataRecordPtr record, IDataRecordPtr parent)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
+int32 MXADataModel::removeDataRecord(IDataRecordPtr record)
+{
+  int32 err = -1;
+  IDataRecordPtr parentPtr = record.get()->getParent().lock();
+  if (NULL != parentPtr.get() ) // The record has a valid parent
+  {
+    parentPtr->removeChild( record.get() );
+    err = 1;
+  }
+  
+  if (NULL == parentPtr.get() || -1 == parentPtr->getGuid() )
+// The record does NOT have a valid parent and is a top level Data Record
+  {
+    for (IDataRecords::iterator iter = this->_dataRecords.begin(); iter != this->_dataRecords.end(); ++iter)
+    {
+      if ( (*(iter)).get() == record.get() )
+      {
+        this->_dataRecords.erase(iter);
+        err = 1;
+        break;
+      }  
+    }
+  }
+  return err;
+}
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 IDataRecords& MXADataModel::getDataRecords()
 {
   return this->_dataRecords;
@@ -566,9 +596,11 @@ MXATypes::MXAError MXADataModel::setRequiredMetaData(std::string researcherName,
 MXATypes::MXAError MXADataModel::setRequiredMetaData(std::map<std::string, std::string> &requiredMetaData)
 {
   std::string message;
+  int32 err = 1;
   if ( MXADataModel::validateRequiredMetaData(requiredMetaData, message) < 0)
   {
-    std::cout << "Meta Data did not Validate." << std::endl;
+    // std::cout << "Meta Data did not Validate." << std::endl;
+    err = -1;
   }
   
   this->_researcherName = requiredMetaData[MXA::MXA_CREATOR_TAG];
@@ -580,7 +612,7 @@ MXATypes::MXAError MXADataModel::setRequiredMetaData(std::map<std::string, std::
   this->_datasetPedigree = requiredMetaData[MXA::MXA_PEDIGREE_TAG];
   this->_datasetPublicReleaseNumber = requiredMetaData[MXA::MXA_RELEASE_NUMBER_TAG];
   
-  return 1;
+  return err;
 }
 
 // -----------------------------------------------------------------------------

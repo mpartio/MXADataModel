@@ -31,7 +31,7 @@
  * data record. Data records can have any number of children but only one parent.
  * @author  Mike Jackson
  * @date March 2007
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  *  
  */
 class MXA_EXPORT MXADataRecord :  public IDataRecord
@@ -169,6 +169,7 @@ public:
   void addChild(IDataRecordPtr child);
   void removeChild(int index);
   void removeChild(IDataRecord* child);
+  void removeAllChildren();
   int32 indexOfChild(IDataRecord* child);
 
   IDataRecordPtr getChildAt(int32 index);

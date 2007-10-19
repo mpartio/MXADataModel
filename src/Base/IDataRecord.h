@@ -19,7 +19,7 @@ class IDataRecordWriter;
  * @brief Abstract class defining the DataRecord public interface
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  *  
  */
 class MXA_EXPORT IDataRecord 
@@ -155,6 +155,10 @@ class MXA_EXPORT IDataRecord
     */
     virtual void removeChild(IDataRecord* child) = 0;
 
+    /**
+    * @brief Removes all the children of this Data Record
+    */
+    virtual void removeAllChildren() = 0;
   
     /**
     * @brief Returns the index of a specific child

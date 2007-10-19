@@ -34,7 +34,7 @@ class MXANode;
  * the data model to an XML file
  * @author  Mike Jackson
  * @date June 2007
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  *  
  */
 class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter, 
@@ -145,6 +145,7 @@ private:
   MXADataModel*       _dataModel;
   XMLIODelegate*      _ioDelegate;
   const std::string   _fileName;
+  int32               _dataRecordIndentation;
   
   boost::shared_ptr<std::ofstream> _ofstreamPtr;
   

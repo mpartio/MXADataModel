@@ -35,7 +35,7 @@ namespace MXA
 * @brief General IO class for Bmp images
 * @author Mike Jackson/Herb Mullens
 * @date October 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT H5BmpIO 
 {
@@ -47,7 +47,7 @@ class MXA_EXPORT H5BmpIO
    * @brief imports a Bmp image into the MXADataModel
    * 
    * @param filename The absolute path to the Bmp file
-   * @param groupId The HDF Group/FileId to store the imported data
+   * @param fileId The HDF Group/FileId to store the imported data
    * @param datasetName The Name of the HDF5 dataset to store the data
    * @param asGrayscale Should the Bmp be stored as a grayscale image
    * @return Error < 0 Error 

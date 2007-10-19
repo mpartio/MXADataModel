@@ -9,7 +9,8 @@
 // -----------------------------------------------------------------------------
 XMLDataModelWriter::XMLDataModelWriter(IFileIODelegate* ioDelegate, MXADataModel* dataModel, const std::string &xmlFileName) :
   _dataModel(dataModel),
-  _fileName(xmlFileName)
+  _fileName(xmlFileName),
+  _dataRecordIndentation(2)
 {
   _ioDelegate  = static_cast<XMLIODelegate*>(ioDelegate);
 }
@@ -153,7 +154,6 @@ void XMLDataModelWriter::_openTag(const std::string &tagName,
       stream << " " << label << "=" << value;
     }
   }
-
   stream  << (group ? ">" : " />") << "\n";
 }
 
@@ -207,7 +207,8 @@ int32 XMLDataModelWriter::writeDataDimensions(int32 depth)
 // -----------------------------------------------------------------------------
 int32 XMLDataModelWriter::writeDataRecords(int32 depth)
 {
-  _openTag(MXA_XML::Data_Records, depth);
+  
+  _openTag(MXA_XML::Data_Records, this->_dataRecordIndentation);
   IDataRecords records =  _dataModel->getDataRecords();
   MXADataRecord* rec;
   int32 err = 0;
@@ -265,12 +266,13 @@ int32 XMLDataModelWriter::writeDataDimension(IDataDimension* dim)
   std::map<std::string, std::string> attrs;
   attrs[MXA::MXA_NAME_TAG] = dim->getDimensionName();
   attrs[MXA::MXA_ALT_NAME_TAG] = dim->getAltName();
-  
+  this->_dataRecordIndentation += 2;
   //Check for uninitialized values since these are all optional. If any of them 
   // are NOT initialized then do not write them to the file.
   if (dim->isPropertyInitialized( dim->getStartValue() ) )
   {
-    attrs[MXA::MXA_START_VALUE_TAG] = StringUtils::numToString(dim->getStartValue() );
+    
+    attrs[MXA::MXA_START_VALUE_TAG] =  StringUtils::numToString(dim->getStartValue() );
   }
   if ( dim->isPropertyInitialized(dim->getEndValue() ) )
   {
@@ -292,7 +294,8 @@ int32 XMLDataModelWriter::writeDataDimension(IDataDimension* dim)
   {
     attrs[MXA::MXA_UNIFORM_TAG] = StringUtils::numToString(dim->getUniform() );
   }
-  _openTag(MXA_XML::Dimension, 1, false, attrs);
+  _openTag(MXA_XML::Dimension, this->_dataRecordIndentation, false, attrs);
+  this->_dataRecordIndentation -= 2;
   return 1;
 }
 
@@ -301,14 +304,14 @@ int32 XMLDataModelWriter::writeDataDimension(IDataDimension* dim)
 // -----------------------------------------------------------------------------
 int32 XMLDataModelWriter::writeDataRecord(IDataRecord* record)
 {
-  int32 depth = 3;
+  //int32 depth = 3;
   int32 err = -1;
   std::map<std::string, std::string> attrs;
   attrs[MXA_XML::Attribute::Name] = record->getRecordName();
   attrs[MXA_XML::Attribute::AltName] = record->getAltName();
-
+  this->_dataRecordIndentation += 2;
   if ( dynamic_cast<IDataRecord*>(record)->hasChildren() ) {
-    _openTag(MXA_XML::Signal_Group, depth - 1, true, attrs);
+    _openTag(MXA_XML::Signal_Group, this->_dataRecordIndentation, true, attrs);
     MXADataRecord* rec;
     IDataRecords records = dynamic_cast<IDataRecord*>(record)->getChildren();
     for ( IDataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
@@ -316,10 +319,11 @@ int32 XMLDataModelWriter::writeDataRecord(IDataRecord* record)
       rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
       err = rec->writeRecord(this);
     }
-    _closeGroupTag(MXA_XML::Signal_Group, depth - 1);
+    _closeGroupTag(MXA_XML::Signal_Group, this->_dataRecordIndentation);
   } else {
-    _openTag(MXA_XML::Signal, depth, false, attrs);
+    _openTag(MXA_XML::Signal, this->_dataRecordIndentation, false, attrs);
   }
+  this->_dataRecordIndentation -= 2;
   return err;
 } 
 

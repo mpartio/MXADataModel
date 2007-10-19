@@ -20,8 +20,8 @@ enum CompressionType {
   };
 
 /**
- * @brief
- * @structure
+ * @brief This holds the bitmap file header values
+ * @struct MXABMPFileHeader
  */
 struct MXABMPFileHeader
 {
@@ -34,8 +34,8 @@ struct MXABMPFileHeader
 
 /* Only supported header is the V3 header */
 /**
- * @brief
- * @structure
+ * @brief This holds the Bitmap info header values. Only V3 headers are supported.
+ * @struct MXABMPDIBHeader
  */
 struct MXABMPDIBHeader
 {

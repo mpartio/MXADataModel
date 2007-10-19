@@ -44,7 +44,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -108,7 +108,6 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Adds a Data Dimension to the end of the Data Dimension data structure
    * thus making the index of the added dimension the largest of all the dimensions.
    * @param dimension The IDataDimension to be added to the list of dimensions.
-   * @param setIndex Sets the Index for the Dimension. Default is false.
    */
   void addDataDimension(IDataDimensionPtr dimension);
 
@@ -116,7 +115,6 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Creates and adds a new Data Dimension to the Model
    * @param name The name for the Data Dimensions
    * @param altName An Alternate Name for the Data Dimension
-   * @param index The index of this dimension
    * @param count The total number of 
    * @param startValue The value this dimension starts at
    * @param endValue The ending value (inclusive) this dimension ends at
@@ -216,6 +214,13 @@ class MXA_EXPORT MXADataModel : public IDataModel
    */
   void addDataRecord(IDataRecordPtr record, IDataRecordPtr parent);
 
+  /**
+   * @brief Removes the Data Record from the Model
+   * @param record The record to remove from the Data model
+   * @return Error Condition
+   */
+  int32 removeDataRecord(IDataRecordPtr record);
+  
   /**
    * @brief Returns the Hierarchy of Data Records
    * @return

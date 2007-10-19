@@ -9,8 +9,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-//TODO: Write test to add/remove Dimensions
-//TODO: Test to check validity of Model/Dimensions
+//TODO: Write a Unit Test for Data Dimension Insertion
 
 #include <MXAConfiguration.h>
 #include <Common/MXATypeDefs.h>
@@ -191,7 +190,6 @@ MXADataModelPtr createModel()
     //Create Data Records
     MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
     model->addDataRecord(rec0);
-      
     errorMessage.clear();
     BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
@@ -246,8 +244,8 @@ void TestRequiredMetaData()
   std::map<std::string, std::string> md;
   md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
   err = model->setRequiredMetaData(md);
+  BOOST_REQUIRE(err == -1); // The data should NOT validate
   errorMessage.clear();
-  BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
   
   md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
   md[MXA::MXA_DSET_NAME_TAG] = "TESTING Example Data Model";
@@ -259,7 +257,7 @@ void TestRequiredMetaData()
   
   err = model->setRequiredMetaData(md);
   errorMessage.clear();
-  BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
+  BOOST_REQUIRE(err >= 0);
 
   researcherName = "Mike Jackson";
   dateCreated = "2006:12:24 15:34.51";
@@ -274,6 +272,7 @@ void TestRequiredMetaData()
                                    datasetName, description, distributionRights, 
                                    releaseNumber, pedigree, derivedSrcFile);
   errorMessage.clear();
+  BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
 }
 
@@ -359,7 +358,7 @@ void TestRetrieveDataRecords()
 // -----------------------------------------------------------------------------
 void TestDataDimensionMethods()
 {
-  std::cout << "TestDataDimensionMethods Running...." << std::endl;
+  std::cout << "Test DataDimensionMethods Running...." << std::endl;
   MXADataModelPtr model = createModel(); // Created on the stack
   int32 error = 0;
   
@@ -440,7 +439,7 @@ void ReReadTestModel()
 // -----------------------------------------------------------------------------
 void TestDimensionCount()
 {
-  std::cout << "Testing Dimension Count" << std::endl;
+  std::cout << "Testing Dimension Count Running...." << std::endl;
   IDataDimensionPtr dim = MXADataDimension::New("Test", "Test", 0, 10, 0, 9, 1, 1);
   int32 count = dim->calculateCount();
   BOOST_REQUIRE(count == 10);
@@ -495,7 +494,7 @@ void TestDimensionCount()
 // -----------------------------------------------------------------------------
 void TestEndianSwap()
 {
-  std::cout << "Testing Endian Swapping" << std::endl;
+  std::cout << "Testing Endian Swapping Running...." << std::endl;
   uint32 value = 0xAABBCCDD;
   MXA::Endian::reverseBytes ( value );
   BOOST_REQUIRE(0xDDCCBBAA == value);
@@ -506,19 +505,44 @@ void TestEndianSwap()
 }
 
 // -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void TestDataRecordRemoval()
+{
+  std::cout << "TestDataRecordRemoval Running...." << std::endl;
+  MXADataModelPtr modelPtr = createModel();
+  MXADataModel* model = modelPtr.get();
+  IDataRecordPtr nullRec;
+  IDataRecordPtr r0;
+  {
+    IDataRecords records = model->getDataRecords();
+    r0 = records[0];
+    BOOST_REQUIRE( r0.use_count() == 3);
+    model->removeDataRecord(r0);
+    BOOST_REQUIRE( r0.use_count() == 2);
+  }
+  BOOST_REQUIRE( model->getDataRecords().size() == 1);
+  BOOST_REQUIRE( r0.use_count() == 1);
+  r0.reset(nullRec.get());
+
+}
+
+
+// -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
-    test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
-    //test->add( new DataModelTest () );
+  test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
+  //test->add( new DataModelTest () );
     
-    test->add( BOOST_TEST_CASE( &WriteTestModel), 0);
-    test->add( BOOST_TEST_CASE( &ReReadTestModel), 0);
-    test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );
-    test->add( BOOST_TEST_CASE( &TestDataDimensionMethods), 0 );
-    test->add( BOOST_TEST_CASE( &TestRequiredMetaData), 0);
-    test->add (BOOST_TEST_CASE( &TestDimensionCount), 0);
-    test->add (BOOST_TEST_CASE( &TestEndianSwap), 0);
-    //test->add( BOOST_TEST_CASE( &TestLookupTableGeneration), 0);
-    return test; 
+  test->add( BOOST_TEST_CASE( &WriteTestModel), 0);
+  test->add( BOOST_TEST_CASE( &ReReadTestModel), 0);
+  test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );
+  test->add( BOOST_TEST_CASE( &TestDataDimensionMethods), 0 );
+  test->add( BOOST_TEST_CASE( &TestRequiredMetaData), 0);
+  test->add (BOOST_TEST_CASE( &TestDimensionCount), 0);
+  test->add (BOOST_TEST_CASE( &TestEndianSwap), 0);
+  test->add (BOOST_TEST_CASE( &TestDataRecordRemoval), 0);
+  
+  return test; 
 }
