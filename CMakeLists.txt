@@ -80,6 +80,7 @@ SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Core/MXADataSource.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataImport.cpp
   ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.cpp
+  ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.cpp
 )
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
@@ -115,28 +116,9 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Utilities/StringUtils.h
   ${MXA_SOURCE_DIR}/src/DataImport/AbstractImportDelegateFactory.h
   ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.h
+  ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.h
+  ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpHeaders.h
 )
-
-
-#---------------------------------------------------------------------------
-# Adding Sources for EasyBMP Bitmap file reading functionality
-#---------------------------------------------------------------------------
-SET (MXA_EASYBMP_SRCS
-    ${MXA_SOURCE_DIR}/src/EasyBMP/BMFH.cpp
-    ${MXA_SOURCE_DIR}/src/EasyBMP/BMIH.cpp
-    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMP.cpp
-    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMPUtilities.cpp
-)
-
-SET (MXA_EASYBMP_HEADERS
-    ${MXA_SOURCE_DIR}/src/EasyBMP/BMFH.h
-    ${MXA_SOURCE_DIR}/src/EasyBMP/BMIH.h
-    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMP.h
-    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMPUtilities.h
-    ${MXA_SOURCE_DIR}/src/EasyBMP/EasyBMP_DataStructures.h
-)
-#  SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_EASYBMP_SRCS} ${MXA_EASYBMP_HEADERS})
-  
   
 # Build with the HDF5 Libraries Enabled. This is the default
 SET(HDF5_SUPPORT "0")
