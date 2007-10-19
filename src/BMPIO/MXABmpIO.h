@@ -1,13 +1,25 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2007, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 
 #ifndef MXA_BMP_IO_H
 #define MXA_BMP_IO_H
 
 
+//-- MXA Includes
 #include <Common/MXAEndian.h>
 #include <Common/MXATypes.h>
 #include <Common/DLLExport.h>
 #include <BMPIO/MXABmpHeaders.h>
 
+//-- C Includes
 #include <stdio.h>
 #include <math.h>
 #include <memory.h>
@@ -36,20 +48,20 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class MXA_EXPORT MXABmpIO
 {
 public:
-	MXABmpIO();
-	virtual ~MXABmpIO();
-	
-	uint8* bitmapData;
-	int32 getHeight();
-	int32 getWidth();
-	int32 getNumberOfChannels();
-	LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
-	
+  MXABmpIO();
+  virtual ~MXABmpIO();
+  
+  uint8* bitmapData;
+  int32 getHeight();
+  int32 getWidth();
+  int32 getNumberOfChannels();
+  LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
+  
 protected:
 
 private:
@@ -60,40 +72,27 @@ private:
   MXABMPFileHeader fileHeader;
   MXABMPDIBHeader dibHeader;
   
-  class MXABmpIO
-  {
-  public:
-  	MXABmpIO();
-  	~MXABmpIO();
-  	int32 getHeight();
-  	int32 getWidth();
-  	int32 getNumberOfChannels();
-  	bool isGrayscaleImage();
-  	void getDataArray(uint8*);
-  	LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
-  private:
-  	uint8* bitmapData;
 
-	int32 bytesRead;
-	// Palette used for paletted images during load.
-	uint8 palette[3][256];
+  int32 bytesRead;
+  // Palette used for paletted images during load.
+  uint8 palette[3][256];
 
-	int32 read32BitValue();
-	int16 read16BitValue();
-	uint8 read8BitValue();
-	
-	LOAD_TEXTUREBMP_RESULT readFileHeader();
-	LOAD_TEXTUREBMP_RESULT readInfoHeader();
-	LOAD_TEXTUREBMP_RESULT readPalette();
-	LOAD_TEXTUREBMP_RESULT readBitmapData(uint8*);
-	LOAD_TEXTUREBMP_RESULT readBitmapData1Bit(uint8*);
-	LOAD_TEXTUREBMP_RESULT readBitmapData4Bit(uint8*);
-	LOAD_TEXTUREBMP_RESULT readBitmapData8Bit(uint8*);
-	LOAD_TEXTUREBMP_RESULT readBitmapData24Bit(uint8*);
-	bool handleEscapeCode(int, int*, int*, LOAD_TEXTUREBMP_RESULT*);
-	void flipBitmap();
-	
-	MXABmpIO(const MXABmpIO&);    //Not Implemented
+  int32 read32BitValue();
+  int16 read16BitValue();
+  uint8 read8BitValue();
+  
+  LOAD_TEXTUREBMP_RESULT readFileHeader();
+  LOAD_TEXTUREBMP_RESULT readInfoHeader();
+  LOAD_TEXTUREBMP_RESULT readPalette();
+  LOAD_TEXTUREBMP_RESULT readBitmapData(uint8*);
+  LOAD_TEXTUREBMP_RESULT readBitmapData1Bit(uint8*);
+  LOAD_TEXTUREBMP_RESULT readBitmapData4Bit(uint8*);
+  LOAD_TEXTUREBMP_RESULT readBitmapData8Bit(uint8*);
+  LOAD_TEXTUREBMP_RESULT readBitmapData24Bit(uint8*);
+  bool handleEscapeCode(int, int*, int*, LOAD_TEXTUREBMP_RESULT*);
+  void flipBitmap();
+  
+  MXABmpIO(const MXABmpIO&);    //Not Implemented
   void operator=(const MXABmpIO&);  //Not Implemented
   
   

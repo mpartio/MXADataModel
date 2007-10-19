@@ -1,23 +1,33 @@
 #include "H5BmpIO.h"
 
 
+//-- MXA Headers
 #include <Common/LogTime.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Image.h>
 
 
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 H5BmpIO::H5BmpIO(hid_t fileId) :
 _fileId(fileId)
 {
   
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 H5BmpIO::~H5BmpIO()
 {
   
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 herr_t H5BmpIO::importBmp(const std::string &filename, 
                   hid_t fileId, 
                   const std::string &datasetName, 
@@ -48,6 +58,9 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
   
 }
 
+// -----------------------------------------------------------------------------
+//  Width and Height are passed by reference. 
+// -----------------------------------------------------------------------------
 herr_t H5BmpIO::_readBmpFile(const std::string &filename,
                               int32 &width,
                               int32 &height,
@@ -60,7 +73,7 @@ herr_t H5BmpIO::_readBmpFile(const std::string &filename,
   MXABmpIO reader = new MXABmpIO();
   LOAD_TEXTUREBMP_RESULT res = reader->loadBMPData(filename.c_str())
   if ( res != LOAD_TEXTUREBMP_SUCCESS )
-  	return -1;
+    return -1;
   width = reader->getWidth();
   height = reader->getHeight();
   
@@ -68,7 +81,10 @@ herr_t H5BmpIO::_readBmpFile(const std::string &filename,
   //If everything goes correctly, then set err to a positive value
   return err;
 }
-
+                              
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, hid_t fileId, const std::string &datasetName)
 {
   int32 err = 0;
@@ -92,7 +108,7 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, hid_t fileId, const s
   err = H5Image::makeGrayScaleImage(fileId, datasetName, width, height, (unsigned char *)rgbRaster );
   if (err<0) {
     std::cout << "Error storing Image data with H5IM API:  datasetName: "
-	      << datasetName << std::endl; 
+        << datasetName << std::endl; 
   }
    // Need to update the attributes to be correct for a grayscale image
    H5Lite::writeStringAttribute(fileId, 
@@ -123,6 +139,9 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, hid_t fileId, const s
    return err;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 herr_t H5BmpIO::_importRGBFullColorBmp(uint8* rgbRaster, hid_t fileId, const std::string &datasetName)
 {
   int32 err = -1;
@@ -148,7 +167,7 @@ herr_t H5BmpIO::_importRGBFullColorBmp(uint8* rgbRaster, hid_t fileId, const std
   // Store byte array to HDF5 File
   // SET THE INTERLACE MODE CORRECTLY - EITHER H5IM_INTERLACE_PIXEL OR H5IM_INTERLACE_PLANE
   err = H5Image::H5IMmake_image_24bit(fileId, datasetName, width, height,
-			                  MXA::H5Image::InterlacePixel, (unsigned char *)rgbRaster);
+                        MXA::H5Image::InterlacePixel, (unsigned char *)rgbRaster);
   if (err<0) {
     std::cout << "Error storing 24 bit true color Image data with H5IM API. datasetName: " << datasetName << std::endl; 
   }
@@ -157,6 +176,9 @@ herr_t H5BmpIO::_importRGBFullColorBmp(uint8* rgbRaster, hid_t fileId, const std
   return err;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 herr_t exportBmp(hid_t fileId, 
                   const std::string &filename, 
                   const std::string &datasetPath)
@@ -165,8 +187,11 @@ herr_t exportBmp(hid_t fileId,
   return -1;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 unsigned int checkShortSize()
 {
-	return sizeof(short);
+  return sizeof(short);
 }
 
