@@ -5,7 +5,7 @@
 #include <Common/LogTime.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Image.h>
-
+#include <BMPIO/MXABmpIO.h>
 
 
 // -----------------------------------------------------------------------------
@@ -70,12 +70,12 @@ herr_t H5BmpIO::_readBmpFile(const std::string &filename,
   // Read the BMP file into an RGB array.
   // If something goes wrong set err to a negative value and return.
   
-  MXABmpIO reader = new MXABmpIO();
-  LOAD_TEXTUREBMP_RESULT res = reader->loadBMPData(filename.c_str())
+  MXABmpIO reader;
+  LOAD_TEXTUREBMP_RESULT res = reader.loadBMPData(filename.c_str());
   if ( res != LOAD_TEXTUREBMP_SUCCESS )
     return -1;
-  width = reader->getWidth();
-  height = reader->getHeight();
+  width = reader.getWidth();
+  height = reader.getHeight();
   
   
   //If everything goes correctly, then set err to a positive value

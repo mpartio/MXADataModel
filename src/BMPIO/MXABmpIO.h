@@ -48,7 +48,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class MXA_EXPORT MXABmpIO
 {
@@ -61,7 +61,9 @@ public:
   int32 getWidth();
   int32 getNumberOfChannels();
   LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
-  
+  void convertToGrayscale();
+  bool isGrayscaleImage();
+  void getDataArray(uint8* array);
 protected:
 
 private:
@@ -71,7 +73,7 @@ private:
   FILE* file;
   MXABMPFileHeader fileHeader;
   MXABMPDIBHeader dibHeader;
-  
+  bool isGrayscale;
 
   int32 bytesRead;
   // Palette used for paletted images during load.
