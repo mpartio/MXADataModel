@@ -1,25 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2007, mjackson
-//  All rights reserved.
-//  BSD License: http://www.opensource.org/licenses/bsd-license.html
-//
-//  This code was written under United States Air Force Contract number 
-//                           FA8650-04-C-5229
-//
-///////////////////////////////////////////////////////////////////////////////
 
 #ifndef MXA_BMP_IO_H
 #define MXA_BMP_IO_H
 
 
-//-- MXA Includes
 #include <Common/MXAEndian.h>
 #include <Common/MXATypes.h>
 #include <Common/DLLExport.h>
 #include <BMPIO/MXABmpHeaders.h>
 
-//-- C Includes
 #include <stdio.h>
 #include <math.h>
 #include <memory.h>
@@ -48,7 +36,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT MXABmpIO
 {
@@ -72,6 +60,19 @@ private:
   MXABMPFileHeader fileHeader;
   MXABMPDIBHeader dibHeader;
   
+  class MXABmpIO
+  {
+  public:
+  	MXABmpIO();
+  	~MXABmpIO();
+  	int32 getHeight();
+  	int32 getWidth();
+  	int32 getNumberOfChannels();
+  	bool isGrayscaleImage();
+  	void getDataArray(uint8*);
+  	LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
+  private:
+  	uint8* bitmapData;
 
 	int32 bytesRead;
 	// Palette used for paletted images during load.
