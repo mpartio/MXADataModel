@@ -44,6 +44,11 @@ INCLUDE (${PROJECT_SOURCE_DIR}/Resources/FindBoost-alt.cmake)
 INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
 LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS}) 
 
+#---- Find Expat -------------
+INCLUDE ( ${PROJECT_SOURCE_DIR}/Resources/MXAFindExpat.cmake)
+INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIRS})
+LINK_DIRECTORIES(${EXPAT_LIBRARIES})
+
 # Extend the include path to include the MXADataModel source directory
 INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
 # ----- Also include our binary directory as some headers are generated into that directory
