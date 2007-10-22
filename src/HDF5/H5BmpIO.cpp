@@ -38,8 +38,11 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
   int32 width = 0;
   int32 height = 0;
   uint8* rgbRaster; // This is an RGB array. 
+  MXABmpIO* reader;
   
-  err = _readBmpFile(filename, width, height, rgbRaster);
+  reader = new MXABmpIO();
+  
+  err = _readBmpFile(filename, width, height, rgbRaster, reader);
   if (err < 0)
   {
     return err;
@@ -47,11 +50,11 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
   
   if (asGrayscale)
   {
-     err =  _importGrayscaleBmpImage(rgbRaster, fileId, datasetName);
+     err =  _importGrayscaleBmpImage(rgbRaster, fileId, datasetName, reader);
   } 
   else 
   {
-    err =  _importRGBFullColorBmp(rgbRaster, fileId, datasetName);
+    err =  _importRGBFullColorBmp(rgbRaster, fileId, datasetName, reader);
   }
   
   return err;
@@ -64,19 +67,18 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
 herr_t H5BmpIO::_readBmpFile(const std::string &filename,
                               int32 &width,
                               int32 &height,
-                              uint8* rgbRaster)
+                              uint8* rgbRaster,
+                              MXABmpIO* reader)
 {
   int32 err = 1;
   // Read the BMP file into an RGB array.
   // If something goes wrong set err to a negative value and return.
   
-  MXABmpIO reader;
-  LOAD_TEXTUREBMP_RESULT res = reader.loadBMPData(filename.c_str());
+  LOAD_TEXTUREBMP_RESULT res = reader->loadBMPData(filename.c_str());
   if ( res != LOAD_TEXTUREBMP_SUCCESS )
     return -1;
-  width = reader.getWidth();
-  height = reader.getHeight();
-  reader.getDataArray(rgbRaster);
+  width = reader->getWidth();
+  height = reader->getHeight();
   
   
   //If everything goes correctly, then set err to a positive value
@@ -86,8 +88,14 @@ herr_t H5BmpIO::_readBmpFile(const std::string &filename,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, hid_t fileId, const std::string &datasetName)
+herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, 
+										 hid_t fileId, 
+										 const std::string &datasetName,
+										 MXABmpIO* reader)
 {
+	reader->convertToGrayscale();
+	reader->getDataArray(rgbRaster);
+/*
   int32 err = 0;
   int32 width = 0;
   int32 height = 0;
@@ -104,6 +112,7 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, hid_t fileId, const s
     src += 4; //skip ahead 4 bytes - THIS ASSUMES AN RGBA image. If this is RGB IMAGE then only skip 3 bytes
     pixel_count--;
   }
+*/
 
   // Store byte array to HDF5 File
   err = H5Image::makeGrayScaleImage(fileId, datasetName, width, height, (unsigned char *)rgbRaster );
@@ -143,27 +152,16 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, hid_t fileId, const s
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5BmpIO::_importRGBFullColorBmp(uint8* rgbRaster, hid_t fileId, const std::string &datasetName)
+herr_t H5BmpIO::_importRGBFullColorBmp(uint8* rgbRaster, 
+									   hid_t fileId, 
+									   const std::string &datasetName,
+									   MXABmpIO* reader)
 {
   int32 err = -1;
-  int32 width = 0;
-  int32 height = 0;
-  /*
-  ** Strip out the Alpha Components - ONLY DO THIS IF NEEDED... DEPENDS ON HOW YOU READ THE BMP FILE
-  */
-  int32 pixel_count = width * height;
-  unsigned char *src, *dst;
+  int32 width = reader->getWidth();
+  int32 height = reader->getHeight();
   
-  src = (unsigned char *) rgbRaster;
-  dst = (unsigned char *) rgbRaster;
-  while( pixel_count > 0 )
-    {
-      *(dst++) = *(src++);
-      *(dst++) = *(src++);
-      *(dst++) = *(src++);
-      src++;
-      pixel_count--;
-    }
+  reader->getDataArray(rgbRaster);
   
   // Store byte array to HDF5 File
   // SET THE INTERLACE MODE CORRECTLY - EITHER H5IM_INTERLACE_PIXEL OR H5IM_INTERLACE_PLANE
