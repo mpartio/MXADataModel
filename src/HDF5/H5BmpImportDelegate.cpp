@@ -99,7 +99,7 @@ int32 H5BmpImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataMode
   //Check for valid BMP file extension - BMP or BMP. 
   std::string fileExt( boost::filesystem::extension(sourcePath) );
   std::transform ( fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower );
-  if (fileExt != MXA::BMP::BMPExtension ) 
+  if (fileExt != MXA::BMP::FileExtension ) 
   {
     std::cout << logTime() << "Only import of BMP images with extensions of 'bmp' are supported." << std::endl;
     return MXA_ERROR_IMAGE_FORMAT_NOT_SUPPORTED; 
@@ -135,7 +135,7 @@ int32 H5BmpImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataMode
   
   //Read the BMP and Import it into the HDF5 File
   H5BmpIO bmpIO(fileId);
-  err = bmpIO.importBMP(dataSource->getSourcePath(), fileId, datasetPath, this->_importAsGrayScale);
+  err = bmpIO.importBmp(dataSource->getSourcePath(), fileId, datasetPath, this->_importAsGrayScale);
   if (err < 0) 
   {
     std::cout << logTime() << "Error Importing BMP Image: " << dataSource->getSourcePath() << std::endl;

@@ -26,7 +26,7 @@ H5BmpImportDelegateFactory::~H5BmpImportDelegateFactory()
 IImportDelegatePtr H5BmpImportDelegateFactory::newDataImportDelegate (const std::string &className )
 {
   IImportDelegatePtr delegate; // Creates a Null Shared Pointer
-  if ( className.compare( H5BmpImportDelegateFactory_Detail::ClassName ) == 0)
+  if ( className.compare( H5BmpImport::Detail::ClassName ) == 0)
   {
     H5BmpImportDelegate* d = new H5BmpImportDelegate();
     delegate.reset ( d );

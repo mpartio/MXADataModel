@@ -156,8 +156,8 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.cpp
   )
   
   SET(MXA_HDF5_HEADERS 

@@ -95,8 +95,8 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster,
 	reader->getDataArray(rgbRaster);
   	int32 width = reader->getWidth();
   	int32 height = reader->getHeight();
+  	int32 err = -1;
 /*
-  int32 err = 0;
     
   // Collapse the data down to a single channel, that will end up
   //  being the grayscale values
@@ -119,13 +119,13 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster,
         << datasetName << std::endl; 
   }
    // Need to update the attributes to be correct for a grayscale image
-   H5Lite::writeStringAttribute(fileId, 
+   err = H5Lite::writeStringAttribute(fileId, 
                           datasetName, 
                           const_cast<std::string&>(MXA::H5Image::ImageSubclass), 
                           const_cast<std::string&>(MXA::H5Image::ImageGrayScale) );
   // H5LTset_attribute_string(groupId, datasetName.c_str(), MXA::H5Image::ImageSubclass, MXA::H5Image::ImageGrayScale);
    uint32 white_is_zero = 0;
-   H5Lite::writeScalarAttribute(fileId, 
+   err = H5Lite::writeScalarAttribute(fileId, 
                           datasetName, 
                           const_cast<std::string&>(MXA::H5Image::ImageWhiteIsZero), 
                           white_is_zero);

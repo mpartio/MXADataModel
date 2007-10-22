@@ -36,7 +36,7 @@ namespace H5BmpImport
 * @brief Factory Class to generate H5BmpImportDelegate Objects
 * @author Mike Jackson
 * @date Oct 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFactory
 {
@@ -80,7 +80,5 @@ class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFacto
     void operator=(const H5BmpImportDelegateFactory&);  //Not Implemented
 };
 
-
-};
 
 #endif /*H5BMPIMPORTDELEGATEFACTORY_H_*/
