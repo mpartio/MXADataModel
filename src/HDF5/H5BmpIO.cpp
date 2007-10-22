@@ -77,8 +77,6 @@ herr_t H5BmpIO::_readBmpFile(const std::string &filename,
   LOAD_TEXTUREBMP_RESULT res = reader->loadBMPData(filename.c_str());
   if ( res != LOAD_TEXTUREBMP_SUCCESS )
     return -1;
-  width = reader->getWidth();
-  height = reader->getHeight();
   
   
   //If everything goes correctly, then set err to a positive value
@@ -95,10 +93,10 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster,
 {
 	reader->convertToGrayscale();
 	reader->getDataArray(rgbRaster);
+  	int32 width = reader->getWidth();
+  	int32 height = reader->getHeight();
 /*
   int32 err = 0;
-  int32 width = 0;
-  int32 height = 0;
     
   // Collapse the data down to a single channel, that will end up
   //  being the grayscale values
