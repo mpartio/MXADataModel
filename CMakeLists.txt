@@ -49,6 +49,7 @@ INCLUDE ( ${PROJECT_SOURCE_DIR}/Resources/MXAFindExpat.cmake)
 INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIRS})
 LINK_DIRECTORIES(${EXPAT_LIBRARIES})
 
+
 # Extend the include path to include the MXADataModel source directory
 INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
 # ----- Also include our binary directory as some headers are generated into that directory
