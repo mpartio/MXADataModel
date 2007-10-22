@@ -39,7 +39,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 */
 class MXA_EXPORT MXABmpIO
 {
@@ -54,7 +54,7 @@ public:
   LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
   void convertToGrayscale();
   bool isGrayscaleImage();
-  void getDataArray(uint8* ptr);
+  void copyDataArray(std::vector<uint8> &buffer);
 protected:
 
 private:

@@ -5,7 +5,7 @@
 #include <Common/LogTime.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Image.h>
-#include <BMPIO/MXABmpIO.h>
+
 
 
 // -----------------------------------------------------------------------------
@@ -35,85 +35,44 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
 {
   // Put the bmp file parsing code here
   int32 err = 0;
-  int32 width = 0;
-  int32 height = 0;
-  uint8* rgbRaster; // This is an RGB array. 
-  MXABmpIO* reader;
+  MXABmpIO reader;
   
-  reader = new MXABmpIO();
-  
-  err = _readBmpFile(filename, width, height, rgbRaster, reader);
-  if (err < 0)
+  LOAD_TEXTUREBMP_RESULT res = reader.loadBMPData(filename.c_str());
+  if ( res != LOAD_TEXTUREBMP_SUCCESS )
   {
-    return err;
+    return -1;
   }
   
   if (asGrayscale)
   {
-     err =  _importGrayscaleBmpImage(rgbRaster, fileId, datasetName, reader);
+    err =  _importGrayscaleBmpImage(fileId, datasetName, reader);
   } 
   else 
   {
-    err =  _importRGBFullColorBmp(rgbRaster, fileId, datasetName, reader);
+    err =  _importRGBFullColorBmp(fileId, datasetName, reader);
   }
   
   return err;
   
 }
 
-// -----------------------------------------------------------------------------
-//  Width and Height are passed by reference. 
-// -----------------------------------------------------------------------------
-herr_t H5BmpIO::_readBmpFile(const std::string &filename,
-                              int32 &width,
-                              int32 &height,
-                              uint8* rgbRaster,
-                              MXABmpIO* reader)
-{
-  int32 err = 1;
-  // Read the BMP file into an RGB array.
-  // If something goes wrong set err to a negative value and return.
-  
-  LOAD_TEXTUREBMP_RESULT res = reader->loadBMPData(filename.c_str());
-  if ( res != LOAD_TEXTUREBMP_SUCCESS )
-    return -1;
-  
-  
-  //If everything goes correctly, then set err to a positive value
-  return err;
-}
-                              
+                         
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster, 
-										 hid_t fileId, 
+herr_t H5BmpIO::_importGrayscaleBmpImage(hid_t fileId, 
 										 const std::string &datasetName,
-										 MXABmpIO* reader)
+										 MXABmpIO &reader)
 {
-	reader->convertToGrayscale();
-	reader->getDataArray(rgbRaster);
-  	int32 width = reader->getWidth();
-  	int32 height = reader->getHeight();
+	reader.convertToGrayscale();
+	std::vector<uint8> rgbRaster;
+	reader.copyDataArray(rgbRaster);
+  	int32 width = reader.getWidth();
+  	int32 height = reader.getHeight();
   	int32 err = -1;
-/*
-    
-  // Collapse the data down to a single channel, that will end up
-  //  being the grayscale values
-  int32 pixel_count = width * height;
-  unsigned char *src, *dst;
-  
-  src = (unsigned char *) rgbRaster;
-  dst = (unsigned char *) rgbRaster;
-  while( pixel_count > 0 ) {
-    *(dst++) = *(src);        
-    src += 4; //skip ahead 4 bytes - THIS ASSUMES AN RGBA image. If this is RGB IMAGE then only skip 3 bytes
-    pixel_count--;
-  }
-*/
 
   // Store byte array to HDF5 File
-  err = H5Image::makeGrayScaleImage(fileId, datasetName, width, height, (unsigned char *)rgbRaster );
+  err = H5Image::makeGrayScaleImage(fileId, datasetName, width, height, static_cast<uint8*>( &(rgbRaster.front() ) ) );
   if (err<0) {
     std::cout << "Error storing Image data with H5IM API:  datasetName: "
         << datasetName << std::endl; 
@@ -150,21 +109,21 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(uint8* rgbRaster,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5BmpIO::_importRGBFullColorBmp(uint8* rgbRaster, 
-									   hid_t fileId, 
+herr_t H5BmpIO::_importRGBFullColorBmp(hid_t fileId, 
 									   const std::string &datasetName,
-									   MXABmpIO* reader)
+									   MXABmpIO &reader)
 {
   int32 err = -1;
-  int32 width = reader->getWidth();
-  int32 height = reader->getHeight();
+  int32 width = reader.getWidth();
+  int32 height = reader.getHeight();
   
-  reader->getDataArray(rgbRaster);
+  std::vector<uint8> rgbRaster;
+  reader.copyDataArray(rgbRaster);
   
   // Store byte array to HDF5 File
   // SET THE INTERLACE MODE CORRECTLY - EITHER H5IM_INTERLACE_PIXEL OR H5IM_INTERLACE_PLANE
   err = H5Image::H5IMmake_image_24bit(fileId, datasetName, width, height,
-                        MXA::H5Image::InterlacePixel, (unsigned char *)rgbRaster);
+                        MXA::H5Image::InterlacePixel,  static_cast<uint8*>( &(rgbRaster.front() ) ) );
   if (err<0) {
     std::cout << "Error storing 24 bit true color Image data with H5IM API. datasetName: " << datasetName << std::endl; 
   }

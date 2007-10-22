@@ -36,7 +36,7 @@ namespace MXA
 * @brief General IO class for Bmp images
 * @author Mike Jackson/Herb Mullens
 * @date October 2007
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 class MXA_EXPORT H5BmpIO 
 {
@@ -73,21 +73,6 @@ class MXA_EXPORT H5BmpIO
 
   
  protected:
-   
-   /**
-    * @brief Reads a Bitmap image from a file on disk
-    * @param filename The name or path to the Bit map file
-    * @param width (Out) Stores the width of the image
-    * @param height (Out) Stores the height of the image
-    * @param rgbRaster (Out) Will point to the first byte of the RGB raster upon completion
-    * @param reader Pointer to MXABmpIO class.
-    * @return Error Condition
-    */
-   herr_t _readBmpFile(const std::string &filename,
-                                 int32 &width,
-                                 int32 &height,
-                                 uint8* rgbRaster,
-                                 MXABmpIO* reader);
    /**
     * @brief Stores a True Color image in the form of a Pixel interlaced buffer as a Grayscale image in the provided HDF5 data set
     * @param rgbRaster The buffer the holds the RGB image
@@ -95,10 +80,9 @@ class MXA_EXPORT H5BmpIO
     * @param datasetName The name of the data set to store the RGB image into
     * @return Error Condition
     */
-   herr_t _importGrayscaleBmpImage(uint8* rgbRaster, 
-   								   hid_t fileId, 
+   herr_t _importGrayscaleBmpImage(hid_t fileId, 
    								   const std::string &datasetName,
-                                   MXABmpIO* reader);
+                                   MXABmpIO &reader);
  
    /**
     * @brief Stores a True Color image in the form of a Pixel interlaced buffer as an RGB image in the provided HDF5 data set
@@ -107,10 +91,9 @@ class MXA_EXPORT H5BmpIO
     * @param datasetName The name of the data set to store the RGB image into
     * @return Error Condition
     */
-   herr_t _importRGBFullColorBmp(uint8* rgbRaster, 
-   								 hid_t fileId, 
+   herr_t _importRGBFullColorBmp(hid_t fileId, 
    								 const std::string &datasetName,
-   								 MXABmpIO* reader);
+   								MXABmpIO &reader);
  
  private:
    hid_t _fileId; 

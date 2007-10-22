@@ -47,6 +47,7 @@ LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS})
 #---- Find Expat -------------
 INCLUDE ( ${PROJECT_SOURCE_DIR}/Resources/MXAFindExpat.cmake)
 INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIRS})
+MESSAGE (STATUS "${EXPAT_INCLUDE_DIRS}")
 LINK_DIRECTORIES(${EXPAT_LIBRARIES})
 
 
@@ -87,6 +88,7 @@ SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Core/MXADataImport.cpp
   ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.cpp
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.cpp
+ 
 )
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
