@@ -1,13 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2007, mjackson
-//  All rights reserved.
-//  BSD License: http://www.opensource.org/licenses/bsd-license.html
-//
-//  This code was written under United States Air Force Contract number 
-//                           FA8650-04-C-5229
-//
-///////////////////////////////////////////////////////////////////////////////
+
 
 #ifndef MXA_BMP_IO_H
 #define MXA_BMP_IO_H
@@ -48,7 +39,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 class MXA_EXPORT MXABmpIO
 {
@@ -63,7 +54,7 @@ public:
   LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
   void convertToGrayscale();
   bool isGrayscaleImage();
-  void getDataArray(uint8* array);
+  void getDataArray(uint8* ptr);
 protected:
 
 private:
