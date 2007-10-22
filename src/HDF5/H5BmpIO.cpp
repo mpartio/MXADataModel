@@ -76,6 +76,7 @@ herr_t H5BmpIO::_readBmpFile(const std::string &filename,
     return -1;
   width = reader.getWidth();
   height = reader.getHeight();
+  reader.getDataArray(rgbRaster);
   
   
   //If everything goes correctly, then set err to a positive value
