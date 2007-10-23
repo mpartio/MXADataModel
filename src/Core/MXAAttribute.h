@@ -37,7 +37,7 @@ typedef boost::any Any;
  * entries in the data model
  * @author mjackson
  * @date Mar 28, 2007
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 class MXA_EXPORT MXAAttribute : public IAttribute
 {
@@ -101,12 +101,12 @@ class MXA_EXPORT MXAAttribute : public IAttribute
     /**
      * @brief Returns the Key for this attribute
      */
-    const std::string& getKey();
+    std::string getKey();
     
     /**
      * @brief Returns the data value of the attribute as an Boost Any
      */
-    const Any& getValue();
+    Any getValue();
 
     /**
      * @brief Converts the data value to an int32 value

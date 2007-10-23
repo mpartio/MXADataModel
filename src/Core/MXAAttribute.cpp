@@ -31,7 +31,7 @@ MXAAttribute::~MXAAttribute()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-const std::string& MXAAttribute::getKey()
+std::string MXAAttribute::getKey()
 {
   return _key;
 }
@@ -39,7 +39,7 @@ const std::string& MXAAttribute::getKey()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-const Any& MXAAttribute::getValue()
+Any MXAAttribute::getValue()
 {
   return _value;
 }

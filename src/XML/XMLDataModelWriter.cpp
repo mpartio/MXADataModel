@@ -245,11 +245,11 @@ int32 XMLDataModelWriter::writeUserMetaData(int32 depth)
   int32 err = 0;
   int32 fileId = 0;
  
-  std::vector<MXAAttributePtr> metadata = _dataModel->getUserMetaData();
-  MXAAttribute* attr = NULL;
+  IAttributes metadata = _dataModel->getUserMetaData();
+  IAttribute* attr = NULL;
   
   XMLUserMetaDataWriter writer(_ofstreamPtr);
-  for (std::vector<MXAAttributePtr>::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
+  for (IAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
     attr = (*(iter)).get();
     err = attr->write( fileId, const_cast<std::string&>(MXA::UserMetaDataPath), writer);
     if(err<0) {std::cout << "Error Writing User MetaData Attribute " << MXA::UserMetaDataPath  << " Key:" << attr->getKey() << std::endl; break;}

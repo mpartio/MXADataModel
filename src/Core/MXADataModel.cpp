@@ -634,7 +634,7 @@ void MXADataModel::getRequiredMetaData(std::map<std::string, std::string> &requi
 // -----------------------------------------------------------------------------
 //  Adds a key/value pair to the User Meta Data section
 // -----------------------------------------------------------------------------
-void MXADataModel::addUserMetaData( MXAAttributePtr userMetaData)
+void MXADataModel::addUserMetaData( IAttributePtr userMetaData)
 {
   this->_userMetaData.push_back(userMetaData);
 }
@@ -651,7 +651,7 @@ void MXADataModel::addUserMetaData(const std::string &key, const std::string &va
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXAUserMetaData&  MXADataModel::getUserMetaData()
+IAttributes&  MXADataModel::getUserMetaData()
 {
   return this->_userMetaData;
 }
@@ -735,8 +735,8 @@ void MXADataModel::printRequiredMetaData(std::ostream& os, int32 indent)
 void MXADataModel::printUserMetaData(std::ostream& os, int32 indent)
 {
   os << StringUtils::indent(indent) << "User Meta Data" << std::endl;
-  MXAAttribute* attr;
-  for (MXAUserMetaData::iterator iter = _userMetaData.begin(); iter != _userMetaData.end(); ++iter)
+  IAttribute* attr;
+  for (IAttributes::iterator iter = _userMetaData.begin(); iter != _userMetaData.end(); ++iter)
   {
     attr = (*iter).get();
     os << StringUtils::indent(indent + 1) << attr->getKey() << " ---> " << attr->valueToString() << std::endl;

@@ -107,7 +107,7 @@ bool H5IODelegate::isMXAFile(hid_t fileId)
   std::string ftype;
   err = H5Lite::readStringAttribute(fileId, MXA::DataModelPath, MXA::ModelType, ftype);
   
-  if ( (ftype != MXA::MXACurrentFileType) ) {
+  if ( (ftype.compare(MXA::MXACurrentFileType)) != 0 ) {
     std::cout << "NOT an MXA formatted HDF5 File. Type should be " << MXA::MXACurrentFileType << " but I found:" << ftype << std::endl;
     return false;
   }

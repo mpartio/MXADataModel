@@ -12,14 +12,20 @@
 #define _IMXAATTRIBUTE_H_
 
 #include <Common/DLLExport.h>
+#include <Common/MXATypeDefs.h>
 
+#include <string>
+#include <boost/any.hpp>
+typedef boost::any Any;
+
+class IAttributeWriter;
 
 /**
  * @brief Base class for attributes. This is used becase subclasses are usually
  * templated.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  *  
  */
 class MXA_EXPORT IAttribute 
@@ -28,6 +34,36 @@ class MXA_EXPORT IAttribute
     IAttribute() {};
     virtual ~IAttribute() {};
      
+    /**
+     * @brief Returns the Key for this attribute
+     */
+    virtual std::string getKey() = 0;
+    
+    /**
+     * @brief Returns the data value of the attribute as an Boost Any
+     */
+    virtual Any getValue() = 0;
+
+    /**
+     * @brief Converts the data value to an int32 value
+     */
+    virtual int32 valueToInt32() = 0;
+
+    /**
+     * @brief Converts the data value to a float value
+     */
+    virtual float valueToFloat32() = 0;
+    
+    /**
+     * @brief Converts the data value to a string
+     */
+    virtual std::string valueToString() = 0;
+    
+    /**
+     * @brief Writes the Attribute using the IAttributeWriter Object
+     */
+    virtual int32 write(int32 locationId, std::string datasetPath, IAttributeWriter &writer) = 0;
+    
   private:
     IAttribute(const IAttribute&);    //Not Implemented
     void operator=(const IAttribute&); //Not Implemented

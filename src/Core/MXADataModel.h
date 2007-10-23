@@ -44,7 +44,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -283,7 +283,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Adds an entry in the User Meta Data record
    * @param  umd An MXAAttribute object
    */
-  void addUserMetaData ( MXAAttributePtr umd);
+  void addUserMetaData ( IAttributePtr umd);
   
   /**
    * @brief Adds a Meta Data entry to the User Meta Data Record
@@ -305,7 +305,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
   }
 
   /** @brief Returns the Data Structure used to hold the user defined Meta Data */
-  MXAUserMetaData& getUserMetaData();
+  IAttributes& getUserMetaData();
   
   /** @brief Sets the IODelegate for this model. Default delegate is an HDF5 delegate */
   void setIODelegate(IODelegatePtr ioDelegate);
@@ -430,7 +430,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    std::string _datasetPublicReleaseNumber;
 
    // Holds the arbitrary User Meta Data
-   MXAUserMetaData _userMetaData;
+   IAttributes _userMetaData;
    
    // The default delegate to use to write the model to a file
    IODelegatePtr _ioDelegate;

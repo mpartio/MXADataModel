@@ -312,10 +312,10 @@ int32 H5DataModelWriter::writeUserMetaData(hid_t fileId)
   int32 data = 0;
   herr_t err = 0;
   H5Lite::writeScalarDataset(fileId, const_cast<std::string&>(MXA::UserMetaDataPath), data);
-  std::vector<MXAAttributePtr> metadata = _dataModel->getUserMetaData();
-  MXAAttribute* attr = NULL;
+  IAttributes metadata = _dataModel->getUserMetaData();
+  IAttribute* attr = NULL;
   H5AttributeWriter writer;
-  for (std::vector<MXAAttributePtr>::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
+  for (IAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
     attr = (*(iter)).get();
    // std::cout << "Writing User MetaData for Key: " << attr->getKey() << std::endl;
     err = attr->write( fileId, const_cast<std::string&>(MXA::UserMetaDataPath), writer);

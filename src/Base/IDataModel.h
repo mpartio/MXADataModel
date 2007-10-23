@@ -26,7 +26,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  *  
  */
 class MXA_EXPORT IDataModel
@@ -247,7 +247,7 @@ class MXA_EXPORT IDataModel
     * @brief Adds User defined Meta data to the model
     * @param umd The Key/Value pair to append to the model
     */
-    virtual void addUserMetaData( MXAAttributePtr umd) = 0;
+    virtual void addUserMetaData( IAttributePtr umd) = 0;
     /**
     * @brief Adds a User defined meta data to the model
     * @param key The key to use

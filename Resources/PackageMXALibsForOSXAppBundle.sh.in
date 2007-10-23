@@ -77,6 +77,7 @@ install_name_tool -change "${BIN_DIR}/${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${
 lib="${HDF5_LIBRARY}"
 path=$(dirname ${lib})
 file=$(basename ${lib})
+rm "${BIN_DIR}/${PLUGINS_PATH}/${file}"
 if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
 then 
 echo "* Copying HDF5 Library -->${HDF5_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
@@ -94,6 +95,7 @@ fi
 lib="${TIFF_LIBRARY}"
 path=$(dirname ${lib})
 file=$(basename ${lib})
+rm "${BIN_DIR}/${PLUGINS_PATH}/${file}"
 if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
 then
 echo "* Copying Tiff Library -->${TIFF_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
