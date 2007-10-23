@@ -156,6 +156,33 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     ENDIF(CYGWIN)
 
   ELSE (WIN32)
+SET(BOOST_INCLUDE_SEARCH_DIRS
+      $ENV{BOOSTINCLUDEDIR}
+      $ENV{BOOST_ROOT}/include
+      C:/boost/include
+      "C:/Program Files/boost/boost_1_34_0"
+      "C:/Program Files/boost/boost_1_33_1"
+      # D: is very often the cdrom drive, IF you don't have a
+      # cdrom inserted it will popup a very annoying dialog
+      #D:/boost/include
+      /usr/include
+      /usr/local/include
+      /opt/local/include
+      /sw/include
+    )
+
+    SET(BOOST_LIBRARIES_SEARCH_DIRS
+      $ENV{BOOSTLIBDIR}
+      $ENV{BOOST_ROOT}/lib
+      C:/boost/lib
+      "C:/Program Files/boost/boost_1_34_0/lib"
+      "C:/Program Files/boost/boost_1_33_1/lib"
+      /usr/lib
+      /usr/local/lib
+      /opt/local/lib
+      /sw/lib
+    )
+
     SET(BOOST_LIBRARIES_SUFFIXES
         "-1_34_1"
         "-gcc-mt"
@@ -165,6 +192,7 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     )
   ENDIF(WIN32)
 
+MESSAGE (STATUS "BOOST_INCLUDE_SEARCH_DIRS: ${BOOST_INCLUDE_SEARCH_DIRS} ")
   FIND_PATH(BOOST_INCLUDE_DIR
     NAMES
       boost/config.hpp
