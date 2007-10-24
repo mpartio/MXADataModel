@@ -24,7 +24,7 @@ SET (EXECUTABLE_OUTPUT_PATH
   )
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
-OPTION(BUILD_TESTING "Build libTiff Complete Testing" ON)
+OPTION(BUILD_TESTING "Build MXADataModel Complete Testing" ON)
 IF(BUILD_TESTING)
   ENABLE_TESTING()
 ENDIF(BUILD_TESTING)
