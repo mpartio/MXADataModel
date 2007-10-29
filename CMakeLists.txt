@@ -206,10 +206,10 @@ SET (TIFF_SUPPORT "0")
 OPTION(MXA_USE_TIFF "Compiles source code that depends on having the Tif Lib installed" ON)
 IF(MXA_USE_TIFF)
 
-    #---- Find Expat -------------
+    #---- Find TIFF -------------
     INCLUDE ( ${PROJECT_SOURCE_DIR}/Resources/MXAFindTiff.cmake)
-    INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIRS})
-    LINK_DIRECTORIES(${EXPAT_LIBRARIES})
+    INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
+    LINK_DIRECTORIES(${TIFF_LIBRARIES})
     IF (NOT TIFF_FOUND)
       MESSAGE (FATAL "Tiff Library was NOT Found and is needed.")
     ENDIF (NOT TIFF_FOUND)
