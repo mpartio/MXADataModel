@@ -40,7 +40,7 @@ ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 SET (BOOST_MXA_LIBS "")
 SET (Boost_FIND_REQUIRED TRUE)
 SET (Boost_FIND_QUIETLY TRUE)
-INCLUDE (${PROJECT_SOURCE_DIR}/Resources/FindBoost-alt.cmake)
+INCLUDE (${PROJECT_SOURCE_DIR}/Resources/MXAFindBoost.cmake)
 INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
 LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS}) 
 
@@ -48,6 +48,9 @@ LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS})
 INCLUDE ( ${PROJECT_SOURCE_DIR}/Resources/MXAFindExpat.cmake)
 INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIRS})
 LINK_DIRECTORIES(${EXPAT_LIBRARIES})
+IF (NOT EXPAT_FOUND)
+  MESSAGE (FATAL "Expat Library was NOT Found and is needed.")
+ENDIF (NOT EXPAT_FOUND)
 
 # Extend the include path to include the MXADataModel source directory
 INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
@@ -55,7 +58,10 @@ INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
 
 #-- Include the MXADataModel Testing Sources
-ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
+IF ( BUILD_TESTING )
+  ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
+ENDIF ( BUILD_TESTING )
+
 
 #-- Include the Examples Directory
 OPTION(BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
@@ -134,7 +140,7 @@ IF ( MXA_USE_HDF5 )
   # ---------- Find the HDF Libraries - DO NOT use the High Level APIs from the HDF5
   # group as those API's will not compile correctly under windows --------------
   SET (HDF5_USE_HIGH_LEVEL FALSE)
-  INCLUDE( ${PROJECT_SOURCE_DIR}/Resources/FindHDF.cmake )
+  INCLUDE( ${PROJECT_SOURCE_DIR}/Resources/MXAFindHDF5.cmake )
   IF(NOT HDF5_FOUND)
     MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
   ENDIF(NOT HDF5_FOUND)
@@ -200,7 +206,13 @@ SET (TIFF_SUPPORT "0")
 OPTION(MXA_USE_TIFF "Compiles source code that depends on having the Tif Lib installed" ON)
 IF(MXA_USE_TIFF)
 
-    FIND_PACKAGE(TIFF REQUIRED)
+    #---- Find Expat -------------
+    INCLUDE ( ${PROJECT_SOURCE_DIR}/Resources/MXAFindTiff.cmake)
+    INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIRS})
+    LINK_DIRECTORIES(${EXPAT_LIBRARIES})
+    IF (NOT TIFF_FOUND)
+      MESSAGE (FATAL "Tiff Library was NOT Found and is needed.")
+    ENDIF (NOT TIFF_FOUND)
     SET(MXA_HDF5_TIFF_SRCS
         ${MXA_SOURCE_DIR}/src/HDF5/H5TiffIO.cpp
         ${MXA_SOURCE_DIR}/src/HDF5/H5TiffImportDelegate.cpp

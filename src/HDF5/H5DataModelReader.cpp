@@ -357,8 +357,6 @@ MXADataRecordPtr H5DataModelReader::_loadDataRecord(hid_t loc_id, std::string na
     std::cout << "Error reading data record LUID value" << std::endl;
     return record;
   }
-
-//TODO: Read in any Extra Attributes for this data record
   
   record = MXADataRecord::New(luid, recName, altName);
   record->setGuid(guid); //Set the GUID from the file

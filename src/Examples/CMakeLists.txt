@@ -16,6 +16,10 @@ SET (EXECUTABLE_OUTPUT_PATH
 
 INCLUDE_DIRECTORIES(${MXA_SOURCE_DIR}/src)
 
+INCLUDE( ${PROJECT_SOURCE_DIR}/../../Resources/MXAFindHDF5.cmake )
+IF(NOT HDF5_FOUND)
+  MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
+ENDIF(NOT HDF5_FOUND)
 
 OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
 IF(BUILD_VTK_HDF5)
