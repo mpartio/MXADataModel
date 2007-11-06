@@ -6,7 +6,7 @@
 #  HDF5_HL_INCLUDE_DIR - The High Level Include Directory
 #  HDF5_HL_LIBRARY - The Actual High Level Library
 #  HDF5_USE_HIGH_LEVEL - Set this to TRUE if you need to link against the HDF5 High level APIs.
-#  HDF_INSTALL - This is an Environment variable that can be used to help find the HDF5 libraries and Include Directories
+#  HDF5_INSTALL - This is an Environment variable that can be used to help find the HDF5 libraries and Include Directories
 #  HDF5_LIBRARIES - The List of HDF5 libraries that were found. This variable can be used in a LINK_LIBRARIES(...) command
 
 #-- Clear the Library List 
@@ -18,7 +18,7 @@ SET (HDF5_INCLUDE_DIRS "")
 
 SET (HDF5_FOUND "NO")
 SET (HDF5_HL_FOUND "NO")
-SET (HDF5_INSTALL  $ENV{HDF_INSTALL})
+SET (HDF5_INSTALL  $ENV{HDF5_INSTALL})
 
 SET(HDF5_INCLUDE_SEARCH_DIRS
   $ENV{HDF5_INSTALL}/include
