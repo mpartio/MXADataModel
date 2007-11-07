@@ -56,19 +56,19 @@ ENDIF (NOT EXPAT_FOUND)
 INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
 # ----- Also include our binary directory as some headers are generated into that directory
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
-
+#
 #-- Include the MXADataModel Testing Sources
 IF ( BUILD_TESTING )
   ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
 ENDIF ( BUILD_TESTING )
-
-
+#
+#
 #-- Include the Examples Directory
 OPTION(BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
 IF(BUILD_EXAMPLES)
     ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
 ENDIF(BUILD_EXAMPLES)
-
+#
 # Build shared libraries
 OPTION (MXA_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 SET (LIB_TYPE STATIC)
@@ -78,8 +78,8 @@ IF (MXA_BUILD_SHARED_LIBS)
     ADD_DEFINITIONS("-DMXA_BUILD_SHARED_LIBS")
   ENDIF (WIN32)
 ENDIF (MXA_BUILD_SHARED_LIBS)
-
-# ------- Set up the MHDataModel Project Source Files -----------
+#
+# ------- Set up the MXADataModel Project Source Files -----------
 # with SET() command you can change variables or define new ones
 # here we define MXADATAMODEL_SRCS variable that contains a list 
 # of all .cpp files note that we don't need \ at the end of line
@@ -230,12 +230,12 @@ IF(MXA_USE_TIFF)
     INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
     SET (TIFF_SUPPORT "1")
 ENDIF (MXA_USE_TIFF)
-
+#
 #--------- XML Sources ---------------------------------------------------
 SET (XML_SUPPORT "0")
 OPTION(MXA_USE_XML "Adds Ability to read/write models to XML Files" ON)
 IF (MXA_USE_XML)
-    FIND_PACKAGE(EXPAT REQUIRED)
+    INCLUDE(${PROJECT_SOURCE_DIR}/Resources/MXAFindExpat.cmake)
     IF ( NOT EXPAT_FOUND )
        MESSAGE(FATAL_ERROR "Expat was not found. Set the include/lib manually. The XML Functionality depends on it")
     ENDIF ( NOT EXPAT_FOUND)
@@ -270,8 +270,6 @@ ENDIF(MXA_USE_XML)
 IF(WIN32)
  SET(GUI_TYPE WIN32)
 ENDIF(WIN32)
-
-
 
 #-- Configure the Header file and then add the Binary Directory to the Includes list
 CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
