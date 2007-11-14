@@ -92,7 +92,9 @@ SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Core/MXADataImport.cpp
   ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.cpp
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.cpp
- 
+  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathIndexSection.cpp
+  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathTextSection.cpp
+  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathBuilder.cpp
 )
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
@@ -126,6 +128,10 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataSource.h
   ${MXA_SOURCE_DIR}/src/Utilities/StringUtils.h
+  ${MXA_SOURCE_DIR}/src/Utilities/IStringSection.h
+  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathIndexSection.h
+  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathTextSection.h
+  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathBuilder.h
   ${MXA_SOURCE_DIR}/src/DataImport/AbstractImportDelegateFactory.h
   ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.h
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.h

@@ -4,13 +4,13 @@
 
 	<!-- Load a Template Model from an XML file -->
 	<Data_Model
-		Template_File="/Users/mjackson/Workspace/MXADataModel/Resources/ModelTemplate.xml">
+		Template_File="@DATA_MODEL_XML_FILE@">
 		<!-- Define the dimensions  -->
     <Data_Dimensions>
-        <Dimension Alt_Name="Vol Frac" Count="16" End_Value="50" Increment="2" Index="0" Name="Dim 0" Start_Value="20" Uniform="1" />
-        <Dimension Alt_Name="Rnd Seed" Count="9" End_Value="5000" Increment="500" Index="1" Name="Dim 1" Start_Value="1000" Uniform="1" />
-        <Dimension Alt_Name="TS" Count="100" End_Value="99" Increment="1" Index="2" Name="Dim 2" Start_Value="0" Uniform="1" />
-        <Dimension Alt_Name="slice" Count="256" End_Value="255" Increment="1" Index="3" Name="Dim 3" Start_Value="0" Uniform="1" />
+        <Dimension Alt_Name="Rnd Seed" Count="4" End_Value="2500" Increment="500" Index="1" Name="Dim 1" Start_Value="1000" Uniform="1" />
+        <Dimension Alt_Name="TS" Count="5" End_Value="99" Increment="1" Index="2" Name="Dim 2" Start_Value="95" Uniform="1" />
+        <Dimension Alt_Name="Vol Frac" Count="3" End_Value="50" Increment="2" Index="0" Name="Dim 0" Start_Value="46" Uniform="1" />
+        <Dimension Alt_Name="slice" Count="5" End_Value="255" Increment="1" Index="3" Name="Dim 3" Start_Value="251" Uniform="1" />
     </Data_Dimensions>
 	</Data_Model>
 
@@ -25,22 +25,22 @@
 	<Implicit_Data_Source Data_Record="Record 0" Source_Type="H5TiffImport">
 		<File_Path>
 			<Text_Part
-				Text="/tmp/test_data/VolFrac-" />
+				Text="/tmp/test_data/Dim0-" />
 			<Index_Part Padding_Char="0" 
 			 Total_Char_Length="3"
 				Numeric_Type="Integer" 
 				Data_Dimension="Dim 0" />
-			<Text_Part Text="/Seed-" />
+			<Text_Part Text="/Dim1-" />
 			<Index_Part Padding_Char="0" 
 			 Total_Char_Length="4"
 				Numeric_Type="Integer" 
 				Data_Dimension="Dim 1" />
-			<Text_Part Text="TimeStep_" />
+			<Text_Part Text="/Dim2-" />
       <Index_Part Padding_Char="0" 
        Total_Char_Length="4"
         Numeric_Type="Integer" 
         Data_Dimension="Dim 2" />
-      <Text_Part Text="/Slice-" />
+      <Text_Part Text="/Dim3-" />
       <Index_Part Padding_Char="0" 
        Total_Char_Length="6"
         Numeric_Type="Integer" 

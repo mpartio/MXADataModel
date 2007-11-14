@@ -20,7 +20,7 @@
 #include <XML/ExpatParser.h>
 #include <XML/ExpatEvtHandler.h>
 #include <XML/XMLConstants.h>
-
+#include <Utilities/DataSourcePathBuilder.h>
 
 //-- STL includes
 #include <string>
@@ -63,7 +63,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 class DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -163,20 +163,19 @@ private:
   std::string        _errorMessage;
   ExpatParser*       _parser;
   
-
-  std::vector<IDataDimension*>            _implDataDimensions;
-  std::map<IDataDimension*, std::string>  _implPathMap;
-
-  IDataRecordPtr                          _implDataRecord;
-  std::string                             _implSourceType;
-  std::string                             _implPathPart;
+  // - Implicit Data Source Variables
+  std::vector<IDataDimension*>                  _implDataDimensions;
+  std::map<IDataDimension*, IStringSectionPtr>  _implPathMap;
+  IDataRecordPtr                                _implDataRecord;
+  std::string                                   _implSourceType;
+  std::string                                   _implPreTextSection;
   
   
   DataImportXmlParser(const DataImportXmlParser&); //Copy Constructor Not Implemented
   void operator=(const DataImportXmlParser&); //Copy Assignment Not Implemented
 
   void _createDataSource(std::string pathTemplate, std::vector<IDataDimension*>::size_type index, std::vector<int> &dimVals);
-
+  void _createDataSource2();
   
   //---------- Methods that are called for each starting and ending tag --------
   /** @brief Method that will be called when the 'Data_Dimensions' tag is found.  */

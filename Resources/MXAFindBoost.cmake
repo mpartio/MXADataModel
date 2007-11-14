@@ -102,16 +102,16 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     # BOOST_LIB_DIAGNOSTIC will cause the auto-linking code to emit a #pragma MESSAGE each time
     # a library is selected for linking.
     SET(BOOST_LIB_DIAGNOSTIC_DEFINITIONS "-DBOOST_LIB_DIAGNOSTIC")
-
+    SET(BOOST_WORKING_VERSION "1_34_1")
     IF (MSVC71)
       IF (CMAKE_BUILD_TYPE STREQUAL Debug)
         SET(BOOST_LIBRARIES_SUFFIXES
-          -vc71-mt-gd-1_34
+          -vc71-mt-gd-${BOOST_WORKING_VERSION}
           -vc71-mt-gd-1_33_1
         )
       ELSE (CMAKE_BUILD_TYPE STREQUAL Debug)
         SET(BOOST_LIBRARIES_SUFFIXES
-          -vc71-mt-1_34
+          -vc71-mt-${BOOST_WORKING_VERSION}
           -vc71-mt-1_33_1
         )
       ENDIF(CMAKE_BUILD_TYPE STREQUAL Debug)
@@ -120,12 +120,12 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     IF (MSVC80)
       IF (CMAKE_BUILD_TYPE STREQUAL Debug)
         SET(BOOST_LIBRARIES_SUFFIXES
-          -vc80-mt-gd-1_34
+          -vc80-mt-gd-${BOOST_WORKING_VERSION}
           -vc80-mt-gd-1_33_1
         )
       ELSE (CMAKE_BUILD_TYPE STREQUAL Debug)
         SET(BOOST_LIBRARIES_SUFFIXES
-          -vc80-mt-1_34
+          -vc80-mt-${BOOST_WORKING_VERSION}
           -vc80-mt-1_33_1
         )
       ENDIF(CMAKE_BUILD_TYPE STREQUAL Debug)

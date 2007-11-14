@@ -42,6 +42,7 @@ class IAttribute;
 class AbstractImportDelegateFactory;
 class ImportDelegateManager;
 class H5TiffImportDelegateFactory;
+class IStringSection;
 
 typedef  boost::shared_ptr<MXADataModel>           MXADataModelPtr;
 typedef  boost::shared_ptr<IDataModel>             IDataModelPtr;
@@ -88,5 +89,6 @@ typedef  std::map<int32, IDataRecordPtr>           IDataRecordLookupTable;
 typedef boost::shared_ptr<H5TiffImportDelegateFactory>  H5TiffImportDelegateFactoryPtr;
 
 
-
+typedef boost::shared_ptr<IStringSection>          IStringSectionPtr;
+typedef std::vector<IStringSectionPtr>     IStringSections;
 

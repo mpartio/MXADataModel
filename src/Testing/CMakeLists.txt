@@ -103,6 +103,16 @@ IF (BUILD_TESTING)
     ADD_EXECUTABLE( XMLTest ${XML_TEST_SRCS} )
     TARGET_LINK_LIBRARIES (XMLTest MXADataModel  ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS} )
     ADD_TEST(XMLTest ${EXECUTABLE_OUTPUT_PATH}/XMLTest)      
-    ENDIF(MXA_USE_XML)       
+    ENDIF(MXA_USE_XML)
+    
+#    ADD_EXECUTABLE( UtilitiesTest UtilitiesTest.cpp )
+#    TARGET_LINK_LIBRARIES(UtilitiesTest MXADataModel ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS})
+#    ADD_TEST(UtilitiesTest ${EXECUTABLE_OUTPUT_PATH}/UtilitiesTest)
+    
+    #-- Configure the XML file to correctly find the XML Model file
+    SET (DATA_MODEL_XML_FILE ${MXA_SOURCE_DIR}/Resources/ModelTemplate.xml)
+    CONFIGURE_FILE(${MXA_SOURCE_DIR}/Resources/DataImportTest.xml.in
+                    ${CMAKE_BINARY_DIR}/DataImportTest.xml @ONLY IMMEDIATE)
+                    
 ENDIF (BUILD_TESTING)
 

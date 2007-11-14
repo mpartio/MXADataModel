@@ -13,6 +13,7 @@
 #include <Common/LogTime.h>
 #include <Base/IImportDelegate.h>
 #include <Base/IFileIODelegate.h>
+#include <Core/MXAConstants.h>
 #include <Core/MXADataModel.h>
 #include <Core/MXADataDimension.h>
 #include <Core/MXADataRecord.h>
@@ -21,6 +22,12 @@
 #include <Testing/H5ImportTest.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
+#include <HDF5/H5TiffImportDelegateFactory.h>
+#include <HDF5/H5BmpImportDelegateFactory.h>
+
+#include <DataImport/DataImportXmlParser.h>
+#include <DataImport/ImportDelegateManager.h>
+
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>
@@ -35,6 +42,7 @@ using namespace boost::unit_test;
 #else 
   #define FILE_NAME_BEFORE "/tmp/DataImportTest-Before.h5"
   #define FILE_NAME_AFTER "/tmp/DataImportTest-After.h5"
+  #define XML_FILE "DataImportTest.xml"
 #endif
 
 
@@ -162,12 +170,40 @@ int DataImportTest ()
   return 0;
 }
 
+int XMLImportTest()
+{
+  std::cout << "------- Running XML Import Test ----------------" << std::endl;
+  // Instantiate the Instance Manager for import delegates
+    ImportDelegateManagerPtr idManager = ImportDelegateManager::instance();
+    
+    //Register to be able to import Tiff images
+    H5TiffImportDelegateFactory* ptr = new H5TiffImportDelegateFactory();
+    AbstractImportDelegateFactoryPtr h5TiffImportDelegateFactory ( ptr );
+    ptr->setImportAsGrayScale(true);
+    ptr->setFileNotFoundIsError(false);
+    idManager->registerDataImportFactory( h5TiffImportDelegateFactory );
+     
+    // Create the XMLParser/Importer Object
+    DataImportXmlParser importer;
+    importer.setXMLInputFile( XML_FILE );
+    int32 err = importer.import(); // Run the Import
+    if (err < 0) {
+      std::cout << "Error Importing Data Files. Check any output for possible error logs." << std::endl;
+    }
+    // std::cout << "DONE" << std::endl;
+    return err;
+  
+  
+  return 0;
+}
+
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
   test_suite* test = BOOST_TEST_SUITE ( "Data Import Test");
-  test->add( BOOST_TEST_CASE (&DataImportTest),0);
+ // test->add( BOOST_TEST_CASE (&DataImportTest),0);
+  test->add( BOOST_TEST_CASE (&XMLImportTest), 0);
    return test;
 }
 
