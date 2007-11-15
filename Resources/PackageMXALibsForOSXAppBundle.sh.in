@@ -115,7 +115,7 @@ install_name_tool -change "${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${
 fi
 
 # -----------------------------------------------------------------------------
-# Copy the Tiff Library into the App package and adjust all Rpaths
+# Copy the expat Library into the App package and adjust all Rpaths
 # -----------------------------------------------------------------------------
 lib="${EXPAT_LIBRARY}"
 path=$(dirname ${lib})
