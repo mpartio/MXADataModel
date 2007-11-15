@@ -7,7 +7,7 @@
 
 # Look for the header file.
 SET(EXPAT_INCLUDE_SEARCH_DIRS
-  $ENV{EXPAT_INSTALL}/include
+  $ENV{EXPAT_INSTALL}/include/expat
 )
 
 SET (EXPAT_LIB_SEARCH_DIRS
