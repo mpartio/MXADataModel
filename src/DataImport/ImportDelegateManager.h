@@ -22,9 +22,9 @@
 * from a factory class
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
-class ImportDelegateManager
+class MXA_EXPORT ImportDelegateManager
 {
   public:
      /**

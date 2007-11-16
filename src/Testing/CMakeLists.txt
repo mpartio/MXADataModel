@@ -36,7 +36,12 @@ IF(NOT HDF5_FOUND)
 ENDIF(NOT HDF5_FOUND)
   # Enable the HDF5_MODULES_ON when using the HDF dynamic libraries
 
-
+  IF (MXA_BUILD_SHARED_LIBS)
+      IF (WIN32)
+        ADD_DEFINITIONS(-D_HDF5USEDLL_)
+      ENDIF (WIN32)
+  ENDIF (MXA_BUILD_SHARED_LIBS)
+  
 OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
 IF(BUILD_VTK_HDF5)
      #-- Find VTK packages -----------------------------------------

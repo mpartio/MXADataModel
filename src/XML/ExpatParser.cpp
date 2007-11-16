@@ -35,7 +35,9 @@
 
 /********************************************** Internal Parser Callbacks **/
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 
 static void StartElementHandler(void* pUserData, const XML_Char* name, const XML_Char** attrs)
 {
@@ -121,7 +123,9 @@ static void EndDoctypeDeclHandler(void* pUserData)
 	ph->OnEndDoctypeDecl();
 }
 
+#ifdef __cplusplus
 };
+#endif
 
 /****************************************** Parser Wrapper Implementation **/
 

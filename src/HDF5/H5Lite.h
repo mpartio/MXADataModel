@@ -23,6 +23,7 @@
 
 //-- HDF Headers
 #include <hdf5.h>
+#include <H5Tpublic.h>
 
 //TODO: Add tests for the find* methods
 //TODO: Add test for attributeInfo
@@ -57,7 +58,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.35 $
+ * @version $Revision: 1.36 $
  */
 class H5Lite
 {
@@ -156,6 +157,7 @@ static std::string HDFTypeForPrimitiveAsStr(T value)
 template<typename T>
 static hid_t HDFTypeForPrimitive(T value)
 {
+
   if (typeid(value) == typeid(float32)) return H5T_NATIVE_FLOAT;
   if (typeid(value) == typeid(float64)) return H5T_NATIVE_DOUBLE;
   

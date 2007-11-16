@@ -39,6 +39,7 @@ using namespace boost::unit_test;
 #if defined (_WIN32)
   #define FILE_NAME_BEFORE "C:\\WINDOWS\\Temp\\DataImportTest-Before.h5"
   #define FILE_NAME_AFTER "C:\\WINDOWS\\Temp\\DataImportTest-After.h5"
+  #define XML_FILE "DataImportTest.xml"
 #else 
   #define FILE_NAME_BEFORE "/tmp/DataImportTest-Before.h5"
   #define FILE_NAME_AFTER "/tmp/DataImportTest-After.h5"

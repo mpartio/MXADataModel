@@ -63,9 +63,9 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 */
-class DataImportXmlParser : public ExpatEvtHandler, public IDataImport
+class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
 
 public:

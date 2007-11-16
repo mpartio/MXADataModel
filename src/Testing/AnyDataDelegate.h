@@ -13,7 +13,7 @@
 * @brief  Template Class to allow any type of data to be created and stored in an HDF5 File
 * @author Mike Jackson
 * @date June 2007
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 * @class AnyDataDelegate AnyDataDelegate.h src/Test/AnyDataDelegate.h
 */
 template <typename T>
@@ -47,7 +47,7 @@ class AnyDataDelegate: public IImportDelegate
       typename std::vector<T>::size_type numElements = 1;
       for (std::vector<hsize_t>::iterator iter = _dims.begin(); iter != _dims.end(); ++iter )
       {
-        numElements += numElements * (*iter);
+        numElements += numElements * static_cast<std::vector<T>::size_type>(*iter);
       }
       std::vector<int32> dataDimValues = dataSource->getDimensionValues();
       std::vector<T> data;
