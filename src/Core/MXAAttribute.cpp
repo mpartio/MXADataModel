@@ -63,6 +63,14 @@ float MXAAttribute::valueToFloat32() {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
+float MXAAttribute::valueToFloat64() { 
+	//FIXME: Add a try catch here otherwise this will terminate when trying to convert a std::vector or something else
+	return boost::any_cast<float64>(_value); 
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 std::string MXAAttribute::valueToString() 
 { 
   if ( boost::any_cast<std::string>( &_value ) ) 
