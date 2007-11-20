@@ -6,6 +6,7 @@
 #  EXPAT_FOUND        - True if expat found.
 
 # Look for the header file.
+MESSAGE (STATUS "Finding expat library and headers..." )
 SET(EXPAT_INCLUDE_SEARCH_DIRS
   $ENV{EXPAT_INSTALL}/include/expat
 )

@@ -51,9 +51,6 @@ LINK_DIRECTORIES(${EXPAT_LIBRARIES})
 IF (NOT EXPAT_FOUND)
   MESSAGE (FATAL "Expat Library was NOT Found and is needed.")
 ENDIF (NOT EXPAT_FOUND)
-IF (WIN32)
-    ADD_DEFINITIONS(-DXML_USE_MSC_EXTENSIONS)
-ENDIF(WIN32)
 
 # Extend the include path to include the MXADataModel source directory
 INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
@@ -155,11 +152,11 @@ IF ( MXA_USE_HDF5 )
   ENDIF(NOT HDF5_FOUND)
   # Enable the HDF5_MODULES_ON when using the HDF dynamic libraries
 
-  IF (MXA_BUILD_SHARED_LIBS)
+  IF (BUILD_SHARED_LIBS)
       IF (WIN32)
-        ADD_DEFINITIONS(-D_HDF5USEDLL_)
+        # ADD_DEFINITIONS(-D_HDF5USEDLL_)
       ENDIF (WIN32)
-  ENDIF (MXA_BUILD_SHARED_LIBS)
+  ENDIF (BUILD_SHARED_LIBS)
   
   # ---------- Include the HDF5 Dependant source in the Build -------------
   SET( MXA_HDF5_SRCS
@@ -242,11 +239,9 @@ ENDIF (MXA_USE_TIFF)
 SET (XML_SUPPORT "0")
 OPTION(MXA_USE_XML "Adds Ability to read/write models to XML Files" ON)
 IF (MXA_USE_XML)
-    INCLUDE(${PROJECT_SOURCE_DIR}/Resources/MXAFindExpat.cmake)
-    IF ( NOT EXPAT_FOUND )
-       MESSAGE(FATAL_ERROR "Expat was not found. Set the include/lib manually. The XML Functionality depends on it")
-    ENDIF ( NOT EXPAT_FOUND)
-   
+    SET(DEP_LIBS ${DEP_LIBS} ${EXPAT_LIBRARIES})
+    INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIRS} )
+    
     SET ( MXA_XML_SRCS
         ${MXA_SOURCE_DIR}/src/XML/ExpatParser.cpp
         ${MXA_SOURCE_DIR}/src/XML/ExpatEvtHandler.cpp
@@ -267,8 +262,6 @@ IF (MXA_USE_XML)
     )
     
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
-    SET(DEP_LIBS ${DEP_LIBS} ${EXPAT_LIBRARIES})
-    INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIRS} )
     SET (XML_SUPPORT "1")
 ENDIF(MXA_USE_XML)
 

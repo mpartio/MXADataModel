@@ -31,7 +31,7 @@
  * data record. Data records can have any number of children but only one parent.
  * @author  Mike Jackson
  * @date March 2007
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  *  
  */
 class MXA_EXPORT MXADataRecord :  public IDataRecord
@@ -46,7 +46,7 @@ public:
    * @param lut The look up table to be populated.
    * @param nodes The IDataRecords to use as the tree
    */
-  static void generateLUT(IDataRecordLookupTable &lut, IDataRecords &nodes);
+   static void generateLUT(IDataRecordLookupTable &lut, IDataRecords &nodes);
   
   
   /**

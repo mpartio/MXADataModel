@@ -34,14 +34,10 @@ INCLUDE( ${PROJECT_SOURCE_DIR}/../../Resources/MXAFindHDF5.cmake )
 IF(NOT HDF5_FOUND)
   MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
 ENDIF(NOT HDF5_FOUND)
-  # Enable the HDF5_MODULES_ON when using the HDF dynamic libraries
 
-  IF (MXA_BUILD_SHARED_LIBS)
-      IF (WIN32)
-        ADD_DEFINITIONS(-D_HDF5USEDLL_)
-      ENDIF (WIN32)
-  ENDIF (MXA_BUILD_SHARED_LIBS)
-  
+# Include the expat directory in our include paths
+INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIRS} )
+
 OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
 IF(BUILD_VTK_HDF5)
      #-- Find VTK packages -----------------------------------------
@@ -106,7 +102,7 @@ IF (BUILD_TESTING)
         XMLTest.cpp
         )
     ADD_EXECUTABLE( XMLTest ${XML_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (XMLTest MXADataModel  ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS} )
+    TARGET_LINK_LIBRARIES (XMLTest MXADataModel expat ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS} )
     ADD_TEST(XMLTest ${EXECUTABLE_OUTPUT_PATH}/XMLTest)      
     ENDIF(MXA_USE_XML)
     

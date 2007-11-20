@@ -68,7 +68,7 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
   {
     // Read a block from the XML file and pass it to the parser
     nRead = fread(buf, 1, BUFFER_SIZE, fh);
-    atEnd = feof(fh);
+    atEnd = ( feof(fh) != 0) ? true : false ;
     parser.Parse(buf, nRead, atEnd);
   }
   fclose(fh);

@@ -294,6 +294,7 @@ void H5LiteTest() {
   hid_t   file_id;
   /* Create a new file using default properties. */
   file_id = H5Fcreate( FILE_NAME, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
+  BOOST_REQUIRE(file_id > 0);
   //Create the Extra Groups
   hid_t sintGid = H5Gcreate(file_id, "Signed Int", 0);
   hid_t uintGid = H5Gcreate(file_id, "Unsigned Int", 0);
