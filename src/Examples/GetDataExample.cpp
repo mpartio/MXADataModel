@@ -31,6 +31,7 @@ int main(int argc, char **argv)
   std::cout << logTime() << "----- Running GetData Example ------------- " << std::endl;
   
   herr_t err = 1;
+#if 1
   // Generate a Data file to use
   std::string outputFile(FILE_NAME);
   DataFileGenerator dfg;
@@ -38,8 +39,9 @@ int main(int argc, char **argv)
   err = dfg.generate();
   if (err < 0)
     return EXIT_FAILURE;
+  #endif
   
-#if 1
+#if 0
   //First load the Data file
   MXADataModelPtr modelPtr = MXADataModel::New();
   modelPtr->readModel(FILE_NAME, false); // We pass 'false' so the file will stay open

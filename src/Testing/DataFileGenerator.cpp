@@ -109,7 +109,7 @@ herr_t DataFileGenerator::generate()
 // -----------------------------------------------------------------------------
 herr_t DataFileGenerator::makeRecords(MXADataModelPtr modelPtr, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims) 
 {
-
+#if 0
   // Add all the Data for this record
   MXADataRecordPtr int8Rec = MXADataRecord::New(0, DataGen::Int8Rec, DataGen::Int8Rec );
   modelPtr->addDataRecord(int8Rec, parentRec);
@@ -151,6 +151,6 @@ herr_t DataFileGenerator::makeRecords(MXADataModelPtr modelPtr, MXADataImportPtr
   MXADataRecordPtr float64Rec = MXADataRecord::New(9, DataGen::Float64Rec, DataGen::Float64Rec );
   modelPtr->addDataRecord(float64Rec, parentRec);
   this->createAndStore(modelPtr, float64Rec, dataImport, MXATypes::Float64Type, dims);
-  
+  #endif
   return 1;
 }

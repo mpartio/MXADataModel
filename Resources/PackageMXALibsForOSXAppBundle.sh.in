@@ -62,6 +62,8 @@ install_name_tool -id "${RPATH_PLUGIN_PATH}/${lib}" "${BIN_DIR}/${PLUGINS_PATH}/
 install_name_tool -change "${TIFF_LIBRARY}" "${RPATH_PLUGIN_PATH}/${TIFF_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
 # Change the HDF5 Lbrary
 install_name_tool -change "${HDF5_LIBRARY}" "${RPATH_PLUGIN_PATH}/${HDF5_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+# Change the Expat Lbrary
+install_name_tool -change "${EXPAT_LIBRARY}" "${RPATH_PLUGIN_PATH}/${EXPAT_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
 # Change the Boost Filesystem library
 if [[ ${BOOST_FILESYSTEM_LIBRARY} != "" ]]; 
 then
