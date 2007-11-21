@@ -15,41 +15,19 @@ SET (EXECUTABLE_OUTPUT_PATH
   )
 
 # ---------- Find Boost Headers/Libraries -----------------------
-SET (BOOST_USE_UNIT_TEST_FRAMEWORK TRUE)
-SET (BOOST_USE_TEST_EXEC_MONITOR TRUE)
-SET (BOOST_MXA_LIBS "")
-SET (Boost_FIND_REQUIRED TRUE)
-SET (Boost_FIND_QUIETLY TRUE)
-INCLUDE(${PROJECT_SOURCE_DIR}/../../Resources/MXAFindBoost.cmake)
-SET (BOOST_MXA_LIBS ${BOOST_MXA_LIBS} 
-    ${BOOST_FILESYSTEM_LIBRARY}
-    ${BOOST_UNIT_TEST_FRAMEWORK_LIBRARY}
-    ${BOOST_TEST_EXEC_MONITOR_LIBRARY}
+SET (BOOST_MXA_LIBS
+    debug ${BOOST_FILESYSTEM_DEBUG_LIBRARY}
+    debug ${BOOST_UNIT_TEST_FRAMEWORK_DEBUG_LIBRARY}
+    debug ${BOOST_TEST_EXEC_MONITOR_DEBUG_LIBRARY}
+    optimized ${BOOST_FILESYSTEM_RELEASE_LIBRARY}
+    optimized ${BOOST_UNIT_TEST_FRAMEWORK_RELEASE_LIBRARY}
+    optimized ${BOOST_TEST_EXEC_MONITOR_RELEASE_LIBRARY}
     )
 INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
 LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS})
 
-SET (HDF5_USE_HIGH_LEVEL FALSE)
-INCLUDE( ${PROJECT_SOURCE_DIR}/../../Resources/MXAFindHDF5.cmake )
-IF(NOT HDF5_FOUND)
-  MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
-ENDIF(NOT HDF5_FOUND)
-
-# Include the expat directory in our include paths
-INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIRS} )
-
 OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
-IF(BUILD_VTK_HDF5)
-     #-- Find VTK packages -----------------------------------------
-    FIND_PACKAGE(VTK REQUIRED)
-    INCLUDE(${VTK_USE_FILE})
-    
-    # List the kits from VTK that are needed by this project.
-    SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
 
-    SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
-    SET(HDF5_VTK_BRIDGE "1")
-ENDIF(BUILD_VTK_HDF5) 
 
 IF (BUILD_TESTING)
 
@@ -58,7 +36,7 @@ IF (BUILD_TESTING)
       DataModelTest.cpp
     )
     ADD_EXECUTABLE ( DataModelTest ${MXADATAMODEL_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES ( DataModelTest MXADataModel ${BOOST_MXA_LIBS})
+    TARGET_LINK_LIBRARIES ( DataModelTest  ${MXADATAMODEL_LIB_NAME} ${BOOST_MXA_LIBS} ${DEP_LIBS} )
     ADD_TEST(DataModelTest ${EXECUTABLE_OUTPUT_PATH}/DataModelTest)
     
     # ------ DataImport Test
@@ -66,16 +44,19 @@ IF (BUILD_TESTING)
       DataImportTest.cpp
     )
     ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES ( DataImportTest  ${MXADATAMODEL_LIB_NAME} ${BOOST_MXA_LIBS})
+    TARGET_LINK_LIBRARIES ( DataImportTest ${MXADATAMODEL_LIB_NAME} ${BOOST_MXA_LIBS} ${DEP_LIBS} )
     ADD_TEST(DataImportTest ${EXECUTABLE_OUTPUT_PATH}/DataImportTest)
-    
+    #-- Configure the XML file to correctly find the XML Model file
+    SET (DATA_MODEL_XML_FILE ${MXA_SOURCE_DIR}/Resources/ModelTemplate.xml)
+    CONFIGURE_FILE(${MXA_SOURCE_DIR}/Resources/DataImportTest.xml.in
+                    ${CMAKE_BINARY_DIR}/DataImportTest.xml @ONLY IMMEDIATE)
     
     # ------- H5Lite Test
     SET (H5LITE_TEST_SRCS
       H5LiteTest.cpp
     )
     ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (H5LiteTest MXADataModel ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS} )
+    TARGET_LINK_LIBRARIES (H5LiteTest ${MXADATAMODEL_LIB_NAME} ${BOOST_MXA_LIBS} ${DEP_LIBS} )
     ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
     
     # --------- BMP IO Test
@@ -83,9 +64,22 @@ IF (BUILD_TESTING)
         BmpIOTest.cpp
     )
     ADD_EXECUTABLE(BmpIOTest ${BMP_IO_TEST_SRCS})
-    TARGET_LINK_LIBRARIES (BmpIOTest MXADataModel ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS})
+    TARGET_LINK_LIBRARIES (BmpIOTest  ${MXADATAMODEL_LIB_NAME} ${BOOST_MXA_LIBS} ${DEP_LIBS} )
     ADD_TEST(BmpIOTest ${EXECUTABLE_OUTPUT_PATH}/BmpIOTest)
+   
+    IF (MXA_USE_XML)
+    SET (XML_TEST_SRCS
+        XMLTest.cpp
+        )
+    ADD_EXECUTABLE( XMLTest ${XML_TEST_SRCS} )
+    TARGET_LINK_LIBRARIES (XMLTest  ${MXADATAMODEL_LIB_NAME} ${BOOST_MXA_LIBS} ${DEP_LIBS} )
+    ADD_TEST(XMLTest ${EXECUTABLE_OUTPUT_PATH}/XMLTest)      
+    ENDIF(MXA_USE_XML)
     
+#    ADD_EXECUTABLE( UtilitiesTest UtilitiesTest.cpp )
+#    TARGET_LINK_LIBRARIES(UtilitiesTest MXADataModel ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS})
+#    ADD_TEST(UtilitiesTest ${EXECUTABLE_OUTPUT_PATH}/UtilitiesTest)
+
     # ------- Vtk to HDF5 Bridge test
     IF(BUILD_VTK_HDF5)
         SET (VTK_HDF5_SRCS
@@ -93,27 +87,13 @@ IF (BUILD_TESTING)
           DataFileGenerator.cpp
         )
         ADD_EXECUTABLE( vtkHDF5Test ${VTK_HDF5_SRCS} )
-        TARGET_LINK_LIBRARIES (vtkHDF5Test MXADataModel  ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS}  ${vtkLocal_LIBS})
+        TARGET_LINK_LIBRARIES (vtkHDF5Test MXADataModel  
+                ${MXADATAMODEL_LIB_NAME} 
+                ${BOOST_MXA_LIBS} ${DEP_LIBS}   
+                ${vtkLocal_LIBS}
+        )
         ADD_TEST(vtkHDF5Test ${EXECUTABLE_OUTPUT_PATH}/vtkHDF5Test)
     ENDIF(BUILD_VTK_HDF5)
-    
-    IF (MXA_USE_XML)
-    SET (XML_TEST_SRCS
-        XMLTest.cpp
-        )
-    ADD_EXECUTABLE( XMLTest ${XML_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (XMLTest MXADataModel expat ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS} )
-    ADD_TEST(XMLTest ${EXECUTABLE_OUTPUT_PATH}/XMLTest)      
-    ENDIF(MXA_USE_XML)
-    
-#    ADD_EXECUTABLE( UtilitiesTest UtilitiesTest.cpp )
-#    TARGET_LINK_LIBRARIES(UtilitiesTest MXADataModel ${HDF5_LIBRARIES} ${BOOST_MXA_LIBS})
-#    ADD_TEST(UtilitiesTest ${EXECUTABLE_OUTPUT_PATH}/UtilitiesTest)
-    
-    #-- Configure the XML file to correctly find the XML Model file
-    SET (DATA_MODEL_XML_FILE ${MXA_SOURCE_DIR}/Resources/ModelTemplate.xml)
-    CONFIGURE_FILE(${MXA_SOURCE_DIR}/Resources/DataImportTest.xml.in
-                    ${CMAKE_BINARY_DIR}/DataImportTest.xml @ONLY IMMEDIATE)
-                    
+                   
 ENDIF (BUILD_TESTING)
 

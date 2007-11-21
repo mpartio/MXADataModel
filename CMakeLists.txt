@@ -29,55 +29,23 @@ IF(BUILD_TESTING)
   ENABLE_TESTING()
 ENDIF(BUILD_TESTING)
 
-# -------- Add some definitions for Debug Builds -----------------
-IF ( CMAKE_BUILD_TYPE MATCHES Debug )
-  ADD_DEFINITIONS(-DDEBUG)
-  ADD_DEFINITIONS(-Wall)
-ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
-
-
-# ---------- Find Boost Headers/Libraries -----------------------
-SET (BOOST_MXA_LIBS "")
-SET (Boost_FIND_REQUIRED TRUE)
-SET (Boost_FIND_QUIETLY TRUE)
-INCLUDE (${PROJECT_SOURCE_DIR}/Resources/MXAFindBoost.cmake)
-INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
-LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS}) 
-
-#---- Find Expat -------------
-INCLUDE ( ${PROJECT_SOURCE_DIR}/Resources/MXAFindExpat.cmake)
-INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIRS})
-LINK_DIRECTORIES(${EXPAT_LIBRARIES})
-IF (NOT EXPAT_FOUND)
-  MESSAGE (FATAL "Expat Library was NOT Found and is needed.")
-ENDIF (NOT EXPAT_FOUND)
-
 # Extend the include path to include the MXADataModel source directory
 INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
 # ----- Also include our binary directory as some headers are generated into that directory
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
-#
-#-- Include the MXADataModel Testing Sources
-IF ( BUILD_TESTING )
-  ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
-ENDIF ( BUILD_TESTING )
-#
-#
-#-- Include the Examples Directory
-OPTION(BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
-IF(BUILD_EXAMPLES)
-    ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
-ENDIF(BUILD_EXAMPLES)
+
 #
 # Build shared libraries
-OPTION (MXA_BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 SET (LIB_TYPE STATIC)
-IF (MXA_BUILD_SHARED_LIBS)
+IF (BUILD_SHARED_LIBS)
   SET (LIB_TYPE SHARED)
   IF (WIN32)
-    ADD_DEFINITIONS("-DMXA_BUILD_SHARED_LIBS")
+    ADD_DEFINITIONS("-DBUILD_SHARED_LIBS")
   ENDIF (WIN32)
-ENDIF (MXA_BUILD_SHARED_LIBS)
+ENDIF (BUILD_SHARED_LIBS)
+
+INCLUDE (${MXA_SOURCE_DIR}/Resources/FindSupportLibraries.cmake)
 #
 # ------- Set up the MXADataModel Project Source Files -----------
 # with SET() command you can change variables or define new ones
@@ -137,28 +105,35 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.h
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpHeaders.h
 )
-  
-# Build with the HDF5 Libraries Enabled. This is the default
-SET(HDF5_SUPPORT "0")
-SET(HDF5_VTK_BRIDGE "0")
-OPTION (MXA_USE_HDF5 "Compiles Sources dependent on HDF5 Libraries" ON)
-IF ( MXA_USE_HDF5 )
-  # ---------- Find the HDF Libraries - DO NOT use the High Level APIs from the HDF5
-  # group as those API's will not compile correctly under windows --------------
-  SET (HDF5_USE_HIGH_LEVEL FALSE)
-  INCLUDE( ${PROJECT_SOURCE_DIR}/Resources/MXAFindHDF5.cmake )
-  IF(NOT HDF5_FOUND)
-    MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
-  ENDIF(NOT HDF5_FOUND)
-  # Enable the HDF5_MODULES_ON when using the HDF dynamic libraries
 
-  IF (BUILD_SHARED_LIBS)
-      IF (WIN32)
-        # ADD_DEFINITIONS(-D_HDF5USEDLL_)
-      ENDIF (WIN32)
-  ENDIF (BUILD_SHARED_LIBS)
-  
-  # ---------- Include the HDF5 Dependant source in the Build -------------
+#--------- XML Sources ---------------------------------------------------
+
+IF (MXA_USE_XML)
+    SET ( MXA_XML_SRCS
+        ${MXA_SOURCE_DIR}/src/XML/ExpatParser.cpp
+        ${MXA_SOURCE_DIR}/src/XML/ExpatEvtHandler.cpp
+        ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.cpp
+        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.cpp
+        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.cpp
+        ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.cpp
+    )
+    
+    SET (MXA_XML_HEADERS
+        ${MXA_SOURCE_DIR}/src/XML/ExpatParser.h
+        ${MXA_SOURCE_DIR}/src/XML/ExpatEvtHandler.h
+        ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.h
+        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.h
+        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.h
+        ${MXA_SOURCE_DIR}/src/XML/XMLUserMetaDataWriter.h
+        ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.h
+    )
+    
+    SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
+    SET (XML_SUPPORT "1")
+ENDIF(MXA_USE_XML)
+
+#------- HDF5 Dependant Sources ------------------------------
+IF ( MXA_USE_HDF5 )
   SET( MXA_HDF5_SRCS
     ${MXA_SOURCE_DIR}/src/HDF5/H5Image.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.cpp
@@ -184,15 +159,13 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.h
   )
   
-
-  SET(DEP_LIBS ${DEP_LIBS} ${HDF5_LIBRARIES})
   SET(HDF5_SUPPORT "1")
   OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
   IF(BUILD_VTK_HDF5)
     #-- Find VTK packages -----------------------------------------
     FIND_PACKAGE(VTK REQUIRED)
     INCLUDE(${VTK_USE_FILE})
-    
+      
     # List the kits from VTK that are needed by this project.
     SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
     
@@ -206,17 +179,9 @@ IF ( MXA_USE_HDF5 )
 ENDIF ( MXA_USE_HDF5 )
 
 # ------------------ Check for and Include Tif Lib dependent code --------------
-SET (TIFF_SUPPORT "0")
-OPTION(MXA_USE_TIFF "Compiles source code that depends on having the Tif Lib installed" ON)
 IF(MXA_USE_TIFF)
-
-    #---- Find TIFF -------------
-    INCLUDE ( ${PROJECT_SOURCE_DIR}/Resources/MXAFindTiff.cmake)
-    INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-    LINK_DIRECTORIES(${TIFF_LIBRARIES})
-    IF (NOT TIFF_FOUND)
-      MESSAGE (FATAL "Tiff Library was NOT Found and is needed.")
-    ENDIF (NOT TIFF_FOUND)
+    SET (TIFF_SUPPORT "1")
+    
     SET(MXA_HDF5_TIFF_SRCS
         ${MXA_SOURCE_DIR}/src/HDF5/H5TiffIO.cpp
         ${MXA_SOURCE_DIR}/src/HDF5/H5TiffImportDelegate.cpp
@@ -228,48 +193,19 @@ IF(MXA_USE_TIFF)
         ${MXA_SOURCE_DIR}/src/HDF5/H5TiffImportDelegate.h
         ${MXA_SOURCE_DIR}/src/HDF5/H5TiffImportDelegateFactory.h
         )
-        
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
-    SET(DEP_LIBS ${DEP_LIBS} ${TIFF_LIBRARIES} ${BOOST_FILESYSTEM_LIBRARY})
-    INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
-    SET (TIFF_SUPPORT "1")
 ENDIF (MXA_USE_TIFF)
-#
-#--------- XML Sources ---------------------------------------------------
-SET (XML_SUPPORT "0")
-OPTION(MXA_USE_XML "Adds Ability to read/write models to XML Files" ON)
-IF (MXA_USE_XML)
-    SET(DEP_LIBS ${DEP_LIBS} ${EXPAT_LIBRARIES})
-    INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIRS} )
-    
-    SET ( MXA_XML_SRCS
-        ${MXA_SOURCE_DIR}/src/XML/ExpatParser.cpp
-        ${MXA_SOURCE_DIR}/src/XML/ExpatEvtHandler.cpp
-        ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.cpp
-        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.cpp
-        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.cpp
-        ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.cpp
-    )
-    
-    SET (MXA_XML_HEADERS
-        ${MXA_SOURCE_DIR}/src/XML/ExpatParser.h
-        ${MXA_SOURCE_DIR}/src/XML/ExpatEvtHandler.h
-        ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.h
-        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.h
-        ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.h
-        ${MXA_SOURCE_DIR}/src/XML/XMLUserMetaDataWriter.h
-        ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.h
-    )
-    
-    SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
-    SET (XML_SUPPORT "1")
-ENDIF(MXA_USE_XML)
-
 
 # ---------- Set up the Project Options -----------------------
 IF(WIN32)
  SET(GUI_TYPE WIN32)
 ENDIF(WIN32)
+
+# -------- Add some definitions for Debug Builds -----------------
+IF ( CMAKE_BUILD_TYPE MATCHES Debug )
+  ADD_DEFINITIONS(-DDEBUG)
+  ADD_DEFINITIONS(-Wall)
+ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
 #-- Configure the Header file and then add the Binary Directory to the Includes list
 CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
@@ -277,13 +213,12 @@ CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
 SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfiguration.h  )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
-
 # - Combine all the source files together -----------------------------
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
 #-- Add the MXADataModel Library and link to needed libraries-------------------
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
-TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} ${BOOST_MXA_LIBS} )
+TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
 
 # ----- OS X specific build settings
 IF ( APPLE )
@@ -319,3 +254,14 @@ INSTALL(DIRECTORY ${INSTALL_INCLUDES}  DESTINATION include/MXADataModel
   PATTERN "*.c*" EXCLUDE
   PATTERN "*.in" EXCLUDE
 )
+
+#-- Include the MXADataModel Testing Sources
+IF ( BUILD_TESTING )
+  ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
+ENDIF ( BUILD_TESTING )
+
+#-- Include the Examples Directory
+OPTION(BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
+IF(BUILD_EXAMPLES)
+    ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
+ENDIF(BUILD_EXAMPLES)
