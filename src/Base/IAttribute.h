@@ -25,7 +25,7 @@ class IAttributeWriter;
  * templated.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *  
  */
 class MXA_EXPORT IAttribute 
@@ -52,12 +52,12 @@ class MXA_EXPORT IAttribute
     /**
      * @brief Converts the data value to a float value
      */
-    virtual float valueToFloat32() = 0;
+    virtual float32 valueToFloat32() = 0;
 	
     /**
      * @brief Converts the data value to a double value
      */
-    virtual float valueToFloat64() = 0;
+    virtual float64 valueToFloat64() = 0;
     
     /**
      * @brief Converts the data value to a string

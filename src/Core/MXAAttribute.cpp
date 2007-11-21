@@ -55,7 +55,7 @@ int MXAAttribute::valueToInt32()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-float MXAAttribute::valueToFloat32() { 
+float32 MXAAttribute::valueToFloat32() { 
   //FIXME: Add a try catch here otherwise this will terminate when trying to convert a std::vector or something else
   return boost::any_cast<float32>(_value); 
 }
@@ -63,7 +63,7 @@ float MXAAttribute::valueToFloat32() {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-float MXAAttribute::valueToFloat64() { 
+float64 MXAAttribute::valueToFloat64() { 
 	//FIXME: Add a try catch here otherwise this will terminate when trying to convert a std::vector or something else
 	return boost::any_cast<float64>(_value); 
 }

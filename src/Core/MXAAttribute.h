@@ -37,7 +37,7 @@ typedef boost::any Any;
  * entries in the data model
  * @author mjackson
  * @date Mar 28, 2007
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 class MXA_EXPORT MXAAttribute : public IAttribute
 {
@@ -116,12 +116,12 @@ class MXA_EXPORT MXAAttribute : public IAttribute
     /**
      * @brief Converts the data value to a float value
      */
-    float valueToFloat32();
+    float32 valueToFloat32();
 	
     /**
      * @brief Converts the data value to a double value
      */
-    float valueToFloat64();
+    float64 valueToFloat64();
     
     /**
      * @brief Converts the data value to a string
