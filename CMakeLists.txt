@@ -22,6 +22,11 @@ SET (EXECUTABLE_OUTPUT_PATH
   CACHE PATH
   "Single Directory for all Executables."
   )
+  
+#-------------------------------------------------------------------------------
+#  Define the location of the Resources Directory
+#-------------------------------------------------------------------------------
+SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 OPTION(BUILD_TESTING "Build MXADataModel Complete Testing" ON)
@@ -34,7 +39,6 @@ INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
 # ----- Also include our binary directory as some headers are generated into that directory
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
 
-#
 # Build shared libraries
 OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 SET (LIB_TYPE STATIC)
@@ -45,12 +49,10 @@ IF (BUILD_SHARED_LIBS)
   ENDIF (WIN32)
 ENDIF (BUILD_SHARED_LIBS)
 
-INCLUDE (${MXA_SOURCE_DIR}/Resources/FindSupportLibraries.cmake)
-#
+#-- Find all the support libraries needed
+INCLUDE (${MXA_RESOURCES_DIR}/FindSupportLibraries.cmake)
+
 # ------- Set up the MXADataModel Project Source Files -----------
-# with SET() command you can change variables or define new ones
-# here we define MXADATAMODEL_SRCS variable that contains a list 
-# of all .cpp files note that we don't need \ at the end of line
 SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Core/MXAAttribute.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.cpp
@@ -107,7 +109,6 @@ SET (MXADATAMODEL_HEADERS
 )
 
 #--------- XML Sources ---------------------------------------------------
-
 IF (MXA_USE_XML)
     SET ( MXA_XML_SRCS
         ${MXA_SOURCE_DIR}/src/XML/ExpatParser.cpp
@@ -222,11 +223,9 @@ TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
 
 # ----- OS X specific build settings
 IF ( APPLE )
-#  SET (OSX_EMBEDDED_LIBRARY ON)
   SET_TARGET_PROPERTIES (${MXADATAMODEL_LIB_NAME}
     PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib
-    )
-    
+    )  
 ENDIF ( APPLE )
 
 
@@ -248,7 +247,6 @@ SET (INSTALL_INCLUDES
   
 INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h DESTINATION include/MXADataModel/Headers )
 
-  
 INSTALL(DIRECTORY ${INSTALL_INCLUDES}  DESTINATION include/MXADataModel
   PATTERN "CVS" EXCLUDE
   PATTERN "*.c*" EXCLUDE
