@@ -54,82 +54,95 @@ mkdir -p "${PLUGINS_PATH}"
 lib="lib@MXADATAMODEL_LIB_NAME@.dylib"
 path=$(dirname ${lib})
 file=$(basename ${lib})
-echo "* Copying MXA Library -->${lib}<-- into ${PLUGINS_DIR_NAME} Directory"
-cp "${lib}" "${PLUGINS_PATH}"
-# Change the internal rpath on the MXADataModel Library
-install_name_tool -id "${RPATH_PLUGIN_PATH}/${lib}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
-# Change the Tiff Library
-install_name_tool -change "${TIFF_LIBRARY}" "${RPATH_PLUGIN_PATH}/${TIFF_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
-# Change the HDF5 Lbrary
-install_name_tool -change "${HDF5_LIBRARY}" "${RPATH_PLUGIN_PATH}/${HDF5_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
-# Change the Expat Lbrary
-install_name_tool -change "${EXPAT_LIBRARY}" "${RPATH_PLUGIN_PATH}/${EXPAT_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
-# Change the Boost Filesystem library
-if [[ ${BOOST_FILESYSTEM_LIBRARY} != "" ]]; 
+MXA_BASE_LIBRARY_NAME=$(basename -s .dylib ${lib})
+if [ -f "${path}/{MXA_BASE_LIBRARY_NAME}.dylib" ]
 then
-install_name_tool -change "${BOOST_FILESYSTEM_LIB_NAME}" "${RPATH_PLUGIN_PATH}/${BOOST_FILESYSTEM_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+	echo "* Copying MXA Library -->${lib}<-- into ${PLUGINS_DIR_NAME} Directory"
+	cp "${lib}" "${PLUGINS_PATH}"
+	# Change the internal rpath on the MXADataModel Library
+	install_name_tool -id "${RPATH_PLUGIN_PATH}/${lib}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+	# Change the Tiff Library
+	install_name_tool -change "${TIFF_LIBRARY}" "${RPATH_PLUGIN_PATH}/${TIFF_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+	# Change the HDF5 Lbrary
+	install_name_tool -change "${HDF5_LIBRARY}" "${RPATH_PLUGIN_PATH}/${HDF5_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+	# Change the Expat Lbrary
+	install_name_tool -change "${EXPAT_LIBRARY}" "${RPATH_PLUGIN_PATH}/${EXPAT_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+	# Change the Boost Filesystem library
+	if [[ ${BOOST_FILESYSTEM_LIBRARY} != "" ]]; 
+	then
+	install_name_tool -change "${BOOST_FILESYSTEM_LIB_NAME}" "${RPATH_PLUGIN_PATH}/${BOOST_FILESYSTEM_LIB_NAME}" "${BIN_DIR}/${PLUGINS_PATH}/${lib}"
+	fi
+	# Change the MXADataViewer executable to have the proper rpath for the MXADataModel Library
+	install_name_tool -change "${BIN_DIR}/${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
 fi
-# Change the MXADataViewer executable to have the proper rpath for the MXADataModel Library
-install_name_tool -change "${BIN_DIR}/${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
-
 
 # -----------------------------------------------------------------------------
 # Copy the HDF5 Library into the App package and adjust all Rpaths
 # -----------------------------------------------------------------------------
 HDF5_BASE_LIBRARY_NAME=$(basename -s .dylib ${HDF5_LIBRARY}).dylib
-# HDF5_LVERS_LIBRARY_NAME=$(basename -s .dylib ${HDF5_LIBRARY}).0.0.0.dylib
-# HDF5_SVERS_LIBRARY_NAME=$(basename -s .dylib ${HDF5_LIBRARY}).0.dylib
 path=$(dirname ${HDF5_LIBRARY})
 file=${HDF5_BASE_LIBRARY_NAME}
-rm "${BIN_DIR}/${PLUGINS_PATH}/${HDF5_BASE_LIBRARY_NAME}"
-if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${HDF5_BASE_LIBRARY_NAME}" ] 
-then 
-  echo "* Copying HDF5 Library -->${path}/${file}<-- into ${PLUGINS_DIR_NAME} Directory" 
-  cp "${HDF5_LIBRARY}" "${BIN_DIR}/${PLUGINS_PATH}/${HDF5_BASE_LIBRARY_NAME}"
-  # Change internal id of the HDF5 Library
-  NEW_ID="${RPATH_PLUGIN_PATH}/${HDF5_BASE_LIBRARY_NAME}"
-  TARGET_FILE="${BIN_DIR}/${PLUGINS_PATH}/${HDF5_BASE_LIBRARY_NAME}"
-  install_name_tool -id ${NEW_ID} ${TARGET_FILE}
+# rm "${BIN_DIR}/${PLUGINS_PATH}/${HDF5_BASE_LIBRARY_NAME}"
+# Check for existance of dylib. If we linked against a static library
+# then the computed absolute path will end like .a.dylib.. which is wrong
+if [ ! -f "${path}/{HDF5_BASE_LIBRARY_NAME}.dylib" ]
+then
+	if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${HDF5_BASE_LIBRARY_NAME}" ] 
+	then 
+	  echo "* Copying HDF5 Library -->${path}/${file}<-- into ${PLUGINS_DIR_NAME} Directory" 
+	  cp "${HDF5_LIBRARY}" "${BIN_DIR}/${PLUGINS_PATH}/${HDF5_BASE_LIBRARY_NAME}"
+	  # Change internal id of the HDF5 Library
+	  NEW_ID="${RPATH_PLUGIN_PATH}/${HDF5_BASE_LIBRARY_NAME}"
+	  TARGET_FILE="${BIN_DIR}/${PLUGINS_PATH}/${HDF5_BASE_LIBRARY_NAME}"
+	  install_name_tool -id ${NEW_ID} ${TARGET_FILE}
 
-  # Change the MXADataViewer executable to have the proper rpath for the HDF5 Library
-  NEW_ID="${RPATH_PLUGIN_PATH}/${HDF5_BASE_LIBRARY_NAME}"
-  OLD_ID=${HDF5_LIBRARY}
-  TARGET_FILE="${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
-  install_name_tool -change ${OLD_ID} ${NEW_ID} ${TARGET_FILE}
+	  # Change the MXADataViewer executable to have the proper rpath for the HDF5 Library
+	  NEW_ID="${RPATH_PLUGIN_PATH}/${HDF5_BASE_LIBRARY_NAME}"
+	  OLD_ID=${HDF5_LIBRARY}
+	  TARGET_FILE="${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+	  install_name_tool -change ${OLD_ID} ${NEW_ID} ${TARGET_FILE}
+	fi
 fi
-
 
 # -----------------------------------------------------------------------------
 # Copy the Tiff Library into the App package and adjust all Rpaths
 # -----------------------------------------------------------------------------
+TIFF_BASE_LIBRARY_NAME=$(basename -s .dylib ${TIFF_LIBRARY}).dylib
 lib="${TIFF_LIBRARY}"
 path=$(dirname ${lib})
 file=$(basename ${lib})
-rm "${BIN_DIR}/${PLUGINS_PATH}/${file}"
-if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
+if [ ! -f "${path}/${TIFF_BASE_LIBRARY_NAME}.dylib" ]
 then
-echo "* Copying Tiff Library -->${TIFF_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
-cp "${lib}" "${BIN_DIR}/${PLUGINS_PATH}"
-# Change internal id of the HDF5 Library
-install_name_tool -id "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${PLUGINS_PATH}/${file}"
-# Change the MXADataViewer executable to have the proper rpath for the tiff Library
-install_name_tool -change "${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+	# rm "${BIN_DIR}/${PLUGINS_PATH}/${file}"
+	if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
+	then
+		echo "* Copying Tiff Library -->${TIFF_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
+		cp "${lib}" "${BIN_DIR}/${PLUGINS_PATH}"
+		# Change internal id of the HDF5 Library
+		install_name_tool -id "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${PLUGINS_PATH}/${file}"
+		# Change the MXADataViewer executable to have the proper rpath for the tiff Library
+		install_name_tool -change "${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+	fi
 fi
 
 # -----------------------------------------------------------------------------
 # Copy the expat Library into the App package and adjust all Rpaths
 # -----------------------------------------------------------------------------
+EXPAT_BASE_LIBRARY_NAME=$(basename -s .dylib ${EXPAT_LIBRARY}).dylib
 lib="${EXPAT_LIBRARY}"
 path=$(dirname ${lib})
 file=$(basename ${lib})
-if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
+if [ ! -f "${path}/${EXPAT_LIBRARY}.dylib" ]
 then
-echo "* Copying Expat Library -->${EXPAT_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
-cp "${lib}" "${BIN_DIR}/${PLUGINS_PATH}"
-# Change internal id of the HDF5 Library
-install_name_tool -id "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${PLUGINS_PATH}/${file}"
-# Change the MXADataViewer executable to have the proper rpath for the Expat Library
-install_name_tool -change "${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+    if [ ! -f "${BIN_DIR}/${PLUGINS_PATH}/${file}" ] 
+    then
+    echo "* Copying Expat Library -->${EXPAT_LIBRARY}<-- into ${PLUGINS_DIR_NAME} Directory" 
+    cp "${lib}" "${BIN_DIR}/${PLUGINS_PATH}"
+    # Change internal id of the HDF5 Library
+    install_name_tool -id "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${PLUGINS_PATH}/${file}"
+    # Change the MXADataViewer executable to have the proper rpath for the Expat Library
+    install_name_tool -change "${lib}" "${RPATH_PLUGIN_PATH}/${file}" "${BIN_DIR}/${QT_APPLICATION_APP_NAME}"
+    fi
 fi
 
 # -----------------------------------------------------------------------------
