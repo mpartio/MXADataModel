@@ -263,3 +263,11 @@ OPTION(BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
 IF(BUILD_EXAMPLES)
     ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
 ENDIF(BUILD_EXAMPLES)
+
+# ------------------------------------------------------------------------------
+#  Build simple test programs. This should always be commented out
+# ------------------------------------------------------------------------------
+ADD_EXECUTABLE(OverWriteDataTest ${MXA_SOURCE_DIR}/src/Misc/OverWriteDataTest.cpp)
+TARGET_LINK_LIBRARIES(OverWriteDataTest ${HDF5_LIBRARY})
+
+

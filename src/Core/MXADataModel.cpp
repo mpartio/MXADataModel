@@ -636,7 +636,25 @@ void MXADataModel::getRequiredMetaData(std::map<std::string, std::string> &requi
 // -----------------------------------------------------------------------------
 void MXADataModel::addUserMetaData( IAttributePtr userMetaData)
 {
-  this->_userMetaData.push_back(userMetaData);
+  IAttribute* attr = NULL;
+  bool addMetaData = true;
+  for (IAttributes::iterator iter = this->_userMetaData.begin(); iter != this->_userMetaData.end(); ++iter ) {
+    attr = (*(iter)).get();
+    if (NULL != attr)
+    {
+      if (attr->getKey().compare(userMetaData->getKey()) == 0)
+      { // The keys are the same, so replace the current meta data with the new one.
+        this->_userMetaData.erase(iter);
+        this->_userMetaData.push_back(userMetaData);
+        addMetaData = false;
+        break;
+      }
+    }
+  }
+  if (true == addMetaData) 
+  {
+    this->_userMetaData.push_back(userMetaData);
+  }
 }
 
 // -----------------------------------------------------------------------------

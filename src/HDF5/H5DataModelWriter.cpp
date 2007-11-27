@@ -108,7 +108,7 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
   
   //Write the data root
   std::string dataRoot = _dataModel->getDataRoot();
-  err = H5Lite::writeStringDataset(fileId, const_cast<std::string&>(MXA::DataRootPath), dataRoot);
+  err = this->_writeStringDataset(fileId, const_cast<std::string&>(MXA::DataRootPath), dataRoot, true);
   if (err < 0)
   {
     std::cout << "Error Writing Data Root to HDF File" << std::endl;
@@ -150,7 +150,7 @@ int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
 
     // Create the dimension dataset
     int32 i = dim->getIndex();
-    err = H5Lite::writeScalarDataset(gid, dsetName,  i);
+    err = this->_writeScalarDataset(gid, dsetName,  i);
     if (err<0) { std::cout << "Error Writing DatasetName for DataDimension: " << dim->getDimensionName() << std::endl;;break;}
     
     i = dim->getCount();
@@ -247,7 +247,7 @@ int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, IDataRecords &records)
     } else {
    //   std::cout << "Writing Data Record for " << rec->getRecordName() << std::endl;
       i = rec->getLuid();
-      err = H5Lite::writeScalarDataset(gid, dsetName, i);
+      err = this->_writeScalarDataset(gid, dsetName, i);
       if (err<0) {std::cout << "Error Writing Data Model Record " << dsetName << std::endl; break;}
     }
 
@@ -288,7 +288,7 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
 {
   int32 data = 0;
   herr_t err = 0;
-  err = H5Lite::writeScalarDataset(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), data);
+  err = this->_writeScalarDataset(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), data);
   if (err < 0)
   {
     std::cout << logTime() << "Error Creating Dataset for RequiredMetaData." << err << std::endl;
@@ -311,7 +311,7 @@ int32 H5DataModelWriter::writeUserMetaData(hid_t fileId)
 { 
   int32 data = 0;
   herr_t err = 0;
-  H5Lite::writeScalarDataset(fileId, const_cast<std::string&>(MXA::UserMetaDataPath), data);
+  this->_writeScalarDataset(fileId, const_cast<std::string&>(MXA::UserMetaDataPath), data);
   IAttributes metadata = _dataModel->getUserMetaData();
   IAttribute* attr = NULL;
   H5AttributeWriter writer;
@@ -325,48 +325,76 @@ int32 H5DataModelWriter::writeUserMetaData(hid_t fileId)
 }
 
 
-#if 0
 // -----------------------------------------------------------------------------
-//  
+//  Writes a string to a HDF5 dataset
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::writeSources(hid_t fileId)
+herr_t H5DataModelWriter::_writeStringDataset (hid_t loc_id, 
+                                            const std::string& dsetName, 
+                                            const std::string &data, 
+                                            bool overwrite)
 {
-  if (_num_sources == 0) {
-    // don't indicate an error - just nothing to write
-    return true;
-  }
-
-  DataSource source;
-  std::string src_path, dset_name;
-  std::string file_path, file_ext;
-  std::list<std::string> splitFilePath;
-  std::vector<DataSource>::const_iterator iter;
-  herr_t error = 0; // < 0 is fail, >= 0 is success
-  for (iter=_dataSources.begin(); iter!=_dataSources.end(); iter++) {
-    src_path = generateDataSourcePath(*iter);
-    dset_name = StringUtils::numToString(iter->record_id);
-    file_path = iter->source_path;
-    
-    splitFilePath = StringUtils::splitString(".", file_path);
-    file_ext = splitFilePath.back();
-    #if DEBUG
-    std::cout << "WRITING RECORD ID: " << dset_name
-	            << "\n  FROM: " << src_path 
-	            << "\n  SOURCE FILE: " << file_path << std::endl;
-    #endif
-     
-    // Make sure the group path exists
-    MXAHDFInterface::createPathGroups(fileId, src_path);
-    if ( NULL == iter->parseDelegate) {
-      std::cout << ">>>> ParseDelegate was NULL.. No data will be imported. <<<<<" << std::endl;
-      return false; 
+  hid_t   did=-1;
+  hid_t   sid=-1;
+  hid_t   tid = -1;
+  size_t  size = 0;
+  herr_t err = -1;
+  herr_t retErr = 0;
+  /* create a string data type */
+  if ( (tid = H5Tcopy( H5T_C_S1 )) >= 0 )
+  {
+    size = data.size() + 1;
+    if ( H5Tset_size(tid, size) >= 0 )
+    {
+      if ( H5Tset_strpad(tid, H5T_STR_NULLTERM ) >= 0 )
+      {
+      /* Create the data space for the dataset. */
+        if ( (sid = H5Screate( H5S_SCALAR )) >= 0 )
+        {
+          /* Create the dataset. */
+          if (overwrite == true)
+          {
+            HDF_ERROR_HANDLER_OFF
+            did = H5Dopen(loc_id, dsetName.c_str() );
+            if (did > 0)
+            {
+              hsize_t storageSize = H5Dget_storage_size(did);
+              if (did > 0 && storageSize != data.size() + 1)
+              { // Data sizes are NOT the same. Delete current data set
+                err = H5Gunlink(loc_id, dsetName.c_str() );
+                if (err < 0 )
+                {
+                  retErr = err;
+                }
+                err = H5Dclose(did);
+                did = -1;
+              }
+            }
+            HDF_ERROR_HANDLER_ON
+          }
+          if (did < 0 && retErr >= 0) // dataset does not exist
+          {
+            did = H5Dcreate(loc_id, dsetName.c_str(), tid, sid, H5P_DEFAULT);
+          }
+          if ( did >= 0 && retErr >= 0)
+          {
+             if ( !data.empty() )
+              {
+                  err = H5Dwrite(did, tid, H5S_ALL, H5S_ALL,H5P_DEFAULT, data.c_str() );
+                  if (err<0 ) {
+                    std::cout << "Error Writing String Data" << std::endl;
+                    retErr = err;
+                  }
+              }
+          } else {
+            retErr = did;
+          }
+          CloseH5D(did, err, retErr);
+        }
+        CloseH5S(sid, err, retErr);
+      }
     }
-    error = iter->parseDelegate->encodeSourceToHDF5 (fileId, src_path, dset_name, file_path);
-    if (error < 0) {
-      std::cout << "Error loading data from file " << file_path << " into the hdf file" << std::endl; 
-    }
+    CloseH5T(tid, err, retErr);
   }
-  return true;
+  return retErr;
 }
-#endif
 

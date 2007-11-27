@@ -1,5 +1,6 @@
+
+#include "H5IODelegate.h"
 #include <Common/LogTime.h>
-#include <HDF5/H5IODelegate.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5DataModelReader.h>
 #include <HDF5/H5DataModelWriter.h>
@@ -35,26 +36,55 @@ H5IODelegate::~H5IODelegate()
 // -----------------------------------------------------------------------------
 MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished)
 {
-  
   int32 success = -1;
-  _fileId = -1;
-  //Create the HDF File
-  _fileId = H5Fcreate(fileName.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
-  if (_fileId < 0)
+  //_fileId = -1;
+  
+  // Model file is NOT open and the filenames do NOT match
+  if (_fileId < 0 && (this->_openFile.compare(fileName) != 0))
   {
-    std::cout << "Error Creating new MXA File" << std::endl;
-    return _fileId;
+    // Named file is not open, try opening it first
+    HDF_ERROR_HANDLER_OFF
+    _fileId = H5Fopen(fileName.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
+    HDF_ERROR_HANDLER_ON
+    if (_fileId < 0) // The data file does NOT exist-Create it and write the model
+    {
+      //Create the HDF File
+      _fileId = H5Fcreate(fileName.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+      if (_fileId < 0)
+      {
+        std::cout << "Error Creating new MXA File" << std::endl;
+        return _fileId;
+      }
+    }
+    this->_openFile = fileName;
   }
   
-  H5DataModelWriter writer(this, model );
-  success = writer.writeModelToFile(_fileId);
-  
-  //Close the file as we are done with it.
-  if (closeWhenFinished) 
-  {  closeMXAFile(); }
-  else 
+  // A different File is open
+  if (_fileId > 0 && (this->_openFile.compare(fileName) != 0) )
   {
-    this->_openFile = fileName;
+#if DEBUG
+    std::cout << "H5IODelegate::writeModelToFile - Error: This method was called with a different filename " 
+    << " than the currently open data file has. Please use H5IODelegate.closeMXAFile() first to close the" 
+    << " current file, then call this method." << std::endl;
+#endif
+    return -1010;
+  }
+
+  // A file IS open, and it is the same as the parameter fileName
+  if (_fileId > 0 && (this->_openFile.compare(fileName) == 0 ) )
+  {
+    // Write or Overwrite the model information
+    H5DataModelWriter writer(this, model);
+    success = writer.writeModelToFile(_fileId);
+    //Close the file as we are done with it.
+    if (closeWhenFinished)
+    {
+      closeMXAFile();
+    }
+    else
+    {
+      this->_openFile = fileName;
+    }
   }
   return success;
 }
@@ -67,16 +97,19 @@ MXATypes::MXAError H5IODelegate::readModelFromFile(const std::string &fileName, 
 {
   //Open the HDF File
   _fileId = openMXAFile(fileName, true);
-  if (_fileId < 0) {
+  if (_fileId < 0)
+  {
     return _fileId;
   }
   //Instantiate the H5DataModelReader object
   H5DataModelReader reader(this, model);
   herr_t error = reader.readDataModel(_fileId);
   //Close the file as we are done with it.
-  if (closeWhenFinished) 
-  {  closeMXAFile(); }
-  else 
+  if (closeWhenFinished)
+  {
+    closeMXAFile();
+  }
+  else
   {
     this->_openFile = fileName;
   }

@@ -32,7 +32,7 @@ class MXADataModel;
  * to serialize/deserialize the model from a data file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *   IMXADataModelCode.h
  */
 class MXA_EXPORT IFileIODelegate
@@ -42,7 +42,11 @@ public:
 
   virtual ~IFileIODelegate(){};
   
-  /** @brief Writes the Model to a data file
+  /** @brief Writes the Model to a data file. If the file does NOT exist, a new
+   * file will be created. If the data file does exist and does NOT have a model
+   * in the file, then the model will be written. If the data file DOES exist and
+   * DOES have an existing model then the model information from the passed in model
+   * will overwrite the model in the file.
   * @param fileName The name of the file (and path if needed) to write the model to
   * @param model The Model to serialize
   * @param closeWhenFinished Close the file when this operation is complete
@@ -83,6 +87,15 @@ public:
    */
   virtual int32 openMXAFile(std::string filename, bool readOnly=false) = 0;
  
+  /**
+   * @brief Creates a new Archive file (based on the subclasses archive format)
+   * that is empty, it has no data or Data Model
+   * @param fileName The name of the data file
+   * @return Error code - Negative is error. Zero or Positive is Success
+   */
+  //virtual int32 createEmptyArchiveFile(std::string fileName) = 0;
+  
+  
   /**
    * @brief Closes the currently open file
    */

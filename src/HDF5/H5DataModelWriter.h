@@ -16,6 +16,7 @@
 #include <Base/IDataModelWriter.h>
 #include <Core/MXADataModel.h>
 #include <HDF5/H5IODelegate.h>
+#include <HDF5/H5Lite.h>
 
 //-- STL Headers
 #include <iostream>
@@ -33,7 +34,7 @@ class MXANode;
  * @brief Writes the DataModel to an HDF5 file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  *  
  */
 class MXA_EXPORT H5DataModelWriter : public IDataModelWriter
@@ -95,6 +96,82 @@ protected:
 * @return
 */
   int32 _traverseDataRecords(hid_t gid,  IDataRecords &records);
+  
+  /**
+   * @brief Writes a std::string as a HDF Dataset.
+   * @param loc_id The Parent location to write the dataset
+   * @param dsetName The Name to use for the dataset
+   * @param data The actual data to write as a null terminated string
+   * @return Standard HDF5 error conditions
+   */
+  herr_t  _writeStringDataset (hid_t loc_id, 
+                               const std::string& dsetName, 
+                               const std::string& data,
+                               bool overwrite = false);
+  
+/**
+ * @brief Creates a Dataset with the given name at the location defined by loc_id.
+ * This version of writeDataset should be used with a single scalar value. If you 
+ * need to write an array of values, use the form that takes an std::vector<>
+ * 
+ * @param loc_id The Parent location to store the data
+ * @param dsetName The name of the dataset
+ * @param value The value to write to the HDF5 dataset
+ * @return Standard HDF5 error conditions
+ */
+  template <typename T>
+  static herr_t _writeScalarDataset (hid_t loc_id,
+                              const std::string& dsetName,
+                              T &value) 
+  {
+    herr_t err = -1;
+    hid_t did = -1;
+    hid_t sid = -1;
+    herr_t retErr = 0;
+    hsize_t dims = 1;
+    hid_t rank = 1;
+    hid_t dataType = H5Lite::HDFTypeForPrimitive(value);
+    if (dataType == -1)
+    {
+      return -1;
+    }
+    //Create the DataSpace
+    sid = H5Screate_simple( rank, &(dims), NULL );
+    if (sid < 0) 
+    {
+      return sid;
+    }
+    HDF_ERROR_HANDLER_OFF
+    did = H5Dopen(loc_id, dsetName.c_str() );
+    HDF_ERROR_HANDLER_ON
+
+    if ( did < 0 ) // dataset does not exist
+    {
+      did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
+    }
+    if ( did >= 0 ) 
+    {
+      err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value );
+      if (err < 0 ) {
+        std::cout << "Error Writing Data" << std::endl;
+        retErr = err;
+      }
+      err = H5Dclose( did );
+      if (err < 0) {
+        std::cout << "Error Closing Dataset." << std::endl;
+        retErr = err;
+      }
+    } else {
+      retErr = did;
+    }
+    /* Terminate access to the data space. */
+    err = H5Sclose( sid );
+    if (err< 0) {
+      std::cout << "Error Closing Dataspace" << std::endl;
+      retErr = err; 
+    }
+    return retErr;
+  }
   
 private:
   H5IODelegate* _ioDelegate;

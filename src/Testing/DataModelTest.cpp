@@ -30,6 +30,10 @@
 //Boost Includes
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+//-- Boost Filesystem Headers
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+//-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
 
 using boost::unit_test::test_suite;
@@ -43,12 +47,22 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 #if defined (_WIN32)
   #define FILE_NAME_BEFORE "C:\\WINDOWS\\Temp\\DataModelTest-Before.h5"
   #define FILE_NAME_AFTER "C:\\WINDOWS\\Temp\\DataModelTest-After.h5"
+#define DATA_MODEL_OVERWRITE_TEST "C:\\WINDOWS\\Temp\\DataModelOverWriteTest.h5" 
 #else 
   #define FILE_NAME_BEFORE "/tmp/DataModelTest-Before.h5"
   #define FILE_NAME_AFTER "/tmp/DataModelTest-After.h5"
+  #define DATA_MODEL_OVERWRITE_TEST "/tmp/DataModelOverWriteTest.h5" 
 #endif
 
-
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void RemoveTestFiles()
+{
+  BOOST_REQUIRE ( boost::filesystem::remove(FILE_NAME_BEFORE) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(FILE_NAME_AFTER) == true );
+  //BOOST_REQUIRE ( boost::filesystem::remove(DATA_MODEL_OVERWRITE_TEST) == true );
+}
 
 // -----------------------------------------------------------------------------
 //  
@@ -426,9 +440,13 @@ void ReReadTestModel()
     MXADataModelPtr rmodel  = MXADataModel::New();
     MXADataModel* model = rmodel.get();
     BOOST_REQUIRE ( model->readModel(inFile) >= 0);
-   // model->printModel(std::cout, true);
-    BOOST_REQUIRE ( model->writeModel(outFile) >= 0 );
+    // This should FAIL because the files passed in are different
+    BOOST_REQUIRE ( model->writeModel(outFile) < 0);
+    // This should PASS because we are providing a new IODelegate to use.
+    IODelegatePtr h5io ( new H5IODelegate); 
+    BOOST_REQUIRE ( model->writeModel(outFile, h5io) >= 0 );
     
+    // This should FAIL because we are providing a NULL delegate.
     IODelegatePtr ioPtr;
     BOOST_REQUIRE ( model->writeModel(outFile, ioPtr) < 0);
   }
@@ -527,11 +545,69 @@ void TestDataRecordRemoval()
 
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void TestDataModelOverWrite()
+{
+  std::cout << "TestDataModelOverWrite Running...." << std::endl;
+  {
+    MXADataModelPtr modelPtr = createModel();
+    MXADataModel* model = modelPtr.get();
+    // Write the standard model.. 
+    model->writeModel(DATA_MODEL_OVERWRITE_TEST, false);
+    // Update one of the dimensions
+    IDataDimension* dim0 = model->getDataDimension(0);
+    //IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
+    dim0->setStartValue(0);
+    dim0->setEndValue(9);
+    dim0->setIncrement(1);
+    int32 count = dim0->calculateCount();
+    model->setDataRoot("New/Data/Root/");
+    BOOST_REQUIRE(count == 10);
+    int8  i8  = -8 * 2;
+    uint8 ui8 = 8 * 2;
+    int16 i16 = -16 * 2;
+    uint16 ui16 = 16 * 2;
+    int32 i32 = -32 * 2;
+    uint32 ui32 = 32 * 2;
+    int64 i64 = -64 * 2;
+    uint64 ui64 = 64 * 2;
+    float32 f32 = 32.32f * 2;
+    float64 f64 = 64.64 * 2;
+    MakeScalarAttribute( i8, "Scalar Int 8", model);
+    MakeScalarAttribute( ui8, "Scalar UInt8", model);
+    MakeScalarAttribute( i16, "Scalar Int 16", model);
+    MakeScalarAttribute( ui16, "Scalar UInt16", model);
+    MakeScalarAttribute( i32, "Scalar Int 32", model);
+    MakeScalarAttribute( ui32, "Scalar UInt32", model);
+    MakeScalarAttribute( i64, "Scalar Int 64", model);
+    MakeScalarAttribute( ui64, "Scalar UInt64", model);
+    // Floating point Numbers
+    MakeScalarAttribute( f32, "Scalar Float 32", model);
+    MakeScalarAttribute( f64, "Scalar Float 64", model);
+    
+    model->writeModel(DATA_MODEL_OVERWRITE_TEST, false);
+  }
+  {
+    MXADataModelPtr modelPtr = MXADataModel::New();
+    modelPtr->readModel(DATA_MODEL_OVERWRITE_TEST, true);
+    IDataDimension* dim0 = modelPtr->getDataDimension(0);
+    BOOST_REQUIRE ( dim0->getCount() == 10);
+    BOOST_REQUIRE ( dim0->getStartValue() == 0);
+    BOOST_REQUIRE ( dim0->getEndValue() == 9);
+    BOOST_REQUIRE ( dim0->getIncrement() == 1);
+    BOOST_REQUIRE ( modelPtr->getDataRoot().compare("New/Data/Root/") == 0);
+  }
+}
+
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
+test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) 
+{
+  
   test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
   //test->add( new DataModelTest () );
     
@@ -543,6 +619,7 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
   test->add (BOOST_TEST_CASE( &TestDimensionCount), 0);
   test->add (BOOST_TEST_CASE( &TestEndianSwap), 0);
   test->add (BOOST_TEST_CASE( &TestDataRecordRemoval), 0);
-  
+  test->add (BOOST_TEST_CASE( &TestDataModelOverWrite), 0);
+  test->add (BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test; 
 }
