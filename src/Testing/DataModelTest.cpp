@@ -61,7 +61,7 @@ void RemoveTestFiles()
 {
   BOOST_REQUIRE ( boost::filesystem::remove(FILE_NAME_BEFORE) == true );
   BOOST_REQUIRE ( boost::filesystem::remove(FILE_NAME_AFTER) == true );
-  //BOOST_REQUIRE ( boost::filesystem::remove(DATA_MODEL_OVERWRITE_TEST) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(DATA_MODEL_OVERWRITE_TEST) == true );
 }
 
 // -----------------------------------------------------------------------------

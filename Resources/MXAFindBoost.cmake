@@ -97,7 +97,7 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-MESSAGE(STATUS "Finding Boost libraries.... ")
+# MESSAGE(STATUS "Finding Boost libraries.... ")
 IF (NOT DEFINED BOOST_CURRENT_VERSION)
     SET ( BOOST_CURRENT_VERSION "1_34_1")
 ENDIF (NOT DEFINED BOOST_CURRENT_VERSION)

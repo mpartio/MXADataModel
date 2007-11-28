@@ -11,7 +11,7 @@
 #  HDF5_LIBRARY_DEBUG - Debug Version of HDF5 library
 #  HDF5_LIBRARY_RELEASE - Release Version of HDF5 library
 
-MESSAGE(STATUS "Finding HDF5 Library... " )
+# MESSAGE(STATUS "Finding HDF5 Library... " )
 
 #-- Clear the Library List 
 # SET (HDF5_LIBRARIES "")

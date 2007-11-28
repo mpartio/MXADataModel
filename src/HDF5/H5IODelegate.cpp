@@ -65,7 +65,7 @@ MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName, M
 #if DEBUG
     std::cout << "H5IODelegate::writeModelToFile - Error: This method was called with a different filename " 
     << " than the currently open data file has. Please use H5IODelegate.closeMXAFile() first to close the" 
-    << " current file, then call this method." << std::endl;
+    << " current file, then call this method or create an IFileIODelegate object on the stack and pass that object as an argument." << std::endl;
 #endif
     return -1010;
   }

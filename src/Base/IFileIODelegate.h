@@ -32,7 +32,7 @@ class MXADataModel;
  * to serialize/deserialize the model from a data file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *   IMXADataModelCode.h
  */
 class MXA_EXPORT IFileIODelegate
@@ -77,7 +77,6 @@ public:
    */
   virtual bool isMXAFile(const std::string &fileName) = 0;
 
-
   /**
    * @brief Opens an existing MXA Data File. IE an HDF5 file with the proper data model
    * encoded.
@@ -86,15 +85,6 @@ public:
    * @return HDF5 file id
    */
   virtual int32 openMXAFile(std::string filename, bool readOnly=false) = 0;
- 
-  /**
-   * @brief Creates a new Archive file (based on the subclasses archive format)
-   * that is empty, it has no data or Data Model
-   * @param fileName The name of the data file
-   * @return Error code - Negative is error. Zero or Positive is Success
-   */
-  //virtual int32 createEmptyArchiveFile(std::string fileName) = 0;
-  
   
   /**
    * @brief Closes the currently open file
