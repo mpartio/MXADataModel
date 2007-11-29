@@ -765,12 +765,12 @@ void MXADataModel::printUserMetaData(std::ostream& os, int32 indent)
 // -----------------------------------------------------------------------------
 //  Reads the datamodel from the filename given using the defualt IODelegatePtr
 // -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, bool closeWhenFinished)
+MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, bool closeWhenFinished, bool openReadOnly)
 {
   int32 err = -1;
   if (this->_ioDelegate.get() != NULL)
   {
-    err =  this->_ioDelegate->readModelFromFile(fileName, this, closeWhenFinished);
+    err =  this->_ioDelegate->readModelFromFile(fileName, this, closeWhenFinished, openReadOnly);
     this->squeezeDataDimensions(); // Remove extra NULL data dimensions
   }
   return err;
@@ -779,12 +779,12 @@ MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, bool clo
 // -----------------------------------------------------------------------------
 //  Reads the datamodel using a different IODelegatePtr than provided as a default
 // -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished)
+MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly)
 {
   int32 err = -1;
   if (ioDelegate.get() != NULL)
   {
-    err = ioDelegate->readModelFromFile(fileName, this, closeWhenFinished);
+    err = ioDelegate->readModelFromFile(fileName, this, closeWhenFinished, openReadOnly);
     this->squeezeDataDimensions(); // Remove extra NULL data dimensions
   } 
   return err;
@@ -793,12 +793,14 @@ MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, IODelega
 // -----------------------------------------------------------------------------
 //  Reads the datamodel from the filename given using the defualt IODelegatePtr
 // -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, bool closeWhenFinished)
+MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, 
+                                  bool closeWhenFinished,
+                                  bool deleteExisting)
 {
   if (this->_ioDelegate.get() != NULL)
   {
     this->squeezeDataDimensions(); // Remove extra NULL data dimensions
-    return this->_ioDelegate->writeModelToFile(fileName, this, closeWhenFinished);
+    return this->_ioDelegate->writeModelToFile(fileName, this, closeWhenFinished, deleteExisting);
   }
   return -1;
 }
@@ -806,12 +808,15 @@ MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, bool cl
 // -----------------------------------------------------------------------------
 //  Reads the datamodel using a different IODelegatePtr than provided as a default
 // -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished)
+MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, 
+                                            IODelegatePtr ioDelegate,                                          
+                                            bool closeWhenFinished,
+                                            bool deleteExisting)
 {
   if (ioDelegate.get() != NULL)
   {
     this->squeezeDataDimensions(); // Remove extra NULL data dimensions
-    return ioDelegate->writeModelToFile(fileName, this, closeWhenFinished);
+    return ioDelegate->writeModelToFile(fileName, this, closeWhenFinished, deleteExisting);
   } 
   return -1;
 }

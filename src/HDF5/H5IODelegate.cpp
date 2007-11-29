@@ -1,10 +1,16 @@
 
+//-- MXA Includes
 #include "H5IODelegate.h"
 #include <Common/LogTime.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5DataModelReader.h>
 #include <HDF5/H5DataModelWriter.h>
 #include <HDF5/H5Utilities.h>
+
+//-- Boost Filesystem Headers
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+
 
 // -----------------------------------------------------------------------------
 //  
@@ -34,10 +40,23 @@ H5IODelegate::~H5IODelegate()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished)
+MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName, 
+                                                  IDataModel* model, 
+                                                  bool closeWhenFinished,
+                                                  bool deleteExisting)
 {
   int32 success = -1;
+  bool didDeleteFile = true;
   //_fileId = -1;
+  if (deleteExisting == true)
+  {
+    if (_fileId > 0 && (this->_openFile.compare(fileName) == 0 ) )
+    {
+      this->closeMXAFile(); // Close the file first if it is open.
+    }
+    // Now delete the file
+    didDeleteFile = boost::filesystem::remove(fileName);
+  }
   
   // Model file is NOT open and the filenames do NOT match
   if (_fileId < 0 && (this->_openFile.compare(fileName) != 0))
@@ -64,8 +83,8 @@ MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName, M
   {
 #if DEBUG
     std::cout << "H5IODelegate::writeModelToFile - Error: This method was called with a different filename " 
-    << " than the currently open data file has. Please use H5IODelegate.closeMXAFile() first to close the" 
-    << " current file, then call this method or create an IFileIODelegate object on the stack and pass that object as an argument." << std::endl;
+    << " than the currently open data file has.\nPlease use H5IODelegate.closeMXAFile() first to close the" 
+    << " current file, then call this method or \ncreate an IFileIODelegate object on the stack and pass that object as an argument." << std::endl;
 #endif
     return -1010;
   }
@@ -87,16 +106,20 @@ MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName, M
     }
   }
   return success;
+  
 }
 
 // -----------------------------------------------------------------------------
 //  Opens the file and then reads the data model from the file. Then closes the
 //  when reading is complete.
 // -----------------------------------------------------------------------------
-MXATypes::MXAError H5IODelegate::readModelFromFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished)
+MXATypes::MXAError H5IODelegate::readModelFromFile(const std::string &fileName, 
+                                                  IDataModel* model, 
+                                                  bool closeWhenFinished,
+                                                  bool openReadOnly)
 {
   //Open the HDF File
-  _fileId = openMXAFile(fileName, true);
+  _fileId = openMXAFile(fileName, openReadOnly);
   if (_fileId < 0)
   {
     return _fileId;

@@ -23,14 +23,14 @@ class IMXAFileIODelegate;
  * a data model to a file.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  *  
  */
 class MXA_EXPORT IDataModelReader 
 {
 
 public:
-  IDataModelReader(IMXAFileIODelegate* ioDelegate, MXADataModel* dataModel){};
+  IDataModelReader(IMXAFileIODelegate* ioDelegate, IDataModel* dataModel){};
   virtual ~IDataModelReader(){};
 
   /**

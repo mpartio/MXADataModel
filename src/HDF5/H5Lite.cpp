@@ -313,7 +313,7 @@ herr_t H5Lite::writeStringAttribute(hid_t loc_id,
               {
                 err = H5Adelete( obj_id, attrName.c_str() );
                 if (err<0) {
-                  std::cout << "Error Deleting Attribute." << std::endl;
+                  std::cout << "Error Deleting Attribute '" << attrName << "' from Object '" <<  objName << "'" << std::endl;
                   retErr = err;
                 }
               }

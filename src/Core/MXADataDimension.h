@@ -27,7 +27,7 @@
  * 
  * @author Mike Jackson @ IMTS.us 
  * @date March 2007
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  *  
  */
 class  MXA_EXPORT MXADataDimension : public IDataDimension
@@ -192,6 +192,7 @@ public:
   
   int32 calculateCount();
 
+  
 protected:
   MXADataDimension();
 

@@ -22,7 +22,7 @@
  * supports reading/writing of the data model and data to and from XML files.
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  *  
  */
 class MXA_EXPORT XMLIODelegate : public IFileIODelegate
@@ -39,19 +39,21 @@ public:
 	  * @param fileName The name of the file (and path if needed) to write the model to
 	  * @param model The Model to serialize
 	  * @param closeWhenFinished
+	  * @param deleteExisting
 	  * @return MXAError - Zero or Positive values are success. Negative values are errors
 	  */
-	  int32 writeModelToFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished=false) ;
+	  int32 writeModelToFile(const std::string &fileName, IDataModel* model, bool closeWhenFinished, bool deleteExisting) ;
 	  
 	  /** @brief Deserializes a Datamodel from a file on disk
 	  * @param fileName The name of the file (including path) to deserialize from
 	  * @param model The model to read the information into
 	  * @param closeWhenFinished
+	  * @param openReadOnly
 	  * @return A pointer to a new'ed MXADataModel Object. It is up to the Programmer to
 	  * release the Object. If an Error occurs during the reading, then a NULL pointer
 	  * is returned.
 	  */
-	  int32 readModelFromFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished=false) ;
+	  int32 readModelFromFile(const std::string &fileName, IDataModel* model, bool closeWhenFinished, bool openReadOnly) ;
 	  
 	  /**
 	   * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model

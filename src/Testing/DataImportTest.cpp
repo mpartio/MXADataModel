@@ -165,7 +165,9 @@ int DataImportTest ()
   //std::cout << logTime() << "----- Running DataImport Test ------------- " << std::endl;
   std::string outputFile(FILE_NAME_BEFORE);
   MXADataModelPtr model = createSimpleModel();
-  BOOST_REQUIRE(model->writeModel(outputFile, false) >= 0); //Leave the file open for the import
+  //Leave the file open for the import
+  // Delete any existing file
+  BOOST_REQUIRE(model->writeModel(outputFile, false, true) >= 0); 
   ImportSimpleData(model, outputFile);
 
   return 0;

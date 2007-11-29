@@ -11,12 +11,6 @@
 #ifndef _IFILEIO_DELEGATE_H
 #define _IFILEIO_DELEGATE_H
 
-//TODO: Reopening a file
-//TODO: Refreshing a model from a file on system
-//TODO: Overwrite model if file exists? Would wipe out data in that file
-//TODO: Overwrite file if file exists on write? Need boolean to control this
-//TODO: Append to an existing file?
-
 //MXA Includes
 #include <Common/DLLExport.h>
 #include <Common/MXATypes.h>
@@ -32,7 +26,7 @@ class MXADataModel;
  * to serialize/deserialize the model from a data file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  *   IMXADataModelCode.h
  */
 class MXA_EXPORT IFileIODelegate
@@ -50,19 +44,24 @@ public:
   * @param fileName The name of the file (and path if needed) to write the model to
   * @param model The Model to serialize
   * @param closeWhenFinished Close the file when this operation is complete
+  * @param deleteExisting Delete existing file of the same name and create a new file
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
-  virtual int32 writeModelToFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished=false) = 0;
+  virtual int32 writeModelToFile(const std::string &fileName, IDataModel* model, bool closeWhenFinished, bool deleteExisting) = 0;
   
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
   * @param model The model to read the information into
   * @param closeWhenFinished Close the file when this operation is complete
+  * @param openReadOnly Opens the file in a read only mode. Nothing can be written to the file
   * @return A pointer to a new'ed MXADataModel Object. It is up to the Programmer to
   * release the Object. If an Error occurs during the reading, then a NULL pointer
   * is returned.
   */
-  virtual int32 readModelFromFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished=false) = 0;
+  virtual int32 readModelFromFile(const std::string &fileName, 
+                                  IDataModel* model, 
+                                  bool closeWhenFinished,
+                                  bool openReadOnly) = 0;
   
   /**
    * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model

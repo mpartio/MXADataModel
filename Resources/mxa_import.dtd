@@ -23,7 +23,7 @@
 	Uniform CDATA #REQUIRED>
 <!ATTLIST Output_File
 	Absolute_Path CDATA #REQUIRED
-	Overwrite_Existing_File (true|false) "true" >
+	Delete_Existing_File (true|false) "true" >
 <!ATTLIST Implicit_Data_Source
 	Data_Record CDATA #REQUIRED
 	Source_Type CDATA #IMPLIED>

@@ -27,7 +27,10 @@ XMLIODelegate::~XMLIODelegate()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXATypes::MXAError XMLIODelegate::writeModelToFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished)
+MXATypes::MXAError XMLIODelegate::writeModelToFile(const std::string &fileName, 
+                                                    IDataModel* model, 
+                                                    bool closeWhenFinished,
+                                                    bool deleteExisting)
 {
   int32 success = -1;
   XMLDataModelWriter writer(this, model, fileName );
@@ -39,7 +42,7 @@ MXATypes::MXAError XMLIODelegate::writeModelToFile(const std::string &fileName, 
 //  Opens the file and then reads the data model from the file. Then closes the
 //  when reading is complete.
 // -----------------------------------------------------------------------------
-MXATypes::MXAError XMLIODelegate::readModelFromFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished)
+MXATypes::MXAError XMLIODelegate::readModelFromFile(const std::string &fileName, IDataModel* model, bool closeWhenFinished, bool openReadOnly)
 {
   int32 success = -1;
   XMLDataModelReader reader(this, model, fileName);

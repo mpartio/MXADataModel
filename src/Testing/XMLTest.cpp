@@ -259,12 +259,12 @@ void GenerateMasterXMLFile()
   std::string xmlFile(MASTER_XML_FILE);
 
   XMLIODelegate iodelegate; // Create on the stack
-  BOOST_REQUIRE ( iodelegate.writeModelToFile(xmlFile, model.get(), true) >= 0);
+  BOOST_REQUIRE ( iodelegate.writeModelToFile(xmlFile, model.get(), true, true) >= 0);
   
   // Read the File back from xml
   MXADataModelPtr modelFromXMLFile = MXADataModel::New();
   IODelegatePtr xmlDelegatePtr (new XMLIODelegate);
-  BOOST_REQUIRE ( modelFromXMLFile->readModel(xmlFile, xmlDelegatePtr, true) >= 0);
+  BOOST_REQUIRE ( modelFromXMLFile->readModel(xmlFile, xmlDelegatePtr, true, true) >= 0);
   
 }
 
@@ -277,12 +277,12 @@ void XMLModelTest()
   std::string xmlFile(MASTER_XML_FILE);
   MXADataModelPtr model = MXADataModel::New();
   XMLIODelegate iodelegate; // Create on the stack
-  BOOST_REQUIRE ( iodelegate.readModelFromFile(xmlFile, model.get(), true) >= 0);
+  BOOST_REQUIRE ( iodelegate.readModelFromFile(xmlFile, model.get(), true, false) >= 0);
   //model->printDataDimensions(std::cout, 2);
   BOOST_REQUIRE (model->getNumberOfDataDimensions() == 4);
   
   
-  BOOST_REQUIRE ( iodelegate.writeModelToFile(XML_TEST_FILE, model.get(), true) >= 0);
+  BOOST_REQUIRE ( iodelegate.writeModelToFile(XML_TEST_FILE, model.get(), true, true) >= 0);
   
   // Now compare the xml files
   std::vector<char> inData;
@@ -320,11 +320,11 @@ void XMLTemplateTest()
   std::string templateFile (XML_TEMPLATE_TEST_FILE);
   MXADataModelPtr model = createModelTemplate();
   XMLIODelegate xmlWriter;
-  BOOST_REQUIRE ( xmlWriter.writeModelToFile(templateFile, model.get(), true) >= 0);
+  BOOST_REQUIRE ( xmlWriter.writeModelToFile(templateFile, model.get(), true, true) >= 0);
 
   MXADataModelPtr readModel = MXADataModel::New();
   IODelegatePtr xmlReader (new XMLIODelegate); // Create on the stack
-  BOOST_REQUIRE ( readModel->readModel(templateFile, xmlReader, true)  < 0); // Should NOT validate correctly
+  BOOST_REQUIRE ( readModel->readModel(templateFile, xmlReader, true, true)  < 0); // Should NOT validate correctly
 
   BOOST_REQUIRE ( readModel->isValid(errorMessage) == false);
   BOOST_REQUIRE ( readModel->getDataRecords().size() == 2);
@@ -359,7 +359,7 @@ void XMLTemplateTest()
   
   BOOST_REQUIRE ( readModel->isValid(errorMessage) == true); //Model should now validate since we have reasonable values for each dimension 
   //We can write the model back out to XML without any errors
-  BOOST_REQUIRE ( xmlWriter.writeModelToFile(XML_TEMPLATE_COMPLETE_FILE, readModel.get(), true) >= 0);
+  BOOST_REQUIRE ( xmlWriter.writeModelToFile(XML_TEMPLATE_COMPLETE_FILE, readModel.get(), true, true) >= 0);
 }
 
 // -----------------------------------------------------------------------------

@@ -34,14 +34,14 @@ class MXANode;
  * @brief Writes the DataModel to an HDF5 file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  *  
  */
 class MXA_EXPORT H5DataModelWriter : public IDataModelWriter
 {
 
 public:
-  H5DataModelWriter(IFileIODelegate* ioDelegate, MXADataModel* dataModel);
+  H5DataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel);
   virtual ~H5DataModelWriter();
 
   /**
@@ -102,6 +102,7 @@ protected:
    * @param loc_id The Parent location to write the dataset
    * @param dsetName The Name to use for the dataset
    * @param data The actual data to write as a null terminated string
+   * @param overwrite Overwrite the existing data
    * @return Standard HDF5 error conditions
    */
   herr_t  _writeStringDataset (hid_t loc_id, 
@@ -175,7 +176,7 @@ protected:
   
 private:
   H5IODelegate* _ioDelegate;
-  MXADataModel* _dataModel;
+  IDataModel* _dataModel;
   
   H5DataModelWriter(const H5DataModelWriter&);   //Copy Constructor Not Implemented
   void operator=(const H5DataModelWriter&); //Copy Assignment Not Implemented

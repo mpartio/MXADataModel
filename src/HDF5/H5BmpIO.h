@@ -36,7 +36,7 @@ namespace MXA
 * @brief General IO class for Bmp images
 * @author Mike Jackson/Herb Mullens
 * @date October 2007
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 */
 class MXA_EXPORT H5BmpIO 
 {
@@ -75,25 +75,25 @@ class MXA_EXPORT H5BmpIO
  protected:
    /**
     * @brief Stores a True Color image in the form of a Pixel interlaced buffer as a Grayscale image in the provided HDF5 data set
-    * @param rgbRaster The buffer the holds the RGB image
     * @param fileId The HDF5 file id
     * @param datasetName The name of the data set to store the RGB image into
+    * @param reader The reader object for reading BMP files
     * @return Error Condition
     */
    herr_t _importGrayscaleBmpImage(hid_t fileId, 
-   								   const std::string &datasetName,
+   								                 const std::string &datasetName,
                                    MXABmpIO &reader);
  
    /**
     * @brief Stores a True Color image in the form of a Pixel interlaced buffer as an RGB image in the provided HDF5 data set
-    * @param rgbRaster The buffer the holds the RGB image
     * @param fileId The HDF5 file id
     * @param datasetName The name of the data set to store the RGB image into
+    * @param reader The reader object for reading BMP files
     * @return Error Condition
     */
    herr_t _importRGBFullColorBmp(hid_t fileId, 
-   								 const std::string &datasetName,
-   								MXABmpIO &reader);
+   								               const std::string &datasetName,
+   								               MXABmpIO &reader);
  
  private:
    hid_t _fileId; 

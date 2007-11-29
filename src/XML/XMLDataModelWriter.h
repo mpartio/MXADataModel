@@ -34,7 +34,7 @@ class MXANode;
  * the data model to an XML file
  * @author  Mike Jackson
  * @date June 2007
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  *  
  */
 class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter, 
@@ -49,7 +49,7 @@ public:
    * @param dataModel The DataModel Object to write
    * @param fileName The name of the file to write the data model
    */
-  XMLDataModelWriter(IFileIODelegate* ioDelegate, MXADataModel* dataModel, const std::string &fileName);
+  XMLDataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel, const std::string &fileName);
   virtual ~XMLDataModelWriter();
 
   /**
@@ -142,7 +142,7 @@ protected:
 
   
 private:
-  MXADataModel*       _dataModel;
+  IDataModel*       _dataModel;
   XMLIODelegate*      _ioDelegate;
   const std::string   _fileName;
   int32               _dataRecordIndentation;

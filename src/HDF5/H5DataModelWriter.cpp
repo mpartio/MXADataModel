@@ -21,7 +21,7 @@
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-H5DataModelWriter::H5DataModelWriter(IFileIODelegate* ioDelegate, MXADataModel* dataModel)
+H5DataModelWriter::H5DataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel)
 {
   _ioDelegate  = static_cast<H5IODelegate*>(ioDelegate);
   _dataModel = dataModel;

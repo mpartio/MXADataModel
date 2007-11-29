@@ -34,7 +34,7 @@ class H5DataModelWriter;
  * supports reading/writing of the data model and data to and from HDF5 files.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  *  
  */
 class MXA_EXPORT H5IODelegate : public IFileIODelegate
@@ -52,10 +52,11 @@ public:
   /** @brief Writes the Model to a data file
   * @param fileName The name of the file (and path if needed) to write the model to
   * @param model The Model to write to disk
-  * @param closeWhenFinished
+  * @param closeWhenFinished Close the file when finished writing the model
+  * @param deleteExisting Deletes existing file first, then creates a new file and writes model to that file
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
-  int32 writeModelToFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished=false);
+  int32 writeModelToFile(const std::string &fileName, IDataModel* model, bool closeWhenFinished, bool deleteExisting);
   
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
@@ -63,9 +64,13 @@ public:
   * @return A pointer to a new'ed MXADataModel Object. It is up to the Programmer to
   * release the Object. If an Error occurs during the reading, then a NULL pointer
   * @param closeWhenFinished
+  * @param openReadOnly
   * is returned.
   */
-  int32 readModelFromFile(const std::string &fileName, MXADataModel* model, bool closeWhenFinished=false);
+  int32 readModelFromFile(const std::string &fileName, 
+      IDataModel* model, 
+      bool closeWhenFinished,
+      bool openReadOnly);
 
   /**
    * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model

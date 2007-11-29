@@ -414,13 +414,25 @@ void TestDataDimensionMethods()
 // -----------------------------------------------------------------------------
 void WriteTestModel()
 {
-  std::cout << "WriteTestModel Running...." << std::endl;
-  MXADataModelPtr modelPtr = createModel();
-  MXADataModel* model = modelPtr.get();
-  std::string fileName(FILE_NAME_BEFORE);
-  BOOST_REQUIRE (model->writeModel(fileName) >= 0 );
-  IODelegatePtr ioPtr;
-  BOOST_REQUIRE ( model->writeModel(fileName, ioPtr) < 0);
+  
+  {
+    std::cout << "WriteTestModel Running...." << std::endl;
+    MXADataModelPtr modelPtr = createModel();
+    MXADataModel* model = modelPtr.get();
+    std::string fileName(FILE_NAME_BEFORE);
+    BOOST_REQUIRE (model->writeModel(fileName, true, true) >= 0 );
+    
+    IODelegatePtr ioPtr;
+    BOOST_REQUIRE ( model->writeModel(fileName, ioPtr, true, true) < 0);
+    
+  }
+  
+  {
+    MXADataModelPtr modelPtr = MXADataModel::New();
+    BOOST_REQUIRE (modelPtr->readModel(FILE_NAME_BEFORE, true, false) >= 0);
+    BOOST_REQUIRE (modelPtr->writeModel(FILE_NAME_BEFORE, true, false) >= 0);
+  }
+
 
 }
 
@@ -439,16 +451,16 @@ void ReReadTestModel()
   {
     MXADataModelPtr rmodel  = MXADataModel::New();
     MXADataModel* model = rmodel.get();
-    BOOST_REQUIRE ( model->readModel(inFile) >= 0);
+    BOOST_REQUIRE ( model->readModel(inFile, false, false) >= 0);
     // This should FAIL because the files passed in are different
-    BOOST_REQUIRE ( model->writeModel(outFile) < 0);
+    BOOST_REQUIRE ( model->writeModel(outFile, true, true) < 0);
     // This should PASS because we are providing a new IODelegate to use.
     IODelegatePtr h5io ( new H5IODelegate); 
-    BOOST_REQUIRE ( model->writeModel(outFile, h5io) >= 0 );
+    BOOST_REQUIRE ( model->writeModel(outFile, h5io, true, true) >= 0 );
     
     // This should FAIL because we are providing a NULL delegate.
     IODelegatePtr ioPtr;
-    BOOST_REQUIRE ( model->writeModel(outFile, ioPtr) < 0);
+    BOOST_REQUIRE ( model->writeModel(outFile, ioPtr, true, true) < 0);
   }
 }
 
@@ -555,7 +567,7 @@ void TestDataModelOverWrite()
     MXADataModelPtr modelPtr = createModel();
     MXADataModel* model = modelPtr.get();
     // Write the standard model.. 
-    model->writeModel(DATA_MODEL_OVERWRITE_TEST, false);
+    model->writeModel(DATA_MODEL_OVERWRITE_TEST, false, true);
     // Update one of the dimensions
     IDataDimension* dim0 = model->getDataDimension(0);
     //IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
@@ -587,11 +599,11 @@ void TestDataModelOverWrite()
     MakeScalarAttribute( f32, "Scalar Float 32", model);
     MakeScalarAttribute( f64, "Scalar Float 64", model);
     
-    model->writeModel(DATA_MODEL_OVERWRITE_TEST, false);
+    model->writeModel(DATA_MODEL_OVERWRITE_TEST, false, false);
   }
   {
     MXADataModelPtr modelPtr = MXADataModel::New();
-    modelPtr->readModel(DATA_MODEL_OVERWRITE_TEST, true);
+    modelPtr->readModel(DATA_MODEL_OVERWRITE_TEST, true, false);
     IDataDimension* dim0 = modelPtr->getDataDimension(0);
     BOOST_REQUIRE ( dim0->getCount() == 10);
     BOOST_REQUIRE ( dim0->getStartValue() == 0);

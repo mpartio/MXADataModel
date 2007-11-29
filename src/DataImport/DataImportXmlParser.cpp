@@ -58,8 +58,25 @@ int32 DataImportXmlParser::import()
   {
     return err;
   }
+  
   // Now create the Output file and leave it open
-  this->_dataModel->writeModel(this->_outputFilePath, false);
+  bool deleteExisting = false;
+  if ( this->_deleteExistingDataFile.compare("true") == 0 ) 
+  {
+    deleteExisting = true;
+    this->_dataModel->writeModel(this->_outputFilePath, false, deleteExisting);
+  }
+  else
+  {
+    //Merge Models from file and the model currently in memory
+    // Only the Dimensions should change
+    this->_mergeModelToDisk();    
+  }
+  // Check for error after merging the models
+  if (err < 0)
+  {
+    return err;
+  }
   
   std::cout << logTime() << "Input XML: " << this->_xmlFilename << std::endl;
   std::cout << logTime() << "Output File: " << this->_outputFilePath << std::endl;
@@ -83,6 +100,59 @@ int32 DataImportXmlParser::import()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
+void DataImportXmlParser::_mergeModelToDisk()
+{
+  IDataModel* mModel = this->_dataModel.get();
+  IDataModelPtr fModelPtr = MXADataModel::New();
+  IDataModel* fModel = fModelPtr.get();
+  //Read the model from the file, leaving it open and in Read/Write mode
+  herr_t err = fModel->readModel(this->_outputFilePath, false, false);
+  
+  if ( err < 0 ) // Ouput file does NOT exist on file system, write the model in memory
+  {
+    mModel->writeModel(this->_outputFilePath, false, false);
+    return;
+  }
+  
+  //Sanity check the number of dims first
+  if (mModel->getNumberOfDataDimensions() != fModel->getNumberOfDataDimensions())
+  {
+    this->_xmlParseError = -1;
+    return;
+  }
+  // Close the HDF5 file that is tied to the model in memory if needed
+  if (mModel->getIODelegate()->getOpenFileId() > 0 )
+  {
+    mModel->getIODelegate()->closeMXAFile();
+  }
+  
+  int32 dimSize = mModel->getNumberOfDataDimensions();
+  IDataDimension* mDim = NULL;
+  IDataDimension* fDim = NULL;
+  // Iterate over the Dimensions
+  for (int32 i = 0; i < dimSize; ++i) {
+    mDim = mModel->getDataDimension(i);
+    fDim = fModel->getDataDimension(i);
+    if (mDim->getStartValue() < fDim->getStartValue())
+    {
+      fDim->setStartValue( mDim->getStartValue());
+    }
+    if (mDim->getEndValue() > fDim->getEndValue())
+    {
+      fDim->setEndValue( mDim->getEndValue() );
+    }
+    // We are only going to sync the start and end values. Anything else would 
+    // throw the model into chaos
+  }
+  //write the model to disk and close the file
+  fModel->writeModel(this->_outputFilePath, false, false);
+  this->_dataModel = fModelPtr;
+}
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 void DataImportXmlParser::addDataSource (IDataSourcePtr dataSource ) {
   this->_dataSources.push_back(dataSource);
 }
@@ -101,6 +171,23 @@ void DataImportXmlParser::setOutputFilePath ( std::string new_var ) {
 std::string DataImportXmlParser::getOutputFilePath ( ) {
   return _outputFilePath;
 }
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void DataImportXmlParser::setDeleteExistingDataFile( std::string deleteExistingDataFile)
+{
+  this->_deleteExistingDataFile = deleteExistingDataFile;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+std::string DataImportXmlParser::getDeleteExistingDataFile()
+{
+  return this->_deleteExistingDataFile;
+}
+
 
 // -----------------------------------------------------------------------------
 //  
@@ -144,11 +231,11 @@ int DataImportXmlParser::_loadDataModelFromTemplateFile(std::string &modelFile)
   if ( StringUtils::endsWith(modelFile, std::string(".xml") ) )
   {
     IODelegatePtr reader (new XMLIODelegate);
-    err = this->_dataModel->readModel(modelFile, reader, true);
+    err = this->_dataModel->readModel(modelFile, reader, true, true);
     //err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true);
     if (err < 0)
     {
-      std::cout << logTime() << "Error Reading DataModel from File: " << modelFile << std::endl;
+      std::cout << DEBUG_OUT(logTime) << "\n\t\tError Reading DataModel from File: " << modelFile << std::endl;
     }
     else 
     {
@@ -159,7 +246,7 @@ int DataImportXmlParser::_loadDataModelFromTemplateFile(std::string &modelFile)
   else 
   {
     H5IODelegate reader;
-    err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true);
+    err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true, false);
     return err;
   }
   //std::cout << logTime() << "---------------- IMPORTING DATA MODEL TEMPLATE COMPLETE------------------" << std::endl;
@@ -369,15 +456,20 @@ void DataImportXmlParser::start_Dimension_Tag(const XML_Char* name, const XML_Ch
     if ( attrMap.find(MXA::MXA_UNIFORM_TAG) != attrMap.end() ) { StringUtils::stringToNum(uniform, attrMap[MXA::MXA_UNIFORM_TAG], std::dec); }
     
     // Over ride what is currently set in the data model with the values from the 'Dimension' tag
-    IDataDimension* dimPtr = this->_dataModel->getDataDimension(attrMap[MXA::MXA_NAME_TAG]);
-    if ( NULL != dimPtr )
+    IDataDimension* dim = this->_dataModel->getDataDimension(attrMap[MXA::MXA_NAME_TAG]);
+    if ( NULL != dim )
     {
-     dimPtr->setIndex(index);
-     dimPtr->setCount(count);
-     dimPtr->setUniform(uniform);
-     dimPtr->setStartValue(start);
-     dimPtr->setEndValue(end);
-     dimPtr->setIncrement(increment);
+      dim->setIndex(index);
+      dim->setCount(count);
+      dim->setUniform(uniform);
+      dim->setStartValue(start);
+      dim->setEndValue(end);
+      dim->setIncrement(increment);
+    }
+    else  // If the Dimension is NULL, then that dimension is not in the model 
+    {
+      std::cout << DEBUG_OUT(logTime) << "\n\t\tThe Data Dimension '" <<  attrMap[MXA::MXA_NAME_TAG] << "' was not found in the Data Model Template File. Check the spelling in each xml file as possible causes for the mismatch." << std::endl;
+      this->_xmlParseError = -1;
     }
 }
 
@@ -391,11 +483,16 @@ void DataImportXmlParser::end_Dimension_Tag(const XML_Char* name)
 void DataImportXmlParser::start_Output_File_Tag(const XML_Char* name, const XML_Char** attrs)
 {
   std::string absoluteFilePath;
+  std::string deleteExistingDataFile;
   for (int i = 0; attrs[i]; i += 2)
   {
     if (MXA_DataImport::Attr_Absolute_Path.compare(attrs[i]) == 0)
     { 
       absoluteFilePath.append(attrs[i+1]); // add the file path to the empty string
+    }
+    else if (MXA_DataImport::Delete_Existing_File.compare(attrs[i]) == 0)
+    {
+      deleteExistingDataFile.append(attrs[i+1]); // add the overwrite value to the empty string
     }
     else
     {
@@ -410,6 +507,17 @@ void DataImportXmlParser::start_Output_File_Tag(const XML_Char* name, const XML_
   else 
   {
     _errorMessage.append("Did not find the 'Absolute_Path' attribute in the 'Output_File' tag");
+    this->_xmlParseError = -1; // Set the error flag to stop the import
+  }
+  
+  // Check to make sure the Overwrite_Existing_File was found
+  if (deleteExistingDataFile.empty() == false )
+  {
+    this->setDeleteExistingDataFile(deleteExistingDataFile);
+  } 
+  else 
+  {
+    _errorMessage.append("Did not find the 'Overwrite_Existing_File' attribute in the 'Output_File' tag");
     this->_xmlParseError = -1; // Set the error flag to stop the import
   }
 }
@@ -538,16 +646,10 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate, std::ve
   {
     dimValues.push_back(start);
   }
-  //std::cout << "  dimValues.size: " << dimValues.size() << std::endl;
   int8 ok = true;
- // currentTemplate.append( _implPathMap[dim] ); // Append the next part of the path template on to the current path
- // int minLength = currentTemplate.size() + 1024;
-//  std::vector<char> newPath( minLength, 0 ); // Create a buffer of Zeros to print into
-//  char* newPathPtr = &(newPath.front());
   for (int i = start; i <= end; i+=incr)
   {
     // Create a new Path 
-  //  snprintf( &(newPath.front()), minLength, currentTemplate.c_str(), i);
     IStringSectionPtr strSection = _implPathMap[dim];
     std::string newPath = strSection->toString(i, ok);
     std::string completePath = currentTemplate + newPath;
@@ -559,19 +661,7 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate, std::ve
     else
     {
       // Create the data source
-      completePath.append( _implPreTextSection ); // This should be dangling since we never had another index part
-      //std::cout << "DataSource Path: " << completePath << std::endl;
-#if 0
-      IDataModel* model = static_cast<MXADataModel*>(this->_dataModel.get() );
-      IDataRecordPtr recordPtr = model->getDataRecordByNamedPath(_implDataRecord->getRecordName(), NULL);
-      if ( NULL == recordPtr.get() )
-      {
-        std::cout << "DataImportXmlParser::_createDataSource |-> Error Retrieving Data Record from model. Path given from XML file was '"
-        << _implDataRecord->getRecordName() << "' and that path was not found in the data model."<< std::endl;
-        this->_xmlParseError = -1;
-        return;
-      }
-#endif      
+      completePath.append( _implPreTextSection ); // This should be dangling since we never had another index part 
       IDataSourcePtr ds( new MXADataSource() ); //Create a new MXADataSource
       ds->setDimensionValues(dimValues);
       ds->setDataRecord(_implDataRecord);

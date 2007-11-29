@@ -13,9 +13,6 @@
 
 
 //TODO: Remove DataRecord using Pointer or String Name
-//TODO: openFile (Filename, delegate)
-//TODO: options to overwrite file, bail on file existance or overwrite current model
-
 
 //------- Utility Methods
 //TODO: Method to copy the model from a file and write it to a new file
@@ -44,7 +41,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -352,43 +349,50 @@ class MXA_EXPORT MXADataModel : public IDataModel
    */
   void printUserMetaData(std::ostream &os, int32 indent);
 
+  //--------------- Methods to Write the DataModel to a File -------------------
   /**
-   * @brief Writes the data model using the internal IODelegate to an external file
-   * @param fileName The filename of the file to write the model to
-   * @param closeWhenFinished Tells the underlying IODelegate to close the file cutting off
-   * access to the file. If you need to write more to the file, set this to 'true'
-   * @return
-   */
-  MXATypes::MXAError writeModel(const std::string &fileName, bool closeWhenFinished=false);
-
+  * @brief Writes the model to the data file
+  * @param fileName The path to the data file
+  * @param closeWhenFinished Terminates access to the file when complete. Default is false
+  * @param deleteExisting If a file of the same name already exists, then the file will be deleted and a new file written in its place.
+  * @return Standard HDF5 Error condition
+  */
+  MXATypes::MXAError writeModel(const std::string &fileName, 
+                                        bool closeWhenFinished,
+                                        bool deleteExisting);
   /**
-   * @brief Writes the data model using the internal IODelegate to an external file
-   * @param fileName The filename of the file to write the model to
-   * @param ioDelegate Use the provided IODelegate instead of the internal IODelegate
-   * @param closeWhenFinished Tells the underlying IODelegate to close the file cutting off
-   * access to the file. If you need to write more to the file, set this to 'true'
-   * @return
-   */
-  MXATypes::MXAError writeModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished=false);
+  * @brief Writes the model to the data file using a specific IODelegate
+  * @param fileName The path to the data file
+  * @param ioDelegate The IODelegate to employ when writing the model
+  * @param closeWhenFinished Terminates access to the file when complete. Default is false
+  * @param deleteExisting If a file of the same name already exists, then the file will be deleted and a new file written in its place.
+  * @return Standard HDF5 Error condition
+  */
+  MXATypes::MXAError writeModel(const std::string &fileName, 
+                                        IODelegatePtr ioDelegate,                                          
+                                        bool closeWhenFinished,
+                                        bool deleteExisting);
   
   /**
    * @brief Reads the data model from the file using the internal IODelegate object
    * @param fileName The filename of the file to write the model to
    * @param closeWhenFinished Tells the underlying IODelegate to close the file cutting off
-   * access to the file. If you need to write more to the file, set this to 'true'
+   * access to the file. 
+   * @param openReadOnly If you need to write more to the file, set this to 'false'
    * @return
    */
-  MXATypes::MXAError readModel(const std::string &fileName, bool closeWhenFinished=false);
+  MXATypes::MXAError readModel(const std::string &fileName, bool closeWhenFinished, bool openReadOnly);
   
   /**
    * @brief Reads the data model from the file using the provided IODelegate object
    * @param fileName The filename of the file to write the model to
    * @param ioDelegate Use the provided IODelegate instead of the internal IODelegate
    * @param closeWhenFinished Tells the underlying IODelegate to close the file cutting off
-   * access to the file. If you need to write more to the file, set this to 'true'
+   * access to the file.
+   * @param openReadOnly If you need to write more to the file, set this to 'false'
    * @return
    */
-  MXATypes::MXAError readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished=false);
+  MXATypes::MXAError readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly);
 
   /**
    * @brief Creates an absolute path suitable for create an HDF5 data set.

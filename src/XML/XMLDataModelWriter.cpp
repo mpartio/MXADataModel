@@ -7,7 +7,7 @@
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-XMLDataModelWriter::XMLDataModelWriter(IFileIODelegate* ioDelegate, MXADataModel* dataModel, const std::string &xmlFileName) :
+XMLDataModelWriter::XMLDataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel, const std::string &xmlFileName) :
   _dataModel(dataModel),
   _fileName(xmlFileName),
   _dataRecordIndentation(2)

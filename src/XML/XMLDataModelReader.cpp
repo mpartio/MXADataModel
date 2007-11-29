@@ -13,7 +13,7 @@
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-XMLDataModelReader::XMLDataModelReader(IFileIODelegate* ioDelegate, MXADataModel* dataModel, const std::string &fileName) :
+XMLDataModelReader::XMLDataModelReader(IFileIODelegate* ioDelegate, IDataModel* dataModel, const std::string &fileName) :
 _dataModel(dataModel),
 _fileName(fileName),
 _xmlParseError(0),

@@ -39,6 +39,7 @@ namespace MXA_DataImport {
   const std::string Index_Part ("Index_Part");
   const std::string Output_File ("Output_File");
   const std::string Text_Part ("Text_Part");
+  const std::string Delete_Existing_File ("Delete_Existing_File");
   
   //This section NOT auto-generated
   const std::string Attr_Template_File ("Template_File");
@@ -63,7 +64,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.9 $
+* @version $Revision: 1.10 $
 */
 class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -115,6 +116,17 @@ public:
    * @return the value of m_outputFilePath
    */
   std::string getOutputFilePath ( );
+  
+  /**
+   * @brief Sets the OverWriteDataFile property
+   */
+  void setDeleteExistingDataFile( std::string deleteExistingDataFile);
+  
+  /**
+   * @brief returns the OverWriteDataFile property
+   * @return The value of the OverWriteDataFile property
+   */
+  std::string getDeleteExistingDataFile();
 
 
   /**
@@ -156,6 +168,7 @@ public:
 private:
   std::string        _xmlFilename;
   std::string        _outputFilePath;
+  std::string        _deleteExistingDataFile;
   IDataModelPtr      _dataModel;
   IDataSources       _dataSources;
   int32              _xmlParseError;
@@ -244,6 +257,11 @@ private:
      * @return Error condition
      */
     int32 _parseXMLFile();
+    
+    /**
+     * @brief Merges the Model in memory to the model resident on disk.
+     */
+    void _mergeModelToDisk();
     
 }; // End Class DataImportXmlParser
 

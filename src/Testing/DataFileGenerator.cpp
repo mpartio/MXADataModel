@@ -84,7 +84,7 @@ herr_t DataFileGenerator::generate()
     err = this->makeRecords(modelPtr, dataImport, volumeRec, volumeDims);    
     
     // Write the model to the HDF5 File
-    err = model->writeModel(this->_filePath, false); //Leave the file open for the import
+    err = model->writeModel(this->_filePath, false, true); //Leave the file open for the import
     if (err < 0)
     {
       std::cout << logTime() << "Error writing Data Model" << std::endl;

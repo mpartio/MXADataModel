@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
   // List the Data Records in the model
   listDataRecords(model);
   
-  int32 err = model->writeModel(MXA_FILE, false);
+  int32 err = model->writeModel(MXA_FILE, false, true);
   if (err < 0)
   {
     std::cout << "Error Writing Model to HDF5 File" << std::endl;
@@ -206,7 +206,7 @@ void exportModelToXML(MXADataModel* model)
     //First Instantiate an XML Writer Delegate
     XMLIODelegate xmlWriter;
     //Next, tell the writer delegate to write the model using and close the file when finished
-    MXATypes::MXAError error = xmlWriter.writeModelToFile(XML_FILE, model, true);
+    MXATypes::MXAError error = xmlWriter.writeModelToFile(XML_FILE, model, true, true);
     if (error < 0) // Check for errors during the writing process
     {
       std::cout << "Error Writing model to XML file." << std::endl;

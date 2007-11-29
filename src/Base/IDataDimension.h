@@ -20,7 +20,7 @@
  * @brief The formal interface description for a DataDimension
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *  
  */
 class MXA_EXPORT IDataDimension 
@@ -168,6 +168,7 @@ class MXA_EXPORT IDataDimension
       * current start, end and increment values
       */
      virtual int32 calculateCount() = 0;
+     
  
   private:
     IDataDimension(const IDataDimension&);    //Not Implemented

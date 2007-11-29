@@ -26,7 +26,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  *  
  */
 class MXA_EXPORT IDataModel
@@ -255,6 +255,9 @@ class MXA_EXPORT IDataModel
     */
     virtual void addUserMetaData(const std::string &key, const std::string &value) = 0;
     
+    /** @brief Returns the Data Structure used to hold the user defined Meta Data */
+    virtual IAttributes& getUserMetaData() = 0;
+    
     //---------------- Methods to Set/Get the IODelegate Object -------------------
     /**
     * @brief Sets the IODelegate object for the model
@@ -304,34 +307,43 @@ class MXA_EXPORT IDataModel
     * @brief Writes the model to the data file
     * @param fileName The path to the data file
     * @param closeWhenFinished Terminates access to the file when complete. Default is false
+    * @param deleteExisting If a file of the same name already exists, then the file will be deleted and a new file written in its place.
     * @return Standard HDF5 Error condition
     */
-    virtual MXATypes::MXAError writeModel(const std::string &fileName, bool closeWhenFinished=false) = 0;
+    virtual MXATypes::MXAError writeModel(const std::string &fileName, 
+                                          bool closeWhenFinished,
+                                          bool deleteExisting) = 0;
     /**
     * @brief Writes the model to the data file using a specific IODelegate
     * @param fileName The path to the data file
     * @param ioDelegate The IODelegate to employ when writing the model
     * @param closeWhenFinished Terminates access to the file when complete. Default is false
+    * @param deleteExisting If a file of the same name already exists, then the file will be deleted and a new file written in its place.
     * @return Standard HDF5 Error condition
     */
-    virtual MXATypes::MXAError writeModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished=false) = 0;
+    virtual MXATypes::MXAError writeModel(const std::string &fileName, 
+                                          IODelegatePtr ioDelegate,                                          
+                                          bool closeWhenFinished,
+                                          bool deleteExisting) = 0;
     
     //--------------- Methods to Read the DataModel from a File -------------------
     /**
     * @brief Reads the model from a file
     * @param fileName The path to the data file
-    * @param closeWhenFinished Terminates access to the file when complete. Default is false
+    * @param closeWhenFinished Terminates access to the file when complete.
+    * @param openReadOnly If you need to write more to the file, set this to 'false'
     * @return Standard HDF5 Error condition
     */
-    virtual MXATypes::MXAError readModel(const std::string &fileName, bool closeWhenFinished=false) = 0;
+    virtual MXATypes::MXAError readModel(const std::string &fileName, bool closeWhenFinished, bool openReadOnly) = 0;
     /**
     * @brief Reads the model from a file
     * @param fileName The path to the data file
     * @param ioDelegate The IODelegate to employ when reading the model
-    * @param closeWhenFinished Terminates access to the file when complete. Default is false
+    * @param closeWhenFinished Terminates access to the file when complete.
+    * @param openReadOnly If you need to write more to the file, set this to 'false'
     * @return Standard HDF5 Error condition
     */
-    virtual MXATypes::MXAError readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished=false) = 0;
+    virtual MXATypes::MXAError readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly) = 0;
    
     
     /**
