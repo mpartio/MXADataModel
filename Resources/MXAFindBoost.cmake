@@ -164,7 +164,8 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     PATH_SUFFIXES
       ${BOOST_PATH_SUFFIX}
   )
- # MESSAGE (STATUS "BOOST_INCLUDE_DIR: ${BOOST_INCLUDE_DIR}")
+  MESSAGE (STATUS "BOOST_INCLUDE_DIR: ${BOOST_INCLUDE_DIR}")
+
 ############################################
 #
 # Check the existence of the libraries.
@@ -248,7 +249,7 @@ ENDMACRO (_BOOST_ADJUST_LIB_VARS)
     IF (APPLE)
         SET (BOOST_COMPILER "")
     ELSE (APPLE)
-        SET (BOOST_COMPILER "-gcc")
+        SET (BOOST_COMPILER "-gcc34")
     ENDIF (APPLE)
   ENDIF(UNIX)
   
