@@ -2,7 +2,7 @@
 #include <Common/LogTime.h>
 
 // Set the initial value of the _uniqueGUIDValue
-int MXADataRecord::_uniqueGUIDValue(0);
+int32 MXADataRecord::_uniqueGUIDValue(0);
 
 // -----------------------------------------------------------------------------
 //  Constructor
@@ -198,7 +198,7 @@ IDataRecordWeakPtr MXADataRecord::getParent()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int MXADataRecord::getNumChildren() const
+int32 MXADataRecord::getNumChildren() const
 {
   return this->_children.size();
 }

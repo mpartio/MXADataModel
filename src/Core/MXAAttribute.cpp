@@ -47,7 +47,7 @@ Any MXAAttribute::getValue()
 // -----------------------------------------------------------------------------
 //  Converts Value to an int32
 // -----------------------------------------------------------------------------
-int MXAAttribute::valueToInt32()
+int32 MXAAttribute::valueToInt32()
 {
   return boost::any_cast<int32>(_value);
 }

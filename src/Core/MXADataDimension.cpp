@@ -73,7 +73,7 @@ void MXADataDimension::setNodeName(std::string nodeName)
 {
   this->_nodeName = nodeName;
   int32 i = 0;
-  if ( StringUtils::stringToNum<int>(i, this->_nodeName, std::dec) )
+  if ( StringUtils::stringToNum<int32>(i, this->_nodeName, std::dec) )
   {
     this->_index = i;
   } else {
