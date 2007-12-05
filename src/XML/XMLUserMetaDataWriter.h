@@ -14,6 +14,7 @@
 //-- MXA Includes
 #include <Base/IAttributeWriter.h>
 #include <XML/XMLConstants.h>
+#include <HDF5/H5Lite.h>
 
 //-- boost includes
 #include <boost/shared_ptr.hpp>
@@ -23,7 +24,7 @@
  * @brief This class writes User meta data from the data model to an xml file
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.12 $
  *  
  */
 class MXA_EXPORT XMLUserMetaDataWriter : public IAttributeWriter
@@ -50,64 +51,64 @@ public:
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-    template<typename T>
-    int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, T value)
-    {
-      int32 size = sizeof(T);
-      std::string sType = StringUtils::typeForPrimitive(value);
-      std::ofstream &stream = *(_ofstreamPtr.get());
-      stream << indent(5) << "<UserMetaData " << MXA_XML::UserMetaData::Key << "=\"" << key << "\" dims=\"" << 1 <<  "\" type=\"" << sType << "\">\n";
-      if (size != 1) {
-        stream << indent(5) << value;
-      } else {
-        stream << indent(5) << static_cast<int32>(value);
-      }
-      stream << "\n"<< indent(5) << "</UserMetaData>\n";
-      return 1;
+  template<typename T>
+  int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, T value)
+  {
+    int32 size = sizeof(T);
+    std::string sType = H5Lite::HDFTypeForPrimitiveAsStr(value);
+    std::ofstream &stream = *(_ofstreamPtr.get());
+    stream << indent(5) << "<UserMetaData " << MXA_XML::UserMetaData::Key << "=\"" << key << "\" dims=\"" << 1 <<  "\" type=\"" << sType << "\">\n";
+    if (size != 1) {
+      stream << indent(5) << value;
+    } else {
+      stream << indent(5) << static_cast<int32>(value);
     }
+    stream << "\n"<< indent(5) << "</UserMetaData>\n";
+    return 1;
+  }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------  
-    template<typename T>
-    int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<T> value)
+  template<typename T>
+  int32 _writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, std::vector<uint64> &dims, std::vector<T> value)
+  {
+    std::ofstream &stream = *(_ofstreamPtr.get());
+    std::string sType = H5Lite::HDFTypeForPrimitiveAsStr(value.front());
+    stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" ;
+    
+    int32 size = dims.size();
+    for (int i = 0; i < size; ++i)
     {
-      std::ofstream &stream = *(_ofstreamPtr.get());
-      std::string sType = StringUtils::typeForPrimitive(value.front());
-      stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" ;
-      
-      int32 size = dims.size();
-      for (int i = 0; i < size; ++i)
+      stream << dims[i];
+      if (i < size - 1)
       {
-        stream << dims[i];
-        if (i < size - 1)
-        {
-          stream << " ";
-        }
+        stream << " ";
       }
-      stream << "\" type=\"" << sType << "\">";
-      // Now Write the data
-      size = value.size();
-      for(int i = 0; i < size; ++i) 
-      {
-       if ( i%dims[0] == 0)
-        {
-          stream << "\n" << indent(5);
-        }
-        if (sizeof(T) != 1 )
-          stream  << value[i];
-        else
-          stream  << static_cast<int32>(value[i]);
-          
-        if (i < size - 1)
-        {
-          stream << " ";
-        }
-       
-      }
-      stream << "\n"<< indent(5) << "</UserMetaData>\n";
-      return 1;
     }
+    stream << "\" type=\"" << sType << "\">";
+    // Now Write the data
+    size = value.size();
+    for(int i = 0; i < size; ++i) 
+    {
+     if ( i%dims[0] == 0)
+      {
+        stream << "\n" << indent(5);
+      }
+      if (sizeof(T) != 1 )
+        stream  << value[i];
+      else
+        stream  << static_cast<int32>(value[i]);
+        
+      if (i < size - 1)
+      {
+        stream << " ";
+      }
+     
+    }
+    stream << "\n"<< indent(5) << "</UserMetaData>\n";
+    return 1;
+  }
 
   // -----------------------------------------------------------------------------
   //  

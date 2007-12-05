@@ -572,7 +572,7 @@ herr_t H5TiffIO::_export8BitTiff(TIFF *image,
 
   int32 index;
   for (uint32 i=0; i<palRank; i=i+3) {
-    index = (unsigned int)( i/3 );
+    index = (uint32)( i/3 );
     dRed[index] = (uint16) colorMap[i] * 256;
     dGreen[index] = (uint16) colorMap[i+1] * 256;
     dBlue[index] = (uint16) colorMap[i+2] * 256;

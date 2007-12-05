@@ -3,6 +3,7 @@
 
 #include <Core/MXADataSource.h>
 #include <Core/MXADataModel.h>
+#include <Utilities/StringUtils.h>
 
 #include <iostream>
 
@@ -49,8 +50,8 @@ std::string MXADataSource::getSourcePath ( ) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataSource::setImportDelegate ( IImportDelegatePtr new_var ) {
-  _dataImportDelegate = new_var;
+void MXADataSource::setImportDelegate ( IImportDelegatePtr dataParser ) {
+  _dataImportDelegate = dataParser;
 }
 
 // -----------------------------------------------------------------------------
@@ -63,8 +64,8 @@ IImportDelegatePtr MXADataSource::getImportDelegate ( ) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataSource::setDataModel ( IDataModelPtr new_var ) {
-  _dataModel = new_var;
+void MXADataSource::setDataModel ( IDataModelPtr dataModel ) {
+  _dataModel = dataModel;
 }
 
 // -----------------------------------------------------------------------------

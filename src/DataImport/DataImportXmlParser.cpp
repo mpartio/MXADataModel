@@ -639,9 +639,9 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate, std::ve
 {
   // std::cout << "_createDataSource" << std::endl;
   IDataDimension* dim = _implDataDimensions[index];
-  int start = dim->getStartValue();
-  int end = dim->getEndValue();
-  int incr = dim->getIncrement();
+  int32 start = dim->getStartValue();
+  int32 end = dim->getEndValue();
+  int32 incr = dim->getIncrement();
   if (index == dimValues.size())
   {
     dimValues.push_back(start);

@@ -198,7 +198,7 @@ inline void _reverseBytes ( uint64 &n )
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template < unsigned int Size > struct ReverseBytes;
+template < uint32 Size > struct ReverseBytes;
 template <> struct ReverseBytes < sizeof ( uint16 ) >
 {
   void operator () ( uint16 &n ) const
