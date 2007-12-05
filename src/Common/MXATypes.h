@@ -15,7 +15,7 @@
  * @file MXATypes.h
  * @brief Contains the typedefs for all the common integer and floating point
  * prinitives that are used in the MXA Code Base
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 
 
@@ -89,15 +89,18 @@
   //64 bit system
     typedef unsigned int            uint32;
     typedef signed int              int32;
+typedef int                      int32;
     typedef signed long int       int64;
     typedef unsigned long int       uint64;
   #else
   // 32 Bit system
     typedef signed long long int    int64;
-    typedef signed long int         int32;
-  
-    typedef unsigned long long int  uint64;
-    typedef unsigned long int       uint32;
+    //typedef signed long int         int32;
+    typedef int                     int32;
+    typedef signed int              int32;
+    typedef unsigned long long int  uint64; 
+    //typedef unsigned long int       uint32;
+    typedef unsigned int            uint32;
   #endif
 
   
