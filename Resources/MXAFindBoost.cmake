@@ -138,7 +138,7 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     /opt/local/lib
     /sw/lib
   )
-  # MESSAGE (STATUS "BOOST_LIBRARIES_SEARCH_DIRS: ${BOOST_LIBRARIES_SEARCH_DIRS}")
+ # MESSAGE (STATUS "BOOST_LIBRARIES_SEARCH_DIRS: ${BOOST_LIBRARIES_SEARCH_DIRS}")
   IF (WIN32)
     # In windows, automatic linking is performed, so you do not have to specify the libraries.
     # If you are linking to a dynamic runtime, then you can choose to link to either a static or a
@@ -164,7 +164,7 @@ ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     PATH_SUFFIXES
       ${BOOST_PATH_SUFFIX}
   )
-  MESSAGE (STATUS "BOOST_INCLUDE_DIR: ${BOOST_INCLUDE_DIR}")
+ # MESSAGE (STATUS "BOOST_INCLUDE_DIR: ${BOOST_INCLUDE_DIR}")
 
 ############################################
 #
@@ -232,7 +232,7 @@ ENDMACRO (_BOOST_ADJUST_LIB_VARS)
   IF ( WIN32 )
     SET (BOOST_LIB_PREFIX "lib")
   ENDIF ( WIN32 )
-  SET (BOOST_COMPILER "gcc")
+  SET (BOOST_COMPILER "-gcc")
   IF (MSVC71)
     SET (BOOST_COMPILER "-vc71")
   ENDIF(MSVC71)
@@ -246,13 +246,16 @@ ENDMACRO (_BOOST_ADJUST_LIB_VARS)
     SET (BOOST_COMPILER "-gcc")
   ENDIF (CYGWIN)
   IF (UNIX)
+
     IF (APPLE)
         SET (BOOST_COMPILER "")
     ELSE (APPLE)
 	IF (NOT CMAKE_COMPILER_IS_GNUCC)
           # This is for the intel compiler
-	  SET (BOOST_COMPILER "-il")
-	ELSEIF (NOT CMAKE_COMPILER_IS_GNUCC)
+	   SET (BOOST_COMPILER "-il")
+	  #MESSAGE(STATUS "COMPILER IS ICC")
+	ELSE (NOT CMAKE_COMPILER_IS_GNUCC)
+	  #MESSAGE(STATUS "COMPILER IS GCC")
           SET (BOOST_COMPILER "-gcc34")
 	ENDIF (NOT CMAKE_COMPILER_IS_GNUCC)
     ENDIF (APPLE)
