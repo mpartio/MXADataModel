@@ -54,6 +54,8 @@ INCLUDE (${MXA_RESOURCES_DIR}/FindSupportLibraries.cmake)
 
 # ------- Set up the MXADataModel Project Source Files -----------
 SET( MXADATAMODEL_SRCS
+  ${MXA_SOURCE_DIR}/src/Common/IO/Reader64.cpp
+  ${MXA_SOURCE_DIR}/src/Common/IO/Writer64.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXAAttribute.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.cpp
@@ -74,6 +76,9 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Common/MXATypeDefs.h
   ${MXA_SOURCE_DIR}/src/Common/MXATypes.h
   ${MXA_SOURCE_DIR}/src/Common/MXAErrorDefinitions.h
+  ${MXA_SOURCE_DIR}/src/Common/IO/Reader64.h
+  ${MXA_SOURCE_DIR}/src/Common/IO/Writer64.h
+  ${MXA_SOURCE_DIR}/src/Common/Cast/Cast.h
   ${MXA_SOURCE_DIR}/src/Base/IAttribute.h
   ${MXA_SOURCE_DIR}/src/Base/IAttributeHelper.h
   ${MXA_SOURCE_DIR}/src/Base/IAttributeWriter.h

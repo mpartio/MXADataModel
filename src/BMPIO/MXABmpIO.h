@@ -8,6 +8,7 @@
 #include <Common/MXAEndian.h>
 #include <Common/MXATypes.h>
 #include <Common/DLLExport.h>
+#include <Common/IO/Reader64.h>
 #include <BMPIO/MXABmpHeaders.h>
 
 //-- C Includes
@@ -15,6 +16,10 @@
 #include <math.h>
 #include <memory.h>
 #include <string.h>
+
+#include <boost/shared_ptr.hpp>
+
+typedef boost::shared_ptr<Reader64>    Reader64Ptr;
 
 // The following is the function return type. Use this to
 // get information about how the loading operation went.
@@ -39,7 +44,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.9 $
+* @version $Revision: 1.10 $
 */
 class MXA_EXPORT MXABmpIO
 {
@@ -61,7 +66,8 @@ private:
   int32 width;
   int32 height;
   int32 numChannels;
-  FILE* file;
+  //FILE* file;
+  Reader64Ptr _reader64Ptr;
   MXABMPFileHeader fileHeader;
   MXABMPDIBHeader dibHeader;
   bool isGrayscale;

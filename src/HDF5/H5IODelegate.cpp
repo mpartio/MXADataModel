@@ -54,13 +54,16 @@ MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName,
     {
       this->closeMXAFile(); // Close the file first if it is open.
     }
-    // Now delete the file
-    didDeleteFile = boost::filesystem::remove(fileName);
-    if (false == didDeleteFile)
+    // Now delete the file if it really exists
+    if (true == boost::filesystem::exists(fileName) )
+    {
+      didDeleteFile = boost::filesystem::remove(fileName);
+      if (false == didDeleteFile)
       {
-	std::cout << "The file could not be deleted\n  " << fileName << std::endl;
-	return -20;
+        std::cout << "H5IODelegate::writeModelToFile: The file could not be deleted\n  " << fileName << std::endl;
+        return -20;
       }
+    }
   }
   
   // Model file is NOT open and the filenames do NOT match
