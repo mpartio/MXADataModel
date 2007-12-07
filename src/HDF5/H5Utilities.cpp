@@ -461,7 +461,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPa
     }
   }
 
-  return err;
+  return retErr;
 }
 
 

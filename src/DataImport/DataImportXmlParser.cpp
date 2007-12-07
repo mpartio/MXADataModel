@@ -243,15 +243,11 @@ int DataImportXmlParser::_loadDataModelFromTemplateFile(std::string &modelFile)
     }
     return err;
   }
-  else 
-  {
-    H5IODelegate reader;
-    err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true, false);
-    return err;
-  }
-  //std::cout << logTime() << "---------------- IMPORTING DATA MODEL TEMPLATE COMPLETE------------------" << std::endl;
+
+  H5IODelegate reader;
+  err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true, false);
   return err;
-}
+ }
 
 // -----------------------------------------------------------------------------
 int DataImportXmlParser::_parseXMLFile()

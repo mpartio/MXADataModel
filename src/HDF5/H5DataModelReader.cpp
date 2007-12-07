@@ -504,6 +504,8 @@ herr_t H5DataModelReader::readUserMetaData(hid_t locId)
     }
   }
 
-  return err;
+  return retErr;
 }
+
+
 

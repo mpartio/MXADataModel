@@ -132,15 +132,10 @@ herr_t H5BmpIO::_importRGBFullColorBmp(hid_t fileId,
   return err;
 }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-herr_t exportBmp(hid_t fileId, 
-                  const std::string &filename, 
-                  const std::string &datasetPath)
+herr_t H5BmpIO::exportBmp(hid_t fileId,
+		 const std::string &filename,
+		 const std::string &datasetPath)
 {
-  // LEAVE THIS UNIMPLEMENTED FOR NOW
+  std::cout << "H5BmpIO::exportBMP is NOT implemented" << std::endl;
   return -1;
 }
-
-

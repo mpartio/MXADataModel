@@ -19,7 +19,7 @@ H5IODelegate::H5IODelegate() :
   _fileId(-1),
   _openFile("")
 {
-#if RELEASE
+#ifndef DEBUG
 #warning HDF Error Handlers are OFF
   HDF_ERROR_HANDLER_OFF;
 #endif
@@ -56,6 +56,11 @@ MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName,
     }
     // Now delete the file
     didDeleteFile = boost::filesystem::remove(fileName);
+    if (false == didDeleteFile)
+      {
+	std::cout << "The file could not be deleted\n  " << fileName << std::endl;
+	return -20;
+      }
   }
   
   // Model file is NOT open and the filenames do NOT match
