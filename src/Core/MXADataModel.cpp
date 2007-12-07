@@ -157,8 +157,8 @@ int32 MXADataModel::insertDataDimension(IDataDimensionPtr dimension, int32 index
   {
     this->_dataDimensions.resize( index ); // This may increase the size of the vector with Null wrapped shared pointers
   }
-  IDataDimensions::iterator iter = this->_dataDimensions.begin();
-  this->_dataDimensions.insert(iter + index, dimension);
+  IDataDimensions::iterator dIter = this->_dataDimensions.begin();
+  this->_dataDimensions.insert(dIter + index, dimension);
   //Update the index value for each dimension
   index = 0;
   IDataDimension* dim;
