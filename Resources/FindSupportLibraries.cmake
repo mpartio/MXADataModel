@@ -1,6 +1,6 @@
 
 
-
+SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
 # ---------- Find Boost Headers/Libraries -----------------------
 SET (Boost_FIND_REQUIRED TRUE)
 SET (Boost_FIND_QUIETLY TRUE)
