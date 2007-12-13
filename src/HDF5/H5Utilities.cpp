@@ -384,7 +384,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPa
 {
   CheckValidLocId(fileId);
   herr_t err = -1;
-  herr_t retErr = -1;
+  herr_t retErr = 1;
   hid_t typeId = -1;
   H5T_class_t attr_type;
   size_t attr_size;
@@ -439,6 +439,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPa
         } else {
           std::cout << "Unknown Type: " << typeId << " at " <<  datasetPath << std::endl;
           err = -1;
+          retErr = -1;
         }
         break;
       case H5T_FLOAT:
@@ -451,6 +452,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPa
         } else {
           std::cout << "Unknown Floating point type" << std::endl;
           err = -1;
+          retErr = -1;
         }
         break;
       default:
@@ -459,6 +461,10 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPa
       }
       CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
     }
+   if (retErr < 0)
+   {
+     break;
+   }
   }
 
   return retErr;

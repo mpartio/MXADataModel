@@ -44,12 +44,12 @@ standard C++ library."
 #include <stdexcept>
 
 /**
- * @class CTMDReader64 CTMDReader64.h PVDislocation/CTMDReader64.h
+ * @class Writer64 Writer64.h Common/IO/Writer64.h
  * @brief This class is a wrapper around platform specific native streams to make
- * sure that we can read files larger than 2GB
+ * sure that we can write files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class Writer64
 {

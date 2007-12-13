@@ -14,6 +14,7 @@
 
 #if defined (_MSC_VER)
 #include "Common/Win32Defines.h"
+// This will define WINDOWS_LARGE_FILE_SUPPORT to true, which is what we want
 #endif
 
 // PVDislocation Headers
@@ -64,7 +65,7 @@ standard C++ library."
  * sure that we can read files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class Reader64
 {
@@ -155,9 +156,10 @@ public:
   
   
   /**
-   * @brief
-   * @param t
-   * @param size
+   * @brief This method will read an array of values and swap each value
+   * @param t Pointer to the front of the array where the values will be stored.
+   * The array MUST already be preallocated.
+   * @param size The number of elements in the array
    */
   template < typename EndianPolicy, typename P>
   void readArrayWithSwap(P* t, int32 size)
