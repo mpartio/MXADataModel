@@ -7,6 +7,7 @@
 #include <HDF5/H5Lite.h>
 #include <HDF5/vtkHDF5.h>
 #include <Testing/DataFileGenerator.h>
+#include <TestDataFileLocations.h>
 
 //-- HDF5 Includes
 #include <hdf5.h>
@@ -19,14 +20,6 @@
 #include <vtkXMLImageDataWriter.h>
 
 
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-#if defined (_WIN32)
-#define FILE_NAME "C:\\WINDOWS\\Temp\\vtkhdf5test.h5"
-#else 
-#define FILE_NAME "/tmp/vtkhdf5test.h5"
-#endif
 
 // -----------------------------------------------------------------------------
 //  
@@ -36,7 +29,7 @@ herr_t test()
   herr_t err = -1;
   //First load the Data file
   MXADataModelPtr modelPtr = MXADataModel::New();
-  modelPtr->readModel(FILE_NAME, false); // We pass 'false' so the file will stay open
+  modelPtr->readModel(VTK_MXA_TEST_FILE, false); // We pass 'false' so the file will stay open
   hid_t fileId = modelPtr->getIODelegate()->getOpenFileId();
   if (fileId < 0)
   {
@@ -88,7 +81,7 @@ int main(int argc, char **argv)
   herr_t err = 1;
 
   // Generate a Data file to use
-  std::string outputFile(FILE_NAME);
+  std::string outputFile(VTK_MXA_TEST_FILE);
   DataFileGenerator dfg;
   dfg.setFilePath(outputFile);
   err = dfg.generate();

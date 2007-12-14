@@ -16,6 +16,7 @@
  *    Retrieving a list of the Data Dimensions
  *    Retrieving a list of the Data Records
  *    Saving the Model to an HDF5 File
+ *    Writing some sample data to the HDF5 file
  */
 
 //-- MXA Includes
@@ -127,6 +128,8 @@ int main(int argc, char **argv) {
   // List the Data Records in the model
   listDataRecords(model);
   
+  //Write the model to a new HDF5 file, deleting any existing file and
+  // allowing the Hdf5 file to remain open for further processing
   int32 err = model->writeModel(MXA_FILE, false, true);
   if (err < 0)
   {
@@ -134,7 +137,7 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
   
-  //Lets store some data into the HDF5 File. In out experiment we are recording the time
+  //Lets store some data into the HDF5 File. In our experiment we are recording the time
   // in 1 minute intervals for 10 minutes and also incrementing the pressure by
   // 200 KPa starting at 200 and ending at 800 KPa. At each combination of those
   // values we are taking the temperature and capturing an image of our sample
@@ -157,7 +160,7 @@ int main(int argc, char **argv) {
     {
       temperature += (float)p;
       indices[1] = p;
-      temperaturePath = model->generatePathToDataset(indices, temp.get());
+      temperaturePath = model->generatePathToDataset(indices, temp.get() );
       cameraImagePath = model->generatePathToDataset(indices, cameraImage.get() );
       pos = temperaturePath.find_last_of("/");
       std::string parentPath ( temperaturePath.substr(0, pos) );

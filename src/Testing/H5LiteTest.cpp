@@ -15,22 +15,13 @@
 #include <Common/MXATypes.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
+#include <TestDataFileLocations.h>
 
 //-- Boost includes
 #include <boost/test/unit_test.hpp>
 
 //using boost::unit_test::test_suite;
 using namespace boost::unit_test;
-
-
-#if defined (_WIN32)
-  #define FILE_NAME "C:\\WINDOWS\\Temp\\test_lite1.h5"
-  #define FILE_NAME2 "C:\\WINDOWS\\Temp\\test_lite2.h5"
-#else 
-  #define FILE_NAME "/tmp/test_lite1.h5"
-  #define FILE_NAME2 "/tmp/test_lite2.h5"
-#endif
-
 
 #define DSET0_NAME "2D int32 array"
 #define DSET1_NAME "dataset char"
@@ -293,7 +284,7 @@ void H5LiteTest() {
  // herr_t err = -1;
   hid_t   file_id;
   /* Create a new file using default properties. */
-  file_id = H5Fcreate( FILE_NAME, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
+  file_id = H5Fcreate( H5LITE_TEST_FILE_NAME, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
   BOOST_REQUIRE(file_id > 0);
   //Create the Extra Groups
   hid_t sintGid = H5Gcreate(file_id, "Signed Int", 0);

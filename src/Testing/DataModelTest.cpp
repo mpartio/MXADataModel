@@ -20,7 +20,7 @@
 #include <Core/MXADataDimension.h>
 #include <Core/MXADataRecord.h>
 #include <HDF5/H5IODelegate.h>
-
+#include <TestDataFileLocations.h>
 
 // C++ Includes
 #include <iostream>
@@ -42,26 +42,13 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 
 
 // -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-#if defined (_WIN32)
-  #define FILE_NAME_BEFORE "C:\\WINDOWS\\Temp\\DataModelTest-Before.h5"
-  #define FILE_NAME_AFTER "C:\\WINDOWS\\Temp\\DataModelTest-After.h5"
-#define DATA_MODEL_OVERWRITE_TEST "C:\\WINDOWS\\Temp\\DataModelOverWriteTest.h5" 
-#else 
-  #define FILE_NAME_BEFORE "/tmp/DataModelTest-Before.h5"
-  #define FILE_NAME_AFTER "/tmp/DataModelTest-After.h5"
-  #define DATA_MODEL_OVERWRITE_TEST "/tmp/DataModelOverWriteTest.h5" 
-#endif
-
-// -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
-  BOOST_REQUIRE ( boost::filesystem::remove(FILE_NAME_BEFORE) == true );
-  BOOST_REQUIRE ( boost::filesystem::remove(FILE_NAME_AFTER) == true );
-  BOOST_REQUIRE ( boost::filesystem::remove(DATA_MODEL_OVERWRITE_TEST) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(DATAMODEL_TEST_BEFORE_H5_FILE) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(DATAMODEL_TEST_AFTER_H5_FILE) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(DATAMODEL_TEST_OVERWRITE_H5_FILE) == true );
 }
 
 // -----------------------------------------------------------------------------
@@ -419,7 +406,7 @@ void WriteTestModel()
     std::cout << "WriteTestModel Running...." << std::endl;
     MXADataModelPtr modelPtr = createModel();
     MXADataModel* model = modelPtr.get();
-    std::string fileName(FILE_NAME_BEFORE);
+    std::string fileName(DATAMODEL_TEST_BEFORE_H5_FILE);
     BOOST_REQUIRE (model->writeModel(fileName, true, true) >= 0 );
     
     IODelegatePtr ioPtr;
@@ -429,8 +416,8 @@ void WriteTestModel()
   
   {
     MXADataModelPtr modelPtr = MXADataModel::New();
-    BOOST_REQUIRE (modelPtr->readModel(FILE_NAME_BEFORE, true, false) >= 0);
-    BOOST_REQUIRE (modelPtr->writeModel(FILE_NAME_BEFORE, true, false) >= 0);
+    BOOST_REQUIRE (modelPtr->readModel(DATAMODEL_TEST_BEFORE_H5_FILE, true, false) >= 0);
+    BOOST_REQUIRE (modelPtr->writeModel(DATAMODEL_TEST_BEFORE_H5_FILE, true, false) >= 0);
   }
 
 
@@ -445,8 +432,8 @@ void ReReadTestModel()
 {
   std::cout << "ReReadTestModel Running....." << std::endl;
   
-  std::string inFile(FILE_NAME_BEFORE);
-  std::string outFile(FILE_NAME_AFTER);
+  std::string inFile(DATAMODEL_TEST_BEFORE_H5_FILE);
+  std::string outFile(DATAMODEL_TEST_AFTER_H5_FILE);
   
   {
     MXADataModelPtr rmodel  = MXADataModel::New();
@@ -567,7 +554,7 @@ void TestDataModelOverWrite()
     MXADataModelPtr modelPtr = createModel();
     MXADataModel* model = modelPtr.get();
     // Write the standard model.. 
-    model->writeModel(DATA_MODEL_OVERWRITE_TEST, false, true);
+    model->writeModel(DATAMODEL_TEST_OVERWRITE_H5_FILE, false, true);
     // Update one of the dimensions
     IDataDimension* dim0 = model->getDataDimension(0);
     //IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
@@ -599,11 +586,11 @@ void TestDataModelOverWrite()
     MakeScalarAttribute( f32, "Scalar Float 32", model);
     MakeScalarAttribute( f64, "Scalar Float 64", model);
     
-    model->writeModel(DATA_MODEL_OVERWRITE_TEST, false, false);
+    model->writeModel(DATAMODEL_TEST_OVERWRITE_H5_FILE, false, false);
   }
   {
     MXADataModelPtr modelPtr = MXADataModel::New();
-    modelPtr->readModel(DATA_MODEL_OVERWRITE_TEST, true, false);
+    modelPtr->readModel(DATAMODEL_TEST_OVERWRITE_H5_FILE, true, false);
     IDataDimension* dim0 = modelPtr->getDataDimension(0);
     BOOST_REQUIRE ( dim0->getCount() == 10);
     BOOST_REQUIRE ( dim0->getStartValue() == 0);

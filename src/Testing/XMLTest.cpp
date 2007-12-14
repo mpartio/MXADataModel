@@ -13,7 +13,10 @@
 #include <Common/MXATypeDefs.h>
 #include <Core/MXADataModel.h>
 #include <XML/XMLIODelegate.h>
+#include <TestDataFileLocations.h>
 
+
+//-- C++ includes
 #include <string>
 
 
@@ -26,20 +29,6 @@ using boost::unit_test::test_suite;
 
 typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-#if defined (_WIN32)
-  #define XML_TEST_FILE "C:\\WINDOWS\\Temp\\XML_Test.xml"
-  #define MASTER_XML_FILE "C:\\WINDOWS\\Temp\\XMLMaster.xml"
-  #define XML_TEMPLATE_TEST_FILE "C:\\WINDOWS\\Temp\\XML_Template_Test_File.xml"
-  #define XML_TEMPLATE_COMPLETE_FILE "C:\\WINDOWS\\Temp\\XML_Template_Complete_File.xml"
-#else 
-  #define XML_TEST_FILE "/tmp/XML_Test.xml"
-  #define MASTER_XML_FILE "/tmp/XMLMaster.xml"
-  #define XML_TEMPLATE_TEST_FILE "/tmp/XML_Template_Test_File.xml"
-  #define XML_TEMPLATE_COMPLETE_FILE "/tmp/XML_Template_Complete_File.xml"
-#endif
 
 // -----------------------------------------------------------------------------
 //  

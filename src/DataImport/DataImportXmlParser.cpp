@@ -513,7 +513,7 @@ void DataImportXmlParser::start_Output_File_Tag(const XML_Char* name, const XML_
   } 
   else 
   {
-    _errorMessage.append("Did not find the 'Overwrite_Existing_File' attribute in the 'Output_File' tag");
+    _errorMessage.append("Did not find the 'Delete_Existing_File' attribute in the 'Output_File' tag");
     this->_xmlParseError = -1; // Set the error flag to stop the import
   }
 }

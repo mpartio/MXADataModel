@@ -1,19 +1,5 @@
 PROJECT (MXATesting)
 
-# ---------- Setup output Directories -------------------------
-SET (LIBRARY_OUTPUT_PATH
-  ${PROJECT_BINARY_DIR}/Bin
-  CACHE PATH
-  "Single Directory for all Libraries"
-  )
-
-# --------- Setup the Executable output Directory -------------
-SET (EXECUTABLE_OUTPUT_PATH
-  ${PROJECT_BINARY_DIR}/Bin
-  CACHE PATH
-  "Single Directory for all Executables."
-  )
-
 #-- Find all the support libraries needed
 SET (TEST_BOOST_LIBS ${BOOST_FILESYSTEM_LIBRARY} ${BOOST_UNIT_TEST_FRAMEWORK_LIBRARY} ${BOOST_TEST_EXEC_MONITOR_LIBRARY} )
 INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
@@ -23,6 +9,17 @@ OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
 
 IF (BUILD_TESTING)
 
+    IF (WIN32)
+        SET (MXA_TEMP_DIR "C:\\WINDOWS\\Temp\\")
+    ELSE (WIN32)
+        SET (MXA_TEMP_DIR "/tmp/")
+    ENDIF(WIN32)
+    GET_FILENAME_COMPONENT(MXA_TEST_SRC_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
+    SET (DATA_IMPORT_TEST_OUTPUT_FILE "${MXA_TEMP_DIR}XML_Based_Data_Import_Test.h5")
+    CONFIGURE_FILE(${MXA_TEST_SRC_DIR}/TestDataFileLocations.h.in
+               ${CMAKE_BINARY_DIR}/TestDataFileLocations.h @ONLY IMMEDIATE)
+    
+    
     # -------- Data Model Test
     SET (MXADATAMODEL_TEST_SRCS
       DataModelTest.cpp
