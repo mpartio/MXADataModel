@@ -35,27 +35,19 @@ Compile Notes for Windows XP
 
     <p>
     Download boost 1.34.1 from www.boost.org. You will also need bjam.exe from boost.org.
-    use the following to configure/build/install Boost
-    bjam.exe --toolset=msvc --with-test --with-filesystem install
+    use the following to configure/build/install Boost.
+    <div>
+    <code>bjam.exe --toolset=msvc --with-test --with-filesystem install</code>
+    </div><br/>
     Let this go for a looong time after which Boost will be installed into C:\Boost. If
-    would like Boost installed somewhere else then add --prefix=C:\Path\To\Install to the above
+    you would like Boost installed somewhere else then add --prefix=C:\Path\To\Install to the above
     configuration line.
     It is helpful to set the "Boost_ROOT" environment variable. This will let cmake find 
     boost easier. It should be set to the same path as the "intall" path from above.
-    <p>
-    Obtain and Compile HDF5 1.6.5 from the HDF5 Group. This involves some contortions to get
-    the Visual Studio projects that are provided to work correctly. Follow their instructions. 
-    Install the HDF5 Includes/Libraries somewhere then set the environment variable "HDF_INSTALL" 
-    to the installation path. Example, if you installed into C:\Library then set HDF_INSTALL to
-    C:\Library
-    <p>
-    <b>Tiff:</b> Tiff 3.8.2 provides a 'nmake' file to use on a command prompt. Use this to build Tiff or 
-    download from <a href="http://titanium.imts.us/viewvc/Task_7/tiff.tar.gz?view=tar"> here </a> to get a CMake version
-    of the tiff library.
-    <p>
-    <b>Expat:</b> Version 2.0.1 Provides a .dsw file to compile. Use this to compile and install the library. You can
-    download a CMake version of Expat from <a href="http://titanium.imts.us/viewvc/Task_7/expat.tar.gz?view=tar">here.</a>
     </div>
+    
+    <div class="entry">Tiff, Expat and HDF5-166 can be downloaded from our CVS server. Use the included CMake files to use CMake
+    to compile the libraries. I suggest build each library as a static library instead of a dll.</div>
     
     <div class="entry">
     Compiling MXADataModel and Unit Tests:<p>
@@ -65,12 +57,6 @@ Compile Notes for Windows XP
     step for Boost libraries is for the cmake file to include the directory where the boost
     libraries are located into its link libraries list. This is done for you. The Visual Studio
     linker will look in that location for the needed libraries.
-    <p>
-    Set cmake to build SHARED LIBRARIES for MXADataModel. If you do NOT have libTIFF compiled/installed
-    on your system then turn OFF TIFF support.
-    <p>
-    If you actually build the "Install" project in VC++ then set the MXADATAMODEL_INSTALL environment variable to
-    the installation location.
     </div>
     
 </td></tr>

@@ -55,11 +55,11 @@ VTK in the MXA Source code. These are optional to build. If you do build them VT
 
 I would suggest compiling in the following order:
 <ol>
+<li>Boost</li>
 <li>Tiff</li>
 <li>Expat</li>
-<li>Boost</li>
-<li>Zlib and/or szip</li>
-<li>HDF5</li>
+<li>Zlib and/or szip (These are optional)</li>
+<li>HDF5 Ver166</li>
 <li>VTK - Only if you need to use VTK from the MXA Data Model</li>
 <li>MXADataModel</li>
 </ol>
@@ -78,14 +78,18 @@ I would suggest compiling in the following order:
     <td>OS X 10.4.x</td>
     <td>GCC 4.x (Xcode 2.4.1 Tooling)</td>
   </tr>
-<tr class="cell_normal">
-    <td>OS X 10.4.x</td>
-    <td>Intel C++ Version 9.1.x</td>
+  <tr class="cell_normal">
+    <td>Linux - Rocks Cluster Distribution</td>
+    <td>Intel C++ Version 10.1</td>
   </tr>
   <tr class="cell_normal">
     <td>Windows XP SP2</td>
     <td>MSVC++ .Net 2003</td>
   </tr>
+  <tr class="cell_normal">
+    <td>Linux HPC IA64</td>
+    <td>GCC 4.x</td>
+  </tr> 
 </table>
 <!-- End OS / Compiler Tested Combinations -->
 

@@ -29,9 +29,6 @@ Using MXADataModel as an External Library for your Project
 <!-- End Navigation Table Cell -->
 <td class="content">
 <div class="entry">Windows XP:<br>
-    <p>As of May 31, 2007 I am NOT compiling against the TIFF library on windows. It is on my list of things to do.
-    When you run cmake, turn ON "BUILD_SHARED_LIBS", turn OFF MXA_USE_TIFF</p>
-    <p>Double check the library for HDF5 that CMake found. Use hdf5dll.lib which should then point to hdf5dll.dll. </p>
     <p>When compiling against the dll version of the HDF5 library be sure to have the following defined:</p>
     <ul>
   <li> ADD_DEFINITIONS(-DHDF5_MODULES_ON) </li>
@@ -40,7 +37,9 @@ Using MXADataModel as an External Library for your Project
     otherwise you will get unresolved symbols when the link stage runs. Some how projects that used the MXADataModel 
     cmakelists file were not getting this added to their flags.
    <p> When compiling against the Qt libraries you need to include the following in the cmake file:
-            <br><code>SET (QT_LIBRARIES qtmain ${QT_LIBRARIES})</code>
+            <br><code>IF (WIN32)<br>
+    SET (QT_USE_QTMAIN TRUE)<br>
+ENDIF (WIN32)</code>
         <br>This will resolve the WinMain16 link error that will occur if you do NOT have it listed
       </p>  
     <p> If you
