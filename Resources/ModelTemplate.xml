@@ -15,13 +15,13 @@
   </Data_Model>
   <Meta_Data>
     <Required_MD Creator="Mike Jackson" 
-    Date="June 25 2005" 
-    Description="These are images that were created during a FIB experiment" 
+    Date="June 25 2007" 
+    Description="Some description of your experiment or data set" 
     Distribution_Rights="Publicly Released" 
-    Name="Junk Test Data" 
-    Original_Source_File="Individual tiff images and ANG files collected from the instrument" 
-    Pedigree="Generated at WPAFB/AFRL/MLLM" 
-    Release_Number="WS-AFRL-12300IDNVD" />
+    Name="Test Data" 
+    Original_Source_File="Description of where the data comes from: Directly from the Instrument or from files on disk." 
+    Pedigree="Where was the data generated. You can be as abstract or detailed as you want." 
+    Release_Number="Not Applicable" />
     <UserDefined_MD>
   </UserDefined_MD>
   </Meta_Data>

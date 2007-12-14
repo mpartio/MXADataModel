@@ -15,7 +15,7 @@
 	</Data_Model>
 
 	<!--  Define the Output file to store the data -->
-	<Output_File Absolute_Path="/tmp/XML_Based_Data_Import_Test.h5" />
+	<Output_File Absolute_Path="@DATA_IMPORT_TEST_OUTPUT_FILE@" Delete_Existing_File="true"/>
 
 	<!--  Define the data sources for each Data Record and Dimension Values
 		/Users/mjackson/Task_7/Data/Mike-Uchic-Data/IN100_25JUN04_DISC1/7000_Series/7000.tif
