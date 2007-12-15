@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2007, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef ANYDATADELEGATE_H_
 #define ANYDATADELEGATE_H_
 
@@ -13,7 +23,7 @@
 * @brief  Template Class to allow any type of data to be created and stored in an HDF5 File
 * @author Mike Jackson
 * @date June 2007
-* @version $Revision: 1.10 $
+* @version $Revision: 1.11 $
 * @class AnyDataDelegate AnyDataDelegate.h src/Test/AnyDataDelegate.h
 */
 template <typename T>

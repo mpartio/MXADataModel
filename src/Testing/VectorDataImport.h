@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2007, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef VECTORDATAIMPORT_H_
 #define VECTORDATAIMPORT_H_
 
@@ -12,7 +22,7 @@
 * @brief 
 * @author
 * @date
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class VectorDataDelegate: public IImportDelegate
 {

@@ -272,7 +272,7 @@ ENDIF(BUILD_EXAMPLES)
 # ------------------------------------------------------------------------------
 #  Build simple test programs. This should always be commented out
 # ------------------------------------------------------------------------------
-# ADD_EXECUTABLE(OverWriteDataTest ${MXA_SOURCE_DIR}/src/Misc/OverWriteDataTest.cpp)
-# TARGET_LINK_LIBRARIES(OverWriteDataTest ${HDF5_LIBRARY})
+ADD_EXECUTABLE(OverLoadTest ${MXA_SOURCE_DIR}/src/Misc/OverLoadTest.cpp)
+TARGET_LINK_LIBRARIES(OverLoadTest)
 
 

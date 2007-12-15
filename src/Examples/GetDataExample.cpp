@@ -31,20 +31,20 @@ int main(int argc, char **argv)
   std::cout << logTime() << "----- Running GetData Example ------------- " << std::endl;
   
   herr_t err = 1;
-#if 1
   // Generate a Data file to use
   std::string outputFile(FILE_NAME);
   DataFileGenerator dfg;
   dfg.setFilePath(outputFile);
   err = dfg.generate();
   if (err < 0)
+  {
     return EXIT_FAILURE;
-  #endif
+  }
   
-#if 0
+
   //First load the Data file
   MXADataModelPtr modelPtr = MXADataModel::New();
-  modelPtr->readModel(FILE_NAME, false); // We pass 'false' so the file will stay open
+  modelPtr->readModel(FILE_NAME, false, true); // We pass 'false' so the file will stay open
   hid_t fileId = modelPtr->getIODelegate()->getOpenFileId();
   if (fileId < 0)
   {
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     std::cout << logTime() << "Error Retrieving Dataset info for " << dsetPath << std::endl;
     return -1;
   }
-#endif
+
   std::cout << logTime() << "------------- GetData Example Complete ------------ " << std::endl;
   
   return 0;
