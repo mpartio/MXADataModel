@@ -21,9 +21,8 @@
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-H5DataModelWriter::H5DataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel)
+H5DataModelWriter::H5DataModelWriter(IDataModelPtr dataModel)
 {
-  _ioDelegate  = static_cast<H5IODelegate*>(ioDelegate);
   _dataModel = dataModel;
 }
 

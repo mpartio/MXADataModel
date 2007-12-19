@@ -5,6 +5,9 @@ SET (TEST_BOOST_LIBS ${BOOST_FILESYSTEM_LIBRARY} ${BOOST_UNIT_TEST_FRAMEWORK_LIB
 INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
 LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS})
 
+INCLUDE (${MXA_RESOURCES_DIR}/FindSupportLibraries.cmake)
+INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIRS} )
+
 OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
 
 IF (BUILD_TESTING)
@@ -29,6 +32,7 @@ IF (BUILD_TESTING)
     ADD_TEST(DataModelTest ${EXECUTABLE_OUTPUT_PATH}/DataModelTest)
     
     # ------ DataImport Test
+    IF (MXA_USE_XML)
     SET (MXADATAIMPORT_TEST_SRCS
       DataImportTest.cpp
     )
@@ -39,6 +43,7 @@ IF (BUILD_TESTING)
     SET (DATA_MODEL_XML_FILE ${MXA_SOURCE_DIR}/Resources/ModelTemplate.xml)
     CONFIGURE_FILE(${MXA_SOURCE_DIR}/Resources/DataImportTest.xml.in
                     ${CMAKE_BINARY_DIR}/DataImportTest.xml @ONLY IMMEDIATE)
+    ENDIF(MXA_USE_XML)
     
     # ------- H5Lite Test
     SET (H5LITE_TEST_SRCS

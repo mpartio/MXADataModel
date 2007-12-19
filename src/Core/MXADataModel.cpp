@@ -32,7 +32,7 @@ _datasetPedigree(""),
 _datasetPublicReleaseNumber("")
 {
   #if HDF5_SUPPORT
-  _ioDelegate.reset(new H5IODelegate());
+ // _ioDelegate.reset(new H5IODelegate());
   #else
   #warning HDF5_SUPPORT is OFF. There is NO default IODelegatePtr for MXADataModel
   #endif
@@ -104,8 +104,11 @@ void MXADataModel::setDefaultTypeAndVersion()
 // -----------------------------------------------------------------------------
 void MXADataModel::setDataRoot(const std::string &dataRoot) 
 {
-  StringUtils::ensureRightSlash(  const_cast<std::string&>(dataRoot) );
   this->_dataRoot = dataRoot;
+  if (false == StringUtils::hasRightSlash(this->_dataRoot))
+  {
+    this->_dataRoot += "/";
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -761,11 +764,13 @@ void MXADataModel::printUserMetaData(std::ostream& os, int32 indent)
   }
 }
 
-
+#if 0
 // -----------------------------------------------------------------------------
 //  Reads the datamodel from the filename given using the defualt IODelegatePtr
 // -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, bool closeWhenFinished, bool openReadOnly)
+MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, 
+                    bool closeWhenFinished, 
+                    bool openReadOnly)
 {
   int32 err = -1;
   if (this->_ioDelegate.get() != NULL)
@@ -779,7 +784,7 @@ MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, bool clo
 // -----------------------------------------------------------------------------
 //  Reads the datamodel using a different IODelegatePtr than provided as a default
 // -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly)
+MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, IFileIODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly)
 {
   int32 err = -1;
   if (ioDelegate.get() != NULL)
@@ -809,7 +814,7 @@ MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName,
 //  Reads the datamodel using a different IODelegatePtr than provided as a default
 // -----------------------------------------------------------------------------
 MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, 
-                                            IODelegatePtr ioDelegate,                                          
+    IFileIODelegatePtr ioDelegate,                                          
                                             bool closeWhenFinished,
                                             bool deleteExisting)
 {
@@ -824,7 +829,7 @@ MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName,
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataModel::setIODelegate(IODelegatePtr ioDelegate)
+void MXADataModel::setIODelegate(IFileIODelegatePtr ioDelegate)
 {
   this->_ioDelegate = ioDelegate;
 }
@@ -832,29 +837,13 @@ void MXADataModel::setIODelegate(IODelegatePtr ioDelegate)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IODelegatePtr MXADataModel::getIODelegate()
+IFileIODelegatePtr MXADataModel::getIODelegate()
 {
   return this->_ioDelegate;
 }
 
+#endif
 
-// -----------------------------------------------------------------------------
-//  Use a new set of indices to generate a path
-// -----------------------------------------------------------------------------
-std::string MXADataModel::generatePathToDataset ( std::vector<int32> &indices,  IDataRecord* record) 
-{
-  std::string path;
-  //Put the data root on first
-  path += this->getDataRoot();
-  //Put the Data Dimensions on Next
-  for (std::vector<int32>::iterator iter = indices.begin(); iter != indices.end(); ++iter ) {
-    path += StringUtils::numToString(*iter);
-    path += "/";
-  }
-   // Now build up the DataRecord path
-  path = path + record->generatePath();
-  return path;
-}
 
 // -----------------------------------------------------------------------------
 //  

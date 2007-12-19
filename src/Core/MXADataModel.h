@@ -41,7 +41,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -303,12 +303,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
 
   /** @brief Returns the Data Structure used to hold the user defined Meta Data */
   IAttributes& getUserMetaData();
-  
-  /** @brief Sets the IODelegate for this model. Default delegate is an HDF5 delegate */
-  void setIODelegate(IODelegatePtr ioDelegate);
-  /** @brief Returns the IOdelegate for this model */
-  IODelegatePtr getIODelegate();
-  
+   
   /**
    * @brief Prints the Data Model to the provided std::ostream
    * @param os
@@ -349,6 +344,12 @@ class MXA_EXPORT MXADataModel : public IDataModel
    */
   void printUserMetaData(std::ostream &os, int32 indent);
 
+#if 0  
+  /** @brief Sets the IODelegate for this model. Default delegate is an HDF5 delegate */
+  void setIODelegate(IFileIODelegatePtr ioDelegate);
+  /** @brief Returns the IOdelegate for this model */
+  IFileIODelegatePtr getIODelegate();
+
   //--------------- Methods to Write the DataModel to a File -------------------
   /**
   * @brief Writes the model to the data file
@@ -369,7 +370,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
   * @return Standard HDF5 Error condition
   */
   MXATypes::MXAError writeModel(const std::string &fileName, 
-                                        IODelegatePtr ioDelegate,                                          
+                                        IFileIODelegatePtr ioDelegate,                                          
                                         bool closeWhenFinished,
                                         bool deleteExisting);
   
@@ -392,15 +393,9 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param openReadOnly If you need to write more to the file, set this to 'false'
    * @return
    */
-  MXATypes::MXAError readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly);
+  MXATypes::MXAError readModel(const std::string &fileName, IFileIODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly);
+#endif
 
-  /**
-   * @brief Creates an absolute path suitable for create an HDF5 data set.
-   * @param indices The indices to use for the Data dimensions
-   * @param record The MXADataRecord to generate the path to
-   * @return The hdf5 path
-   */
-   std::string generatePathToDataset ( std::vector<int32> &indices, IDataRecord* record);
    
    /**
     * @brief Performs some basic checks to make sure the model is valid.
@@ -437,7 +432,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    IAttributes _userMetaData;
    
    // The default delegate to use to write the model to a file
-   IODelegatePtr _ioDelegate;
+   //IFileIODelegatePtr _ioDelegate;
    
 };
 

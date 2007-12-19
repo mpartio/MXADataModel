@@ -11,7 +11,7 @@
  * a delegate to import data sources into HDF5 data files.
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  *  
  */
 class MXA_EXPORT IImportDelegate
@@ -25,10 +25,10 @@ public:
   * @brief Imports a Data source into the underlying data storage mechanism. This is the method that subclasses
   * should over ride and implement.
   * @param dataSource A Valid IDataSource Object
-  * @param model A Valid IDataModel object
+  * @param dataFile The IDataFile object
   * @return Zero or Positive on Success
   */
-  virtual int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model) = 0;
+  virtual int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile) = 0;
   
 
 };

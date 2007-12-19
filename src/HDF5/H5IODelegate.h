@@ -34,7 +34,7 @@ class H5DataModelWriter;
  * supports reading/writing of the data model and data to and from HDF5 files.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  *  
  */
 class MXA_EXPORT H5IODelegate : public IFileIODelegate
@@ -56,7 +56,10 @@ public:
   * @param deleteExisting Deletes existing file first, then creates a new file and writes model to that file
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
-  int32 writeModelToFile(const std::string &fileName, IDataModel* model, bool closeWhenFinished, bool deleteExisting);
+  int32 writeModelToFile(const std::string &fileName, 
+      IDataModelPtr model, 
+      bool closeWhenFinished, 
+      bool deleteExisting);
   
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
@@ -68,7 +71,7 @@ public:
   * is returned.
   */
   int32 readModelFromFile(const std::string &fileName, 
-      IDataModel* model, 
+      IDataModelPtr model, 
       bool closeWhenFinished,
       bool openReadOnly);
 

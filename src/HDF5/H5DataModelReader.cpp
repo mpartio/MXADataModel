@@ -22,9 +22,8 @@
 // -----------------------------------------------------------------------------
 //  Constructor
 // -----------------------------------------------------------------------------
-H5DataModelReader::H5DataModelReader(IFileIODelegate* ioDelegate, IDataModel* dataModel)
+H5DataModelReader::H5DataModelReader(IDataModelPtr dataModel)
 {
-  _ioDelegate  = static_cast<H5IODelegate*>(ioDelegate);
   _dataModel = dataModel;
 }
 

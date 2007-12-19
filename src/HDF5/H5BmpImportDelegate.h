@@ -39,7 +39,7 @@ namespace FileSystem = boost::filesystem;
  * @author Mike Jackson
  * @date April 2007
  * @class H5BmpImportDelegate HDF5/H5BmpImportDelegate.h HDF5/H5BmpImportDelegate.h
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 class MXA_EXPORT H5BmpImportDelegate : public IImportDelegate
 {
@@ -50,13 +50,13 @@ public:
   /**
   * @brief Implementation from the IDataImportDelegate class
   */
-  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model);
+  int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile);
   
   /**
    * @brief Sets the pointer to the DataModel
    * @param model A Pointer to the DataModel
    */
-  void setDataModel(IDataModelPtr model);
+  // void setDataModel(IDataModelPtr model);
   
   /**
   * @brief Sets the 'FileNotFoundIsError' flag.

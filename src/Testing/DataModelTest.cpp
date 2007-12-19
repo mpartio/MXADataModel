@@ -14,12 +14,13 @@
 #include <MXAConfiguration.h>
 #include <Common/MXATypeDefs.h>
 #include <Common/MXAEndian.h>
+#include <Base/IDataFile.h>
 #include <Core/MXAConstants.h>
 #include <Core/MXAAttribute.h>
 #include <Core/MXADataModel.h>
 #include <Core/MXADataDimension.h>
 #include <Core/MXADataRecord.h>
-#include <HDF5/H5IODelegate.h>
+#include <HDF5/H5MXADataFile.h>
 #include <TestDataFileLocations.h>
 
 // C++ Includes
@@ -221,7 +222,7 @@ void TestRequiredMetaData()
 {
   int32 err = -1;
   std::string errorMessage;
-  std::cout << "TestRequiredMetaData Running...." << std::endl;
+  std::cout << "TestRequiredMetaData Running...." ;
   MXADataModelPtr model = createModel();
   
   // Test setting the Required MetaData by individual strings
@@ -275,6 +276,7 @@ void TestRequiredMetaData()
   errorMessage.clear();
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
+  std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -317,7 +319,7 @@ void TestLookupTableGeneration()
 // -----------------------------------------------------------------------------
 void TestRetrieveDataRecords()
 { 
-  std::cout << "TestRetrieveDataRecords Running...." << std::endl;
+  std::cout << "TestRetrieveDataRecords Running....";
   MXADataModelPtr model = createModel();
   BOOST_REQUIRE( recordExists(model, "/Order Parameters/Eta1/") == true);
   BOOST_REQUIRE( recordExists(model, "Order Parameters/Eta1") == true);
@@ -351,7 +353,7 @@ void TestRetrieveDataRecords()
   BOOST_REQUIRE( recordInternalPathExists(model, "/1/3/") == true);
   BOOST_REQUIRE( recordInternalPathExists(model, "/1/3/0") == true);
   BOOST_REQUIRE( recordInternalPathExists(model, "/1/3/3") == false);
-  
+  std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -359,7 +361,7 @@ void TestRetrieveDataRecords()
 // -----------------------------------------------------------------------------
 void TestDataDimensionMethods()
 {
-  std::cout << "Test DataDimensionMethods Running...." << std::endl;
+  std::cout << "Test DataDimensionMethods Running....";
   MXADataModelPtr model = createModel(); // Created on the stack
   int32 error = 0;
   
@@ -394,6 +396,7 @@ void TestDataDimensionMethods()
   error = model->removeDataDimension("Junk");
   BOOST_REQUIRE( error < 0);
   BOOST_REQUIRE(model->getDataDimensions().size() == 2);
+  std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -401,26 +404,24 @@ void TestDataDimensionMethods()
 // -----------------------------------------------------------------------------
 void WriteTestModel()
 {
-  
   {
-    std::cout << "WriteTestModel Running...." << std::endl;
+    std::cout << "WriteTestModel Running....";
     MXADataModelPtr modelPtr = createModel();
-    MXADataModel* model = modelPtr.get();
-    std::string fileName(DATAMODEL_TEST_BEFORE_H5_FILE);
-    BOOST_REQUIRE (model->writeModel(fileName, true, true) >= 0 );
-    
-    IODelegatePtr ioPtr;
-    BOOST_REQUIRE ( model->writeModel(fileName, ioPtr, true, true) < 0);
-    
+    IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(DATAMODEL_TEST_BEFORE_H5_FILE, modelPtr);
+    BOOST_REQUIRE(dataFile.get() != 0x0);
+    std::cout << "......Passed" << std::endl;
   }
   
   {
-    MXADataModelPtr modelPtr = MXADataModel::New();
-    BOOST_REQUIRE (modelPtr->readModel(DATAMODEL_TEST_BEFORE_H5_FILE, true, false) >= 0);
-    BOOST_REQUIRE (modelPtr->writeModel(DATAMODEL_TEST_BEFORE_H5_FILE, true, false) >= 0);
+    std::cout << "Read DataModel Running...." ;
+    IDataFilePtr dataFile = H5MXADataFile::OpenFile(DATAMODEL_TEST_BEFORE_H5_FILE, false);
+    BOOST_REQUIRE(dataFile.get() != 0x0);
+    IDataModelPtr modelPtr = dataFile->getDataModel();
+    BOOST_REQUIRE(modelPtr.get() != 0x0);
+    // Resave the model. This should work with out any problems.
+    BOOST_REQUIRE (dataFile->saveDataModel() >= 0);
+    std::cout << "......Passed" << std::endl;
   }
-
-
 }
 
 // -----------------------------------------------------------------------------
@@ -428,27 +429,25 @@ void WriteTestModel()
 //  a new file. Use h5dump and diff to compare the files. They should be the same
 //  assuming the original file only had a DataModel in it.
 // -----------------------------------------------------------------------------
-void ReReadTestModel()
+void ReWriteModelTest()
 {
-  std::cout << "ReReadTestModel Running....." << std::endl;
+  std::cout << "ReWriteModelTest Running.....";
   
-  std::string inFile(DATAMODEL_TEST_BEFORE_H5_FILE);
-  std::string outFile(DATAMODEL_TEST_AFTER_H5_FILE);
+  std::string inFilename(DATAMODEL_TEST_BEFORE_H5_FILE);
+  std::string outFilename(DATAMODEL_TEST_AFTER_H5_FILE);
   
   {
-    MXADataModelPtr rmodel  = MXADataModel::New();
-    MXADataModel* model = rmodel.get();
-    BOOST_REQUIRE ( model->readModel(inFile, false, false) >= 0);
-    // This should FAIL because the files passed in are different
-    BOOST_REQUIRE ( model->writeModel(outFile, true, true) < 0);
-    // This should PASS because we are providing a new IODelegate to use.
-    IODelegatePtr h5io ( new H5IODelegate); 
-    BOOST_REQUIRE ( model->writeModel(outFile, h5io, true, true) >= 0 );
+    IDataFilePtr dataFile = H5MXADataFile::OpenFile(inFilename, false);
+    BOOST_REQUIRE(dataFile.get() != 0x0);
     
-    // This should FAIL because we are providing a NULL delegate.
-    IODelegatePtr ioPtr;
-    BOOST_REQUIRE ( model->writeModel(outFile, ioPtr, true, true) < 0);
+    IDataModelPtr modelPtr  = dataFile->getDataModel();
+    BOOST_REQUIRE(modelPtr.get() != 0x0);
+    
+    IDataFilePtr outFile = H5MXADataFile::CreateFileWithModel(outFilename, modelPtr);
+    BOOST_REQUIRE(outFile.get() != 0x0);
   }
+  
+  std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -456,7 +455,7 @@ void ReReadTestModel()
 // -----------------------------------------------------------------------------
 void TestDimensionCount()
 {
-  std::cout << "Testing Dimension Count Running...." << std::endl;
+  std::cout << "Testing Dimension Count Running...." ;
   IDataDimensionPtr dim = MXADataDimension::New("Test", "Test", 0, 10, 0, 9, 1, 1);
   int32 count = dim->calculateCount();
   BOOST_REQUIRE(count == 10);
@@ -503,7 +502,7 @@ void TestDimensionCount()
   dim->setEndValue(31);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 11);
-
+  std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -511,7 +510,7 @@ void TestDimensionCount()
 // -----------------------------------------------------------------------------
 void TestEndianSwap()
 {
-  std::cout << "Testing Endian Swapping Running...." << std::endl;
+  std::cout << "Testing Endian Swapping Running....";
   uint32 value = 0xAABBCCDD;
   MXA::Endian::reverseBytes ( value );
   BOOST_REQUIRE(0xDDCCBBAA == value);
@@ -519,6 +518,7 @@ void TestEndianSwap()
   uint16 value16 = 0xAABB;
   MXA::Endian::reverseBytes( value16);
   BOOST_REQUIRE(0xBBAA == value16);
+  std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -526,7 +526,7 @@ void TestEndianSwap()
 // -----------------------------------------------------------------------------
 void TestDataRecordRemoval()
 {
-  std::cout << "TestDataRecordRemoval Running...." << std::endl;
+  std::cout << "TestDataRecordRemoval Running....";
   MXADataModelPtr modelPtr = createModel();
   MXADataModel* model = modelPtr.get();
   IDataRecordPtr nullRec;
@@ -541,7 +541,7 @@ void TestDataRecordRemoval()
   BOOST_REQUIRE( model->getDataRecords().size() == 1);
   BOOST_REQUIRE( r0.use_count() == 1);
   r0.reset(nullRec.get());
-
+  std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -549,12 +549,19 @@ void TestDataRecordRemoval()
 // -----------------------------------------------------------------------------
 void TestDataModelOverWrite()
 {
-  std::cout << "TestDataModelOverWrite Running...." << std::endl;
+  std::cout << "TestDataModelOverWrite Running...." ;
+  std::string outFilename (DATAMODEL_TEST_OVERWRITE_H5_FILE);
   {
+
+    
     MXADataModelPtr modelPtr = createModel();
+    IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outFilename, modelPtr);
+    // Make sure nothing went wrong in the file creation
+    BOOST_REQUIRE(dataFile.get() != 0x0);
+    //Make sure the model pointers are the same. They SHOULD be.
+    BOOST_REQUIRE(dataFile->getDataModel().get() == modelPtr.get() );
+    
     MXADataModel* model = modelPtr.get();
-    // Write the standard model.. 
-    model->writeModel(DATAMODEL_TEST_OVERWRITE_H5_FILE, false, true);
     // Update one of the dimensions
     IDataDimension* dim0 = model->getDataDimension(0);
     //IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
@@ -585,12 +592,14 @@ void TestDataModelOverWrite()
     // Floating point Numbers
     MakeScalarAttribute( f32, "Scalar Float 32", model);
     MakeScalarAttribute( f64, "Scalar Float 64", model);
-    
-    model->writeModel(DATAMODEL_TEST_OVERWRITE_H5_FILE, false, false);
+    int32 err = dataFile->saveDataModel();
+    BOOST_REQUIRE(err >= 0); // This must pass
   }
+  //Reread the model from the file and compare values
   {
-    MXADataModelPtr modelPtr = MXADataModel::New();
-    modelPtr->readModel(DATAMODEL_TEST_OVERWRITE_H5_FILE, true, false);
+    IDataFilePtr dataFile = H5MXADataFile::OpenFile(outFilename, true);
+    BOOST_REQUIRE(dataFile.get() != 0x0);
+    IDataModelPtr modelPtr = dataFile->getDataModel();
     IDataDimension* dim0 = modelPtr->getDataDimension(0);
     BOOST_REQUIRE ( dim0->getCount() == 10);
     BOOST_REQUIRE ( dim0->getStartValue() == 0);
@@ -598,6 +607,8 @@ void TestDataModelOverWrite()
     BOOST_REQUIRE ( dim0->getIncrement() == 1);
     BOOST_REQUIRE ( modelPtr->getDataRoot().compare("New/Data/Root/") == 0);
   }
+  
+  std::cout << "......Passed" << std::endl;
 }
 
 
@@ -611,7 +622,7 @@ test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] )
   //test->add( new DataModelTest () );
     
   test->add( BOOST_TEST_CASE( &WriteTestModel), 0);
-  test->add( BOOST_TEST_CASE( &ReReadTestModel), 0);
+  test->add( BOOST_TEST_CASE( &ReWriteModelTest), 0);
   test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );
   test->add( BOOST_TEST_CASE( &TestDataDimensionMethods), 0 );
   test->add( BOOST_TEST_CASE( &TestRequiredMetaData), 0);

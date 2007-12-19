@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  */
 class H5Utilities
 {
@@ -226,6 +226,15 @@ public:
     return ptr;
   }
 
+  /**
+   * @brief Creates an absolute path suitable for create an HDF5 data set.
+   * @param model The data model to use
+   * @param indices The indices to use for the Data dimensions
+   * @param record The MXADataRecord to generate the path to
+   * @return The hdf5 path
+   */
+  static std::string generateH5PathToDataset ( IDataModelPtr model, std::vector<int32> &indices,  IDataRecordPtr record);
+ 
   
 protected:
   H5Utilities() {}; //This is just a bunch of Static methods

@@ -3,7 +3,7 @@
 #include <Base/IImportDelegate.h>
 #include <Core/MXADataSource.h>
 #include <Core/MXADataModel.h>
-
+#include <Base/IDataFile.h>
 
 #include <iostream>
 
@@ -27,9 +27,20 @@ MXADataImport::~MXADataImport ( )
 int32 MXADataImport::import()
 {
   int32 err = 1;
+  // Ensure the output file is open
+  if (this->_dataFile->isFileOpen() == false)
+  {
+    err = _dataFile->openFile(false);
+    if (err < 0)
+    {
+      std::cout << DEBUG_OUT(logTime) << "MXADataImport::import - Error Opening file: " << this->getOutputFilePath() << std::endl;
+      return err;
+    }
+  }
+
   for (IDataSources::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
   {
-    err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataModel );
+    err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataFile );
     if ( err < 0 )
     {
       break;
@@ -63,15 +74,15 @@ std::string MXADataImport::getOutputFilePath ( ) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataImport::setDataModel ( boost::shared_ptr<IDataModel> new_var ) {
-  _dataModel = new_var;
+void MXADataImport::setDataFile ( IDataFilePtr new_var ) {
+  _dataFile = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IDataModelPtr MXADataImport::getDataModel ( ) {
-  return _dataModel;
+IDataFilePtr MXADataImport::getDataFile ( ) {
+  return _dataFile;
 }
 
 // -----------------------------------------------------------------------------

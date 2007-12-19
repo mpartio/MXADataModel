@@ -24,9 +24,10 @@
 #include <Common/MXATypeDefs.h>
 #include <Common/LogTime.h>
 #include <Core/MXADataModel.h>
-#include <XML/XMLIODelegate.h>
+#include <XML/XMLDataModelWriter.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
+#include <HDF5/H5MXADataFile.h>
 
 // HDF5 Include
 #include <hdf5.h>
@@ -44,7 +45,6 @@
 
 // Declare methods
 void listDataDimensions(MXADataModel* model);
-void exportModelToXML(MXADataModel* model);
 void listDataRecords(MXADataModel* model);
 void captureSampleImage(std::vector<uint8> &imageBuffer);
 
@@ -120,7 +120,14 @@ int main(int argc, char **argv) {
   }
   
   // Export the Model to an XML File
-  exportModelToXML(model);
+  
+  XMLDataModelWriter xmlWriter(modelPtr, XML_FILE);
+  int32 err = xmlWriter.writeModelToFile(-1);
+  if (err < 0)
+  {
+    std::cout << "Error writing model to an xml file" << std::endl;
+    return -1;
+  }
   
   // List the Data Dimensions of the model
   listDataDimensions(model);
@@ -130,8 +137,9 @@ int main(int argc, char **argv) {
   
   //Write the model to a new HDF5 file, deleting any existing file and
   // allowing the Hdf5 file to remain open for further processing
-  int32 err = model->writeModel(MXA_FILE, false, true);
-  if (err < 0)
+  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(MXA_FILE, modelPtr);
+  
+  if (NULL == dataFile.get() )
   {
     std::cout << "Error Writing Model to HDF5 File" << std::endl;
     return EXIT_FAILURE;
@@ -141,7 +149,7 @@ int main(int argc, char **argv) {
   // in 1 minute intervals for 10 minutes and also incrementing the pressure by
   // 200 KPa starting at 200 and ending at 800 KPa. At each combination of those
   // values we are taking the temperature and capturing an image of our sample
-  hid_t fileId = model->getIODelegate()->getOpenFileId(); //We need the HDF5 indentifier for the open file
+  hid_t fileId = dataFile->getFileId();//We need the HDF5 indentifier for the open file
   std::vector<int32> indices(2, 0); // we keep this for re-use during the loop
   std::string temperaturePath;
   std::string cameraImagePath;
@@ -160,8 +168,8 @@ int main(int argc, char **argv) {
     {
       temperature += (float)p;
       indices[1] = p;
-      temperaturePath = model->generatePathToDataset(indices, temp.get() );
-      cameraImagePath = model->generatePathToDataset(indices, cameraImage.get() );
+      temperaturePath = H5Utilities::generateH5PathToDataset(modelPtr, indices, temp );
+      cameraImagePath = H5Utilities::generateH5PathToDataset(modelPtr, indices, cameraImage );
       pos = temperaturePath.find_last_of("/");
       std::string parentPath ( temperaturePath.substr(0, pos) );
       // Make sure the path to the dataset in the HDF5 file is already created.
@@ -199,21 +207,6 @@ void captureSampleImage(std::vector<uint8> &imageBuffer)
     }
   }
   
-}
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-void exportModelToXML(MXADataModel* model)
-{
-  //We can now export our model to an XML File for use in other applications
-    //First Instantiate an XML Writer Delegate
-    XMLIODelegate xmlWriter;
-    //Next, tell the writer delegate to write the model using and close the file when finished
-    MXATypes::MXAError error = xmlWriter.writeModelToFile(XML_FILE, model, true, true);
-    if (error < 0) // Check for errors during the writing process
-    {
-      std::cout << "Error Writing model to XML file." << std::endl;
-    }
 }
 
 // -----------------------------------------------------------------------------

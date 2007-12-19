@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <Testing/DataFileGenerator.h>
 
-
+#include <HDF5/H5MXADataFile.h>
 
 // -----------------------------------------------------------------------------
 //  
@@ -69,8 +69,6 @@ herr_t DataFileGenerator::generate()
     MXADataImportPtr dataImport( new MXADataImport() );
     // Set the HDF5 Output file to write all the data into
     dataImport->setOutputFilePath(_filePath);
-    // Set the MXADataModel Object into the dataImport Object
-    dataImport->setDataModel(modelPtr);
   
     // Create some Scalar Data
     MXADataRecordPtr scalarRec = MXADataRecord::New(1, DataGen::ScalarRec, DataGen::ScalarRec);
@@ -94,13 +92,15 @@ herr_t DataFileGenerator::generate()
     err = this->makeRecords(modelPtr, dataImport, volumeRec, volumeDims);    
     
     // Write the model to the HDF5 File
-    err = model->writeModel(this->_filePath, false, true); //Leave the file open for the import
-    if (err < 0)
+    IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(_filePath, modelPtr);
+    if (NULL == dataFile.get() )
     {
       std::cout << logTime() << "Error writing Data Model" << std::endl;
       return err;
     }
- 
+    // Set the MXADataModel Object into the dataImport Object
+    dataImport->setDataFile(dataFile);
+    
     //std::cout << "IMPORTING DATA NOW" << std::endl;
     err = dataImport->import();
    // std::cout << logTime() << "err=" << err << std::endl;

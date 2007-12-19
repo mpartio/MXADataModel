@@ -23,7 +23,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class ScalarDataDelegate: public IImportDelegate
 {
@@ -34,7 +34,13 @@ public:
 // -----------------------------------------------------------------------------
 //  Implemented Method from the IDataImportDelegate interface 
 // -----------------------------------------------------------------------------
-  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
+  /**
+   * @brief Imports the datasource to the data file
+   * @param dataSource The source of the data
+   * @param dataFile The IDataFile object
+   * @return 
+   */
+  int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
   {
     
     std::string path ( dataSource->generateInternalPath() );
@@ -42,7 +48,7 @@ public:
     uint32 pos = path.find_last_of("/");
     std::string parentPath ( path.substr(0, pos)  );
     int32 value = 55;
-    hid_t fileId = model->getIODelegate()->getOpenFileId();
+    hid_t fileId = dataFile->getFileId();
     H5Utilities::createGroupsFromPath(parentPath,  fileId);
     //Write the Data to the HDF5 File
     return H5Lite::writeScalarDataset(fileId, path, value);

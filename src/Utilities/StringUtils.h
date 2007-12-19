@@ -28,7 +28,7 @@
  
 /**
  * @brief Just some convenience utilities for dealing with strings
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  */
 class StringUtils {
   
@@ -88,11 +88,19 @@ static MXA_EXPORT std::string numToString(size_t num)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-static MXA_EXPORT void ensureRightSlash(std::string& path)
+static MXA_EXPORT void addRightSlash(std::string &path)
 {
-  if (! (path.at(path.length()-1) == '/')) {  
+  //if (! (path.at(path.length()-1) == '/')) {  
     path += "/";
-  }
+  //}
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+static MXA_EXPORT bool hasRightSlash(const std::string &path)
+{
+  return (path.at(path.length()-1) == '/');
 }
 
 // -----------------------------------------------------------------------------
@@ -156,14 +164,17 @@ static MXA_EXPORT std::string joinList(std::string sep, std::list<int> nums)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-static MXA_EXPORT std::string makePath(std::string parentPath, std::string name)
+static MXA_EXPORT std::string makePath(const std::string parentPath, const std::string name)
 {
   std::string result;
   if (parentPath == "/") {
     result = name;
   } else {
-    StringUtils::ensureRightSlash(parentPath);
-    result = parentPath + name;
+    result = parentPath;
+    if (StringUtils::hasRightSlash(result) == false)
+    {
+      result = "/" + name;
+    }
   }
   return result;
 } 
@@ -171,7 +182,7 @@ static MXA_EXPORT std::string makePath(std::string parentPath, std::string name)
 // -----------------------------------------------------------------------------
 //  Determines if a string ends with another string
 // -----------------------------------------------------------------------------
-static MXA_EXPORT bool endsWith(std::string &base, std::string ending) {
+static MXA_EXPORT bool endsWith(const std::string &base, const std::string ending) {
   std::string::size_type len = base.length();
   std::string::size_type eLen = ending.length();
   std::string::size_type npos = len - eLen;

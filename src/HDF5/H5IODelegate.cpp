@@ -41,7 +41,7 @@ H5IODelegate::~H5IODelegate()
 //  
 // -----------------------------------------------------------------------------
 MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName, 
-                                                  IDataModel* model, 
+                                                  IDataModelPtr model, 
                                                   bool closeWhenFinished,
                                                   bool deleteExisting)
 {
@@ -101,7 +101,7 @@ MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName,
   if (_fileId > 0 && (this->_openFile.compare(fileName) == 0 ) )
   {
     // Write or Overwrite the model information
-    H5DataModelWriter writer(this, model);
+    H5DataModelWriter writer( model);
     success = writer.writeModelToFile(_fileId);
     //Close the file as we are done with it.
     if (closeWhenFinished)
@@ -122,7 +122,7 @@ MXATypes::MXAError H5IODelegate::writeModelToFile(const std::string &fileName,
 //  when reading is complete.
 // -----------------------------------------------------------------------------
 MXATypes::MXAError H5IODelegate::readModelFromFile(const std::string &fileName, 
-                                                  IDataModel* model, 
+                                                  IDataModelPtr model, 
                                                   bool closeWhenFinished,
                                                   bool openReadOnly)
 {
@@ -133,7 +133,7 @@ MXATypes::MXAError H5IODelegate::readModelFromFile(const std::string &fileName,
     return _fileId;
   }
   //Instantiate the H5DataModelReader object
-  H5DataModelReader reader(this, model);
+  H5DataModelReader reader( model);
   herr_t error = reader.readDataModel(_fileId);
   //Close the file as we are done with it.
   if (closeWhenFinished)

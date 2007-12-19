@@ -9,7 +9,7 @@
  * @brief Interface that defines the methods of a "Data Source" Object
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 class MXA_EXPORT IDataSource
 {
@@ -19,7 +19,7 @@ public:
   virtual ~IDataSource() {}
   
   /**
-    * Generates the internal path that is used by the underlying data storage
+    * @brief Generates the internal path that is used by the underlying data storage
     * mechanism to place the data into the hierarchy
     * @return std::string
     */

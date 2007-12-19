@@ -13,26 +13,22 @@
 
 #include <Common/DLLExport.h>
 #include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
 
-#include <boost/shared_ptr.hpp>
-
-class IDataModel;
-class MXAAttribute;
-class IFileIODelegate;
 
 /**
  * @brief Abstract class that formally defines the interface that subclasses must
  * implement to be able to write data models to files or other media
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *  
  */
 class MXA_EXPORT IDataModelWriter 
 {
 
 public:
-  IDataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel){};
+  IDataModelWriter(IFileIODelegatePtr ioDelegate, IDataModelPtr dataModel){};
   virtual ~IDataModelWriter() {};
   
   /**

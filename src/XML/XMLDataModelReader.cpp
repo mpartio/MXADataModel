@@ -13,7 +13,7 @@
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-XMLDataModelReader::XMLDataModelReader(IFileIODelegate* ioDelegate, IDataModel* dataModel, const std::string &fileName) :
+XMLDataModelReader::XMLDataModelReader( IDataModelPtr dataModel, const std::string &fileName) :
 _dataModel(dataModel),
 _fileName(fileName),
 _xmlParseError(0),
@@ -23,7 +23,7 @@ _userMDKey(""),
 _userMDDims(""),
 _userMDType("")
 {
-  _ioDelegate  = static_cast<XMLIODelegate*>(ioDelegate);
+ // _ioDelegate  = static_cast<XMLIODelegate*>(ioDelegate);
   _parser = NULL;
 }
 // -----------------------------------------------------------------------------

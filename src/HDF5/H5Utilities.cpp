@@ -1,5 +1,6 @@
 
-
+#include <Base/IDataModel.h>
+#include <Base/IDataRecord.h>
 #include <HDF5/H5Utilities.h>
 #include <HDF5/H5Lite.h>
 #include <Utilities/StringUtils.h>
@@ -623,5 +624,23 @@ bool H5Utilities::isGroup(hid_t nodeId, const std::string &objName)   {
   return isGroup;
 }
 
-
+// -----------------------------------------------------------------------------
+ //  Use a new set of indices to generate a path
+ // -----------------------------------------------------------------------------
+ std::string H5Utilities::generateH5PathToDataset ( IDataModelPtr model, 
+                                                   std::vector<int32> &indices,  
+                                                   IDataRecordPtr record) 
+ {
+   std::string path;
+   //Put the data root on first
+   path += model->getDataRoot();
+   //Put the Data Dimensions on Next
+   for (std::vector<int32>::iterator iter = indices.begin(); iter != indices.end(); ++iter ) {
+     path += StringUtils::numToString(*iter);
+     path += "/";
+   }
+    // Now build up the DataRecord path
+   path = path + record->generatePath();
+   return path;
+ }
 

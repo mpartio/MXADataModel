@@ -84,6 +84,7 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Base/IAttributeWriter.h
   ${MXA_SOURCE_DIR}/src/Base/IDataDimension.h
   ${MXA_SOURCE_DIR}/src/Base/IDataDimensionWriter.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataFile.h
   ${MXA_SOURCE_DIR}/src/Base/IDataImport.h
   ${MXA_SOURCE_DIR}/src/Base/IImportDelegate.h
   ${MXA_SOURCE_DIR}/src/Base/IDataModel.h
@@ -141,6 +142,7 @@ ENDIF(MXA_USE_XML)
 #------- HDF5 Dependant Sources ------------------------------
 IF ( MXA_USE_HDF5 )
   SET( MXA_HDF5_SRCS
+    ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataFile.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5Image.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5Utilities.cpp
@@ -152,7 +154,8 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.cpp
   )
   
-  SET(MXA_HDF5_HEADERS 
+  SET(MXA_HDF5_HEADERS
+    ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataFile.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5AttributeWriter.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.h

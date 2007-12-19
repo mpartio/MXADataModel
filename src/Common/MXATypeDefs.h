@@ -23,7 +23,7 @@
  * @brief This file contains many common typdefs used through out the MXA Source code
  */
 
-
+class IDataFile;
 class MXADataModel;
 class MXANode;
 class MXAAttribute;
@@ -47,6 +47,8 @@ class IStringSection;
 typedef  boost::shared_ptr<MXADataModel>           MXADataModelPtr;
 typedef  boost::shared_ptr<IDataModel>             IDataModelPtr;
 
+typedef boost::shared_ptr<IDataFile>                IDataFilePtr;
+
 typedef  boost::shared_ptr<MXAAttribute>           MXAAttributePtr;
 typedef  boost::shared_ptr<IAttribute>             IAttributePtr;
 typedef  std::vector<MXAAttributePtr>              MXAAttributes;
@@ -54,21 +56,20 @@ typedef  std::vector<IAttributePtr>                IAttributes;
 typedef  std::map<std::string, MXAAttributePtr>    MXAAttributeMap;
 typedef  std::vector<MXAAttributePtr>              MXAUserMetaData;
 typedef  std::map<std::string, std::string>        MXARequiredMetaData;
+typedef  boost::shared_ptr<IFileIODelegate>        IFileIODelegatePtr;
 
-typedef  boost::shared_ptr<IFileIODelegate>        IODelegatePtr;
+// Importing of Data related
+typedef  boost::shared_ptr<IDataSource>                     IDataSourcePtr;
+typedef  std::vector<IDataSourcePtr>                        IDataSources;
+typedef  boost::shared_ptr<IDataImport>                     IDataImportPtr;
+typedef  boost::shared_ptr<IImportDelegate>                 IImportDelegatePtr;
+typedef  boost::shared_ptr<AbstractImportDelegateFactory>   AbstractImportDelegateFactoryPtr;
+typedef  std::vector<AbstractImportDelegateFactoryPtr>      AbstractImportDelegateFactories;
+typedef  boost::shared_ptr<ImportDelegateManager>           ImportDelegateManagerPtr;
+typedef  boost::shared_ptr<MXADataSource>                   MXADataSourcePtr;
+typedef  std::vector<MXADataSourcePtr>                      MXADataSources;
+typedef  boost::shared_ptr<MXADataImport>                   MXADataImportPtr;
 
-// Importing of Data related 
-typedef  boost::shared_ptr<MXADataSource>          MXADataSourcePtr;
-typedef  boost::shared_ptr<IDataSource>            IDataSourcePtr;
-typedef  std::vector<MXADataSourcePtr>             MXADataSources;
-typedef  std::vector<IDataSourcePtr>               IDataSources;
-typedef  boost::shared_ptr<MXADataImport>          MXADataImportPtr;
-typedef  boost::shared_ptr<IDataImport>            IDataImportPtr;
-typedef  boost::shared_ptr<IImportDelegate>                IImportDelegatePtr;
-typedef  boost::shared_ptr<AbstractImportDelegateFactory>  AbstractImportDelegateFactoryPtr;
-typedef  boost::shared_ptr<ImportDelegateManager>          ImportDelegateManagerPtr;
-//typedef  boost::shared_ptr<ImportDelegateFactory>          ImportDelegateFactoryPtr;
-typedef  std::vector<AbstractImportDelegateFactoryPtr>     AbstractImportDelegateFactories;
 
 // Data Dimension typedefs
 typedef  boost::shared_ptr<MXADataDimension>       MXADataDimensionPtr;
@@ -90,5 +91,5 @@ typedef boost::shared_ptr<H5TiffImportDelegateFactory>  H5TiffImportDelegateFact
 
 
 typedef boost::shared_ptr<IStringSection>          IStringSectionPtr;
-typedef std::vector<IStringSectionPtr>     IStringSections;
+typedef std::vector<IStringSectionPtr>             IStringSections;
 

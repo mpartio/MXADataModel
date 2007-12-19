@@ -14,23 +14,21 @@
 
 #include <Common/DLLExport.h>
 #include <Common/MXATypes.h>
-
-class MXADataModel;
-class IMXAFileIODelegate;
+#include <Common/MXATypeDefs.h>
 
 /**
  * @brief Interface that defines what methods a class must implement to write
  * a data model to a file.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *  
  */
 class MXA_EXPORT IDataModelReader 
 {
 
 public:
-  IDataModelReader(IMXAFileIODelegate* ioDelegate, IDataModel* dataModel){};
+  IDataModelReader(IFileIODelegatePtr ioDelegate, IDataModelPtr dataModel){};
   virtual ~IDataModelReader(){};
 
   /**

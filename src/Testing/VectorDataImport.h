@@ -22,7 +22,7 @@
 * @brief 
 * @author
 * @date
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class VectorDataDelegate: public IImportDelegate
 {
@@ -33,13 +33,13 @@ public:
 // -----------------------------------------------------------------------------
 //  Implemented Method from the IDataImportDelegate interface 
 // -----------------------------------------------------------------------------
-  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
+  int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
   {
     std::string path ( dataSource->generateInternalPath() );
   //  std::cout << logTime() << "VectorDataDelegate::importDataSource() " << path << std::endl;
     uint32 pos = path.find_last_of("/");
     std::string parentPath ( path.substr(0, pos)  );
-    hid_t fileId = model->getIODelegate()->getOpenFileId();
+    hid_t fileId = dataFile->getFileId();
     H5Utilities::createGroupsFromPath(parentPath, fileId);
     //Create data in a 2x5 table
     std::vector<hsize_t> dims;

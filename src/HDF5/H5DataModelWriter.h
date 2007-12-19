@@ -13,6 +13,7 @@
 
 // MXA Includes
 #include <Common/DLLExport.h>
+#include <Common/MXATypeDefs.h>
 #include <Base/IDataModelWriter.h>
 #include <Core/MXADataModel.h>
 #include <HDF5/H5IODelegate.h>
@@ -34,14 +35,14 @@ class MXANode;
  * @brief Writes the DataModel to an HDF5 file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  *  
  */
 class MXA_EXPORT H5DataModelWriter : public IDataModelWriter
 {
 
 public:
-  H5DataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel);
+  H5DataModelWriter(IDataModelPtr dataModel);
   virtual ~H5DataModelWriter();
 
   /**
@@ -175,8 +176,8 @@ protected:
   }
   
 private:
-  H5IODelegate* _ioDelegate;
-  IDataModel* _dataModel;
+  //H5IODelegatePtr _ioDelegate;
+  IDataModelPtr _dataModel;
   
   H5DataModelWriter(const H5DataModelWriter&);   //Copy Constructor Not Implemented
   void operator=(const H5DataModelWriter&); //Copy Assignment Not Implemented

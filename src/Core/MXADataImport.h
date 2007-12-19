@@ -33,7 +33,7 @@
  * 
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *  
  */
 class MXA_EXPORT MXADataImport : public IDataImport
@@ -77,13 +77,13 @@ public:
    * Set the value of m_dataModel
    * @param dataModel the new value of m_dataModel
    */
-  void setDataModel ( IDataModelPtr dataModel );
+  void setDataFile ( IDataFilePtr dataModel );
 
   /**
    * Get the value of m_dataModel
    * @return the value of m_dataModel
    */
-  IDataModelPtr getDataModel ( );
+  IDataFilePtr getDataFile ( );
 
 
   /**
@@ -110,7 +110,7 @@ public:
 
 private:
   std::string                 _outputFilePath;
-  IDataModelPtr               _dataModel;
+  IDataFilePtr                _dataFile;
   IDataSources                _dataSources;
 
   MXADataImport(const MXADataImport&);   //Copy Constructor Not Implemented

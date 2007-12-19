@@ -5,7 +5,8 @@
 //-- MXA Includes
 #include <Common/MXAErrorDefinitions.h>
 #include <Common/LogTime.h>
-#include <Base/IFileIODelegate.h>
+// #include <Base/IFileIODelegate.h>
+#include <Base/IDataFile.h>
 #include <Core/MXADataModel.h>
 #include <Core/MXADataSource.h>
 #include <HDF5/H5Lite.h>
@@ -37,7 +38,6 @@ if ( err < 0 ) {\
 //  
 // -----------------------------------------------------------------------------
 H5TiffImportDelegate::H5TiffImportDelegate() :
-  _modelPtr(),
   _fileNotFoundIsError(true),
   _importAsGrayScale(false)
 {
@@ -69,15 +69,15 @@ void H5TiffImportDelegate::setImportAsGrayScale(bool value)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void H5TiffImportDelegate::setDataModel(IDataModelPtr model) {
-  this->_modelPtr = model; 
-}
+//void H5TiffImportDelegate::setDataModel(IDataModelPtr model) {
+//  this->_modelPtr = model; 
+//}
 
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
+int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
 {
   //std::cout << "H5TiffImportDelegate::importDataSource:  Importing as grayscale->" << this->_importAsGrayScale << std::endl;
   herr_t err = -1;
@@ -107,14 +107,19 @@ int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataMod
       return MXA_ERROR_IMAGE_FORMAT_NOT_SUPPORTED; 
     }
   }
-  
+ 
   //Basic Checks are OK. Now Import the Tiff image into the HDF5 File
-  std::cout << logTime() << "Importing Tiff Image: " << dataSource->getSourcePath() << std::endl;
-  // Close then reopen the file to get around an HDF5 performance issue
-  std::string filename = model->getIODelegate()->getOpenFileName();
-  model->getIODelegate()->closeMXAFile(); //Close the file
-  model->getIODelegate()->openMXAFile(filename, false); // Reopen the file
-  hid_t fileId = model->getIODelegate()->getOpenFileId();
+#if 0
+  std::string filename = dataFile->getFilename();
+  err = dataFile->closeFile(false);
+  if (err < 0)
+  {
+    std::cout << logTime() << "H5BmpImportDelegate::importDataSource Could not close data file: [" << filename << "]" << std::endl;
+    return err;
+  }
+  dataFile->openFile(false);
+#endif
+  hid_t fileId = dataFile->getFileId();
   if (fileId < 0) 
   {
     std::cout << "FileId was not Valid [" << fileId << "]. Data was NOT imported" << std::endl;

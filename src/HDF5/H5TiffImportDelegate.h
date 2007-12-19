@@ -39,7 +39,7 @@ namespace FileSystem = boost::filesystem;
  * @author Mike Jackson
  * @date April 2007
  * @class H5TiffImportDelegate HDF5/H5TiffImportDelegate.h HDF5/H5TiffImportDelegate.h
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  */
 class MXA_EXPORT H5TiffImportDelegate : public IImportDelegate
 {
@@ -50,7 +50,7 @@ public:
   /**
   * @brief Implementation from the IDataImportDelegate class
   */
-  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model);
+  int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile);
   
   /**
    * @brief Sets the pointer to the DataModel
@@ -71,9 +71,9 @@ public:
   void setImportAsGrayScale(bool value);
   
 private:
-  IDataModelPtr      _modelPtr;
-  bool _fileNotFoundIsError;
-  bool _importAsGrayScale;
+  //IDataFilePtr      _dataFilePtr;
+  bool              _fileNotFoundIsError;
+  bool              _importAsGrayScale;
   
   H5TiffImportDelegate(const H5TiffImportDelegate&);   //Copy Constructor Not Implemented
   void operator=(const H5TiffImportDelegate&); //Copy Assignment Not Implemented

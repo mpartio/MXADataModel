@@ -64,7 +64,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.10 $
+* @version $Revision: 1.11 $
 */
 class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -133,13 +133,13 @@ public:
    * Set the value of m_dataModel
    * @param dataModel the new value of m_dataModel
    */
-  void setDataModel ( IDataModelPtr dataModel );
+  void setDataFile ( IDataFilePtr dataModel );
 
   /**
    * Get the value of m_dataModel
    * @return the value of m_dataModel
    */
-  IDataModelPtr getDataModel ( );
+  IDataFilePtr getDataFile ( );
 
 
   /**
@@ -169,6 +169,7 @@ private:
   std::string        _xmlFilename;
   std::string        _outputFilePath;
   std::string        _deleteExistingDataFile;
+  IDataFilePtr       _dataFile;
   IDataModelPtr      _dataModel;
   IDataSources       _dataSources;
   int32              _xmlParseError;
@@ -249,7 +250,7 @@ private:
      * @param modelFile The xml or HDF5 file
      * @return Error condition
      */
-    int32 _loadDataModelFromTemplateFile(std::string &modelFile);
+    int32 _loadDataModelFromTemplateFile(const std::string &modelFile);
     
     /**
      * @brief Does the actual work of parsing the xml file and creating all the

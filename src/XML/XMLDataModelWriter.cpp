@@ -7,12 +7,12 @@
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-XMLDataModelWriter::XMLDataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel, const std::string &xmlFileName) :
+XMLDataModelWriter::XMLDataModelWriter( IDataModelPtr dataModel, const std::string &fileName) :
   _dataModel(dataModel),
-  _fileName(xmlFileName),
+  _fileName(fileName),
   _dataRecordIndentation(2)
 {
-  _ioDelegate  = static_cast<XMLIODelegate*>(ioDelegate);
+
 }
 
 // -----------------------------------------------------------------------------

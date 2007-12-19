@@ -11,6 +11,7 @@
 #ifndef H5IMPORTTEST_H_
 #define H5IMPORTTEST_H_
 
+#include <Base/IDataFile.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
 #include <DataImport/AbstractImportDelegateFactory.h>
@@ -23,7 +24,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class H5ImportTestDelegate: public IImportDelegate
 {
@@ -34,13 +35,20 @@ public:
 // -----------------------------------------------------------------------------
 //  Implemented Method from the IDataImportDelegate interface 
 // -----------------------------------------------------------------------------
-  int32 importDataSource(IDataSourcePtr dataSource, IDataModelPtr model)
+  /**
+   * @brief Imports the datasource to the data file
+   * @param dataSource The source of the data
+   * @param dataFile The IDataFile object
+   * @return 
+   */
+  int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
   {
+    IDataModelPtr model = dataFile->getDataModel();
     std::string path ( dataSource->generateInternalPath() );
     uint32 pos = path.find_last_of("/");
     std::string parentPath ( path.substr(0, pos)  );
     int32 value = 55;
-    hid_t fileId = model->getIODelegate()->getOpenFileId();
+    hid_t fileId = dataFile->getFileId();
     H5Utilities::createGroupsFromPath(parentPath,  fileId);
     //Write the Data to the HDF5 File
     return H5Lite::writeScalarDataset(fileId, path, value);
@@ -67,7 +75,7 @@ namespace H5ImportTestDelegateFactory_Detail
 * @brief Factory class to generate H5ImportTestDelegate objects
 * @author Mike Jackson
 * @date Sep 12, 2007
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
 {

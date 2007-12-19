@@ -34,22 +34,21 @@ class MXANode;
  * the data model to an XML file
  * @author  Mike Jackson
  * @date June 2007
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  *  
  */
 class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter, 
-                                     public IDataDimensionWriter,
-                                     public IDataRecordWriter
+                                      public IDataDimensionWriter,
+                                      public IDataRecordWriter
 {
 
 public:
   /**
    * @brief Constructor
-   * @param ioDelegate The IFileIODelegate object to use 
    * @param dataModel The DataModel Object to write
    * @param fileName The name of the file to write the data model
    */
-  XMLDataModelWriter(IFileIODelegate* ioDelegate, IDataModel* dataModel, const std::string &fileName);
+  XMLDataModelWriter( IDataModelPtr dataModel, const std::string &fileName);
   virtual ~XMLDataModelWriter();
 
   /**
@@ -142,10 +141,10 @@ protected:
 
   
 private:
-  IDataModel*       _dataModel;
-  XMLIODelegate*      _ioDelegate;
-  const std::string   _fileName;
-  int32               _dataRecordIndentation;
+  IDataModelPtr           _dataModel;
+  //IFileIODelegatePtr      _ioDelegate;
+  const std::string       _fileName;
+  int32                   _dataRecordIndentation;
   
   boost::shared_ptr<std::ofstream> _ofstreamPtr;
   

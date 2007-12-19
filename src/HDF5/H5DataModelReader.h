@@ -30,7 +30,7 @@
  * from the HDF5 data file
  * @author Mike Jackson
  * @date Mar 2007
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  *   H5DataModelReader.h
  */
 class MXA_EXPORT H5DataModelReader : public IDataModelReader
@@ -39,11 +39,10 @@ class MXA_EXPORT H5DataModelReader : public IDataModelReader
 public:
   /**
   * @brief Constructor for H5DataModelReader
-  * @param ioDelegate The IFileIODelegate object to use
   * @param dataModel The DataModel to use. Note that settings in the datamodel will
   * be over written with those from the file.
   */
-  H5DataModelReader(IFileIODelegate* ioDelegate, IDataModel* dataModel);
+  H5DataModelReader(IDataModelPtr dataModel);
   
   virtual ~H5DataModelReader();
   
@@ -168,8 +167,8 @@ protected:
   
   
 private:
-    H5IODelegate* _ioDelegate;
-    IDataModel* _dataModel;
+  
+    IDataModelPtr _dataModel;
   
     H5DataModelReader(const H5DataModelReader&);   //Copy Constructor Not Implemented
     void operator=(const H5DataModelReader&); //Copy Assignment Not Implemented

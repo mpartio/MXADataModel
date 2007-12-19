@@ -8,8 +8,9 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+#include <Common/MXATypeDefs.h>
 #include <Common/LogTime.h>
+#include <HDF5/H5MXADataFile.h>
 #include <Testing/DataFileGenerator.h>
 #include <hdf5.h>
 
@@ -43,9 +44,9 @@ int main(int argc, char **argv)
   
 
   //First load the Data file
-  MXADataModelPtr modelPtr = MXADataModel::New();
-  modelPtr->readModel(FILE_NAME, false, true); // We pass 'false' so the file will stay open
-  hid_t fileId = modelPtr->getIODelegate()->getOpenFileId();
+  IDataFilePtr dataFile = H5MXADataFile::OpenFile(FILE_NAME, true);
+  IDataModelPtr modelPtr = dataFile->getDataModel();
+  hid_t fileId = dataFile->getFileId();
   if (fileId < 0)
   {
     std::cout << logTime() << "Error: FileId was not valid." << std::endl;
@@ -77,7 +78,7 @@ int main(int argc, char **argv)
   }
   
   // Have the DataModel generate the proper internal path relative to the root level and extending to the dataset
-  std::string dsetPath = modelPtr->generatePathToDataset(indices, record.get() );
+  std::string dsetPath = H5Utilities::generateH5PathToDataset(modelPtr, indices, record );
   
   std::vector<float32> data; // This will hold our data. The next call will call 'clear' and 'resize' the vector as needed
   err = H5Lite::readVectorDataset(fileId, dsetPath, data);

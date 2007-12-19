@@ -1,6 +1,7 @@
 
 #include <Base/IDataSource.h>
 #include <Base/IImportDelegate.h>
+#include <Base/IDataFile.h>
 #include <Core/MXADataSource.h>
 #include <Core/MXADataImport.h>
 #include <Common/LogTime.h>
@@ -9,8 +10,9 @@
 #include <Utilities/StringUtils.h>
 #include <Utilities/DataSourcePathIndexSection.h>
 #include <Utilities/DataSourcePathTextSection.h>
-#include <XML/XMLIODelegate.h>
+#include <XML/XMLDataModelReader.h>
 #include <HDF5/H5IODelegate.h>
+#include <HDF5/H5MXADataFile.h>
 
 //-- C++ stdlib includes
 #include <iostream>
@@ -59,12 +61,17 @@ int32 DataImportXmlParser::import()
     return err;
   }
   
+  
   // Now create the Output file and leave it open
-  bool deleteExisting = false;
+//  bool deleteExisting = false;
   if ( this->_deleteExistingDataFile.compare("true") == 0 ) 
-  {
-    deleteExisting = true;
-    this->_dataModel->writeModel(this->_outputFilePath, false, deleteExisting);
+  {    
+    _dataFile = H5MXADataFile::CreateFileWithModel(this->_outputFilePath, this->_dataModel);
+    if (NULL == _dataFile.get())
+    {
+      std::cout << "DataImportXmlParser::import - Error Creating Output file: " << this->_outputFilePath << std::endl;
+      return -100;
+    }
   }
   else
   {
@@ -85,7 +92,7 @@ int32 DataImportXmlParser::import()
   // Finally try to run the import loop
   for (IDataSources::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
   {
-    err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataModel );
+    err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataFile );
     if ( err < 0 )
     {
       break;
@@ -102,30 +109,29 @@ int32 DataImportXmlParser::import()
 // -----------------------------------------------------------------------------
 void DataImportXmlParser::_mergeModelToDisk()
 {
-  IDataModel* mModel = this->_dataModel.get();
-  IDataModelPtr fModelPtr = MXADataModel::New();
-  IDataModel* fModel = fModelPtr.get();
-  //Read the model from the file, leaving it open and in Read/Write mode
-  herr_t err = fModel->readModel(this->_outputFilePath, false, false);
   
-  if ( err < 0 ) // Ouput file does NOT exist on file system, write the model in memory
+
+  //Read the model from the file, leaving it open and in Read/Write mode
+  _dataFile = H5MXADataFile::OpenFile(this->_outputFilePath, false);
+  //herr_t err = fModel->readModel(this->_outputFilePath, false, false);
+  
+  if ( NULL == _dataFile.get() ) // Ouput file does NOT exist on file system, write the model in memory
   {
-    mModel->writeModel(this->_outputFilePath, false, false);
+    _dataFile = H5MXADataFile::CreateFileWithModel(this->_outputFilePath, this->_dataModel);
+    //mModel->writeModel(this->_outputFilePath, false, false);
     return;
   }
   
+  IDataModelPtr fModelPtr = _dataFile->getDataModel();
+  IDataModel* fModel = fModelPtr.get();
+  IDataModel* mModel = this->_dataModel.get();
   //Sanity check the number of dims first
   if (mModel->getNumberOfDataDimensions() != fModel->getNumberOfDataDimensions())
   {
     this->_xmlParseError = -1;
     return;
   }
-  // Close the HDF5 file that is tied to the model in memory if needed
-  if (mModel->getIODelegate()->getOpenFileId() > 0 )
-  {
-    mModel->getIODelegate()->closeMXAFile();
-  }
-  
+ 
   int32 dimSize = mModel->getNumberOfDataDimensions();
   IDataDimension* mDim = NULL;
   IDataDimension* fDim = NULL;
@@ -145,7 +151,7 @@ void DataImportXmlParser::_mergeModelToDisk()
     // throw the model into chaos
   }
   //write the model to disk and close the file
-  fModel->writeModel(this->_outputFilePath, false, false);
+  _dataFile->saveDataModel();
   this->_dataModel = fModelPtr;
 }
 
@@ -192,15 +198,17 @@ std::string DataImportXmlParser::getDeleteExistingDataFile()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void DataImportXmlParser::setDataModel ( boost::shared_ptr<IDataModel> new_var ) {
-  _dataModel = new_var;
+void DataImportXmlParser::setDataFile ( IDataFilePtr dataFile ) 
+{
+  _dataFile = dataFile;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IDataModelPtr DataImportXmlParser::getDataModel ( ) {
-  return _dataModel;
+IDataFilePtr DataImportXmlParser::getDataFile ( ) 
+{
+  return _dataFile;
 }
 
 // -----------------------------------------------------------------------------
@@ -224,30 +232,37 @@ IDataSources DataImportXmlParser::getDataSources ( ) {
 // *****************************************************************************
 
 // -----------------------------------------------------------------------------
-int DataImportXmlParser::_loadDataModelFromTemplateFile(std::string &modelFile)
+int DataImportXmlParser::_loadDataModelFromTemplateFile(const std::string &modelFile)
 {
   //std::cout << logTime() << "---------------- IMPORTING DATA MODEL TEMPLATE ------------------" << std::endl;
   MXATypes::MXAError err = -1;
   if ( StringUtils::endsWith(modelFile, std::string(".xml") ) )
   {
-    IODelegatePtr reader (new XMLIODelegate);
-    err = this->_dataModel->readModel(modelFile, reader, true, true);
-    //err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true);
+    XMLDataModelReader reader(this->_dataModel, modelFile);
+    err = reader.readDataModel(-1);
     if (err < 0)
     {
-      std::cout << DEBUG_OUT(logTime) << "\n\t\tError Reading DataModel from File: " << modelFile << std::endl;
-    }
-    else 
-    {
-      //this->_dataModel->printModel(std::cout, 1);
+      std::cout << DEBUG_OUT(logTime) << "\n\t\t Error Reading DataModel from File: " << modelFile << std::endl;
     }
     return err;
   }
 
-  H5IODelegate reader;
-  err = reader.readModelFromFile(modelFile, dynamic_cast<MXADataModel*>(this->_dataModel.get()), true, false);
-  return err;
- }
+  if ( StringUtils::endsWith(modelFile, std::string(".mxa") ) 
+      || StringUtils::endsWith(modelFile, std::string(".h5") )
+      || StringUtils::endsWith(modelFile, std::string(".hdf5") ) )
+    {
+       err = 1;
+       IDataFilePtr file = H5MXADataFile::OpenFile(modelFile, true);
+       if (NULL == file.get())
+       {
+         std::cout << logTime() << "DataImportXmlParser::_loadDataModelFromTemplateFile - Error Reading DataModel from File: " << modelFile << std::endl;
+         err = -1;
+         return err;
+       }
+       this->_dataModel = file->getDataModel();
+     }
+     return err;
+}
 
 // -----------------------------------------------------------------------------
 int DataImportXmlParser::_parseXMLFile()

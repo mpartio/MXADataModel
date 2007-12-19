@@ -24,6 +24,7 @@
 #include <HDF5/H5Utilities.h>
 #include <HDF5/H5TiffImportDelegateFactory.h>
 #include <HDF5/H5BmpImportDelegateFactory.h>
+#include <HDF5/H5MXADataFile.h>
 
 #include <DataImport/DataImportXmlParser.h>
 #include <DataImport/ImportDelegateManager.h>
@@ -48,8 +49,10 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   MXADataImportPtr dataImport( new MXADataImport() );
   // Set the HDF5 Output file to write all the data into
   dataImport->setOutputFilePath(outputFilePath);
-  // Set the MXADataModel Object into the dataImport Object
-  dataImport->setDataModel(model);
+  
+  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outputFilePath, model);
+  BOOST_REQUIRE (NULL != dataFile.get() );
+  dataImport->setDataFile(dataFile);
   
   // Create an Import Delegate to use for the DataSources
   IImportDelegatePtr delegatePtr( new H5ImportTestDelegate());
@@ -99,6 +102,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   //std::cout << "IMPORTING DATA NOW" << std::endl;
   int32 err = dataImport->import();
   BOOST_REQUIRE(err >= 0); // Used for Boost Unit Test Framework
+  dataFile->closeFile(false);
 }
 
 

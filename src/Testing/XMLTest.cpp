@@ -12,7 +12,8 @@
 #include <MXAConfiguration.h>
 #include <Common/MXATypeDefs.h>
 #include <Core/MXADataModel.h>
-#include <XML/XMLIODelegate.h>
+#include <XML/XMLDataModelReader.h>
+#include <XML/XMLDataModelWriter.h>
 #include <TestDataFileLocations.h>
 
 
@@ -243,18 +244,23 @@ MXADataModelPtr createModelTemplate()
 // -----------------------------------------------------------------------------
 void GenerateMasterXMLFile()
 {
-  std::cout << "GenerateMasterXMLFile" << std::endl;
-  MXADataModelPtr model = createModel();
+  std::cout << "Running GenerateMasterXMLFile........";
   std::string xmlFile(MASTER_XML_FILE);
-
-  XMLIODelegate iodelegate; // Create on the stack
-  BOOST_REQUIRE ( iodelegate.writeModelToFile(xmlFile, model.get(), true, true) >= 0);
+  {
+    MXADataModelPtr model = createModel();
+    XMLDataModelWriter writer(model, xmlFile);
+    int32 err = writer.writeModelToFile(-1);
+    BOOST_REQUIRE ( err >= 0);
+  }
   
-  // Read the File back from xml
-  MXADataModelPtr modelFromXMLFile = MXADataModel::New();
-  IODelegatePtr xmlDelegatePtr (new XMLIODelegate);
-  BOOST_REQUIRE ( modelFromXMLFile->readModel(xmlFile, xmlDelegatePtr, true, true) >= 0);
-  
+  {
+    IDataModelPtr model = MXADataModel::New();
+    // Read the File back from xml
+    XMLDataModelReader reader (model, xmlFile);
+    int32 err = reader.readDataModel(-1);
+    BOOST_REQUIRE ( err >= 0);
+    std::cout << "....... Passed" << std::endl;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -262,41 +268,50 @@ void GenerateMasterXMLFile()
 // -----------------------------------------------------------------------------
 void XMLModelTest()
 {
-  std::cout << "XMLModelTest Running..." << std::endl;
-  std::string xmlFile(MASTER_XML_FILE);
+  std::cout << "XMLModelTest Running...";
+  std::string masterXmlFile(MASTER_XML_FILE);
+  std::string outFile (XML_TEST_FILE);
+  std::string errorMessage;
   MXADataModelPtr model = MXADataModel::New();
-  XMLIODelegate iodelegate; // Create on the stack
-  BOOST_REQUIRE ( iodelegate.readModelFromFile(xmlFile, model.get(), true, false) >= 0);
-  //model->printDataDimensions(std::cout, 2);
-  BOOST_REQUIRE (model->getNumberOfDataDimensions() == 4);
+  {
+    
+    XMLDataModelReader reader (model, masterXmlFile);
+    int32 err = reader.readDataModel(-1);
+    BOOST_REQUIRE ( err >= 0);
+    BOOST_REQUIRE (model->getNumberOfDataDimensions() == 4);
+    BOOST_REQUIRE (model->isValid(errorMessage) == true);
+  }
   
-  
-  BOOST_REQUIRE ( iodelegate.writeModelToFile(XML_TEST_FILE, model.get(), true, true) >= 0);
+  {
+    XMLDataModelWriter writer(model, outFile);
+    int32 err = writer.writeModelToFile(-1);
+    BOOST_REQUIRE ( err >= 0);
+  }
   
   // Now compare the xml files
-  std::vector<char> inData;
-  std::vector<char> outData;
-  FILE* fp = fopen(MASTER_XML_FILE, "r");
+  std::vector<char> masterData;
+  std::vector<char> testData;
+  FILE* fp = fopen(masterXmlFile.c_str(), "r");
   if( NULL != fp)
   {
     char buf[1024];
     while(size_t len = fread(buf, 1, sizeof(buf), fp))
-      inData.insert(inData.end(), buf, buf + len);
+      masterData.insert(masterData.end(), buf, buf + len);
     fclose(fp);
     fp = NULL;
   }
   
-  fp = fopen(XML_TEST_FILE, "r");
+  fp = fopen(outFile.c_str(), "r");
   if( NULL != fp)
   {
     char buf[1024];
     while(size_t len = fread(buf, 1, sizeof(buf), fp))
-      outData.insert(outData.end(), buf, buf + len);
+      testData.insert(testData.end(), buf, buf + len);
     fclose(fp);
     fp = NULL;
   }
-  
-  BOOST_REQUIRE (inData == outData);
+  BOOST_REQUIRE (masterData == testData);
+  std::cout << "....... Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -304,17 +319,19 @@ void XMLModelTest()
 // -----------------------------------------------------------------------------
 void XMLTemplateTest()
 {
-  std::cout << "XMLTemplateTest Running..." << std::endl;
+  std::cout << "XMLTemplateTest Running..." ;
   std::string errorMessage;
   std::string templateFile (XML_TEMPLATE_TEST_FILE);
-  MXADataModelPtr model = createModelTemplate();
-  XMLIODelegate xmlWriter;
-  BOOST_REQUIRE ( xmlWriter.writeModelToFile(templateFile, model.get(), true, true) >= 0);
-
+  {
+    MXADataModelPtr model = createModelTemplate();
+    XMLDataModelWriter writer(model, templateFile);
+    int32 err = writer.writeModelToFile(-1);
+    BOOST_REQUIRE ( err >= 0);
+  }
   MXADataModelPtr readModel = MXADataModel::New();
-  IODelegatePtr xmlReader (new XMLIODelegate); // Create on the stack
-  BOOST_REQUIRE ( readModel->readModel(templateFile, xmlReader, true, true)  < 0); // Should NOT validate correctly
-
+  XMLDataModelReader reader (readModel, templateFile);
+  int32 err = reader.readDataModel(-1);
+  BOOST_REQUIRE ( err < 0); // This SHOULD fail because we read in a partial model
   BOOST_REQUIRE ( readModel->isValid(errorMessage) == false);
   BOOST_REQUIRE ( readModel->getDataRecords().size() == 2);
   
@@ -348,7 +365,13 @@ void XMLTemplateTest()
   
   BOOST_REQUIRE ( readModel->isValid(errorMessage) == true); //Model should now validate since we have reasonable values for each dimension 
   //We can write the model back out to XML without any errors
-  BOOST_REQUIRE ( xmlWriter.writeModelToFile(XML_TEMPLATE_COMPLETE_FILE, readModel.get(), true, true) >= 0);
+  {
+
+    XMLDataModelWriter writer(readModel, XML_TEMPLATE_COMPLETE_FILE);
+    int32 err = writer.writeModelToFile(-1);
+    BOOST_REQUIRE ( err >= 0);
+  }
+  std::cout << "....... Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------

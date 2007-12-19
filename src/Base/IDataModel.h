@@ -14,7 +14,8 @@
 
 //-- MXA Includes
 #include <Common/DLLExport.h>
-#include <Common/MXATypes.h>
+//#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
 
 //-- STL Includes
 #include <string>
@@ -26,7 +27,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  *  
  */
 class MXA_EXPORT IDataModel
@@ -257,7 +258,8 @@ class MXA_EXPORT IDataModel
     
     /** @brief Returns the Data Structure used to hold the user defined Meta Data */
     virtual IAttributes& getUserMetaData() = 0;
-    
+
+#if 0  
     //---------------- Methods to Set/Get the IODelegate Object -------------------
     /**
     * @brief Sets the IODelegate object for the model
@@ -269,6 +271,7 @@ class MXA_EXPORT IDataModel
     * @return 
     */
     virtual IODelegatePtr getIODelegate() = 0;
+#endif
     
     //-------------- Methods to Print the DataModel to an outputstream ----------
     /**
@@ -301,7 +304,8 @@ class MXA_EXPORT IDataModel
     * @param indent The level of indentation to start with
     */
     virtual void printUserMetaData(std::ostream &os, int32 indent) = 0;
-    
+
+#if 0
     //--------------- Methods to Write the DataModel to a File -------------------
     /**
     * @brief Writes the model to the data file
@@ -344,7 +348,7 @@ class MXA_EXPORT IDataModel
     * @return Standard HDF5 Error condition
     */
     virtual MXATypes::MXAError readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly) = 0;
-   
+#endif   
     
     /**
      * @brief Performs some basic checks to make sure the model is valid.
