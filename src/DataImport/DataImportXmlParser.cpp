@@ -133,8 +133,8 @@ void DataImportXmlParser::_mergeModelToDisk()
   }
  
   int32 dimSize = mModel->getNumberOfDataDimensions();
-  IDataDimension* mDim = NULL;
-  IDataDimension* fDim = NULL;
+  IDataDimensionPtr mDim;
+  IDataDimensionPtr fDim;
   // Iterate over the Dimensions
   for (int32 i = 0; i < dimSize; ++i) {
     mDim = mModel->getDataDimension(i);
@@ -467,7 +467,7 @@ void DataImportXmlParser::start_Dimension_Tag(const XML_Char* name, const XML_Ch
     if ( attrMap.find(MXA::MXA_UNIFORM_TAG) != attrMap.end() ) { StringUtils::stringToNum(uniform, attrMap[MXA::MXA_UNIFORM_TAG], std::dec); }
     
     // Over ride what is currently set in the data model with the values from the 'Dimension' tag
-    IDataDimension* dim = this->_dataModel->getDataDimension(attrMap[MXA::MXA_NAME_TAG]);
+    IDataDimensionPtr dim = this->_dataModel->getDataDimension(attrMap[MXA::MXA_NAME_TAG]);
     if ( NULL != dim )
     {
       dim->setIndex(index);
@@ -649,7 +649,7 @@ void DataImportXmlParser::end_Implicit_Data_Source_Tag(const XML_Char* name)
 void DataImportXmlParser::_createDataSource(std::string currentTemplate, std::vector<IDataDimension*>::size_type index, std::vector<int> &dimValues)
 {
   // std::cout << "_createDataSource" << std::endl;
-  IDataDimension* dim = _implDataDimensions[index];
+  IDataDimensionPtr dim = _implDataDimensions[index];
   int32 start = dim->getStartValue();
   int32 end = dim->getEndValue();
   int32 incr = dim->getIncrement();
@@ -748,9 +748,11 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
   
   std::string dimName = attrMap[MXA_DataImport::Attr_Data_Dimension];
   IDataModel* model = static_cast<MXADataModel*>(this->_dataModel.get() );
-  IDataDimension* dim = model->getDataDimension(dimName);
+  IDataDimensionPtr dim = model->getDataDimension(dimName);
   //std::cout << "Dim Pointer: " << dim << std::endl;
-  if (NULL == dim)
+  
+  
+  if ( dim.get() == NULL)
   {
     std::cout << logTime() << "DataImportXmlParser::start_Index_Part_Tag: Could not retrieve Data Dimension from Model" << std::endl;
     this->_xmlParseError = -11;

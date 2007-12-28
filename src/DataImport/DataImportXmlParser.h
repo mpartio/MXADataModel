@@ -64,7 +64,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.11 $
+* @version $Revision: 1.12 $
 */
 class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -178,8 +178,8 @@ private:
   ExpatParser*       _parser;
   
   // - Implicit Data Source Variables
-  std::vector<IDataDimension*>                  _implDataDimensions;
-  std::map<IDataDimension*, IStringSectionPtr>  _implPathMap;
+  std::vector<IDataDimensionPtr>                  _implDataDimensions;
+  std::map<IDataDimensionPtr, IStringSectionPtr>  _implPathMap;
   IDataRecordPtr                                _implDataRecord;
   std::string                                   _implSourceType;
   std::string                                   _implPreTextSection;
