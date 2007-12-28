@@ -224,6 +224,21 @@ hid_t H5Utilities::createGroup(hid_t loc_id, const std::string &group)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
+int32 H5Utilities::createGroupsForDataset(const std::string &datasetPath, hid_t parent)
+{
+  // Generate the internal HDF dataset path and create all the groups necessary to write the dataset
+  uint32 pos = 0;
+  pos = datasetPath.find_last_of("/");
+  std::string parentPath ( datasetPath.substr(0, pos)  );
+  
+  //Make sure all the intermediary groups are in place in the HDF5 File
+  return H5Utilities::createGroupsFromPath(parentPath, parent);
+}
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 int32 H5Utilities::createGroupsFromPath(const std::string &pathToCheck, hid_t parent)
 {
   

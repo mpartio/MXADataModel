@@ -1,69 +1,31 @@
 
 #include "H5MXADataFile.h"
+#include <Base/IFileWriter.h>
+#include <Base/IFileReader.h>
 #include <Core/MXAConstants.h>
 #include <HDF5/H5DataModelWriter.h>
 #include <HDF5/H5DataModelReader.h>
 #include <HDF5/H5Utilities.h>
-
+#include <Dataset/IAbstractDataset.h>
 
 //-- Boost Filesystem Headers
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
-
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-H5MXADataFile::H5MXADataFile(const std::string &filename) :
-  IDataFile(filename),
-  _filename(filename),
-  _fileId(-1),
-  _isFileOpen(false),
-  _isReadOnly(true)
-{
-  this->_dataModel = MXADataModel::New();
-}
-
-H5MXADataFile::H5MXADataFile(const std::string &filename, IDataModelPtr model) :
-  IDataFile(filename),
-  _filename(filename),
-  _fileId(-1),
-  _isFileOpen(false),
-  _isReadOnly(true)
-{
-  if (NULL == model.get()) // Model is NUll, so create a new one.
-  {
-    IDataModelPtr modelPtr = MXADataModel::New();
-    model.swap(modelPtr);
-  }
-  this->_dataModel = model;
-}
-
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-H5MXADataFile::~H5MXADataFile()
-{
-  if (this->_isFileOpen == true)
-  {
-    closeFile(false);
-  }
-}
-
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
 IDataFilePtr H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
 {
-  IDataFilePtr filePtr (new H5MXADataFile(filename));
+  H5MXADataFile* dataFile = new H5MXADataFile(filename);
+  IDataFilePtr filePtr (dynamic_cast<IDataFile*>(dataFile) );
   int32 err = filePtr->openFile(readOnly);
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
     H5MXADataFile* nullDataFile = 0x0;
     filePtr.reset(nullDataFile);
   }
+  dataFile->_setWeakPointer(filePtr);
   return filePtr;
 }
 
@@ -72,7 +34,8 @@ IDataFilePtr H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
 // -----------------------------------------------------------------------------
 IDataFilePtr H5MXADataFile::CreateFileWithModel(const std::string &filename, IDataModelPtr model)
 {
-  IDataFilePtr filePtr (new H5MXADataFile(filename, model));
+  H5MXADataFile* dataFile = new H5MXADataFile(filename, model);
+  IDataFilePtr filePtr (dynamic_cast<IDataFile*>(dataFile) );
   int32 err = filePtr->createFile();
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
@@ -89,7 +52,59 @@ IDataFilePtr H5MXADataFile::CreateFileWithModel(const std::string &filename, IDa
     H5MXADataFile* nullDataFile = 0x0;
     filePtr.reset(nullDataFile);
   }
+  dataFile->_setWeakPointer(filePtr);
   return filePtr;
+}
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+H5MXADataFile::H5MXADataFile(const std::string &filename) :
+  IDataFile(filename),
+  _filename(filename),
+  _fileId(-1),
+  _isFileOpen(false),
+  _isReadOnly(true)
+{
+  this->_dataModel = MXADataModel::New();
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+H5MXADataFile::H5MXADataFile(const std::string &filename, IDataModelPtr model) :
+  IDataFile(filename),
+  _filename(filename),
+  _fileId(-1),
+  _isFileOpen(false),
+  _isReadOnly(true)
+{
+  if (NULL == model.get()) // Model is NUll, so create a new one.
+  {
+    IDataModelPtr modelPtr = MXADataModel::New();
+    model.swap(modelPtr);
+  }
+  this->_dataModel = model;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+H5MXADataFile::~H5MXADataFile()
+{
+  if (this->_isFileOpen == true)
+  {
+    closeFile(false);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void H5MXADataFile::_setWeakPointer(boost::weak_ptr<IDataFile> weakPtr)
+{
+  this->_weakPtr = weakPtr;
 }
 
 // -----------------------------------------------------------------------------
@@ -310,16 +325,15 @@ int32 H5MXADataFile::_readDataModel()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::writeDataSource(const IDataSourcePtr dataSource)
+int32 H5MXADataFile::writeData(const IAbstractDatasetPtr dataset)
 {
-#warning IMPLEMENT THIS !!!!!!!!!!!
-  return -1;
+  return dataset->writeToFile(this->_weakPtr.lock() );
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::readDataSource(IDataSourcePtr dataSource)
+int32 H5MXADataFile::readData(const IAbstractDatasetPtr dataset)
 {
 #warning IMPLEMENT THIS !!!!!!!!!!!
   return -1;

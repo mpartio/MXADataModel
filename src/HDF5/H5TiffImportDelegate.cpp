@@ -127,16 +127,12 @@ int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFil
   }
    
   // Generate the internal HDF dataset path and create all the groups necessary to write the dataset
-  uint32 pos = 0;
-  std::string datasetPath( dataSource->generateInternalPath() );;
-  pos = datasetPath.find_last_of("/");
-  std::string parentPath ( datasetPath.substr(0, pos)  );
-  
+  std::string datasetPath( dataSource->generateInternalPath() ); 
   //Make sure all the intermediary groups are in place in the HDF5 File
-  err = H5Utilities::createGroupsFromPath(parentPath, fileId);
+  err = H5Utilities::createGroupsForDataset(datasetPath, fileId);
   if (err < 0)
   {
-    std::cout << logTime() << "Error: Could not create HDF5 Group paths for path: " << parentPath << std::endl;
+    std::cout << logTime() << "Error: Could not create HDF5 Group paths for dataset: " << datasetPath << std::endl;
     return -1;
   }
   

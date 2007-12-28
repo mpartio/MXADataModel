@@ -22,7 +22,7 @@
  * @brief 
  * @author mjackson
  * @date Dec 17, 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class H5MXADataFile : public IDataFile
 {
@@ -97,9 +97,9 @@ class H5MXADataFile : public IDataFile
     // -----------------------------------------------------------------------------
     //  Writing data related methods
 
-    int32 writeDataSource(const IDataSourcePtr dataSource);
-
-    int32 readDataSource(IDataSourcePtr dataSource);
+    int32 writeData ( const IAbstractDatasetPtr dataset);
+    
+    int32 readData (const IAbstractDatasetPtr dataset);
     
     int32 getFileId();
 
@@ -120,14 +120,17 @@ class H5MXADataFile : public IDataFile
      * @return Error code < 0 is error. 0 or positive is Success
     */
     int32 _readDataModel();
-
+    
+    void _setWeakPointer(boost::weak_ptr<IDataFile> weakPtr);
+    
     
   private:
-    std::string _filename;
-    hid_t _fileId;
-    bool _isFileOpen;
-    bool _isReadOnly;
-    IDataModelPtr _dataModel;
+    std::string                   _filename;
+    hid_t                         _fileId;
+    bool                          _isFileOpen;
+    bool                          _isReadOnly;
+    IDataModelPtr                 _dataModel;
+    boost::weak_ptr<IDataFile>    _weakPtr;
     
     
     H5MXADataFile(const H5MXADataFile&); //Not Implemented

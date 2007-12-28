@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  */
 class H5Utilities
 {
@@ -137,7 +137,14 @@ public:
    */
   static MXA_EXPORT herr_t  createGroupsFromPath(const std::string &pathToCheck, hid_t parent);
   
-
+  /**
+   * @brief Given a path relative to the Parent ID, this method will create all
+   * the intermediate groups if necessary.
+   * @param datasetPath The path to the dataset that you want to make all the intermediate groups for
+   * @param parent The HDF unique id for the parent
+   * @return Error Condition: Negative is error. Positive is success.
+   */
+  static MXA_EXPORT herr_t createGroupsForDataset(const std::string &datasetPath, hid_t parent);
 
   // -------------- HDF Attribute Methods ----------------------------
   /**

@@ -58,7 +58,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.36 $
+ * @version $Revision: 1.37 $
  */
 class H5Lite
 {
@@ -484,6 +484,112 @@ static herr_t writeScalarDataset (hid_t loc_id,
 static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id, 
                                         const std::string& dsetName, 
                                         const std::string& data);
+
+
+/**
+ * @brief Writes an Attribute to an HDF5 Object
+ * @param loc_id The Parent Location of the HDFobject that is getting the attribute
+ * @param objName The Name of Object to write the attribute into.
+ * @param attrName The Name of the Attribute
+ * @param dims The Dimensions of the data set
+ * @param data The Attribute Data to write
+ * @return Standard HDF Error Condition
+ *  
+ */
+template <typename T>
+static herr_t writePointerAttribute(hid_t loc_id, 
+                             const std::string& objName, 
+                             const std::string& attrName, 
+                             int32   rank,
+                             uint64* dims, 
+                             T* data)
+{
+  hid_t      obj_id, sid, attr_id;
+  //hsize_t    dim_size = data.size();
+  int32        has_attr;
+  H5G_stat_t statbuf;
+  herr_t err = 0;
+  herr_t retErr = 0;
+  T test;
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
+  if (dataType == -1)
+  {
+    return -1;
+  }
+  /* Get the type of object */
+  if (H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf) < 0) {
+    std::cout << "Error getting object info." << std::endl;
+    return -1;
+  }
+  /* Open the object */
+  obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
+  if ( obj_id < 0) {
+    std::cout << "Error opening Object for Attribute operations." << std::endl;
+    return -1;
+  }
+  
+  /* Create the data space for the attribute. */
+ // hsize_t* dimsPtr = 0x0;
+  //size mismatch between hsize_t and size_t
+//  std::vector<hsize_t> _dims(_size, 0);
+//  for (std::vector<uint64>::size_type i = 0; i < _size; ++i) 
+//  {
+//    _dims[i] = static_cast<hsize_t>(dims[i]);
+//  }
+//  dimsPtr = &(_dims.front() );
+
+  sid = H5Screate_simple( rank, dims, NULL );
+  if ( sid >= 0 ) {
+    /* Verify if the attribute already exists */
+    has_attr = H5Lite::findAttribute( obj_id, attrName );
+    
+    /* The attribute already exists, delete it */
+    if ( has_attr == 1 ) {
+      err = H5Adelete( obj_id, attrName.c_str() );
+      if (err < 0) {
+        std::cout << "Error Deleting Existing Attribute" << std::endl;
+        retErr = err; 
+      }
+    }
+    
+    if ( err >= 0 ) {
+      /* Create the attribute. */
+      attr_id = H5Acreate( obj_id, attrName.c_str() , dataType, sid, H5P_DEFAULT );
+      if ( attr_id >= 0 ) {
+        /* Write the attribute data. */
+        err = H5Awrite( attr_id, dataType, data );
+        if ( err < 0 ) {
+          std::cout << "Error Writing Attribute" << std::endl;
+          retErr = err;
+        }
+      }
+      /* Close the attribute. */
+      err = H5Aclose( attr_id );
+      if (err < 0) {
+        std::cout << "Error Closing Attribute" << std::endl;
+        retErr = err; 
+      }
+    }
+    /* Close the dataspace. */
+    err = H5Sclose( sid );
+    if ( err < 0 ) {
+      std::cout << "Error Closing Dataspace" << std::endl;
+      retErr = err;
+    }
+  }
+  else 
+  {
+    retErr = sid;
+  }
+  /* Close the object */
+  err = H5Lite::closeId( obj_id, statbuf.type );
+  if ( err < 0 ) {
+    std::cout << "Error Closing HDF5 Object ID" << std::endl;
+    retErr = err;
+  }
+  return retErr;  
+}
+
 
 /**
  * @brief Writes an Attribute to an HDF5 Object
