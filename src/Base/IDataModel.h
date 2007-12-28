@@ -27,7 +27,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  *  
  */
 class MXA_EXPORT IDataModel
@@ -148,7 +148,7 @@ class MXA_EXPORT IDataModel
     * @param index The index to return
     * @return A Pointer to the data dimension or NULL if there is an error
     */
-    virtual IDataDimension* getDataDimension(int32 index) = 0;
+    virtual IDataDimensionPtr getDataDimension(int32 index) = 0;
     /**
     * @brief Returns a specific Data Dimension from the model. Technically Data
     * dimensions could have the same names as Data Dimensions are only differentiated
@@ -157,7 +157,9 @@ class MXA_EXPORT IDataModel
     * @param dimName The name of the data dimension
     * @return A Pointer to the data dimension or NULL if there is an error
     */
-    virtual IDataDimension* getDataDimension(std::string dimName) = 0;
+    //virtual IDataDimension* getDataDimension(std::string dimName) = 0;
+    
+    virtual IDataDimensionPtr getDataDimension(std::string dimName) = 0;
     
     /**
      * @brief Returns the number of data dimensions in the model
@@ -200,7 +202,7 @@ class MXA_EXPORT IDataModel
     * search will start at the top level of the data records.
     * @return Boost::shared_ptr to the data record object
     */
-    virtual IDataRecordPtr getDataRecordByNamedPath(std::string path, IDataRecord* parent=NULL) = 0;
+    virtual IDataRecordPtr getDataRecordByNamedPath(const std::string &path, IDataRecord* parent=NULL) = 0;
     
     /**
     * @brief Returns a Data Record that is found by giving the full path using the internal names of the data record(s)
@@ -209,7 +211,7 @@ class MXA_EXPORT IDataModel
     * search will start at the top level of the data records.
     * @return Boost::shared_ptr to the data record object
     */
-    virtual IDataRecordPtr getDataRecordByInternalPath(std::string path, IDataRecord* parent=NULL) = 0;
+    virtual IDataRecordPtr getDataRecordByInternalPath(const std::string &path, IDataRecord* parent=NULL) = 0;
     
     //------------- Required Meta Data Methods -----------------------------------
     /**
