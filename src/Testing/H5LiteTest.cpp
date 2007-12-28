@@ -17,11 +17,15 @@
 #include <HDF5/H5Utilities.h>
 #include <TestDataFileLocations.h>
 
-//-- Boost includes
+//-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
+#include <boost/test/test_tools.hpp>
 
-//using boost::unit_test::test_suite;
-using namespace boost::unit_test;
+//-- Boost Filesystem Headers
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+
+
 
 #define DSET0_NAME "2D int32 array"
 #define DSET1_NAME "dataset char"
@@ -37,17 +41,28 @@ using namespace boost::unit_test;
 
 using namespace MXATypes;
 
-test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] );
+
 herr_t testMakeStringDataset(hid_t file_id);
 herr_t testMakeStringAttribute(hid_t file_id);
 void H5LiteTest();
 MXADataModelPtr createModelTemplate();
 
 // -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void RemoveTestFiles()
+{
+#if REMOVE_TEST_FILES
+  BOOST_REQUIRE ( boost::filesystem::remove(H5LITE_TEST_FILE_NAME) == true );
+#endif
+}
+
+// -----------------------------------------------------------------------------
 //  Uses Raw Pointers to save data to the data file
 // -----------------------------------------------------------------------------
 template <typename T>
-herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, T type ) {
+herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, T type ) 
+{
   herr_t err = 1;
   int32 dimx = 2;
   int32 dimy = 3;
@@ -280,7 +295,8 @@ herr_t testMakeStringAttribute(hid_t file_id) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void H5LiteTest() {
+void H5LiteTest() 
+{
  // herr_t err = -1;
   hid_t   file_id;
   /* Create a new file using default properties. */
@@ -367,13 +383,10 @@ void H5LiteTest() {
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
-    //test_suite* test= BOOST_TEST_SUITE( "H5Lite Tests" );
-    framework::master_test_suite().p_name.value = "H5Lite Tests";
-    // register the test case in test tree and specify number of expected failures so
-    // this example will pass at runtime. We expect 2 errors: one from failed check and 
-    // one from memory acces violation
-    framework::master_test_suite().add( BOOST_TEST_CASE( &H5LiteTest), 0);
-    return 0; 
+boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
+  boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "H5Lite Tests" );
+  test->add( BOOST_TEST_CASE( &H5LiteTest), 0);
+  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
+  return test; 
 }
 

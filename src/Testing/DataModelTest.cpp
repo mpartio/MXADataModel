@@ -37,8 +37,6 @@
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
 
-using boost::unit_test::test_suite;
-
 typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 
 
@@ -47,9 +45,11 @@ typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
+#if REMOVE_TEST_FILES
   BOOST_REQUIRE ( boost::filesystem::remove(DATAMODEL_TEST_BEFORE_H5_FILE) == true );
   BOOST_REQUIRE ( boost::filesystem::remove(DATAMODEL_TEST_AFTER_H5_FILE) == true );
   BOOST_REQUIRE ( boost::filesystem::remove(DATAMODEL_TEST_OVERWRITE_H5_FILE) == true );
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -365,21 +365,21 @@ void TestDataDimensionMethods()
   MXADataModelPtr model = createModel(); // Created on the stack
   int32 error = 0;
   
-  MXADataDimension* dim0 = static_cast<MXADataDimension*>(model->getDataDimension(0) );
-  MXADataDimension* dim1 = static_cast<MXADataDimension*>(model->getDataDimension(1) );
-  MXADataDimension* dim2 = static_cast<MXADataDimension*>(model->getDataDimension(2) );
-  MXADataDimension* dim3 = static_cast<MXADataDimension*>(model->getDataDimension(3) );
-  MXADataDimension* dimNull = static_cast<MXADataDimension*>(model->getDataDimension(4) );
-  BOOST_REQUIRE(dim0 != NULL);
-  BOOST_REQUIRE(dim1 != NULL);
-  BOOST_REQUIRE(dim2 != NULL);
-  BOOST_REQUIRE(dim3 != NULL);
-  BOOST_REQUIRE(dimNull == NULL); // The last one should be NULL because it does NOT exist
+  IDataDimensionPtr dim0 = model->getDataDimension(0);
+  IDataDimensionPtr dim1 = model->getDataDimension(1);
+  IDataDimensionPtr dim2 = model->getDataDimension(2);
+  IDataDimensionPtr dim3 = model->getDataDimension(3);
+  IDataDimensionPtr dimNull = model->getDataDimension(4);
+  BOOST_REQUIRE(dim0.get() != NULL);
+  BOOST_REQUIRE(dim1.get() != NULL);
+  BOOST_REQUIRE(dim2.get() != NULL);
+  BOOST_REQUIRE(dim3.get() != NULL);
+  BOOST_REQUIRE(dimNull.get() == NULL); // The last one should be NULL because it does NOT exist
 
   //Test removing by index
   error = model->removeDataDimension(3); // Remove the last Dimension
   BOOST_REQUIRE( error > 0);
-  MXADataDimension* test = static_cast<MXADataDimension*>(model->getDataDimension(2) );
+  IDataDimensionPtr test = model->getDataDimension(2);
   BOOST_REQUIRE(test != dim3);
   BOOST_REQUIRE(model->getDataDimensions().size() == 3);
   
@@ -563,7 +563,7 @@ void TestDataModelOverWrite()
     
     MXADataModel* model = modelPtr.get();
     // Update one of the dimensions
-    IDataDimension* dim0 = model->getDataDimension(0);
+    IDataDimensionPtr dim0 = model->getDataDimension(0);
     //IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
     dim0->setStartValue(0);
     dim0->setEndValue(9);
@@ -600,7 +600,7 @@ void TestDataModelOverWrite()
     IDataFilePtr dataFile = H5MXADataFile::OpenFile(outFilename, true);
     BOOST_REQUIRE(dataFile.get() != 0x0);
     IDataModelPtr modelPtr = dataFile->getDataModel();
-    IDataDimension* dim0 = modelPtr->getDataDimension(0);
+    IDataDimensionPtr dim0 = modelPtr->getDataDimension(0);
     BOOST_REQUIRE ( dim0->getCount() == 10);
     BOOST_REQUIRE ( dim0->getStartValue() == 0);
     BOOST_REQUIRE ( dim0->getEndValue() == 9);
@@ -615,10 +615,10 @@ void TestDataModelOverWrite()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) 
+boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) 
 {
   
-  test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
+  boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
   //test->add( new DataModelTest () );
     
   test->add( BOOST_TEST_CASE( &WriteTestModel), 0);

@@ -16,9 +16,16 @@
 #ifndef SOURCEFILELOCATIONS_H_
 #define SOURCEFILELOCATIONS_H_
 
+/* Define the following to '0' if you want to leave the test files on the filesystem.
+ * This can be advantageous to check the contents to of the test files during 
+ * debugging process
+ */
+#define REMOVE_TEST_FILES 0
+
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the DataImport test
 // -----------------------------------------------------------------------------
+#define DATA_IMPORT_TEST_OUTPUT_FILE "@MXA_TEMP_DIR@XML_Based_Data_Import_Test.h5"
 #define DATAIMPORT_TEST_H5_FILE_BEFORE "@MXA_TEMP_DIR@DataImportTest-Before.h5"
 #define DATAIMPORT_TEST_H5_FILE_AFTER "@MXA_TEMP_DIR@DataImportTest-After.h5"
 #define DATAIMPORT_TEST_IMPORT_XML_FILE "@CMAKE_BINARY_DIR@/DataImportTest.xml"
@@ -36,7 +43,6 @@
 //  Define where to put our temporary files for the H5Lite Test
 // -----------------------------------------------------------------------------
 #define H5LITE_TEST_FILE_NAME "@MXA_TEMP_DIR@test_h5_lite1.h5"
-#define H5LITE_TEST_H5LITE_TEST_FILE_NAME2 "@MXA_TEMP_DIR@test_h5_lite2.h5"
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the vtk tests
@@ -50,6 +56,11 @@
 #define MASTER_XML_FILE "@MXA_TEMP_DIR@XMLMaster.xml"
 #define XML_TEMPLATE_TEST_FILE "@MXA_TEMP_DIR@XML_Template_Test_File.xml"
 #define XML_TEMPLATE_COMPLETE_FILE "@MXA_TEMP_DIR@XML_Template_Complete_File.xml"
+
+// -----------------------------------------------------------------------------
+//  Define where to put our temporary files
+// -----------------------------------------------------------------------------
+#define DATASET_TEST_FILE "@MXA_TEMP_DIR@Dataset_Test.h5"
 
 
 

@@ -24,11 +24,28 @@
 //Boost Includes
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+//-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
+#include <boost/test/test_tools.hpp>
+//-- Boost Filesystem Headers
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
 
-using boost::unit_test::test_suite;
 
 typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void RemoveTestFiles()
+{
+#if REMOVE_TEST_FILES
+  BOOST_REQUIRE ( boost::filesystem::remove(XML_TEST_FILE) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(MASTER_XML_FILE) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(XML_TEMPLATE_TEST_FILE) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(XML_TEMPLATE_COMPLETE_FILE) == true );
+#endif
+}
 
 
 // -----------------------------------------------------------------------------
@@ -335,28 +352,28 @@ void XMLTemplateTest()
   BOOST_REQUIRE ( readModel->isValid(errorMessage) == false);
   BOOST_REQUIRE ( readModel->getDataRecords().size() == 2);
   
-  IDataDimension* dim0 = readModel->getDataDimension(0);
+  IDataDimensionPtr dim0 = readModel->getDataDimension(0);
   dim0->setCount(15);
   dim0->setStartValue(20);
   dim0->setEndValue(50);
   dim0->setIncrement(2);
   dim0->setUniform(1);
   
-  IDataDimension* dim1 = readModel->getDataDimension(1);
+  IDataDimensionPtr dim1 = readModel->getDataDimension(1);
   dim1->setCount(10);
   dim1->setStartValue(1000);
   dim1->setEndValue(5000);
   dim1->setIncrement(500);
   dim1->setUniform(1);
   
-  IDataDimension* dim2 = readModel->getDataDimension(2);
+  IDataDimensionPtr dim2 = readModel->getDataDimension(2);
   dim2->setCount(100);
   dim2->setStartValue(0);
   dim2->setEndValue(99);
   dim2->setIncrement(1);
   dim2->setUniform(1);
   
-  IDataDimension* dim3 = readModel->getDataDimension(3);
+  IDataDimensionPtr dim3 = readModel->getDataDimension(3);
   dim3->setCount(256);
   dim3->setStartValue(0);
   dim3->setEndValue(255);
@@ -377,12 +394,12 @@ void XMLTemplateTest()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
-  
-    test_suite* test= BOOST_TEST_SUITE( "XML Tests" );
-    test->add( BOOST_TEST_CASE( &GenerateMasterXMLFile), 0);
-    test->add( BOOST_TEST_CASE( &XMLModelTest), 0);
-    test->add (BOOST_TEST_CASE( &XMLTemplateTest), 0);
-    
-    return test; 
+boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
+{
+  boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "XML Tests" );
+  test->add( BOOST_TEST_CASE( &GenerateMasterXMLFile), 0);
+  test->add( BOOST_TEST_CASE( &XMLModelTest), 0);
+  test->add( BOOST_TEST_CASE( &XMLTemplateTest), 0);
+  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
+  return test;
 }

@@ -32,10 +32,25 @@
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>
-using namespace boost::unit_test;
+#include <boost/test/test_tools.hpp>
+//-- Boost Filesystem Headers
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+
 
 #include <TestDataFileLocations.h>
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void RemoveTestFiles()
+{
+#if REMOVE_TEST_FILES
+ // BOOST_REQUIRE ( boost::filesystem::remove(DATAIMPORT_TEST_H5_FILE_BEFORE) == true );
+ // BOOST_REQUIRE ( boost::filesystem::remove(DATAIMPORT_TEST_H5_FILE_AFTER) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(DATA_IMPORT_TEST_OUTPUT_FILE) == true );
+#endif
+}
 
 
 
@@ -58,10 +73,10 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   IImportDelegatePtr delegatePtr( new H5ImportTestDelegate());
   
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
-  MXADataDimension* dim0 = static_cast<MXADataDimension*>(model->getDataDimension(0) ); // Get the first Dimension, since there is only one this works
+  IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension, since there is only one this works
   BOOST_REQUIRE(dim0 != NULL); // Used for Boost Unit Test Framework
   
-  MXADataDimension* dim1 = static_cast<MXADataDimension*>(model->getDataDimension(1) );
+  IDataDimensionPtr dim1 = model->getDataDimension(1);
   BOOST_REQUIRE(dim1 != NULL); // Used for Boost Unit Test Framework
   
   // Create a DataRecord entry for the Data Model
@@ -197,11 +212,11 @@ int XMLImportTest()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
+boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
 {
-  test_suite* test= BOOST_TEST_SUITE ( "Data Import Test");
-  // test->add( BOOST_TEST_CASE (&DataImportTest),0);
+  boost::unit_test::test_suite* test= BOOST_TEST_SUITE ( "Data Import Test");
   test->add( BOOST_TEST_CASE (&XMLImportTest), 0);
+  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test;
 }
 

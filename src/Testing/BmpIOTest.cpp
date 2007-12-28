@@ -9,13 +9,26 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include <Common/MXATypes.h>
-
-//-- Boost Unit Testing Framework
-#include <boost/test/unit_test.hpp>
-using namespace boost::unit_test;
 #include <BMPIO/MXABmpIO.h>
+#include <TestDataFileLocations.h>
 
+//-- Boost Test Headers
+#include <boost/test/unit_test.hpp>
+#include <boost/test/test_tools.hpp>
 
+//-- Boost Filesystem Headers
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void RemoveTestFiles()
+{
+#if REMOVE_TEST_FILES
+
+#endif
+}
 
 // -----------------------------------------------------------------------------
 //  
@@ -74,10 +87,10 @@ void TestBMPIO()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
-    test_suite* test= BOOST_TEST_SUITE( "Bitmap IO Testing" );
+boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
+  boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "Bitmap IO Testing" );
     
     test->add( BOOST_TEST_CASE( &TestBMPIO), 0);
-
+    test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
     return test; 
 }
