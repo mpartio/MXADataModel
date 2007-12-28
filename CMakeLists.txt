@@ -67,6 +67,8 @@ SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathIndexSection.cpp
   ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathTextSection.cpp
   ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathBuilder.cpp
+  ${MXA_SOURCE_DIR}/src/Dataset/IAbstractDataset.cpp
+  ${MXA_SOURCE_DIR}/src/Dataset/IAbstractAttribute.cpp
 )
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
@@ -112,6 +114,10 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.h
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.h
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpHeaders.h
+  ${MXA_SOURCE_DIR}/src/Base/IFileReader.h
+  ${MXA_SOURCE_DIR}/src/Base/IFileWriter.h
+  ${MXA_SOURCE_DIR}/src/Dataset/IAbstractDataset.h
+  ${MXA_SOURCE_DIR}/src/Dataset/IAbstractAttribute.h
 )
 
 #--------- XML Sources ---------------------------------------------------
@@ -152,6 +158,8 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.cpp
+    ${MXA_SOURCE_DIR}/src/Dataset/H5StringDataset.cpp
+    ${MXA_SOURCE_DIR}/src/Dataset/H5StringAttribute.cpp
   )
   
   SET(MXA_HDF5_HEADERS
@@ -166,6 +174,11 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.h
+    ${MXA_SOURCE_DIR}/src/Dataset/H5StringDataset.h
+    ${MXA_SOURCE_DIR}/src/Dataset/H5StringAttribute.h
+    ${MXA_SOURCE_DIR}/src/Dataset/H5PointerDataset.h
+    ${MXA_SOURCE_DIR}/src/Dataset/H5VectorRefDataset.h
+    ${MXA_SOURCE_DIR}/src/Dataset/H5PointerAttribute.h
   )
   
   SET(HDF5_SUPPORT "1")
@@ -216,6 +229,13 @@ IF ( CMAKE_BUILD_TYPE MATCHES Debug )
   ADD_DEFINITIONS(-Wall)
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
+IF(CMAKE_COMPILER_IS_GNUCC)
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmessage-length=0")
+ENDIF(CMAKE_COMPILER_IS_GNUCC)
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 #-- Configure the Header file and then add the Binary Directory to the Includes list
 CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
                ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
@@ -245,15 +265,18 @@ INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME}
     )
     
 SET (INSTALL_INCLUDES 
-  ${MXA_SOURCE_DIR}/src/Core
-  ${MXA_SOURCE_DIR}/src/HDF5
-  ${MXA_SOURCE_DIR}/src/Common
   ${MXA_SOURCE_DIR}/src/Base
+  ${MXA_SOURCE_DIR}/src/BMPIO
+  ${MXA_SOURCE_DIR}/src/Common
+  ${MXA_SOURCE_DIR}/src/Core
+  ${MXA_SOURCE_DIR}/src/DataImport
+  ${MXA_SOURCE_DIR}/src/Dataset
+  ${MXA_SOURCE_DIR}/src/HDF5
   ${MXA_SOURCE_DIR}/src/Utilities
   ${MXA_SOURCE_DIR}/src/XML
   )
   
-INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h DESTINATION include/MXADataModel/Headers )
+INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h DESTINATION include/MXADataModel )
 
 INSTALL(DIRECTORY ${INSTALL_INCLUDES}  DESTINATION include/MXADataModel
   PATTERN "CVS" EXCLUDE
@@ -276,6 +299,6 @@ ENDIF(BUILD_EXAMPLES)
 #  Build simple test programs. This should always be commented out
 # ------------------------------------------------------------------------------
 #ADD_EXECUTABLE(OverLoadTest ${MXA_SOURCE_DIR}/src/Misc/OverLoadTest.cpp)
-#TARGET_LINK_LIBRARIES(OverLoadTest)
+#TARGET_LINK_LIBRARIES(OverLoadTest ${MXADATAMODEL_LIB_NAME} ${DEP_LIBS})
 
 
