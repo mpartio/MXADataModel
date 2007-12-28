@@ -320,30 +320,33 @@ IDataDimensions& MXADataModel::getDataDimensions()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IDataDimension* MXADataModel::getDataDimension(int32 index)
+IDataDimensionPtr MXADataModel::getDataDimension(int32 index)
 {
   if ( 0 <= index  &&  static_cast<uint32>(index) < this->_dataDimensions.size() )
   {
     IDataDimensionPtr ptr = this->_dataDimensions[index];
-    return ptr.get();
+    return ptr;
   }
-  return NULL;
+  IDataDimensionPtr nullDim;
+  return nullDim;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IDataDimension* MXADataModel::getDataDimension(std::string dimName)
+IDataDimensionPtr MXADataModel::getDataDimension(std::string dimName)
 {
   MXADataDimension* currentDim = NULL;
   for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
     currentDim = static_cast<MXADataDimension*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
     if (NULL == currentDim) { continue; }
     if (   currentDim->getDimensionName() == dimName  ) {
-      return currentDim;
+     // return currentDim;
+     return *(iter);
     }
   }
-  return NULL;
+  IDataDimensionPtr nullDim;
+  return nullDim;
 }
 
 // -----------------------------------------------------------------------------
@@ -419,29 +422,29 @@ IDataRecords& MXADataModel::getDataRecords()
 // -----------------------------------------------------------------------------
 //  Gets an MXADataRecord by the path given
 // -----------------------------------------------------------------------------
-IDataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, IDataRecord* parentPtr)
+IDataRecordPtr MXADataModel::getDataRecordByNamedPath(const std::string &path, IDataRecord* parentPtr)
 {
  // std::cout << "Looking for Path: " << path << std::endl;
   // Remove any trailing slash in the path
   MXADataRecord* currentRec = NULL;
   IDataRecordPtr rec;
   IDataRecord* parent = static_cast<IDataRecord*>(parentPtr);
-  
+  std::string mPath (path);
   // remove any front slash
-  std::string::size_type pos = path.find_first_of("/", 0);
+  std::string::size_type pos = mPath.find_first_of("/", 0);
   if ( 0 == pos ) 
   {
-    path = path.substr(1, path.size());
+    mPath = mPath.substr(1, mPath.size());
   }
   
   //Remove any trailing slash
-  pos = path.find_last_of("/");
-  if ( pos == (path.size() - 1) ) // slash was in the last position
+  pos = mPath.find_last_of("/");
+  if ( pos == (mPath.size() - 1) ) // slash was in the last position
   {
-    path = path.substr(0, pos);
+    mPath = mPath.substr(0, pos);
   }
   
-  if (path.size() == 0) 
+  if (mPath.size() == 0) 
   {
     return rec; // The path that was passed in was only a slash.. 
   }
@@ -463,16 +466,16 @@ IDataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, IDataRec
   {
     currentRec = static_cast<MXADataRecord*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
     std::string recName = currentRec->getRecordName();
-    pos = path.find_first_of("/", 0);
+    pos = mPath.find_first_of("/", 0);
     if (pos == std::string::npos) // No slash found
     {
-      first = path;
+      first = mPath;
       second = "";
     } 
     else 
     {
-      first = path.substr(0, pos);
-      second = path.substr(pos, path.size());
+      first = mPath.substr(0, pos);
+      second = mPath.substr(pos, mPath.size());
     }
     if ( first.compare(recName) == 0)
     {
@@ -496,28 +499,28 @@ IDataRecordPtr MXADataModel::getDataRecordByNamedPath(std::string path, IDataRec
 // -----------------------------------------------------------------------------
 //  Gets an MXADataRecord by the path given
 // -----------------------------------------------------------------------------
-IDataRecordPtr MXADataModel::getDataRecordByInternalPath(std::string path, IDataRecord* parent)
+IDataRecordPtr MXADataModel::getDataRecordByInternalPath(const std::string &path, IDataRecord* parent)
 {
  // std::cout << "Looking for Path: " << path << std::endl;
   // Remove any trailing slash in the path
   IDataRecord* currentRec = NULL;
   IDataRecordPtr rec;
-
+  std::string mPath(path);
   // remove any front slash
-  std::string::size_type pos = path.find_first_of("/", 0);
+  std::string::size_type pos = mPath.find_first_of("/", 0);
   if ( 0 == pos ) 
   {
-    path = path.substr(1, path.size());
+    mPath = mPath.substr(1, mPath.size());
   }
   
   //Remove any trailing slash
-  pos = path.find_last_of("/");
-  if ( pos == (path.size() - 1) ) // slash was in the last position
+  pos = mPath.find_last_of("/");
+  if ( pos == (mPath.size() - 1) ) // slash was in the last position
   {
-    path = path.substr(0, pos);
+    mPath = mPath.substr(0, pos);
   }
   
-  if (path.size() == 0) 
+  if (mPath.size() == 0) 
   {
     return rec; // The path that was passed in was only a slash.. 
   }
@@ -539,16 +542,16 @@ IDataRecordPtr MXADataModel::getDataRecordByInternalPath(std::string path, IData
   {
     currentRec = static_cast<MXADataRecord*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
     std::string recName = StringUtils::numToString( currentRec->getLuid() );
-    pos = path.find_first_of("/", 0);
+    pos = mPath.find_first_of("/", 0);
     if (pos == std::string::npos) // No slash found
     {
-      first = path;
+      first = mPath;
       second = "";
     } 
     else 
     {
-      first = path.substr(0, pos);
-      second = path.substr(pos, path.size());
+      first = mPath.substr(0, pos);
+      second = mPath.substr(pos, mPath.size());
     }
     if ( first.compare(recName) == 0)
     {

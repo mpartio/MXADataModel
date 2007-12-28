@@ -41,7 +41,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -181,14 +181,15 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param index
    * @return
    */
-  IDataDimension* getDataDimension(int32 index);
+  IDataDimensionPtr getDataDimension(int32 index);
 
   /**
    * @brief Returns a Data Dimension object given the name of the data dimension
    * @param dimName
    * @return
    */
-  IDataDimension* getDataDimension(std::string dimName);
+  // IDataDimension* getDataDimension(std::string dimName);
+  IDataDimensionPtr getDataDimension(std::string dimName);
   
   /**
    * @brief
@@ -230,7 +231,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param parent The parent data record
    * @return
    */
-  IDataRecordPtr getDataRecordByNamedPath(std::string path, IDataRecord* parent=NULL);
+  IDataRecordPtr getDataRecordByNamedPath(const std::string &path, IDataRecord* parent=NULL);
   
   /**
    * @brief Returns a Data Record based on an internal path representation
@@ -238,7 +239,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param parent
    * @return
    */
-  IDataRecordPtr getDataRecordByInternalPath(std::string path, IDataRecord* parent=NULL);
+  IDataRecordPtr getDataRecordByInternalPath(const std::string &path, IDataRecord* parent=NULL);
 
   
   /**
