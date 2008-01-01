@@ -20,13 +20,10 @@
 #include <HDF5/H5MXADataFile.h>
 #include <HDF5/H5Utilities.h>
 
-#include <Dataset/IAbstractDataset.h>
-#include <Dataset/IAbstractAttribute.h>
-#include <Dataset/H5StringDataset.h>
-#include <Dataset/H5StringAttribute.h>
-#include <Dataset/H5PointerDataset.h>
-#include <Dataset/H5PointerAttribute.h>
-#include <Dataset/H5VectorRefDataset.h>
+#include <Dataset/IDataset.h>
+#include <Dataset/IDataArray.h>
+#include <Dataset/H5DataArrayTemplate.hxx>
+
 
 // C++ Includes
 #include <iostream>
@@ -50,6 +47,9 @@
 
 #define DECLARE_REFERENCE_VARIABLE(classType ,shared_ptr, ref) \
   classType &ref = *(shared_ptr.get());
+
+#define WRAP_POINTER_IN_BOOST_SHARED_POINTER(Pointer, PointerType, BoostVariable)\
+boost::shared_ptr<PointerType> BoostVariable (Pointer);
 
 
 #define CreatePointerAttribute(U, dsPath, key) \
@@ -97,6 +97,7 @@ void MakeDataRecord( const std::string &key, IDataModelPtr model)
   model->addDataRecord(rec);
 }
 
+
 // -----------------------------------------------------------------------------
 //  Creates a Data Model to use
 // -----------------------------------------------------------------------------
@@ -123,30 +124,30 @@ IDataModelPtr createModel()
     BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
        
     //Create Data Records for the Pointer Tests
-    MakeDataRecord( "Pointer Int 8", model);
-    MakeDataRecord( "Pointer UInt8", model);
-    MakeDataRecord( "Pointer Int 16", model);
-    MakeDataRecord( "Pointer UInt16", model);
-    MakeDataRecord( "Pointer Int 32", model);
-    MakeDataRecord( "Pointer UInt32", model);
-    MakeDataRecord( "Pointer Int 64", model);
-    MakeDataRecord( "Pointer UInt64", model);
+    MakeDataRecord( "Dataset Int 8", model);
+    MakeDataRecord( "Dataset UInt 8", model);
+    MakeDataRecord( "Dataset Int 16", model);
+    MakeDataRecord( "Dataset UInt 16", model);
+    MakeDataRecord( "Dataset Int 32", model);
+    MakeDataRecord( "Dataset UInt 32", model);
+    MakeDataRecord( "Dataset Int 64", model);
+    MakeDataRecord( "Dataset UInt 64", model);
     // Floating point Numbers
-    MakeDataRecord( "Pointer Float 32", model);
-    MakeDataRecord( "Pointer Float 64", model);
+    MakeDataRecord( "Dataset Float 32", model);
+    MakeDataRecord( "Dataset Float 64", model);
     
     // Create Data record for the String test
     MakeDataRecord( "String", model);
     
     // Create Data Records for the Vector Tests
     MakeDataRecord( "Vector Int 8", model);
-    MakeDataRecord( "Vector UInt8", model);
+    MakeDataRecord( "Vector UInt 8", model);
     MakeDataRecord( "Vector Int 16", model);
     MakeDataRecord( "Vector UInt16", model);
     MakeDataRecord( "Vector Int 32", model);
-    MakeDataRecord( "Vector UInt32", model);
+    MakeDataRecord( "Vector UInt 32", model);
     MakeDataRecord( "Vector Int 64", model);
-    MakeDataRecord( "Vector UInt64", model);
+    MakeDataRecord( "Vector UInt 64", model);
     // Floating point Numbers
     MakeDataRecord( "Vector Float 32", model);
     MakeDataRecord( "Vector Float 64", model);
@@ -175,8 +176,25 @@ IDataModelPtr createModel()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
+template<typename T>
+void MakeAttribute(const std::string &key, IDatasetPtr dataset)
+{
+  int32 numElements = 4;
+  H5DataArrayTemplate<T>* attribute = H5DataArrayTemplate<T>::NewArray(numElements);
+  for (mxaIdType i = 0; i < numElements; ++i) {
+    attribute->setValue(i, static_cast<T>(i) );
+  }
+  
+  WRAP_POINTER_IN_BOOST_SHARED_POINTER(attribute, IDataArray, attrPtr);
+  dataset->addAttribute(key, attrPtr);
+  
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 template<typename T> 
-int32 PointerTest(T theType, const std::string &recName, IDataFilePtr dataFile)
+int32 IDatasetTest( const std::string &recName, IDataFilePtr dataFile)
 {
   IDataModelPtr model = dataFile->getDataModel();
   IDataRecordPtr rec = model->getDataRecordByNamedPath(recName, NULL);
@@ -185,184 +203,55 @@ int32 PointerTest(T theType, const std::string &recName, IDataFilePtr dataFile)
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
   std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
+  int32 err = 1;
+  
+  // Create the data
+  int32 numElements = 5;
+  H5DataArrayTemplate<T>* data  = H5DataArrayTemplate<T>::NewArray(numElements);
+  BOOST_REQUIRE(data != 0x0);
+  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
+ 
+  numElements = 0; // Resize the array to zero
+  err = data->resize(numElements);
+  BOOST_REQUIRE(err >= 0); 
+  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
+  
+  
+  numElements = 10; // Resize the array to 10
+  err = data->resize(numElements);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
+  for (mxaIdType i = 0; i < numElements; ++i) {
+    data->setValue(i, static_cast<T>(i) );
+  }
 
-  std::vector<uint64> datasetDims(1, 10); // 1 element with a value of 10
-  T dvec[10];
-  for (int i = 0; i < 10; ++i)
-  {
-    dvec[i] = (T)(i * 5643.234523);
-  } // Fill with some data
-  IAbstractDatasetPtr testDataset = H5PointerDataset<T>::New(dsPath, datasetDims, dvec);
-  BOOST_REQUIRE(1 == testDataset->getDatasetDimensions().size() );
-  BOOST_REQUIRE(10 == testDataset->getDatasetDimensions().at(0) );
-
-  //Create a string Attribute 
-  IAbstractAttributePtr strAttribute = H5StringAttribute::New(dsPath, "String Attribute", "Test String");
-  BOOST_REQUIRE (strAttribute.get() != NULL);
-  testDataset->addAttribute(strAttribute);
-
-  // Create a Pointer based Attribute
-  IAbstractAttributePtr attr;
-  std::string name;
-  std::vector<uint64> attrDimensions(1, 4); // 1 element with a value of 10
+  T* value = static_cast<T*>(data->getVoidPointer(0) );
+  for (mxaIdType i = 0; i < numElements; ++i) {
+    //value[i] = static_cast<T>(i);
+    BOOST_REQUIRE(value[i] == static_cast<T>(i) );
+  }
   
-  CreatePointerAttribute(int8, dsPath, "Int 8")
-  CreatePointerAttribute(uint8, dsPath, "UInt8")
-  CreatePointerAttribute(int16, dsPath, "Int 16")
-  CreatePointerAttribute(uint16, dsPath, "UInt16")
-  CreatePointerAttribute(int32, dsPath, "Int 32")
-  CreatePointerAttribute(uint32, dsPath, "UInt32")
-  CreatePointerAttribute(int64, dsPath, "Int 64")
-  CreatePointerAttribute(uint64, dsPath, "UInt64")
-  //  //Floating Point Numbers
-  CreatePointerAttribute(float32, dsPath, "Float 32")
-  CreatePointerAttribute(float64, dsPath, "Float 64")
-
-  int32 err = dataFile->writeData(testDataset);
+  //data->debugPrint(std::cout);
+  WRAP_POINTER_IN_BOOST_SHARED_POINTER(data, IDataArray, dataPtr);
+  // Create the dataset
+  IDatasetPtr ds = IDataset::New(dsPath, dataPtr);
   
-  int numAttrs = testDataset->getNumberOfAttributes();
-  BOOST_REQUIRE(numAttrs == 11);
-  err = testDataset->removeAttribute(attr);
-  BOOST_REQUIRE (err >= 0);
-  numAttrs = testDataset->getNumberOfAttributes();
-  BOOST_REQUIRE(numAttrs == 10);
-  err = testDataset->removeAttribute(9); // Remove the last attribute
-  BOOST_REQUIRE (err >= 0);
-  numAttrs = testDataset->getNumberOfAttributes();
-  BOOST_REQUIRE(numAttrs == 9);
+  //Create some Attributes
+  MakeAttribute<int8>( "Attribute Int 8", ds );
+  MakeAttribute<uint8>( "Attribute UInt 8", ds );
+  MakeAttribute<int16>( "Attribute Int 16", ds );
+  MakeAttribute<uint16>( "Attribute UInt 16", ds );
+  MakeAttribute<int32>( "Attribute Int 32", ds );
+  MakeAttribute<uint32>( "Attribute UInt 32", ds );
+  MakeAttribute<int64>( "Attribute Int 64", ds );
+  MakeAttribute<uint64>( "Attribute UInt 64", ds );
+  MakeAttribute<float32>( "Attribute Float 32", ds );
+  MakeAttribute<float64>( "Attribute Float 64", ds );
   
-  // try removing a value outside the range of the attributes
-  err = testDataset->removeAttribute(9); 
-  BOOST_REQUIRE (err == 0);
-  numAttrs = testDataset->getNumberOfAttributes();
-  BOOST_REQUIRE(numAttrs == 9);
-  
-  err = testDataset->removeAttribute(-1); 
-  BOOST_REQUIRE (err == 0);
-  numAttrs = testDataset->getNumberOfAttributes();
-  BOOST_REQUIRE(numAttrs == 9);
-  
-  // Try removing the first attribute at index 0
-  err = testDataset->removeAttribute(0); 
-  BOOST_REQUIRE (err >= 0);
-  numAttrs = testDataset->getNumberOfAttributes();
-  BOOST_REQUIRE(numAttrs == 8);
-  
-  
-  // Try removing an attribute from the middle
-  err = testDataset->removeAttribute(5); 
-  BOOST_REQUIRE (err >= 0);
-  numAttrs = testDataset->getNumberOfAttributes();
-  BOOST_REQUIRE(numAttrs == 7);
+  // Write the data to the file
+  ds->writeToFile(dataFile);
   return err;
 }
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-void H5StringDatasetTest(IDataFilePtr dataFile)
-{
-   IDataModelPtr model = dataFile->getDataModel();
-   IDataRecordPtr rec = model->getDataRecordByNamedPath("String", NULL);
-   BOOST_REQUIRE(rec.get() != NULL);
-
-   std::vector<int32> mxaDims;
-   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
-   std::string data ("This is the string Dataset");
-   std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
-
-   // Create the dataset
-   IAbstractDatasetPtr testDataset = H5StringDataset::New(dsPath, data);
-   BOOST_REQUIRE (testDataset.get() != NULL);
-     
-  //Create a string Attribute 
-   IAbstractAttributePtr strAttribute = H5StringAttribute::New(dsPath, "String Attribute", "Test String");
-   BOOST_REQUIRE (strAttribute.get() != NULL);
-   testDataset->addAttribute(strAttribute);
-
-   // Create a Pointer based Attribute
-   IAbstractAttributePtr attr;
-   std::string name;
-   std::vector<uint64> attrDimensions(1, 4); // 1 element with a value of 10
-   
-   CreatePointerAttribute(int8, dsPath, "Int 8")
-   CreatePointerAttribute(uint8, dsPath, "UInt8")
-   CreatePointerAttribute(int16, dsPath, "Int 16")
-   CreatePointerAttribute(uint16, dsPath, "UInt16")
-   CreatePointerAttribute(int32, dsPath, "Int 32")
-   CreatePointerAttribute(uint32, dsPath, "UInt32")
-   CreatePointerAttribute(int64, dsPath, "Int 64")
-   CreatePointerAttribute(uint64, dsPath, "UInt64")
-   //  //Floating Point Numbers
-   CreatePointerAttribute(float32, dsPath, "Float 32")
-   CreatePointerAttribute(float64, dsPath, "Float 64")
-
-   int32 err = dataFile->writeData(testDataset);
-   
-   int numAttrs = testDataset->getNumberOfAttributes();
-   BOOST_REQUIRE(numAttrs == 11);
-   err = testDataset->removeAttribute(attr);
-   BOOST_REQUIRE (err >= 0);
-   numAttrs = testDataset->getNumberOfAttributes();
-   BOOST_REQUIRE(numAttrs == 10);
-   err = testDataset->removeAttribute(9); // Remove the last attribute
-   BOOST_REQUIRE (err >= 0);
-   numAttrs = testDataset->getNumberOfAttributes();
-   BOOST_REQUIRE(numAttrs == 9);
-   
-   // try removing a value outside the range of the attributes
-   err = testDataset->removeAttribute(9); 
-   BOOST_REQUIRE (err == 0);
-   numAttrs = testDataset->getNumberOfAttributes();
-   BOOST_REQUIRE(numAttrs == 9);
-   
-   err = testDataset->removeAttribute(-1); 
-   BOOST_REQUIRE (err == 0);
-   numAttrs = testDataset->getNumberOfAttributes();
-   BOOST_REQUIRE(numAttrs == 9);
-   
-   // Try removing the first attribute at index 0
-   err = testDataset->removeAttribute(0); 
-   BOOST_REQUIRE (err >= 0);
-   numAttrs = testDataset->getNumberOfAttributes();
-   BOOST_REQUIRE(numAttrs == 8);
-   
-   
-   // Try removing an attribute from the middle
-   err = testDataset->removeAttribute(5); 
-   BOOST_REQUIRE (err >= 0);
-   numAttrs = testDataset->getNumberOfAttributes();
-   BOOST_REQUIRE(numAttrs == 7);
-}
-
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-template<typename T> 
-int32 VectorTest(T theType, const std::string &recName, IDataFilePtr dataFile)
-{
-  IDataModelPtr model = dataFile->getDataModel();
-  IDataRecordPtr rec = model->getDataRecordByNamedPath(recName, NULL);
-  BOOST_REQUIRE(rec.get() != NULL);
-  
-  std::vector<int32> mxaDims;
-  mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
-  std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
-  // Watch out for Scope issues with feeding H5VectorDataset the data variable. If 
-  //  'data' were to go out of scope BEFORE the write operation then junk
-  //  is going to be written to the file
-  std::vector<uint64> datasetDims(1, 10); // 1 element with a value of 10
-  std::vector<T> data(10, 0);
-  for (int i = 0; i < 10; ++i) { data[i] = (T)(100); }
-  IAbstractDatasetPtr testDataset = H5VectorRefDataset<T>::New(dsPath, datasetDims, data);
-  
-  
-  int32 err = dataFile->writeData(testDataset);
-  
-  return err;
-}
-
 
 // -----------------------------------------------------------------------------
 //  
@@ -371,50 +260,22 @@ void DatasetTest()
 {
   std::cout << "Running Dataset Test ....";
   // Create our Test File to output our test data into
-  std::string testFile (DATASET_TEST_FILE);
+  std::string testFile(DATASET_TEST_FILE);
   IDataModelPtr model = createModel();
   IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(testFile, model);
-  
-  // Test String datasets
-  H5StringDatasetTest(dataFile);
-  
-  int8  i8  = -8;
-  uint8 ui8 = 8;
-  int16 i16 = -16;
-  uint16 ui16 = 16;
-  int32 i32 = -32;
-  uint32 ui32 = 32;
-  int64 i64 = -64;
-  uint64 ui64 = 64;
-  float32 f32 = 32.32f;
-  float64 f64 = 64.64;
-  
+
   // Test the Pointer Datasets
-  BOOST_REQUIRE ( PointerTest( i8, "Pointer Int 8", dataFile) >= 0 );
-  BOOST_REQUIRE ( PointerTest( ui8, "Pointer UInt8", dataFile) >= 0);
-  BOOST_REQUIRE ( PointerTest( i16, "Pointer Int 16", dataFile) >= 0);
-  BOOST_REQUIRE ( PointerTest( ui16, "Pointer UInt16", dataFile) >= 0);
-  BOOST_REQUIRE ( PointerTest( i32, "Pointer Int 32", dataFile) >= 0);
-  BOOST_REQUIRE ( PointerTest( ui32, "Pointer UInt32", dataFile) >= 0);
-  BOOST_REQUIRE ( PointerTest( i64, "Pointer Int 64", dataFile) >= 0);
-  BOOST_REQUIRE ( PointerTest( ui64, "Pointer UInt64", dataFile) >= 0);
-  // Floating point Numbers
-  BOOST_REQUIRE ( PointerTest( f32, "Pointer Float 32", dataFile) >= 0);
-  BOOST_REQUIRE ( PointerTest( f64, "Pointer Float 64", dataFile) >= 0);
-  
-  // Test the Vector based dataset classes
-  BOOST_REQUIRE ( VectorTest( i8, "Vector Int 8", dataFile) >= 0 );
-  BOOST_REQUIRE ( VectorTest( ui8, "Vector UInt8", dataFile) >= 0);
-  BOOST_REQUIRE ( VectorTest( i16, "Vector Int 16", dataFile) >= 0);
-  BOOST_REQUIRE ( VectorTest( ui16, "Vector UInt16", dataFile) >= 0);
-  BOOST_REQUIRE ( VectorTest( i32, "Vector Int 32", dataFile) >= 0);
-  BOOST_REQUIRE ( VectorTest( ui32, "Vector UInt32", dataFile) >= 0);
-  BOOST_REQUIRE ( VectorTest( i64, "Vector Int 64", dataFile) >= 0);
-  BOOST_REQUIRE ( VectorTest( ui64, "Vector UInt64", dataFile) >= 0);
-  // Floating point Numbers
-  BOOST_REQUIRE ( VectorTest( f32, "Vector Float 32", dataFile) >= 0);
-  BOOST_REQUIRE ( VectorTest( f64, "Vector Float 64", dataFile) >= 0);
-  
+  IDatasetTest<int8>( "Dataset Int 8", dataFile );
+  IDatasetTest<uint8>( "Dataset UInt 8", dataFile );
+  IDatasetTest<int16>( "Dataset Int 16", dataFile );
+  IDatasetTest<uint16>( "Dataset UInt 16", dataFile );
+  IDatasetTest<int32>( "Dataset Int 32", dataFile );
+  IDatasetTest<uint32>( "Dataset UInt 32", dataFile );
+  IDatasetTest<int64>( "Dataset Int 64", dataFile );
+  IDatasetTest<uint64>( "Dataset UInt 64", dataFile );
+  IDatasetTest<float32>( "Dataset Float 32", dataFile );
+  IDatasetTest<float64>( "Dataset Float 64", dataFile );
+
   std::cout << "... Passed." << std::endl;
 }
 

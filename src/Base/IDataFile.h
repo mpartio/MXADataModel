@@ -21,7 +21,7 @@
 * @brief 
 * @author mjackson
 * @date Dec 14, 2007
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class IDataFile 
 {
@@ -102,9 +102,9 @@ class IDataFile
 // -----------------------------------------------------------------------------
 //  Writing data related methods
     
-    virtual int32 writeData ( const IAbstractDatasetPtr dataset) = 0;
+    virtual int32 writeData ( const IDatasetPtr dataset) = 0;
     
-    virtual int32 readData (const IAbstractDatasetPtr dataset) = 0;
+    virtual int32 readData (const IDatasetPtr dataset) = 0;
     
     
   protected:  

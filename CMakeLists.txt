@@ -71,8 +71,6 @@ SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathIndexSection.cpp
   ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathTextSection.cpp
   ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathBuilder.cpp
-#  ${MXA_SOURCE_DIR}/src/Dataset/IAbstractDataset.cpp
-#  ${MXA_SOURCE_DIR}/src/Dataset/IAbstractAttribute.cpp
 )
   
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
@@ -120,8 +118,6 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpHeaders.h
   ${MXA_SOURCE_DIR}/src/Base/IFileReader.h
   ${MXA_SOURCE_DIR}/src/Base/IFileWriter.h
-#  ${MXA_SOURCE_DIR}/src/Dataset/IAbstractDataset.h
-#  ${MXA_SOURCE_DIR}/src/Dataset/IAbstractAttribute.h
   ${MXA_SOURCE_DIR}/src/Dataset/IDataArray.h
   ${MXA_SOURCE_DIR}/src/Dataset/IDataset.h
   ${MXA_SOURCE_DIR}/src/Dataset/IDataArrayTemplate.h
@@ -165,9 +161,8 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.cpp
-#    ${MXA_SOURCE_DIR}/src/Dataset/H5StringDataset.cpp
-#    ${MXA_SOURCE_DIR}/src/Dataset/H5StringAttribute.cpp
-#    ${MXA_SOURCE_DIR}/src/Dataset/H5MxaDataset.cpp
+    ${MXA_SOURCE_DIR}/src/Dataset/H5StringDataset.cpp
+    ${MXA_SOURCE_DIR}/src/Dataset/H5StringAttribute.cpp
   )
   
   SET(MXA_HDF5_HEADERS
@@ -182,13 +177,9 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.h
-    ${MXA_SOURCE_DIR}/src/Dataset/H5DataArrayTemplate.hpp
-#    ${MXA_SOURCE_DIR}/src/Dataset/H5StringDataset.h
-#    ${MXA_SOURCE_DIR}/src/Dataset/H5StringAttribute.h
-#    ${MXA_SOURCE_DIR}/src/Dataset/H5PointerDataset.h
-#    ${MXA_SOURCE_DIR}/src/Dataset/H5VectorRefDataset.h
-#    ${MXA_SOURCE_DIR}/src/Dataset/H5PointerAttribute.h
-#    ${MXA_SOURCE_DIR}/src/Dataset/H5MxaDataset.h
+    ${MXA_SOURCE_DIR}/src/Dataset/H5DataArrayTemplate.hxx
+    ${MXA_SOURCE_DIR}/src/Dataset/H5StringDataset.h
+    ${MXA_SOURCE_DIR}/src/Dataset/H5StringAttribute.h
   )
   
   SET(HDF5_SUPPORT "1")

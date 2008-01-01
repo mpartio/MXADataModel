@@ -22,7 +22,7 @@
  * @brief 
  * @author mjackson
  * @date Dec 17, 2007
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 class H5MXADataFile : public IDataFile
 {
@@ -97,9 +97,9 @@ class H5MXADataFile : public IDataFile
     // -----------------------------------------------------------------------------
     //  Writing data related methods
 
-    int32 writeData ( const IAbstractDatasetPtr dataset);
+    int32 writeData ( const IDatasetPtr dataset);
     
-    int32 readData (const IAbstractDatasetPtr dataset);
+    int32 readData (const IDatasetPtr dataset);
     
     int32 getFileId();
 

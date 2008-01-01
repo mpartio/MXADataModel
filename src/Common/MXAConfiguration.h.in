@@ -2,8 +2,6 @@
 #define SYSTEMCONFIGURATION_H_IN_
 // This file is used as an input. DO NOT INCLUDE this file directly.
 
-
-
 #define HDF5_SUPPORT @HDF5_SUPPORT@
 
 #define TIFF_SUPPORT @TIFF_SUPPORT@
@@ -11,5 +9,14 @@
 #define HDF5_VTK_BRIDGE @HDF5_VTK_BRIDGE@
 
 #define XML_SUPPORT @XML_SUPPORT@
+
+/** Defines the number of bytes that make up a void pointer */
+#define SIZEOF_VOID_P @CMAKE_SIZEOF_VOID_P@
+
+/** The number of bytes for the size_t type */
+#define SIZEOF_SIZE_T @SIZEOF_SIZE_T@
+
+/** The number of bytes for the ssize_t type */
+#define SIZEOF_SSIZE_T @SIZEOF_SSIZE_T@
 
 #endif /*SYSTEMCONFIGURATION_H_IN_*/

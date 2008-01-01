@@ -11,21 +11,9 @@
 H5StringAttribute::H5StringAttribute(const std::string &path,
                                       const std::string &key,
                                       const std::string &value)  :
-IAbstractAttribute(path, key, std::vector<uint64>(1, value.size() ) ),
 _value(value)
 {}
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-IAbstractAttributePtr H5StringAttribute::New( const std::string &path,
-                                  const std::string &key,
-                                  const std::string &value)
-{ 
-  H5StringAttribute* ds = new H5StringAttribute(path, key, value);
-  IAbstractAttributePtr ptr (ds); // Wrap pointer in a Boost Shared Ptr
-  return ptr;
-}
 
 // -----------------------------------------------------------------------------
 //  
@@ -39,7 +27,7 @@ H5StringAttribute::~H5StringAttribute()
 // -----------------------------------------------------------------------------
 int32 H5StringAttribute::writeToFile(IDataFilePtr dataFile)
 {
-  return H5Lite::writeStringAttribute(dataFile->getFileId(), this->getDatasetPath(), this->getKey(), _value);
+  return H5Lite::writeStringAttribute(dataFile->getFileId(), _datasetPath, _key, _value);
 }
 
 // -----------------------------------------------------------------------------

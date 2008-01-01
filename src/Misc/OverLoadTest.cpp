@@ -1,119 +1,137 @@
 
-
+#include <Common/MXATypeDefs.h>
+#include <Base/IFileWriter.h>
+#include <Base/IDataFile.h>
 #include <string>
 #include <iostream>
 
 #include <boost/shared_ptr.hpp>
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-class SuperClass
-{
-  public:
-    SuperClass() {}
-    virtual ~SuperClass() {}
-    
-    virtual int doSomething() = 0;
-    virtual int writeData() = 0;
-    virtual void* getVoidPointer() = 0;
-  
-  private:
-
-    SuperClass(const SuperClass&);    // Copy Constructor Not Implemented
-    void operator=(const SuperClass&);  // Operator '=' Not Implemented
-  
-};
+This layout makes things easier for ME but not easier for the end programmer. Implement 
+each class in its own and take care of all the heavy lifting in the write* methods
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-template <typename T>
-class PointerDataTemplate : public SuperClass
+class IDataset : public IFileWriter
 {
   public:
-    PointerDataTemplate(boost::shared_ptr<T> data) : _data(data) {};
-    virtual ~PointerDataTemplate() {};
+    IDataset() {}
+    virtual ~IDataset() {}
     
-    virtual int doSomething()
+    void setDatasetPath(const std::string &path)
     {
-      std::cout << "doSomething" << std::endl;
-      return -2;
+      _path = path;
     }
-    
-    virtual int writeData()
+    std::string getDatasetPath()
     {
-      std::cout << "WriteData" << std::endl;
-      return 1;
+      return _path;
     }
-    
-    virtual void* getVoidPointer()
+   
+    int getRank()
     {
-      return static_cast<void*>(_data.get());
+     return _rank; 
     }
-    
-    virtual boost::shared_ptr<T>   getValue()
+   
+    void setDataDimensions(int rank, int32* dims)
     {
-      return _data;
+      _rank = rank;
+      if (_dims != NULL)
+      {
+        ::free(dims);
+      }
+      _dims = static_cast<int32*>(::calloc(rank, sizeof(int32) ) );
+      ::memcpy(_dims, dims, sizeof(int32)*rank);
     }
-    
-  private:
-    boost::shared_ptr<T> _data;
-    PointerDataTemplate(const PointerDataTemplate&);    // Copy Constructor Not Implemented
-      void operator=(const PointerDataTemplate&);  // Operator '=' Not Implemented
   
+    virtual void setData(void* ptr, bool copyData = false)
+    {
+      if (copyData == true)
+      {
+        
+      }
+      else 
+      {
+        _data = ptr;
+      }
+    }
+    
+   
+  private:
+    std::string _path;
+    int32 _rank;
+    int32* _dims;
+    void*  _data;
+    
+    IDataset(const IDataset&);    // Copy Constructor Not Implemented
+    void operator=(const IDataset&);  // Operator '=' Not Implemented
   
 };
 
-#if 0
+typedef boost::shared_ptr<IDataset>   IDatasetPtr;
+
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-class DoubleArray : public PointerDataTemplate<double>
+class H5MXADataset : public IDataset
 {
-  
   public:
-    DoubleArray() : _value(99.99) {};
-    virtual ~DoubleArray() {};
+    H5MXADataset() {};
+    ~H5MXADataset() {};
+  
+
+     void addAttribute(IDatasetPtr ds)
+     {
+       
+     }
     
-    int doSomething() {std::cout << "doSomething<double>" << std::endl; return 1; }
-    int doSomethingElse(double value) { this->_value = value; return -1; }
-    double   getValue() { return _value; }
-    int   writeData()
-    {
-      std::cout << "Writing Double..." << std::endl;
-      return 1;
-    }
-    
+     int32 writeToFile(IDataFilePtr dataFile)
+     {
+       
+     }
+     
+     
   private:
-    double _value;
-    DoubleArray(const DoubleArray&);    // Copy Constructor Not Implemented
-    void operator=(const DoubleArray&);  // Operator '=' Not Implemented
+
+    
+    H5MXADataset(const H5MXADataset&);    // Copy Constructor Not Implemented
+    void operator=(const H5MXADataset&);  // Operator '=' Not Implemented
 };
-#endif
-
-typedef PointerDataTemplate<double> DoubleArray;
 
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+class H5MXAAttribute : public IDataset
+{
+  public:
+    H5MXAAttribute() {};
+    ~H5MXAAttribute() {};
+  
+
+     int32 writeToFile(IDataFilePtr dataFile)
+     {
+       std::cout << getRank() << std::endl;
+       
+     }
+     
+     
+  private:
+    
+    H5MXAAttribute(const H5MXAAttribute&);    // Copy Constructor Not Implemented
+    void operator=(const H5MXAAttribute&);  // Operator '=' Not Implemented
+};
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
 int main(int argc, char **argv) 
 {
-//  DoubleArray da;
-//  da.doSomething();
-//  double val = da.getValue();
-//  std::cout << "val: " << val << std::endl;
-  double md[20];
-  double* data = static_cast<double*>(malloc(60 * sizeof(double)));
-  std::cout << "ptr: " << data << std::endl;
-  boost::shared_ptr<double> dblPtr(data);
-  SuperClass* sc = new DoubleArray(dblPtr);
-  sc->writeData();
-  double* dd = static_cast<double*>(sc->getVoidPointer());
-  std::cout << "dd: " << dd << std::endl;
+  H5MXADataset* h5ds = new H5MXADataset;
+  IDatasetPtr ds (h5ds);
+  IDatasetPtr attr (new H5MXAAttribute);
   
+  h5ds->addAttribute(attr);
   
   return EXIT_SUCCESS;
 }

@@ -11,7 +11,9 @@
 #ifndef _H5STRINGATTRIBUTE_H_
 #define _H5STRINGATTRIBUTE_H_
 
-#include <Dataset/IAbstractAttribute.h>
+#include <Common/DLLExport.h>
+#include <Base/IFileWriter.h>
+#include <Base/IFileReader.h>
 
 /**
  * @class H5StringAttribute H5StringAttribute.h Dataset/H5StringAttribute.h
@@ -19,23 +21,23 @@
  * HDF5 file.
  * @author Mike Jackson
  * @date Dec 28, 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @header
  */
-class MXA_EXPORT H5StringAttribute : public IAbstractAttribute
+class MXA_EXPORT H5StringAttribute : public IFileWriter, public IFileReader
 {
 
 public:
   /**
-   * @brief Static 'New' method that is used to create a new instance of this class
+   * @brief Protect this constructor so that the user MUST use the Static New Method
    * @param datasetPath The path to the dataset
    * @param key The name of the attribute
    * @param value The actual value of the attribute. A copy WILL be made
-   * @return Boost Shared Pointer wrapped instance of H5StringAttribute
    */
-  static IAbstractAttributePtr New( const std::string &datasetPath,
-                                    const std::string &key,
-                                    const std::string &value);
+  H5StringAttribute(const std::string &path,
+                    const std::string &key,
+                    const std::string &value);
+  
   
   virtual ~H5StringAttribute();
   
@@ -52,16 +54,8 @@ public:
 
 private:
   std::string _value;
-  
-  /**
-   * @brief Protect this constructor so that the user MUST use the Static New Method
-   * @param datasetPath The path to the dataset
-   * @param key The name of the attribute
-   * @param value The actual value of the attribute. A copy WILL be made
-   */
-  H5StringAttribute(const std::string &path,
-                    const std::string &key,
-                    const std::string &value);
+  std::string _datasetPath;
+  std::string _key;
   
   
   H5StringAttribute(const H5StringAttribute&);   //Copy Constructor Not Implemented

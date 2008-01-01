@@ -6,7 +6,7 @@
 #include <HDF5/H5DataModelWriter.h>
 #include <HDF5/H5DataModelReader.h>
 #include <HDF5/H5Utilities.h>
-#include <Dataset/IAbstractDataset.h>
+#include <Dataset/IDataset.h>
 
 //-- Boost Filesystem Headers
 #include <boost/filesystem/operations.hpp>
@@ -325,7 +325,7 @@ int32 H5MXADataFile::_readDataModel()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::writeData(const IAbstractDatasetPtr dataset)
+int32 H5MXADataFile::writeData(const IDatasetPtr dataset)
 {
   return dataset->writeToFile(this->_weakPtr.lock() );
 }
@@ -333,7 +333,7 @@ int32 H5MXADataFile::writeData(const IAbstractDatasetPtr dataset)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::readData(const IAbstractDatasetPtr dataset)
+int32 H5MXADataFile::readData(const IDatasetPtr dataset)
 {
 #warning IMPLEMENT THIS !!!!!!!!!!!
   return -1;

@@ -46,8 +46,11 @@ class ImportDelegateManager;
 class H5TiffImportDelegateFactory;
 class IStringSection;
 
-class IAbstractDataset;
-class IAbstractAttribute;
+// class IAbstractDataset;
+// class IAbstractAttribute;
+class IDataset;
+class IDataArray;
+
 
 typedef  boost::shared_ptr<MXADataModel>           MXADataModelPtr;
 typedef  boost::shared_ptr<IDataModel>             IDataModelPtr;
@@ -56,9 +59,13 @@ typedef boost::shared_ptr<IDataFile>                IDataFilePtr;
 typedef boost::shared_ptr<IFileReader>              IFileReaderPtr;
 typedef boost::shared_ptr<IFileWriter>              IFileWriterPtr;
 
-typedef boost::shared_ptr<IAbstractDataset>         IAbstractDatasetPtr;
-typedef boost::shared_ptr<IAbstractAttribute>       IAbstractAttributePtr;
-typedef std::vector<IAbstractAttributePtr>          IAbstractAttributes;
+//typedef boost::shared_ptr<IAbstractDataset>         IAbstractDatasetPtr;
+//typedef boost::shared_ptr<IAbstractAttribute>       IAbstractAttributePtr;
+//typedef std::vector<IAbstractAttributePtr>          IAbstractAttributes;
+typedef boost::shared_ptr<IDataset>                 IDatasetPtr;
+typedef boost::shared_ptr<IDataArray>               IDataArrayPtr;
+
+
 
 typedef  boost::shared_ptr<MXAAttribute>           MXAAttributePtr;
 typedef  boost::shared_ptr<IAttribute>             IAttributePtr;

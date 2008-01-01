@@ -15,9 +15,10 @@
  * @file MXATypes.h
  * @brief Contains the typedefs for all the common integer and floating point
  * prinitives that are used in the MXA Code Base
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 
+#include <MXAConfiguration.h>
 
 // C++ Includes
 #include <vector>
@@ -123,6 +124,13 @@
   typedef double              float64;
 #endif
 
+#if defined (SIZEOF_SIZE_T) && (SIZEOF_SIZE_T == 4)
+  typedef int32 mxaIdType;
+#elif defined (SIZEOF_SIZE_T) && (SIZEOF_SIZE_T == 8)
+  typedef int64 mxaIdType;
+#else 
+#error Size of size_t and ssize_t could not be determined or did not match each other
+#endif
 
 #define MXA_UINT8_TYPE 1
 #define MXA_INT8_TYPE  2
