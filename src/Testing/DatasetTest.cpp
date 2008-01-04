@@ -85,7 +85,7 @@ template<typename T>
 void MakeAttribute(const std::string &dsPath, IDatasetPtr dataset)
 {
   int32 numElements = 4;
-  T value;
+  T value = 0xFF;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
   attributeKey = "H5Attribute<" + attributeKey + ">";
   
