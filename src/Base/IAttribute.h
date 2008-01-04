@@ -8,8 +8,8 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _IMXAATTRIBUTE_H_
-#define _IMXAATTRIBUTE_H_
+#ifndef _IAttribute_H_
+#define _IAttribute_H_
 
 #include <Common/DLLExport.h>
 #include <Common/MXATypeDefs.h>
@@ -25,7 +25,7 @@ class IAttributeWriter;
  * templated.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *  
  */
 class MXA_EXPORT IAttribute 
@@ -74,4 +74,4 @@ class MXA_EXPORT IAttribute
     void operator=(const IAttribute&); //Not Implemented
 };
 
-#endif /*_IMXAATTRIBUTE_H_*/
+#endif /*_IAttribute_H_*/

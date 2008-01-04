@@ -66,6 +66,8 @@ SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Core/MXADataModel.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataSource.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataImport.cpp
+  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractAttribute.cpp
+  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractData.cpp
   ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.cpp
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.cpp
   ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathIndexSection.cpp
@@ -99,6 +101,12 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Base/IDataSource.h
   ${MXA_SOURCE_DIR}/src/Base/IFileIODelegate.h
   ${MXA_SOURCE_DIR}/src/Base/INode.h
+  ${MXA_SOURCE_DIR}/src/Base/IFileReader.h
+  ${MXA_SOURCE_DIR}/src/Base/IFileWriter.h
+  ${MXA_SOURCE_DIR}/src/Base/IAbstractDataArray.h
+  ${MXA_SOURCE_DIR}/src/Base/IAbstractDataset.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataFileIO.h
+  ${MXA_SOURCE_DIR}/src/Base/IDataset.h
   ${MXA_SOURCE_DIR}/src/Core/AttributeHelpers.h
   ${MXA_SOURCE_DIR}/src/Core/MXAAttribute.h
   ${MXA_SOURCE_DIR}/src/Core/MXAConstants.h
@@ -107,6 +115,8 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Core/MXADataModel.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataSource.h
+  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractAttribute.h
+  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractData.h
   ${MXA_SOURCE_DIR}/src/Utilities/StringUtils.h
   ${MXA_SOURCE_DIR}/src/Utilities/IStringSection.h
   ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathIndexSection.h
@@ -116,11 +126,6 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.h
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.h
   ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpHeaders.h
-  ${MXA_SOURCE_DIR}/src/Base/IFileReader.h
-  ${MXA_SOURCE_DIR}/src/Base/IFileWriter.h
-  ${MXA_SOURCE_DIR}/src/Dataset/IDataArray.h
-  ${MXA_SOURCE_DIR}/src/Dataset/IDataset.h
-  ${MXA_SOURCE_DIR}/src/Dataset/IDataArrayTemplate.h
 )
 
 #--------- XML Sources ---------------------------------------------------
@@ -161,8 +166,9 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.cpp
-    ${MXA_SOURCE_DIR}/src/Dataset/H5StringDataset.cpp
-    ${MXA_SOURCE_DIR}/src/Dataset/H5StringAttribute.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringData.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringAttribute.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataset.cpp
   )
   
   SET(MXA_HDF5_HEADERS
@@ -177,9 +183,11 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.h
-    ${MXA_SOURCE_DIR}/src/Dataset/H5DataArrayTemplate.hxx
-    ${MXA_SOURCE_DIR}/src/Dataset/H5StringDataset.h
-    ${MXA_SOURCE_DIR}/src/Dataset/H5StringAttribute.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5AttributeArrayTemplate.hpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5DataArrayTemplate.hpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringData.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringAttribute.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataset.h
   )
   
   SET(HDF5_SUPPORT "1")
