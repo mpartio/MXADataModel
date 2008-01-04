@@ -16,11 +16,11 @@
 
 
 /**
-* @class H5AttributeArrayTemplate H5AttributeArrayTemplate.h PathToHeader/H5AttributeArrayTemplate.h
+* @class H5AttributeArrayTemplate H5AttributeArrayTemplate.hpp PathToHeader/H5AttributeArrayTemplate.hpp
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 template<typename T>
 class H5AttributeArrayTemplate : public MXAAbstractAttribute
@@ -29,9 +29,9 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
    
 /**
  * @brief Static constructor
- * @param datasetPath
- * @param attributeKey
- * @param numElements
+ * @param datasetPath The path to the dataset in the HDF5 file
+ * @param attributeKey The string name of the attribute
+ * @param numElements The number of elements in the internal array.
  * @return Boost::Shared_Ptr wrapping an instance of H5AttributeArrayTemplateTemplate<T>
  */
     static MXAAbstractAttributePtr CreateAbstractAttributeArray(const std::string &datasetPath, const std::string &attributeKey, mxaIdType numElements)
@@ -46,10 +46,11 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
     }
     
 /**
- * @brief
- * @param datasetPath
- * @param attributeKey
- * @param numElements
+ * @brief Static construction of H5AttributeArrayTemplate objects. YOU are 
+ * responsible for cleaning up the memory that this method creates.
+ * @param datasetPath The path to the dataset in the HDF5 file
+ * @param attributeKey The string name of the attribute
+ * @param numElements The number of elements in the internal array.
  * @return
  */
     static H5AttributeArrayTemplate<T>* New(const std::string &datasetPath, const std::string &attributeKey, mxaIdType numElements)
@@ -251,12 +252,12 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
     
     
   protected:  
-    /**    
-     * @brief
-     * @param datasetPath
-     * @param attributeKey
-     * @param numElements
-     * @param takeOwnership
+/**    
+ * @brief Protected Constructor
+ * @param datasetPath The path to the dataset in the HDF5 file
+ * @param attributeKey The string name of the attribute
+ * @param numElements The number of elements in the internal array.
+ * @param takeOwnership Will the class clean up the memory. Default=true
      */
       H5AttributeArrayTemplate(const std::string &datasetPath, const std::string &attributeKey, mxaIdType numElements, bool takeOwnership = true) :
         _datasetPath(datasetPath),

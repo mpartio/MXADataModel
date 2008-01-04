@@ -58,7 +58,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.39 $
+ * @version $Revision: 1.40 $
  */
 class H5Lite
 {
@@ -504,8 +504,9 @@ static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id,
  * @param loc_id The Parent Location of the HDFobject that is getting the attribute
  * @param objName The Name of Object to write the attribute into.
  * @param attrName The Name of the Attribute
- * @param dims The Dimensions of the data set
- * @param data The Attribute Data to write
+ * @param rank The number of dimensions in the attribute data
+ * @param dims The Dimensions of the attribute data
+ * @param data The Attribute Data to write as a pointer
  * @return Standard HDF Error Condition
  *  
  */
@@ -518,7 +519,6 @@ static herr_t writePointerAttribute(hid_t loc_id,
                              T* data)
 {
   hid_t      obj_id, sid, attr_id;
-  //hsize_t    dim_size = data.size();
   int32        has_attr;
   H5G_stat_t statbuf;
   herr_t err = 0;
@@ -737,7 +737,8 @@ static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
 
 
 /**
- * @brief
+ * @brief Writes attributes that all have a data type of STRING. The first value
+ * in each set is the key, the second is the actual value of the attribute.
  * @param loc_id The location to look for objName
  * @param objName The Object to write the attribute to
  * @param attributes
@@ -1189,12 +1190,12 @@ static herr_t  readScalarAttribute(hid_t loc_id,
 } 
 
 /**
- * @brief
+ * @brief Reads the Attribute into a pre-allocated pointer
  * @param loc_id
- * @param objName
- * @param attrName
- * @param data
- * @return
+ * @param objName The name of the dataset
+ * @param attrName The name of the Attribute
+ * @param data The preallocated memory for the variable to be stored into
+ * @return Standard HDF5 error condition
  */
 template <typename T>
 static herr_t readPointerAttribute(hid_t loc_id, 

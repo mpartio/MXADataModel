@@ -23,7 +23,7 @@
 * methods to meet my specific needs.
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT IAbstractDataArray : public IDataFileIO
 {
@@ -31,11 +31,41 @@ class MXA_EXPORT IAbstractDataArray : public IDataFileIO
     IAbstractDataArray() {}
     virtual ~IAbstractDataArray() {}
     
+    /**
+     * @brief Makes this class responsible for freeing the memory
+     */
     virtual void takeOwnership () = 0;
+    
+    /**
+     * @brief This class will NOT free the memory associated with the internal pointer. 
+     * This can be useful if the user wishes to keep the data around after this
+     * class goes out of scope.
+     */
     virtual void releaseOwnership () = 0;
+    
+    /**
+     * @brief Returns a void pointer pointing to the index of the array. NULL 
+     * pointers are entirely possible. No checks are performed to make sure 
+     * the index is with in the range of the internal data array.
+     * @param i The index to have the returned pointer pointing to.
+     * @return Void Pointer. Possibly NULL.
+     */
     virtual void* getVoidPointer ( mxaIdType i) = 0;
+    
+    /**
+     * @brief Returns the number of elements in the internal array.
+     */
     virtual mxaIdType getNumberOfElements () = 0;
+    
+    /**
+     * Returns the number of dimensions the data has.
+     */
     virtual int32 getNumberOfDimensions () = 0;
+    
+    /**
+     * @brief Returns an enumerated type that can be used to find out the type
+     * of primitive stored in the internal array.
+     */
     virtual int32 getDataType () = 0;
       
   protected:  

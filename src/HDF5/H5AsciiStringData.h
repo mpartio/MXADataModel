@@ -16,11 +16,11 @@
 
 
 /**
-* @class H5AsciiAttribute H5AsciiAttribute.h HDF5/H5AsciiAttribute.h
+* @class H5AsciiStringData H5AsciiStringData.h HDF5/H5AsciiStringData.h
 * @brief 
 * @author mjackson
 * @date Jan 4, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT H5AsciiStringData : public H5DataArrayTemplate<uint8>
 {

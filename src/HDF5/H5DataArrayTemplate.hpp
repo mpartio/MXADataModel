@@ -23,7 +23,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 template<typename T>
 class H5DataArrayTemplate : public MXAAbstractData
@@ -32,8 +32,8 @@ class H5DataArrayTemplate : public MXAAbstractData
    
 /**
  * @brief Static constructor
- * @param datasetPath
- * @param numElements
+ * @param datasetPath The path to the dataset in the HDF5 file
+ * @param numElements The number of elements in the internal array.
  * @return Boost::Shared_Ptr wrapping an instance of H5DataArrayTemplateTemplate<T>
  */
    static MXAAbstractDataPtr CreateAbstractDataArray(const std::string &datasetPath, mxaIdType numElements)
@@ -48,10 +48,11 @@ class H5DataArrayTemplate : public MXAAbstractData
    }
     
 /**
- * @brief
- * @param datasetPath
- * @param numElements
- * @return
+ * @brief Constructs a new H5DataArrayTemplate pointer. This is a raw pointer which 
+ * makes YOU responsible to 'delete'ing the memory
+ * @param datasetPath The path to the dataset in the HDF5 file
+ * @param numElements The number of elements in the internal array.
+ * @return raw pointer to an new instance of H5DataArrayTemplate
  */
    static H5DataArrayTemplate<T>* New(const std::string &datasetPath, mxaIdType numElements)
    {
@@ -242,12 +243,12 @@ class H5DataArrayTemplate : public MXAAbstractData
     
     
   protected:  
-    /**    
-     * @brief
-     * @param datasetPath
-     * @param numElements
-     * @param takeOwnership
-     */
+/**    
+ * @brief Protected Constructor
+ * @param datasetPath The path to the dataset in the HDF5 file
+ * @param numElements The number of elements in the internal array.
+ * @param takeOwnership Will the class clean up the memory. Default=true
+ */
       H5DataArrayTemplate(const std::string &datasetPath, mxaIdType numElements, bool takeOwnership = true) :
         _datasetPath(datasetPath),
         _data(NULL),
@@ -257,8 +258,8 @@ class H5DataArrayTemplate : public MXAAbstractData
         
 
     /**
-     * @brief
-     * @return
+     * @brief Allocates memory for the internal array
+     * @return -1 failure, 1 success.
      */
         int32 _allocate()
         {
@@ -279,9 +280,11 @@ class H5DataArrayTemplate : public MXAAbstractData
           return 1;
         }
         
-    // -----------------------------------------------------------------------------
-    //  
-    // -----------------------------------------------------------------------------
+/**
+ * @brief Resizes and/or extends the internal memory
+ * @param size The number of elements to resize the internal array to
+ * @return Pointer to the new array
+ */
       virtual T* _resizeAndExtend(mxaIdType size)
         {
           T* newArray;

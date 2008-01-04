@@ -24,7 +24,7 @@ typedef boost::shared_ptr<MXAAbstractAttribute>    MXAAbstractAttributePtr;
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class IAbstractDataset : public IDataFileIO 
 {
@@ -32,11 +32,34 @@ class IAbstractDataset : public IDataFileIO
     IAbstractDataset() {}
     virtual ~IAbstractDataset() {}
     
+    /**
+     * @brief Sets the AbstractData shared pointer
+     * @param dataPtr A MXAAbstractDataPtr object
+     */
     virtual setData(MXAAbstractDataPtr dataPtr) = 0;
+   
+    /**
+     * @brief Returns the MXAAbstractDataPtr object
+     */
     virtual MXAAbstractDataPtr getData() = 0;
     
+    /**
+     * @brief Adds an attribute to the data set
+     * @param attribute The attribute to add to the data set.
+     */
     virtual addAttribute(MXAAbstractAttributePtr attribute) = 0;
+    
+    /**
+     * @brief Removes an attribute from the data set
+     * @param attributeKey The Attribute to remove based on its 'key' value
+     */
     virtual removeAttribute(const std::string &attributeKey) = 0;
+    
+    /**
+     * @brief Returns an Attribute from the dataset
+     * @param attributeKey The Attribute to return based on its 'key' value. If
+     * the attribute is not found then a NULL wrapped pointer is returned.
+     */
     virtual getAttribute (const std::string &attributeKey) = 0;
         
   protected:  

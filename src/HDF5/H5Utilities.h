@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  */
 class H5Utilities
 {
@@ -245,14 +245,22 @@ public:
                                                 IDataRecordPtr record);
  
  /**
- * @brief
- * @param dataFile
- * @param datasetPath
+ * @brief Reads a dataset from an HDF5 data file into a newly allocated MXAAbstractData
+ * derived object.
+ * @param dataFile The IDataFile object to read from
+ * @param datasetPath The internal HDF5 path to the data, relative to the root of the data file
  * @return
  */
   static MXAAbstractDataPtr readDataArray(IDataFilePtr dataFile, const std::string &datasetPath);
   
-  
+  /**
+  * @brief Reads an attribute from an HDF5 data file into a newly allocated MXAAbstractAttribute
+  * derived object.
+  * @param dataFile The IDataFile object to read from
+  * @param datasetPath The internal HDF5 path to the data, relative to the root of the data file
+  * @param attributeKey The name of the attribute to read
+  * @return
+  */ 
   static MXAAbstractAttributePtr readAttributeArray(IDataFilePtr dataFile, const std::string &datasetPath, const std::string &attributeKey);
   
   
