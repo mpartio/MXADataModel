@@ -681,7 +681,7 @@ MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::
   size_t attr_size;
   std::string res;
  
-  std::vector<uint64> dims;  //Reusable for the loop
+  std::vector<hsize_t> dims;  //Reusable for the loop
   err = H5Lite::getDatasetInfo(fileId, datasetPath, dims, attr_type, attr_size);
   if (err < 0 )
   {

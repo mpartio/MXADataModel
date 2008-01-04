@@ -23,7 +23,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 template<typename T>
 class H5DataArrayTemplate : public MXAAbstractData
@@ -195,7 +195,7 @@ class H5DataArrayTemplate : public MXAAbstractData
     {
       int32 err = -1;
       int32 rank = this->getNumberOfDimensions();
-      std::vector<hsize_t> dims (1, this->getNumberOfElements() );
+      std::vector<uint64> dims (1, this->getNumberOfElements() );
       err = H5Utilities::createGroupsForDataset(_datasetPath, dataFile->getFileId() );
       if (err < 0)
       {
@@ -220,7 +220,7 @@ class H5DataArrayTemplate : public MXAAbstractData
       size_t attr_size;
       std::string res;
      
-      std::vector<uint64> dims;  //Reusable for the loop
+      std::vector<hsize_t> dims;  //Reusable for the loop
       err = H5Lite::getDatasetInfo(fileId, _datasetPath, dims, attr_type, attr_size);
       if (err < 0 )
       {

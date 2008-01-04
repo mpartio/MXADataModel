@@ -94,14 +94,14 @@ int32 H5AsciiStringData::readFromFile(IDataFilePtr dataFile)
   size_t attr_size;
   std::string res;
 
-  std::vector<uint64> dims; //Reusable for the loop
+  std::vector<hsize_t> dims; //Reusable for the loop
   err = H5Lite::getDatasetInfo(fileId, this->getDatasetPath(), dims, attr_type, attr_size);
   if (err < 0)
   {
     return err;
   }
   mxaIdType numElements = 1;
-  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+  for (std::vector<hsize_t>::size_type i = 0; i < dims.size(); ++i)
   {
     numElements = numElements * dims[i];
   }

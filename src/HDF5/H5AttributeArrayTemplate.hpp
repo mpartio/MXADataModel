@@ -20,7 +20,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 template<typename T>
 class H5AttributeArrayTemplate : public MXAAbstractAttribute
@@ -209,7 +209,7 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
         return -1;
       }
       int32 rank = this->getNumberOfDimensions();
-      std::vector<hsize_t> dims (1, this->getNumberOfElements() );
+      std::vector<uint64> dims (1, this->getNumberOfElements() );
       return H5Lite::writePointerAttribute(dataFile->getFileId(), _datasetPath, _attributeKey, rank, &(dims.front()), this->getPointer(0) );
     }
     
