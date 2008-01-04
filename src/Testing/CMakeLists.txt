@@ -19,6 +19,16 @@ IF (BUILD_TESTING)
     # -------- Dataset Test
     SET (MXADataset_TEST_SRCS
         DatasetTest.cpp
+        ${MXA_SOURCE_DIR}/src/HDF5/H5AttributeArrayTemplate.hpp
+        ${MXA_SOURCE_DIR}/src/HDF5/H5DataArrayTemplate.hpp
+        ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataset.h
+        ${MXA_SOURCE_DIR}/src/Core/MXAAbstractAttribute.h
+        ${MXA_SOURCE_DIR}/src/Core/MXAAbstractData.h
+        ${MXA_SOURCE_DIR}/src/Base/IFileReader.h
+        ${MXA_SOURCE_DIR}/src/Base/IFileWriter.h
+        ${MXA_SOURCE_DIR}/src/Base/IAbstractDataArray.h
+        ${MXA_SOURCE_DIR}/src/Base/IAbstractDataset.h
+        ${MXA_SOURCE_DIR}/src/Base/IDataFileIO.h
     )
     ADD_EXECUTABLE(DatasetTest ${MXADataset_TEST_SRCS})
     TARGET_LINK_LIBRARIES( DatasetTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS})

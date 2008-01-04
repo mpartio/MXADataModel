@@ -6,7 +6,7 @@
 #include <HDF5/H5DataModelWriter.h>
 #include <HDF5/H5DataModelReader.h>
 #include <HDF5/H5Utilities.h>
-#include <Dataset/IDataset.h>
+#include <Base/IDataset.h>
 
 //-- Boost Filesystem Headers
 #include <boost/filesystem/operations.hpp>

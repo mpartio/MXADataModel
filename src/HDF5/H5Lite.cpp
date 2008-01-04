@@ -182,7 +182,54 @@ herr_t H5Lite::findDataset( hid_t loc_id, const std::string& dsetName )
  return ret;
 }
 
+// -----------------------------------------------------------------------------
+//  We assume a null terminated string
+// -----------------------------------------------------------------------------
+herr_t  H5Lite::writeStringDataset (hid_t loc_id, 
+                                    const std::string& dsetName,
+                                    mxaIdType size,
+                                    const char* data)
+{
+  hid_t   did=-1;
+  hid_t   sid=-1;
+  hid_t   tid = -1;
+  //size_t  size = 0;
+  herr_t err = -1;
+  herr_t retErr = 0;
 
+  /* create a string data type */
+  if ( (tid = H5Tcopy( H5T_C_S1 )) >= 0 )
+  {
+    if ( H5Tset_size(tid, size) >= 0 )
+    {
+      if ( H5Tset_strpad(tid, H5T_STR_NULLTERM ) >= 0 )
+      {
+      /* Create the data space for the dataset. */
+        if ( (sid = H5Screate( H5S_SCALAR )) >= 0 )
+        {
+          /* Create the dataset. */
+          if ( (did = H5Dcreate(loc_id, dsetName.c_str(), tid, sid, H5P_DEFAULT)) >= 0 )
+          {
+             if ( NULL != data )
+              {
+                  err = H5Dwrite(did, tid, H5S_ALL, H5S_ALL,H5P_DEFAULT, data );
+                  if (err<0 ) {
+                    std::cout << "Error Writing String Data" << std::endl;
+                    retErr = err;
+                  }
+              }
+          } else {
+            retErr = did;
+          }
+          CloseH5D(did, err, retErr);
+        }
+        CloseH5S(sid, err, retErr);
+      }
+    }
+    CloseH5T(tid, err, retErr);
+  }
+  return retErr;
+}
 
 // -----------------------------------------------------------------------------
 //  Writes a string to a HDF5 dataset
@@ -263,7 +310,94 @@ herr_t H5Lite::writeStringAttributes(hid_t loc_id,
   }
   return err;
 }
-                                     
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+herr_t  H5Lite::writeStringAttribute(hid_t loc_id, 
+                              const std::string& objName, 
+                              const std::string& attrName,
+                              mxaIdType size,
+                              const char* data)
+{
+   hid_t      attr_type;
+   hid_t      attr_space_id;
+   hid_t      attr_id;
+   hid_t      obj_id;
+   int32      has_attr;
+   H5G_stat_t statbuf;
+   size_t     attr_size;
+   herr_t     err = 0;
+   herr_t     retErr = 0;
+
+   /* Get the type of object */
+   retErr = H5Gget_objinfo( loc_id, objName.c_str(), 1, &statbuf );
+   if (retErr >= 0) {
+     /* Open the object */
+     obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
+     if ( obj_id >= 0) {
+       /* Create the attribute */
+       attr_type = H5Tcopy( H5T_C_S1 );
+       if ( attr_type >= 0 ) {
+         attr_size = size; /* extra null term */
+         err = H5Tset_size( attr_type, (size_t)attr_size);
+         if (err<0) {
+           std::cout << "Error Setting H5T Size" << std::endl;
+           retErr = err; 
+         }
+         if ( err >= 0 ) {
+           err = H5Tset_strpad( attr_type, H5T_STR_NULLTERM );
+           if (err<0) {
+             std::cout << "Error adding a null terminator." << std::endl;
+             retErr = err; 
+           }
+           if ( err >= 0 )  {
+             attr_space_id = H5Screate( H5S_SCALAR );
+             if ( attr_space_id >= 0 ) {
+               /* Verify if the attribute already exists */
+               has_attr = H5Lite::findAttribute( obj_id, attrName );
+               /* The attribute already exists, delete it */
+               if ( has_attr == 1 )
+               {
+                 err = H5Adelete( obj_id, attrName.c_str() );
+                 if (err<0) {
+                   std::cout << "Error Deleting Attribute '" << attrName << "' from Object '" <<  objName << "'" << std::endl;
+                   retErr = err;
+                 }
+               }
+               if (err >= 0) {
+                 /* Create and write the attribute */
+                 attr_id = H5Acreate( obj_id, attrName.c_str(), attr_type, attr_space_id, H5P_DEFAULT );
+                 if ( attr_id >= 0 ) {
+                   err = H5Awrite( attr_id, attr_type, data );
+                   if ( err < 0 ) {
+                     std::cout << "Error Writing String attribute." << std::endl;\
+                     retErr = err;
+                   }
+                 }
+                 CloseH5A(attr_id, err, retErr);
+               }
+               CloseH5S(attr_space_id, err, retErr);
+             }
+           }
+         }
+         CloseH5T(attr_type, err, retErr);
+       }
+       else
+       {
+         retErr = attr_type;
+       }
+       /* Close the object */
+       err = H5Lite::closeId( obj_id, statbuf.type );
+       if (err < 0) {
+         std::cout << "Error Closing Object Id" << std::endl;
+         retErr = err;
+       }
+     }
+   }
+   return retErr;
+}
+
 // -----------------------------------------------------------------------------
 //  Writes a string to an HDF5 Attribute
 // -----------------------------------------------------------------------------
@@ -272,6 +406,9 @@ herr_t H5Lite::writeStringAttribute(hid_t loc_id,
                                  const std::string& attrName, 
                                  const std::string& data )
 {
+  
+  return H5Lite::writeStringAttribute(loc_id, objName, attrName, data.size()+ 1, data.data() );
+#if 0
   hid_t      attr_type;
   hid_t      attr_space_id;
   hid_t      attr_id;
@@ -348,6 +485,7 @@ herr_t H5Lite::writeStringAttribute(hid_t loc_id,
     }
   }
   return retErr;
+#endif
 }
 
 // -----------------------------------------------------------------------------

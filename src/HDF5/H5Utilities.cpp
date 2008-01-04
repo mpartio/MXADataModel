@@ -3,6 +3,10 @@
 #include <Base/IDataRecord.h>
 #include <HDF5/H5Utilities.h>
 #include <HDF5/H5Lite.h>
+#include <HDF5/H5DataArrayTemplate.hpp>
+#include <HDF5/H5AttributeArrayTemplate.hpp>
+#include <HDF5/H5AsciiStringAttribute.h>
+#include <HDF5/H5AsciiStringData.h>
 #include <Utilities/StringUtils.h>
 #include <Common/LogTime.h>
 
@@ -487,7 +491,6 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPa
 }
 
 
-
 // Returns a std::map with all of the attributes for obj_name 
 //  and their attribute values in a std::string std::map
 std::map<std::string, std::string> H5Utilities::getAttributesMap(hid_t loc_id, const std::string &obj_name)
@@ -658,4 +661,181 @@ bool H5Utilities::isGroup(hid_t nodeId, const std::string &objName)   {
    path = path + record->generatePath();
    return path;
  }
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::string &datasetPath)
+{
+  MXAAbstractDataPtr ptr;
+  hid_t fileId = dataFile->getFileId();
+  if (fileId < 0)
+  {
+    return ptr;
+  }
+  herr_t err = -1;
+  herr_t retErr = 1;
+  hid_t typeId = -1;
+  H5T_class_t attr_type;
+  size_t attr_size;
+  std::string res;
+ 
+  std::vector<uint64> dims;  //Reusable for the loop
+  err = H5Lite::getDatasetInfo(fileId, datasetPath, dims, attr_type, attr_size);
+  if (err < 0 )
+  {
+    return ptr;
+  }
+  mxaIdType numElements = 1;
+  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+  {
+    numElements = numElements * dims[i];
+  }
+  typeId = H5Lite::getDatasetType(fileId, datasetPath);
+  if (typeId < 0)
+  {
+    return ptr;
+  }
+  
+  switch(attr_type) 
+  {
+  case H5T_STRING:
+    res.clear(); //Clear the string out first
+    err = H5Lite::readStringDataset(fileId, datasetPath, res );
+    if (err >= 0) {
+      ptr = H5AsciiStringData::New(datasetPath, res);
+    }
+    break;
+  case H5T_INTEGER:
+    //std::cout << "User Meta Data Type is Integer" << std::endl;
+    if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
+      ptr = H5DataArrayTemplate<uint8>::CreateAbstractDataArray(datasetPath, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
+       ptr = H5DataArrayTemplate<uint16>::CreateAbstractDataArray(datasetPath, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
+       ptr = H5DataArrayTemplate<uint32>::CreateAbstractDataArray(datasetPath, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
+       ptr = H5DataArrayTemplate<uint64>::CreateAbstractDataArray(datasetPath, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
+       ptr = H5DataArrayTemplate<int8>::CreateAbstractDataArray(datasetPath, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
+       ptr = H5DataArrayTemplate<int16>::CreateAbstractDataArray(datasetPath, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
+       ptr = H5DataArrayTemplate<int32>::CreateAbstractDataArray(datasetPath, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
+       ptr = H5DataArrayTemplate<int64>::CreateAbstractDataArray(datasetPath, numElements);
+    } else {
+      std::cout << "Unknown Type: " << typeId << " at " <<  datasetPath << std::endl;
+      err = -1;
+      retErr = -1;
+    }
+    break;
+  case H5T_FLOAT:
+    if (attr_size == 4) {
+      ptr = H5DataArrayTemplate<float32>::CreateAbstractDataArray(datasetPath, numElements);
+    } else if (attr_size == 8 ) {
+      ptr = H5DataArrayTemplate<float64>::CreateAbstractDataArray(datasetPath, numElements);
+    } else {
+      std::cout << "Unknown Floating point type" << std::endl;
+      err = -1;
+      retErr = -1;
+    }
+    break;
+  default:
+    std::cout << "Error: H5Utilities::readDatasetArray() Unknown attribute type: " << attr_type << std::endl;
+    H5Utilities::printHDFClassType(attr_type);
+  }
+  CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
+  if (ptr.get() != NULL)
+  {
+    ptr->readFromFile(dataFile);
+  }
+  return ptr;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+MXAAbstractAttributePtr H5Utilities::readAttributeArray(IDataFilePtr dataFile, const std::string &datasetPath, const std::string &attributeKey)
+{
+  MXAAbstractAttributePtr ptr;
+  hid_t fileId = dataFile->getFileId();
+  if (fileId < 0)
+  {
+    return ptr;
+  }
+  herr_t err = -1;
+  herr_t retErr = 1;
+  hid_t typeId = -1;
+  H5T_class_t attr_type;
+  size_t attr_size;
+  std::string res;
+ 
+  std::vector<uint64> dims;  //Reusable for the loop
+  err = H5Lite::getAttributeInfo(fileId, datasetPath, attributeKey, dims, attr_type, attr_size, typeId);
+  if (err < 0 )
+  {
+    return ptr;
+  }
+  mxaIdType numElements = 1;
+  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+  {
+    numElements = numElements * dims[i];
+  }  
+  switch(attr_type) 
+  {
+  case H5T_STRING:
+    res.clear(); //Clear the string out first
+    err = H5Lite::readStringDataset(fileId, datasetPath, res );
+    if (err >= 0) {
+      ptr = H5AsciiStringAttribute::New(datasetPath, attributeKey, res);
+    }
+    break;
+  case H5T_INTEGER:
+    //std::cout << "User Meta Data Type is Integer" << std::endl;
+    if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
+      ptr = H5AttributeArrayTemplate<uint8>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
+       ptr = H5AttributeArrayTemplate<uint16>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
+       ptr = H5AttributeArrayTemplate<uint32>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
+       ptr = H5AttributeArrayTemplate<uint64>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
+       ptr = H5AttributeArrayTemplate<int8>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
+       ptr = H5AttributeArrayTemplate<int16>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
+       ptr = H5AttributeArrayTemplate<int32>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+     } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
+       ptr = H5AttributeArrayTemplate<int64>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+    } else {
+      std::cout << DEBUG_OUT(logTime) << "Unknown Integer Type: " << typeId << " for attribute:'" << attributeKey << "' for dataset:'" <<  datasetPath <<"'" << std::endl;
+      err = -1;
+      retErr = -1;
+    }
+    break;
+  case H5T_FLOAT:
+    if (attr_size == 4) {
+      ptr = H5AttributeArrayTemplate<float32>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+    } else if (attr_size == 8 ) {
+      ptr = H5AttributeArrayTemplate<float64>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+    } else {
+      std::cout << DEBUG_OUT(logTime) << "Unknown Floating point type: " << typeId << " for attribute:'" << attributeKey << "' for dataset:'" <<  datasetPath <<"'" << std::endl;
+      err = -1;
+      retErr = -1;
+    }
+    break;
+  default:
+    std::cout << DEBUG_OUT(logTime) << "Error: H5Utilities::readAttributeArray()\n\t\t\t\t Unknown attribute_type:'" << attr_type << "' for typeId:'" << typeId << "' for attribute:'" << attributeKey << "' for dataset:'" <<  datasetPath <<"'" << std::endl;
+    H5Utilities::printHDFClassType(attr_type);
+  }
+  CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
+  if (ptr.get() != NULL)
+  {
+    ptr->readFromFile(dataFile);
+  }
+  return ptr;
+}
 

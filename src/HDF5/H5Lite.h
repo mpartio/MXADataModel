@@ -58,7 +58,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.38 $
+ * @version $Revision: 1.39 $
  */
 class H5Lite
 {
@@ -175,7 +175,7 @@ static hid_t HDFTypeForPrimitive(T value)
   
   std::cout << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
   if (typeid(value).name() == "l" ) {
-    std::cout << "You are using 'long int' as a type which is not 32/64 bit safe. Suggest you use one of the MXATypes defined in <Headers/MXATypes.h> such as int32 or uint32." << std::endl;
+    std::cout << "You are using 'long int' as a type which is not 32/64 bit safe. Suggest you use one of the MXATypes defined in <Common/MXATypes.h> such as int32 or uint32." << std::endl;
   }
   return -1;
 }
@@ -485,6 +485,19 @@ static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id,
                                         const std::string& dsetName, 
                                         const std::string& data);
 
+/**
+ * @brief Writes a null terminated 'C String' to an HDF Dataset.
+ * @param loc_id The Parent location to write the dataset
+ * @param dsetName The Name to use for the dataset
+ * @param data const char pointer to write as a null terminated string
+ * @param size The number of characters in the string
+ * @return Standard HDF5 error conditions
+ */
+static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id, 
+                                        const std::string& dsetName,
+                                        mxaIdType size,
+                                        const char* data);
+
 
 /**
  * @brief Writes an Attribute to an HDF5 Object
@@ -707,9 +720,29 @@ static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
                               const std::string& objName, 
                               const std::string& attrName, 
                               const std::string& data);
+/**
+ * @brief Writes a null terminated string as an attribute
+ * @param loc_id The location to look for objName
+ * @param objName The Object to write the attribute to
+ * @param attrName The name of the Attribute
+ * @param size The number of characters  in the string
+ * @param data pointer to a const char array
+ * @return Standard HDF error conditions
+ */
+static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id, 
+                              const std::string& objName, 
+                              const std::string& attrName,
+                              mxaIdType size,
+                              const char* data);
 
 
-
+/**
+ * @brief
+ * @param loc_id The location to look for objName
+ * @param objName The Object to write the attribute to
+ * @param attributes
+ * @return Standard HDF error conditions
+ */
 static MXA_EXPORT herr_t writeStringAttributes(hid_t loc_id,
                                      const std::string &objName,
                                      const std::map<std::string, std::string> &attributes);
@@ -1156,6 +1189,68 @@ static herr_t  readScalarAttribute(hid_t loc_id,
 } 
 
 /**
+ * @brief
+ * @param loc_id
+ * @param objName
+ * @param attrName
+ * @param data
+ * @return
+ */
+template <typename T>
+static herr_t readPointerAttribute(hid_t loc_id, 
+                            const std::string& objName, 
+                            const std::string& attrName,
+                            T* data)
+{
+  /* identifiers */
+  hid_t      obj_id;
+  H5G_stat_t statbuf;
+  herr_t err = 0;
+  herr_t retErr = 0;
+  hid_t attr_id;
+  T test = 0x00;
+  hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
+  if (dataType == -1)
+  {
+    return -1;
+  }
+  //std::cout << "   Reading Vector Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
+  /* Get the type of object */
+  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
+  if (err<0)
+    return err;
+  /* Open the object */
+  obj_id = H5Lite::openId( loc_id, objName, statbuf.type); 
+  if ( obj_id >= 0)
+  {
+    attr_id = H5Aopen_name( obj_id, attrName.c_str() );
+    if ( attr_id >= 0 ) 
+    {
+      err = H5Aread( attr_id, dataType, data);
+      if ( err < 0 ) {
+        std::cout << "Error Reading Attribute." << err << std::endl;
+        retErr = err;
+      }
+      err = H5Aclose( attr_id );
+      if ( err < 0 ) {
+        std::cout << "Error Closing Attribute" << std::endl;
+        retErr = err;
+      }
+    } 
+    else
+    {
+      retErr = attr_id;
+    }
+    err = H5Lite::closeId( obj_id, statbuf.type );
+    if ( err < 0 ) {
+     std::cout << "Error Closing Object" << std::endl;
+     retErr = err; 
+    }
+  }
+  return retErr;
+}                    
+
+/**
  * @brief Reads a string attribute from an HDF object
  * @param loc_id The Parent object that holds the object to which you want to read an attribute
  * @param objName The name of the object to which the attribute is to be read
@@ -1163,8 +1258,10 @@ static herr_t  readScalarAttribute(hid_t loc_id,
  * @param data The memory to store the data
  * @return Standard HDF Error condition
  */
-static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id, const std::string& objName, const std::string& attrName,
-                              std::string &data);
+static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id, 
+                                             const std::string& objName, 
+                                             const std::string& attrName,
+                                             std::string &data);
 
 /**
  * @brief Returns the number of dimensions for a given attribute

@@ -1,4 +1,13 @@
-
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2008, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef _HDF5AttributeWriter_h_
 #define _HDF5AttributeWriter_h_
 
@@ -10,7 +19,7 @@
 /**
 * @brief Writes Attributes for a dataset to an HDF5 data file
 * @author Mike Jackson
-* @version $Revision: 1.12 $
+* @version $Revision: 1.13 $
 * @date March 2007
 */
 class MXA_EXPORT H5AttributeWriter : public IAttributeWriter

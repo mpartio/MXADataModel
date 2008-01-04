@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  */
 class H5Utilities
 {
@@ -240,8 +240,22 @@ public:
    * @param record The MXADataRecord to generate the path to
    * @return The hdf5 path
    */
-  static std::string generateH5PathToDataset ( IDataModelPtr model, std::vector<int32> &indices,  IDataRecordPtr record);
+  static std::string generateH5PathToDataset (  IDataModelPtr model, 
+                                                std::vector<int32> &indices,  
+                                                IDataRecordPtr record);
  
+ /**
+ * @brief
+ * @param dataFile
+ * @param datasetPath
+ * @return
+ */
+  static MXAAbstractDataPtr readDataArray(IDataFilePtr dataFile, const std::string &datasetPath);
+  
+  
+  static MXAAbstractAttributePtr readAttributeArray(IDataFilePtr dataFile, const std::string &datasetPath, const std::string &attributeKey);
+  
+  
   
 protected:
   H5Utilities() {}; //This is just a bunch of Static methods
