@@ -279,7 +279,6 @@ SET (INSTALL_INCLUDES
   ${MXA_SOURCE_DIR}/src/Common
   ${MXA_SOURCE_DIR}/src/Core
   ${MXA_SOURCE_DIR}/src/DataImport
-  ${MXA_SOURCE_DIR}/src/Dataset
   ${MXA_SOURCE_DIR}/src/HDF5
   ${MXA_SOURCE_DIR}/src/Utilities
   ${MXA_SOURCE_DIR}/src/XML
