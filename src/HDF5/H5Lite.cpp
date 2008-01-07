@@ -736,7 +736,8 @@ herr_t H5Lite::getDatasetInfo( hid_t loc_id,
   {
     /* Get the Number of Dimensions */
     rank = H5Sget_simple_extent_ndims(sid);
-    if ( rank > 0) {
+    if ( rank > 0) 
+    {
      // hsize_t _dims[rank]; // allocate space for the dimensions
       std::vector<hsize_t> _dims(rank, 0);
       /* Get dimensions */
@@ -746,13 +747,19 @@ herr_t H5Lite::getDatasetInfo( hid_t loc_id,
         retErr = err;
       }
       //Copy the dimensions into the dims vector
-        dims.clear(); //Erase everything in the Vector
-        dims.resize(rank);
-        for (hid_t i = 0; i < rank; ++i) 
-        {
-        	dims[i] = static_cast<uint64>(_dims[i]);
-        }
+      dims.clear(); //Erase everything in the Vector
+      dims.resize(rank);
+      for (hid_t i = 0; i < rank; ++i) 
+      {
+      	dims[i] = static_cast<uint64>(_dims[i]);
+      }
       
+    } 
+    else if (classType == H5T_STRING)
+    {
+      dims.clear(); //Erase everything in the Vector
+      dims.resize(1);
+      dims[0] = sizeType;
     }
     /* Terminate access to the dataspace */
     CloseH5S(sid, err, retErr);

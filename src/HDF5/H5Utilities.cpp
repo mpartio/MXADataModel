@@ -687,6 +687,11 @@ MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::
   {
     return ptr;
   }
+  if(dims.size() == 0)
+  {
+    std::cout << "dims.size() == 0. BAD" << std::endl;
+    return ptr;
+  }
   mxaIdType numElements = 1;
   for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
   {
@@ -702,10 +707,7 @@ MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::
   {
   case H5T_STRING:
     res.clear(); //Clear the string out first
-    err = H5Lite::readStringDataset(fileId, datasetPath, res );
-    if (err >= 0) {
-      ptr = H5AsciiStringData::New(datasetPath, res);
-    }
+    ptr = H5AsciiStringData::New(datasetPath, res);
     break;
   case H5T_INTEGER:
     //std::cout << "User Meta Data Type is Integer" << std::endl;
@@ -787,10 +789,7 @@ MXAAbstractAttributePtr H5Utilities::readAttributeArray(IDataFilePtr dataFile, c
   {
   case H5T_STRING:
     res.clear(); //Clear the string out first
-    err = H5Lite::readStringDataset(fileId, datasetPath, res );
-    if (err >= 0) {
-      ptr = H5AsciiStringAttribute::New(datasetPath, attributeKey, res);
-    }
+    ptr = H5AsciiStringAttribute::New(datasetPath, attributeKey, res);
     break;
   case H5T_INTEGER:
     //std::cout << "User Meta Data Type is Integer" << std::endl;

@@ -38,6 +38,11 @@
 
 #define DIM 6
 
+#define CloseH5T(tid, err, retError)\
+  err = H5Tclose(tid);\
+  if (err < 0 ) {std::cout << "Error closing DataType" << std::endl; retErr = err;}
+
+
 
 using namespace MXATypes;
 
@@ -181,6 +186,15 @@ herr_t testMakeDataset(hid_t &file_id, std::string name, T type ) {
     std::cout << " - Failed - Data Read from the file does not match the stored data." << std::endl;
     err = -1;
   }
+  
+  // ******* test the H5Lite::getDatasetInfo
+  H5T_class_t attr_type;
+  size_t attr_size;
+  std::string res;
+ 
+  err = H5Lite::getDatasetInfo(file_id, name, dims, attr_type, attr_size);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(dims.size() != 0);
   return err;
 }
  
@@ -198,14 +212,19 @@ herr_t testMakeStringDataset(hid_t file_id) {
      return err;; 
   }
   std::string rData;
+
+  H5T_class_t attr_type;
+  size_t attr_size;
+  std::string res;
+ 
+  std::vector<hsize_t> dims;  //Reusable for the loop
+  err = H5Lite::getDatasetInfo(file_id, dsetName, dims, attr_type, attr_size);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(dims.size() > 0);
+
   err = H5Lite::readStringDataset(file_id, dsetName, rData);
-  if ( strData == rData) {
-    err = 0;
-   // std::cout << " - Passed" << std::endl;
-  } else {
-    std::cout << " - Failed - Data Read from the file does not match the stored data." << std::endl;
-    err = -1;
-  }
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(strData == rData);
   return err;
 }
 
