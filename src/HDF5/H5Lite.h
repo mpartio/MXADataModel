@@ -58,7 +58,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.41 $
+ * @version $Revision: 1.42 $
  */
 class H5Lite
 {
@@ -1278,6 +1278,18 @@ static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id,
                                              const std::string& attrName,
                                              std::string &data);
 
+/**
+ * @brief Reads a string attribute from an HDF object into a precallocated buffer
+ * @param loc_id The Parent object that holds the object to which you want to read an attribute
+ * @param objName The name of the object to which the attribute is to be read
+ * @param attrName The name of the Attribute to read
+ * @param data The memory to store the data into
+ * @return Standard HDF Error condition
+ */
+static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id, 
+                                   const std::string& objName, 
+                                   const std::string& attrName,
+                                   uint8* data);
 /**
  * @brief Returns the number of dimensions for a given attribute
  * @param loc_id The HDF5 id of the parent group/file for the objName

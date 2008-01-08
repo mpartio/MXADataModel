@@ -616,6 +616,64 @@ herr_t H5Lite::readStringAttribute(hid_t loc_id, const std::string& objName, con
 }
 
 // -----------------------------------------------------------------------------
+//  Reads a string Attribute from the HDF file
+// -----------------------------------------------------------------------------
+herr_t H5Lite::readStringAttribute(hid_t loc_id, 
+                                   const std::string& objName, 
+                                   const std::string& attrName,
+                                   uint8* data)
+{
+  
+ /* identifiers */
+ hid_t      obj_id;
+ H5G_stat_t statbuf;
+ hid_t      attr_id;
+ hid_t      attr_type;
+ herr_t err = 0;
+ herr_t retErr = 0;
+ 
+ HDF_ERROR_HANDLER_OFF;
+ 
+  /* Get the type of object */
+  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
+  if (err<0) {
+    return err;
+  }
+
+  /* Open the object */
+  obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
+  if ( obj_id >= 0)
+  {
+    attr_id = H5Aopen_name( obj_id, attrName.c_str() );
+    if ( attr_id >= 0 )
+    {
+      attr_type = H5Aget_type( attr_id );
+      if ( attr_type >= 0 )
+      {
+        err = H5Aread( attr_id, attr_type, data );
+        if (err < 0) {
+          std::cout << DEBUG_OUT(logTime) << "Error Reading Attribute." << std::endl;
+          retErr = err;
+        } 
+        CloseH5T(attr_type, err, retErr);
+      }  
+      CloseH5A(attr_id, err, retErr);      
+    } 
+    else 
+    {
+      retErr = attr_id;
+    }
+    err = H5Lite::closeId( obj_id, statbuf.type );
+    if (err<0) {
+      std::cout << DEBUG_OUT(logTime) << "Error Closing Object ID" << std::endl;
+      retErr = err;
+    }
+ }
+  HDF_ERROR_HANDLER_ON;
+ return retErr;
+}
+
+// -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
 herr_t H5Lite::getDatasetNDims( hid_t loc_id, const std::string& dsetName, hid_t &rank)

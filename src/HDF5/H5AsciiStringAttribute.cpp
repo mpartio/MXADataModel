@@ -16,17 +16,27 @@ MXAAbstractAttributePtr H5AsciiStringAttribute::New(const std::string &datasetPa
                                                     const std::string &value)
 {
   MXAAbstractAttributePtr ptr;
-  
+  int32 err = 1;
   H5AsciiStringAttribute* d = new H5AsciiStringAttribute(datasetPath, attributeKey, 0);
-  if (d->resize( value.size() ) > 0)
+  std::string::size_type size = value.size();
+  std::string::size_type nullTermSize = size + 1;
+  if (size > 0) // NOT an empty String
   {
-    ptr.reset(d);
-    if (value.size() > 0)
-    {  //copy data into array only if there is something to copy
+    err = d->resize(nullTermSize);
+    if (err > 0) //copy data into array
+    {
       uint8* dest = d->getPointer(0);
       const char* source = value.c_str();
       ::memcpy(dest, source, value.size() + 1 );
     }
+  }
+  if (err >= 0)
+  { // No errors, swap in the pointer
+    ptr.reset(d); 
+  }
+  else
+  {
+    delete d; // Clean up the memory
   }
   return ptr;
 }
@@ -98,27 +108,39 @@ int32 H5AsciiStringAttribute::writeToFile(IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 int32 H5AsciiStringAttribute::readFromFile(IDataFilePtr dataFile)
 {
-  if (dataFile->getFileId() < 0)
+  hid_t fileId = dataFile->getFileId();
+  if (fileId < 0)
   {
     return -1;
   }
   herr_t err = -1;
-
-  std::string resultStr;
-  err = H5Lite::readStringAttribute(dataFile->getFileId(), this->getDatasetPath(), this->getAttributeKey(), resultStr);
-  if (err < 0)
+  herr_t retErr = -1;
+  H5T_class_t attr_type;
+  size_t attr_size;
+  hid_t typeId = -1;
+  
+  std::vector<uint64> dims;  //Reusable for the loop
+   err = H5Lite::getAttributeInfo(fileId, this->getDatasetPath(), this->getAttributeKey(), dims, attr_type, attr_size, typeId);
+   
+   if (err < 0 )
+   {
+     CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
+     return err;
+   }
+   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
+  std::string::size_type size = attr_size;
+  if (size > 0) // NOT an empty String
   {
-    this->initialize();
-    return err;
+    err = this->resize(size);
+    if (err > 0) //copy data into array
+    {
+      uint8* dest = static_cast<uint8*>(this->getVoidPointer(0) );
+      if (NULL != dest) {
+        err = H5Lite::readStringAttribute(fileId, this->getDatasetPath(), this->getAttributeKey(), dest);
+      }
+    }
   }
-  err = this->resize(resultStr.size() );
-  if ( err < 0)
-  {
-    return err;
-  }
-  uint8* dest = static_cast<uint8*>(this->getVoidPointer(0) );
-  const char* source = resultStr.c_str();
-  ::memcpy(dest, source, resultStr.size() );
+  
   return err;
 }
 
