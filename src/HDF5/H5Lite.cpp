@@ -522,6 +522,38 @@ herr_t H5Lite::readStringDataset(hid_t loc_id, const std::string& dsetName, std:
 }
 
 // -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+herr_t H5Lite::readStringDataset(hid_t loc_id,
+                                 const std::string &dsetName,
+                                 uint8* data)
+{
+  hid_t did; // dataset id
+  hid_t tid; //type id
+  herr_t err = 0;
+  herr_t retErr = 0;
+  
+  did = H5Dopen(loc_id, dsetName.c_str() );
+  if (did < 0) {
+    std::cout << "Error Opening Dataset" << std::endl;
+    return -1; 
+  }
+  tid = H5Dget_type(did);
+  if ( tid >= 0 ) {
+    err = H5Dread(did, tid, H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
+    if (err<0) {
+      std::cout << DEBUG_OUT(logTime) << "Error Reading string dataset." << std::endl;
+      retErr = err;
+    }
+    CloseH5T(tid, err, retErr);
+  }
+  CloseH5D(did, err, retErr);
+  return retErr; 
+}
+
+
+
+// -----------------------------------------------------------------------------
 //  Reads a string Attribute from the HDF file
 // -----------------------------------------------------------------------------
 herr_t H5Lite::readStringAttribute(hid_t loc_id, const std::string& objName, const std::string& attrName,

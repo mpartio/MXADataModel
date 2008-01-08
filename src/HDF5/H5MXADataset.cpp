@@ -13,7 +13,7 @@
 IDatasetPtr H5MXADataset::LoadFromFile(IDataFilePtr dataFile, const std::string &datasetPath)
 {
   MXAAbstractDataPtr data = H5Utilities::readDataArray(dataFile, datasetPath);
-  if (NULL == data)
+  if (NULL == data.get() )
   {
     IDatasetPtr ptr;
     return ptr;

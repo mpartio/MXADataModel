@@ -751,7 +751,12 @@ MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
   if (ptr.get() != NULL)
   {
-    ptr->readFromFile(dataFile);
+    err = ptr->readFromFile(dataFile);
+    if (err < 0)
+    {
+      MXAAbstractData* nullData;
+      ptr.reset(nullData); // Swap in a null pointer
+    }
   }
   return ptr;
 }

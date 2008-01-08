@@ -14,15 +14,27 @@
 MXAAbstractDataPtr H5AsciiStringData::New(const std::string &datasetPath, const std::string &value)
 {
   MXAAbstractDataPtr ptr;
-  
+  int32 err = 1;
   H5AsciiStringData* d = new H5AsciiStringData(datasetPath, 0);
-  if (d->resize( value.size() ) > 0)
+  std::string::size_type size = value.size();
+  std::string::size_type nullTermSize = size + 1;
+  if (size > 0) // NOT an empty String
   {
-    ptr.reset(d);
-    //copy data into array
-    uint8* dest = d->getPointer(0);
-    const char* source = value.c_str();
-    ::memcpy(dest, source, value.size() + 1 );
+    err = d->resize(nullTermSize);
+    if (err > 0) //copy data into array
+    {
+      uint8* dest = d->getPointer(0);
+      const char* source = value.c_str();
+      ::memcpy(dest, source, value.size() + 1 );
+    }
+  }
+  if (err >= 0)
+  { // No errors, swap in the pointer
+    ptr.reset(d); 
+  }
+  else
+  {
+    delete d; // Clean up the memory
   }
   return ptr;
 }
@@ -94,30 +106,24 @@ int32 H5AsciiStringData::readFromFile(IDataFilePtr dataFile)
   size_t attr_size;
   std::string res;
 
-  std::vector<hsize_t> dims; //Reusable for the loop
+  std::vector<hsize_t> dims;
   err = H5Lite::getDatasetInfo(fileId, this->getDatasetPath(), dims, attr_type, attr_size);
   if (err < 0)
   {
     return err;
   }
-  mxaIdType numElements = 1;
-  for (std::vector<hsize_t>::size_type i = 0; i < dims.size(); ++i)
+  std::string::size_type size = dims[0];
+  if (size > 0) // NOT an empty String
   {
-    numElements = numElements * dims[i];
-  }
-  if (this->getNumberOfElements() != numElements)
-  {
-    err = this->resize(numElements); //Resize the array to hold the data from the file
-    if (err < 0)
+    err = this->resize(size);
+    if (err > 0) //copy data into array
     {
-      return err;
+      uint8* dest = static_cast<uint8*>(this->getVoidPointer(0) );
+      if (NULL != dest) {
+        err = H5Lite::readStringDataset(fileId, this->getDatasetPath(), dest);
+      }
     }
   }
-  std::string resultStr;
-  err = H5Lite::readStringDataset(fileId, this->getDatasetPath(), resultStr);
-  uint8* dest = static_cast<uint8*>(this->getVoidPointer(0) );
-  const char* source = resultStr.data();
-  ::memcpy(dest, source, resultStr.size() );
   
   return err;
 }

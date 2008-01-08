@@ -302,16 +302,16 @@ void WriteDatasetTest()
   IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(testFile, model);
 
   // These will test WRITING Data to the data file
-//  _WriteDatasetTest<int8>( "Dataset Int 8", dataFile );
-//  _WriteDatasetTest<uint8>( "Dataset UInt 8", dataFile );
-//  _WriteDatasetTest<int16>( "Dataset Int 16", dataFile );
-//  _WriteDatasetTest<uint16>( "Dataset UInt 16", dataFile );
-//  _WriteDatasetTest<int32>( "Dataset Int 32", dataFile );
-//  _WriteDatasetTest<uint32>( "Dataset UInt 32", dataFile );
-//  _WriteDatasetTest<int64>( "Dataset Int 64", dataFile );
-//  _WriteDatasetTest<uint64>( "Dataset UInt 64", dataFile );
-//  _WriteDatasetTest<float32>( "Dataset Float 32", dataFile );
-//  _WriteDatasetTest<float64>( "Dataset Float 64", dataFile );
+  _WriteDatasetTest<int8>( "Dataset Int 8", dataFile );
+  _WriteDatasetTest<uint8>( "Dataset UInt 8", dataFile );
+  _WriteDatasetTest<int16>( "Dataset Int 16", dataFile );
+  _WriteDatasetTest<uint16>( "Dataset UInt 16", dataFile );
+  _WriteDatasetTest<int32>( "Dataset Int 32", dataFile );
+  _WriteDatasetTest<uint32>( "Dataset UInt 32", dataFile );
+  _WriteDatasetTest<int64>( "Dataset Int 64", dataFile );
+  _WriteDatasetTest<uint64>( "Dataset UInt 64", dataFile );
+  _WriteDatasetTest<float32>( "Dataset Float 32", dataFile );
+  _WriteDatasetTest<float64>( "Dataset Float 64", dataFile );
 
   _WriteStringDataTest("String", dataFile);
   
@@ -346,16 +346,16 @@ void ReadDatasetTest( )
   std::string testFile(DATASET_TEST_FILE);
   IDataFilePtr dataFile = H5MXADataFile::OpenFile(testFile, true);
   BOOST_REQUIRE(dataFile.get() != NULL);
-//  _readDatasetTest( "Dataset Int 8", dataFile );
-//  _readDatasetTest( "Dataset UInt 8", dataFile );
-//  _readDatasetTest( "Dataset Int 16", dataFile );
-//  _readDatasetTest( "Dataset UInt 16", dataFile );
-//  _readDatasetTest( "Dataset Int 32", dataFile );
-//  _readDatasetTest( "Dataset UInt 32", dataFile );
-//  _readDatasetTest( "Dataset Int 64", dataFile );
-//  _readDatasetTest( "Dataset UInt 64", dataFile );
-//  _readDatasetTest( "Dataset Float 32", dataFile );
-//  _readDatasetTest( "Dataset Float 64", dataFile );
+  _readDatasetTest( "Dataset Int 8", dataFile );
+  _readDatasetTest( "Dataset UInt 8", dataFile );
+  _readDatasetTest( "Dataset Int 16", dataFile );
+  _readDatasetTest( "Dataset UInt 16", dataFile );
+  _readDatasetTest( "Dataset Int 32", dataFile );
+  _readDatasetTest( "Dataset UInt 32", dataFile );
+  _readDatasetTest( "Dataset Int 64", dataFile );
+  _readDatasetTest( "Dataset UInt 64", dataFile );
+  _readDatasetTest( "Dataset Float 32", dataFile );
+  _readDatasetTest( "Dataset Float 64", dataFile );
   _readDatasetTest( "String", dataFile );
   
   std::cout << "... Passed." << std::endl;

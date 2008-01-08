@@ -58,7 +58,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.40 $
+ * @version $Revision: 1.41 $
  */
 class H5Lite
 {
@@ -873,7 +873,7 @@ static herr_t readPointerDataset(hid_t loc_id,
   did = H5Dopen( loc_id, dsetName.c_str() );
   if ( did < 0 )
   {
-    std::cout << " Error opening Dataset: " << did << std::endl;
+    std::cout << DEBUG_OUT(logTime) << " Error opening Dataset: " << did << std::endl;
     return -1;
   }
   if ( did >= 0 )
@@ -881,13 +881,13 @@ static herr_t readPointerDataset(hid_t loc_id,
     err = H5Dread(did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
     if (err < 0)
     {
-      std::cout << "Error Reading Data." << std::endl;
+      std::cout << DEBUG_OUT(logTime) << "Error Reading Data." << std::endl;
       retErr = err;
     }
     err = H5Dclose( did );
     if (err < 0 )
     {
-      std::cout << "Error Closing Dataset id" << std::endl;
+      std::cout << DEBUG_OUT(logTime) << "Error Closing Dataset id" << std::endl;
       retErr = err;
     }
   }
@@ -1046,6 +1046,20 @@ static herr_t readScalarDataset(hid_t loc_id,
 static MXA_EXPORT herr_t readStringDataset(hid_t loc_id, 
                                      const std::string& dsetName, 
                                      std::string &data);
+
+
+
+/**
+ * @brief reads a nullterminated string dataset into the supplied buffer. The buffer
+ * should be already preallocated.
+ * @param loc_id The parent group that holds the data object to read
+ * @param dsetName The name of the dataset.
+ * @param data pointer to the buffer
+ * @return Standard HDF error condition
+ */ 
+static MXA_EXPORT herr_t readStringDataset(hid_t loc_id,
+                                           const std::string &dsetName,
+                                           uint8* data);
 
 /**
  * @brief Reads an Attribute from an HDF5 Object.
