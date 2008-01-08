@@ -719,8 +719,10 @@ herr_t H5Lite::getDatasetNDims( hid_t loc_id, const std::string& dsetName, hid_t
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-herr_t H5Lite::getAttributeNDims(hid_t loc_id, const std::string& objName, 
-                                const std::string& attrName, hid_t &rank)
+herr_t H5Lite::getAttributeNDims(hid_t loc_id, 
+                                 const std::string& objName, 
+                                const std::string& attrName, 
+                                hid_t &rank)
 {
    /* identifiers */
    hid_t      obj_id;
@@ -746,7 +748,7 @@ herr_t H5Lite::getAttributeNDims(hid_t loc_id, const std::string& objName,
       if ( sid >= 0 )
       {
         rank = H5Sget_simple_extent_ndims( sid );
-        CloseH5T(sid, err, retErr);
+        CloseH5S(sid, err, retErr);
       }  
       CloseH5A(attr_id, err, retErr);      
     }

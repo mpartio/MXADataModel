@@ -37,12 +37,47 @@
 #define DSET7_NAME "dataset string"
 
 #define DIM 6
+#define DIM0 4
+#define DIM1 3
+#define DIM2 2
 
-#define CloseH5T(tid, err, retError)\
-  err = H5Tclose(tid);\
-  if (err < 0 ) {std::cout << "Error closing DataType" << std::endl; retErr = err;}
+#define RANK_1D 1
+#define RANK_2D 2
+#define RANK_3D 3
 
 
+/* Methods to test
+ * 
+ * HDFTypeFromString
+ * HDFTypeForPrimitiveAsStr
+ * HDFTypeForPrimitive
+ * writeVectorDataset - DONE
+ * writePointerDataset - DONE
+ * writeScalarDataset - DONE
+ * writeStringDataset - DONE
+ * writeStringDataset - DONE
+ * writePointerAttribute - DONE
+ * writeVectorAttribute - DONE
+ * writeStringAttribute - DONE
+ * writeStringAttribute - DONE
+ * writeStringAttributes - DONE
+ * writeScalarAttribute - DONE
+ * readPointerDataset - DONE
+ * readVectorDataset - DONE
+ * readScalarDataset - DONE
+ * readStringDataset - DONE
+ * readStringDataset - DONE
+ * readVectorAttribute - DONE
+ * readScalarAttribute - DONE
+ * readPointerAttribute - DONE
+ * readStringAttribute - DONE
+ * readStringAttribute - DONE
+ * getAttributeNDims - DONE
+ * getDatasetNDims - DONE
+ * getDatasetType
+ * getDatasetInfo - DONE
+ * getAttributeInfo - DONE
+ */
 
 using namespace MXATypes;
 
@@ -51,6 +86,8 @@ herr_t testMakeStringDataset(hid_t file_id);
 herr_t testMakeStringAttribute(hid_t file_id);
 void H5LiteTest();
 MXADataModelPtr createModelTemplate();
+template<typename T>
+herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetName);
 
 // -----------------------------------------------------------------------------
 //  
@@ -63,171 +100,637 @@ void RemoveTestFiles()
 }
 
 // -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetName)
+{
+  T value = 0x0;
+  herr_t err = -1;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  attributeKey = "1DArrayAttribute<" + attributeKey + ">";
+  int32 rank = 1;
+  T data[DIM0];
+  for(int i = 0; i < DIM0; ++i) 
+  {
+    data[i] = (T)(i);
+  }
+  uint64 dims[1];
+  dims[0] = DIM0;
+
+  err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
+  BOOST_REQUIRE(err >= 0);
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetName)
+{
+  T value = 0x0;
+  herr_t err = -1;
+  herr_t retErr = err;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  attributeKey = "1DArrayAttribute<" + attributeKey + ">";
+  std::vector<T> referenceData(DIM0, 0);
+  for(int i = 0; i < DIM0; ++i) 
+  {
+    referenceData[i] = (T)(i);
+  }
+  
+  H5T_class_t attr_type;
+  size_t attr_size;
+  hid_t typeId = -1;
+  std::vector<uint64> dims;  //Reusable for the loop
+  err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(dims.size() == 1);
+  BOOST_REQUIRE(attr_size == sizeof(T));
+  hid_t rank = 0;
+  err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(rank == 1);
+  CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
+  mxaIdType numElements = 1;
+  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+  {
+    numElements = numElements * dims[i];
+  }
+  std::vector<T> data(numElements, 0);
+  err = H5Lite::readPointerAttribute<T>(file_id, dsetName, attributeKey, &(data.front() ) );
+  BOOST_REQUIRE(err >= 0);
+  
+  BOOST_REQUIRE (data == referenceData);
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetName)
+{
+  //std::cout << DEBUG_OUT(logTime) << "testWritePointer2DArrayAttribute" << std::endl;
+  T value = 0x0;
+  herr_t err = -1;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  
+  attributeKey = "2DArrayAttribute<" + attributeKey + ">";
+  int32 rank = 2;
+  T data[DIM0][DIM1];
+  for(int i = 0; i < DIM0; ++i) 
+  {
+    for (int j = 0; j < DIM1; ++j) {
+      data[i][j] = (T)(i * j);
+    }
+  }
+  uint64 dims[rank];
+  dims[0] = DIM0;
+  dims[1] = DIM1;
+  err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
+  BOOST_REQUIRE(err >= 0);
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetName)
+{
+  T value = 0x0;
+  herr_t err = -1;
+  herr_t retErr = err;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  attributeKey = "2DArrayAttribute<" + attributeKey + ">";
+  T referenceData[DIM0][DIM1];
+  for(int i = 0; i < DIM0; ++i) 
+  {
+    for (int j = 0; j < DIM1; ++j) {
+      referenceData[i][j] = (T)(i * j);
+    }
+  }
+  H5T_class_t attr_type;
+  size_t attr_size;
+  hid_t typeId = -1;
+  std::vector<uint64> dims;  //Reusable for the loop
+  err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(dims.size() == 2);
+  BOOST_REQUIRE(attr_size == sizeof(T));
+  hid_t rank = 0;
+  err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(rank == 2);
+  CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
+  mxaIdType numElements = 1;
+  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+  {
+    numElements = numElements * dims[i];
+  }
+  std::vector<T> data(numElements, 0);
+  err = H5Lite::readPointerAttribute<T>(file_id, dsetName, attributeKey, &(data.front() ) );
+  BOOST_REQUIRE(err >= 0);
+
+  BOOST_REQUIRE (::memcmp( &(data.front() ), referenceData, sizeof(T)*numElements) == 0);
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetName)
+{
+  T value = 0x0;
+  herr_t err = -1;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  attributeKey = "3DArrayAttribute<" + attributeKey + ">";
+  int32 rank = 3;
+  T data[DIM0][DIM1][DIM2];
+  for(int i = 0; i < DIM0; ++i) {
+    for (int j = 0; j < DIM1; ++j) {
+      for (int k = 0; k < DIM2; ++k) {
+        data[i][j][k] = (T)(i * j * k); 
+      }
+    }
+  }
+  uint64 dims[rank];
+  dims[0] = DIM0;
+  dims[1] = DIM1;
+  dims[2] = DIM2;
+  err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
+  BOOST_REQUIRE(err >= 0);
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testReadPointer3DArrayAttribute(hid_t file_id, const std::string &dsetName)
+{
+  T value = 0x0;
+  herr_t err = -1;
+  herr_t retErr = err;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  attributeKey = "3DArrayAttribute<" + attributeKey + ">";
+  T referenceData[DIM0][DIM1][DIM2];
+  for(int i = 0; i < DIM0; ++i) {
+    for (int j = 0; j < DIM1; ++j) {
+      for (int k = 0; k < DIM2; ++k) {
+        referenceData[i][j][k] = (T)(i * j * k); 
+      }
+    }
+  }
+  H5T_class_t attr_type;
+  size_t attr_size;
+  hid_t typeId = -1;
+  std::vector<uint64> dims;  //Reusable for the loop
+  err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(dims.size() == 3);
+  BOOST_REQUIRE(attr_size == sizeof(T));
+  hid_t rank = 0;
+  err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(rank == 3);
+  CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
+  mxaIdType numElements = 1;
+  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+  {
+    numElements = numElements * dims[i];
+  }
+  std::vector<T> data(numElements, 0);
+  err = H5Lite::readPointerAttribute<T>(file_id, dsetName, attributeKey, &(data.front() ) );
+  BOOST_REQUIRE(err >= 0);
+
+  BOOST_REQUIRE (::memcmp( &(data.front() ), referenceData, sizeof(T)*numElements) == 0);
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template <typename T>
+herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName ) 
+{
+  T value = 0x0;
+  herr_t err = -1;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  attributeKey = "VectorAttribute<" + attributeKey + ">";
+
+  int32 numElements = DIM0;
+  std::vector<uint64> dims (1, DIM0);
+
+  /* Make dataset */
+  std::vector<T> data (DIM0, 0);
+  for (int i = 0; i < numElements; ++i) {
+    data[i] = (T)(i);
+  }
+  //std::cout << "Attribute->Write: " << objName;
+  err = H5Lite::writeVectorAttribute( file_id, dsetName, attributeKey, dims, data );
+  BOOST_REQUIRE(err >= 0);
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template <typename T>
+herr_t testReadVectorAttribute(hid_t file_id, std::string dsetName ) 
+{
+  T value = 0x0;
+  herr_t err = -1;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  attributeKey = "VectorAttribute<" + attributeKey + ">";
+
+  int32 numElements = DIM0;
+  std::vector<uint64> dims (1, DIM0);
+
+  std::vector<T> data (DIM0, 0);
+  for (int i = 0; i < numElements; ++i) {
+    data[i] = (T)(i);
+  }
+  std::vector<T> rData(numElements, 0); //allocate and zero out the memory
+  err = H5Lite::readVectorAttribute(file_id, dsetName, attributeKey, rData);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE( data == rData );
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testWriteScalarAttribute(hid_t file_id, const std::string &dsetName)
+{
+  T value = 0x0F;
+  herr_t err = -1;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  attributeKey = "ScalarAttribute<" + attributeKey + ">";
+  err = H5Lite::writeScalarAttribute(file_id, dsetName, attributeKey, value);
+  BOOST_REQUIRE(err >= 0);
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testReadScalarAttribute(hid_t file_id, const std::string &dsetName)
+{
+  T value = 0x0F;
+  T refValue = value;
+  herr_t err = -1;
+  std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  BOOST_REQUIRE(attributeKey.empty() == false);
+  attributeKey = "ScalarAttribute<" + attributeKey + ">";
+  
+  err = H5Lite::readScalarAttribute(file_id, dsetName, attributeKey, value);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(refValue == value);
+  return err;
+}
+
+
+// -----------------------------------------------------------------------------
 //  Uses Raw Pointers to save data to the data file
 // -----------------------------------------------------------------------------
 template <typename T>
-herr_t testMakeDatasetFromPointer(hid_t &file_id, std::string name, T type ) 
+herr_t testWritePointer2DArrayDataset(hid_t file_id) 
 {
+  
+  T value = 0x0;
   herr_t err = 1;
-  int32 dimx = 2;
-  int32 dimy = 3;
   int32 rank = 2;
   // Create the Dimensions
   uint64 dims[2];
-  dims[0] = dimx; dims[1] = dimy;
+  dims[0] = DIM0; dims[1] = DIM1;
   
   /* Make dataset char */
-  int32 tSize = dimx * dimy;
+  int32 tSize = dims[0] * dims[1];
  // T data[dimx*dimy];
   std::vector<T> data(tSize);
   for (int32 i = 0; i < tSize; ++i) {
-    data[i] = static_cast<T>(type * i * 5);
-  }
-  //std::cout << "Write/Read->Vector: " << name;
-  err = H5Lite::writePointerDataset( file_id, name, rank, dims, &(data.front()) );
-  if (err<0) {
-     std::cout << " - Failed - Could not write data to file." << std::endl;
-     return err;; 
-  }
-
-  /* Now read the dataset into another vector and compare */
-
-  //T rData[dimx*dimy];
-  std::vector<T> rData(tSize);
-  err = H5Lite::readPointerDataset( file_id, name, &(rData.front() ) );
-  if (err<0) {
-    std::cout << " - Failed - Error Reading Data from File" << std::endl;
-    return err;; 
+    data[i] = static_cast<T>( i * 5);
   }
   
-  if ( (std::memcmp(&(data.front()), &(rData.front() ), tSize)) == 0) {
-    err = 0;
-   // std::cout << " - Passed" << std::endl;
-  } else {
-    std::cout << " - Failed - Data Read from the file does not match the stored data." << std::endl;
-    err = -1;
-  }
+  std::string dsetName = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  dsetName = "Pointer2DArrayDataset<" + dsetName + ">";
+  std::cout << "Running " << dsetName << " ... ";
+  err = H5Lite::writePointerDataset( file_id, dsetName, rank, dims, &(data.front()) );
+  BOOST_REQUIRE(err >= 0);
+  err = testWritePointer1DArrayAttribute<int8>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<uint8>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<int16>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<uint16>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<int32>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<uint32>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<int64>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<uint64>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<float32>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<float64>(file_id, dsetName);
 
+  err = testWritePointer2DArrayAttribute<int8>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<uint8>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<int16>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<uint16>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<int32>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<uint32>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<int64>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<uint64>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<float32>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<float64>(file_id, dsetName);
+
+  err = testWritePointer3DArrayAttribute<int8>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<uint8>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<int16>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<uint16>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<int32>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<uint32>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<int64>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<uint64>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<float32>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<float64>(file_id, dsetName);
+
+  err = testWriteVectorAttribute<int8>(file_id, dsetName);
+  err = testWriteVectorAttribute<uint8>(file_id, dsetName);
+  err = testWriteVectorAttribute<int16>(file_id, dsetName);
+  err = testWriteVectorAttribute<uint16>(file_id, dsetName);
+  err = testWriteVectorAttribute<int32>(file_id, dsetName);
+  err = testWriteVectorAttribute<uint32>(file_id, dsetName);
+  err = testWriteVectorAttribute<int64>(file_id, dsetName);
+  err = testWriteVectorAttribute<uint64>(file_id, dsetName);
+  err = testWriteVectorAttribute<float32>(file_id, dsetName);
+  err = testWriteVectorAttribute<float64>(file_id, dsetName);
+
+  err = testWriteScalarAttribute<int8>(file_id, dsetName);
+  err = testWriteScalarAttribute<uint8>(file_id, dsetName);
+  err = testWriteScalarAttribute<int16>(file_id, dsetName);
+  err = testWriteScalarAttribute<uint16>(file_id, dsetName);
+  err = testWriteScalarAttribute<int32>(file_id, dsetName);
+  err = testWriteScalarAttribute<uint32>(file_id, dsetName);
+  err = testWriteScalarAttribute<int64>(file_id, dsetName);
+  err = testWriteScalarAttribute<uint64>(file_id, dsetName);
+  err = testWriteScalarAttribute<float32>(file_id, dsetName);
+  err = testWriteScalarAttribute<float64>(file_id, dsetName);
+
+  std::cout << " Passed" << std::endl;
   return err;
 }
 
 // -----------------------------------------------------------------------------
 //  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testWriteVectorDataset(hid_t file_id)
+{
+  T value = 0x0;
+  herr_t err = 1;
+
+  std::vector<hsize_t> dims(RANK_1D, DIM0);
+  /* Make dataset char */
+  std::vector<T> data(DIM0, 0);
+  for (int32 i = 0; i < DIM0; ++i) {
+    data[i] = static_cast<T>( i * 5);
+  }
+  
+  std::string dsetName = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  dsetName = "VectorDataset<" + dsetName + ">";
+  std::cout << "Running " << dsetName << " ... ";
+  err = H5Lite::writeVectorDataset( file_id, dsetName, dims, data );
+  BOOST_REQUIRE(err >= 0);
+  
+  std::cout << " Passed" << std::endl;
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testReadVectorDataset(hid_t file_id)
+{
+  T value = 0x0;
+  herr_t err = 1;
+
+  std::vector<hsize_t> dims(RANK_1D, DIM0);
+  std::vector<T> referenceData(DIM0, 0);
+  for (int32 i = 0; i < DIM0; ++i) {
+    referenceData[i] = static_cast<T>( i * 5);
+  }
+  
+  std::string dsetName = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  std::cout << "Running testReadVectorDataset <" + dsetName + "> ... ";
+  dsetName = "VectorDataset<" + dsetName + ">";
+
+  std::vector<T> data;
+  err = H5Lite::readVectorDataset( file_id, dsetName, data );
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(data == referenceData);
+  
+  std::cout << " Passed" << std::endl;
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testWriteScalarDataset(hid_t file_id)
+{
+  T value = 0x0F;
+  herr_t err = 1;
+
+  std::string dsetName = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  dsetName = "ScalarDataset<" + dsetName + ">";
+  std::cout << "Running " << dsetName << " ... ";
+  err = H5Lite::writeScalarDataset(file_id, dsetName, value );
+  BOOST_REQUIRE(err >= 0);
+  
+  std::cout << " Passed" << std::endl;
+  return err;
+}
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+template<typename T>
+herr_t testReadScalarDataset(hid_t file_id)
+{
+  T value = 0x0F;
+  T refValue = value;
+  herr_t err = 1;
+
+  std::string dsetName = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  std::cout << "Running testReadScalarDataset <" + dsetName + "> ... ";
+  dsetName = "ScalarDataset<" + dsetName + ">";
+
+  err = H5Lite::readScalarDataset(file_id, dsetName, value );
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE(refValue == value );
+  
+  std::cout << " Passed" << std::endl;
+  return err;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+herr_t testWriteStringDatasetAndAttributes(hid_t file_id) 
+{
+  std::cout << "Running testWriteStringDatasetAndAttributes ......";
+  herr_t err = 0;
+  std::string dsetName ("std::string");
+  std::string strData ("THIS IS THE DATA");
+  err = H5Lite::writeStringDataset(file_id, dsetName, strData);
+  BOOST_REQUIRE(err >= 0);
+  // Write the Attributes
+  std::string attributeKey ("std::string");
+  std::string attrData ("THIS IS THE ATTRIBUTE DATA");
+  err = H5Lite::writeStringAttribute(file_id, dsetName, attributeKey, attrData);
+  BOOST_REQUIRE(err >= 0);
+  
+  const char* attrDataPtr = attrData.c_str();
+  attributeKey = "c_string";
+  err = H5Lite::writeStringAttribute(file_id, dsetName, attributeKey, attrData.size() + 1, attrDataPtr);
+  
+  std::map<std::string, std::string> attrMap;
+  attrMap[attributeKey] = attrData;
+  attributeKey = "std::string";
+  attrMap[attributeKey] = attrData;
+  
+  // Dataset via pointer (c_str)
+  const char* strPtr = strData.c_str();
+  dsetName = "c_string";
+  err = H5Lite::writeStringDataset(file_id, dsetName, strData.size() + 1, strPtr);
+  BOOST_REQUIRE(err >= 0);
+  
+  err = H5Lite::writeStringAttributes(file_id, dsetName, attrMap);
+  BOOST_REQUIRE(err >= 0);
+  
+  std::cout << " Passed" << std::endl;
+  return err;
+}
+
+
+// -----------------------------------------------------------------------------
+//  Uses Raw Pointers to read data from the data file
 // -----------------------------------------------------------------------------
 template <typename T>
-herr_t testMakeDataset(hid_t &file_id, std::string name, T type ) {
-  herr_t err = -1;
-  hsize_t dimx = 2;
-  hsize_t dimy = 3;
-  // Create the Dimensions
-  std::vector<hsize_t> dims;
-  dims.push_back(dimx);
-  dims.push_back(dimy);
-  
-  /* Make dataset char */
-  std::vector<T> data;
-  for (int i = 0; i < DIM; ++i) {
-    data.push_back(type);
-  }
-  //std::cout << "Write/Read->Vector: " << name;
-  err = H5Lite::writeVectorDataset( file_id, name, dims, data );
-  if (err<0) {
-     std::cout << " - Failed - Could not write data to file." << std::endl;
-     return err;; 
-  }
+herr_t testReadPointer2DArrayDataset(hid_t file_id) 
+{
+  // Create the reference data
+  T value = 0x0;
+  herr_t err = 1;
+  std::vector<hsize_t> dims(2, 0);
+  dims[0] = DIM0; dims[1] = DIM1;
 
-  /* Now read the dataset into another vector and compare */
-  std::vector<T> rData; //Create a vector to hold the data.
-  err = H5Lite::readVectorDataset( file_id, name, rData);
-  if (err<0) {
-    std::cout << " - Failed - Error Reading Data from File" << std::endl;
-    return err;
+  int32 tSize = dims[0] * dims[1];
+  std::vector<T> referenceData(tSize);
+  for (int32 i = 0; i < tSize; ++i) {
+    referenceData[i] = static_cast<T>( i * 5);
   }
-  if ( data == rData) {
-    err = 0;
-    //std::cout << " - Passed" << std::endl;
-  } else {
-  #if 0
-  	std::cout << "\nRead Data: " << std::endl;
-  	for (uint32 i = 0; i < rData.size(); ++i)
-  	{
-  		std::cout << rData[i] << " ";
-  	}
-  	
-  	std::cout << "\nWritten Data: " << std::endl;
-  	for (uint32 i = 0; i < data.size(); ++i)
-  	{
-  		std::cout << data[i] << " ";
-  	}
-  	#endif
-    std::cout << " - Failed - Data Read from the file does not match the stored data." << std::endl;
-    err = -1;
-  }
- 
- // std::cout << "Write/Read->Scalar: " << name;
-  name += "_Single";
-  T sData = type;
-  err = H5Lite::writeScalarDataset(file_id, name, sData);
-  if (err<0) {
-     std::cout << " - Failed - Could not write single value data to file." << std::endl;
-     return err;; 
-  }
-  /* Now read the dataset into another vector and compare */
-  T srData; //Create something to hold the data.
-  err = H5Lite::readScalarDataset( file_id, name, srData);
-  if (err<0) {
-    std::cout << " - Failed - Error Reading Single Value Data from File" << std::endl;
-    return err;; 
-  }
-  if ( sData == srData) {
-    err = 0;
-   // std::cout << " - Passed" << std::endl;
-  } else {
-    std::cout << " - Failed - Data Read from the file does not match the stored data." << std::endl;
-    err = -1;
-  }
+  // Generate the data set name
+  std::string dsetName = H5Lite::HDFTypeForPrimitiveAsStr(value);
+  std::cout << "Running testReadPointer2DArrayDataset<" << dsetName << "> ... ";
+  dsetName = "Pointer2DArrayDataset<" + dsetName + ">";
   
-  // ******* test the H5Lite::getDatasetInfo
   H5T_class_t attr_type;
-  size_t attr_size;
-  std::string res;
- 
-  err = H5Lite::getDatasetInfo(file_id, name, dims, attr_type, attr_size);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(dims.size() != 0);
-  return err;
-}
- 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-herr_t testMakeStringDataset(hid_t file_id) {
-  herr_t err = 0;
-  std::string dsetName ("H5T_STR_NULLTERM");
-  std::string strData ("Some data for the File");
-  //std::cout << "Write/Read->H5T_STR_NULLTERM: ";
-  err = H5Lite::writeStringDataset(file_id, dsetName, strData);
-  if (err<0) {
-     std::cout << " - Failed - Could not write data to file." << std::endl;
-     return err;; 
-  }
-  std::string rData;
+  size_t attr_size; 
 
-  H5T_class_t attr_type;
-  size_t attr_size;
-  std::string res;
- 
-  std::vector<hsize_t> dims;  //Reusable for the loop
   err = H5Lite::getDatasetInfo(file_id, dsetName, dims, attr_type, attr_size);
   BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(dims.size() > 0);
-
-  err = H5Lite::readStringDataset(file_id, dsetName, rData);
+  BOOST_REQUIRE(dims.size() == 2);
+  BOOST_REQUIRE(attr_size == sizeof(T));
+  hid_t rank = 0;
+  err = H5Lite::getDatasetNDims(file_id, dsetName, rank);
   BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(strData == rData);
+  BOOST_REQUIRE(rank == 2);
+  mxaIdType numElements = 1;
+  for (std::vector<hsize_t>::size_type i = 0; i < dims.size(); ++i)
+  {
+    numElements = numElements * dims[i];
+  }
+  
+  std::vector<T> data(numElements, 0);
+  err = H5Lite::readPointerDataset(file_id, dsetName, &(data.front() ) );
+  BOOST_REQUIRE(err >= 0);
+  // Compare the data... 
+  BOOST_REQUIRE(data == referenceData);
+  
+  //Read all the attributes
+  err = testReadPointer1DArrayAttribute<int8>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<uint8>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<int16>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<uint16>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<int32>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<uint32>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<int64>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<uint64>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<float32>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<float64>(file_id, dsetName);
+
+  err = testReadPointer2DArrayAttribute<int8>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<uint8>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<int16>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<uint16>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<int32>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<uint32>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<int64>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<uint64>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<float32>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<float64>(file_id, dsetName);
+
+  err = testReadPointer3DArrayAttribute<int8>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<uint8>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<int16>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<uint16>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<int32>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<uint32>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<int64>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<uint64>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<float32>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<float64>(file_id, dsetName);
+//
+  err = testReadVectorAttribute<int8>(file_id, dsetName);
+  err = testReadVectorAttribute<uint8>(file_id, dsetName);
+  err = testReadVectorAttribute<int16>(file_id, dsetName);
+  err = testReadVectorAttribute<uint16>(file_id, dsetName);
+  err = testReadVectorAttribute<int32>(file_id, dsetName);
+  err = testReadVectorAttribute<uint32>(file_id, dsetName);
+  err = testReadVectorAttribute<int64>(file_id, dsetName);
+  err = testReadVectorAttribute<uint64>(file_id, dsetName);
+  err = testReadVectorAttribute<float32>(file_id, dsetName);
+  err = testReadVectorAttribute<float64>(file_id, dsetName);
+
+  err = testReadScalarAttribute<int8>(file_id, dsetName);
+  err = testReadScalarAttribute<uint8>(file_id, dsetName);
+  err = testReadScalarAttribute<int16>(file_id, dsetName);
+  err = testReadScalarAttribute<uint16>(file_id, dsetName);
+  err = testReadScalarAttribute<int32>(file_id, dsetName);
+  err = testReadScalarAttribute<uint32>(file_id, dsetName);
+  err = testReadScalarAttribute<int64>(file_id, dsetName);
+  err = testReadScalarAttribute<uint64>(file_id, dsetName);
+  err = testReadScalarAttribute<float32>(file_id, dsetName);
+  err = testReadScalarAttribute<float64>(file_id, dsetName);
+
+  std::cout << " Passed" << std::endl;
   return err;
 }
-
 
 // -----------------------------------------------------------------------------
 //  
@@ -251,64 +754,43 @@ void printData(std::vector<T> &data, std::vector<T> &rData) {
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-template <typename T>
-herr_t testMakeAttribute(hid_t &file_id, std::string objName, T type ) {
-  std::string testAttribute("Test_Attribute");
-  herr_t err = -1;
-  int32 numElements = 4;
-  // Create the Dimensions
-  std::vector<uint64> dims;
-  dims.push_back(numElements);
-  
-  /* Make dataset */
-  std::vector<T> data;
-  T _dat = 0x0f;
-  for (int i = 0; i < numElements; ++i) {
-    data.push_back( _dat );
-  }
-  //std::cout << "Attribute->Write: " << objName;
-  err = H5Lite::writeVectorAttribute( file_id, objName, testAttribute, dims, data );
-  if (err < 0 ) {
-    std::cout << " - Failed - Could not Write the Attribute: " << objName << std::endl;
-    return err;
-  }
-  
-  std::vector<T> rData(numElements, 0); //allocate and zero out the memory
-  err = H5Lite::readVectorAttribute(file_id, objName, testAttribute, rData);
-  if ( data == rData ) {
- //   std::cout << " - Passed" << std::endl;
-    err = 0;
-  } else { 
-    std::cout << " - Failed - Written and Read data are not the same." << std::endl;
-    printData(data, rData);
-    err = -1;
-  }
-  return err;
-}
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-herr_t testMakeStringAttribute(hid_t file_id) {
+herr_t testReadStringDatasetAndAttributes(hid_t file_id) 
+{
+  std::cout << "Running testReadStringDatasetAndAttributes ......";
   herr_t err = 0;
-  std::string dsetName ("H5T_STR_NULLTERM");
-  std::string testAttribute("Test_Attribute");
-  std::string strData ("Some data for the Attribute");
-
- // std::cout << "WriteAttribute->H5T_STR_NULLTERM: ";
-  err = H5Lite::writeStringAttribute(file_id, dsetName, testAttribute, strData);
   
-  std::string rData;
-  err = H5Lite::readStringAttribute(file_id, dsetName, testAttribute, rData);
-  //int32 size = rData.size();
-   if ( strData == rData) {
-   // std::cout << " - Passed" << std::endl;
-     err = 0;
-  } else { 
-    std::cout << " - Failed - Written and Read data are not the same" << std::endl;
-    err = -1;
-  }
-   return err;
+  std::string refData ("THIS IS THE DATA");
+  std::string refAttrData ("THIS IS THE ATTRIBUTE DATA");
+  
+  
+  std::string dsetName ("std::string");
+  std::string strData ("");
+  err = H5Lite::readStringDataset(file_id, dsetName, strData);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE( refData.compare(strData) == 0);
+  
+  // Write the Attributes
+  std::string attributeKey ("std::string");
+  std::string attrData ("");
+  err = H5Lite::readStringAttribute(file_id, dsetName, attributeKey, attrData);
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE( refAttrData.compare(attrData) == 0);
+  
+  std::vector<uint8> attrDataPtr (refAttrData.size() + 1, 0);
+  attributeKey = "c_string";
+  err = H5Lite::readStringAttribute(file_id, dsetName, attributeKey, &(attrDataPtr.front() ) );
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE( refAttrData.compare(attrData) == 0);
+    
+  // Dataset via pointer (c_str)
+  std::vector<uint8> strDataPtr (refData.size() + 1, 0);
+  dsetName = "c_string";
+  err = H5Lite::readStringDataset(file_id, dsetName, &(strDataPtr.front() ) );
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE( ::memcmp(&(strDataPtr.front()), refData.c_str(), refData.size() + 1) == 0 );
+  
+  std::cout << " Passed" << std::endl;
+  return err;
 }
 
 // -----------------------------------------------------------------------------
@@ -344,47 +826,79 @@ void H5LiteTest()
     return;
   }
   
-  // ******************* Test Writing Data *************************************
-//  std::cout << logTime() << "----------- Testing Writing/Reading of Datasets -----------" << std::endl;
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT64",   Int64Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT64",  Uint64Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT8",   Int8Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT8",  Uint8Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT16",    Int16Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT16",  Uint16Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Signed Int/H5T_NATIVE_INT32",  Int32Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "Unsigned Int/H5T_NATIVE_UINT32",  Uint32Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "H5T_NATIVE_FLOAT",  Float32Type) >= 0);
-  BOOST_REQUIRE ( testMakeDataset(file_id, "H5T_NATIVE_DOUBLE",  Float64Type) >= 0);
-  BOOST_REQUIRE ( testMakeStringDataset(file_id)  >= 0);
- 
-
- // std::cout << logTime() << "----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl; 
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/Signed Int-H5T_NATIVE_INT8 Ptr", Int8Type) >= 0);
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/Unsigned Int-H5T_NATIVE_UINT8 Ptr", Uint8Type) >= 0);
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/Signed Int-H5T_NATIVE_INT16 Ptr",   Int16Type) >= 0);
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/Unsigned Int-H5T_NATIVE_UINT16 Ptr", Uint16Type) >= 0);
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/Signed Int-H5T_NATIVE_INT32 Ptr", Int32Type) >= 0);
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/Unsigned Int-H5T_NATIVE_UINT32 Ptr", Uint32Type) >= 0);
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/Signed Int-H5T_NATIVE_INT64 Ptr",  Int64Type) >= 0);
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/Unsigned Int-H5T_NATIVE_UINT64 Ptr", Uint64Type) >= 0);
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/H5T_NATIVE_FLOAT Ptr", Float32Type) >= 0);
-  BOOST_REQUIRE ( testMakeDatasetFromPointer(file_id, "Pointer/H5T_NATIVE_DOUBLE Ptr", Float64Type) >= 0);
-
-  // ******************* Test Writing Attributes *******************************
- // std::cout << logTime() << "----------- Testing Writing/Reading of Attributes -----------" << std::endl;
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT8",   Int8Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT8",  Uint8Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT16",    Int16Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT16",  Uint16Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT32",  Int32Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT32",  Uint32Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Signed Int/H5T_NATIVE_INT64",   Int64Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "Unsigned Int/H5T_NATIVE_UINT64",  Uint64Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "H5T_NATIVE_FLOAT",  Float32Type) >= 0);
-  BOOST_REQUIRE ( testMakeAttribute(file_id, "H5T_NATIVE_DOUBLE",  Float64Type) >= 0);
-  BOOST_REQUIRE ( testMakeStringAttribute(file_id)  >= 0);
-
+  // std::cout << logTime() << "----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl;
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<int8>(file_id) >= 0);
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<uint8>(file_id) >= 0);
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<int16>(file_id) >= 0);
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<uint16>(file_id) >= 0);
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<int32>(file_id) >= 0);
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<uint32>(file_id) >= 0);
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<int64>(file_id) >= 0);
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<uint64>(file_id) >= 0);
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<float32>(file_id) >= 0);
+   BOOST_REQUIRE ( testWritePointer2DArrayDataset<float64>(file_id) >= 0);
+   
+   BOOST_REQUIRE ( testWriteVectorDataset<int8>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteVectorDataset<uint8>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteVectorDataset<int16>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteVectorDataset<uint16>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteVectorDataset<int32>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteVectorDataset<uint32>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteVectorDataset<int64>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteVectorDataset<uint64>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteVectorDataset<float32>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteVectorDataset<float64>(file_id) >= 0);
+   
+   BOOST_REQUIRE ( testWriteScalarDataset<int8>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteScalarDataset<uint8>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteScalarDataset<int16>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteScalarDataset<uint16>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteScalarDataset<int32>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteScalarDataset<uint32>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteScalarDataset<int64>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteScalarDataset<uint64>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteScalarDataset<float32>(file_id) >= 0);
+   BOOST_REQUIRE ( testWriteScalarDataset<float64>(file_id) >= 0); 
+   
+   BOOST_REQUIRE ( testWriteStringDatasetAndAttributes(file_id) >= 0);
+   
+//  // ******************* Test Reading Data *************************************
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<int8>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<uint8>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<int16>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<uint16>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<int32>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<uint32>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<int64>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<uint64>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<float32>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadPointer2DArrayDataset<float64>(file_id) >= 0); 
+   
+   
+   BOOST_REQUIRE ( testReadVectorDataset<int8>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadVectorDataset<uint8>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadVectorDataset<int16>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadVectorDataset<uint16>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadVectorDataset<int32>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadVectorDataset<uint32>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadVectorDataset<int64>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadVectorDataset<uint64>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadVectorDataset<float32>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadVectorDataset<float64>(file_id) >= 0);
+//
+   BOOST_REQUIRE ( testReadScalarDataset<int8>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadScalarDataset<uint8>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadScalarDataset<int16>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadScalarDataset<uint16>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadScalarDataset<int32>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadScalarDataset<uint32>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadScalarDataset<int64>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadScalarDataset<uint64>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadScalarDataset<float32>(file_id) >= 0);
+   BOOST_REQUIRE ( testReadScalarDataset<float64>(file_id) >= 0); 
+   
+   BOOST_REQUIRE ( testReadStringDatasetAndAttributes(file_id) >= 0);
+   
   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 1", file_id) >= 0);
   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 2/", file_id) >= 0);
   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 3/", file_id) >= 0);

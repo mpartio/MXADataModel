@@ -31,19 +31,19 @@
 
 #define CloseH5A(aid, err, retError)\
    err = H5Aclose( attr_id );\
-   if (err<0) {std::cout << "Error Closing Attribute." << std::endl;retErr = err;}
+   if (err<0) {std::cout << "File: " << __FILE__ << "(" << __LINE__ << "): " << "Error Closing Attribute." << std::endl;retErr = err;}
 
 #define CloseH5D(did, err, retError)\
   err = H5Dclose(did);\
-  if (err < 0) { std::cout << "Error Closing Dataset." << std::endl; retError = err;}
+  if (err < 0) { std::cout << "File: " << __FILE__ << "(" << __LINE__ << "): "<< "Error Closing Dataset." << std::endl; retError = err;}
 
 #define CloseH5S(sid, err, retError)\
   err = H5Sclose(sid); \
-  if ( err < 0) {std::cout << "Error closing Dataspace." << std::endl;retErr = err;}
+  if ( err < 0) {std::cout << "File: " << __FILE__ << "(" << __LINE__ << "): "<< "Error closing Dataspace." << std::endl;retErr = err;}
 
 #define CloseH5T(tid, err, retError)\
   err = H5Tclose(tid);\
-  if (err < 0 ) {std::cout << "Error closing DataType" << std::endl; retErr = err;}
+  if (err < 0 ) {std::cout << "File: " << __FILE__ << "(" << __LINE__ << "): "<< "Error closing DataType" << std::endl; retErr = err;}
 
 #define HDF_ERROR_HANDLER_OFF\
   herr_t (*_oldHDF_error_func)(void *);\
@@ -58,7 +58,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.42 $
+ * @version $Revision: 1.43 $
  */
 class H5Lite
 {
@@ -73,7 +73,7 @@ public:
   static MXA_EXPORT void disableErrorHandlers();
   
 /**
- * @brief Opens and object for HDF5 operations
+ * @brief Opens an object for HDF5 operations
  * @param loc_id The parent object that holds the true object we want to open
  * @param objName The string name of the object
  * @param obj_type The HDF5_TYPE of object
@@ -114,7 +114,7 @@ static hid_t HDFTypeFromString(const std::string &value)
   
   if (value.compare("H5T_STRING") == 0) return H5T_STRING;
   
-  std::cout << "Error: HDFTypeFromString - Unknown Type: " << value << std::endl;
+  std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeFromString - Unknown Type: " << value << std::endl;
   return -1;
 }
 
@@ -144,7 +144,7 @@ static std::string HDFTypeForPrimitiveAsStr(T value)
   if (typeid(value) == typeid(float32)) return "H5T_NATIVE_FLOAT";
   if (typeid(value) == typeid(float64)) return "H5T_NATIVE_DOUBLE";
   
-  std::cout << "Error: HDFTypeForPrimitiveAsStr - Unknown Type: " << typeid(value).name() << std::endl;
+  std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitiveAsStr - Unknown Type: " << typeid(value).name() << std::endl;
   return "";
 }
 
@@ -173,7 +173,7 @@ static hid_t HDFTypeForPrimitive(T value)
   if (typeid(value) == typeid(int64)) return H5T_NATIVE_INT64;
   if (typeid(value) == typeid(uint64)) return H5T_NATIVE_UINT64; 
   
-  std::cout << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
+  std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
   if (typeid(value).name() == "l" ) {
     std::cout << "You are using 'long int' as a type which is not 32/64 bit safe. Suggest you use one of the MXATypes defined in <Common/MXATypes.h> such as int32 or uint32." << std::endl;
   }
@@ -527,6 +527,7 @@ static herr_t writePointerAttribute(hid_t loc_id,
   hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
   if (dataType == -1)
   {
+    std::cout << DEBUG_OUT(logTime) << "dataType was unknown" << std::endl;
     return -1;
   }
   /* Get the type of object */

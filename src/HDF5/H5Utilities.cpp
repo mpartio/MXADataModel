@@ -17,9 +17,6 @@
 #define CheckValidLocId(locId)\
   if (locId < 0 ) {std::cout << "Invalid HDF Location ID: " << locId << std::endl;return -1;}
 
-#define CloseH5T(tid, err, retError)\
-  err = H5Tclose(tid);\
-  if (err < 0 ) {std::cout << "Error closing DataType" << std::endl; retErr = err;}
 
 
 // *****************************************************************************************
