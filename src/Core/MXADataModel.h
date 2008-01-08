@@ -12,12 +12,9 @@
 #define _MXADATAMODEL_H_
 
 
-//TODO: Remove DataRecord using Pointer or String Name
-
 //------- Utility Methods
 //TODO: Method to copy the model from a file and write it to a new file
 //TODO: Static Method to Read from the various types of files (text, xml, H5) and create the model
-//TODO: Use Usul as a template to implement typeid macros that each class can use
 
 
 //-- MXA Headers
@@ -41,7 +38,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel

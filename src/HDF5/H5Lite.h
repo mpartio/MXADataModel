@@ -26,8 +26,6 @@
 #include <H5Tpublic.h>
 
 //TODO: Add tests for the find* methods
-//TODO: Add test for attributeInfo
-//TODO: Add test for datasetInfo
 
 #define CloseH5A(aid, err, retError)\
    err = H5Aclose( attr_id );\
@@ -58,7 +56,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.43 $
+ * @version $Revision: 1.44 $
  */
 class H5Lite
 {
