@@ -20,8 +20,11 @@ H5IODelegate::H5IODelegate() :
   _openFile("")
 {
 #ifndef DEBUG
+#ifndef _WIN32
 #warning HDF Error Handlers are OFF
+#endif
   HDF_ERROR_HANDLER_OFF;
+
 #endif
 }
 

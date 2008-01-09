@@ -468,7 +468,7 @@ void DataImportXmlParser::start_Dimension_Tag(const XML_Char* name, const XML_Ch
     
     // Over ride what is currently set in the data model with the values from the 'Dimension' tag
     IDataDimensionPtr dim = this->_dataModel->getDataDimension(attrMap[MXA::MXA_NAME_TAG]);
-    if ( NULL != dim )
+    if ( NULL != dim.get() )
     {
       dim->setIndex(index);
       dim->setCount(count);

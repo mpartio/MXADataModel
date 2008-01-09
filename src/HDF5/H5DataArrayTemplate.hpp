@@ -23,7 +23,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 template<typename T>
 class H5DataArrayTemplate : public MXAAbstractData
@@ -176,7 +176,7 @@ class H5DataArrayTemplate : public MXAAbstractData
 // -----------------------------------------------------------------------------
     virtual int32 getDataType()
     {
-      T t;
+      T t = 0x0;
       return H5Lite::HDFTypeForPrimitive(t);
     }
 

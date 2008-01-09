@@ -751,7 +751,7 @@ MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::
     err = ptr->readFromFile(dataFile);
     if (err < 0)
     {
-      MXAAbstractData* nullData;
+      MXAAbstractData* nullData = 0x0;
       ptr.reset(nullData); // Swap in a null pointer
     }
   }

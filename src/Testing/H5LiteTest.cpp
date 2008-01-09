@@ -181,7 +181,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
   BOOST_REQUIRE(attributeKey.empty() == false);
   
   attributeKey = "2DArrayAttribute<" + attributeKey + ">";
-  int32 rank = 2;
+  int32 rank = RANK_2D;
   T data[DIM0][DIM1];
   for(int i = 0; i < DIM0; ++i) 
   {
@@ -189,7 +189,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
       data[i][j] = (T)(i * j);
     }
   }
-  uint64 dims[rank];
+  uint64 dims[RANK_2D];
   dims[0] = DIM0;
   dims[1] = DIM1;
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
@@ -253,7 +253,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
   BOOST_REQUIRE(attributeKey.empty() == false);
   attributeKey = "3DArrayAttribute<" + attributeKey + ">";
-  int32 rank = 3;
+  int32 rank = RANK_3D;
   T data[DIM0][DIM1][DIM2];
   for(int i = 0; i < DIM0; ++i) {
     for (int j = 0; j < DIM1; ++j) {
@@ -262,7 +262,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
       }
     }
   }
-  uint64 dims[rank];
+  uint64 dims[RANK_3D];
   dims[0] = DIM0;
   dims[1] = DIM1;
   dims[2] = DIM2;

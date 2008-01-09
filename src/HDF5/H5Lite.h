@@ -56,7 +56,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.44 $
+ * @version $Revision: 1.45 $
  */
 class H5Lite
 {
@@ -521,7 +521,7 @@ static herr_t writePointerAttribute(hid_t loc_id,
   H5G_stat_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
-  T test;
+  T test = 0x00;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
   if (dataType == -1)
   {

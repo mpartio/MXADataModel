@@ -335,8 +335,7 @@ int32 H5MXADataFile::writeData(const IDatasetPtr dataset)
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::readData(const IDatasetPtr dataset)
 {
-#warning IMPLEMENT THIS !!!!!!!!!!!
-  return -1;
+  return dataset->writeToFile(this->_weakPtr.lock() );
 }
 
 // -----------------------------------------------------------------------------
