@@ -23,7 +23,7 @@
 * methods to meet my specific needs.
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT IAbstractDataArray : public IDataFileIO
 {
@@ -61,6 +61,12 @@ class MXA_EXPORT IAbstractDataArray : public IDataFileIO
      * Returns the number of dimensions the data has.
      */
     virtual int32 getNumberOfDimensions () = 0;
+    
+    /**
+     * @brief Sets the number of dimensions the data array has
+     * @param rank The number of dimensions
+     */
+    //virtual void setArrayDimensions(std::vector<uint64> dimensions) = 0;
     
     /**
      * @brief Returns an enumerated type that can be used to find out the type

@@ -60,4 +60,11 @@ ADD_EXECUTABLE(Example1 Example1/Example1.cpp)
 TARGET_LINK_LIBRARIES(Example1 MXADataModel ${HDF5_LIBRARIES})
 
 
+# ------------------------------------------------------------------------------
+#  Add Executable for Example 2
+# ------------------------------------------------------------------------------
+ADD_EXECUTABLE(Example2 Example2/Example2.cpp)
+TARGET_LINK_LIBRARIES(Example2 MXADataModel ${HDF5_LIBRARIES})
+
+
 

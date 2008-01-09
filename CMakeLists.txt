@@ -167,6 +167,7 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringData.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5RGBImage.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringAttribute.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataset.cpp
   )
@@ -187,6 +188,8 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataArrayTemplate.hpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringData.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringAttribute.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5RGBImage.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5Data2DArray.hpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataset.h
   )
   

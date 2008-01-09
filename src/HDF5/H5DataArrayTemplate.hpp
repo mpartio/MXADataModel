@@ -23,7 +23,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 template<typename T>
 class H5DataArrayTemplate : public MXAAbstractData
@@ -136,6 +136,10 @@ class H5DataArrayTemplate : public MXAAbstractData
 // -----------------------------------------------------------------------------
     virtual void* getVoidPointer(mxaIdType i)
     {
+      if (i >= this->getNumberOfElements() || i < 0)
+      {
+        return 0x0;
+      }
       return (void*)(&(_data[i]) );
     }
 
@@ -147,6 +151,15 @@ class H5DataArrayTemplate : public MXAAbstractData
       return this->_data[i];
     }
     
+    
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+    virtual void setValue(mxaIdType i, T value)
+    {
+      this->_data[i] = value;
+    }
+    
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -155,20 +168,13 @@ class H5DataArrayTemplate : public MXAAbstractData
       return _size;
     }
 
+    
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
     virtual int32 getNumberOfDimensions()
     {
       return 1;
-    }
-    
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-    void setValue(mxaIdType i, T value)
-    {
-      this->_data[i] = value;
     }
     
 // -----------------------------------------------------------------------------
@@ -187,7 +193,7 @@ class H5DataArrayTemplate : public MXAAbstractData
     {
       return (T*)(&(_data[i]) );
     }
-    
+      
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
@@ -254,7 +260,7 @@ class H5DataArrayTemplate : public MXAAbstractData
         _data(NULL),
         _size(numElements),
         _ownsData(takeOwnership)
-      {    }
+      {          }
         
 
     /**
@@ -351,7 +357,7 @@ class H5DataArrayTemplate : public MXAAbstractData
     T* _data;
     mxaIdType _size;
     bool _ownsData;
-  
+    
     H5DataArrayTemplate(const H5DataArrayTemplate&);    //Not Implemented
     void operator=(const H5DataArrayTemplate&); //Not Implemented
 

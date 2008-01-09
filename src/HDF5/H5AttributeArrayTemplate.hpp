@@ -20,7 +20,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 template<typename T>
 class H5AttributeArrayTemplate : public MXAAbstractAttribute
@@ -165,13 +165,21 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
     {
       return _size;
     }
-
+    
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+//    virtual void setArrayDimensions(std::vector<uint64> dimensions)
+//    {
+//      this->_dims = dimensions;
+//    }
+        
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
     virtual int32 getNumberOfDimensions()
     {
-      return 1;
+      return this->_dims.size();
     }
     
 // -----------------------------------------------------------------------------
@@ -265,7 +273,10 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
         _data(NULL),
         _size(numElements),
         _ownsData(takeOwnership)
-      {    }
+      {    
+        _dims.resize(1);
+        _dims[0] = numElements;
+      }
         
 
     /**
@@ -363,6 +374,7 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
     T* _data;
     mxaIdType _size;
     bool _ownsData;
+    std::vector<uint64> _dims;
   
     H5AttributeArrayTemplate(const H5AttributeArrayTemplate&);    //Not Implemented
     void operator=(const H5AttributeArrayTemplate&); //Not Implemented
