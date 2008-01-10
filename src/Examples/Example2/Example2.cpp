@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2008, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 //-- MXA Includes
 #include <Common/MXATypes.h>
 #include <Common/MXATypeDefs.h>
@@ -12,6 +22,14 @@
 #include <HDF5/H5Data2DArray.hpp>
 // HDF5 Include
 #include <hdf5.h>
+
+/**
+ * This example shows how to retrieve data that is stored in a hdf5 based MXA
+ * datafile. This example uses the same model layout as example #1 used and adds
+ * a 'readData' method that shows how to use some of the predefined classes in 
+ * the MXA library that can fetch their data from an HDF5 data file
+ */ 
+
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files
@@ -29,21 +47,97 @@ void listDataDimensions(MXADataModel* model);
 void listDataRecords(MXADataModel* model);
 MXAAbstractDataPtr captureSampleImage(const std::string &datasetPath);
 int32 generateData();
+int32 readData();
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
 int main(int argc, char **argv) 
 {
- std::cout << "Starting Example 2." << std::endl;
+std::cout << logTime() << "Example 2 Starting" << std::endl;
  if ( generateData() == EXIT_FAILURE)
  {
    return EXIT_FAILURE;
  }
  
+ if (readData() == EXIT_FAILURE)
+ {
+   return EXIT_FAILURE;
+ }
  
- 
+std::cout << logTime() << "Example 2 Ending"  << std::endl;
  return EXIT_SUCCESS; 
+}
+
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+int32 readData()
+{
+  // Open the data file in read-only mode
+  IDataFilePtr dataFile = H5MXADataFile::OpenFile(MXA_FILE, true);
+  if (dataFile.get() == NULL)
+  { // CHeck for a good open operation. If something failed during the open operation
+    //  then the pointer will be NULL;
+    return EXIT_FAILURE;
+  }
+  
+  IDataModelPtr modelPtr = dataFile->getDataModel();
+  //Now we need to get each MXADataDimension from the Model so we know what
+  // values to use in our loop.
+  
+  IDataDimensionPtr timeDim = modelPtr->getDataDimension(0);
+  if (timeDim.get() == NULL)
+  {
+    return EXIT_FAILURE;
+  }
+  IDataDimensionPtr pressureDim = modelPtr->getDataDimension(1);
+  if (pressureDim.get() == NULL)
+  {
+    return EXIT_FAILURE;
+  }
+  
+  int32 err = 0;
+  // Create an array with 2 values. This will hold the values for the current time and current
+  //  pressure indexes. These indexes allow for the construction of the internal HDF5
+  // path to the actual data.
+  std::vector<mxaIdType> indices (2,0); 
+  IDataRecordPtr cameraRec = modelPtr->getDataRecordByNamedPath("Camera");
+  IDataRecordPtr tempRec = modelPtr->getDataRecordByNamedPath("Temperature");
+  if (cameraRec.get() == NULL || tempRec.get() == NULL)
+  {
+    return EXIT_FAILURE;
+  }
+  for (int t = timeDim->getStartValue(); t <= timeDim->getEndValue(); t+= timeDim->getIncrement())
+  {
+    indices[0] = t;
+    for (int p = pressureDim->getStartValue(); p <= pressureDim->getEndValue(); p+=pressureDim->getIncrement() )
+    {
+      indices[1] = p;
+      std::string cameraPath = H5Utilities::generateH5PathToDataset(modelPtr, indices, cameraRec);
+      std::string tempPath = H5Utilities::generateH5PathToDataset(modelPtr, indices, tempRec);
+      
+      // We know the "Camera" signal was an RGBArray, so we create an H5RGBImage to hold the data;
+      H5RGBImage* image = H5RGBImage::New(cameraPath, 0, 0); // Create an empty Image
+      err = image->readFromFile(dataFile);
+      if (err < 0) { 
+        std::cout << DEBUG_OUT(logTime) << "cameraPath: " << cameraPath << std::endl;
+        return EXIT_FAILURE; 
+      }
+      
+      //We know the temperature was a scalar float value of size 32 bits
+      H5DataArrayTemplate<float32>* tempValue = H5DataArrayTemplate<float32>::New(tempPath, 0);
+      err = tempValue->readFromFile(dataFile);
+      if (err < 0) { 
+        std::cout << DEBUG_OUT(logTime) << "tempPath: " << tempPath << std::endl;
+        return EXIT_FAILURE; 
+      }
+      // Now you can do something with the data... Print it, display it.. 
+      
+    }
+  }
+  return EXIT_SUCCESS;
 }
 
 // -----------------------------------------------------------------------------
@@ -91,7 +185,7 @@ int32 generateData()
   // In our sample experiment we are going to measure the temperature and record an image of the sample.
   // The important argument is the 'luid' argument. These need to be unique within each group of Data Records.
   MXADataRecordPtr temp = MXADataRecord::New(0, "Temperature" , "Temp (K)");
-  MXADataRecordPtr cameraImage = MXADataRecord::New(1, "Camera", "Camera Image");
+  MXADataRecordPtr cameraImage = MXADataRecord::New(1, "Camera", "Camera Image(RGB)");
   
   // Next, add these Records to the Data Model
   model->addDataRecord(temp);
@@ -173,8 +267,6 @@ int32 generateData()
       }
     }
   }
- 
-  std::cout << "... Ending Example 2" << std::endl;
   return EXIT_SUCCESS;
 }
 
