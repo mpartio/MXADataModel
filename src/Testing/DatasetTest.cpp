@@ -482,7 +482,8 @@ int32 _readDatasetTest(const std::string &recName, IDataFilePtr dataFile)
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
   std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
-
+  
+  // This will also indirectly test H5Utilities.readDataArray and H5Utilities::readAttributeArray
   IDatasetPtr ds = H5MXADataset::LoadFromFile(dataFile, dsPath);
   BOOST_REQUIRE(ds.get() != NULL);
   return 1;

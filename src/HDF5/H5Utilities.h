@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  */
 class H5Utilities
 {
@@ -176,7 +176,8 @@ public:
   */
   static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, const std::string &obj_name, 
                                                   std::list<std::string> &names);
-
+#if 0
+  THIS IS REALLY BROKEN. DO NOT USE THIS METHOD
   /**
   * @brief Returns a mapping of attribute names to attribute values. This is a pretty specialized 
   * method and should be used with great care. The outcome of the method is undefined for any type
@@ -185,8 +186,10 @@ public:
   * @param obj_name The name of the object whose attributes you want a map of
   * @return A std::map<string, string> of attribute names to values
   */
-  static MXA_EXPORT std::map<std::string, std::string> getAttributesMap(hid_t objId, const std::string &obj_name);
-  
+  static MXA_EXPORT  herr_t H5Utilities::getAttributesMap(hid_t loc_id, 
+                                                          const std::string &obj_name,
+                                                          std::map<std::string, std::string> &attributes);
+#endif  
   /**
    * @brief Returns a vector of IAttributes, one for each attribute of a given hdf5 object
    * @param fileId The parent hdf5 id
@@ -194,7 +197,9 @@ public:
    * @param attributes Variable to store the attributes
    * @return Negative value on error
    */
-  static MXA_EXPORT herr_t readAllAttributes(hid_t fileId, const std::string &datasetPath, MXAAttributes &attributes);
+  static MXA_EXPORT herr_t readAllAttributes(hid_t fileId, 
+                                             const std::string &datasetPath, 
+                                             MXAAttributes &attributes);
   
 /**
   * @brief Reads data from an Attribute into an IAttributePtr

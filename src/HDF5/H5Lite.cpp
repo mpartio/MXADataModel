@@ -758,7 +758,9 @@ herr_t H5Lite::getAttributeNDims(hid_t loc_id,
       retErr = err;
     }
  }
- 
+ if (attr_id < 0) {
+   retErr = attr_id;
+ }
  return retErr;
 }
 

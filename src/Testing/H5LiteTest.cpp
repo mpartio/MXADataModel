@@ -587,6 +587,7 @@ herr_t testReadScalarDataset(hid_t file_id)
   return err;
 }
 
+
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -825,7 +826,7 @@ void H5LiteTest()
     std::cout << "Error closing Group c99Gid" << std::endl;
     return;
   }
-  
+
   // std::cout << logTime() << "----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl;
    BOOST_REQUIRE ( testWritePointer2DArrayDataset<int8>(file_id) >= 0);
    BOOST_REQUIRE ( testWritePointer2DArrayDataset<uint8>(file_id) >= 0);
@@ -899,14 +900,7 @@ void H5LiteTest()
    
    BOOST_REQUIRE ( testReadStringDatasetAndAttributes(file_id) >= 0);
    
-  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 1", file_id) >= 0);
-  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 2/", file_id) >= 0);
-  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 3/", file_id) >= 0);
-  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/", file_id) < 0);
-  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 4/Test Path 7", file_id) >= 0);
-  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 5/Test Path 8/", file_id) >= 0);
-  BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 6/Test Path 9/", file_id) >= 0);
-  
+
   /* Close the file. */
   H5Fclose( file_id );
  // std::cout << logTime() << "Testing Complete" << std::endl;

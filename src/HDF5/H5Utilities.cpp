@@ -50,7 +50,7 @@ std::string H5Utilities::getObjectPath(hid_t loc_id, bool trim)
 // -----------------------------------------------------------------------------
 herr_t H5Utilities::getObjectType(hid_t objId, const std::string &objName, int32 *objType)
 {
-  herr_t err=0;
+  herr_t err=1;
   H5G_stat_t obj_info;
   
   err = H5Gget_objinfo(objId, objName.c_str(), 1, &obj_info);
@@ -191,8 +191,9 @@ herr_t H5Utilities::getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<st
   return err;
 }
 
-
-// HDF Creation/Modification Methods
+// -----------------------------------------------------------------------------
+// HDF Creation/Modification Methods 
+// -----------------------------------------------------------------------------
 hid_t H5Utilities::createGroup(hid_t loc_id, const std::string &group) 
 {
   hid_t grp_id;
@@ -330,28 +331,28 @@ int32 H5Utilities::createGroupsFromPath(const std::string &pathToCheck, hid_t pa
 //--------------------------------------------------------------------//
 // HDF Attribute Methods
 //--------------------------------------------------------------------//
-
-/*! @brief Returns true if there is an attribute named attr_name
- *   associated with obj_name at loc_id
- */
-bool H5Utilities::probeForAttribute(hid_t loc_id, const std::string &obj_name, 
-    const std::string &attr_name)
+bool H5Utilities::probeForAttribute(hid_t loc_id, 
+                                    const std::string &obj_name, 
+                                    const std::string &attr_name)
 {
   herr_t err=0;
   int32 rank;
+  HDF_ERROR_HANDLER_OFF
   err = H5Lite::getAttributeNDims(loc_id, obj_name, attr_name, rank);
-  //err = H5LTget_attribute_ndims(loc_id, obj_name.c_str(), attr_name.c_str(), &rank);
-  if (err < 0) {
+  HDF_ERROR_HANDLER_ON
+  if (err < 0) 
+  {
     return false;
-  } else {
-    return true;
   } 
+  return true;
 }
 
-
+//--------------------------------------------------------------------//
 // Returns a std::list of all attribute names attached to the object
 //  referred to by obj_id
-herr_t H5Utilities::getAllAttributeNames(hid_t obj_id, std::list<std::string> &results)
+//--------------------------------------------------------------------//
+herr_t H5Utilities::getAllAttributeNames(hid_t obj_id, 
+                                         std::list<std::string> &results)
 {
   if (obj_id < 0) { return -1; }
   herr_t err = -1;
@@ -394,6 +395,65 @@ herr_t H5Utilities::getAllAttributeNames(hid_t obj_id, std::list<std::string> &r
   return err;
 }
 
+#if 0
+ // Returns a std::map with all of the attributes for obj_name 
+ //  and their attribute values in a std::string std::map
+ herr_t H5Utilities::getAttributesMap(hid_t loc_id, 
+                                      const std::string &obj_name,
+                                      std::map<std::string, std::string> &attributes)
+ { 
+   //std::map<std::string, std::string> attributes;
+   herr_t err=0;
+   H5T_class_t attr_type;
+   size_t attr_size;
+   std::string res;
+   hid_t tid;
+   MXATypes::Int32Vector ires;
+   MXATypes::Float32Vector fres;
+   std::vector<uint64> dims;  //Reusable for the loop
+   std::list<std::string> names;
+   err = getAllAttributeNames(loc_id, obj_name, names);
+   if (err < 0) { return err; }
+   std::list<std::string>::iterator iter;
+   for (iter=names.begin(); iter != names.end(); iter++) 
+   {
+     err = H5Lite::getAttributeInfo(loc_id, obj_name, (*iter), dims, attr_type, attr_size, tid);
+     if (err < 0) {
+       std::cout << "Error getting all attributes" << std::endl;
+       return err;
+     } else {
+       switch(attr_type) 
+       {
+       case H5T_STRING:
+         err = H5Lite::readStringAttribute(loc_id, obj_name, (*iter), res );
+         if (err >= 0) {
+           attributes[(*iter)] = res;
+         } else { return err; }
+         break;
+       case H5T_INTEGER:
+         err = H5Lite::readVectorAttribute(loc_id, obj_name, (*iter), ires);
+         if (err >= 0) {
+           attributes[(*iter)] = StringUtils::numToString(ires[0]);
+         } else { return err; }
+         break;
+       case H5T_FLOAT:
+         err = H5Lite::readVectorAttribute(loc_id, obj_name, (*iter), fres);
+         if (err >= 0) {
+           attributes[(*iter)] = StringUtils::numToString(fres[0]);
+         } else { return err; }
+         break;
+       default:
+         std::cout << "Unknown attribute type: " << attr_type << ": ";
+         printHDFClassType(attr_type);
+       }
+     }
+   }
+
+   return err;
+ }
+#endif
+
+ 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -487,59 +547,6 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPa
   return retErr;
 }
 
-
-// Returns a std::map with all of the attributes for obj_name 
-//  and their attribute values in a std::string std::map
-std::map<std::string, std::string> H5Utilities::getAttributesMap(hid_t loc_id, const std::string &obj_name)
-{	
-  //AbstractKeyValuePtr attr(new StringAttribute(key, value));
-  std::map<std::string, std::string> attributes;
-  herr_t err=0;
-  H5T_class_t attr_type;
-  size_t attr_size;
-  std::string res;
-  hid_t tid;
-  MXATypes::Int32Vector ires;
-  MXATypes::Float32Vector fres;
-  std::vector<uint64> dims;  //Reusable for the loop
-  std::list<std::string> names;
-  err = getAllAttributeNames(loc_id, obj_name, names);
-  std::list<std::string>::iterator iter;
-  for (iter=names.begin(); iter != names.end(); iter++) 
-  {
-    err = H5Lite::getAttributeInfo(loc_id, obj_name, (*iter), dims, attr_type, attr_size, tid);
-    if (err < 0) {
-      std::cout << "Error getting all attributes" << std::endl;
-    } else {
-      switch(attr_type) 
-      {
-      case H5T_STRING:
-      	err = H5Lite::readStringAttribute(loc_id, obj_name, (*iter), res );
-      	if (err >= 0) {
-      	  attributes[(*iter)] = res;
-      	}
-      	break;
-      case H5T_INTEGER:
-      	err = H5Lite::readVectorAttribute(loc_id, obj_name, (*iter), ires);
-      	if (err >= 0) {
-      	  attributes[(*iter)] = StringUtils::numToString(ires[0]);
-      	}
-      	break;
-      case H5T_FLOAT:
-      	err = H5Lite::readVectorAttribute(loc_id, obj_name, (*iter), fres);
-      	if (err >= 0) {
-      	  attributes[(*iter)] = StringUtils::numToString(fres[0]);
-      	}
-      	break;
-      default:
-      	std::cout << "Unknown attribute type: " << attr_type << ": ";
-      	printHDFClassType(attr_type);
-      }
-    }
-  }
-
-  return attributes;
-}
 
 
 

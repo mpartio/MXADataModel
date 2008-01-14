@@ -67,7 +67,15 @@ IF (BUILD_TESTING)
     ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
     TARGET_LINK_LIBRARIES (H5LiteTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS})
     ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
-    
+
+    # ------- H5Lite Test
+    SET (H5UTIL_TEST_SRCS
+      H5UtilitiesTest.cpp
+    )
+    ADD_EXECUTABLE ( H5UtilitiesTest ${H5UTIL_TEST_SRCS} )
+    TARGET_LINK_LIBRARIES (H5UtilitiesTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS})
+    ADD_TEST(H5UtilitiesTest ${EXECUTABLE_OUTPUT_PATH}/H5UtilitiesTest)
+        
     # --------- BMP IO Test
     SET (BMP_IO_TEST_SRCS
         BmpIOTest.cpp

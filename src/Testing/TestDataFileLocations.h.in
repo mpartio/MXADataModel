@@ -36,13 +36,19 @@
 // -----------------------------------------------------------------------------
 #define DATAMODEL_TEST_BEFORE_H5_FILE "@MXA_TEMP_DIR@DataModelTest-Before.h5"
 #define DATAMODEL_TEST_AFTER_H5_FILE "@MXA_TEMP_DIR@DataModelTest-After.h5"
-#define DATAMODEL_TEST_OVERWRITE_H5_FILE "@MXA_TEMP_DIR@DataModelOverWriteTest.h5" 
+#define DATAMODEL_TEST_OVERWRITE_H5_FILE "@MXA_TEMP_DIR@DataModelOverWrite_Test.h5" 
 
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the H5Lite Test
 // -----------------------------------------------------------------------------
-#define H5LITE_TEST_FILE_NAME "@MXA_TEMP_DIR@H5Lite_test.h5"
+#define H5LITE_TEST_FILE_NAME "@MXA_TEMP_DIR@H5Lite_Test.h5"
+
+
+// -----------------------------------------------------------------------------
+//  Define where to put our temporary files for the H5Lite Test
+// -----------------------------------------------------------------------------
+#define H5UTIL_TEST_FILE_NAME "@MXA_TEMP_DIR@H5Utilities_Test.h5"
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the vtk tests
