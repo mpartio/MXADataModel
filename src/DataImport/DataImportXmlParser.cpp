@@ -11,7 +11,6 @@
 #include <Utilities/DataSourcePathIndexSection.h>
 #include <Utilities/DataSourcePathTextSection.h>
 #include <XML/XMLDataModelReader.h>
-#include <HDF5/H5IODelegate.h>
 #include <HDF5/H5MXADataFile.h>
 
 //-- C++ stdlib includes

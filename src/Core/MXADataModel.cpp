@@ -11,7 +11,6 @@
 #include <iostream>
 
 #if HDF5_SUPPORT
-#include <HDF5/H5IODelegate.h>
 #include <HDF5/H5MXARequiredMetaData.h>
 #endif
 
