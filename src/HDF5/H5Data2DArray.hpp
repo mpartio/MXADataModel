@@ -26,7 +26,7 @@
 * @brief This class represents a generic 2D array of data.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 template<typename T>
 class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T> 
@@ -208,6 +208,43 @@ class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T>
       this->_height = dims[1];
       err = H5Lite::readPointerDataset(fileId, this->getDatasetPath(), this->getPointer(0,0) );
       return err;
+    }
+    
+    /**
+     * @brief Converts the data array into a string delimited by the supplied
+     * delimiter.
+     * @param delimiter The delimiter to use between each value. Default is a single space
+     * @return The generated string
+     */ 
+    virtual std::string valueToString(char delimiter = ' ')
+    {
+      std::stringstream sstream;
+      uint64 nElements = this->getNumberOfElements();
+      uint64 limit = nElements - 1;
+      int32 width = 0;
+      T* data = this->getPointer(0, 0);
+      for(uint64 i = 0; i < nElements; ++i) 
+      {
+        if (sizeof(T) != 1 )
+         {
+          sstream  << data[i];
+         }
+         else
+         {
+           sstream  << static_cast<int32>(data[i]);
+         } 
+        if (i < limit && width != _width)
+        {
+          sstream << delimiter;
+        }
+        if (width == _width) // Format in multiple rows
+        {
+          sstream << "\n";
+          width = 0;
+        }
+        ++width;
+      }
+      return sstream.str();
     }
     
     

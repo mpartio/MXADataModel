@@ -23,7 +23,7 @@
 * then use the generic H5Data2DArray class instead.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT H5RGBImage : public H5DataArrayTemplate<uint8> 
 {
@@ -67,6 +67,8 @@ class MXA_EXPORT H5RGBImage : public H5DataArrayTemplate<uint8>
 // -----------------------------------------------------------------------------
     virtual int32 readFromFile(IDataFilePtr dataFile);
     
+    
+    virtual std::string valueToString(char delimiter = ' ');
     
   protected:  
       H5RGBImage(const std::string &datasetPath, 

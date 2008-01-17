@@ -49,6 +49,15 @@ std::string H5AsciiStringData::toStdString(H5AsciiStringData* strData)
   return str;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+std::string H5AsciiStringData::valueToString(char delimiter)
+{
+  const char* p = static_cast<const char*>(this->getVoidPointer(0) );
+  std::string str (p, this->getNumberOfElements());
+  return str;
+}
 
 // -----------------------------------------------------------------------------
 //  

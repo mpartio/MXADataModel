@@ -23,7 +23,7 @@
 * methods to meet my specific needs.
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT IAbstractDataArray : public IDataFileIO
 {
@@ -81,7 +81,13 @@ class MXA_EXPORT IAbstractDataArray : public IDataFileIO
      */
     virtual void printSelf(std::ostream &os, int32 indent) = 0;
     
-    
+    /**
+     * @brief Converts the data array into a string delimited by the supplied
+     * delimiter.
+     * @param delimiter The delimiter to use between each value
+     * @return The generated string
+     */ 
+    virtual std::string valueToString(char delimiter) = 0;
     
   protected:  
   

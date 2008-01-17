@@ -30,7 +30,7 @@
  * from the HDF5 data file
  * @author Mike Jackson
  * @date Mar 2007
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  *   H5DataModelReader.h
  */
 class MXA_EXPORT H5DataModelReader : public IDataModelReader
@@ -103,49 +103,7 @@ public:
   * @return Standard HDF5 Error Condition 
   */
   herr_t readUserMetaData(hid_t locId);
-  
-  /**
-  * @brief Reads a Primitive Value that will be assigned to a named attribute
-  * @param locId The HDF5 file or group id
-  * @param datasetPath The path to the dataset to read
-  * @param key The attribute key to read
-  * @param dims The dimensions of the attribute
-  * @return Standard HDF5 Error Condition 
-  */
-  template<typename T>
-  int32 readPrimitiveAttribute(hid_t locId, 
-                               const std::string &datasetPath, 
-                               const std::string &key, 
-                               const std::vector<uint64> &dims)
-    {
-      herr_t err = -1;
-      if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
-      {
-        T data;
-        err = H5Lite::readScalarAttribute(locId, datasetPath, key, data);
-        if (err >= 0)
-        {
-          MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateScalarAttribute(datasetPath, key, data);
-          this->_dataModel->addUserMetaData(attr);
-        }
-      }
-      else // Multi-Dimensional Data 
-      {
-        MXAAbstractAttributePtr attr =
-            H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray(datasetPath, key, dims.size(), &(dims.front()));
-        if (attr.get() != NULL)
-        {
-          T* data = static_cast<T*>(attr->getVoidPointer(0) );
-          err = H5Lite::readPointerAttribute(locId, datasetPath, key, data);
 
-          if (err >= 0)
-          {
-            this->_dataModel->addUserMetaData(attr);
-          }
-        }
-      }
-      return err;
-    }
   
 protected:
   // ----- Helper methods to read data dimensions or data records --------------

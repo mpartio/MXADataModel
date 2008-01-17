@@ -26,7 +26,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  *  
  */
 class MXA_EXPORT IDataModel
@@ -257,6 +257,13 @@ class MXA_EXPORT IDataModel
     * @param umd The Key/Value pair to append to the model
     */
     virtual void addUserMetaData( MXAAbstractAttributePtr umd) = 0;
+    
+    /**
+     * @brief Sets all the user defined meta data for this model. Any previously
+     * defined meta data will be erased.
+     * @param attributes Vector of MXAAbstractAttributePtr objects
+     */
+    virtual void setUserMetaData( MXAAbstractAttributes &attributes) = 0;
 
     
     /** @brief Returns the Data Structure used to hold the user defined Meta Data */

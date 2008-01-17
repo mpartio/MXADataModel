@@ -37,7 +37,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.21 $
+ * @version $Revision: 1.22 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -285,7 +285,13 @@ class MXA_EXPORT MXADataModel : public IDataModel
    */
   void addUserMetaData ( MXAAbstractAttributePtr umd);
   
-
+  /**
+   * @brief Sets all the user defined meta data for this model.Any previously
+     * defined meta data will be erased.
+   * @param attributes Vector of MXAAbstractAttributePtr objects
+   */
+  void setUserMetaData( MXAAbstractAttributes &attributes);
+  
 
   /** @brief Returns the Data Structure used to hold the user defined Meta Data */
   MXAAbstractAttributes getUserMetaData();

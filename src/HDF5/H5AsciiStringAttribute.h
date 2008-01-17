@@ -21,12 +21,12 @@
 * @brief 
 * @author mjackson
 * @date Jan 4, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT H5AsciiStringAttribute : public H5AttributeArrayTemplate<uint8>
 {
   public:
-    static MXAAbstractAttributePtr New(const std::string &datasetPath, 
+    static MXAAbstractAttributePtr CreateAbstractAttributeArray(const std::string &datasetPath, 
                                        const std::string &attributeKey,
                                        const std::string &value);
    
@@ -47,6 +47,9 @@ class MXA_EXPORT H5AsciiStringAttribute : public H5AttributeArrayTemplate<uint8>
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
     virtual int32 readFromFile(IDataFilePtr dataFile);
+    
+    virtual std::string valueToString(char delimiter = ' ');
+    
     
   protected:  
     H5AsciiStringAttribute(const std::string &datasetPath, 

@@ -431,76 +431,15 @@ herr_t H5DataModelReader::readRequiredMetaData(hid_t locId)
 // -----------------------------------------------------------------------------
 herr_t H5DataModelReader::readUserMetaData(hid_t locId)
 {
-  CheckValidLocId(locId);
-  herr_t err = -1;
-  herr_t retErr = -1;
-  hid_t typeId = -1;
-  H5T_class_t attr_type;
-  size_t attr_size;
-  std::string res;
- 
-  std::vector<uint64> dims;  //Reusable for the loop
-  std::list<std::string> names;
-  err = H5Utilities::getAllAttributeNames(locId, MXA::UserMetaDataPath, names );
-
-  for (std::list<std::string>::iterator iter=names.begin(); iter != names.end(); iter++) 
+  MXAAbstractAttributes attributes;
+  herr_t err = H5Utilities::readAllAttributes(locId, MXA::UserMetaDataPath, attributes);
+  if (err >= 0) 
   {
-    err = H5Lite::getAttributeInfo(locId, MXA::UserMetaDataPath, (*iter), dims, attr_type, attr_size, typeId);
-    if (err < 0) {
-      std::cout << "Error in getAttributeInfo method in readUserMetaData." << std::endl;
-    } else {
-      switch(attr_type) 
-      {
-      case H5T_STRING:
-        res.clear(); //Clear the string out first since we are reusing it
-        err = H5Lite::readStringAttribute(locId, MXA::UserMetaDataPath, (*iter), res );
-        if (err >= 0) {
-          MXAAbstractAttributePtr attr = H5AsciiStringAttribute::New(MXA::UserMetaDataPath, (*iter), res );
-          this->_dataModel->addUserMetaData(attr);
-        }
-        break;
-      case H5T_INTEGER:
-        //std::cout << "User Meta Data Type is Integer" << std::endl;
-        if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
-          readPrimitiveAttribute<uint8>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
-          readPrimitiveAttribute<uint16>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
-          readPrimitiveAttribute<uint32>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
-          readPrimitiveAttribute<uint64>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
-          readPrimitiveAttribute<int8>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
-          readPrimitiveAttribute<int16>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
-          readPrimitiveAttribute<int32>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
-          readPrimitiveAttribute<int64>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else {
-          std::cout << "Unknown Type: " << typeId << " at " <<  MXA::UserMetaDataPath << std::endl;
-          err = -1;
-        }
-        break;
-      case H5T_FLOAT:
-        if (attr_size == 4) {
-          readPrimitiveAttribute<float32>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else if (attr_size == 8 ) {
-          readPrimitiveAttribute<float64>(locId, const_cast<std::string&>(MXA::UserMetaDataPath), (*iter), dims);
-        } else {
-          std::cout << "Unknown Floating point type" << std::endl;
-          err = -1;
-        }
-        break;
-      default:
-        std::cout << "Error: readUserMetaData() Unknown attribute type: " << attr_type << std::endl;
-        H5Utilities::printHDFClassType(attr_type);
-      }
-      CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
-    }
+    this->_dataModel->setUserMetaData(attributes);
   }
+  
+  return err;
 
-  return retErr;
 }
 
 

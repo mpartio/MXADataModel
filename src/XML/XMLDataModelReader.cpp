@@ -488,7 +488,7 @@ void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
   }
   if ( this->_userMDType.compare("H5T_STRING") == 0 )
   {
-    MXAAbstractAttributePtr attr = H5AsciiStringAttribute::New(MXA::UserMetaDataPath, this->_userMDKey, this->_userAttributeData);
+    MXAAbstractAttributePtr attr = H5AsciiStringAttribute::CreateAbstractAttributeArray(MXA::UserMetaDataPath, this->_userMDKey, this->_userAttributeData);
     this->_dataModel->addUserMetaData(attr);
   }
   else 

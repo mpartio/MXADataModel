@@ -16,12 +16,15 @@
 #include <HDF5/H5Lite.h>
 #include <Utilities/StringUtils.h>
 
+// STL Includes
+#include <sstream>
+
 /**
 * @class H5AttributeArrayTemplate H5AttributeArrayTemplate.hpp PathToHeader/H5AttributeArrayTemplate.hpp
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 template<typename T>
 class H5AttributeArrayTemplate : public MXAAbstractAttribute
@@ -65,13 +68,6 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
       {  // Could not allocate enough memory, reset the pointer to null and return
         d = NULL;
       }
-      
-#if 0
-      std::cout << logTime() << "CreateAbstractAttributeMultiDimensionalArray" << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
-      std::cout << "dims.size(): " << nDims << std::endl;
-      std::cout << "dims[0]: " << dims[0] << std::endl;
-      std::cout << "dims[1]: " << dims[1] << std::endl;
-#endif
       MXAAbstractAttributePtr ptr ( dynamic_cast<MXAAbstractAttribute*>(d) );
       return ptr;
     }
@@ -339,6 +335,33 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
       os << ind << "}" << std::endl;
     }
     
+    /**
+     * @brief Converts the data array into a string delimited by the supplied
+     * delimiter.
+     * @param delimiter The delimiter to use between each value. Default is a single space
+     * @return The generated string
+     */ 
+    virtual std::string valueToString(char delimiter = ' ')
+    {
+      std::stringstream sstream;
+      uint64 limit = _nElements - 1;
+      for(uint64 i = 0; i < _nElements; ++i) 
+      {
+        if (sizeof(T) != 1 )
+         {
+          sstream  << _data[i];
+         }
+         else
+         {
+           sstream  << static_cast<int32>(_data[i]);
+         } 
+        if (i < limit)
+        {
+          sstream << delimiter;
+        }
+      }
+      return sstream.str();
+    }
     
   protected:  
 /**    

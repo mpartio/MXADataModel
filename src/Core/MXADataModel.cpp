@@ -658,6 +658,14 @@ void MXADataModel::addUserMetaData( MXAAbstractAttributePtr userMetaData)
   }
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void MXADataModel::setUserMetaData( MXAAbstractAttributes &attributes)
+{
+  this->_userMetaData = attributes;
+}
+
 
 // -----------------------------------------------------------------------------
 //  

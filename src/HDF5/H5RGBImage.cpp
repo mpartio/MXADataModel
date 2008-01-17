@@ -53,7 +53,7 @@ H5RGBImage* H5RGBImage::New(const std::string &datasetPath,
 // -----------------------------------------------------------------------------
 H5RGBImage::H5RGBImage(const std::string &datasetPath, 
                        int32 width, int32 height) :
-H5DataArrayTemplate<uint8>(datasetPath, width * height * 3, true),
+H5DataArrayTemplate<uint8>(datasetPath, (uint64)(width * height * 3), true),
 _width(width),
 _height(height)
 {
@@ -67,10 +67,9 @@ H5RGBImage::~H5RGBImage()
   
 }
 
-
-/**
- * Returns the number of dimensions the data has.
- */
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 int32 H5RGBImage::getNumberOfDimensions ()
 {
   return 2;
@@ -167,3 +166,32 @@ int32 H5RGBImage::readFromFile(IDataFilePtr dataFile)
   return err;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+std::string H5RGBImage::valueToString(char delimiter)
+{
+  std::stringstream sstream;
+  
+  uint64 nElements = this->getNumberOfElements();
+  uint64 limit = nElements - 1;
+  int32 wLimit = _width * 3;
+  int32 width = 0;
+  uint8* data = this->getPointer(0);
+  for(uint64 i = 0; i < nElements; i=i+3) 
+  {
+    
+    sstream << "[" << data[i] << "," << data[i+1] << "," << data[i+2] << "]";
+    if (i < limit && width != wLimit)
+    {
+      sstream << delimiter;
+    }
+    if (width == wLimit) // Format in multiple rows
+    {
+      sstream << "\n";
+      width = 0;
+    }
+    width += 3;
+  }
+  return sstream.str();
+}

@@ -20,7 +20,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 4, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT H5AsciiStringData : public H5DataArrayTemplate<uint8>
 {
@@ -43,6 +43,9 @@ class MXA_EXPORT H5AsciiStringData : public H5DataArrayTemplate<uint8>
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
     virtual int32 readFromFile(IDataFilePtr dataFile);
+    
+    
+    virtual std::string valueToString(char delimiter = ' ');
         
   protected:  
     H5AsciiStringData(const std::string &datasetPath, mxaIdType numElements);

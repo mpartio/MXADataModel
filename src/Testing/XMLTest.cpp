@@ -144,7 +144,7 @@ void CreateAttributes(MXADataModel* model)
     MakeScalarAttribute( f64, "Scalar Float 64", model);
 
     // String attributes
-    MXAAbstractAttributePtr s1 = H5AsciiStringAttribute::New(MXA::UserMetaDataPath, "Password", "DaddyO");
+    MXAAbstractAttributePtr s1 = H5AsciiStringAttribute::CreateAbstractAttributeArray(MXA::UserMetaDataPath, "Password", "DaddyO");
     model->addUserMetaData(s1);
 }
 

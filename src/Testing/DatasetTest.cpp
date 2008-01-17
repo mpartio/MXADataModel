@@ -109,7 +109,7 @@ void MakeStringAttribute(const std::string &dsPath, IDatasetPtr dataset)
   std::string value ("attribute value");
   std::string attributeKey ("H5AsciiStringAttribute");
   
-  MXAAbstractAttributePtr strAttr = H5AsciiStringAttribute::New(dsPath, attributeKey, value);
+  MXAAbstractAttributePtr strAttr = H5AsciiStringAttribute::CreateAbstractAttributeArray(dsPath, attributeKey, value);
   dataset->addAttribute(strAttr);
 }
 

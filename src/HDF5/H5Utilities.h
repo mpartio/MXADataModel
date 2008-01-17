@@ -15,7 +15,7 @@
 #include <Common/DLLExport.h>
 #include <Common/MXATypes.h>
 #include <Common/MXATypeDefs.h>
-// #include <Core/MXAAttribute.h>
+#include <HDF5/H5AttributeArrayTemplate.hpp>
 #include <HDF5/H5Lite.h>
 
 // C++ Includes
@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.23 $
+ * @version $Revision: 1.24 $
  */
 class H5Utilities
 {
@@ -191,7 +191,7 @@ public:
                                                           std::map<std::string, std::string> &attributes);
 #endif  
   
-#if 0
+
   /**
    * @brief Returns a vector of IAttributes, one for each attribute of a given hdf5 object
    * @param fileId The parent hdf5 id
@@ -201,8 +201,8 @@ public:
    */
   static MXA_EXPORT herr_t readAllAttributes(hid_t fileId, 
                                              const std::string &datasetPath, 
-                                             MXAAttributes &attributes);
-  
+                                             MXAAbstractAttributes &attributes);
+
 /**
   * @brief Reads data from an Attribute into an IAttributePtr
   * @param locId The hdf5 object id of the parent
@@ -212,35 +212,43 @@ public:
   * @return Boost shared pointer to the attribute
   */
   template<typename T>
-  static MXAAttributePtr readPrimitiveAttribute( hid_t locId, 
-                                  const std::string &datasetPath, 
-                                 const std::string &key, 
-                                 const std::vector<uint64> &dims)
+  static MXAAbstractAttributePtr readPrimitiveAttribute( hid_t locId, 
+                                                         const std::string &datasetPath, 
+                                                         const std::string &key, 
+                                                         const std::vector<uint64> &dims)
   {
     herr_t err = -1;
-    MXAAttributePtr ptr;
+    MXAAbstractAttributePtr ptr;
     if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
     {
       T data;
       err = H5Lite::readScalarAttribute(locId, datasetPath, key, data);
       if (err >= 0) {   
-        MXAAttributePtr attr = MXAAttribute::createAttribute(key, data);
-        return attr;
+        MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateScalarAttribute(datasetPath, key, data);
+        if (attr.get() != NULL)
+        {
+          ptr = attr;
+        }
       }
     } 
     else // Multi-Dimensional Data 
     {
-      std::vector<T> data;
-      err = H5Lite::readVectorAttribute(locId, datasetPath, key, data);
-      if (err >= 0) {   
-        MXAAttributePtr attr = MXAAttribute::createAttribute(key, data, dims);
-        return attr;
+      MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray(datasetPath, key, dims.size(), &(dims.front()));
+      if (attr.get() == NULL)
+      {
+        return ptr; // empty attribute
+      }
+      // All the needed space is now preallocated in the attribute
+      T* data = static_cast<T*>(attr->getVoidPointer(0) );
+      err = H5Lite::readPointerAttribute(locId, datasetPath, key, data);
+      if (err >= 0) 
+      {   
+         ptr = attr;
       }
     }
     return ptr;
   }
 
-#endif
   
   /**
    * @brief Creates an absolute path suitable for create an HDF5 data set.

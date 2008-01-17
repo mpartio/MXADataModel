@@ -23,7 +23,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 template<typename T>
 class H5DataArrayTemplate : public MXAAbstractData
@@ -284,6 +284,34 @@ class H5DataArrayTemplate : public MXAAbstractData
      os << ind << "}" << std::endl;
    }
     
+   /**
+    * @brief Converts the data array into a string delimited by the supplied
+    * delimiter.
+    * @param delimiter The delimiter to use between each value. Default is a single space
+    * @return The generated string
+    */ 
+   virtual std::string valueToString(char delimiter = ' ')
+   {
+     std::stringstream sstream;
+     uint64 limit = _nElements - 1;
+     for(uint64 i = 0; i < _nElements; ++i) 
+     {
+       if (sizeof(T) != 1 )
+        {
+         sstream  << _data[i];
+        }
+        else
+        {
+          sstream  << static_cast<int32>(_data[i]);
+        } 
+       if (i < limit)
+       {
+         sstream << delimiter;
+       }
+     }
+     return sstream.str();
+   }
+   
   protected:  
 /**    
  * @brief Protected Constructor

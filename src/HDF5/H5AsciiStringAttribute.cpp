@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXAAbstractAttributePtr H5AsciiStringAttribute::New(const std::string &datasetPath, 
+MXAAbstractAttributePtr H5AsciiStringAttribute::CreateAbstractAttributeArray(const std::string &datasetPath, 
                                                     const std::string &attributeKey,
                                                     const std::string &value)
 {
@@ -51,6 +51,15 @@ std::string H5AsciiStringAttribute::toStdString(H5AsciiStringAttribute* strData)
   return str;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+std::string H5AsciiStringAttribute::valueToString(char delimiter)
+{
+  const char* p = static_cast<const char*>(this->getVoidPointer(0) );
+  std::string str (p, this->getNumberOfElements());
+  return str;
+}
 
 // -----------------------------------------------------------------------------
 //  
