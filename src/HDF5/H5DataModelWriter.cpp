@@ -15,15 +15,18 @@
 #include <HDF5/H5Utilities.h>
 #include <HDF5/H5AttributeWriter.h>
 #include <Common/LogTime.h>
+#include <Base/IRequiredMetaData.h>
 #include <Core/MXADataModel.h>
 #include <Utilities/StringUtils.h>
-
+#include <Core/MXAAbstractAttribute.h>
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-H5DataModelWriter::H5DataModelWriter(IDataModelPtr dataModel)
+H5DataModelWriter::H5DataModelWriter(IDataModelPtr dataModel, IDataFilePtr dataFile) :
+  _dataModel(dataModel),
+  _dataFile(dataFile)
 {
-  _dataModel = dataModel;
+
 }
 
 // -----------------------------------------------------------------------------
@@ -293,10 +296,11 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
     std::cout << logTime() << "Error Creating Dataset for RequiredMetaData." << err << std::endl;
     return err;
   }
-  std::map<std::string, std::string> metadata;
-  _dataModel->getRequiredMetaData(metadata);
+  std::map<std::string, std::string> meta;
+  IRequiredMetaDataPtr metaData = _dataModel->getRequiredMetaData();
+  metaData->generateKeyValueMap(meta);
 
-  for (std::map<std::string, std::string>::iterator iter=metadata.begin(); iter!=metadata.end(); iter++) {
+  for (std::map<std::string, std::string>::iterator iter=meta.begin(); iter!=meta.end(); iter++) {
     err = H5Lite::writeStringAttribute(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), const_cast<std::string&>( iter->first), iter->second);
     if(err<0) {std::cout << "Error Writing Required MetaData: " << iter->first << "=" << iter->second << " at path " << MXA::RequiredMetaDataPath << std::endl; break;}
   }
@@ -311,14 +315,14 @@ int32 H5DataModelWriter::writeUserMetaData(hid_t fileId)
   int32 data = 0;
   herr_t err = 0;
   this->_writeScalarDataset(fileId, const_cast<std::string&>(MXA::UserMetaDataPath), data);
-  IAttributes metadata = _dataModel->getUserMetaData();
-  IAttribute* attr = NULL;
+  MXAAbstractAttributes metadata = _dataModel->getUserMetaData();
+  MXAAbstractAttribute* attr = NULL;
   H5AttributeWriter writer;
-  for (IAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
+  for (MXAAbstractAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
     attr = (*(iter)).get();
-   // std::cout << "Writing User MetaData for Key: " << attr->getKey() << std::endl;
-    err = attr->write( fileId, const_cast<std::string&>(MXA::UserMetaDataPath), writer);
-    if(err<0) {std::cout << "Error Writing User MetaData Attribute " << MXA::UserMetaDataPath  << " Key:" << attr->getKey() << std::endl; break;}
+    err = attr->writeToFile(_dataFile);
+   // err = attr->write( fileId, const_cast<std::string&>(MXA::UserMetaDataPath), writer);
+    if(err<0) {std::cout << "Error Writing User MetaData Attribute " << MXA::UserMetaDataPath  << " Key:" << attr->getAttributeKey() << std::endl; break;}
   }
   return err;
 }

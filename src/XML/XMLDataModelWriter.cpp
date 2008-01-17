@@ -1,8 +1,8 @@
 #include <XML/XMLDataModelWriter.h>
 #include <XML/XMLUserMetaDataWriter.h>
 #include <XML/XMLConstants.h>
-
-
+#include <Base/IRequiredMetaData.h>
+#include <XML/XMLMXAAttributeWriter.hpp>
 
 // -----------------------------------------------------------------------------
 //  
@@ -228,7 +228,9 @@ int32 XMLDataModelWriter::writeDataRecords(int32 depth)
 int32 XMLDataModelWriter::writeRequiredMetaData(int32 depth)
 {
   std::map<std::string, std::string> meta;
-  _dataModel->getRequiredMetaData(meta);
+  _dataModel->getRequiredMetaData();
+  IRequiredMetaDataPtr metaData = _dataModel->getRequiredMetaData();
+  metaData->generateKeyValueMap(meta);
   _openTag(MXA_XML::Required_MD, depth, false, meta);
   return 1;
 }
@@ -243,16 +245,18 @@ int32 XMLDataModelWriter::writeUserMetaData(int32 depth)
   _openTag(MXA_XML::UserDefined_MD, depth, true, meta);
 
   int32 err = 0;
-  int32 fileId = 0;
+  //int32 fileId = 0;
  
-  IAttributes metadata = _dataModel->getUserMetaData();
-  IAttribute* attr = NULL;
+  MXAAbstractAttributes metadata = _dataModel->getUserMetaData();
+  MXAAbstractAttribute* attr = NULL;
   
-  XMLUserMetaDataWriter writer(_ofstreamPtr);
-  for (IAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
+  //XMLUserMetaDataWriter writer(_ofstreamPtr);
+  for (MXAAbstractAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
     attr = (*(iter)).get();
-    err = attr->write( fileId, const_cast<std::string&>(MXA::UserMetaDataPath), writer);
-    if(err<0) {std::cout << "Error Writing User MetaData Attribute " << MXA::UserMetaDataPath  << " Key:" << attr->getKey() << std::endl; break;}
+    //err = attr->write( fileId, const_cast<std::string&>(MXA::UserMetaDataPath), writer);
+    XMLMXAAttributeWriter writer(_ofstreamPtr);
+    err = writer.writeAttribute(*iter);
+    if(err<0) {std::cout << "Error Writing User MetaData Attribute " << MXA::UserMetaDataPath  << " Key:" << attr->getAttributeKey() << std::endl; break;}
   }
   _closeGroupTag(MXA_XML::UserDefined_MD, depth - 1);
   return err;
@@ -271,7 +275,6 @@ int32 XMLDataModelWriter::writeDataDimension(IDataDimension* dim)
   // are NOT initialized then do not write them to the file.
   if (dim->isPropertyInitialized( dim->getStartValue() ) )
   {
-    
     attrs[MXA::MXA_START_VALUE_TAG] =  StringUtils::numToString(dim->getStartValue() );
   }
   if ( dim->isPropertyInitialized(dim->getEndValue() ) )

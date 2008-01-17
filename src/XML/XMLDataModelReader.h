@@ -16,6 +16,7 @@
 #include <Core/MXADataModel.h>
 #include <Base/IDataModelReader.h>
 #include <HDF5/H5Lite.h>
+#include <HDF5/H5AttributeArrayTemplate.hpp>
 #include <XML/XMLIODelegate.h>
 #include <XML/ExpatParser.h>
 #include <XML/XMLConstants.h>
@@ -26,7 +27,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
  * class. This class is responsible for reading a data model from an XML File
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  * @class XMLDataModelReader XMLDataModelReader.h
  */
 class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,
@@ -88,7 +89,7 @@ public:
       {
         if ( (istream >> tmp).good() )
         {
-          MXAAttributePtr attr = MXAAttribute::createAttribute(this->_userMDKey, static_cast<T>(tmp) );
+          MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateScalarAttribute(MXA::UserMetaDataPath, this->_userMDKey,static_cast<T>(tmp) );
           this->_dataModel->addUserMetaData(attr);
         }
       }
@@ -96,7 +97,7 @@ public:
       {
         if ( (istream >> temp).good() )
         {
-          MXAAttributePtr attr = MXAAttribute::createAttribute(this->_userMDKey, temp);
+          MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateScalarAttribute(MXA::UserMetaDataPath, this->_userMDKey,static_cast<T>(temp) );
           this->_dataModel->addUserMetaData(attr);
         }
       }
@@ -125,7 +126,14 @@ public:
 
       if (data.size() == size)
       {
-        MXAAttributePtr attr = MXAAttribute::createAttribute(this->_userMDKey, data, dims);
+        MXAAbstractAttributePtr attr = 
+          H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray( MXA::UserMetaDataPath, 
+                                                                                  this->_userMDKey, 
+                                                                                  dims.size(), 
+                                                                                  &(dims.front()) );
+        T* dest = static_cast<T*>(attr->getVoidPointer(0));
+        ::memcpy(dest, &(data.front()), data.size() * sizeof(T) );
+        
         this->_dataModel->addUserMetaData(attr);
       } else {
         err = -1;

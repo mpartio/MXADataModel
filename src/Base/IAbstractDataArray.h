@@ -12,7 +12,7 @@
 #define _IAbstractDataArray_h_
 
 #include <Base/IDataFileIO.h>
-
+#include <iostream>
 
 /**
 * @class IAbstractDataArray IAbstractDataArray.h PathToHeader/IAbstractDataArray.h
@@ -23,7 +23,7 @@
 * methods to meet my specific needs.
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class MXA_EXPORT IAbstractDataArray : public IDataFileIO
 {
@@ -50,12 +50,12 @@ class MXA_EXPORT IAbstractDataArray : public IDataFileIO
      * @param i The index to have the returned pointer pointing to.
      * @return Void Pointer. Possibly NULL.
      */
-    virtual void* getVoidPointer ( mxaIdType i) = 0;
+    virtual void* getVoidPointer ( uint64 i) = 0;
     
     /**
      * @brief Returns the number of elements in the internal array.
      */
-    virtual mxaIdType getNumberOfElements () = 0;
+    virtual uint64 getNumberOfElements () = 0;
     
     /**
      * Returns the number of dimensions the data has.
@@ -63,17 +63,26 @@ class MXA_EXPORT IAbstractDataArray : public IDataFileIO
     virtual int32 getNumberOfDimensions () = 0;
     
     /**
-     * @brief Sets the number of dimensions the data array has
-     * @param rank The number of dimensions
+     * @brief Copies the values of the dimensions into the supplied pointer
+     * @param dims
      */
-    //virtual void setArrayDimensions(std::vector<uint64> dimensions) = 0;
+    virtual void getDimensions(uint64* dims) = 0;
     
     /**
      * @brief Returns an enumerated type that can be used to find out the type
      * of primitive stored in the internal array.
      */
     virtual int32 getDataType () = 0;
-      
+    
+    /**
+     * @brief Prints information about the class to ostream
+     * @param os
+     * @param indent
+     */
+    virtual void printSelf(std::ostream &os, int32 indent) = 0;
+    
+    
+    
   protected:  
   
   private:

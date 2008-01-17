@@ -208,7 +208,7 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFilePtr dataFile)
   int32 err = 1;
   
   // Create the data
-  int32 numElements = 5;
+  uint64 numElements = 5;
   H5DataArrayTemplate<T>* data = H5DataArrayTemplate<T>::New(dsPath, numElements);
   MXAAbstractDataPtr dataPtr (data); //Let boost manage the pointer 
   BOOST_REQUIRE(data != 0x0);
@@ -223,12 +223,12 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFilePtr dataFile)
   err = data->resize(numElements);
   BOOST_REQUIRE(err == 1);
   BOOST_REQUIRE(data->getNumberOfElements() == numElements);
-  for (mxaIdType i = 0; i < numElements; ++i) {
+  for (uint64 i = 0; i < numElements; ++i) {
     data->setValue(i, static_cast<T>(i) );
   }
   // Actually set some meaningful data to the array
   T* value = static_cast<T*>(data->getVoidPointer(0) );
-  for (mxaIdType i = 0; i < numElements; ++i) {
+  for (uint64 i = 0; i < numElements; ++i) {
     BOOST_REQUIRE(value[i] == static_cast<T>(i) );
   }
 
@@ -313,7 +313,7 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFilePtr dataFile)
   int32 err = 1;
   
   // Create the data
-  int32 numElements = 256 * 100;
+  uint64 numElements = 256 * 100;
   H5Data2DArray<T>* data = H5Data2DArray<T>::New(dsPath, 256, 100);
   MXAAbstractDataPtr dataPtr (data); //Let boost manage the pointer 
   BOOST_REQUIRE(data != 0x0);
@@ -348,12 +348,12 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFilePtr dataFile)
   BOOST_REQUIRE(data->getNumberOfElements() == numElements);
   BOOST_REQUIRE(data->getWidth() == 212);
   BOOST_REQUIRE(data->getHeight() == 120);
-  for (mxaIdType i = 0; i < numElements; ++i) {
+  for (uint64 i = 0; i < numElements; ++i) {
     data->setValue(i, static_cast<T>(i) );
   }
   // Actually set some meaningful data to the array
   T* value = static_cast<T*>(data->getVoidPointer(0) );
-  for (mxaIdType i = 0; i < numElements; ++i) {
+  for (uint64 i = 0; i < numElements; ++i) {
     BOOST_REQUIRE(value[i] == static_cast<T>(i) );
   }
 
@@ -383,7 +383,7 @@ void _WriteRGBImageTest( const std::string &recName, IDataFilePtr dataFile)
   int32 err = 1;
   
   // Create the data
-  int32 numElements = 256 * 100 * 3;
+  uint64 numElements = 256 * 100 * 3;
   H5RGBImage* data = H5RGBImage::New(dsPath, 256, 100);
   MXAAbstractDataPtr dataPtr (data); //Let boost manage the pointer 
   BOOST_REQUIRE(data != 0x0);
@@ -506,7 +506,7 @@ int32 _readRGBImageTest(const std::string &recName, IDataFilePtr dataFile)
   MXAAbstractDataPtr dataPtr (data); //Let boost manage the pointer 
   int32 err = data->readFromFile(dataFile);
   BOOST_REQUIRE(err >= 0);
-  int32 numElements = 150 * 101 * 3;
+  uint64 numElements = 150 * 101 * 3;
   BOOST_REQUIRE(data->getWidth() == 150);
   BOOST_REQUIRE(data->getHeight() == 101);
   BOOST_REQUIRE(data->getNumberOfElements() == numElements);

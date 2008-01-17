@@ -26,7 +26,7 @@
 * @brief This class represents a generic 2D array of data.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 template<typename T>
 class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T> 
@@ -75,6 +75,15 @@ class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T>
       return 2;
     }
     
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+    virtual void getDimensions(mxaIdType* dims)
+    {
+      dims[0] = _width;
+      dims[1] = _height;
+    }
+        
     virtual int32 getWidth() { return _width; }
     virtual int32 getHeight() { return _height; }
     
@@ -97,7 +106,7 @@ class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T>
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-    virtual int32 resize(mxaIdType size)
+    virtual int32 resize(uint64 size)
     {
       if(this->_resizeAndExtend(size) || size <= 0)
         {
@@ -184,7 +193,7 @@ class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T>
       {
         return -1;
       }
-      mxaIdType numElements = 1;
+      uint64 numElements = 1;
       for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
       {
         numElements = numElements * dims[i];

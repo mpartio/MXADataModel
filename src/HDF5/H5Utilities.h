@@ -15,7 +15,7 @@
 #include <Common/DLLExport.h>
 #include <Common/MXATypes.h>
 #include <Common/MXATypeDefs.h>
-#include <Core/MXAAttribute.h>
+// #include <Core/MXAAttribute.h>
 #include <HDF5/H5Lite.h>
 
 // C++ Includes
@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  */
 class H5Utilities
 {
@@ -190,6 +190,8 @@ public:
                                                           const std::string &obj_name,
                                                           std::map<std::string, std::string> &attributes);
 #endif  
+  
+#if 0
   /**
    * @brief Returns a vector of IAttributes, one for each attribute of a given hdf5 object
    * @param fileId The parent hdf5 id
@@ -238,6 +240,8 @@ public:
     return ptr;
   }
 
+#endif
+  
   /**
    * @brief Creates an absolute path suitable for create an HDF5 data set.
    * @param model The data model to use

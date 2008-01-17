@@ -15,8 +15,8 @@
 #include <Common/DLLExport.h>
 #include <Core/MXADataModel.h>
 #include <Base/IDataModelReader.h>
-#include <HDF5/H5IODelegate.h>
-
+//#include <HDF5/H5IODelegate.h>
+#include <HDF5/H5AttributeArrayTemplate.hpp>
 
 // C++ Headers
 #include <string>
@@ -30,7 +30,7 @@
  * from the HDF5 data file
  * @author Mike Jackson
  * @date Mar 2007
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  *   H5DataModelReader.h
  */
 class MXA_EXPORT H5DataModelReader : public IDataModelReader
@@ -113,31 +113,39 @@ public:
   * @return Standard HDF5 Error Condition 
   */
   template<typename T>
-  int32 readPrimitiveAttribute( hid_t locId, const std::string &datasetPath, 
-                                 const std::string &key, 
-                                 const std::vector<uint64> &dims)
-  {
-    herr_t err = -1;
-    if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
+  int32 readPrimitiveAttribute(hid_t locId, 
+                               const std::string &datasetPath, 
+                               const std::string &key, 
+                               const std::vector<uint64> &dims)
     {
-      T data;
-      err = H5Lite::readScalarAttribute(locId, datasetPath, key, data);
-      if (err >= 0) {   
-        MXAAttributePtr attr = MXAAttribute::createAttribute(key, data);
-        this->_dataModel->addUserMetaData(attr);
+      herr_t err = -1;
+      if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
+      {
+        T data;
+        err = H5Lite::readScalarAttribute(locId, datasetPath, key, data);
+        if (err >= 0)
+        {
+          MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateScalarAttribute(datasetPath, key, data);
+          this->_dataModel->addUserMetaData(attr);
+        }
       }
-    } 
-    else // Multi-Dimensional Data 
-    {
-      std::vector<T> data;
-      err = H5Lite::readVectorAttribute(locId, datasetPath, key, data);
-      if (err >= 0) {   
-        MXAAttributePtr attr = MXAAttribute::createAttribute(key, data, dims);
-        this->_dataModel->addUserMetaData(attr);
+      else // Multi-Dimensional Data 
+      {
+        MXAAbstractAttributePtr attr =
+            H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray(datasetPath, key, dims.size(), &(dims.front()));
+        if (attr.get() != NULL)
+        {
+          T* data = static_cast<T*>(attr->getVoidPointer(0) );
+          err = H5Lite::readPointerAttribute(locId, datasetPath, key, data);
+
+          if (err >= 0)
+          {
+            this->_dataModel->addUserMetaData(attr);
+          }
+        }
       }
+      return err;
     }
-    return err;
-  }
   
 protected:
   // ----- Helper methods to read data dimensions or data records --------------

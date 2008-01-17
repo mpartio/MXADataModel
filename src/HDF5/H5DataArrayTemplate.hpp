@@ -16,14 +16,14 @@
 #include <Core/MXAAbstractData.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
-
+#include <Utilities/StringUtils.h>
 
 /**
 * @class H5DataArrayTemplate H5DataArrayTemplate.hpp HDF5/H5DataArrayTemplate.hpp
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 template<typename T>
 class H5DataArrayTemplate : public MXAAbstractData
@@ -36,7 +36,7 @@ class H5DataArrayTemplate : public MXAAbstractData
  * @param numElements The number of elements in the internal array.
  * @return Boost::Shared_Ptr wrapping an instance of H5DataArrayTemplateTemplate<T>
  */
-   static MXAAbstractDataPtr CreateAbstractDataArray(const std::string &datasetPath, mxaIdType numElements)
+   static MXAAbstractDataPtr CreateAbstractDataArray(const std::string &datasetPath, uint64 numElements)
    {
      H5DataArrayTemplate<T>* d = new H5DataArrayTemplate<T>(datasetPath, numElements, true);
      if ( d->_allocate() < 0)
@@ -54,7 +54,7 @@ class H5DataArrayTemplate : public MXAAbstractData
  * @param numElements The number of elements in the internal array.
  * @return raw pointer to an new instance of H5DataArrayTemplate
  */
-   static H5DataArrayTemplate<T>* New(const std::string &datasetPath, mxaIdType numElements)
+   static H5DataArrayTemplate<T>* New(const std::string &datasetPath, uint64 numElements)
    {
      H5DataArrayTemplate<T>* ptr = new H5DataArrayTemplate<T>(datasetPath, numElements, true);
      if (ptr->_allocate() < 0)
@@ -113,13 +113,13 @@ class H5DataArrayTemplate : public MXAAbstractData
         free(this->_data);
         }
       this->_data = 0;
-      this->_size = 0;
+      this->_nElements = 0;
       this->_ownsData = true;
     }
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-    virtual int32 resize(mxaIdType size)
+    virtual int32 resize(uint64 size)
     {
       if(this->_resizeAndExtend(size) || size <= 0)
         {
@@ -134,7 +134,7 @@ class H5DataArrayTemplate : public MXAAbstractData
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-    virtual void* getVoidPointer(mxaIdType i)
+    virtual void* getVoidPointer(uint64 i)
     {
       if (i >= this->getNumberOfElements() || i < 0)
       {
@@ -146,7 +146,7 @@ class H5DataArrayTemplate : public MXAAbstractData
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-    virtual T getValue(mxaIdType i)
+    virtual T getValue(uint64 i)
     {
       return this->_data[i];
     }
@@ -155,7 +155,7 @@ class H5DataArrayTemplate : public MXAAbstractData
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-    virtual void setValue(mxaIdType i, T value)
+    virtual void setValue(uint64 i, T value)
     {
       this->_data[i] = value;
     }
@@ -163,9 +163,9 @@ class H5DataArrayTemplate : public MXAAbstractData
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-    virtual mxaIdType getNumberOfElements()
+    virtual uint64 getNumberOfElements()
     {
-      return _size;
+      return _nElements;
     }
 
     
@@ -176,7 +176,16 @@ class H5DataArrayTemplate : public MXAAbstractData
     {
       return 1;
     }
-    
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+    virtual void getDimensions(uint64* dims)
+    {
+      *dims = 1;
+    }
+        
+        
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -189,7 +198,7 @@ class H5DataArrayTemplate : public MXAAbstractData
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-    virtual T* getPointer(mxaIdType i)
+    virtual T* getPointer(uint64 i)
     {
       return (T*)(&(_data[i]) );
     }
@@ -223,16 +232,16 @@ class H5DataArrayTemplate : public MXAAbstractData
       }
       herr_t err = -1;
       H5T_class_t attr_type;
-      size_t attr_size;
+      size_t attr_nElements;
       std::string res;
      
       std::vector<hsize_t> dims;  //Reusable for the loop
-      err = H5Lite::getDatasetInfo(fileId, _datasetPath, dims, attr_type, attr_size);
+      err = H5Lite::getDatasetInfo(fileId, _datasetPath, dims, attr_type, attr_nElements);
       if (err < 0 )
       {
         return err;
       }
-      mxaIdType numElements = 1;
+      uint64 numElements = 1;
       for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
       {
         numElements = numElements * dims[i];
@@ -247,6 +256,33 @@ class H5DataArrayTemplate : public MXAAbstractData
       return err;
     }
     
+    /**
+    * @brief Prints information about the class to ostream
+    * @param os
+    * @param indent
+    */
+   virtual void printSelf(std::ostream &os, int32 indent)
+   {
+     std::string ind = StringUtils::indent(indent);
+     os << ind << "H5AttributeArrayTemplate<T>" << std::endl;
+     ind = StringUtils::indent(indent + 1);
+     os << ind << "Dataset Path: " << this->getDatasetPath() << std::endl;
+     os << ind << "Number of Elements: " << this->getNumberOfElements() << std::endl;
+     os << ind << "Number of Dimensions: " << this->getNumberOfDimensions() << std::endl;
+     os << ind << "DataType: " << this->getDataType() << std::endl;
+     os << ind << "Begin Data" << std::endl;
+     os << ind << "{";
+     T* data = this->getPointer(0);
+     for (uint64 i = 0; i < this->getNumberOfElements(); ++i) 
+     {
+       os << ind << *data << " ";
+       if (i%10 ==0)
+       {
+         os << std::endl;
+       }
+     }
+     os << ind << "}" << std::endl;
+   }
     
   protected:  
 /**    
@@ -255,10 +291,10 @@ class H5DataArrayTemplate : public MXAAbstractData
  * @param numElements The number of elements in the internal array.
  * @param takeOwnership Will the class clean up the memory. Default=true
  */
-      H5DataArrayTemplate(const std::string &datasetPath, mxaIdType numElements, bool takeOwnership = true) :
+      H5DataArrayTemplate(const std::string &datasetPath, uint64 numElements, bool takeOwnership = true) :
         _datasetPath(datasetPath),
         _data(NULL),
-        _size(numElements),
+        _nElements(numElements),
         _ownsData(takeOwnership)
       {          }
         
@@ -275,14 +311,14 @@ class H5DataArrayTemplate : public MXAAbstractData
           }
           this->_data = NULL;
           this->_ownsData = true;
-          int newSize = (this->_size > 0 ? this->_size : 1);
+          uint64 newSize = (this->_nElements > 0 ? this->_nElements : 1);
           this->_data = (T*)malloc(newSize * sizeof(T));
           if (!this->_data)
           {
             std::cout << DEBUG_OUT(logTime) << "Unable to allocate " << newSize << " elements of size " << sizeof(T) << " bytes. " << std::endl;
             return -1;
           }
-          this->_size = newSize;
+          this->_nElements = newSize;
           return 1;
         }
         
@@ -291,16 +327,16 @@ class H5DataArrayTemplate : public MXAAbstractData
  * @param size The number of elements to resize the internal array to
  * @return Pointer to the new array
  */
-      virtual T* _resizeAndExtend(mxaIdType size)
+      virtual T* _resizeAndExtend(uint64 size)
         {
           T* newArray;
-          mxaIdType newSize;
+          uint64 newSize;
 
-          if (size > this->_size)
+          if (size > this->_nElements)
           {
             newSize = size;
           }
-          else if (size == this->_size) // Requested size is equal to current size.  Do nothing.
+          else if (size == this->_nElements) // Requested size is equal to current size.  Do nothing.
           {
             return this->_data;
           }
@@ -329,7 +365,7 @@ class H5DataArrayTemplate : public MXAAbstractData
             }
 
             // Copy the data from the old array.
-            memcpy(newArray, this->_data, (newSize < this->_size ? newSize : this->_size) * sizeof(T));
+            ::memcpy(newArray, this->_data, (newSize < this->_nElements ? newSize : this->_nElements) * sizeof(T));
           }
           else
           {
@@ -343,7 +379,7 @@ class H5DataArrayTemplate : public MXAAbstractData
           }
 
           // Allocation was successful.  Save it.
-          this->_size = newSize;
+          this->_nElements = newSize;
           this->_data = newArray;
           // This object has now allocated its memory and owns it.
           this->_ownsData = true;
@@ -355,7 +391,7 @@ class H5DataArrayTemplate : public MXAAbstractData
   private:
     std::string _datasetPath;
     T* _data;
-    mxaIdType _size;
+    uint64 _nElements;
     bool _ownsData;
     
     H5DataArrayTemplate(const H5DataArrayTemplate&);    //Not Implemented

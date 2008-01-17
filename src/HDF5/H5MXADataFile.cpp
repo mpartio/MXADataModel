@@ -44,6 +44,7 @@ IDataFilePtr H5MXADataFile::CreateFileWithModel(const std::string &filename, IDa
     filePtr.reset(nullDataFile);
     return filePtr;
   }
+  dataFile->_setWeakPointer(filePtr);
   // Write the supplied data model to the data file
   err = filePtr->saveDataModel();
   if (err < 0)
@@ -52,7 +53,7 @@ IDataFilePtr H5MXADataFile::CreateFileWithModel(const std::string &filename, IDa
     H5MXADataFile* nullDataFile = 0x0;
     filePtr.reset(nullDataFile);
   }
-  dataFile->_setWeakPointer(filePtr);
+  
   return filePtr;
 }
 
@@ -309,7 +310,7 @@ int32 H5MXADataFile::saveDataModel()
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::_writeDataModel()
 {
-  H5DataModelWriter writer( this->_dataModel);
+  H5DataModelWriter writer( this->_dataModel, this->_weakPtr.lock() );
   return writer.writeModelToFile(_fileId);
 }
 

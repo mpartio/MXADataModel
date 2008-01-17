@@ -28,7 +28,7 @@ class IFileReader;
 class IFileWriter;
 class MXADataModel;
 class MXANode;
-class MXAAttribute;
+// class MXAAttribute;
 class MXADataRecord;
 class MXADataDimension;
 class MXADataSource;
@@ -54,11 +54,17 @@ class IDataset;
 class MXAAbstractData;
 class MXAAbstractAttribute;
 
+// MXA Meta Data
+class IRequiredMetaData;
+class H5MXARequiredMetaData;
+
 typedef boost::shared_ptr<IDataset>                 IDatasetPtr;
 typedef boost::shared_ptr<MXAAbstractData>          MXAAbstractDataPtr;
 typedef boost::shared_ptr<MXAAbstractAttribute>     MXAAbstractAttributePtr;
 typedef std::vector<MXAAbstractAttributePtr>        MXAAbstractAttributes;
 
+typedef boost::shared_ptr<IRequiredMetaData>        IRequiredMetaDataPtr;
+typedef boost::shared_ptr<H5MXARequiredMetaData>    H5MXARequiredMetaDataPtr;
 
 typedef boost::shared_ptr<MXADataModel>           MXADataModelPtr;
 typedef boost::shared_ptr<IDataModel>             IDataModelPtr;
@@ -67,12 +73,12 @@ typedef boost::shared_ptr<IDataFile>                IDataFilePtr;
 typedef boost::shared_ptr<IFileReader>              IFileReaderPtr;
 typedef boost::shared_ptr<IFileWriter>              IFileWriterPtr;
 
-typedef boost::shared_ptr<MXAAttribute>           MXAAttributePtr;
-typedef boost::shared_ptr<IAttribute>             IAttributePtr;
-typedef std::vector<MXAAttributePtr>              MXAAttributes;
-typedef std::vector<IAttributePtr>                IAttributes;
-typedef std::map<std::string, MXAAttributePtr>    MXAAttributeMap;
-typedef std::vector<MXAAttributePtr>              MXAUserMetaData;
+//typedef boost::shared_ptr<MXAAttribute>           MXAAttributePtr;
+//typedef boost::shared_ptr<IAttribute>             IAttributePtr;
+//typedef std::vector<MXAAttributePtr>              MXAAttributes;
+//typedef std::vector<IAttributePtr>                IAttributes;
+//typedef std::map<std::string, MXAAttributePtr>    MXAAttributeMap;
+//typedef std::vector<MXAAttributePtr>              MXAUserMetaData;
 typedef std::map<std::string, std::string>        MXARequiredMetaData;
 typedef boost::shared_ptr<IFileIODelegate>        IFileIODelegatePtr;
 

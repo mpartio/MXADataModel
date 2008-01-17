@@ -104,7 +104,7 @@ namespace MXA {
 //   default value.
 // -----------------------------------------------------------------------------
   const std::string MXA_RELEASE_NUMBER_TAG("Release_Number");
-  const std::string MXA_NOT_APPLICABLE_VALUE("Not Applicable");  
+  const std::string MXA_NOT_APPLICABLE_VALUE("Not Applicable");
 
   /* These are tags that can be used in configuration files for data import
    * or other purposes. Use these constants to get the correct tag. */

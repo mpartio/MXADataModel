@@ -88,7 +88,7 @@ uint8* H5RGBImage::getPixelPointer(int32 x, int32 y)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 H5RGBImage::resize(mxaIdType size)
+int32 H5RGBImage::resize(uint64 size)
 {
   if(this->_resizeAndExtend(size) || size <= 0)
     {

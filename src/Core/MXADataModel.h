@@ -19,7 +19,6 @@
 
 //-- MXA Headers
 #include <Common/MXATypeDefs.h>
-#include <Common/MXATypeDefs.h>
 #include <Base/IDataModel.h>
 #include <Core/MXAConstants.h>
 #include <Core/MXADataDimension.h>
@@ -38,7 +37,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -266,41 +265,30 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return
    */
   MXATypes::MXAError setRequiredMetaData(std::map<std::string, std::string> &metadata);
-
+  
+  /**
+   * @brief Sets the required meta data
+   * @param metaData IRequiredMetaDataPtr object
+   */
+  int32 setRequiredMetaData(IRequiredMetaDataPtr metaData);
+  
   /**
    * @brief Returns the RequiredMeta Data in the provided std::map
    * @param requiredMetaData
-   * @return
+   * @return IRequiredMetaDataPtr
    */
-  void getRequiredMetaData(std::map<std::string, std::string> &requiredMetaData);
+  IRequiredMetaDataPtr getRequiredMetaData();
 
   /**
    * @brief Adds an entry in the User Meta Data record
-   * @param  umd An MXAAttribute object
+   * @param  umd An MXAAbstractAttributePtr object
    */
-  void addUserMetaData ( IAttributePtr umd);
+  void addUserMetaData ( MXAAbstractAttributePtr umd);
   
-  /**
-   * @brief Adds a Meta Data entry to the User Meta Data Record
-   * @param key The key to use for the user meta data
-   * @param value The value of the attribute 
-   */
-  void addUserMetaData(const std::string &key, const std::string &value);
-  
-  /**
-   * @brief Adds a user meta data entry
-  * @param key The key for the entry
-  * @param value The value of the entry
-  */
-  template<typename T>
-  void addUserMetaData(std::string key, T value)
-  {
-    MXAAttributePtr umd = MXAAttribute::createAttribute<T>(key, value);
-    addUserMetaData(umd);
-  }
+
 
   /** @brief Returns the Data Structure used to hold the user defined Meta Data */
-  IAttributes& getUserMetaData();
+  MXAAbstractAttributes getUserMetaData();
    
   /**
    * @brief Prints the Data Model to the provided std::ostream
@@ -342,59 +330,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    */
   void printUserMetaData(std::ostream &os, int32 indent);
 
-#if 0  
-  /** @brief Sets the IODelegate for this model. Default delegate is an HDF5 delegate */
-  void setIODelegate(IFileIODelegatePtr ioDelegate);
-  /** @brief Returns the IOdelegate for this model */
-  IFileIODelegatePtr getIODelegate();
-
-  //--------------- Methods to Write the DataModel to a File -------------------
-  /**
-  * @brief Writes the model to the data file
-  * @param fileName The path to the data file
-  * @param closeWhenFinished Terminates access to the file when complete. Default is false
-  * @param deleteExisting If a file of the same name already exists, then the file will be deleted and a new file written in its place.
-  * @return Standard HDF5 Error condition
-  */
-  MXATypes::MXAError writeModel(const std::string &fileName, 
-                                        bool closeWhenFinished,
-                                        bool deleteExisting);
-  /**
-  * @brief Writes the model to the data file using a specific IODelegate
-  * @param fileName The path to the data file
-  * @param ioDelegate The IODelegate to employ when writing the model
-  * @param closeWhenFinished Terminates access to the file when complete. Default is false
-  * @param deleteExisting If a file of the same name already exists, then the file will be deleted and a new file written in its place.
-  * @return Standard HDF5 Error condition
-  */
-  MXATypes::MXAError writeModel(const std::string &fileName, 
-                                        IFileIODelegatePtr ioDelegate,                                          
-                                        bool closeWhenFinished,
-                                        bool deleteExisting);
-  
-  /**
-   * @brief Reads the data model from the file using the internal IODelegate object
-   * @param fileName The filename of the file to write the model to
-   * @param closeWhenFinished Tells the underlying IODelegate to close the file cutting off
-   * access to the file. 
-   * @param openReadOnly If you need to write more to the file, set this to 'false'
-   * @return
-   */
-  MXATypes::MXAError readModel(const std::string &fileName, bool closeWhenFinished, bool openReadOnly);
-  
-  /**
-   * @brief Reads the data model from the file using the provided IODelegate object
-   * @param fileName The filename of the file to write the model to
-   * @param ioDelegate Use the provided IODelegate instead of the internal IODelegate
-   * @param closeWhenFinished Tells the underlying IODelegate to close the file cutting off
-   * access to the file.
-   * @param openReadOnly If you need to write more to the file, set this to 'false'
-   * @return
-   */
-  MXATypes::MXAError readModel(const std::string &fileName, IFileIODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly);
-#endif
-
-   
+ 
    /**
     * @brief Performs some basic checks to make sure the model is valid.
     * @param message String to store messages relating to errors/omissions about the model
@@ -417,21 +353,11 @@ class MXA_EXPORT MXADataModel : public IDataModel
    IDataRecords    _dataRecords;
 
    //Fields to hold the Required Meta Data Fields
-   std::string _researcherName ;
-   std::string _datasetDateCreated ;
-   std::string _derivedSourceFile;
-   std::string _datasetDescription;
-   std::string _distributionRights;
-   std::string _datasetName;
-   std::string _datasetPedigree;
-   std::string _datasetPublicReleaseNumber;
+   IRequiredMetaDataPtr _requiredMetaData;
 
    // Holds the arbitrary User Meta Data
-   IAttributes _userMetaData;
-   
-   // The default delegate to use to write the model to a file
-   //IFileIODelegatePtr _ioDelegate;
-   
+   MXAAbstractAttributes _userMetaData;
+
 };
 
 

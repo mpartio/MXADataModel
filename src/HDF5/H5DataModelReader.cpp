@@ -2,8 +2,9 @@
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
 #include <HDF5/H5DataModelReader.h>
+#include <HDF5/H5AsciiStringAttribute.h>
 #include <Core/MXAConstants.h>
-#include <Core/MXAAttribute.h>
+//#include <Core/MXAAttribute.h>
 #include <Utilities/StringUtils.h>
 
 //-- STL Headers
@@ -454,7 +455,7 @@ herr_t H5DataModelReader::readUserMetaData(hid_t locId)
         res.clear(); //Clear the string out first since we are reusing it
         err = H5Lite::readStringAttribute(locId, MXA::UserMetaDataPath, (*iter), res );
         if (err >= 0) {
-          MXAAttributePtr attr = MXAAttribute::createAttribute((*iter), res);
+          MXAAbstractAttributePtr attr = H5AsciiStringAttribute::New(MXA::UserMetaDataPath, (*iter), res );
           this->_dataModel->addUserMetaData(attr);
         }
         break;

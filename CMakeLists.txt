@@ -60,7 +60,6 @@ INCLUDE (${MXA_RESOURCES_DIR}/FindSupportLibraries.cmake)
 SET( MXADATAMODEL_SRCS
   ${MXA_SOURCE_DIR}/src/Common/IO/Reader64.cpp
   ${MXA_SOURCE_DIR}/src/Common/IO/Writer64.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXAAttribute.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataModel.cpp
@@ -107,8 +106,8 @@ SET (MXADATAMODEL_HEADERS
   ${MXA_SOURCE_DIR}/src/Base/IAbstractDataset.h
   ${MXA_SOURCE_DIR}/src/Base/IDataFileIO.h
   ${MXA_SOURCE_DIR}/src/Base/IDataset.h
+  ${MXA_SOURCE_DIR}/src/Base/IRequiredMetaData.h
   ${MXA_SOURCE_DIR}/src/Core/AttributeHelpers.h
-  ${MXA_SOURCE_DIR}/src/Core/MXAAttribute.h
   ${MXA_SOURCE_DIR}/src/Core/MXAConstants.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataImport.h
@@ -160,7 +159,6 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5Image.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5Utilities.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5IODelegate.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.cpp
@@ -170,6 +168,7 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5RGBImage.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringAttribute.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataset.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5MXARequiredMetaData.cpp
   )
   
   SET(MXA_HDF5_HEADERS
@@ -177,7 +176,6 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5AttributeWriter.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5IODelegate.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5Image.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5Utilities.h
@@ -191,6 +189,7 @@ IF ( MXA_USE_HDF5 )
     ${MXA_SOURCE_DIR}/src/HDF5/H5RGBImage.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5Data2DArray.hpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataset.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5MXARequiredMetaData.h
   )
   
   SET(HDF5_SUPPORT "1")

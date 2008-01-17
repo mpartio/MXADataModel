@@ -302,6 +302,7 @@ IDataRecords& MXADataRecord::getChildren()
   return this->_children;
 }
 
+#if 0
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -310,7 +311,7 @@ void MXADataRecord::removeAttribute(std::string label)
   _nodeAttributes.erase(label);
 }
 
-
+#endif
 
 
 

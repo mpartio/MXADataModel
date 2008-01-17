@@ -5,12 +5,14 @@
 #include <Core/MXADataModel.h>
 #include <Utilities/StringUtils.h>
 #include <XML/XMLDataModelWriter.h>
-
+#include <Base/IRequiredMetaData.h>
+#include <Core/MXAAbstractAttribute.h>
 //-- Standard Library Headers
 #include <iostream>
 
 #if HDF5_SUPPORT
 #include <HDF5/H5IODelegate.h>
+#include <HDF5/H5MXARequiredMetaData.h>
 #endif
 
 using namespace MXA;
@@ -21,15 +23,7 @@ using namespace MXA;
 MXADataModel::MXADataModel() :
 _fileVersion(-1.0),
 _fileType(""),
-_dataRoot("/"),
-_researcherName(""),
-_datasetDateCreated(""),
-_derivedSourceFile(""),
-_datasetDescription(""),
-_distributionRights(""),
-_datasetName(""),
-_datasetPedigree(""),
-_datasetPublicReleaseNumber("")
+_dataRoot("/")
 {
   #if HDF5_SUPPORT
  // _ioDelegate.reset(new H5IODelegate());
@@ -575,7 +569,7 @@ IDataRecordPtr MXADataModel::getDataRecordByInternalPath(const std::string &path
 // -----------------------------------------------------------------------------
 //  Sets all the Required MetaData in one shot
 // -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::setRequiredMetaData(std::string researcherName, 
+int32 MXADataModel::setRequiredMetaData(std::string researcherName, 
               std::string dateCreated, 
 				      std::string datasetName, 
               std::string description,
@@ -584,71 +578,73 @@ MXATypes::MXAError MXADataModel::setRequiredMetaData(std::string researcherName,
 				      std::string pedigree, 
               std::string derivedSrcFile)
 {
-  
-  _researcherName = researcherName;
-  _datasetDateCreated = dateCreated;
-  _derivedSourceFile = derivedSrcFile;
-  _datasetDescription = description;
-  _distributionRights = distributionRights;
-  _datasetName = datasetName;
-  _datasetPedigree = pedigree;
-  _datasetPublicReleaseNumber = releaseNumber;
-  return 1;
-}
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::setRequiredMetaData(std::map<std::string, std::string> &requiredMetaData)
-{
+#if HDF5_SUPPORT
+  _requiredMetaData = H5MXARequiredMetaData::New( researcherName, 
+                                                  dateCreated, 
+                                                  datasetName, 
+                                                  description,
+                                                  distributionRights,
+                                                  releaseNumber,
+                                                  pedigree, 
+                                                  derivedSrcFile);
+#endif
   std::string message;
-  int32 err = 1;
-  if ( MXADataModel::validateRequiredMetaData(requiredMetaData, message) < 0)
-  {
-    // std::cout << "Meta Data did not Validate." << std::endl;
-    err = -1;
-  }
-  
-  this->_researcherName = requiredMetaData[MXA::MXA_CREATOR_TAG];
-  this->_datasetDateCreated = requiredMetaData[MXA::MXA_DATE_TAG];
-  this->_derivedSourceFile = requiredMetaData[MXA::MXA_DERIVED_SRC_TAG];
-  this->_datasetDescription = requiredMetaData[MXA::MXA_DESCRIPTION_TAG];
-  this->_distributionRights = requiredMetaData[MXA::MXA_RIGHTS_TAG];
-  this->_datasetName = requiredMetaData[MXA::MXA_DSET_NAME_TAG];
-  this->_datasetPedigree = requiredMetaData[MXA::MXA_PEDIGREE_TAG];
-  this->_datasetPublicReleaseNumber = requiredMetaData[MXA::MXA_RELEASE_NUMBER_TAG];
-  
-  return err;
+  if ( _requiredMetaData->isValid(message) == true) { return 1; }
+  return -1;
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataModel::getRequiredMetaData(std::map<std::string, std::string> &requiredMetaData)
+int32 MXADataModel::setRequiredMetaData(std::map<std::string, std::string> &requiredMetaData)
 {
-  requiredMetaData.clear(); //Clear the map
-  requiredMetaData[MXA::MXA_CREATOR_TAG] = this->_researcherName;
-  requiredMetaData[MXA::MXA_DATE_TAG] = this->_datasetDateCreated;
-  requiredMetaData[MXA::MXA_DERIVED_SRC_TAG] = this->_derivedSourceFile;
-  requiredMetaData[MXA::MXA_DESCRIPTION_TAG] = this->_datasetDescription;
-  requiredMetaData[MXA::MXA_RIGHTS_TAG] = this->_distributionRights;
-  requiredMetaData[MXA::MXA_DSET_NAME_TAG] = this->_datasetName;
-  requiredMetaData[MXA::MXA_PEDIGREE_TAG] = this->_datasetPedigree;
-  requiredMetaData[MXA::MXA_RELEASE_NUMBER_TAG] = this->_datasetPublicReleaseNumber;
+#if HDF5_SUPPORT
+  _requiredMetaData = H5MXARequiredMetaData::New( requiredMetaData[MXA::MXA_CREATOR_TAG], 
+                                                  requiredMetaData[MXA::MXA_DATE_TAG], 
+                                                  requiredMetaData[MXA::MXA_DSET_NAME_TAG], 
+                                                  requiredMetaData[MXA::MXA_DESCRIPTION_TAG],
+                                                  requiredMetaData[MXA::MXA_RIGHTS_TAG],
+                                                  requiredMetaData[MXA::MXA_RELEASE_NUMBER_TAG],
+                                                  requiredMetaData[MXA::MXA_PEDIGREE_TAG], 
+                                                  requiredMetaData[MXA::MXA_DERIVED_SRC_TAG]);
+#endif
+  std::string message;
+  if ( _requiredMetaData->isValid(message) == true) { return 1; }
+  return -1;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+int32 MXADataModel::setRequiredMetaData(IRequiredMetaDataPtr metaData)
+{
+  this->_requiredMetaData = metaData;
+  std::string message;
+  if ( _requiredMetaData->isValid(message) == true) { return 1; }
+  return -1;
+}
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+IRequiredMetaDataPtr MXADataModel::getRequiredMetaData()
+{
+  return this->_requiredMetaData;
 }
 
 // -----------------------------------------------------------------------------
 //  Adds a key/value pair to the User Meta Data section
 // -----------------------------------------------------------------------------
-void MXADataModel::addUserMetaData( IAttributePtr userMetaData)
+void MXADataModel::addUserMetaData( MXAAbstractAttributePtr userMetaData)
 {
-  IAttribute* attr = NULL;
+  
+  MXAAbstractAttribute* attr = NULL;
   bool addMetaData = true;
-  for (IAttributes::iterator iter = this->_userMetaData.begin(); iter != this->_userMetaData.end(); ++iter ) {
+  for (MXAAbstractAttributes::iterator iter = this->_userMetaData.begin(); iter != this->_userMetaData.end(); ++iter ) {
     attr = (*(iter)).get();
     if (NULL != attr)
     {
-      if (attr->getKey().compare(userMetaData->getKey()) == 0)
+      if (attr->getAttributeKey().compare(userMetaData->getAttributeKey()) == 0)
       { // The keys are the same, so replace the current meta data with the new one.
         this->_userMetaData.erase(iter);
         this->_userMetaData.push_back(userMetaData);
@@ -663,19 +659,11 @@ void MXADataModel::addUserMetaData( IAttributePtr userMetaData)
   }
 }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-void MXADataModel::addUserMetaData(const std::string &key, const std::string &value)
-{
-  MXAAttributePtr umd = MXAAttribute::createAttribute(key, value);
-  addUserMetaData(umd);
-}
 
 // -----------------------------------------------------------------------------
 //  
+MXAAbstractAttributes  MXADataModel::getUserMetaData()
 // -----------------------------------------------------------------------------
-IAttributes&  MXADataModel::getUserMetaData()
 {
   return this->_userMetaData;
 }
@@ -740,17 +728,7 @@ void MXADataModel::printDataDimensions(std::ostream& os, int32 indent)
 // -----------------------------------------------------------------------------
 void MXADataModel::printRequiredMetaData(std::ostream& os, int32 indent)
 {
-  std::string ind = StringUtils::indent(indent);
-  os << ind << "Required Meta Data" << std::endl;
-  ind = StringUtils::indent(indent + 1);
-  os << ind << "Researcher Name: " << _researcherName << std::endl;
-  os << ind << "Date Created: " << _datasetDateCreated << std::endl;
-  os << ind << "Derived Source File: " << _derivedSourceFile << std::endl;
-  os << ind << "Data Description: " << _datasetDescription << std::endl;
-  os << ind << "Distribution Rights: " << _distributionRights << std::endl;
-  os << ind << "Dataset Name: " << _datasetName << std::endl;
-  os << ind << "Dataset Pedigree: " << _datasetPedigree << std::endl;
-  os << ind << "Public Release Number: " << _datasetPublicReleaseNumber << std::endl;
+  _requiredMetaData->printSelf(os, indent);
 }
 
 // -----------------------------------------------------------------------------
@@ -759,94 +737,13 @@ void MXADataModel::printRequiredMetaData(std::ostream& os, int32 indent)
 void MXADataModel::printUserMetaData(std::ostream& os, int32 indent)
 {
   os << StringUtils::indent(indent) << "User Meta Data" << std::endl;
-  IAttribute* attr;
-  for (IAttributes::iterator iter = _userMetaData.begin(); iter != _userMetaData.end(); ++iter)
+  MXAAbstractAttribute* attr;
+  for (MXAAbstractAttributes::iterator iter = _userMetaData.begin(); iter != _userMetaData.end(); ++iter)
   {
     attr = (*iter).get();
-    os << StringUtils::indent(indent + 1) << attr->getKey() << " ---> " << attr->valueToString() << std::endl;
+    attr->printSelf(os, indent);
   }
 }
-
-#if 0
-// -----------------------------------------------------------------------------
-//  Reads the datamodel from the filename given using the defualt IODelegatePtr
-// -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, 
-                    bool closeWhenFinished, 
-                    bool openReadOnly)
-{
-  int32 err = -1;
-  if (this->_ioDelegate.get() != NULL)
-  {
-    err =  this->_ioDelegate->readModelFromFile(fileName, this, closeWhenFinished, openReadOnly);
-    this->squeezeDataDimensions(); // Remove extra NULL data dimensions
-  }
-  return err;
-}
-
-// -----------------------------------------------------------------------------
-//  Reads the datamodel using a different IODelegatePtr than provided as a default
-// -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::readModel(const std::string &fileName, IFileIODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly)
-{
-  int32 err = -1;
-  if (ioDelegate.get() != NULL)
-  {
-    err = ioDelegate->readModelFromFile(fileName, this, closeWhenFinished, openReadOnly);
-    this->squeezeDataDimensions(); // Remove extra NULL data dimensions
-  } 
-  return err;
-}
-
-// -----------------------------------------------------------------------------
-//  Reads the datamodel from the filename given using the defualt IODelegatePtr
-// -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, 
-                                  bool closeWhenFinished,
-                                  bool deleteExisting)
-{
-  if (this->_ioDelegate.get() != NULL)
-  {
-    this->squeezeDataDimensions(); // Remove extra NULL data dimensions
-    return this->_ioDelegate->writeModelToFile(fileName, this, closeWhenFinished, deleteExisting);
-  }
-  return -1;
-}
-
-// -----------------------------------------------------------------------------
-//  Reads the datamodel using a different IODelegatePtr than provided as a default
-// -----------------------------------------------------------------------------
-MXATypes::MXAError MXADataModel::writeModel(const std::string &fileName, 
-    IFileIODelegatePtr ioDelegate,                                          
-                                            bool closeWhenFinished,
-                                            bool deleteExisting)
-{
-  if (ioDelegate.get() != NULL)
-  {
-    this->squeezeDataDimensions(); // Remove extra NULL data dimensions
-    return ioDelegate->writeModelToFile(fileName, this, closeWhenFinished, deleteExisting);
-  } 
-  return -1;
-}
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-void MXADataModel::setIODelegate(IFileIODelegatePtr ioDelegate)
-{
-  this->_ioDelegate = ioDelegate;
-}
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-IFileIODelegatePtr MXADataModel::getIODelegate()
-{
-  return this->_ioDelegate;
-}
-
-#endif
-
 
 // -----------------------------------------------------------------------------
 //  
@@ -958,51 +855,20 @@ bool MXADataModel::isValid(std::string &message)
     if ( dim->isValid(message) == false )
     {
       valid = false;
+    } 
+  }
+  if (this->_requiredMetaData.get() == NULL)
+  {
+    valid = false;
+    message.append("Required Meta Data Object Container is NULL");
+  }
+  else 
+  {
+    if (_requiredMetaData->isValid(message) == false)
+    {
+      valid = false;
     }
   }
-  
-  if (_researcherName.empty() )
-  {
-    valid = false;
-    message.append("Required Meta Data {_researcherName} missing value.\n");
-  }
-  
-  if (_datasetDateCreated.empty() )
-  {
-    valid = false;
-    message.append("Required Meta Data {_datasetDateCreated} missing value.\n");
-  }
-  
-  if (_derivedSourceFile.empty() )
-  {
-    valid = false;
-    message.append("Required Meta Data {_derivedSourceFile} missing value.\n");
-  }
-  
-  if (_datasetDescription.empty() )
-  {
-    valid = false;
-    message.append("Required Meta Data {_datasetDescription} missing value.\n");
-  }
-  
-  if (_distributionRights.empty() )
-  {
-    valid = false;
-    message.append("Required Meta Data {_distributionRights} missing value.\n");
-  }
-  
-  if (_datasetPedigree.empty() )
-  {
-    valid = false;
-    message.append("Required Meta Data {_datasetPedigree} missing value.\n");
-  }
-  
-  if (_datasetPublicReleaseNumber.empty() )
-  {
-    valid = false;
-    message.append("Required Meta Data {_datasetPublicReleaseNumber} missing value.\n");
-  }
-
   return valid;
 }
 

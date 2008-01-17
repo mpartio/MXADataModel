@@ -35,14 +35,14 @@ class MXANode;
  * @brief Writes the DataModel to an HDF5 file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  *  
  */
 class MXA_EXPORT H5DataModelWriter : public IDataModelWriter
 {
 
 public:
-  H5DataModelWriter(IDataModelPtr dataModel);
+  H5DataModelWriter(IDataModelPtr dataModel, IDataFilePtr dataFile);
   virtual ~H5DataModelWriter();
 
   /**
@@ -176,8 +176,8 @@ protected:
   }
   
 private:
-  //H5IODelegatePtr _ioDelegate;
   IDataModelPtr _dataModel;
+  IDataFilePtr  _dataFile;
   
   H5DataModelWriter(const H5DataModelWriter&);   //Copy Constructor Not Implemented
   void operator=(const H5DataModelWriter&); //Copy Assignment Not Implemented

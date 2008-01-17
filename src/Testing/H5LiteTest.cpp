@@ -910,7 +910,11 @@ void H5LiteTest()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
+boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) 
+{
+  
+  std::cout << "sizeof(hsize_t): " << sizeof(hsize_t) << std::endl;
+  std::cout << "sizeof(size_t): " << sizeof(size_t) << std::endl;
   boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "H5Lite Tests" );
   test->add( BOOST_TEST_CASE( &H5LiteTest), 0);
   test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);

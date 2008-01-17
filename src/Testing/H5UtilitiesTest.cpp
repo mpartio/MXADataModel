@@ -352,10 +352,10 @@ void H5UtilitiesTest()
    BOOST_REQUIRE(attributes.size() == 50);
    err = H5Utilities::closeHDF5Object(dsetId);
    BOOST_REQUIRE(err >= 0);
-   
-   MXAAttributes allAttributes;
-   err = H5Utilities::readAllAttributes(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", allAttributes );
-   BOOST_REQUIRE(err >= 0);
+//   
+//   MXAAttributes allAttributes;
+//   err = H5Utilities::readAllAttributes(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", allAttributes );
+//   BOOST_REQUIRE(err >= 0);
    
 }
 

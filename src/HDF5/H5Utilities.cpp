@@ -453,7 +453,7 @@ herr_t H5Utilities::getAllAttributeNames(hid_t obj_id,
  }
 #endif
 
- 
+#if 0
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
@@ -546,7 +546,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId, const std::string &datasetPa
 
   return retErr;
 }
-
+#endif
 
 
 

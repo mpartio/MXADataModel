@@ -19,7 +19,7 @@ class IDataRecordWriter;
  * @brief Abstract class defining the DataRecord public interface
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  *  
  */
 class MXA_EXPORT IDataRecord 
@@ -178,13 +178,13 @@ class MXA_EXPORT IDataRecord
     */
     virtual IDataRecords& getChildren() = 0;
 
-
+#if 0
     /**
     * @brief Removes an Attribute from this node
     * @param attrName The name of the attribute to remove
     */
     virtual void removeAttribute(std::string attrName) = 0;
-    
+#endif
 
     /**
     * @brief prints the node and the children of this node

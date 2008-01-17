@@ -19,7 +19,7 @@
 #include <Base/IDataRecordWriter.h>
 #include <Core/MXAConstants.h>
 #include <Utilities/StringUtils.h>
-#include <Core/MXAAttribute.h>
+// #include <Core/MXAAttribute.h>
 
 //Include Boost Headers
 #include <boost/shared_ptr.hpp>
@@ -31,7 +31,7 @@
  * data record. Data records can have any number of children but only one parent.
  * @author  Mike Jackson
  * @date March 2007
- * @version $Revision: 1.10 $
+ * @version $Revision: 1.11 $
  *  
  */
 class MXA_EXPORT MXADataRecord :  public IDataRecord
@@ -174,7 +174,8 @@ public:
 
   IDataRecordPtr getChildAt(int32 index);
   IDataRecords& getChildren();
-  
+
+#if 0
   // Template Method for native types
   template<typename T>
     void setAttribute(std::string key, T value)
@@ -186,6 +187,7 @@ public:
   
   // Removes the Attribute
   void removeAttribute(std::string);
+#endif
   
   // Utilities
   void printDataRecordTree(int32 depth=0);
@@ -209,7 +211,7 @@ protected:
   IDataRecordWeakPtr _selfPtr;
   IDataRecordWeakPtr _parent;
   IDataRecords _children;
-  MXAAttributeMap _nodeAttributes;
+ // MXAAttributeMap _nodeAttributes;
   
 private:
     MXADataRecord(const MXADataRecord&);   //Copy Constructor Not Implemented

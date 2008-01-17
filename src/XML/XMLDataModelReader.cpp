@@ -1,6 +1,7 @@
 
 
 #include <Common/LogTime.h>
+#include <HDF5/H5AsciiStringAttribute.h>
 #include <XML/XMLDataModelReader.h>
 
 #include <sstream>
@@ -73,7 +74,8 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
   }
   fclose(fh);
   std::string message;
-  if (this->_dataModel->isValid(message) == false )
+  bool validModel = this->_dataModel->isValid(message);
+  if ( validModel == false )
   {
     _xmlParseError = -1;
   }
@@ -155,7 +157,6 @@ void XMLDataModelReader::OnStartElement(const XML_Char* name, const XML_Char** a
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::OnEndElement(const XML_Char* name)
 {
-
     std::string currentTag(name);
     if ( currentTag.compare(MXA_XML::Data_Dimensions) == 0 )
     {
@@ -298,6 +299,16 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
       uniform = 1;
     }
     MXADataDimensionPtr dim = MXADataDimension::New( attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG], index, count, start, end, increment, uniform);
+//    std::string message;
+//    bool isValid = dim->isValid(message);
+//    if (isValid == true)
+//    {
+//      std::cout << "XMLDataModelReader::onDimensionStartTag: Dim " << attrMap[MXA::MXA_NAME_TAG] << " was valid" << std::endl;
+//    }
+//    else 
+//    {
+//      std::cout << "XMLDataModelReader::onDimensionStartTag: Dim " << attrMap[MXA::MXA_NAME_TAG] << " wasÊNOT valid" << std::endl;
+//    }
     this->_dataModel->insertDataDimension(dim, index);
 }
 
@@ -426,11 +437,11 @@ void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_
   this->_userMDKey.clear();
   this->_userMDDims.clear();
   this->_userMDType.clear();
-  //    std::cout << "---------------UserMetaDataStart----------------------" << std::endl;
-  //    std::cout << "Tag: " << name << std::endl;
+   //   std::cout << "---------------UserMetaDataStart----------------------" << std::endl;
+   //   std::cout << "Tag: " << name << std::endl;
   for (int i = 0; attrs[i]; i += 2)
   {
-    //printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
+   // printf("\n\t %s='%s'", attrs[i], attrs[i + 1]);
     if (MXA_XML::UserMetaData::Key.compare(attrs[i]) == 0)
     {
       this->_userMDKey = attrs[i+1];
@@ -449,7 +460,7 @@ void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_
           << " tag."<< std::endl;
     }
   }
-  //    std::cout << "\n   Data Start   " << std::endl;
+//      std::cout << "\n   Data Start   " << std::endl;
   // Store the key, dims, and type in iVars for use when the tag closes
   // Check all three required Attributes are valid
   if (this->_userMDKey.empty() || this->_userMDDims.empty()
@@ -471,13 +482,14 @@ void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
 {
-  if (this->_xmlParseError < 0) return;
- //  std::cout << this->_userAttributeData << std::endl;
-//  std::cout << "   Data End   " << std::endl;
-//  std::cout << "---------------UserMetaDataEnd----------------------" << std::endl;
+  if (this->_xmlParseError < 0) 
+  { 
+    return; 
+  }
   if ( this->_userMDType.compare("H5T_STRING") == 0 )
   {
-    this->_dataModel->addUserMetaData(this->_userMDKey, this->_userAttributeData);
+    MXAAbstractAttributePtr attr = H5AsciiStringAttribute::New(MXA::UserMetaDataPath, this->_userMDKey, this->_userAttributeData);
+    this->_dataModel->addUserMetaData(attr);
   }
   else 
   {

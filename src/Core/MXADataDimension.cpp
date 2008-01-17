@@ -1,6 +1,6 @@
 #include <Core/MXADataDimension.h>
 #include <Utilities/StringUtils.h>
-
+#include <Common/LogTime.h>
 
 // -----------------------------------------------------------------------------
 //  Constructor
@@ -143,7 +143,6 @@ bool MXADataDimension::isValid(std::string &message)
     valid = false;
     message.append("Either the Dimension Name or the Alt Name is empty. Both are required to have a value.\n");
   }
-  
   return valid;
 }
 

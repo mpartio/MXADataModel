@@ -15,12 +15,15 @@
 #include <Common/MXATypeDefs.h>
 #include <Common/MXAEndian.h>
 #include <Base/IDataFile.h>
+#include <Base/IRequiredMetaData.h>
 #include <Core/MXAConstants.h>
-#include <Core/MXAAttribute.h>
+//#include <Core/MXAAttribute.h>
 #include <Core/MXADataModel.h>
 #include <Core/MXADataDimension.h>
 #include <Core/MXADataRecord.h>
 #include <HDF5/H5MXADataFile.h>
+#include <HDF5/H5MXARequiredMetaData.h>
+#include <HDF5/H5AsciiStringAttribute.h>
 #include <TestDataFileLocations.h>
 
 // C++ Includes
@@ -37,7 +40,7 @@
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
 
-typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
+//typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 
 
 // -----------------------------------------------------------------------------
@@ -58,7 +61,7 @@ void RemoveTestFiles()
 template<typename T>
 void MakeScalarAttribute(T value, std::string key, MXADataModel* model)
 {
-  MXAAttributePtr umd = MXAAttribute::createAttribute<T>(key, value);
+  MXAAbstractAttributePtr umd = H5AttributeArrayTemplate<T>::CreateScalarAttribute(MXA::UserMetaDataPath, key, value);
   model->addUserMetaData(umd);
 }
 
@@ -68,17 +71,24 @@ void MakeScalarAttribute(T value, std::string key, MXADataModel* model)
 template<typename T>
 void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MXADataModel* model)
 {
-    std::vector<T> data;
+    //std::vector<T> data;
     uint64 numelements =1;
     for (std::vector<uint64>::iterator iter = dims.begin(); iter != dims.end(); ++iter)
     {
       numelements *= *(iter);
     }
+    
+    MXAAbstractAttributePtr vecPtr = 
+      H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray(MXA::UserMetaDataPath,
+                                                                                key, 
+                                                                                dims.size(), 
+                                                                                &(dims.front()) );
+    // Copy data into the attribute container
+    T* data = static_cast<T*>( vecPtr->getVoidPointer(0) );
     for (uint32 i = 0; i < numelements; ++i)
     {
-      data.push_back(static_cast<T>(i * 1.5) );
+      data[i] = static_cast<T>(i * 1.5);
     }
-    MXAAttributePtr vecPtr = MXAAttribute::createAttribute(key, data, dims);
     model->addUserMetaData(vecPtr);
 }
 
@@ -134,7 +144,7 @@ void CreateAttributes(MXADataModel* model)
     MakeScalarAttribute( f64, "Scalar Float 64", model);
 
     // String attributes
-    MXAAttributePtr s1 =  MXAAttribute::createAttribute("Password", std::string("DaddyO") );
+    MXAAbstractAttributePtr s1 = H5AsciiStringAttribute::New(MXA::UserMetaDataPath, "Password", "DaddyO");
     model->addUserMetaData(s1);
 
 }
@@ -235,9 +245,20 @@ void TestRequiredMetaData()
   std::string pedigree("");
   std::string derivedSrcFile("");
   
+  IRequiredMetaDataPtr metaData = H5MXARequiredMetaData::New(researcherName, dateCreated, 
+                                   datasetName, description, distributionRights, 
+                                   releaseNumber, pedigree, derivedSrcFile);
+  BOOST_REQUIRE(metaData->isValid(errorMessage) == false);
+  
+  
+  
   err = model->setRequiredMetaData(researcherName, dateCreated, 
                                    datasetName, description, distributionRights, 
                                    releaseNumber, pedigree, derivedSrcFile);
+  errorMessage.clear();
+  BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
+  
+  err = model->setRequiredMetaData(metaData);
   errorMessage.clear();
   BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
   
@@ -259,8 +280,8 @@ void TestRequiredMetaData()
   
   err = model->setRequiredMetaData(md);
   errorMessage.clear();
-  BOOST_REQUIRE(err >= 0);
-
+  BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
+  
   researcherName = "Mike Jackson";
   dateCreated = "2006:12:24 15:34.51";
   datasetName = "TESTING Example Data Model";
@@ -276,6 +297,16 @@ void TestRequiredMetaData()
   errorMessage.clear();
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
+  
+  metaData = H5MXARequiredMetaData::New(researcherName, dateCreated, 
+                                     datasetName, description, distributionRights, 
+                                     releaseNumber, pedigree, derivedSrcFile);
+  BOOST_REQUIRE(metaData->isValid(errorMessage) == true);
+  err = model->setRequiredMetaData(metaData);
+  errorMessage.clear();
+  BOOST_REQUIRE(err >= 0);
+  BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
+  
   std::cout << "......Passed" << std::endl;
 }
 

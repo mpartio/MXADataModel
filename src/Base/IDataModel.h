@@ -14,7 +14,6 @@
 
 //-- MXA Includes
 #include <Common/DLLExport.h>
-//#include <Common/MXATypes.h>
 #include <Common/MXATypeDefs.h>
 
 //-- STL Includes
@@ -27,7 +26,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  *  
  */
 class MXA_EXPORT IDataModel
@@ -239,41 +238,30 @@ class MXA_EXPORT IDataModel
     * @param metadata The meta data
     */
     virtual MXATypes::MXAError setRequiredMetaData(std::map<std::string, std::string> &metadata) = 0;
+    
+    /**
+     * @brief Sets the required meta data
+     * @param metaData IRequiredMetaDataPtr object
+     */
+    virtual int32 setRequiredMetaData(IRequiredMetaDataPtr metaData) = 0;
+    
     /**
     * @brief Returns the meta data for the data model
     * @param requiredMetaData
     */
-    virtual void getRequiredMetaData(std::map<std::string, std::string> &requiredMetaData) = 0;
+    virtual IRequiredMetaDataPtr getRequiredMetaData() = 0;
     
     
     /**
     * @brief Adds User defined Meta data to the model
     * @param umd The Key/Value pair to append to the model
     */
-    virtual void addUserMetaData( IAttributePtr umd) = 0;
-    /**
-    * @brief Adds a User defined meta data to the model
-    * @param key The key to use
-    * @param value The value to use
-    */
-    virtual void addUserMetaData(const std::string &key, const std::string &value) = 0;
+    virtual void addUserMetaData( MXAAbstractAttributePtr umd) = 0;
+
     
     /** @brief Returns the Data Structure used to hold the user defined Meta Data */
-    virtual IAttributes& getUserMetaData() = 0;
+    virtual MXAAbstractAttributes getUserMetaData() = 0;
 
-#if 0  
-    //---------------- Methods to Set/Get the IODelegate Object -------------------
-    /**
-    * @brief Sets the IODelegate object for the model
-    * @param ioDelegate
-    */
-    virtual void setIODelegate(IODelegatePtr ioDelegate) = 0;
-    /**
-    * @brief The IODelegate object being used by this Data model
-    * @return 
-    */
-    virtual IODelegatePtr getIODelegate() = 0;
-#endif
     
     //-------------- Methods to Print the DataModel to an outputstream ----------
     /**
@@ -306,51 +294,6 @@ class MXA_EXPORT IDataModel
     * @param indent The level of indentation to start with
     */
     virtual void printUserMetaData(std::ostream &os, int32 indent) = 0;
-
-#if 0
-    //--------------- Methods to Write the DataModel to a File -------------------
-    /**
-    * @brief Writes the model to the data file
-    * @param fileName The path to the data file
-    * @param closeWhenFinished Terminates access to the file when complete. Default is false
-    * @param deleteExisting If a file of the same name already exists, then the file will be deleted and a new file written in its place.
-    * @return Standard HDF5 Error condition
-    */
-    virtual MXATypes::MXAError writeModel(const std::string &fileName, 
-                                          bool closeWhenFinished,
-                                          bool deleteExisting) = 0;
-    /**
-    * @brief Writes the model to the data file using a specific IODelegate
-    * @param fileName The path to the data file
-    * @param ioDelegate The IODelegate to employ when writing the model
-    * @param closeWhenFinished Terminates access to the file when complete. Default is false
-    * @param deleteExisting If a file of the same name already exists, then the file will be deleted and a new file written in its place.
-    * @return Standard HDF5 Error condition
-    */
-    virtual MXATypes::MXAError writeModel(const std::string &fileName, 
-                                          IODelegatePtr ioDelegate,                                          
-                                          bool closeWhenFinished,
-                                          bool deleteExisting) = 0;
-    
-    //--------------- Methods to Read the DataModel from a File -------------------
-    /**
-    * @brief Reads the model from a file
-    * @param fileName The path to the data file
-    * @param closeWhenFinished Terminates access to the file when complete.
-    * @param openReadOnly If you need to write more to the file, set this to 'false'
-    * @return Standard HDF5 Error condition
-    */
-    virtual MXATypes::MXAError readModel(const std::string &fileName, bool closeWhenFinished, bool openReadOnly) = 0;
-    /**
-    * @brief Reads the model from a file
-    * @param fileName The path to the data file
-    * @param ioDelegate The IODelegate to employ when reading the model
-    * @param closeWhenFinished Terminates access to the file when complete.
-    * @param openReadOnly If you need to write more to the file, set this to 'false'
-    * @return Standard HDF5 Error condition
-    */
-    virtual MXATypes::MXAError readModel(const std::string &fileName, IODelegatePtr ioDelegate, bool closeWhenFinished, bool openReadOnly) = 0;
-#endif   
     
     /**
      * @brief Performs some basic checks to make sure the model is valid.
