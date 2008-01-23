@@ -316,17 +316,24 @@ INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h DESTINATION include/MXAD
 SET (MXA_INSTALLED_RESOURCES
         ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
         ${MXA_RESOURCES_DIR}/ConfigureChecks.cmake
-        ${MXA_RESOURCES_DIR}/CreateOSXBundle.sh.in
+
         ${MXA_RESOURCES_DIR}/IncludeMXADataModelSource.cmake
         ${MXA_RESOURCES_DIR}/MXAAdjustLibVars.cmake
         ${MXA_RESOURCES_DIR}/MXAFindBoost.cmake
-        ${MXA_RESOURCES_DIR}/MXAFindBoost_Generator.sh
         ${MXA_RESOURCES_DIR}/MXAFindExpat.cmake
         ${MXA_RESOURCES_DIR}/MXAFindHDF5.cmake
         ${MXA_RESOURCES_DIR}/MXAFindSZip.cmake
         ${MXA_RESOURCES_DIR}/MXAFindTiff.cmake
-        ${MXA_RESOURCES_DIR}/PackageMXALibsForOSXAppBundle.sh.in
+        
 )
+
+#-- Add Apple specific resources
+IF (APPLE)
+    SET (MXA_INSTALLED_RESOURCES ${MXA_INSTALLED_RESOURCES}
+        ${MXA_RESOURCES_DIR}/PackageMXALibsForOSXAppBundle.sh.in
+        ${MXA_RESOURCES_DIR}/CreateOSXBundle.sh.in
+        )
+ENDIF (APPLE)
 
 INSTALL (FILES ${MXA_INSTALLED_RESOURCES} DESTINATION share/MXADataModel/Resources/ )
 
