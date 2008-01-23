@@ -60,7 +60,11 @@ int32 DataImportXmlParser::import()
     return err;
   }
   
-  
+  if (this->_dataModel->getDataDimension(0).get() == NULL)
+  {
+    std::cout << logTime() << "Data Model has Zero Dimensions." << "\n Error Location->" << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
+    return -1010;
+  }
   // Now create the Output file and leave it open
 //  bool deleteExisting = false;
   if ( this->_deleteExistingDataFile.compare("true") == 0 ) 
@@ -76,13 +80,14 @@ int32 DataImportXmlParser::import()
   {
     //Merge Models from file and the model currently in memory
     // Only the Dimensions should change
-    this->_mergeModelToDisk();    
+    err = this->_mergeModelToDisk();    
+    // Check for error after merging the models
+    if (err < 0)
+    {
+      return err;
+    }
   }
-  // Check for error after merging the models
-  if (err < 0)
-  {
-    return err;
-  }
+
   
   std::cout << logTime() << "Input XML: " << this->_xmlFilename << std::endl;
   std::cout << logTime() << "Output File: " << this->_outputFilePath << std::endl;
@@ -106,19 +111,19 @@ int32 DataImportXmlParser::import()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void DataImportXmlParser::_mergeModelToDisk()
+int32 DataImportXmlParser::_mergeModelToDisk()
 {
   
-
+  int32 err = 1;
   //Read the model from the file, leaving it open and in Read/Write mode
   _dataFile = H5MXADataFile::OpenFile(this->_outputFilePath, false);
-  //herr_t err = fModel->readModel(this->_outputFilePath, false, false);
   
   if ( NULL == _dataFile.get() ) // Ouput file does NOT exist on file system, write the model in memory
   {
     _dataFile = H5MXADataFile::CreateFileWithModel(this->_outputFilePath, this->_dataModel);
-    //mModel->writeModel(this->_outputFilePath, false, false);
-    return;
+    if(_dataFile.get() == NULL) { err = -1; }
+    else { err = 1; }
+    return err;
   }
   
   IDataModelPtr fModelPtr = _dataFile->getDataModel();
@@ -128,7 +133,7 @@ void DataImportXmlParser::_mergeModelToDisk()
   if (mModel->getNumberOfDataDimensions() != fModel->getNumberOfDataDimensions())
   {
     this->_xmlParseError = -1;
-    return;
+    return -1;
   }
  
   int32 dimSize = mModel->getNumberOfDataDimensions();
@@ -150,8 +155,9 @@ void DataImportXmlParser::_mergeModelToDisk()
     // throw the model into chaos
   }
   //write the model to disk and close the file
-  _dataFile->saveDataModel();
+  err = _dataFile->saveDataModel();
   this->_dataModel = fModelPtr;
+  return err;
 }
 
 

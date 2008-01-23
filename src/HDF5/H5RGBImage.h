@@ -23,7 +23,7 @@
 * then use the generic H5Data2DArray class instead.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class MXA_EXPORT H5RGBImage : public H5DataArrayTemplate<uint8> 
 {
@@ -50,10 +50,10 @@ class MXA_EXPORT H5RGBImage : public H5DataArrayTemplate<uint8>
     virtual int32 resize(uint64 size);
         
     /**
-     * @brief
-     * @param width
-     * @param height
-     * @return
+     * @brief Resizes the data array to the specified width and height
+     * @param width The new width of the array
+     * @param height The new height of the array
+     * @return 1 on success and Zero (0) on failure 
      */
     int32 resizeArray(mxaIdType width, mxaIdType height);
     

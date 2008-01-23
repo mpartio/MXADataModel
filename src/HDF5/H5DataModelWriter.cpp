@@ -1,14 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2006, Shawn Nicholson
-//  All rights reserved.
-//  BSD License: http://www.opensource.org/licenses/bsd-license.html
-//
-//  This code was written under United States Air Force Contract number 
-//                           FA8650-04-C-5229
-//
-///////////////////////////////////////////////////////////////////////////////
-
 //MXA Includes
 #include <HDF5/H5DataModelWriter.h>
 #include <HDF5/H5Lite.h>

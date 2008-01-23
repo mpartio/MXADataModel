@@ -24,7 +24,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 template<typename T>
 class H5AttributeArrayTemplate : public MXAAbstractAttribute
@@ -50,7 +50,7 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
     }
     
 /**    
- * @brief
+ * @brief Creates an MXAAbstractAttributePtr object for the supplied arguments.
  * @param datasetPath The path to the dataset in the HDF5 file
  * @param attributeKey The string name of the attribute
  * @param nDims
@@ -371,7 +371,10 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
  * @param numElements The number of elements in the internal array.
  * @param takeOwnership Will the class clean up the memory. Default=true
      */
-      H5AttributeArrayTemplate(const std::string &datasetPath, const std::string &attributeKey, int32 numElements, bool takeOwnership = true) :
+      H5AttributeArrayTemplate(const std::string &datasetPath, 
+                               const std::string &attributeKey, 
+                               int32 numElements, 
+                               bool takeOwnership = true) :
         _datasetPath(datasetPath),
         _attributeKey(attributeKey),
         _data(NULL),
@@ -382,12 +385,12 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
         _dims[0] = numElements;
       }
  
-      /**
-       * @brief
+/**
+ * @brief Constructor used to create an H5AttributeArrayTemplate class that has multiple dimensions.
  * @param datasetPath The path to the dataset in the HDF5 file
  * @param attributeKey The string name of the attribute
- * @param numDims 
- * @param dims
+ * @param numDims The number of dimensions to the data set.
+ * @param dims The actual values of the dimensions.
  * @param takeOwnership Will the class clean up the memory. Default=true
  */
       H5AttributeArrayTemplate(const std::string &datasetPath, 

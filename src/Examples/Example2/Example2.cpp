@@ -102,7 +102,7 @@ int32 readData()
   // Create an array with 2 values. This will hold the values for the current time and current
   //  pressure indexes. These indexes allow for the construction of the internal HDF5
   // path to the actual data.
-  std::vector<mxaIdType> indices (2,0); 
+  std::vector<int32> indices (2,0); 
   IDataRecordPtr cameraRec = modelPtr->getDataRecordByNamedPath("Camera");
   IDataRecordPtr tempRec = modelPtr->getDataRecordByNamedPath("Temperature");
   if (cameraRec.get() == NULL || tempRec.get() == NULL)

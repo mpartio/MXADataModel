@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2008, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef _XMLMXAAttributeWriter_h_
 #define _XMLMXAAttributeWriter_h_
 
@@ -5,11 +15,11 @@
 #include <Core/MXAAbstractAttribute.h>
 #include <hdf5.h>
 /**
-* @class XMLMXAAttributeWriter XMLMXAAttributeWriter.h XML/XMLMXAAttributeWriter.h
-* @brief 
+* @class XMLMXAAttributeWriter XMLMXAAttributeWriter.hpp XML/XMLMXAAttributeWriter.hpp
+* @brief Delegate type class that writes attributes to an xml file
 * @author mjackson
 * @date Jan 15, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 
 class MXA_EXPORT XMLMXAAttributeWriter 
@@ -21,18 +31,20 @@ class MXA_EXPORT XMLMXAAttributeWriter
     
     virtual ~XMLMXAAttributeWriter() {} 
     
-    // -----------------------------------------------------------------------------
-    //  Does indenting for pretty printing the XML
-    // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+//  Does indenting for pretty printing the XML
+// -----------------------------------------------------------------------------
       std::string indent(int depth)
       {
         const int32 indentSize = 2;
         return std::string(indentSize * depth, ' ');
       }
       
-      // -----------------------------------------------------------------------------
-      //  
-      // -----------------------------------------------------------------------------
+/**
+ * @brief Writes the attribute to the xml file
+ * @param attribute The attribute to write
+ * @return Error condition - Negative is error
+ */
     int32 writeAttribute(MXAAbstractAttributePtr attribute)
     {
       hid_t typeId = attribute->getDataType();
@@ -93,9 +105,11 @@ class MXA_EXPORT XMLMXAAttributeWriter
       return err;
     }
     
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
+/**
+ * @brief Template based method to write an attribute to an xml file
+ * @param attribute The attribute to write to the xml file
+ * @return Error Condition - Negative is Error.
+ */
     template<typename T>
     int32 writeAttributeData(MXAAbstractAttributePtr attribute)
     {
@@ -142,9 +156,11 @@ class MXA_EXPORT XMLMXAAttributeWriter
       return 1;
     }
     
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
+/**
+ * @brief Writes a string based attribute to an xml file
+ * @param attribute The attribute to write
+ * @return Error Condition - Negative is error
+ */
     int32 writeStringAttributeData(MXAAbstractAttributePtr attribute)
     {
       std::ofstream &stream = *(_ofstreamPtr.get());

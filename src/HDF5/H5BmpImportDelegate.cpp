@@ -1,5 +1,3 @@
-
-
 #include <HDF5/H5BmpImportDelegate.h>
 
 //-- MXA Includes

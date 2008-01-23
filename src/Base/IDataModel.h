@@ -26,7 +26,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  *  
  */
 class MXA_EXPORT IDataModel
@@ -247,7 +247,7 @@ class MXA_EXPORT IDataModel
     
     /**
     * @brief Returns the meta data for the data model
-    * @param requiredMetaData
+    * @return IRequiredMetaDataPtr object
     */
     virtual IRequiredMetaDataPtr getRequiredMetaData() = 0;
     

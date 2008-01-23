@@ -64,7 +64,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.12 $
+* @version $Revision: 1.13 $
 */
 class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -262,7 +262,7 @@ private:
     /**
      * @brief Merges the Model in memory to the model resident on disk.
      */
-    void _mergeModelToDisk();
+    int32 _mergeModelToDisk();
     
 }; // End Class DataImportXmlParser
 

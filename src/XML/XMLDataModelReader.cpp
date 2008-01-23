@@ -43,8 +43,8 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
 //  std::cout << "XMLDataModelReader::readDataModel -> Data Records Size: " << this->_dataModel->getDataRecords().size() << std::endl;
   if ( this->_dataModel->getDataRecords().size() != 0 )
   {
-    std::cout << "XMLDataModelReader::readDataModel - The data model has Data Records. This will turn out to be bad. YOU should be" 
-    << " supplying a data model that is clean" << std::endl;
+    std::cout << "XMLDataModelReader::readDataModel - The data model has Data Records. This will turn out to be bad. You should be" 
+    << " supplying a data model that is clean." << std::endl;
     return -1;
   }
   char buf[BUFFER_SIZE];
@@ -77,6 +77,7 @@ int32 XMLDataModelReader::readDataModel(int32 locId)
   bool validModel = this->_dataModel->isValid(message);
   if ( validModel == false )
   {
+    std::cout << logTime() << "DataModel is NOT valid: Error Message is: \n" << message << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
     _xmlParseError = -1;
   }
   
@@ -299,6 +300,12 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
       uniform = 1;
     }
     MXADataDimensionPtr dim = MXADataDimension::New( attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG], index, count, start, end, increment, uniform);
+    if (dim.get() == NULL)
+    {
+      std::cout << logTime() << "Attempting to add a NULL MXA Data Dimension to the Model." << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
+    }
+    else
+    {
 //    std::string message;
 //    bool isValid = dim->isValid(message);
 //    if (isValid == true)
@@ -309,7 +316,8 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
 //    {
 //      std::cout << "XMLDataModelReader::onDimensionStartTag: Dim " << attrMap[MXA::MXA_NAME_TAG] << " wasÊNOT valid" << std::endl;
 //    }
-    this->_dataModel->insertDataDimension(dim, index);
+      this->_dataModel->insertDataDimension(dim, index);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -542,8 +550,7 @@ void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onData_DimensionsEndTag(const XML_Char* name)
 {
-
-    // printf("Ending %s\n", name); 
+  this->_dataModel->squeezeDataDimensions();
 }
 
 // -----------------------------------------------------------------------------

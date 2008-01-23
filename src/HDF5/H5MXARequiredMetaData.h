@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2008, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef _H5MXARequiredMetaData_h_
 #define _H5MXARequiredMetaData_h_
 
@@ -10,10 +20,10 @@
 
 /**
 * @class H5MXARequiredMetaData H5MXARequiredMetaData.h HDF5/H5MXARequiredMetaData.h
-* @brief 
-* @author mjackson
+* @brief Concrete implmentation of the IRequiredMetaData virtual class.
+* @author Mike Jackson  for IMTS.us
 * @date Jan 15, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData 
 {

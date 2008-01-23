@@ -858,7 +858,12 @@ bool MXADataModel::isValid(std::string &message)
   MXADataDimension* dim = NULL;
   for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
     dim = static_cast<MXADataDimension*>((*(iter)).get());
-    if (NULL == dim) { continue; }
+    if (NULL == dim) 
+    { 
+      valid = false; 
+      message.append("MXA Data Dimension is NULL. All MXA Data Dimension objects must be valid.\n");
+      break;
+    }
     if ( dim->isValid(message) == false )
     {
       valid = false;
@@ -867,7 +872,7 @@ bool MXADataModel::isValid(std::string &message)
   if (this->_requiredMetaData.get() == NULL)
   {
     valid = false;
-    message.append("Required Meta Data Object Container is NULL");
+    message.append("Required Meta Data Object Container is NULL.\n");
   }
   else 
   {

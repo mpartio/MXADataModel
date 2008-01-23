@@ -37,7 +37,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.22 $
+ * @version $Revision: 1.23 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -274,7 +274,6 @@ class MXA_EXPORT MXADataModel : public IDataModel
   
   /**
    * @brief Returns the RequiredMeta Data in the provided std::map
-   * @param requiredMetaData
    * @return IRequiredMetaDataPtr
    */
   IRequiredMetaDataPtr getRequiredMetaData();

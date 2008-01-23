@@ -22,11 +22,11 @@
 #include <hdf5.h>
 
 /**
-* @class H5Data2DArray H5Data2DArray.h HDF5/H5Data2DArray.h
+* @class H5Data2DArray H5Data2DArray.hpp HDF5/H5Data2DArray.hpp
 * @brief This class represents a generic 2D array of data.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 template<typename T>
 class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T> 
@@ -88,10 +88,10 @@ class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T>
     virtual int32 getHeight() { return _height; }
     
     /**
-     * @brief
-     * @param x
-     * @param y
-     * @return
+     * @brief Returns the a pointer to the data value located at pixel (x,y)
+     * @param x The x location of the pixel
+     * @param y The y location of the pixel
+     * @return A pointer to the value.
      */
     T* getPointer(int32 x, int32 y)
     { 
@@ -121,10 +121,10 @@ class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T>
     }
         
     /**
-     * @brief
-     * @param width
-     * @param height
-     * @return
+     * @brief Resizes the data array to the specified width and height
+     * @param width The new width of the array
+     * @param height The new height of the array
+     * @return 1 on success and Zero (0) on failure 
      */
     int32 resizeArray(mxaIdType width, mxaIdType height)
     {

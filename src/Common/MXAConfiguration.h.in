@@ -1,5 +1,5 @@
-#ifndef SYSTEMCONFIGURATION_H_IN_
-#define SYSTEMCONFIGURATION_H_IN_
+#ifndef MXA_DATA_MODEL_SYSTEMCONFIGURATION_H_IN_
+#define MXA_DATA_MODEL_SYSTEMCONFIGURATION_H_IN_
 // This file is used as an input. DO NOT INCLUDE this file directly.
 
 #define HDF5_SUPPORT @HDF5_SUPPORT@
@@ -19,4 +19,4 @@
 /** The number of bytes for the ssize_t type */
 #define SIZEOF_SSIZE_T @SIZEOF_SSIZE_T@
 
-#endif /*SYSTEMCONFIGURATION_H_IN_*/
+#endif /*MXA_DATA_MODEL_SYSTEMCONFIGURATION_H_IN_*/
