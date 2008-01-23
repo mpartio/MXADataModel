@@ -22,7 +22,7 @@ echo ""
 for ((i=0;i<$varnum;i++)); do
   libName=${BOOST_LIB_LIST[${i}]}
   cmVar=${CMAKE_VAR_LIST[${i}]} 
-  echo "#  BOOST_${cmVar}_LIBRARY     The Boost ${libName} libraries"
+  echo "#  BOOST_${cmVar}_LIBRARY           The Boost ${libName} libraries"
   echo "#  BOOST_${cmVar}_LIBRARY_DEBUG     The Boost ${libName} debug library"
   echo "#  BOOST_${cmVar}_LIBRARY_RELEASE   The Boost ${libName} release library"
   echo "#"

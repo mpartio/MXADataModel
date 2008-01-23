@@ -253,6 +253,10 @@ CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
 SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfiguration.h  )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
+#-- Configure our UseMXADataModel.cmake file
+CONFIGURE_FILE ( ${MXA_RESOURCES_DIR}/UseMXADataModel.cmake.in
+                 ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake @ONLY IMMEDIATE)
+
 # - Combine all the source files together -----------------------------
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
@@ -266,6 +270,27 @@ IF ( APPLE )
     PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib
     )  
 ENDIF ( APPLE )
+
+#IF (WIN32)
+    SET (MXA_LIB_DEBUG_NAME "")
+    SET (MXA_LIB_RELEASE_NAME "")
+    SET (MXA_LIB_STATIC_PREFIX "")
+    IF (WIN32)
+       SET (MXA_LIB_STATIC_PREFIX "lib")
+    ENDIF(WIN32)
+    IF (BUILD_SHARED_LIBS)
+        SET(MXA_LIB_RELEASE_NAME "MXADataModel")
+        SET(MXA_LIB_DEBUG_NAME "MXADataModel_D")
+    ELSE (BUILD_SHARED_LIBS)
+        SET(MXA_LIB_RELEASE_NAME "${MXA_LIB_STATIC_PREFIX}MXADataModel")
+        SET(MXA_LIB_DEBUG_NAME "${MXA_LIB_STATIC_PREFIX}MXADataModel_D")
+    ENDIF(BUILD_SHARED_LIBS)
+    SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME}
+        PROPERTIES
+        DEBUG_OUTPUT_NAME ${MXA_LIB_DEBUG_NAME}
+        RELEASE_OUTPUT_NAME ${MXA_LIB_RELEASE_NAME}
+    )
+#ENDIF (WIN32)
 
 
 #--- Set up the installation Code for Make Install
@@ -287,6 +312,23 @@ SET (INSTALL_INCLUDES
   )
   
 INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h DESTINATION include/MXADataModel )
+
+SET (MXA_INSTALLED_RESOURCES
+        ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
+        ${MXA_RESOURCES_DIR}/ConfigureChecks.cmake
+        ${MXA_RESOURCES_DIR}/CreateOSXBundle.sh.in
+        ${MXA_RESOURCES_DIR}/IncludeMXADataModelSource.cmake
+        ${MXA_RESOURCES_DIR}/MXAAdjustLibVars.cmake
+        ${MXA_RESOURCES_DIR}/MXAFindBoost.cmake
+        ${MXA_RESOURCES_DIR}/MXAFindBoost_Generator.sh
+        ${MXA_RESOURCES_DIR}/MXAFindExpat.cmake
+        ${MXA_RESOURCES_DIR}/MXAFindHDF5.cmake
+        ${MXA_RESOURCES_DIR}/MXAFindSZip.cmake
+        ${MXA_RESOURCES_DIR}/MXAFindTiff.cmake
+        ${MXA_RESOURCES_DIR}/PackageMXALibsForOSXAppBundle.sh.in
+)
+
+INSTALL (FILES ${MXA_INSTALLED_RESOURCES} DESTINATION share/MXADataModel/Resources/ )
 
 INSTALL(DIRECTORY ${INSTALL_INCLUDES}  DESTINATION include/MXADataModel
   PATTERN "CVS" EXCLUDE

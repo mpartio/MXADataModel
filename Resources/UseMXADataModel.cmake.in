@@ -1,4 +1,9 @@
-# IF YOU CHANGE THIS FILE, MAKE SURE YOU UPDATE THE UseMXADataModel.cmake.in FILE ALSO.
+# The contents of this file should closely match that of FindSupportLibraries.cmake
+
+SET (MXA_USE_XML @MXA_USE_XML@)
+SET (HDF5_SUPPORT @HDF5_SUPPORT@)
+SET (HDF5_VTK_BRIDGE @HDF5_VTK_BRIDGE@)
+SET (TIFF_SUPPORT @TIFF_SUPPORT@)
 
 IF ( NOT DEFINED  MXA_RESOURCES_DIR)
   SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
@@ -14,8 +19,6 @@ SET(DEP_LIBS ${DEP_LIBS} ${BOOST_FILESYSTEM_LIBRARY})
 LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS}) 
 
 #---- Find Expat -------------
-SET (XML_SUPPORT "0")
-OPTION(MXA_USE_XML "Adds Ability to read/write models to XML Files" ON)
 IF (MXA_USE_XML)
     INCLUDE ( ${MXA_RESOURCES_DIR}/MXAFindExpat.cmake)
     IF (NOT EXPAT_FOUND)
@@ -28,9 +31,6 @@ ENDIF (MXA_USE_XML)
 
 #--- Find the HDF5 library ------------------------------------------------
 # Build with the HDF5 Libraries Enabled. This is the default
-SET(HDF5_SUPPORT "0")
-SET(HDF5_VTK_BRIDGE "0")
-OPTION (MXA_USE_HDF5 "Compiles Sources dependent on HDF5 Libraries" ON)
 IF ( MXA_USE_HDF5 )
   # ---------- DO NOT use the High Level APIs from the HDF5
   # group as those API's will not compile correctly under windows --------------
@@ -44,8 +44,6 @@ IF ( MXA_USE_HDF5 )
 ENDIF ( MXA_USE_HDF5 )   
  
 #---- Find TIFF -------------------------------------------------------------
-SET (TIFF_SUPPORT "0")
-OPTION(MXA_USE_TIFF "Compiles source code that depends on having the Tif Lib installed" ON)
 IF(MXA_USE_TIFF)
     INCLUDE ( ${MXA_RESOURCES_DIR}/MXAFindTiff.cmake)
     IF (NOT TIFF_FOUND)

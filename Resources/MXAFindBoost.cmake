@@ -8,6 +8,16 @@
 #  BOOST_DEFINITIONS - Compiler switches required for using Boost
 #  BOOST_LIBRARIES_SUFFIX - Boost libraries name suffix (e.g -vc71-mt-gd-1_34, -gcc41-mt...)
 #
+#  BOOST_CURRENT_VERSION  The version of Boost that you want to find (1_34_1)
+#  BOOST_COMPILER      Boost's abbreviation for the compiler used. Reasonable defaults have
+#   been set for Windows Visual Studio (2003, 2003.net and VS8), MinGW, Cygwin, 
+#   Apple OS X and Intel Compiler on Linux. If you need another combination set this
+#   cmake variable PRIOR to including this file in your cmakelists.txt.
+#   
+#  Environment Variables:
+#   BOOSTLIBDIR  The directory where the libraries are located
+#   BOOST_ROOT   The Directory where boost is installed. 
+#
 #  Use these variables to control which libraries will be used for linking.
 #  BOOST_USE_DATE_TIME     Link against the date_time Library
 #  BOOST_USE_FILESYSTEM     Link against the filesystem Library
@@ -96,17 +106,21 @@
 #  BSD license.
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
+OPTION (BOOST_USE_MULTITHREADED "Use the Multithreaded boost libraries" ON)
+MARK_AS_ADVANCED (BOOST_USE_MULTITHREADED)
+
 
 # MESSAGE(STATUS "Finding Boost libraries.... ")
 IF (NOT DEFINED BOOST_CURRENT_VERSION)
     SET ( BOOST_CURRENT_VERSION "1_34_1")
 ENDIF (NOT DEFINED BOOST_CURRENT_VERSION)
- SET (BOOST_LIBRARIES "")
- SET (BOOST_INCLUDE_DIRS "")
-IF (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
+
+SET (BOOST_LIBRARIES "")
+SET (BOOST_INCLUDE_DIRS "")
+IF (BOOST_INCLUDE_DIRS)
   # in cache already
   SET(BOOST_FOUND TRUE)
-ELSE (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
+ELSE (BOOST_INCLUDE_DIRS)
 
   # Add in some path suffixes. These will have to be updated whenever
   # a new Boost version comes out.
@@ -227,38 +241,41 @@ MACRO (_BOOST_ADJUST_LIB_VARS basename)
 ENDMACRO (_BOOST_ADJUST_LIB_VARS)
 
 #-------------------------------------------------------------------------------
-  SET (BOOST_LIB_PREFIX "")
-  IF ( WIN32 )
-    SET (BOOST_LIB_PREFIX "lib")
-  ENDIF ( WIN32 )
-  SET (BOOST_COMPILER "-gcc")
-  IF (MSVC71)
-    SET (BOOST_COMPILER "-vc71")
-  ENDIF(MSVC71)
-   IF (MSVC80)
-    SET (BOOST_COMPILER "-vc80")
-  ENDIF(MSVC80) 
-  IF (MINGW)
-    SET (BOOST_COMPILER "-mgw")
-  ENDIF(MINGW)
-  IF (CYGWIN)
-    SET (BOOST_COMPILER "-gcc")
-  ENDIF (CYGWIN)
-  IF (UNIX)
-
-    IF (APPLE)
-        SET (BOOST_COMPILER "")
-    ELSE (APPLE)
-	    IF (NOT CMAKE_COMPILER_IS_GNUCC)
-          # This is for the intel compiler
-	       SET (BOOST_COMPILER "-il")
-	    ELSE (NOT CMAKE_COMPILER_IS_GNUCC)
-         SET (BOOST_COMPILER "-gcc34")
-    	ENDIF (NOT CMAKE_COMPILER_IS_GNUCC)
-    ENDIF (APPLE)
-  ENDIF(UNIX)
+    SET (BOOST_LIB_PREFIX "")
+    IF ( WIN32 )
+        SET (BOOST_LIB_PREFIX "lib")  # Looks for the static libraries by default
+    ENDIF ( WIN32 )
   
-  SET (BOOST_MULTITHREADED "-mt")
+    IF (NOT DEFINED BOOST_COMPILER)
+      SET (BOOST_COMPILER "-gcc")
+      IF (MSVC71)
+        SET (BOOST_COMPILER "-vc71")
+      ENDIF(MSVC71)
+       IF (MSVC80)
+        SET (BOOST_COMPILER "-vc80")
+      ENDIF(MSVC80) 
+      IF (MINGW)
+        SET (BOOST_COMPILER "-mgw")
+      ENDIF(MINGW)
+      IF (CYGWIN)
+        SET (BOOST_COMPILER "-gcc")
+      ENDIF (CYGWIN)
+      IF (UNIX)
+        IF (APPLE)
+            SET (BOOST_COMPILER "")
+        ELSE (APPLE)
+    	    IF (NOT CMAKE_COMPILER_IS_GNUCC)
+    	       SET (BOOST_COMPILER "-il")           # This is for the intel compiler
+    	    ELSE (NOT CMAKE_COMPILER_IS_GNUCC)
+             SET (BOOST_COMPILER "-gcc34")
+        	ENDIF (NOT CMAKE_COMPILER_IS_GNUCC)
+        ENDIF (APPLE)
+      ENDIF(UNIX)
+    ENDIF (NOT DEFINED BOOST_COMPILER)
+
+  IF(BOOST_USE_MULTITHREADED)
+    SET (BOOST_MULTITHREADED "-mt")
+  ENDIF(BOOST_USE_MULTITHREADED)
   
   IF (WIN32)
     SET (BOOST_ABI_TAG "g")
@@ -613,9 +630,9 @@ SET(BOOST_INCLUDE_DIRS
 # MESSAGE(STATUS "BOOST_INCLUDE_DIR: ${BOOST_INCLUDE_DIR}")
 # MESSAGE(STATUS "BOOST_LIBRARIES: ${BOOST_LIBRARIES}")
 
-IF (BOOST_INCLUDE_DIRS AND BOOST_LIBRARIES)
+IF (BOOST_INCLUDE_DIRS)
   SET(BOOST_FOUND TRUE)
-ENDIF(BOOST_INCLUDE_DIRS AND BOOST_LIBRARIES)
+ENDIF(BOOST_INCLUDE_DIRS)
 
 IF (BOOST_FOUND)
     IF (NOT Boost_FIND_QUIETLY)
@@ -647,4 +664,4 @@ MARK_AS_ADVANCED(BOOST_INCLUDE_DIRS
     BOOST_LIBRARIES_SUFFIX
 )
 
-ENDIF(BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
+ENDIF(BOOST_INCLUDE_DIRS)

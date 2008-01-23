@@ -18,7 +18,6 @@ LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS})
 SET( MXADATAMODEL_SRCS
     ${MXA_SOURCE_DIR}/src/Common/IO/Reader64.cpp
     ${MXA_SOURCE_DIR}/src/Common/IO/Writer64.cpp
-    ${MXA_SOURCE_DIR}/src/Core/MXAAttribute.cpp
     ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.cpp
     ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.cpp
     ${MXA_SOURCE_DIR}/src/Core/MXADataModel.cpp
@@ -27,7 +26,6 @@ SET( MXADATAMODEL_SRCS
     ${MXA_SOURCE_DIR}/src/HDF5/H5Image.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5Utilities.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5IODelegate.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.cpp
 )
