@@ -17,6 +17,7 @@
  *    Retrieving a list of the Data Records
  *    Saving the Model to an HDF5 File
  *    Writing some sample data to the HDF5 file
+ *    Shows 2 different ways to get the value from a User Defined Meta Data Object
  */
 
 //-- MXA Includes
@@ -28,6 +29,8 @@
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
 #include <HDF5/H5MXADataFile.h>
+#include <HDF5/H5DataArrayTemplate.hpp>
+#include <HDF5/H5AttributeArrayTemplate.hpp>
 
 // HDF5 Include
 #include <hdf5.h>
@@ -47,6 +50,7 @@
 void listDataDimensions(MXADataModel* model);
 void listDataRecords(MXADataModel* model);
 void captureSampleImage(std::vector<uint8> &imageBuffer);
+void listUserMetaData(IDataFilePtr dataFile);
 
 // -----------------------------------------------------------------------------
 //  
@@ -119,8 +123,16 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
   
-  // Export the Model to an XML File
+  // Add some user defined Meta Data to the model
+  float32 value = 12.234234f;
+  MXAAbstractAttributePtr umd = H5AttributeArrayTemplate<float32>::CreateScalarAttribute(MXA::UserMetaDataPath, "Float32 User Meta Data", value);
+  model->addUserMetaData(umd);
+  int32 iMDValue = 34212;
+  umd = H5AttributeArrayTemplate<int32>::CreateScalarAttribute(MXA::UserMetaDataPath, "Int32 User Meta Data", iMDValue);
+  model->addUserMetaData(umd);
   
+  
+  // Export the Model to an XML File
   XMLDataModelWriter xmlWriter(modelPtr, XML_FILE);
   int32 err = xmlWriter.writeModelToFile(-1);
   if (err < 0)
@@ -144,6 +156,9 @@ int main(int argc, char **argv) {
     std::cout << "Error Writing Model to HDF5 File" << std::endl;
     return EXIT_FAILURE;
   }
+  
+  //List the User Meta Data
+  listUserMetaData(dataFile);
   
   //Lets store some data into the HDF5 File. In our experiment we are recording the time
   // in 1 minute intervals for 10 minutes and also incrementing the pressure by
@@ -208,6 +223,37 @@ void captureSampleImage(std::vector<uint8> &imageBuffer)
   }
   
 }
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+void listUserMetaData(IDataFilePtr dataFile)
+{
+  IDataModelPtr modelPtr = dataFile->getDataModel();
+  MXAAbstractAttributes userMetaData = modelPtr->getUserMetaData();
+  MXAAbstractAttributePtr attribute;
+  H5AttributeArrayTemplate<float32>* fAttr = NULL;
+  std::string key;
+  //std::string value;
+  for (MXAAbstractAttributes::iterator iter = userMetaData.begin(); iter != userMetaData.end(); ++iter ) {
+    attribute = (*iter);
+    key = attribute->getAttributeKey();
+    if (key.compare("Int32 User Meta Data") == 0)
+    {
+      // This works because we have a-priori knowledge of the type of data stored
+      int32* valuePtr = static_cast<int32*>( attribute->getVoidPointer(0) );
+      std::cout << "Value is: " << *valuePtr << std::endl;
+    }
+    
+    if (key.compare("Float32 User Meta Data") == 0)
+    {
+      // This works because we have a-priori knowledge of the type of data stored
+      fAttr = dynamic_cast<H5AttributeArrayTemplate<float32>* >( attribute.get() );
+      std::cout << "Value is: " << fAttr->getValue(0) << std::endl;
+    }
+  }
+}
+
 
 // -----------------------------------------------------------------------------
 //  

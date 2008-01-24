@@ -23,7 +23,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 template<typename T>
 class H5DataArrayTemplate : public MXAAbstractData
@@ -43,7 +43,7 @@ class H5DataArrayTemplate : public MXAAbstractData
      {  // Could not allocate enough memory, reset the pointer to null and return
        d = NULL;
      }
-     MXAAbstractDataPtr ptr ( dynamic_cast<MXAAbstractData*>(d) );
+     MXAAbstractDataPtr ptr ( static_cast<MXAAbstractData*>(d) );
      return ptr;
    }
     

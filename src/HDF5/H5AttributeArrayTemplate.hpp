@@ -24,7 +24,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 */
 template<typename T>
 class H5AttributeArrayTemplate : public MXAAbstractAttribute
@@ -45,7 +45,7 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
       {  // Could not allocate enough memory, reset the pointer to null and return
         d = NULL;
       }
-      MXAAbstractAttributePtr ptr ( dynamic_cast<MXAAbstractAttribute*>(d) );
+      MXAAbstractAttributePtr ptr ( static_cast<MXAAbstractAttribute*>(d) );
       return ptr;
     }
     
@@ -68,7 +68,7 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
       {  // Could not allocate enough memory, reset the pointer to null and return
         d = NULL;
       }
-      MXAAbstractAttributePtr ptr ( dynamic_cast<MXAAbstractAttribute*>(d) );
+      MXAAbstractAttributePtr ptr ( static_cast<MXAAbstractAttribute*>(d) );
       return ptr;
     }
     
@@ -88,7 +88,7 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
         d = NULL;
       }
       d->setValue(0, value);
-      MXAAbstractAttributePtr ptr ( dynamic_cast<MXAAbstractAttribute*>(d) );
+      MXAAbstractAttributePtr ptr ( static_cast<MXAAbstractAttribute*>(d) );
       return ptr;
     }
     
@@ -198,10 +198,12 @@ class H5AttributeArrayTemplate : public MXAAbstractAttribute
       return (void*)(&(_data[i]) );
     }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-    virtual T getValue(mxaIdType i)
+/**
+ * @brief Returns the value for a given index
+ * @param i The index to return the value at
+ * @return The value at index i
+ */
+    virtual T getValue(uint64 i)
     {
       return this->_data[i];
     }
