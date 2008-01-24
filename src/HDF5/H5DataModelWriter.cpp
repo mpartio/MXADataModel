@@ -282,7 +282,7 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
   err = this->_writeScalarDataset(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), data);
   if (err < 0)
   {
-    std::cout << logTime() << "Error Creating Dataset for RequiredMetaData." << err << std::endl;
+    std::cout << logTime() << "Error Creating Dataset for RequiredMetaData." << err << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")\n" << std::endl;
     return err;
   }
   std::map<std::string, std::string> meta;
@@ -291,7 +291,8 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
 
   for (std::map<std::string, std::string>::iterator iter=meta.begin(); iter!=meta.end(); iter++) {
     err = H5Lite::writeStringAttribute(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), const_cast<std::string&>( iter->first), iter->second);
-    if(err<0) {std::cout << "Error Writing Required MetaData: " << iter->first << "=" << iter->second << " at path " << MXA::RequiredMetaDataPath << std::endl; break;}
+    if(err<0) {std::cout << logTime() << "Error Writing Required MetaData: " << iter->first << "=" << iter->second << " at path " << MXA::RequiredMetaDataPath << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")\n" << std::endl;
+    break;}
   }
   return err;
 }
@@ -311,7 +312,10 @@ int32 H5DataModelWriter::writeUserMetaData(hid_t fileId)
     attr = (*(iter)).get();
     err = attr->writeToFile(_dataFile);
    // err = attr->write( fileId, const_cast<std::string&>(MXA::UserMetaDataPath), writer);
-    if(err<0) {std::cout << "Error Writing User MetaData Attribute " << MXA::UserMetaDataPath  << " Key:" << attr->getAttributeKey() << std::endl; break;}
+    if(err<0) {
+      std::cout << logTime() << "Error Writing User MetaData at HDF5 Path '" << MXA::UserMetaDataPath  << "' using Key:" << attr->getAttributeKey() << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")\n" << std::endl;
+      break;
+    }
   }
   return err;
 }

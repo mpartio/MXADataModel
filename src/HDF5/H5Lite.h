@@ -56,7 +56,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.45 $
+ * @version $Revision: 1.46 $
  */
 class H5Lite
 {
@@ -142,6 +142,8 @@ static std::string HDFTypeForPrimitiveAsStr(T value)
   if (typeid(value) == typeid(float32)) return "H5T_NATIVE_FLOAT";
   if (typeid(value) == typeid(float64)) return "H5T_NATIVE_DOUBLE";
   
+  //if (typeid(value) == typeid(bool)) return "H5T_NATIVE_UINT8";
+  
   std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitiveAsStr - Unknown Type: " << typeid(value).name() << std::endl;
   return "";
 }
@@ -169,7 +171,9 @@ static hid_t HDFTypeForPrimitive(T value)
   if (typeid(value) == typeid(uint32)) return H5T_NATIVE_UINT32; 
   
   if (typeid(value) == typeid(int64)) return H5T_NATIVE_INT64;
-  if (typeid(value) == typeid(uint64)) return H5T_NATIVE_UINT64; 
+  if (typeid(value) == typeid(uint64)) return H5T_NATIVE_UINT64;
+  
+  if (typeid(value) == typeid(bool)) return H5T_NATIVE_UINT8;
   
   std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
   if (typeid(value).name() == "l" ) {
