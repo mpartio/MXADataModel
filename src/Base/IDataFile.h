@@ -11,7 +11,7 @@
 #ifndef IMXAFILE_H_
 #define IMXAFILE_H_
 
-
+#include <Common/DLLExport.h>
 #include <Common/MXATypeDefs.h>
 
 #include <string>
@@ -21,9 +21,9 @@
 * @brief 
 * @author mjackson
 * @date Dec 14, 2007
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
-class IDataFile 
+class MXA_EXPORT IDataFile 
 {
   public:
     explicit IDataFile(const std::string &filename) {};

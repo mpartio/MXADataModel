@@ -26,6 +26,14 @@ IDataFilePtr H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
     filePtr.reset(nullDataFile);
   }
   dataFile->_setWeakPointer(filePtr);
+  
+//  hid_t id = filePtr->getFileId();
+//  err = H5Gget_objinfo(id, "/OIMFIB/Data/0/0", false, NULL);
+//  if (err < 0)
+//  {
+//    std::cout << logTime() << "fileId: " << id << " dataPath: /OIMFIB/Data/0/0\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
+//  }
+
   return filePtr;
 }
 
@@ -94,6 +102,7 @@ H5MXADataFile::H5MXADataFile(const std::string &filename, IDataModelPtr model) :
 // -----------------------------------------------------------------------------
 H5MXADataFile::~H5MXADataFile()
 {
+  std::cout << logTime() << "H5MXADataFile::~H5MXADataFile()" << std::endl;
   if (this->_isFileOpen == true)
   {
     closeFile(false);

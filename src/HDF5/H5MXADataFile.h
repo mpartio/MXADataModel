@@ -22,9 +22,9 @@
  * @brief 
  * @author mjackson
  * @date Dec 17, 2007
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
-class H5MXADataFile : public IDataFile
+class MXA_EXPORT H5MXADataFile : public IDataFile
 {
   public:
     

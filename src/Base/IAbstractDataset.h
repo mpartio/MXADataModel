@@ -24,9 +24,9 @@ typedef boost::shared_ptr<MXAAbstractAttribute>    MXAAbstractAttributePtr;
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
-class IAbstractDataset : public IDataFileIO 
+class MXA_EXPORT IAbstractDataset : public IDataFileIO 
 {
   public:
     IAbstractDataset() {}

@@ -23,10 +23,10 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 */
 template<typename T>
-class H5DataArrayTemplate : public MXAAbstractData
+class MXA_EXPORT H5DataArrayTemplate : public MXAAbstractData
 {
   public:
    
