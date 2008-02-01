@@ -23,7 +23,7 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.9 $
+* @version $Revision: 1.10 $
 */
 template<typename T>
 class MXA_EXPORT H5DataArrayTemplate : public MXAAbstractData
@@ -136,7 +136,7 @@ class MXA_EXPORT H5DataArrayTemplate : public MXAAbstractData
 // -----------------------------------------------------------------------------
     virtual void* getVoidPointer(uint64 i)
     {
-      if (i >= this->getNumberOfElements() || i < 0)
+      if (i >= this->getNumberOfElements() )
       {
         return 0x0;
       }

@@ -23,7 +23,7 @@
 * @brief Concrete implmentation of the IRequiredMetaData virtual class.
 * @author Mike Jackson  for IMTS.us
 * @date Jan 15, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData 
 {
@@ -31,6 +31,15 @@ class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
     /**
      * @brief Static method to create a new IRequiredMetaData object that is 
      * wrapped in a Boost Shared Pointer.
+     * @param researcherName
+     * @param dateCreated
+     * @param datasetName
+     * @param description
+     * @param distributionRights
+     * @param releaseNumber
+     * @param pedigree
+     * @param derivedSrcFile
+     * @return 
      */
     static IRequiredMetaDataPtr New( std::string researcherName, 
                                      std::string dateCreated, 
@@ -40,9 +49,37 @@ class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
                                      std::string releaseNumber,
                                      std::string pedigree, 
                                      std::string derivedSrcFile);
+    
+    /**
+     * @brief Creates a new IRequiredMetaDataPtr object that has all empty values.
+     * Note that this will make it INVALID. You are required to fill in the appropriate values
+     * to make it valid. This is provided as a convenience.
+     */
+    static IRequiredMetaDataPtr DefaultMetaData();
 
     virtual ~H5MXARequiredMetaData();
-      
+    
+    /**
+     * @brief
+     * @param researcherName
+     * @param dateCreated
+     * @param datasetName
+     * @param description
+     * @param distributionRights
+     * @param releaseNumber
+     * @param pedigree
+     * @param derivedSrcFile
+     */
+    void setAll(std::string researcherName, 
+                std::string dateCreated, 
+                std::string datasetName, 
+                std::string description,
+                std::string distributionRights,
+                std::string releaseNumber,
+                std::string pedigree, 
+                std::string derivedSrcFile);
+    
+    
     void setResearcherName(const std::string &researcherName);
     std::string getResearcherName();
     

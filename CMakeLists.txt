@@ -236,8 +236,8 @@ ENDIF(WIN32)
 
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
-  ADD_DEFINITIONS(-DDEBUG)
-  ADD_DEFINITIONS(-Wall)
+ # ADD_DEFINITIONS(-DDEBUG)
+ # ADD_DEFINITIONS(-Wall)
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -359,5 +359,4 @@ ENDIF(BUILD_EXAMPLES)
 # ------------------------------------------------------------------------------
 #ADD_EXECUTABLE(OverLoadTest ${MXA_SOURCE_DIR}/src/Misc/OverLoadTest.cpp)
 #TARGET_LINK_LIBRARIES(OverLoadTest ${MXADATAMODEL_LIB_NAME} ${DEP_LIBS})
-
 

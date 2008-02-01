@@ -21,13 +21,33 @@
 * MXADataModel and is included in each data file.
 * @author Mike Jackson for IMTS.us
 * @date Jan 15, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT IRequiredMetaData : public IDataFileIO 
 {
   public:
     IRequiredMetaData() {}
     virtual ~IRequiredMetaData() {}
+    
+    /**
+     * @brief
+     * @param researcherName
+     * @param dateCreated
+     * @param datasetName
+     * @param description
+     * @param distributionRights
+     * @param releaseNumber
+     * @param pedigree
+     * @param derivedSrcFile
+     */
+    virtual void setAll(std::string researcherName, 
+                std::string dateCreated, 
+                std::string datasetName, 
+                std::string description,
+                std::string distributionRights,
+                std::string releaseNumber,
+                std::string pedigree, 
+                std::string derivedSrcFile) = 0;
     
     /**
      * @brief Sets the Researcher's name or who is generating the data set

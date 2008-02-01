@@ -331,7 +331,7 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFilePtr dataFile)
   BOOST_REQUIRE(data->getNumberOfElements() == numElements);
   BOOST_REQUIRE(data->getVoidPointer(10) == NULL); // Check for NULL pointer
   BOOST_REQUIRE(data->getVoidPointer(11) == NULL); // Check for NULL pointer
-  BOOST_REQUIRE(data->getVoidPointer(-1) == NULL); // Check for NULL pointer
+
   BOOST_REQUIRE(data->getNumberOfDimensions() == 2);
   BOOST_REQUIRE(data->getPointer(10, 0) == NULL);
   BOOST_REQUIRE(data->getPointer(0, 1) == NULL);

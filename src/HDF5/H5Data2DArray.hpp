@@ -26,12 +26,19 @@
 * @brief This class represents a generic 2D array of data.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 template<typename T>
 class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T> 
 {
   public:
+    /**
+     * @brief
+     * @param datasetPath
+     * @param width
+     * @param height
+     * @return
+     */
     static MXAAbstractDataPtr CreateAbstractDataArray(const std::string &datasetPath, 
                                   int32 width, int32 height)
     {
@@ -50,6 +57,13 @@ class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T>
       return ptr;
     }
     
+    /**
+     * @brief
+     * @param datasetPath
+     * @param width
+     * @param height
+     * @return
+     */
     static H5Data2DArray* New(const std::string &datasetPath, 
                           int32 width, int32 height)
     {

@@ -26,14 +26,6 @@ IDataFilePtr H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
     filePtr.reset(nullDataFile);
   }
   dataFile->_setWeakPointer(filePtr);
-  
-//  hid_t id = filePtr->getFileId();
-//  err = H5Gget_objinfo(id, "/OIMFIB/Data/0/0", false, NULL);
-//  if (err < 0)
-//  {
-//    std::cout << logTime() << "fileId: " << id << " dataPath: /OIMFIB/Data/0/0\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
-//  }
-
   return filePtr;
 }
 
@@ -102,7 +94,7 @@ H5MXADataFile::H5MXADataFile(const std::string &filename, IDataModelPtr model) :
 // -----------------------------------------------------------------------------
 H5MXADataFile::~H5MXADataFile()
 {
-  std::cout << logTime() << "H5MXADataFile::~H5MXADataFile()" << std::endl;
+  // std::cout << logTime() << "H5MXADataFile::~H5MXADataFile()" << std::endl;
   if (this->_isFileOpen == true)
   {
     closeFile(false);
@@ -165,7 +157,7 @@ int32 H5MXADataFile::createFile()
       return err;
     }
   }
-
+#if 1
   bool didDeleteFile = true;
   // Now delete the file if it really exists
   if (true == boost::filesystem::exists(this->_filename) )
@@ -194,7 +186,7 @@ int32 H5MXADataFile::createFile()
     this->_isFileOpen = true;
     this->_isReadOnly = false;
   }
-
+#endif
   return err;
 }
 
