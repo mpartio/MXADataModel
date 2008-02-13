@@ -71,6 +71,7 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(hid_t fileId,
   	int32 height = reader.getHeight();
   	int32 err = -1;
 
+  //std::cout << "H5BmpIO::_importGrayscaleBmpImage: width and height: " << width << "," << height << std::endl;
   // Store byte array to HDF5 File
   err = H5Image::makeGrayScaleImage(fileId, datasetName, width, height, static_cast<uint8*>( &(rgbRaster.front() ) ) );
   if (err<0) {

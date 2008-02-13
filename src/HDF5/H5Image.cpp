@@ -91,7 +91,7 @@ herr_t H5Image::makeGrayScaleImage( hid_t loc_id,
                             hsize_t height,
                             const unsigned char *buffer )
 {
- int32      rank = 2;
+ int32    rank = 2;
  hsize_t  dims[2];
  //herr_t err = -1;
  
@@ -279,7 +279,7 @@ herr_t H5Image::H5IMget_image_info(hid_t loc_id, std::string datasetName, hsize_
   hasInterlaceMode = H5Lite::findAttribute(did, MXA::H5Image::InterlaceMode);
   interlace.clear();
   char interlaceBuffer[32];
-::  memset(interlaceBuffer, 0, sizeof(interlaceBuffer)); // Zero out the buffer
+  ::memset(interlaceBuffer, 0, sizeof(interlaceBuffer)); // Zero out the buffer
   /* It exists, get it */
   if (hasInterlaceMode == 1)
   {

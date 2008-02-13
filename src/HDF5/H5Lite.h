@@ -56,7 +56,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.46 $
+ * @version $Revision: 1.47 $
  */
 class H5Lite
 {
@@ -1340,7 +1340,7 @@ static MXA_EXPORT herr_t getDatasetInfo( hid_t loc_id,
 /**
  * @brief Returns the information about an attribute.
  * You must close the attributeType argument or resource leaks will occur. Use
- *  H5Tclose(tid); after your call to this method if you do not need the id for
+ *  H5Tclose(attr_type); after your call to this method if you do not need the id for
  *   anything.
  * @param loc_id
  * @param objName
