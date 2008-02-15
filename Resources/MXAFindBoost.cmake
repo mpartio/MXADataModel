@@ -112,7 +112,8 @@ MARK_AS_ADVANCED (BOOST_USE_MULTITHREADED)
 
 # MESSAGE(STATUS "Finding Boost libraries.... ")
 IF (NOT DEFINED BOOST_CURRENT_VERSION)
-    SET ( BOOST_CURRENT_VERSION "1_34_1")
+  #SET ( BOOST_CURRENT_VERSION "1_35")
+  SET ( BOOST_CURRENT_VERSION "1_34_1")
 ENDIF (NOT DEFINED BOOST_CURRENT_VERSION)
 
 SET (BOOST_LIBRARIES "")
@@ -292,6 +293,8 @@ ENDMACRO (_BOOST_ADJUST_LIB_VARS)
 # ------------------------------------------------------------------------
 #  Begin finding boost libraries
 # ------------------------------------------------------------------------
+
+
 # -------- Find the date_time Library ------------- 
  SET (BOOST_LIB date_time)
  SET (BOOST_DEBUG_LIB_NAME boost_${BOOST_LIB}${BOOST_COMPILER}${BOOST_MULTITHREADED}${BOOST_ABI_TAG}-${BOOST_CURRENT_VERSION})
@@ -618,6 +621,31 @@ _BOOST_ADJUST_LIB_VARS(UNIT_TEST_FRAMEWORK)
  ENDIF (BOOST_WSERIALIZATION_LIBRARY_RELEASE)
 # -- Adjust all the library variables --------------------------------
 _BOOST_ADJUST_LIB_VARS(WSERIALIZATION)
+
+# -------- Find the system Library ------------- 
+ SET (BOOST_LIB system)
+ SET (BOOST_DEBUG_LIB_NAME boost_${BOOST_LIB}${BOOST_COMPILER}${BOOST_MULTITHREADED}${BOOST_ABI_TAG}-${BOOST_CURRENT_VERSION})
+ SET (BOOST_RELEASE_LIB_NAME boost_${BOOST_LIB}${BOOST_COMPILER}${BOOST_MULTITHREADED}-${BOOST_CURRENT_VERSION})
+#-- Find a Debug Library ---------------------------------------------
+ FIND_LIBRARY(BOOST_SYSTEM_LIBRARY_DEBUG
+  NAMES ${BOOST_LIB_PREFIX}${BOOST_DEBUG_LIB_NAME}
+  PATHS ${BOOST_LIBRARIES_SEARCH_DIRS}
+  NO_DEFAULT_PATH
+ )
+ IF (BOOST_SYSTEM_LIBRARY_DEBUG)
+  SET(BOOST_DEBUG_LIBRARIES ${BOOST_DEBUG_LIBRARIES} ${BOOST_SYSTEM_LIBRARY_DEBUG} )
+ ENDIF (BOOST_SYSTEM_LIBRARY_DEBUG)
+#-- Find a Release Library -------------------------------------------
+ FIND_LIBRARY(BOOST_SYSTEM_LIBRARY_RELEASE
+  NAMES ${BOOST_LIB_PREFIX}${BOOST_RELEASE_LIB_NAME}
+  PATHS ${BOOST_LIBRARIES_SEARCH_DIRS}
+  NO_DEFAULT_PATH
+ )
+ IF (BOOST_SYSTEM_LIBRARY_RELEASE)
+  SET(BOOST_RELEASE_LIBRARIES ${BOOST_DEBUG_LIBRARIES} ${BOOST_SYSTEM_LIBRARY_RELEASE} )
+ ENDIF (BOOST_SYSTEM_LIBRARY_RELEASE)
+# -- Adjust all the library variables --------------------------------
+_BOOST_ADJUST_LIB_VARS(SYSTEM)
 
 # ------------------------------------------------------------------------
 #  End finding boost libraries

@@ -4,8 +4,8 @@
 # file.
 
 
-BOOST_LIB_LIST=(date_time filesystem iostreams prg_exec_monitor program_options python regex serialization signals test_exec_monitor thread unit_test_framework wserialization )
-CMAKE_VAR_LIST=(DATE_TIME FILESYSTEM IOSTREAMS PRO_EXEC_MONITOR PROGRAM_OPTIONS PYTHON REGEX SERIALIZATION SIGNALS TEST_EXEC_MONITOR THREAD UNIT_TEST_FRAMEWORK WSERIALIZATION )
+BOOST_LIB_LIST=(system date_time filesystem iostreams prg_exec_monitor program_options python regex serialization signals test_exec_monitor thread unit_test_framework wserialization )
+CMAKE_VAR_LIST=(SYSTEM DATE_TIME FILESYSTEM IOSTREAMS PRO_EXEC_MONITOR PROGRAM_OPTIONS PYTHON REGEX SERIALIZATION SIGNALS TEST_EXEC_MONITOR THREAD UNIT_TEST_FRAMEWORK WSERIALIZATION )
 varnum=13
 
 echo ""
