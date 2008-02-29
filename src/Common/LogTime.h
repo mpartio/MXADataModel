@@ -22,22 +22,13 @@
 #if _MSC_VER < 1400
 #define TimeType __time64_t
 #define TimeFunc _time64
-#define LocalTimeFunc _localtime64
-#define LocalTimeFunction(long_time, t)\
-  t = LocalTimeFunc(long_time);
 #else 
 #define TimeType __time64_t
 #define TimeFunc _time64
-#define LocalTimeFunc _localtime64_s
-#define LocalTimeFunction(long_time, t)\
-  errno_t tError = LocalTimeFunc(t, long_time);
 #endif
 #else
 #define TimeType time_t
 #define TimeFunc time
-#define LocalTimeFunc localtime
-#define LocalTimeFunction(long_time, t)\
-  t = LocalTimeFunc(long_time);
 #endif
 
 #define DEBUG_OUT(function) \
@@ -50,8 +41,20 @@
 inline std::string logTime() {
   TimeType long_time = 0;
   TimeFunc(&long_time);
-  tm *t = 0;
-  LocalTimeFunction(&long_time, t);
+  tm *t = 0x0;
+  
+#ifdef _MSC_VER
+#if _MSC_VER < 1400
+	t = _localtime64(&long_time);
+#else 
+  tm tm;
+  t = &tm;
+  errno_t tError = _localtime64_s(&tm, &long_time);
+#endif
+#else  // Non windows platforms
+	t = localtime(long_time);
+#endif
+
   std::stringstream ss;
   ss.setf(std::ios::fixed);
   ss.fill('0');
@@ -66,6 +69,3 @@ inline std::string logTime() {
 
 
 #endif //_LOGTIME_H_
-
-
-
