@@ -283,8 +283,10 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
     for (int i = 0; attrs[i]; i += 2) {
       attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
     }
-    int32  start, end, increment = std::numeric_limits<int32>::max();
-    int32  index, count, uniform = std::numeric_limits<int32>::min();
+    int32  start, end, increment;
+	start = end = increment = std::numeric_limits<int32>::max();
+    int32  index, count, uniform;
+	index = count = uniform = std::numeric_limits<int32>::min();
     
     //Check for each Attribute. If the attribute was in the list then parse its value
     if ( attrMap.find(MXA::MXA_INDEX_TAG) != attrMap.end() ) { StringUtils::stringToNum(index, attrMap[MXA::MXA_INDEX_TAG], std::dec); }
