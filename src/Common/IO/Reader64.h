@@ -17,9 +17,8 @@
 // This will define WINDOWS_LARGE_FILE_SUPPORT to true, which is what we want
 #endif
 
-// PVDislocation Headers
 #include "Common/MXATypes.h"
-#include "Common/MXAEndian.h"
+
 
 // Conditional Includes/Defines for Large File Support on Windows
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
@@ -65,7 +64,7 @@ standard C++ library."
  * sure that we can read files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 class Reader64
 {
