@@ -1,24 +1,28 @@
-
-
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) Mike Jackson, Herb Mullens 
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef MXA_BMP_IO_H
 #define MXA_BMP_IO_H
 
-
-//-- MXA Includes
-#include <Common/MXAEndian.h>
+//MXA Includes
 #include <Common/MXATypes.h>
 #include <Common/DLLExport.h>
-#include <Common/IO/Reader64.h>
 #include <BMPIO/MXABmpHeaders.h>
 
-//-- C Includes
-#include <stdio.h>
-#include <math.h>
-#include <memory.h>
-#include <string.h>
+//STL includes
+#include <vector>
 
+//--Boost Includes
 #include <boost/shared_ptr.hpp>
 
+class Reader64;
 typedef boost::shared_ptr<Reader64>    Reader64Ptr;
 
 // The following is the function return type. Use this to
@@ -44,7 +48,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.10 $
+* @version $Revision: 1.11 $
 */
 class MXA_EXPORT MXABmpIO
 {
