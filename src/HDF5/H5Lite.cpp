@@ -845,7 +845,7 @@ herr_t H5Lite::getDatasetInfo( hid_t loc_id,
       dims.resize(rank);
       for (hid_t i = 0; i < rank; ++i) 
       {
-      	dims[i] = static_cast<uint64>(_dims[i]);
+        dims[i] = static_cast<uint64>(_dims[i]);
       }
       
     } 
@@ -910,30 +910,30 @@ herr_t H5Lite::getAttributeInfo(hid_t loc_id,
         sid = H5Aget_space(attr_id);
         if (sid >= 0 ) 
         {
-			if (type_class == H5T_STRING)
-			{
-				rank = 1;
-				dims.resize(rank);
-				dims[0] = static_cast<uint64>(type_size);
-			} 
-			else 
-			{
-			  rank = H5Sget_simple_extent_ndims( sid );
-			  std::vector<hsize_t> _dims(rank, 0);
-			  /* Get dimensions */
-			  err = H5Sget_simple_extent_dims( sid, &(_dims.front() ), NULL);
-			  if (err<0) {
-				std::cout << "Error Getting Attribute dims" << std::endl;
-				retErr = err; 
-			  }
-			  //Copy the dimensions into the dims vector
-			  dims.clear(); //Erase everything in the Vector
-			  dims.resize(rank);
-			  for (hid_t i = 0; i < rank; ++i) 
-			  {
-				dims[i] = static_cast<uint64>(_dims[i]);
-			  }
-			}
+          if (type_class == H5T_STRING)
+          {
+            rank = 1;
+            dims.resize(1);
+            dims[0] = type_size;
+          }
+          else 
+          {
+            rank = H5Sget_simple_extent_ndims( sid );
+            std::vector<hsize_t> _dims(rank, 0);
+            /* Get dimensions */
+            err = H5Sget_simple_extent_dims( sid, &(_dims.front() ), NULL);
+            if (err<0) {
+              std::cout << "Error Getting Attribute dims" << std::endl;
+              retErr = err; 
+            }
+            //Copy the dimensions into the dims vector
+            dims.clear(); //Erase everything in the Vector
+            dims.resize(rank);
+            for (hid_t i = 0; i < rank; ++i) 
+            {
+              dims[i] = static_cast<uint64>(_dims[i]);
+            }
+          }
           CloseH5S(sid, err, retErr);
         }
         //CloseH5T(tid, err, retErr); We are passing back the tid so don't close it
