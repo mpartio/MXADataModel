@@ -52,7 +52,7 @@ inline std::string logTime() {
   errno_t tError = _localtime64_s(&tm, &long_time);
 #endif
 #else  // Non windows platforms
-	t = localtime(long_time);
+	t = localtime(&long_time);
 #endif
 
   std::stringstream ss;
