@@ -34,11 +34,12 @@ _dataRoot("/")
 // -----------------------------------------------------------------------------
 //  Static New Method to construct a Model
 // -----------------------------------------------------------------------------
-MXADataModelPtr MXADataModel::New(float modelVersion, const std::string &type)
+MXADataModelPtr MXADataModel::New(float modelVersion, const std::string &type, const std::string &dataRoot)
 {
   MXADataModelPtr model(new MXADataModel());
   model->setModelVersion(modelVersion);
   model->setModelType(type);
+  model->setDataRoot(dataRoot);
   return model;
 }
 
