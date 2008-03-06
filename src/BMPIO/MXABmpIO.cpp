@@ -17,10 +17,14 @@
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXABmpIO::MXABmpIO()
+MXABmpIO::MXABmpIO() :
+  width(0),
+  height(0),
+  numChannels(0),
+  isGrayscale(false),
+  bytesRead(0)
 {
-  bitmapData = NULL;
-  isGrayscale = false;
+ 
 }
 
 // -----------------------------------------------------------------------------
@@ -28,10 +32,6 @@ MXABmpIO::MXABmpIO()
 // -----------------------------------------------------------------------------
 MXABmpIO::~MXABmpIO()
 {
-  if ( !bitmapData )
-  {
-    delete [] bitmapData;
-  }
 }
 
 // -----------------------------------------------------------------------------
@@ -42,15 +42,11 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName )
   // Open file for buffered read.
   //file = fopen(fName,"rb");
   LOAD_TEXTUREBMP_RESULT res = LOAD_TEXTUREBMP_SUCCESS;
-  Reader64* reader = new Reader64(fName);
-  _reader64Ptr.reset(reader);
-  if ( false == reader->initReader() )
+  _reader64Ptr = Reader64Ptr(new Reader64(fName) );
+  if ( false == _reader64Ptr->initReader() )
   {
     return LOAD_TEXTUREBMP_COULD_NOT_FIND_OR_READ_FILE;
   }
-
-  // char readBuffer[BUFSIZ];
-  // setbuf(reader, readBuffer);
 
   bytesRead=0;
 
@@ -64,27 +60,20 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName )
   res=readPalette();
 
   // The bitmap data we are going to hand to OpenGL
-  this->bitmapData = new uint8[width*height*3];
-
-  if (!bitmapData) 
-  {
-    res = LOAD_TEXTUREBMP_OUT_OF_MEMORY;
-    return res;
-  }
+  this->bitmapData.resize( width*height*3 );
 
   // Read Data
-  res=readBitmapData(bitmapData);
+  res = readBitmapData( &(bitmapData.front() ) );
 
   // Only clean up bitmapData if there was an error.
-  if (bitmapData && res)
-    delete[] bitmapData;
-  else
+  if (res == LOAD_TEXTUREBMP_SUCCESS)
   {
     numChannels = 3;
   }
   // Reset the Shared Pointer forces the wrapped pointer to be deleted 
   //  and the underlying file closed
-  _reader64Ptr.reset();
+  Reader64Ptr nullReader;
+  _reader64Ptr.swap(nullReader);
   
   this->flipBitmap();
 
@@ -622,7 +611,9 @@ int32 MXABmpIO::getNumberOfChannels()
 // -----------------------------------------------------------------------------
 void MXABmpIO::flipBitmap()
 {
-  uint8* flippedImage;
+  
+  std::vector<uint8> flippedVec;
+  uint8* flippedImage = 0x0;
   uint8* temp;
   int32 element1, element2, width3, el1, el2;
 	
@@ -630,7 +621,8 @@ void MXABmpIO::flipBitmap()
 	
   if ( !isGrayscale )
   {
-  	flippedImage = new uint8[height * width3];
+  	flippedVec.resize(height * width3);
+  	flippedImage = &(flippedVec.front());
   	for ( int32 row1 = 0, row2 = (height - 1); row1 < height || row2 > 0; row1++, row2-- )
   	{
 		el1 = (row1 * width3); // Beginning of scan line in source
@@ -648,7 +640,8 @@ void MXABmpIO::flipBitmap()
   }
   else
   {
-  	flippedImage = new uint8[width * height];
+    flippedVec.resize(width * height);
+    flippedImage = &(flippedVec.front());
   	for ( int32 row1 = 0, row2 = (height - 1); row1 < height || row2 > 0; row1++, row2-- )
   	{
   	  for ( int32 col = 0; col < width; col++ )
@@ -659,9 +652,7 @@ void MXABmpIO::flipBitmap()
   	  }
   	}
   }
-  temp = bitmapData;
-  bitmapData = flippedImage;
-  delete[] temp;
+  this->bitmapData.swap(flippedVec);
 }
 
 void MXABmpIO::convertToGrayscale()
@@ -671,11 +662,13 @@ void MXABmpIO::convertToGrayscale()
   {
     return;
   }
-  
+  std::vector<uint8> grayscaleVec;
   uint8* grayscaleImage;
   uint8* temp;
   int32 element1, element2;
-  grayscaleImage = new uint8[this->width * this->height];
+//  grayscaleImage = new uint8[this->width * this->height];
+  grayscaleVec.resize(this->width * this->height);
+  grayscaleImage = &(grayscaleVec.front());
   for ( int32 row = 0; row < height; row++ )
   {
     for ( int32 col = 0; col < width; col++ )
@@ -687,10 +680,8 @@ void MXABmpIO::convertToGrayscale()
         bitmapData[element2 + 2] * 0.11;
     }
   }
-  temp = bitmapData;
-  bitmapData = grayscaleImage;
-  delete[] temp;
   isGrayscale = true;
+  this->bitmapData.swap(grayscaleVec);
 }
 
 // -----------------------------------------------------------------------------
@@ -719,6 +710,5 @@ void MXABmpIO::copyDataArray(std::vector<uint8> &buffer)
   {
 	  std::cout << "buffer size was 0" << std::endl;
   }
-  ::memcpy( &(buffer.front()), this->bitmapData, numElements);
-
+  ::memcpy( &(buffer.front()), &(this->bitmapData.front()), numElements);
 }

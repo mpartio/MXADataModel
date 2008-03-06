@@ -48,7 +48,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.11 $
+* @version $Revision: 1.12 $
 */
 class MXA_EXPORT MXABmpIO
 {
@@ -56,17 +56,49 @@ public:
   MXABmpIO();
   virtual ~MXABmpIO();
   
-  uint8* bitmapData;
+  /**
+   * @brief Returns height of image
+   */
   int32 getHeight();
+  
+  /**
+   * @brief returns width of image
+   */
   int32 getWidth();
+  
+  /**
+   * @brief Returns the number of color channels in the Image
+   */
   int32 getNumberOfChannels();
-  LOAD_TEXTUREBMP_RESULT loadBMPData(const char*);
+  
+  /**
+   * @brief Loads the bmp from file into memory
+   * @param fName The file name of the image to load
+   * @return Error code. 
+   */
+  LOAD_TEXTUREBMP_RESULT loadBMPData(const char* fName);
+  
+  /**
+   * @brief Converts the image to grayscale
+   */
   void convertToGrayscale();
+  
+  /**
+   * @brief Is the image a grayscale image
+   */
   bool isGrayscaleImage();
+  
+  /**
+   * @brief Copies the BMP data into a supplied buffer. The supplied buffer
+   * will be resized to fit all the data
+   * @param buffer A buffer to copy the bmp data into
+   */
   void copyDataArray(std::vector<uint8> &buffer);
+  
 protected:
 
 private:
+  std::vector<uint8> bitmapData;
   int32 width;
   int32 height;
   int32 numChannels;
@@ -87,11 +119,11 @@ private:
   LOAD_TEXTUREBMP_RESULT readFileHeader();
   LOAD_TEXTUREBMP_RESULT readInfoHeader();
   LOAD_TEXTUREBMP_RESULT readPalette();
-  LOAD_TEXTUREBMP_RESULT readBitmapData(uint8*);
-  LOAD_TEXTUREBMP_RESULT readBitmapData1Bit(uint8*);
-  LOAD_TEXTUREBMP_RESULT readBitmapData4Bit(uint8*);
-  LOAD_TEXTUREBMP_RESULT readBitmapData8Bit(uint8*);
-  LOAD_TEXTUREBMP_RESULT readBitmapData24Bit(uint8*);
+  LOAD_TEXTUREBMP_RESULT readBitmapData(uint8* bitmapData);
+  LOAD_TEXTUREBMP_RESULT readBitmapData1Bit(uint8* bitmapData);
+  LOAD_TEXTUREBMP_RESULT readBitmapData4Bit(uint8* bitmapData);
+  LOAD_TEXTUREBMP_RESULT readBitmapData8Bit(uint8* bitmapData);
+  LOAD_TEXTUREBMP_RESULT readBitmapData24Bit(uint8* bitmapData);
   bool handleEscapeCode(int, int*, int*, LOAD_TEXTUREBMP_RESULT*);
   void flipBitmap();
   
