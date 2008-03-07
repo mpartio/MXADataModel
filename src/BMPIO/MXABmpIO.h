@@ -48,7 +48,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.12 $
+* @version $Revision: 1.13 $
 */
 class MXA_EXPORT MXABmpIO
 {
@@ -76,8 +76,7 @@ public:
    * @param fName The file name of the image to load
    * @return Error code. 
    */
-  LOAD_TEXTUREBMP_RESULT loadBMPData(const char* fName);
-  
+  LOAD_TEXTUREBMP_RESULT loadBMPData(const char* fName, bool readAsGrayScale = false, bool flipImage = true);
   /**
    * @brief Converts the image to grayscale
    */

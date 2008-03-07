@@ -2,6 +2,7 @@
 #include <iostream>
 
 //-- MXA Includes
+#include <Common/LogTime.h>
 #include <Common/MXAEndian.h>
 #include <Common/MXATypes.h>
 #include <Common/DLLExport.h>
@@ -37,8 +38,10 @@ MXABmpIO::~MXABmpIO()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName )
+LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fNamebool readAsGrayScale, bool flipImage )
 {
+  uint64 startTime = getMilliSeconds();
+  std::cout << "MXABmpIO::loadBMPData" << std::endl;
   // Open file for buffered read.
   //file = fopen(fName,"rb");
   LOAD_TEXTUREBMP_RESULT res = LOAD_TEXTUREBMP_SUCCESS;
@@ -52,18 +55,29 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName )
 
 // Read File Header
   res=readFileHeader();
-
+  uint64 elapsedTime = getMilliSeconds() - startTime;
+  std::cout << "readFileHeader took: " << elapsedTime << std::endl;
+ 
+  startTime = getMilliSeconds();
 // Read Info Header
   res=readInfoHeader();
-
+  elapsedTime = getMilliSeconds() - startTime;
+  std::cout << "readInfoHeader took: " << elapsedTime << std::endl;
+  
+  startTime = getMilliSeconds();
 // Read Palette
   res=readPalette();
+  elapsedTime = getMilliSeconds() - startTime;
+  std::cout << "readPalette took: " << elapsedTime << std::endl;
+  startTime = getMilliSeconds();
 
-  // The bitmap data we are going to hand to OpenGL
+  // Make sure we have a large enough buffer
   this->bitmapData.resize( width*height*3 );
-
   // Read Data
   res = readBitmapData( &(bitmapData.front() ) );
+  elapsedTime = getMilliSeconds() - startTime;
+  std::cout << "readBitmapData took: " << elapsedTime << std::endl;
+  startTime = getMilliSeconds();
 
   // Only clean up bitmapData if there was an error.
   if (res == LOAD_TEXTUREBMP_SUCCESS)
@@ -74,9 +88,15 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName )
   //  and the underlying file closed
   Reader64Ptr nullReader;
   _reader64Ptr.swap(nullReader);
+  elapsedTime = getMilliSeconds() - startTime;
+  std::cout << "Swap took: " << elapsedTime << std::endl;
   
-  this->flipBitmap();
-
+  startTime = getMilliSeconds();  
+  if (flipImage) {
+    this->flipBitmap();
+    elapsedTime = getMilliSeconds() - startTime;
+    std::cout << "Flip took: " << elapsedTime << std::endl;
+  }
   return res;
 }
 
@@ -438,19 +458,29 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit(uint8* bitmapData)
 // Read 8-bit image. Can be uncompressed or RLE-8 compressed.
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit(uint8* bitmapData)
 {
+  uint64 startTime = getMilliSeconds();
+
   if (this->dibHeader.compressionMethod != BMP_BI_RGB && 
       this->dibHeader.compressionMethod != BMP_BI_RLE8)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
   
   if (this->dibHeader.compressionMethod == BMP_BI_RGB)
   {
+    int32 numBytes = height * width;
+    std::vector<uint8> buffer;
+    buffer.reserve(numBytes);
+    buffer.resize(numBytes);
+    //Read all the data into a buffer at once.
+    _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
+    bytesRead += numBytes;
+    int32 offset = 0;
     // For each scan line
     for (int i=0;i<height;i++)
     {
       int32 index = i*width*3;
       for (int j=0;j<width;j++)
       {
-        int32 color = read8BitValue(); 
+        int32 color = buffer[offset++];
 		    int32 temp = index + j * 3;
         bitmapData[temp++] = palette[0][color];
         bitmapData[temp++] = palette[1][color];
@@ -458,8 +488,13 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit(uint8* bitmapData)
       }                                             
       
       // go to next alignment of 4 bytes.
-      for (int k=0; k<(width%4);k++)
-        read8BitValue();
+      int32 kEnd = width%4;
+      for (int k = 0; k < kEnd; ++k) {
+        char value;
+         this->_reader64Ptr->readPrimitive(value);
+         bytesRead+=1;
+        // read8BitValue();
+      }
     }
   }
   
@@ -537,7 +572,6 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit(uint8* bitmapData)
   // 24-bit bitmaps cannot be encoded. Verify this.
   if (this->dibHeader.compressionMethod != BMP_BI_RGB)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-  
   for (int i=0;i<height;i++)
   {
     int32 index = i*width*3;
@@ -565,9 +599,11 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData(uint8* bitmapData)
   // Pad until byteoffset. Most images will need no padding
   // since they already are made to use as little space as
   // possible.
-  while(bytesRead<this->fileHeader.dataOffset)
+  while(bytesRead < this->fileHeader.dataOffset)
+  {
     read8BitValue();
-  
+  }
+
   // The data reading procedure depends on the bit depth.
   switch(this->dibHeader.bitsPerPixel)
   {
@@ -611,7 +647,6 @@ int32 MXABmpIO::getNumberOfChannels()
 // -----------------------------------------------------------------------------
 void MXABmpIO::flipBitmap()
 {
-  
   std::vector<uint8> flippedVec;
   uint8* flippedImage = 0x0;
   uint8* temp;
@@ -652,7 +687,8 @@ void MXABmpIO::flipBitmap()
   	  }
   	}
   }
-  this->bitmapData.swap(flippedVec);
+ // this->bitmapData.swap(flippedVec);
+  this->bitmapData = flippedVec;
 }
 
 void MXABmpIO::convertToGrayscale()
@@ -681,7 +717,8 @@ void MXABmpIO::convertToGrayscale()
     }
   }
   isGrayscale = true;
-  this->bitmapData.swap(grayscaleVec);
+  this->bitmapData = grayscaleVec;
+  //this->bitmapData.swap(grayscaleVec);
 }
 
 // -----------------------------------------------------------------------------
