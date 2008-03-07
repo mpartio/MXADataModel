@@ -67,13 +67,27 @@ inline std::string logTime() {
   return ss.str();
 }
 
+namespace MXA {
+
+/**
+ * @brief returns the number of milliseconds from a platform specified time.
+ */
 inline TimeType getMilliSeconds()
 {
 #ifdef _MSC_VER
   return ::clock();
 #else 
-#error Implement this
+  struct timeval t1;
+  gettimeofday(&t1, NULL);
+  TimeType seconds ( t1.tv_sec );
+  TimeType microSec ( t1.tv_usec );
+  seconds *= 1000;
+  microSec /= 1000;
+  return seconds + microSec; // Both in milliseconds at this point.
 #endif
 }
+
+
+} // end Namespace MXA
 
 #endif //_LOGTIME_H_

@@ -125,7 +125,6 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData()
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
 {
   uint8* bitmapData = &(this->bitmapDataVec.front());
-  uint64 startTime = getMilliSeconds();
   int32 temp = 0;
   int32 index = 0;
   uint8 color = 0;
