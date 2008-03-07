@@ -27,8 +27,3 @@
 #endif
 
 #endif /* _WIN32DEFINES_H_ */
-
-
-
-
-

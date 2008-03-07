@@ -47,9 +47,9 @@ inline std::string logTime() {
 #if _MSC_VER < 1400
 	t = _localtime64(&long_time);
 #else 
-  tm tm;
-  t = &tm;
-  errno_t tError = _localtime64_s(&tm, &long_time);
+  tm time;
+  t = &time;
+  errno_t tError = _localtime64_s(&time, &long_time);
 #endif
 #else  // Non windows platforms
 	t = localtime(&long_time);
@@ -67,5 +67,13 @@ inline std::string logTime() {
   return ss.str();
 }
 
+inline TimeType getMilliSeconds()
+{
+#ifdef _MSC_VER
+  return ::clock();
+#else 
+#error Implement this
+#endif
+}
 
 #endif //_LOGTIME_H_

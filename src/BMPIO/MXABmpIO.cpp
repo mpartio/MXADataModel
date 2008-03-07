@@ -23,7 +23,10 @@ MXABmpIO::MXABmpIO() :
   height(0),
   numChannels(0),
   isGrayscale(false),
-  bytesRead(0)
+  bytesRead(0),
+  _imageFlipped(false),
+  _imageConvertedToGrayScale(false),
+  _convertToGrayScale(false)
 {
  
 }
@@ -38,12 +41,10 @@ MXABmpIO::~MXABmpIO()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fNamebool readAsGrayScale, bool flipImage )
+LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGrayScale )
 {
-  uint64 startTime = getMilliSeconds();
-  std::cout << "MXABmpIO::loadBMPData" << std::endl;
+  this->_convertToGrayScale = readAsGrayScale;
   // Open file for buffered read.
-  //file = fopen(fName,"rb");
   LOAD_TEXTUREBMP_RESULT res = LOAD_TEXTUREBMP_SUCCESS;
   _reader64Ptr = Reader64Ptr(new Reader64(fName) );
   if ( false == _reader64Ptr->initReader() )
@@ -55,30 +56,16 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fNamebool readAsGraySc
 
 // Read File Header
   res=readFileHeader();
-  uint64 elapsedTime = getMilliSeconds() - startTime;
-  std::cout << "readFileHeader took: " << elapsedTime << std::endl;
- 
-  startTime = getMilliSeconds();
+
 // Read Info Header
   res=readInfoHeader();
-  elapsedTime = getMilliSeconds() - startTime;
-  std::cout << "readInfoHeader took: " << elapsedTime << std::endl;
-  
-  startTime = getMilliSeconds();
+
 // Read Palette
   res=readPalette();
-  elapsedTime = getMilliSeconds() - startTime;
-  std::cout << "readPalette took: " << elapsedTime << std::endl;
-  startTime = getMilliSeconds();
 
-  // Make sure we have a large enough buffer
-  this->bitmapData.resize( width*height*3 );
   // Read Data
-  res = readBitmapData( &(bitmapData.front() ) );
-  elapsedTime = getMilliSeconds() - startTime;
-  std::cout << "readBitmapData took: " << elapsedTime << std::endl;
-  startTime = getMilliSeconds();
-
+  res = readBitmapData();
+ 
   // Only clean up bitmapData if there was an error.
   if (res == LOAD_TEXTUREBMP_SUCCESS)
   {
@@ -88,49 +75,187 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fNamebool readAsGraySc
   //  and the underlying file closed
   Reader64Ptr nullReader;
   _reader64Ptr.swap(nullReader);
-  elapsedTime = getMilliSeconds() - startTime;
-  std::cout << "Swap took: " << elapsedTime << std::endl;
   
-  startTime = getMilliSeconds();  
-  if (flipImage) {
+  // Flip the y values of the image since the (0,0) is in the lower left of a bitmap file
+  if (false == this->_imageFlipped) 
+  {
     this->flipBitmap();
-    elapsedTime = getMilliSeconds() - startTime;
-    std::cout << "Flip took: " << elapsedTime << std::endl;
+  }
+
+  // Convert the image to a gray scale image if asked for
+  if (true == this->_convertToGrayScale && false == this->_imageConvertedToGrayScale )
+  {
+    this->convertToGrayscale();
   }
   return res;
 }
 
 // -----------------------------------------------------------------------------
-// Reads and returns a 32-bit value from the file.
+//  
 // -----------------------------------------------------------------------------
-int32 MXABmpIO::read32BitValue()
+LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData()
 {
-  int32 value;
-  this->_reader64Ptr->read<MXA::Endian::FromLittleToSystem>(value);
-  bytesRead+=4;
-  return value;
+  
+  // Make sure we have a large enough buffer
+  this->bitmapDataVec.resize( width*height*3 );
+  // Pad until byteoffset. Most images will need no padding
+  // since they already are made to use as little space as
+  // possible.
+  while(bytesRead < this->fileHeader.dataOffset)
+  {
+    read8BitValue();
+  }
+
+  // The data reading procedure depends on the bit depth.
+  switch(this->dibHeader.bitsPerPixel)
+  {
+  case 1: 
+    return readBitmapData1Bit();
+  case 4:
+    return readBitmapData4Bit();
+  case 8:
+    return readBitmapData8Bit();
+  default: // 24 bit.
+    return readBitmapData24Bit();
+  }
 }
 
 // -----------------------------------------------------------------------------
-// Reads and returns a 16-bit value from the file
-// -----------------------------------------------------------------------------
-int16 MXABmpIO::read16BitValue()
+// Read 8-bit image. Can be uncompressed or RLE-8 compressed.
+LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
 {
-  int16 value;
-  this->_reader64Ptr->read<MXA::Endian::FromLittleToSystem>(value);
-  bytesRead+=2;
-  return value;
-}
+  uint8* bitmapData = &(this->bitmapDataVec.front());
+  uint64 startTime = getMilliSeconds();
+  int32 temp = 0;
+  int32 index = 0;
+  uint8 color = 0;
+  int32 componentNumBytes = 3;
+  int32 numBytes = height * width;
 
-// -----------------------------------------------------------------------------
-// Reads and returns a 8-bit value from the file
-// -----------------------------------------------------------------------------
-uint8 MXABmpIO::read8BitValue()
-{
-  uint8 value;
-  this->_reader64Ptr->readPrimitive(value);
-  bytesRead+=1;
-  return value;
+  if (this->dibHeader.compressionMethod != BMP_BI_RGB && 
+    this->dibHeader.compressionMethod != BMP_BI_RLE8) {
+      return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
+   }
+  
+  //RoboMet Images fall into this category
+  // We are going to flip the image as it gets read from the file
+  // We are going to convert to grayscale on the fly if needed
+  if (this->dibHeader.compressionMethod == BMP_BI_RGB)
+  {
+    std::vector<uint8> buffer(numBytes, 0); // Create a buffer large enough to hold the colors
+
+    if (true == this->_convertToGrayScale) {   
+      this->bitmapDataVec.resize(width * height);
+      componentNumBytes = 1;
+    }
+    int32 widthByComponentNumBytes = componentNumBytes * width;
+    //Read all the data into a buffer at once.
+    _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
+    bytesRead += numBytes;
+    int32 offset = 0;
+    // For each scan line
+    int targetRow = 0;
+    for (int i = 0;i < height; ++i)
+    { 
+      targetRow = height - i - 1;
+      index = targetRow * widthByComponentNumBytes;
+      for (int j=0;j<width;j++)
+      {
+        color = buffer[offset++];
+        if (true == this->_convertToGrayScale)
+        {
+          temp = index + j;
+          bitmapData[temp] = (uint8)((float)(palette[0][color]) * 0.3f
+            + (float)(palette[1][color]) * 0.59f
+            + (float)(palette[2][color]) * 0.11f);
+        }
+        else 
+        {
+		      temp = index + j * 3;
+          bitmapData[temp++] = palette[0][color];
+          bitmapData[temp++] = palette[1][color];
+          bitmapData[temp] = palette[2][color];
+        }
+      }                                             
+      
+      // go to next alignment of 4 bytes.
+      int32 kEnd = width%4;
+      for (int k = 0; k < kEnd; ++k) {
+        char value;
+         this->_reader64Ptr->readPrimitive(value);
+         bytesRead+=1;
+      }
+    }
+    this->_imageFlipped = true;
+    this->_imageConvertedToGrayScale = true;
+    this->numChannels = 1;
+  }
+  
+  if (this->dibHeader.compressionMethod == BMP_BI_RLE8)
+  {
+    // Drawing cursor pos
+    int32 x=0;
+    int32 y=0;
+
+    bytesRead=0;
+    
+    // Clear bitmap data since it is legal not to 
+    // fill it all out.
+    memset(bitmapData,0,sizeof(unsigned char)*width*height*3);
+    
+    while(true)
+    {
+      unsigned char firstByte = read8BitValue();
+      unsigned char secondByte = read8BitValue();
+      
+      // Is this an escape code or absolute encoding?
+      if (firstByte==0)
+      {
+        // Is this an escape code
+        if (secondByte<=0x02)
+        {
+          LOAD_TEXTUREBMP_RESULT res;
+          if (handleEscapeCode(secondByte,&x,&y,&res))
+            return res;
+        }
+        else
+        {
+          // Absolute encoding
+          index = y*width*3;
+          for (int i=0; i<secondByte; i++)
+          {
+            if (x>=width)
+              return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
+            color = read8BitValue(); 
+            bitmapData[index+x*3] = palette[0][color];
+            bitmapData[index+x*3+1] = palette[1][color];
+            bitmapData[index+x*3+2] = palette[2][color]; 
+            x++;
+          } // end for (int i=0; i<secondByte; i++)
+          
+          // Pad to 16-bit word boundery
+          if (secondByte%2 == 1)
+            read8BitValue();
+        }
+      }
+      else
+      {
+        // If not, perform data decode for next length of colors
+        for (int i=0;i<firstByte;i++)
+        {
+          if (x>=width)
+            return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
+          int32 index = y*width*3+x*3;
+          bitmapData[index] = palette[0][secondByte];
+          bitmapData[index+1] = palette[1][secondByte];
+          bitmapData[index+2] = palette[2][secondByte];
+          x++;
+        }        // end for (int i=0;i<firstByte;i++)
+      }
+    }
+  }
+  
+  return LOAD_TEXTUREBMP_SUCCESS;
 }
 
 // -----------------------------------------------------------------------------
@@ -253,8 +378,9 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readPalette()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData1Bit(uint8* bitmapData)
+LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData1Bit()
 {
+  uint8* bitmapData = &(this->bitmapDataVec.front());
   // 1-bit format cannot be compressed
   if (this->dibHeader.compressionMethod != BMP_BI_RGB)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
@@ -326,8 +452,9 @@ bool MXABmpIO::handleEscapeCode(int secondByte, int* x, int* y,
 
 // -----------------------------------------------------------------------------
 // Draw a 4-bit image. Can be uncompressed or RLE-4 compressed.
-LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit(uint8* bitmapData)
+LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit()
 {
+  uint8* bitmapData = &(this->bitmapDataVec.front());
   if (this->dibHeader.compressionMethod != BMP_BI_RGB && 
       this->dibHeader.compressionMethod != BMP_BI_RLE4)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
@@ -454,121 +581,13 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit(uint8* bitmapData)
   return LOAD_TEXTUREBMP_SUCCESS;
 }
 
-// -----------------------------------------------------------------------------
-// Read 8-bit image. Can be uncompressed or RLE-8 compressed.
-LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit(uint8* bitmapData)
-{
-  uint64 startTime = getMilliSeconds();
 
-  if (this->dibHeader.compressionMethod != BMP_BI_RGB && 
-      this->dibHeader.compressionMethod != BMP_BI_RLE8)
-    return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-  
-  if (this->dibHeader.compressionMethod == BMP_BI_RGB)
-  {
-    int32 numBytes = height * width;
-    std::vector<uint8> buffer;
-    buffer.reserve(numBytes);
-    buffer.resize(numBytes);
-    //Read all the data into a buffer at once.
-    _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
-    bytesRead += numBytes;
-    int32 offset = 0;
-    // For each scan line
-    for (int i=0;i<height;i++)
-    {
-      int32 index = i*width*3;
-      for (int j=0;j<width;j++)
-      {
-        int32 color = buffer[offset++];
-		    int32 temp = index + j * 3;
-        bitmapData[temp++] = palette[0][color];
-        bitmapData[temp++] = palette[1][color];
-        bitmapData[temp] = palette[2][color];
-      }                                             
-      
-      // go to next alignment of 4 bytes.
-      int32 kEnd = width%4;
-      for (int k = 0; k < kEnd; ++k) {
-        char value;
-         this->_reader64Ptr->readPrimitive(value);
-         bytesRead+=1;
-        // read8BitValue();
-      }
-    }
-  }
-  
-  if (this->dibHeader.compressionMethod == BMP_BI_RLE8)
-  {
-    // Drawing cursor pos
-    int32 x=0;
-    int32 y=0;
-
-    bytesRead=0;
-    
-    // Clear bitmap data since it is legal not to 
-    // fill it all out.
-    memset(bitmapData,0,sizeof(unsigned char)*width*height*3);
-    
-    while(true)
-    {
-      unsigned char firstByte = read8BitValue();
-      unsigned char secondByte = read8BitValue();
-      
-      // Is this an escape code or absolute encoding?
-      if (firstByte==0)
-      {
-        // Is this an escape code
-        if (secondByte<=0x02)
-        {
-          LOAD_TEXTUREBMP_RESULT res;
-          if (handleEscapeCode(secondByte,&x,&y,&res))
-            return res;
-        }
-        else
-        {
-          // Absolute encoding
-          int32 index = y*width*3;
-          for (int i=0; i<secondByte; i++)
-          {
-            if (x>=width)
-              return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-            int32 color = read8BitValue(); 
-            bitmapData[index+x*3] = palette[0][color];
-            bitmapData[index+x*3+1] = palette[1][color];
-            bitmapData[index+x*3+2] = palette[2][color]; 
-            x++;
-          } // end for (int i=0; i<secondByte; i++)
-          
-          // Pad to 16-bit word boundery
-          if (secondByte%2 == 1)
-            read8BitValue();
-        }
-      }
-      else
-      {
-        // If not, perform data decode for next length of colors
-        for (int i=0;i<firstByte;i++)
-        {
-          if (x>=width)
-            return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-          int32 index = y*width*3+x*3;
-          bitmapData[index] = palette[0][secondByte];
-          bitmapData[index+1] = palette[1][secondByte];
-          bitmapData[index+2] = palette[2][secondByte];
-          x++;
-        }        // end for (int i=0;i<firstByte;i++)
-      }
-    }
-  }
-  
-  return LOAD_TEXTUREBMP_SUCCESS;
-}
 
 // -----------------------------------------------------------------------------
 // Load a 24-bit image. Cannot be encoded.
-LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit(uint8* bitmapData)
+LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
 {
+  uint8* bitmapData = &(this->bitmapDataVec.front());
   // 24-bit bitmaps cannot be encoded. Verify this.
   if (this->dibHeader.compressionMethod != BMP_BI_RGB)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
@@ -591,32 +610,6 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit(uint8* bitmapData)
   return LOAD_TEXTUREBMP_SUCCESS;
 }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData(uint8* bitmapData)
-{
-  // Pad until byteoffset. Most images will need no padding
-  // since they already are made to use as little space as
-  // possible.
-  while(bytesRead < this->fileHeader.dataOffset)
-  {
-    read8BitValue();
-  }
-
-  // The data reading procedure depends on the bit depth.
-  switch(this->dibHeader.bitsPerPixel)
-  {
-  case 1: 
-    return readBitmapData1Bit(bitmapData);
-  case 4:
-    return readBitmapData4Bit(bitmapData);
-  case 8:
-    return readBitmapData8Bit(bitmapData);
-  default: // 24 bit.
-    return readBitmapData24Bit(bitmapData);
-  }
-}
 
 // -----------------------------------------------------------------------------
 //  
@@ -647,9 +640,10 @@ int32 MXABmpIO::getNumberOfChannels()
 // -----------------------------------------------------------------------------
 void MXABmpIO::flipBitmap()
 {
+  uint8* bitmapData = &(this->bitmapDataVec.front() );
   std::vector<uint8> flippedVec;
   uint8* flippedImage = 0x0;
-  uint8* temp;
+//  uint8* temp;
   int32 element1, element2, width3, el1, el2;
 	
 	width3 = width * 3;
@@ -688,11 +682,12 @@ void MXABmpIO::flipBitmap()
   	}
   }
  // this->bitmapData.swap(flippedVec);
-  this->bitmapData = flippedVec;
+  this->bitmapDataVec = flippedVec;
 }
 
 void MXABmpIO::convertToGrayscale()
 {
+  uint8* bitmapData = &(this->bitmapDataVec.front() );
   //Uses the function Y = 0.3R + 0.59G + 0.11B
   if ( this->isGrayscale )
   {
@@ -700,7 +695,7 @@ void MXABmpIO::convertToGrayscale()
   }
   std::vector<uint8> grayscaleVec;
   uint8* grayscaleImage;
-  uint8* temp;
+  //uint8* temp;
   int32 element1, element2;
 //  grayscaleImage = new uint8[this->width * this->height];
   grayscaleVec.resize(this->width * this->height);
@@ -717,8 +712,9 @@ void MXABmpIO::convertToGrayscale()
     }
   }
   isGrayscale = true;
-  this->bitmapData = grayscaleVec;
-  //this->bitmapData.swap(grayscaleVec);
+  this->_imageConvertedToGrayScale = true;
+  this->bitmapDataVec = grayscaleVec;
+  this->numChannels = 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -747,5 +743,38 @@ void MXABmpIO::copyDataArray(std::vector<uint8> &buffer)
   {
 	  std::cout << "buffer size was 0" << std::endl;
   }
-  ::memcpy( &(buffer.front()), &(this->bitmapData.front()), numElements);
+  ::memcpy( &(buffer.front()), &(this->bitmapDataVec.front()), numElements);
+}
+
+// -----------------------------------------------------------------------------
+// Reads and returns a 32-bit value from the file.
+// -----------------------------------------------------------------------------
+int32 MXABmpIO::read32BitValue()
+{
+  int32 value;
+  this->_reader64Ptr->read<MXA::Endian::FromLittleToSystem>(value);
+  bytesRead+=4;
+  return value;
+}
+
+// -----------------------------------------------------------------------------
+// Reads and returns a 16-bit value from the file
+// -----------------------------------------------------------------------------
+int16 MXABmpIO::read16BitValue()
+{
+  int16 value;
+  this->_reader64Ptr->read<MXA::Endian::FromLittleToSystem>(value);
+  bytesRead+=2;
+  return value;
+}
+
+// -----------------------------------------------------------------------------
+// Reads and returns a 8-bit value from the file
+// -----------------------------------------------------------------------------
+uint8 MXABmpIO::read8BitValue()
+{
+  uint8 value;
+  this->_reader64Ptr->readPrimitive(value);
+  bytesRead+=1;
+  return value;
 }

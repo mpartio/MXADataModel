@@ -48,7 +48,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.13 $
+* @version $Revision: 1.14 $
 */
 class MXA_EXPORT MXABmpIO
 {
@@ -76,7 +76,7 @@ public:
    * @param fName The file name of the image to load
    * @return Error code. 
    */
-  LOAD_TEXTUREBMP_RESULT loadBMPData(const char* fName, bool readAsGrayScale = false, bool flipImage = true);
+  LOAD_TEXTUREBMP_RESULT loadBMPData(const char* fName, bool readAsGrayScale = false);
   /**
    * @brief Converts the image to grayscale
    */
@@ -97,7 +97,7 @@ public:
 protected:
 
 private:
-  std::vector<uint8> bitmapData;
+  std::vector<uint8> bitmapDataVec;
   int32 width;
   int32 height;
   int32 numChannels;
@@ -106,6 +106,9 @@ private:
   MXABMPFileHeader fileHeader;
   MXABMPDIBHeader dibHeader;
   bool isGrayscale;
+  bool _imageFlipped;
+  bool _imageConvertedToGrayScale;
+  bool _convertToGrayScale;
 
   int32 bytesRead;
   // Palette used for paletted images during load.
@@ -118,11 +121,11 @@ private:
   LOAD_TEXTUREBMP_RESULT readFileHeader();
   LOAD_TEXTUREBMP_RESULT readInfoHeader();
   LOAD_TEXTUREBMP_RESULT readPalette();
-  LOAD_TEXTUREBMP_RESULT readBitmapData(uint8* bitmapData);
-  LOAD_TEXTUREBMP_RESULT readBitmapData1Bit(uint8* bitmapData);
-  LOAD_TEXTUREBMP_RESULT readBitmapData4Bit(uint8* bitmapData);
-  LOAD_TEXTUREBMP_RESULT readBitmapData8Bit(uint8* bitmapData);
-  LOAD_TEXTUREBMP_RESULT readBitmapData24Bit(uint8* bitmapData);
+  LOAD_TEXTUREBMP_RESULT readBitmapData();
+  LOAD_TEXTUREBMP_RESULT readBitmapData1Bit();
+  LOAD_TEXTUREBMP_RESULT readBitmapData4Bit();
+  LOAD_TEXTUREBMP_RESULT readBitmapData8Bit();
+  LOAD_TEXTUREBMP_RESULT readBitmapData24Bit();
   bool handleEscapeCode(int, int*, int*, LOAD_TEXTUREBMP_RESULT*);
   void flipBitmap();
   

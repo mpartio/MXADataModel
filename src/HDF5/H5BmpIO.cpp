@@ -36,14 +36,16 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
   // Put the bmp file parsing code here
   int32 err = 0;
   MXABmpIO reader;
+
+  LOAD_TEXTUREBMP_RESULT res = reader.loadBMPData(filename.c_str(), asGrayscale);
   
-  LOAD_TEXTUREBMP_RESULT res = reader.loadBMPData(filename.c_str());
+  //std::cout << logTime() << "  H5BmpIO::importBmp  WRITING HDF5" << std::endl;
   if ( res != LOAD_TEXTUREBMP_SUCCESS )
   {
     return -1;
   }
-  
-  if (asGrayscale)
+ 
+  if (true == asGrayscale)
   {
     err =  _importGrayscaleBmpImage(fileId, datasetName, reader);
   } 
@@ -51,9 +53,7 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
   {
     err =  _importRGBFullColorBmp(fileId, datasetName, reader);
   }
-  
   return err;
-  
 }
 
                          
@@ -64,12 +64,11 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(hid_t fileId,
 										 const std::string &datasetName,
 										 MXABmpIO &reader)
 {
-	reader.convertToGrayscale();
 	std::vector<uint8> rgbRaster;
 	reader.copyDataArray(rgbRaster);
-  	int32 width = reader.getWidth();
-  	int32 height = reader.getHeight();
-  	int32 err = -1;
+  int32 width = reader.getWidth();
+  int32 height = reader.getHeight();
+  int32 err = -1;
 
   //std::cout << "H5BmpIO::_importGrayscaleBmpImage: width and height: " << width << "," << height << std::endl;
   // Store byte array to HDF5 File

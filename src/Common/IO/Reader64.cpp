@@ -39,7 +39,7 @@ bool Reader64::initReader()
                    FILE_SHARE_READ,       // share for reading
                    NULL,                  // default security
                    OPEN_EXISTING,         // existing file only
-                   FILE_ATTRIBUTE_NORMAL, // normal file
+                   FILE_FLAG_SEQUENTIAL_SCAN, // normal file
                    NULL);                 // no attr. template
   if (_instream == INVALID_HANDLE_VALUE) 
   { 
