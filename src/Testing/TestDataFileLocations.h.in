@@ -20,7 +20,7 @@
  * This can be advantageous to check the contents to of the test files during 
  * debugging process
  */
-#define REMOVE_TEST_FILES 0
+#define REMOVE_TEST_FILES 1
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the DataImport test
@@ -43,10 +43,10 @@
 //  Define where to put our temporary files for the H5Lite Test
 // -----------------------------------------------------------------------------
 #define H5LITE_TEST_FILE_NAME "@MXA_TEMP_DIR@H5Lite_Test.h5"
-
+#define H5LITE_TEST_LARGE_FILE "@MXA_TEMP_DIR@H5Lite_LargeFile_Test.h5"
 
 // -----------------------------------------------------------------------------
-//  Define where to put our temporary files for the H5Lite Test
+//  Define where to put our temporary files for the H5Utilities Test
 // -----------------------------------------------------------------------------
 #define H5UTIL_TEST_FILE_NAME "@MXA_TEMP_DIR@H5Utilities_Test.h5"
 

@@ -48,7 +48,7 @@ using namespace MXATypes;
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  BOOST_REQUIRE ( boost::filesystem::remove(H5LITE_TEST_FILE_NAME) == true );
+  BOOST_REQUIRE ( boost::filesystem::remove(H5UTIL_TEST_FILE_NAME) == true );
 #endif
 }
 
@@ -357,7 +357,7 @@ void H5UtilitiesTest()
    err = H5Utilities::readAllAttributes(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", allAttributes );
    BOOST_REQUIRE(err >= 0);
    BOOST_REQUIRE(allAttributes.size() == 50);
-   
+   BOOST_REQUIRE(H5Fclose(file_id) >= 0);
 }
 
 // -----------------------------------------------------------------------------

@@ -96,6 +96,7 @@ void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
   BOOST_REQUIRE ( boost::filesystem::remove(H5LITE_TEST_FILE_NAME) == true );
+ // BOOST_REQUIRE ( boost::filesystem::remove(H5LITE_TEST_LARGE_FILE) == true );
 #endif
 }
 
@@ -899,12 +900,35 @@ void H5LiteTest()
    BOOST_REQUIRE ( testReadScalarDataset<float64>(file_id) >= 0); 
    
    BOOST_REQUIRE ( testReadStringDatasetAndAttributes(file_id) >= 0);
-   
-
   /* Close the file. */
   H5Fclose( file_id );
  // std::cout << logTime() << "Testing Complete" << std::endl;
 }
+
+void TestLargeFileSupport()
+{
+ // herr_t err = -1;
+  hid_t   file_id;
+  /* Create a new file using default properties. */
+  file_id = H5Fcreate( H5LITE_TEST_LARGE_FILE, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
+  BOOST_REQUIRE(file_id > 0);
+  std::vector<int> buffer(1000000); // Create a 4 MegaByte Buffer
+	int32 rank = 1;
+	std::vector<uint64> dims(1,1000000);
+	std::string dsetName;
+  for (int i = 0; i < 1000; ++i)
+  {
+	  dsetName = "/" + StringUtils::numToString(i);
+	  H5Lite::writePointerDataset<int>(file_id, dsetName, rank, &(dims.front()), &(buffer.front()) );
+	  std::cout << "Large File " << i << "/1000" << std::endl;
+
+  }
+
+	herr_t err = H5Fclose(file_id);
+
+
+}
+
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
@@ -916,7 +940,9 @@ boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv
   std::cout << "sizeof(size_t): " << sizeof(size_t) << std::endl;
   boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "H5Lite Tests" );
   test->add( BOOST_TEST_CASE( &H5LiteTest), 0);
+ // test->add( BOOST_TEST_CASE( &TestLargeFileSupport), 0);
   test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
+
   return test; 
 }
 

@@ -64,6 +64,7 @@ IF (BUILD_TESTING)
     # ------- H5Lite Test
     SET (H5LITE_TEST_SRCS
       H5LiteTest.cpp
+      ${CMAKE_BINARY_DIR}/TestDataFileLocations.h
     )
     ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
     TARGET_LINK_LIBRARIES (H5LiteTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS})
