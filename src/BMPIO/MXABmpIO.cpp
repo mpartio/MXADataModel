@@ -121,6 +121,76 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData()
 }
 
 // -----------------------------------------------------------------------------
+// Load a 24-bit image. Cannot be encoded.
+LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
+{
+  uint8* bitmapData = &(this->bitmapDataVec.front());
+  int32 temp = 0;
+  int32 index = 0;
+  uint8 red, green, blue = 0;
+  int32 componentNumBytes = 3;
+  int32 numBytes = width * componentNumBytes;
+  int32 offset = 0;
+  // 24-bit bitmaps cannot be encoded. Verify this.
+  if (this->dibHeader.compressionMethod != BMP_BI_RGB)
+    return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
+
+ 
+  if (true == this->_convertToGrayScale) {   
+  this->bitmapDataVec.resize(width * height);
+    componentNumBytes = 1;
+  }
+  int32 widthByComponentNumBytes = componentNumBytes * width;
+
+   std::vector<uint8> buffer(numBytes, 0); // Create a buffer large enough to hold a row of rgb
+
+  // For each scan line
+  int targetRow = 0;
+
+  for (int i = 0; i < height; i++)
+  {
+    //read a row of bytes
+    _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
+    bytesRead += numBytes;
+    offset = 0;  //Reset the offset to start of the buffer
+
+    targetRow = height - i - 1;
+    index = targetRow * widthByComponentNumBytes;
+    for (int j=0;j<width;j++)
+    {
+      blue = buffer[offset++];
+      green = buffer[offset++];
+      red = buffer[offset++];
+      if (true == this->_convertToGrayScale)
+      {
+        temp = index + j;
+        bitmapData[temp] = (uint8)((float)(red) * 0.3f
+          + (float)(green) * 0.59f
+          + (float)(blue) * 0.11f);
+      }
+      else 
+      {
+		    temp = index + j * 3;
+        bitmapData[temp++] = red;
+        bitmapData[temp++] = green;
+        bitmapData[temp] = blue;
+      }
+
+ //     bitmapData[index+j*3+2] = read8BitValue();
+ //     bitmapData[index+j*3+1] = read8BitValue();
+ //     bitmapData[index+j*3] = read8BitValue();
+    }                                             
+
+    for (int k=(width*3)%4; k!=0 && k<4;k++) 
+    {
+        read8BitValue();
+    }
+  }
+  return LOAD_TEXTUREBMP_SUCCESS;
+}
+
+
+// -----------------------------------------------------------------------------
 // Read 8-bit image. Can be uncompressed or RLE-8 compressed.
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
 {
@@ -129,8 +199,8 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
   int32 index = 0;
   uint8 color = 0;
   int32 componentNumBytes = 3;
-  int32 numBytes = height * width;
-
+  int32 numBytes = width;
+  int32 offset = 0;
   if (this->dibHeader.compressionMethod != BMP_BI_RGB && 
     this->dibHeader.compressionMethod != BMP_BI_RLE8) {
       return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
@@ -142,20 +212,20 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
   if (this->dibHeader.compressionMethod == BMP_BI_RGB)
   {
     std::vector<uint8> buffer(numBytes, 0); // Create a buffer large enough to hold the colors
-
     if (true == this->_convertToGrayScale) {   
       this->bitmapDataVec.resize(width * height);
       componentNumBytes = 1;
     }
     int32 widthByComponentNumBytes = componentNumBytes * width;
-    //Read all the data into a buffer at once.
-    _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
-    bytesRead += numBytes;
-    int32 offset = 0;
+   
     // For each scan line
     int targetRow = 0;
     for (int i = 0;i < height; ++i)
     { 
+      _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
+      bytesRead += numBytes;
+      offset = 0;  //Reset the offset to start of the buffer
+
       targetRow = height - i - 1;
       index = targetRow * widthByComponentNumBytes;
       for (int j=0;j<width;j++)
@@ -180,7 +250,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
       // go to next alignment of 4 bytes.
       int32 kEnd = width%4;
       for (int k = 0; k < kEnd; ++k) {
-        char value;
+         char value;
          this->_reader64Ptr->readPrimitive(value);
          bytesRead+=1;
       }
@@ -575,35 +645,6 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit()
         }        
       }
     }
-  }
-  
-  return LOAD_TEXTUREBMP_SUCCESS;
-}
-
-
-
-// -----------------------------------------------------------------------------
-// Load a 24-bit image. Cannot be encoded.
-LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
-{
-  uint8* bitmapData = &(this->bitmapDataVec.front());
-  // 24-bit bitmaps cannot be encoded. Verify this.
-  if (this->dibHeader.compressionMethod != BMP_BI_RGB)
-    return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-  for (int i=0;i<height;i++)
-  {
-    int32 index = i*width*3;
-    for (int j=0;j<width;j++)
-    {
-      bitmapData[index+j*3+2] = read8BitValue();
-      bitmapData[index+j*3+1] = read8BitValue();
-      bitmapData[index+j*3] = read8BitValue();
-    }                                             
-
-    // go to next alignment of 4 bytes.
-//    for (int k=0; k<((width*3)%4);k++), the fix:
-  for (int k=(width*3)%4; k!=0 && k<4;k++)
-      read8BitValue();
   }
   
   return LOAD_TEXTUREBMP_SUCCESS;
