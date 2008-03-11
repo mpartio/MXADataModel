@@ -136,8 +136,9 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
 
  
-  if (true == this->_convertToGrayScale) {   
-  this->bitmapDataVec.resize(width * height);
+  if (true == this->_convertToGrayScale) {
+    this->bitmapDataVec.reserve(width * height);
+    this->bitmapDataVec.resize(width * height);
     componentNumBytes = 1;
   }
   int32 widthByComponentNumBytes = componentNumBytes * width;
@@ -146,30 +147,32 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
 
   // For each scan line
   int targetRow = 0;
-
+  char* buffPtr = (char*)(&(buffer.front() ) );
   for (int i = 0; i < height; i++)
   {
     //read a row of bytes
     _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
     bytesRead += numBytes;
     offset = 0;  //Reset the offset to start of the buffer
-
+    buffPtr = (char*)(&(buffer.front() ) );
+    
     targetRow = height - i - 1;
     index = targetRow * widthByComponentNumBytes;
     for (int j=0;j<width;j++)
     {
-      blue = buffer[offset++];
-      green = buffer[offset++];
-      red = buffer[offset++];
+
       if (true == this->_convertToGrayScale)
       {
         temp = index + j;
-        bitmapData[temp] = (uint8)((float)(red) * 0.3f
-          + (float)(green) * 0.59f
-          + (float)(blue) * 0.11f);
+        bitmapData[temp] = (uint8)((float)(*(buffPtr++)) * 0.3f
+          + (float)(*(buffPtr++)) * 0.59f
+          + (float)(*(buffPtr++)) * 0.11f);
       }
       else 
       {
+        blue = buffer[offset++];
+        green = buffer[offset++];
+        red = buffer[offset++];
 		    temp = index + j * 3;
         bitmapData[temp++] = red;
         bitmapData[temp++] = green;
@@ -185,6 +188,11 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
     {
         read8BitValue();
     }
+  }
+  this->_imageFlipped = true;
+  if (true == this->_convertToGrayScale) {
+    this->_imageConvertedToGrayScale = true;
+    this->numChannels = 1;
   }
   return LOAD_TEXTUREBMP_SUCCESS;
 }
@@ -212,6 +220,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
   if (this->dibHeader.compressionMethod == BMP_BI_RGB)
   {
     std::vector<uint8> buffer(numBytes, 0); // Create a buffer large enough to hold the colors
+    char* buffPtr = (char*)(&(buffer.front() ) );
     if (true == this->_convertToGrayScale) {   
       this->bitmapDataVec.resize(width * height);
       componentNumBytes = 1;
@@ -225,12 +234,12 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
       _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
       bytesRead += numBytes;
       offset = 0;  //Reset the offset to start of the buffer
-
+      buffPtr = (char*)(&(buffer.front() ) );
       targetRow = height - i - 1;
       index = targetRow * widthByComponentNumBytes;
       for (int j=0;j<width;j++)
       {
-        color = buffer[offset++];
+        color = *buffPtr++;
         if (true == this->_convertToGrayScale)
         {
           temp = index + j;
@@ -255,9 +264,13 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
          bytesRead+=1;
       }
     }
+    
     this->_imageFlipped = true;
-    this->_imageConvertedToGrayScale = true;
-    this->numChannels = 1;
+    if (true == this->_convertToGrayScale) {
+      this->_imageConvertedToGrayScale = true;
+      this->numChannels = 1;
+    }
+    
   }
   
   if (this->dibHeader.compressionMethod == BMP_BI_RLE8)
