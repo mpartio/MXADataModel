@@ -18,120 +18,16 @@ ENDIF(NOT BOOST_FOUND)
 INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
 LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS}) 
 
-#-- Add the HDF5 include directory
-# INCLUDE_DIRECTORIES(${HDF5_INCLUDE_DIR})
-
-#-- Add in the MXADataModel Sources
-SET( MXADATAMODEL_SRCS
-  ${MXA_SOURCE_DIR}/src/Common/IO/Reader64.cpp
-  ${MXA_SOURCE_DIR}/src/Common/IO/Writer64.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXADataModel.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXADataSource.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXADataImport.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractAttribute.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractData.cpp
-  ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.cpp
-  ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.cpp
-  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathIndexSection.cpp
-  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathTextSection.cpp
-  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathBuilder.cpp
-)
-  
-#--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
-SET (MXADATAMODEL_HEADERS
-  ${MXA_SOURCE_DIR}/src/Common/LogTime.h
-  ${MXA_SOURCE_DIR}/src/Common/DLLExport.h
-  ${MXA_SOURCE_DIR}/src/Common/MXATypeDefs.h
-  ${MXA_SOURCE_DIR}/src/Common/MXATypes.h
-  ${MXA_SOURCE_DIR}/src/Common/MXAErrorDefinitions.h
-  ${MXA_SOURCE_DIR}/src/Common/IO/Reader64.h
-  ${MXA_SOURCE_DIR}/src/Common/IO/Writer64.h
-  ${MXA_SOURCE_DIR}/src/Common/Cast/Cast.h
-  ${MXA_SOURCE_DIR}/src/Base/IAttribute.h
-  ${MXA_SOURCE_DIR}/src/Base/IAttributeHelper.h
-  ${MXA_SOURCE_DIR}/src/Base/IAttributeWriter.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataDimension.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataDimensionWriter.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataFile.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataImport.h
-  ${MXA_SOURCE_DIR}/src/Base/IImportDelegate.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataModel.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataModelReader.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataModelWriter.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataRecord.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataRecordWriter.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataSource.h
-  ${MXA_SOURCE_DIR}/src/Base/IFileIODelegate.h
-  ${MXA_SOURCE_DIR}/src/Base/INode.h
-  ${MXA_SOURCE_DIR}/src/Base/IFileReader.h
-  ${MXA_SOURCE_DIR}/src/Base/IFileWriter.h
-  ${MXA_SOURCE_DIR}/src/Base/IAbstractDataArray.h
-  ${MXA_SOURCE_DIR}/src/Base/IAbstractDataset.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataFileIO.h
-  ${MXA_SOURCE_DIR}/src/Base/IDataset.h
-  ${MXA_SOURCE_DIR}/src/Base/IRequiredMetaData.h
-  ${MXA_SOURCE_DIR}/src/Core/AttributeHelpers.h
-  ${MXA_SOURCE_DIR}/src/Core/MXAConstants.h
-  ${MXA_SOURCE_DIR}/src/Core/MXADataDimension.h
-  ${MXA_SOURCE_DIR}/src/Core/MXADataImport.h
-  ${MXA_SOURCE_DIR}/src/Core/MXADataModel.h
-  ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.h
-  ${MXA_SOURCE_DIR}/src/Core/MXADataSource.h
-  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractAttribute.h
-  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractData.h
-  ${MXA_SOURCE_DIR}/src/Utilities/StringUtils.h
-  ${MXA_SOURCE_DIR}/src/Utilities/IStringSection.h
-  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathIndexSection.h
-  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathTextSection.h
-  ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathBuilder.h
-  ${MXA_SOURCE_DIR}/src/DataImport/AbstractImportDelegateFactory.h
-  ${MXA_SOURCE_DIR}/src/DataImport/ImportDelegateManager.h
-  ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpIO.h
-  ${MXA_SOURCE_DIR}/src/BMPIO/MXABmpHeaders.h
-)
-    #-- Add the source files that depend on hdf5
-  SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS}
-    ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataFile.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5Image.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5Utilities.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringData.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5RGBImage.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringAttribute.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataset.cpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5MXARequiredMetaData.cpp
-  )
-  
-  #-- Add the headers that depend on HDF5
-  SET(MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS}
-    ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataFile.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5AttributeWriter.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelReader.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5DataModelWriter.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5Lite.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5Image.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5Utilities.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpIO.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegate.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5AttributeArrayTemplate.hpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5DataArrayTemplate.hpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringData.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5AsciiStringAttribute.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5RGBImage.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5Data2DArray.hpp
-    ${MXA_SOURCE_DIR}/src/HDF5/H5MXADataset.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5MXARequiredMetaData.h
-  )
-
+#--- Include the MXADataModel/src directory on the INCLUDE path
 INCLUDE_DIRECTORIES(${MXA_RESOURCES_DIR}/../src/)
+
+#-- Include all the source files
+INCLUDE (${MXA_SOURCE_DIR}/src/Base/Base_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/src/BMPIO/BMPIO_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/src/Common/Common_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/src/Core/Core_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/src/DataImport/DataImport_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/src/Utilities/Utilities_SourceList.cmake)
 
 SET (HDF5_SUPPORT "1")
 SET (HDF5_VTK_BRIDGE "0")
@@ -139,6 +35,64 @@ SET (TIFF_SUPPORT "0")
 SET (XML_SUPPORT "0")
 SET (BUILD_TESTING "0")
 SET (BUILD_EXAMPLES "0")
+
+# ------- Set up the MXADataModel Project Source Files -----------
+SET( MXADATAMODEL_SRCS
+    ${MXA_BASE_SRCS}
+    ${MXA_BMPIO_SRCS}
+    ${MXA_COMMON_SRCS}
+    ${MXA_CORE_SRCS}
+    ${MXA_DATA_IMPORT_SRCS}
+    ${MXA_UTILITIES_SRCS}
+)
+  
+#--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
+SET (MXADATAMODEL_HEADERS
+    ${MXA_BASE_HEADERS}
+    ${MXA_BMPIO_HEADERS}
+    ${MXA_COMMON_HEADERS}
+    ${MXA_CORE_HEADERS}
+    ${MXA_DATA_IMPORT_HEADERS}
+    ${MXA_UTILITIES_HEADERS}
+)
+
+#--------- XML Sources ---------------------------------------------------
+IF (MXA_USE_XML)
+    INCLUDE (${MXA_SOURCE_DIR}/src/XML/XML_SourceList.cmake)
+    SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
+    SET (XML_SUPPORT "1")
+ENDIF(MXA_USE_XML)
+
+#------- HDF5 Dependant Sources ------------------------------
+IF ( MXA_USE_HDF5 )
+  INCLUDE (${MXA_SOURCE_DIR}/src/HDF5/HDF5_SourceList.cmake)
+  
+  SET(HDF5_SUPPORT "1")
+ # OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
+  IF(BUILD_VTK_HDF5)
+    #-- Find VTK packages -----------------------------------------
+    FIND_PACKAGE(VTK REQUIRED)
+    INCLUDE(${VTK_USE_FILE})
+      
+    # List the kits from VTK that are needed by this project.
+    SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
+    
+    SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} ${MXA_SOURCE_DIR}/src/HDF5/vtkHDF5.cpp)
+    SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} ${MXA_SOURCE_DIR}/src/HDF5/vtkHDF5.h)
+    SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
+    SET(HDF5_VTK_BRIDGE "1")
+  ENDIF (BUILD_VTK_HDF5)
+  #-- Finally include all the sources and headers from the HDf5 and vtk sections
+  SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
+  
+  # ------------------ Check for and Include Tif Lib dependent code --------------
+  IF(MXA_USE_TIFF)
+    SET (TIFF_SUPPORT "1")
+    SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
+  ENDIF (MXA_USE_TIFF)
+
+ENDIF ( MXA_USE_HDF5 )
+
 
 #-- Configure the Header file and then add the Binary Directory to the Includes list
 CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
