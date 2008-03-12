@@ -23,10 +23,10 @@ MXABmpIO::MXABmpIO() :
   height(0),
   numChannels(0),
   isGrayscale(false),
-  bytesRead(0),
   _imageFlipped(false),
   _imageConvertedToGrayScale(false),
-  _convertToGrayScale(false)
+  _convertToGrayScale(false),
+  bytesRead(0)
 {
  
 }
@@ -148,6 +148,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
   // For each scan line
   int targetRow = 0;
   char* buffPtr = (char*)(&(buffer.front() ) );
+  float fTmp;
   for (int i = 0; i < height; i++)
   {
     //read a row of bytes
@@ -164,9 +165,10 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
       if (true == this->_convertToGrayScale)
       {
         temp = index + j;
-        bitmapData[temp] = (uint8)((float)(*(buffPtr++)) * 0.3f
-          + (float)(*(buffPtr++)) * 0.59f
-          + (float)(*(buffPtr++)) * 0.11f);
+        fTmp = (float)(*(buffPtr++)) * 0.3f;
+        fTmp += (float)(*(buffPtr++)) * 0.59f;
+        fTmp +=(float)(*(buffPtr++)) * 0.11f;
+        bitmapData[temp] = (uint8)(fTmp);
       }
       else 
       {
