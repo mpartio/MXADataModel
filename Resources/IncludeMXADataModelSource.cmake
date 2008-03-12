@@ -1,4 +1,4 @@
-MESSAGE (STATUS "IncludeMXADataModelSource.cmake")
+#MESSAGE (STATUS "IncludeMXADataModelSource.cmake")
 IF (NOT MXA_RESOURCES_DIR)
   GET_FILENAME_COMPONENT(MXA_RESOURCES_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
 ENDIF (NOT MXA_RESOURCES_DIR)
@@ -19,7 +19,7 @@ INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
 LINK_DIRECTORIES(${BOOST_LIBRARY_DIRS}) 
 
 #--- Include the MXADataModel/src directory on the INCLUDE path
-INCLUDE_DIRECTORIES(${MXA_RESOURCES_DIR}/../src/)
+INCLUDE_DIRECTORIES (${MXA_SOURCE_DIR}/src)
 
 #-- Include all the source files
 INCLUDE (${MXA_SOURCE_DIR}/src/Base/Base_SourceList.cmake)
