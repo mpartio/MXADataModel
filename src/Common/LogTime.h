@@ -12,7 +12,7 @@
 #ifndef _LOGTIME_H_
 #define _LOGTIME_H_
 
-#include <time.h>
+#include <sys/time.h>
 #include <iomanip>
 #include <iostream>
 #include <string>
