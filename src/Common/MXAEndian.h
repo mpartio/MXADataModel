@@ -1,5 +1,3 @@
-#ifndef MXAENDIAN_H_
-#define MXAENDIAN_H_
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2002, Perry L. Miller IV
@@ -21,9 +19,11 @@
  *  MXA::Endian::FromLittleToSystem::convert(value);
  */
 
+#ifndef MXAENDIAN_H_
+#define MXAENDIAN_H_
+
 
 #include "MXATypes.h"
-
 
 #include <iosfwd>
 #include <string>

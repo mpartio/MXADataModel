@@ -1,4 +1,13 @@
-
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2008, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef _WRITER64_H_
 #define _WRITER64_H_
 
@@ -49,7 +58,7 @@ standard C++ library."
  * sure that we can write files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 class Writer64
 {
