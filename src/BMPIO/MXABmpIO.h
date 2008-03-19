@@ -48,7 +48,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.15 $
+* @version $Revision: 1.16 $
 */
 class MXA_EXPORT MXABmpIO
 {
@@ -116,19 +116,80 @@ private:
   // Palette used for paletted images during load.
   uint8 palette[3][256];
 
+  /**
+   * @brief Reads a 4 byte integer from the file */
   int32 read32BitValue();
+  
+  /**
+   * @brief Reads a 2 byte integer from the file */
   int16 read16BitValue();
+  
+  /**
+   * @brief Reads a 1 byte integer from the file */
   uint8 read8BitValue();
   
+  /**
+   * @brief Reads the file header from the bmp file
+   * @return LOAD_TEXTUREBMP_RESULT
+   */
   LOAD_TEXTUREBMP_RESULT readFileHeader();
+  
+  /**
+   * @brief Reads the info header from the bmp file
+   * @return LOAD_TEXTUREBMP_RESULT
+   */
   LOAD_TEXTUREBMP_RESULT readInfoHeader();
+  
+  /**
+   * @brief Reads the color palette from the bmp file
+   * @return LOAD_TEXTUREBMP_RESULT
+   */
   LOAD_TEXTUREBMP_RESULT readPalette();
+  
+  /**
+   * @brief Reads the bitmap data from the bmp file
+   * @return LOAD_TEXTUREBMP_RESULT
+   */
   LOAD_TEXTUREBMP_RESULT readBitmapData();
+  
+  /**
+   * @brief Reads 1 bit encoded bitmap data from the bmp file
+   * @return LOAD_TEXTUREBMP_RESULT
+   */
   LOAD_TEXTUREBMP_RESULT readBitmapData1Bit();
+  
+  /**
+   * @brief Reads 4 bit encoded bitmap data from the bmp file
+   * @return LOAD_TEXTUREBMP_RESULT
+   */
   LOAD_TEXTUREBMP_RESULT readBitmapData4Bit();
+  
+  /**
+   * @brief Reads 8 bit encoded bitmap data from the bmp file
+   * @return LOAD_TEXTUREBMP_RESULT
+   */
   LOAD_TEXTUREBMP_RESULT readBitmapData8Bit();
+  
+  /**
+   * @brief Reads 24 bit encoded bitmap data from the bmp file
+   * @return LOAD_TEXTUREBMP_RESULT
+   */
   LOAD_TEXTUREBMP_RESULT readBitmapData24Bit();
-  bool handleEscapeCode(int, int*, int*, LOAD_TEXTUREBMP_RESULT*);
+  
+  /**
+   * @brief Parser for escape codes
+   * @param secondByte
+   * @param x
+   * @param y 
+   * @param res
+   * @return
+   */
+  bool handleEscapeCode(int secondByte, int* x, int* y, 
+                        LOAD_TEXTUREBMP_RESULT* res);
+  
+  /**
+   * @brief Flips the bitmap image so the (0,0) pixel is in the upper left.
+   */
   void flipBitmap();
   
   MXABmpIO(const MXABmpIO&);    //Not Implemented
