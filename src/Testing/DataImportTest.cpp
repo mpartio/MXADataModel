@@ -38,7 +38,7 @@
 #include <boost/filesystem/convenience.hpp>
 
 
-#include <TestDataFileLocations.h>
+#include <Testing/TestDataFileLocations.h>
 
 // -----------------------------------------------------------------------------
 //  

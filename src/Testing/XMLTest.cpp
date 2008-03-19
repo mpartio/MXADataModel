@@ -14,7 +14,7 @@
 #include <Core/MXADataModel.h>
 #include <XML/XMLDataModelReader.h>
 #include <XML/XMLDataModelWriter.h>
-#include <TestDataFileLocations.h>
+#include <Testing/TestDataFileLocations.h>
 #include <HDF5/H5AsciiStringAttribute.h>
 
 //-- C++ includes

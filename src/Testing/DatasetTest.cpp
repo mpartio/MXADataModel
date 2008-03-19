@@ -11,7 +11,7 @@
 
 //-- MXA Includes
 #include <MXAConfiguration.h>
-#include <TestDataFileLocations.h>
+#include <Testing/TestDataFileLocations.h>
 #include <Common/MXATypeDefs.h>
 #include <Base/IDataFile.h>
 #include <Base/IDataModel.h>

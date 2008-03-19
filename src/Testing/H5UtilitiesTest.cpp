@@ -15,7 +15,7 @@
 #include <Common/MXATypes.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
-#include <TestDataFileLocations.h>
+#include <Testing/TestDataFileLocations.h>
 
 //-- C++ includes
 #include <list>

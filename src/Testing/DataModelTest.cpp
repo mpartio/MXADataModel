@@ -24,7 +24,7 @@
 #include <HDF5/H5MXADataFile.h>
 #include <HDF5/H5MXARequiredMetaData.h>
 #include <HDF5/H5AsciiStringAttribute.h>
-#include <TestDataFileLocations.h>
+#include <Testing/TestDataFileLocations.h>
 
 // C++ Includes
 #include <iostream>

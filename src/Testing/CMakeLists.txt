@@ -18,7 +18,7 @@ IF (BUILD_TESTING)
      STRING(REPLACE "\\" "\\\\" DATAIMPORT_TEST_IMPORT_XML_FILE ${DATAIMPORT_TEST_IMPORT_XML_FILE} )
     ENDIF(WIN32)
     CONFIGURE_FILE(${MXA_TEST_SRC_DIR}/TestDataFileLocations.h.in
-               ${CMAKE_BINARY_DIR}/TestDataFileLocations.h @ONLY IMMEDIATE)
+               ${PROJECT_BINARY_DIR}/TestDataFileLocations.h @ONLY IMMEDIATE)
     
     # -------- Dataset Test
     SET (MXADataset_TEST_SRCS
@@ -64,7 +64,7 @@ IF (BUILD_TESTING)
     # ------- H5Lite Test
     SET (H5LITE_TEST_SRCS
       H5LiteTest.cpp
-      ${CMAKE_BINARY_DIR}/TestDataFileLocations.h
+      ${PROJECT_BINARY_DIR}/TestDataFileLocations.h
     )
     ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
     TARGET_LINK_LIBRARIES (H5LiteTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS})

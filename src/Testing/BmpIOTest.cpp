@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <Common/MXATypes.h>
 #include <BMPIO/MXABmpIO.h>
-#include <TestDataFileLocations.h>
+#include <Testing/TestDataFileLocations.h>
 
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
