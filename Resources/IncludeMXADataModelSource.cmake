@@ -66,6 +66,7 @@ ENDIF(MXA_USE_XML)
 #------- HDF5 Dependant Sources ------------------------------
 IF ( MXA_USE_HDF5 )
   INCLUDE (${MXA_SOURCE_DIR}/src/HDF5/HDF5_SourceList.cmake)
+  MESSAGE(STATUS "MXA has HDF5 sources")
   
   SET(HDF5_SUPPORT "1")
  # OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
