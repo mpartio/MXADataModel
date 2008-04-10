@@ -12,7 +12,15 @@
 #ifndef _LOGTIME_H_
 #define _LOGTIME_H_
 
+#include <MXAConfiguration.h>
+
+#if defined (HAVE_SYS_TIME_GETTIMEOFDAY)
+#include <sys/time.h>
+#endif
+#if defined (HAVE_TIME_GETTIMEOFDAY)
 #include <time.h>
+#endif
+
 #include <iomanip>
 #include <iostream>
 #include <string>

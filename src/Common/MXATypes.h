@@ -15,7 +15,7 @@
  * @file MXATypes.h
  * @brief Contains the typedefs for all the common integer and floating point
  * prinitives that are used in the MXA Code Base
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 
 #include <MXAConfiguration.h>
@@ -103,25 +103,30 @@
     typedef unsigned long long int  uint64; 
   #endif
 
+#elif defined(_SGI_PLATFORM) 
+ #include <inttypes.h> 
+
+#elif defined(_COMPAQ_PLATFORM)
+ #include <inttypes.h> 
+
+#elif defined(__MINGW32__)
+// #error <-------------- MINGW Platform ------------------------------>
+    typedef uint64_t            uint64; 
+    typedef uint32_t            uint32; 
+    typedef uint16_t            uint16;
+    typedef uint8_t             uint8;
+
+    typedef int64_t             int64; 
+    typedef int32_t             int32; 
+    typedef int16_t             int16; 
+    typedef int8_t              int8;
+    
+    typedef float               float32;
+    typedef double              float64;
 #else 
-  #if defined(_SGI_PLATFORM) 
-      #include <inttypes.h> 
-  #elif defined(_COMPAQ_PLATFORM) 
-      #include <inttypes.h> 
-  #else 
-      #include <stdint.h> 
-  #endif 
+#error This platform is not recognized
 
-  typedef uint64_t            uint64; 
-  typedef uint32_t            uint32; 
-  typedef uint16_t            uint16; 
 
-  typedef int64_t             int64; 
-  typedef int32_t             int32; 
-  typedef int16_t             int16; 
-
-  typedef float               float32;
-  typedef double              float64;
 #endif
 
 #if defined (SIZEOF_SIZE_T) && (SIZEOF_SIZE_T == 4)
