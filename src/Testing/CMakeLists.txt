@@ -1,7 +1,7 @@
 PROJECT (MXATesting)
 
 SET (TEST_BOOST_LIBS ${BOOST_TEST_EXEC_MONITOR_LIBRARY} )
-
+        
 OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
 
 IF (BUILD_TESTING)
@@ -49,16 +49,16 @@ IF (BUILD_TESTING)
     
     # ------ DataImport Test
     IF (MXA_USE_XML)
-    SET (MXADATAIMPORT_TEST_SRCS
-      DataImportTest.cpp
-    )
-    ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES ( DataImportTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS} )
-    ADD_TEST(DataImportTest ${EXECUTABLE_OUTPUT_PATH}/DataImportTest)
-    #-- Configure the XML file to correctly find the XML Model file
-    SET (DATA_MODEL_XML_FILE ${MXA_SOURCE_DIR}/Resources/ModelTemplate.xml)
-    CONFIGURE_FILE(${MXA_SOURCE_DIR}/Resources/DataImportTest.xml.in
-                    ${CMAKE_BINARY_DIR}/DataImportTest.xml @ONLY IMMEDIATE)
+        SET (MXADATAIMPORT_TEST_SRCS
+          DataImportTest.cpp
+        )
+        ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} )
+        TARGET_LINK_LIBRARIES ( DataImportTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS} )
+        ADD_TEST(DataImportTest ${EXECUTABLE_OUTPUT_PATH}/DataImportTest)
+        #-- Configure the XML file to correctly find the XML Model file
+        SET (DATA_MODEL_XML_FILE ${MXA_SOURCE_DIR}/Resources/ModelTemplate.xml)
+        CONFIGURE_FILE(${MXA_SOURCE_DIR}/Resources/DataImportTest.xml.in
+                        ${CMAKE_BINARY_DIR}/DataImportTest.xml @ONLY IMMEDIATE)
     ENDIF(MXA_USE_XML)
     
     # ------- H5Lite Test

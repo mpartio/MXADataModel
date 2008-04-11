@@ -227,7 +227,7 @@ MACRO (_BOOST_ADJUST_LIB_VARS basename)
         SET(BOOST_${basename}_FOUND 1)
         IF (BOOST_USE_${basename})
             SET (BOOST_LIBRARIES ${BOOST_LIBRARIES} ${BOOST_${basename}_LIBRARY} )
-            # MESSAGE(STATUS "BOOST_LIBRARIES: ${BOOST_LIBRARIES}")
+            #MESSAGE(STATUS "BOOST_LIBRARIES: ${BOOST_LIBRARIES}")
         ENDIF(BOOST_USE_${basename})
       ENDIF (BOOST_${basename}_LIBRARY)
 
@@ -243,9 +243,9 @@ ENDMACRO (_BOOST_ADJUST_LIB_VARS)
 
 #-------------------------------------------------------------------------------
     SET (BOOST_LIB_PREFIX "")
-    IF ( WIN32 )
+    IF ( MSVC )
         SET (BOOST_LIB_PREFIX "lib")  # Looks for the static libraries by default
-    ENDIF ( WIN32 )
+    ENDIF ( MSVC )
   
     IF (NOT DEFINED BOOST_COMPILER)
       SET (BOOST_COMPILER "-gcc")
@@ -261,32 +261,32 @@ ENDMACRO (_BOOST_ADJUST_LIB_VARS)
       IF (CYGWIN)
         SET (BOOST_COMPILER "-gcc")
       ENDIF (CYGWIN)
-      IF (UNIX)
-        IF (APPLE)
-            SET (BOOST_COMPILER "")
-        ELSE (APPLE)
-    	    IF (NOT CMAKE_COMPILER_IS_GNUCC)
-    	       SET (BOOST_COMPILER "-il")           # This is for the intel compiler
-    	    ELSE (NOT CMAKE_COMPILER_IS_GNUCC)
-             SET (BOOST_COMPILER "-gcc34")
-        	ENDIF (NOT CMAKE_COMPILER_IS_GNUCC)
-        ENDIF (APPLE)
-      ENDIF(UNIX)
+        IF (UNIX)
+            IF (APPLE)
+                SET (BOOST_COMPILER "")
+            ELSE (APPLE)
+                IF (NOT CMAKE_COMPILER_IS_GNUCC)
+                    SET (BOOST_COMPILER "-il")  # This is for the intel compiler
+                ELSE (NOT CMAKE_COMPILER_IS_GNUCC)
+                    SET (BOOST_COMPILER "-gcc34")
+                ENDIF (NOT CMAKE_COMPILER_IS_GNUCC)
+            ENDIF (APPLE)
+        ENDIF(UNIX)
     ENDIF (NOT DEFINED BOOST_COMPILER)
 
   IF(BOOST_USE_MULTITHREADED)
     SET (BOOST_MULTITHREADED "-mt")
   ENDIF(BOOST_USE_MULTITHREADED)
   
-  IF (WIN32)
+  IF (MSVC)
     SET (BOOST_ABI_TAG "g")
-  ENDIF(WIN32)
+  ENDIF(MSVC)
   SET (BOOST_ABI_TAG "-${BOOST_ABI_TAG}d")
   
   SET (BOOST_EXTENSION "a")
-  IF (WIN32)
+  IF (MSVC)
     SET (BOOST_EXTENSION "lib")
-  ENDIF (WIN32)
+  ENDIF (MSVC)
 
 #MESSAGE (STATUS "BOOST_LIBRARIES_SEARCH_DIRS: ${BOOST_LIBRARIES_SEARCH_DIRS}")
 
@@ -324,7 +324,7 @@ _BOOST_ADJUST_LIB_VARS(DATE_TIME)
  SET (BOOST_LIB filesystem)
  SET (BOOST_DEBUG_LIB_NAME boost_${BOOST_LIB}${BOOST_COMPILER}${BOOST_MULTITHREADED}${BOOST_ABI_TAG}-${BOOST_CURRENT_VERSION})
  SET (BOOST_RELEASE_LIB_NAME boost_${BOOST_LIB}${BOOST_COMPILER}${BOOST_MULTITHREADED}-${BOOST_CURRENT_VERSION})
-
+ 
 #-- Find a Debug Library ---------------------------------------------
  FIND_LIBRARY(BOOST_FILESYSTEM_LIBRARY_DEBUG
   NAMES ${BOOST_LIB_PREFIX}${BOOST_DEBUG_LIB_NAME}
@@ -679,10 +679,11 @@ FOREACH (BOOST_LIBDIR ${BOOST_LIBRARIES})
     GET_FILENAME_COMPONENT(BOOST_LIBRARY_DIRS ${BOOST_LIBDIR} PATH)
 ENDFOREACH (BOOST_LIBDIR ${BOOST_LIBRARIES})
 
-  # Under Windows, automatic linking is performed, so no need to specify the libraries.
-IF (WIN32)
+  # Under MSVC on Windows, automatic linking is performed, so no need to specify 
+  # the libraries. MinGW/MSYS/Cygwin still need these defined
+IF (MSVC)
     SET(BOOST_LIBRARIES "")
-ENDIF(WIN32)
+ENDIF(MSVC)
 
   # show the BOOST_INCLUDE_DIRS AND BOOST_LIBRARIES variables only in the advanced view
 MARK_AS_ADVANCED(BOOST_INCLUDE_DIRS 

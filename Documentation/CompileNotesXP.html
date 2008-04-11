@@ -59,6 +59,22 @@ Compile Notes for Windows XP
     linker will look in that location for the needed libraries.
     </div>
     
+    <div class="entry">
+    <b>MinGW Notes:</b> The MXADataModel code base has been successfully compiled with MinGW using
+    version 3.4.5 of gcc. I <i>HIGHLY</i> suggest building all the support libraries (expat, tiff, hdf5, boost)
+    as static libraries. I have had difficulties linking when these are built as dynamic libraries (dlls).
+    If you use an msys shell to invoke cmake, use the following as an example of how to make sure 
+    gcc is the default compiler:<br/>
+    <code>cmake -G "MSYS Makefiles" ../</code><br/>
+    <br/>The shell command that I used to compile boost 1.34.1 was the following:<br/>
+    <br/><code>bjam.exe --prefix=/c/Developer/mingw/Boost --with-filesystem --
+with-program_options --with-test --toolset=gcc install</code><br/>
+   <br/> There is a small bug in the Boost::FileSystem header. The following header <b>C:\Workspace\boost_1_34_1\boost\filesystem\convenience.hpp</b>
+    needs line 31 changed to <br/><code>#   define BOOST_FS_FUNC_STRING inline std::string</code><br/>MinGW will massage this error while other systems
+    will allow the code to compile.
+    
+    </div>
+    
 </td></tr>
 </table>
 </body>
