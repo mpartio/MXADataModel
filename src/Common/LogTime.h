@@ -17,7 +17,8 @@
 #if defined (HAVE_SYS_TIME_GETTIMEOFDAY)
 #include <sys/time.h>
 #endif
-#if defined (HAVE_TIME_GETTIMEOFDAY)
+
+#if defined (HAVE_TIME_GETTIMEOFDAY) || defined (_MSC_VER)
 #include <time.h>
 #endif
 
@@ -80,15 +81,15 @@ namespace MXA {
 /**
  * @brief returns the number of milliseconds from a platform specified time.
  */
-inline TimeType getMilliSeconds()
+inline unsigned long long int getMilliSeconds()
 {
 #ifdef _MSC_VER
   return ::clock();
 #else 
   struct timeval t1;
   gettimeofday(&t1, NULL);
-  TimeType seconds ( t1.tv_sec );
-  TimeType microSec ( t1.tv_usec );
+  unsigned long long int seconds ( t1.tv_sec );
+  unsigned long long int microSec ( t1.tv_usec );
   seconds *= 1000;
   microSec /= 1000;
   return seconds + microSec; // Both in milliseconds at this point.
