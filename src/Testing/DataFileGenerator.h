@@ -66,7 +66,7 @@ namespace DataGen
  * @class DataFileGenerator DataFileGenerator.h src/Testing/DataFileGenerator.h
  * @author Mike Jackson
  * @date July 2007
- * @version $Revision: 1.8 $
+ * @version $Revision: 1.9 $
  */
 class DataFileGenerator
 {
@@ -94,7 +94,7 @@ public:
 	 * @param dims Valus for the Data Dimensions
 	 * @return Error condition
 	 */
-	herr_t DataFileGenerator::makeRecords(MXADataModelPtr model, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims); 
+	herr_t makeRecords(MXADataModelPtr model, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims); 
 	
 /**
  * @brief Creates Data and stores the data in the HDF5 file
