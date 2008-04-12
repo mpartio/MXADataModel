@@ -242,37 +242,52 @@ MACRO (_BOOST_ADJUST_LIB_VARS basename)
 ENDMACRO (_BOOST_ADJUST_LIB_VARS)
 
 #-------------------------------------------------------------------------------
-    SET (BOOST_LIB_PREFIX "")
-    IF ( MSVC )
-        SET (BOOST_LIB_PREFIX "lib")  # Looks for the static libraries by default
-    ENDIF ( MSVC )
+SET (BOOST_LIB_PREFIX "")
+IF ( MSVC )
+    SET (BOOST_LIB_PREFIX "lib")  # Looks for the static libraries by default
+ENDIF ( MSVC )
   
-    IF (NOT DEFINED BOOST_COMPILER)
-      SET (BOOST_COMPILER "-gcc")
-      IF (MSVC71)
+IF (NOT DEFINED BOOST_COMPILER)
+    SET (BOOST_COMPILER "-gcc")
+    IF (MSVC71)
         SET (BOOST_COMPILER "-vc71")
-      ENDIF(MSVC71)
-       IF (MSVC80)
+    ENDIF(MSVC71)
+    IF (MSVC80)
         SET (BOOST_COMPILER "-vc80")
-      ENDIF(MSVC80) 
-      IF (MINGW)
-        SET (BOOST_COMPILER "-mgw34")
-      ENDIF(MINGW)
-      IF (CYGWIN)
+    ENDIF(MSVC80)
+    IF (MSVC90)
+        SET (_boost_COMPILER "-vc90")
+    ENDIF (MSVC90)
+    IF (MINGW)
+        EXEC_PROGRAM(${CMAKE_CXX_COMPILER}
+            ARGS --version
+            OUTPUT_VARIABLE _boost_COMPILER_VERSION
+        )
+        STRING(REGEX REPLACE ".* ([0-9])\\.([0-9])\\.[0-9] .*" "\\1\\2"
+           _boost_COMPILER_VERSION ${_boost_COMPILER_VERSION})
+        SET (_boost_COMPILER "-mgw${_boost_COMPILER_VERSION}")
+    ENDIF(MINGW)
+    IF (CYGWIN)
         SET (BOOST_COMPILER "-gcc")
-      ENDIF (CYGWIN)
-        IF (UNIX)
-            IF (APPLE)
-                SET (BOOST_COMPILER "")
-            ELSE (APPLE)
-                IF (NOT CMAKE_COMPILER_IS_GNUCC)
-                    SET (BOOST_COMPILER "-il")  # This is for the intel compiler
-                ELSE (NOT CMAKE_COMPILER_IS_GNUCC)
-                    SET (BOOST_COMPILER "-gcc34")
-                ENDIF (NOT CMAKE_COMPILER_IS_GNUCC)
-            ENDIF (APPLE)
-        ENDIF(UNIX)
-    ENDIF (NOT DEFINED BOOST_COMPILER)
+    ENDIF (CYGWIN)
+    IF (UNIX)
+        IF (APPLE)
+            SET (BOOST_COMPILER "")
+        ELSE (APPLE)
+            IF (NOT CMAKE_COMPILER_IS_GNUCC)
+                SET (BOOST_COMPILER "-il")  # This is for the intel compiler
+            ELSE (NOT CMAKE_COMPILER_IS_GNUCC)
+                EXEC_PROGRAM(${CMAKE_CXX_COMPILER}
+                    ARGS --version
+                    OUTPUT_VARIABLE _boost_COMPILER_VERSION
+                )
+                STRING(REGEX REPLACE ".* ([0-9])\\.([0-9])\\.[0-9] .*" "\\1\\2"
+                   _boost_COMPILER_VERSION ${_boost_COMPILER_VERSION})
+                SET (_boost_COMPILER "-gcc${_boost_COMPILER_VERSION}")
+            ENDIF (NOT CMAKE_COMPILER_IS_GNUCC)
+        ENDIF (APPLE)
+    ENDIF(UNIX)
+  ENDIF (NOT DEFINED BOOST_COMPILER)
 
   IF(BOOST_USE_MULTITHREADED)
     SET (BOOST_MULTITHREADED "-mt")
