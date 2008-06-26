@@ -1,141 +1,265 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2006, Perry Miller IV
-//  All rights reserved.
-//  BSD License: http://www.opensource.org/licenses/bsd-license.html
-//
-//  This code was written under United States Air Force Contract number 
-//                           FA8650-04-C-5229
-//
-///////////////////////////////////////////////////////////////////////////////
-#ifndef MXA_BASIC_TYPES_H_
-#define MXA_BASIC_TYPES_H_
+/*=========================================================================
 
-/**
- * @file MXATypes.h
- * @brief Contains the typedefs for all the common integer and floating point
- * prinitives that are used in the MXA Code Base
- * @version $Revision: 1.7 $
- */
+  Program:   Visualization Toolkit
+  Module:    $RCSfile: MXATypes.h,v $
 
-#include <MXAConfiguration.h>
+  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+  All rights reserved.
+  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
 
-// C++ Includes
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+#ifndef __MXATypes_h
+#define __MXATypes_h
+
+#include "MXAConfiguration.h"
+
+/*--------------------------------------------------------------------------*/
+/* Define a unique integer identifier for each native scalar type.  */
+
+/* These types are returned by GetDataType to indicate pixel type.  */
+#define MXA_VOID            0
+#define MXA_BIT             1
+#define MXA_CHAR            2
+#define MXA_SIGNED_CHAR    15
+#define MXA_UNSIGNED_CHAR   3
+#define MXA_SHORT           4
+#define MXA_UNSIGNED_SHORT  5
+#define MXA_INT             6
+#define MXA_UNSIGNED_INT    7
+#define MXA_LONG            8
+#define MXA_UNSIGNED_LONG   9
+#define MXA_FLOAT          10
+#define MXA_DOUBLE         11
+#define MXA_ID_TYPE        12
+
+/* These types are not currently supported by GetDataType, but are for
+   completeness.  */
+#define MXA_STRING         13
+#define MXA_OPAQUE         14
+
+/* These types are enabled if MXA_TYPE_USE_LONG_LONG is defined.  */
+#define MXA_LONG_LONG          16
+#define MXA_UNSIGNED_LONG_LONG 17
+
+/* This type is enabled if MXA_TYPE_USE___INT64 is defined.  */
+#define MXA___INT64            18
+
+/* This type is enabled if MXA_TYPE_USE___INT64 and
+   MXA_TYPE_CONVERT_UI64_TO_DOUBLE are both defined.  */
+#define MXA_UNSIGNED___INT64   19
+
+/* These types are required by vtkVariant and vtkVariantArray */
+#define MXA_VARIANT 20
+#define MXA_OBJECT 21
+
+/*--------------------------------------------------------------------------*/
+/* Define a unique integer identifier for each vtkDataObject type.          */
+/* When adding a new data type here, make sure to update                    */
+/* vtkDataObjectTypes as well.                                              */
+#define MXA_POLY_DATA                       0
+#define MXA_STRUCTURED_POINTS               1
+#define MXA_STRUCTURED_GRID                 2
+#define MXA_RECTILINEAR_GRID                3
+#define MXA_UNSTRUCTURED_GRID               4
+#define MXA_PIECEWISE_FUNCTION              5
+#define MXA_IMAGE_DATA                      6
+#define MXA_DATA_OBJECT                     7
+#define MXA_DATA_SET                        8
+#define MXA_POINT_SET                       9
+#define MXA_UNIFORM_GRID                   10
+#define MXA_COMPOSITE_DATA_SET             11
+#define MXA_MULTIGROUP_DATA_SET            12
+#define MXA_MULTIBLOCK_DATA_SET            13
+#define MXA_HIERARCHICAL_DATA_SET          14
+#define MXA_HIERARCHICAL_BOX_DATA_SET      15
+#define MXA_GENERIC_DATA_SET               16
+#define MXA_HYPER_OCTREE                   17
+#define MXA_TEMPORAL_DATA_SET              18
+#define MXA_TABLE                          19
+#define MXA_GRAPH                          20
+#define MXA_TREE                           21
+#define MXA_SELECTION                      22
+#define MXA_DIRECTED_GRAPH                 23
+#define MXA_UNDIRECTED_GRAPH               24
+#define MXA_MULTIPIECE_DATA_SET            25
+#define MXA_DIRECTED_ACYCLIC_GRAPH         26
+
+/*--------------------------------------------------------------------------*/
+/* Define a casting macro for use by the constants below.  */
+#if defined(__cplusplus)
+# define MXA_TYPE_CAST(T, V) static_cast< T >(V)
+#else
+# define MXA_TYPE_CAST(T, V) ((T)(V))
+#endif
+
+/*--------------------------------------------------------------------------*/
+/* Define min/max constants for each type.  */
+#define MXA_BIT_MIN                 0
+#define MXA_BIT_MAX                 1
+#if MXA_TYPE_CHAR_IS_SIGNED
+# define MXA_CHAR_MIN               MXA_TYPE_CAST(char, 0x80)
+# define MXA_CHAR_MAX               MXA_TYPE_CAST(char, 0x7f)
+#else
+# define MXA_CHAR_MIN               MXA_TYPE_CAST(char, 0u)
+# define MXA_CHAR_MAX               MXA_TYPE_CAST(char, 0xffu)
+#endif
+#define MXA_SIGNED_CHAR_MIN         MXA_TYPE_CAST(signed char, 0x80)
+#define MXA_SIGNED_CHAR_MAX         MXA_TYPE_CAST(signed char, 0x7f)
+#define MXA_UNSIGNED_CHAR_MIN       MXA_TYPE_CAST(unsigned char, 0u)
+#define MXA_UNSIGNED_CHAR_MAX       MXA_TYPE_CAST(unsigned char, 0xffu)
+#define MXA_SHORT_MIN               MXA_TYPE_CAST(short, 0x8000)
+#define MXA_SHORT_MAX               MXA_TYPE_CAST(short, 0x7fff)
+#define MXA_UNSIGNED_SHORT_MIN      MXA_TYPE_CAST(unsigned short, 0u)
+#define MXA_UNSIGNED_SHORT_MAX      MXA_TYPE_CAST(unsigned short, 0xffffu)
+#define MXA_INT_MIN                 MXA_TYPE_CAST(int, ~(~0u >> 1))
+#define MXA_INT_MAX                 MXA_TYPE_CAST(int, ~0u >> 1)
+#define MXA_UNSIGNED_INT_MIN        MXA_TYPE_CAST(unsigned int, 0)
+#define MXA_UNSIGNED_INT_MAX        MXA_TYPE_CAST(unsigned int, ~0u)
+#define MXA_LONG_MIN                MXA_TYPE_CAST(long, ~(~0ul >> 1))
+#define MXA_LONG_MAX                MXA_TYPE_CAST(long, ~0ul >> 1)
+#define MXA_UNSIGNED_LONG_MIN       MXA_TYPE_CAST(unsigned long, 0ul)
+#define MXA_UNSIGNED_LONG_MAX       MXA_TYPE_CAST(unsigned long, ~0ul)
+#define MXA_FLOAT_MIN               MXA_TYPE_CAST(float, -1.0e+38f)
+#define MXA_FLOAT_MAX               MXA_TYPE_CAST(float,  1.0e+38f)
+#define MXA_DOUBLE_MIN              MXA_TYPE_CAST(double, -1.0e+299)
+#define MXA_DOUBLE_MAX              MXA_TYPE_CAST(double,  1.0e+299)
+#if defined(MXA_SIZEOF_LONG_LONG)
+# define MXA_LONG_LONG_MIN          MXA_TYPE_CAST(long long, ~(~0ull >> 1))
+# define MXA_LONG_LONG_MAX          MXA_TYPE_CAST(long long, ~0ull >> 1)
+# define MXA_UNSIGNED_LONG_LONG_MIN MXA_TYPE_CAST(unsigned long long, 0ull)
+# define MXA_UNSIGNED_LONG_LONG_MAX MXA_TYPE_CAST(unsigned long long, ~0ull)
+#endif
+#if defined(MXA_SIZEOF___INT64)
+# define MXA___INT64_MIN            MXA_TYPE_CAST(__int64, ~(~0ui64 >> 1))
+# define MXA___INT64_MAX            MXA_TYPE_CAST(__int64, ~0ui64 >> 1)
+# define MXA_UNSIGNED___INT64_MIN   MXA_TYPE_CAST(unsigned __int64, 0ui64)
+# define MXA_UNSIGNED___INT64_MAX   MXA_TYPE_CAST(unsigned __int64, ~0ui64)
+#endif
+
+/* Define compatibility names for these constants.  */
+#define MXA_LARGE_INTEGER MXA_INT_MAX
+#define MXA_LARGE_FLOAT MXA_FLOAT_MAX
+
+/*--------------------------------------------------------------------------*/
+/* Define named types and constants corresponding to specific integer
+   and floating-point sizes and signedness.  */
+
+/* Select an 8-bit integer type.  */
+#if MXA_SIZEOF_CHAR == 1
+typedef unsigned char uint8;
+typedef signed char   int8;
+# define MXA_TYPE_UINT8 MXA_UNSIGNED_CHAR
+# if MXA_TYPE_CHAR_IS_SIGNED
+#  define MXA_TYPE_INT8 MXA_CHAR
+# else
+#  define MXA_TYPE_INT8 MXA_SIGNED_CHAR
+# endif
+#else
+# error "No native data type can represent an 8-bit integer."
+#endif
+
+/* Select a 16-bit integer type.  */
+#if MXA_SIZEOF_SHORT == 2
+typedef unsigned short uint16;
+typedef signed short   int16;
+# define MXA_TYPE_UINT16 MXA_UNSIGNED_SHORT
+# define MXA_TYPE_INT16 MXA_SHORT
+#elif MXA_SIZEOF_INT == 2
+typedef unsigned int uint16;
+typedef signed int   int16;
+# define MXA_TYPE_UINT16 MXA_UNSIGNED_INT
+# define MXA_TYPE_INT16 MXA_INT
+#else
+# error "No native data type can represent a 16-bit integer."
+#endif
+
+/* Select a 32-bit integer type.  */
+#if MXA_SIZEOF_INT == 4
+typedef unsigned int uint32;
+typedef signed int   int32;
+# define MXA_TYPE_UINT32 MXA_UNSIGNED_INT
+# define MXA_TYPE_INT32 MXA_INT
+#elif MXA_SIZEOF_LONG == 4
+typedef unsigned long uint32;
+typedef signed long   int32;
+# define MXA_TYPE_UINT32 MXA_UNSIGNED_LONG
+# define MXA_TYPE_INT32 MXA_LONG
+#else
+# error "No native data type can represent a 32-bit integer."
+#endif
+
+/* Select a 64-bit integer type.  */
+#if defined(MXA_TYPE_USE_LONG_LONG) && MXA_SIZEOF_LONG_LONG == 8
+typedef unsigned long long uint64;
+typedef signed long long   int64;
+# define MXA_TYPE_UINT64 MXA_UNSIGNED_LONG_LONG
+# define MXA_TYPE_INT64 MXA_LONG_LONG
+#elif MXA_SIZEOF_LONG == 8
+typedef unsigned long uint64;
+typedef signed long   int64;
+# define MXA_TYPE_UINT64 MXA_UNSIGNED_LONG
+# define MXA_TYPE_INT64 MXA_LONG
+#elif defined(MXA_TYPE_USE___INT64) && MXA_SIZEOF___INT64 == 8
+typedef unsigned __int64 uint64;
+typedef signed __int64   int64;
+# define MXA_TYPE_UINT64 MXA_UNSIGNED___INT64
+# define MXA_TYPE_INT64 MXA___INT64
+#else
+# error "No native data type can represent a 64-bit integer."
+#endif
+
+/* Select a 32-bit floating point type.  */
+#if MXA_SIZEOF_FLOAT == 4
+typedef float float32;
+# define MXA_TYPE_FLOAT32 MXA_FLOAT
+#else
+# error "No native data type can represent a 32-bit floating point value."
+#endif
+
+/* Select a 64-bit floating point type.  */
+#if MXA_SIZEOF_DOUBLE == 8
+typedef double float64;
+# define MXA_TYPE_FLOAT64 MXA_DOUBLE
+#else
+# error "No native data type can represent a 64-bit floating point value."
+#endif
+
+/*--------------------------------------------------------------------------*/
+/* Choose an implementation for vtkIdType.  */
+#define MXA_HAS_ID_TYPE
+#ifdef MXA_USE_64BIT_IDS
+# if defined(MXA_SIZEOF_LONG) && MXA_SIZEOF_LONG == 8 && 0
+typedef long mxaIdType;
+#  define MXA_SIZEOF_ID_TYPE MXA_SIZEOF_LONG
+#  define MXA_LARGE_ID MXA_LONG_MAX
+# elif defined(MXA_TYPE_USE_LONG_LONG) && MXA_SIZEOF_LONG_LONG == 8
+typedef long long mxaIdType;
+#  define MXA_SIZEOF_ID_TYPE MXA_SIZEOF_LONG_LONG
+#  define MXA_LARGE_ID MXA_LONG_LONG_MAX
+# elif defined(MXA_TYPE_USE___INT64) && MXA_SIZEOF___INT64 == 8
+typedef __int64 mxaIdType;
+#  define MXA_SIZEOF_ID_TYPE MXA_SIZEOF___INT64
+#  define MXA_LARGE_ID MXA___INT64_MAX
+# else
+#  error "MXA_USE_64BIT_IDS is ON but no 64-bit integer type is available."
+# endif
+#else
+typedef int mxaIdType;
+# define MXA_SIZEOF_ID_TYPE MXA_SIZEOF_INT
+# define MXA_LARGE_ID MXA_INT_MAX
+#endif
+
+/*=========================================================================
+
+  This section just defines some constants that will probably get used. This
+  section was NOT originally part of the VTK project.
+
+=========================================================================*/
 #include <vector>
-
-// -----------------------------------------------------------------------------
-//  MXA Standard Types
-// -----------------------------------------------------------------------------
-
-#if defined (_MSC_VER) // Visual C++
-
-  typedef __int64             int64;
-  typedef int                 int32;
-  typedef short               int16;
-  typedef signed char         int8;
-
-  typedef unsigned __int64    uint64;
-  typedef unsigned int        uint32;
-  typedef unsigned short      uint16;
-  typedef unsigned char       uint8;
-
-  typedef float               float32;
-  typedef double              float64;
-
-#elif defined( __SGI )
-  
-  typedef long long           int64;
-  typedef int                 int32;
-  typedef short               int16;
-  typedef char                int8;
-
-  typedef unsigned long long  uint64;
-  typedef unsigned int        uint32;
-  typedef unsigned short      uint16;
-  typedef unsigned char       uint8;
-
-  typedef float               float32;
-  typedef double              float64;
-
-#elif defined (__APPLE__) 
-
-
-  typedef u_int8_t       uint8;
-  typedef int8_t         int8;
-  
-  typedef u_int16_t      uint16;
-  typedef int16_t        int16;
-
-  typedef u_int32_t      uint32;
-  typedef int32_t        int32;
-  
-  typedef int64_t        int64;
-  typedef u_int64_t      uint64;
-  
-  typedef float          float32;
-  typedef double         float64;  
-
-#elif defined(__linux) 
-  #include <bits/wordsize.h>
-  typedef signed short            int16;
-  typedef signed char             int8;
-  
-  typedef unsigned short          uint16;
-  typedef unsigned char           uint8;
-  
-  typedef float                   float32;
-  typedef double                  float64;
-
-  #if __WORDSIZE == 64
-  //64 bit system
-    typedef unsigned int            uint32;
-    typedef signed int              int32;
-    typedef int                     int32;
-    typedef signed long int         int64;
-    typedef unsigned long int       uint64;
-  #else
-  // 32 Bit system
-    typedef int                     int32;
-    typedef signed int              int32;
-    typedef unsigned int            uint32;    
-    
-    typedef signed long long int    int64;
-    typedef unsigned long long int  uint64; 
-  #endif
-
-#elif defined(_SGI_PLATFORM) 
- #include <inttypes.h> 
-
-#elif defined(_COMPAQ_PLATFORM)
- #include <inttypes.h> 
-
-#elif defined(__MINGW32__)
-// #error <-------------- MINGW Platform ------------------------------>
-    typedef uint64_t            uint64; 
-    typedef uint32_t            uint32; 
-    typedef uint16_t            uint16;
-    typedef uint8_t             uint8;
-
-    typedef int64_t             int64; 
-    typedef int32_t             int32; 
-    typedef int16_t             int16; 
-    typedef int8_t              int8;
-    
-    typedef float               float32;
-    typedef double              float64;
-#else 
-#error This platform is not recognized
-
-
-#endif
-
-#if defined (SIZEOF_SIZE_T) && (SIZEOF_SIZE_T == 4)
-  typedef int32 mxaIdType;
-#elif defined (SIZEOF_SIZE_T) && (SIZEOF_SIZE_T == 8)
-  typedef int64 mxaIdType;
-#else 
-#error Size of size_t and ssize_t could not be determined or did not match each other
-#endif
 
 #define MXA_UINT8_TYPE 1
 #define MXA_INT8_TYPE  2
@@ -180,4 +304,5 @@ namespace MXATypes {
 
 
 
-#endif // MXA_BASIC_TYPES_H_
+
+#endif

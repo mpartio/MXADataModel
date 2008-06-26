@@ -51,7 +51,10 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGray
   {
     return LOAD_TEXTUREBMP_COULD_NOT_FIND_OR_READ_FILE;
   }
-
+  
+  char* data;
+  int64 nBytes;
+  _reader64Ptr->rawRead(data, nBytes);
   bytesRead=0;
 
 // Read File Header

@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.47 $
+ * @version $Revision: 1.48 $
  */
 class H5Lite
 {
@@ -65,11 +65,11 @@ public:
    * @brief Turns off the global error handler/reporting objects. Note that once
    * they are turned off using this method they CAN NOT be turned back on. If you
    * would like to turn them off for a piece of code then surround your code with
-   * the HDF_ERROR_HANDLER_OFF and HDF_ERROR_HANDLER_ON macros defined in 
+   * the HDF_ERROR_HANDLER_OFF and HDF_ERROR_HANDLER_ON macros defined in
    * H5Lite.h
    */
   static MXA_EXPORT void disableErrorHandlers();
-  
+
 /**
  * @brief Opens an object for HDF5 operations
  * @param loc_id The parent object that holds the true object we want to open
@@ -78,7 +78,7 @@ public:
  * @return Standard HDF5 Error Conditions
  */
 static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int32 obj_type);
-                     
+
 /**
  * @brief Opens an HDF5 Object
  * @param obj_id The Object id
@@ -97,29 +97,56 @@ static hid_t HDFTypeFromString(const std::string &value)
 {
   if (value.compare("H5T_NATIVE_INT8") == 0) return H5T_NATIVE_INT8;
   if (value.compare("H5T_NATIVE_UINT8") == 0) return H5T_NATIVE_UINT8;
-  
+
   if (value.compare("H5T_NATIVE_INT16") == 0) return H5T_NATIVE_INT16;
   if (value.compare("H5T_NATIVE_UINT16") == 0) return H5T_NATIVE_UINT16;
-  
+
   if (value.compare("H5T_NATIVE_INT32") == 0) return H5T_NATIVE_INT32;
   if (value.compare("H5T_NATIVE_UINT32") == 0) return H5T_NATIVE_UINT32;
-  
+
   if (value.compare("H5T_NATIVE_INT64") == 0) return H5T_NATIVE_INT64;
   if (value.compare("H5T_NATIVE_UINT64") == 0) return H5T_NATIVE_UINT64;
-  
+
   if (value.compare("H5T_NATIVE_FLOAT") == 0) return H5T_NATIVE_FLOAT;
   if (value.compare("H5T_NATIVE_DOUBLE") == 0) return H5T_NATIVE_DOUBLE;
-  
+
   if (value.compare("H5T_STRING") == 0) return H5T_STRING;
-  
+
   std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeFromString - Unknown Type: " << value << std::endl;
   return -1;
 }
 
 
+/**
+ * @brief Returns a string version of the HDF Type
+ * @param type The HDF5 Type to query
+ * @return
+ */
+static std::string StringForHDFType(hid_t type)
+{
+  if ( H5Tequal(type ,H5T_NATIVE_INT8) ) return "H5T_NATIVE_INT8";
+  if (H5Tequal(type ,H5T_NATIVE_UINT8) ) return "H5T_NATIVE_UINT8";
+
+  if (H5Tequal(type ,H5T_NATIVE_INT16) ) return "H5T_NATIVE_INT16";
+  if (H5Tequal(type ,H5T_NATIVE_UINT16) ) return "H5T_NATIVE_UINT16";
+
+  if (H5Tequal(type ,H5T_NATIVE_INT32) ) return "H5T_NATIVE_INT32";
+  if (H5Tequal(type ,H5T_NATIVE_UINT32) ) return "H5T_NATIVE_UINT32";
+
+  if (H5Tequal(type ,H5T_NATIVE_INT64) ) return "H5T_NATIVE_INT64";
+  if (H5Tequal(type ,H5T_NATIVE_UINT64) ) return "H5T_NATIVE_UINT64";
+
+  if (H5Tequal(type ,H5T_NATIVE_FLOAT) ) return "H5T_NATIVE_FLOAT";
+  if (H5Tequal(type ,H5T_NATIVE_DOUBLE) ) return "H5T_NATIVE_DOUBLE";
+
+  if ( type == H5T_STRING) return "H5T_STRING";
+
+  std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitiveAsStr - Unknown Type: " << std::endl;
+  return "Unknown";
+}
 
 /**
-* @brief Returns the HDF Type for a given primitive value. 
+* @brief Returns the HDF Type for a given primitive value.
  * @param value A value to use. Can be anything. Just used to get the type info
  * from
  * @return A std::string representing the HDF5 Type
@@ -129,27 +156,27 @@ static std::string HDFTypeForPrimitiveAsStr(T value)
 {
   if (typeid(value) == typeid(int8)) return "H5T_NATIVE_INT8";
   if (typeid(value) == typeid(uint8)) return "H5T_NATIVE_UINT8";
-  
+
   if (typeid(value) == typeid(int16)) return "H5T_NATIVE_INT16";
   if (typeid(value) == typeid(uint16)) return "H5T_NATIVE_UINT16";
-  
+
   if (typeid(value) == typeid(int32)) return "H5T_NATIVE_INT32";
   if (typeid(value) == typeid(uint32)) return "H5T_NATIVE_UINT32";
-  
+
   if (typeid(value) == typeid(int64)) return "H5T_NATIVE_INT64";
   if (typeid(value) == typeid(uint64)) return "H5T_NATIVE_UINT64";
-  
+
   if (typeid(value) == typeid(float32)) return "H5T_NATIVE_FLOAT";
   if (typeid(value) == typeid(float64)) return "H5T_NATIVE_DOUBLE";
-  
+
   //if (typeid(value) == typeid(bool)) return "H5T_NATIVE_UINT8";
-  
+
   std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitiveAsStr - Unknown Type: " << typeid(value).name() << std::endl;
   return "";
 }
 
 /**
-* @brief Returns the HDF Type for a given primitive value. 
+* @brief Returns the HDF Type for a given primitive value.
  * @param value A value to use. Can be anything. Just used to get the type info
  * from
  * @return The HDF5 native type for the value
@@ -160,21 +187,21 @@ static hid_t HDFTypeForPrimitive(T value)
 
   if (typeid(value) == typeid(float32)) return H5T_NATIVE_FLOAT;
   if (typeid(value) == typeid(float64)) return H5T_NATIVE_DOUBLE;
-  
+
   if (typeid(value) == typeid(int8)) return H5T_NATIVE_INT8;
-  if (typeid(value) == typeid(uint8)) return H5T_NATIVE_UINT8; 
-  
+  if (typeid(value) == typeid(uint8)) return H5T_NATIVE_UINT8;
+
   if (typeid(value) == typeid(int16)) return H5T_NATIVE_INT16;
-  if (typeid(value) == typeid(uint16)) return H5T_NATIVE_UINT16; 
-  
+  if (typeid(value) == typeid(uint16)) return H5T_NATIVE_UINT16;
+
   if (typeid(value) == typeid(int32)) return H5T_NATIVE_INT32;
-  if (typeid(value) == typeid(uint32)) return H5T_NATIVE_UINT32; 
-  
+  if (typeid(value) == typeid(uint32)) return H5T_NATIVE_UINT32;
+
   if (typeid(value) == typeid(int64)) return H5T_NATIVE_INT64;
   if (typeid(value) == typeid(uint64)) return H5T_NATIVE_UINT64;
-  
+
   if (typeid(value) == typeid(bool)) return H5T_NATIVE_UINT8;
-  
+
   std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
   if (typeid(value).name() == "l" ) {
     std::cout << "You are using 'long int' as a type which is not 32/64 bit safe. Suggest you use one of the MXATypes defined in <Common/MXATypes.h> such as int32 or uint32." << std::endl;
@@ -202,15 +229,15 @@ static MXA_EXPORT herr_t findDataset( hid_t loc_id, const std::string& name );
 
 /**
  * @brief Creates a Dataset with the given name at the location defined by loc_id
- * 
- * 
+ *
+ *
  * @param loc_id The Parent location to store the data
  * @param dsetName The name of the dataset
  * @param dims The dimensions of the dataset
  * @param data The data to write to the file
  * @return Standard HDF5 error conditions
- * 
- * The dimensions of the data sets are usually passed as both a "rank" and 
+ *
+ * The dimensions of the data sets are usually passed as both a "rank" and
  * dimensions array. By using a std::vector<hsize_t> that stores the values of
  * each of the dimensions we can reduce the number of arguments to this method as
  * the value of the "rank" simply becomes dims.length(). So to create a Dims variable
@@ -221,15 +248,15 @@ static MXA_EXPORT herr_t findDataset( hid_t loc_id, const std::string& name );
  * dims.push_back(20);
  * dims.push_back(30);
  * </code>
- * 
- * Also when passing data BE SURE that the type of data and the data type match. 
+ *
+ * Also when passing data BE SURE that the type of data and the data type match.
  * For example if I create some data in a std::vector<UInt8Type> I would need to
  * pass H5T_NATIVE_UINT8 as the dataType.
  */
 template <typename T>
-static herr_t writeVectorDataset (hid_t loc_id, 
-                            const std::string& dsetName, 
-                            std::vector<hsize_t> &dims, 
+static herr_t writeVectorDataset (hid_t loc_id,
+                            const std::string& dsetName,
+                            std::vector<hsize_t> &dims,
                             std::vector<T> &data)
 {
   herr_t err = -1;
@@ -250,13 +277,13 @@ static herr_t writeVectorDataset (hid_t loc_id,
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
   sid = H5Screate_simple( size, &(_dims.front()), NULL );
-  if (sid < 0) 
+  if (sid < 0)
   {
     return sid;
   }
   // Create the Dataset
   did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
-  if ( did >= 0 ) 
+  if ( did >= 0 )
   {
     err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &(data.front()) );
     if (err < 0 ) {
@@ -275,7 +302,7 @@ static herr_t writeVectorDataset (hid_t loc_id,
   err= H5Sclose( sid );
   if (err< 0) {
     std::cout << "Error Closing Dataspace" << std::endl;
-    retErr = err; 
+    retErr = err;
   }
   return retErr;
 }
@@ -290,10 +317,10 @@ static herr_t writeVectorDataset (hid_t loc_id,
  * @return
  */
 template <typename T>
-static herr_t writePointerDataset (hid_t loc_id, 
+static herr_t writePointerDataset (hid_t loc_id,
                             const std::string& dsetName,
                             int32   rank,
-                            uint64* dims, 
+                            uint64* dims,
                             T* data)
 {
 
@@ -316,13 +343,13 @@ static herr_t writePointerDataset (hid_t loc_id,
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
   sid = H5Screate_simple( size, &(_dims.front()), NULL );
-  if (sid < 0) 
+  if (sid < 0)
   {
     return sid;
   }
   // Create the Dataset
   did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
-  if ( did >= 0 ) 
+  if ( did >= 0 )
   {
     err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
     if (err < 0 ) {
@@ -341,22 +368,22 @@ static herr_t writePointerDataset (hid_t loc_id,
   err= H5Sclose( sid );
   if (err< 0) {
     std::cout << "Error Closing Dataspace" << std::endl;
-    retErr = err; 
+    retErr = err;
   }
   return retErr;
 }
 
 /**
  * @brief Creates a Dataset with the given name at the location defined by loc_id
- * 
+ *
  * @param loc_id The Parent location to store the data
  * @param dsetName The name of the dataset
  * @param dims The dimensions of the dataset
  * @param rank The number of dimensions to the dataset
  * @param data The data to write to the file
  * @return Standard HDF5 error conditions
- * 
- * The dimensions of the data sets are usually passed as both a "rank" and 
+ *
+ * The dimensions of the data sets are usually passed as both a "rank" and
  * dimensions array. By using a std::vector<hsize_t> that stores the values of
  * each of the dimensions we can reduce the number of arguments to this method as
  * the value of the "rank" simply becomes dims.length(). So to create a Dims variable
@@ -367,13 +394,13 @@ static herr_t writePointerDataset (hid_t loc_id,
  * dims.push_back(20);
  * dims.push_back(30);
  * </code>
- * 
+ *
  */
 template<typename T>
-static herr_t writeDataset(hid_t loc_id, 
+static herr_t writeDataset(hid_t loc_id,
                            const std::string& dsetName,
                            int32 &rank,
-                           hsize_t* dims, 
+                           hsize_t* dims,
                            T* data)
 {
   herr_t err = -1;
@@ -387,13 +414,13 @@ static herr_t writeDataset(hid_t loc_id,
   }
   //Create the DataSpace
   sid = H5Screate_simple( rank, dims, NULL );
-  if (sid < 0) 
+  if (sid < 0)
   {
     return sid;
   }
   // Create the Dataset
   did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
-  if ( did >= 0 ) 
+  if ( did >= 0 )
   {
     err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
     if (err < 0 ) {
@@ -412,7 +439,7 @@ static herr_t writeDataset(hid_t loc_id,
   err= H5Sclose( sid );
   if (err< 0) {
     std::cout << "Error Closing Dataspace" << std::endl;
-    retErr = err; 
+    retErr = err;
   }
   return retErr;
 }
@@ -420,9 +447,9 @@ static herr_t writeDataset(hid_t loc_id,
 
 /**
  * @brief Creates a Dataset with the given name at the location defined by loc_id.
- * This version of writeDataset should be used with a single scalar value. If you 
+ * This version of writeDataset should be used with a single scalar value. If you
  * need to write an array of values, use the form that takes an std::vector<>
- * 
+ *
  * @param loc_id The Parent location to store the data
  * @param dsetName The name of the dataset
  * @param value The value to write to the HDF5 dataset
@@ -431,7 +458,7 @@ static herr_t writeDataset(hid_t loc_id,
 template <typename T>
 static herr_t writeScalarDataset (hid_t loc_id,
                             const std::string& dsetName,
-                            T &value) 
+                            T &value)
 {
   herr_t err = -1;
   hid_t did = -1;
@@ -446,13 +473,13 @@ static herr_t writeScalarDataset (hid_t loc_id,
   }
   //Create the DataSpace
   sid = H5Screate_simple( rank, &(dims), NULL );
-  if (sid < 0) 
+  if (sid < 0)
   {
     return sid;
   }
   // Create the Dataset
   did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
-  if ( did >= 0 ) 
+  if ( did >= 0 )
   {
     err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value );
     if (err < 0 ) {
@@ -471,7 +498,7 @@ static herr_t writeScalarDataset (hid_t loc_id,
   err = H5Sclose( sid );
   if (err< 0) {
     std::cout << "Error Closing Dataspace" << std::endl;
-    retErr = err; 
+    retErr = err;
   }
   return retErr;
 }
@@ -483,8 +510,8 @@ static herr_t writeScalarDataset (hid_t loc_id,
  * @param data The actual data to write as a null terminated string
  * @return Standard HDF5 error conditions
  */
-static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id, 
-                                        const std::string& dsetName, 
+static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id,
+                                        const std::string& dsetName,
                                         const std::string& data);
 
 /**
@@ -495,7 +522,7 @@ static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id,
  * @param size The number of characters in the string
  * @return Standard HDF5 error conditions
  */
-static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id, 
+static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id,
                                         const std::string& dsetName,
                                         mxaIdType size,
                                         const char* data);
@@ -510,14 +537,14 @@ static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id,
  * @param dims The Dimensions of the attribute data
  * @param data The Attribute Data to write as a pointer
  * @return Standard HDF Error Condition
- *  
+ *
  */
 template <typename T>
-static herr_t writePointerAttribute(hid_t loc_id, 
-                             const std::string& objName, 
-                             const std::string& attrName, 
+static herr_t writePointerAttribute(hid_t loc_id,
+                             const std::string& objName,
+                             const std::string& attrName,
                              int32   rank,
-                             uint64* dims, 
+                             uint64* dims,
                              T* data)
 {
   hid_t      obj_id, sid, attr_id;
@@ -543,12 +570,12 @@ static herr_t writePointerAttribute(hid_t loc_id,
     std::cout << "Error opening Object for Attribute operations." << std::endl;
     return -1;
   }
-  
+
   /* Create the data space for the attribute. */
   hsize_t* dimsPtr = 0x0;
  // size mismatch between hsize_t and size_t
   std::vector<hsize_t> _dims(rank, 0);
-  for (int32 i = 0; i < rank; ++i) 
+  for (int32 i = 0; i < rank; ++i)
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
@@ -558,16 +585,16 @@ static herr_t writePointerAttribute(hid_t loc_id,
   if ( sid >= 0 ) {
     /* Verify if the attribute already exists */
     has_attr = H5Lite::findAttribute( obj_id, attrName );
-    
+
     /* The attribute already exists, delete it */
     if ( has_attr == 1 ) {
       err = H5Adelete( obj_id, attrName.c_str() );
       if (err < 0) {
         std::cout << "Error Deleting Existing Attribute" << std::endl;
-        retErr = err; 
+        retErr = err;
       }
     }
-    
+
     if ( err >= 0 ) {
       /* Create the attribute. */
       attr_id = H5Acreate( obj_id, attrName.c_str() , dataType, sid, H5P_DEFAULT );
@@ -583,7 +610,7 @@ static herr_t writePointerAttribute(hid_t loc_id,
       err = H5Aclose( attr_id );
       if (err < 0) {
         std::cout << "Error Closing Attribute" << std::endl;
-        retErr = err; 
+        retErr = err;
       }
     }
     /* Close the dataspace. */
@@ -593,7 +620,7 @@ static herr_t writePointerAttribute(hid_t loc_id,
       retErr = err;
     }
   }
-  else 
+  else
   {
     retErr = sid;
   }
@@ -603,7 +630,7 @@ static herr_t writePointerAttribute(hid_t loc_id,
     std::cout << "Error Closing HDF5 Object ID" << std::endl;
     retErr = err;
   }
-  return retErr;  
+  return retErr;
 }
 
 
@@ -615,13 +642,13 @@ static herr_t writePointerAttribute(hid_t loc_id,
  * @param dims The Dimensions of the data set
  * @param data The Attribute Data to write
  * @return Standard HDF Error Condition
- *  
+ *
  */
 template <typename T>
-static herr_t writeVectorAttribute(hid_t loc_id, 
-                             const std::string& objName, 
-                             const std::string& attrName, 
-                             std::vector<uint64> &dims, 
+static herr_t writeVectorAttribute(hid_t loc_id,
+                             const std::string& objName,
+                             const std::string& attrName,
+                             std::vector<uint64> &dims,
                              std::vector<T> &data )
 {
   hid_t      obj_id, sid, attr_id;
@@ -646,14 +673,14 @@ static herr_t writeVectorAttribute(hid_t loc_id,
     std::cout << "Error opening Object for Attribute operations." << std::endl;
     return -1;
   }
-  
+
   /* Create the data space for the attribute. */
   hsize_t* dimsPtr = 0x0;
   //size mismatch between hsize_t and size_t
   std::vector<uint64>::size_type _size = dims.size();
   //hsize_t _dims[ _size ];
   std::vector<hsize_t> _dims(_size, 0);
-  for (std::vector<uint64>::size_type i = 0; i < _size; ++i) 
+  for (std::vector<uint64>::size_type i = 0; i < _size; ++i)
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
@@ -663,16 +690,16 @@ static herr_t writeVectorAttribute(hid_t loc_id,
   if ( sid >= 0 ) {
     /* Verify if the attribute already exists */
     has_attr = H5Lite::findAttribute( obj_id, attrName );
-    
+
     /* The attribute already exists, delete it */
     if ( has_attr == 1 ) {
       err = H5Adelete( obj_id, attrName.c_str() );
       if (err < 0) {
         std::cout << "Error Deleting Existing Attribute" << std::endl;
-        retErr = err; 
+        retErr = err;
       }
     }
-    
+
     if ( err >= 0 ) {
       /* Create the attribute. */
       attr_id = H5Acreate( obj_id, attrName.c_str() , dataType, sid, H5P_DEFAULT );
@@ -688,7 +715,7 @@ static herr_t writeVectorAttribute(hid_t loc_id,
       err = H5Aclose( attr_id );
       if (err < 0) {
         std::cout << "Error Closing Attribute" << std::endl;
-        retErr = err; 
+        retErr = err;
       }
     }
     /* Close the dataspace. */
@@ -698,7 +725,7 @@ static herr_t writeVectorAttribute(hid_t loc_id,
       retErr = err;
     }
   }
-  else 
+  else
   {
     retErr = sid;
   }
@@ -708,7 +735,7 @@ static herr_t writeVectorAttribute(hid_t loc_id,
     std::cout << "Error Closing HDF5 Object ID" << std::endl;
     retErr = err;
   }
-  return retErr;  
+  return retErr;
 }
 
 /**
@@ -719,9 +746,9 @@ static herr_t writeVectorAttribute(hid_t loc_id,
  * @param data The string to write as the attribute
  * @return Standard HDF error conditions
  */
-static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id, 
-                              const std::string& objName, 
-                              const std::string& attrName, 
+static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
+                              const std::string& objName,
+                              const std::string& attrName,
                               const std::string& data);
 /**
  * @brief Writes a null terminated string as an attribute
@@ -732,8 +759,8 @@ static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
  * @param data pointer to a const char array
  * @return Standard HDF error conditions
  */
-static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id, 
-                              const std::string& objName, 
+static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
+                              const std::string& objName,
                               const std::string& attrName,
                               mxaIdType size,
                               const char* data);
@@ -756,12 +783,12 @@ static MXA_EXPORT herr_t writeStringAttributes(hid_t loc_id,
  * an array, please use the other over loaded method that takes a vector.
  */
 template <typename T>
-static herr_t  writeScalarAttribute(hid_t loc_id, 
-                             const std::string& objName, 
-                             const std::string& attrName, 
+static herr_t  writeScalarAttribute(hid_t loc_id,
+                             const std::string& objName,
+                             const std::string& attrName,
                              T data )
 {
-  
+
   hid_t      obj_id, sid, attr_id;
   int32        has_attr;
   H5G_stat_t statbuf;
@@ -785,22 +812,22 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
     std::cout << "Error opening Object for Attribute operations." << std::endl;
     return -1;
   }
-  
+
   /* Create the data space for the attribute. */
   sid = H5Screate_simple( rank, &dims, NULL );
   if ( sid >= 0 ) {
     /* Verify if the attribute already exists */
     has_attr = H5Lite::findAttribute( obj_id, attrName );
-    
+
     /* The attribute already exists, delete it */
     if ( has_attr == 1 ) {
       err = H5Adelete( obj_id, attrName.c_str() );
       if (err < 0) {
         std::cout << "Error Deleting Existing Attribute" << std::endl;
-        retErr = err; 
+        retErr = err;
       }
     }
-    
+
     if ( err >= 0 ) {
       /* Create the attribute. */
       attr_id = H5Acreate( obj_id, attrName.c_str() , dataType, sid, H5P_DEFAULT );
@@ -816,7 +843,7 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
       err = H5Aclose( attr_id );
       if (err < 0) {
         std::cout << "Error Closing Attribute" << std::endl;
-        retErr = err; 
+        retErr = err;
       }
     }
     /* Close the dataspace. */
@@ -825,19 +852,19 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
       std::cout << "Error Closing Dataspace" << std::endl;
       retErr = err;
     }
-  } 
+  }
   else
   {
     retErr = sid;
   }
-  
+
   /* Close the object */
   err = H5Lite::closeId( obj_id, statbuf.type );
   if ( err < 0 ) {
     std::cout << "Error Closing HDF5 Object ID" << std::endl;
     retErr = err;
   }
-  return retErr;  
+  return retErr;
 }
 
 /**
@@ -848,9 +875,9 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
  * @return Standard HDF error condition
  */
 template <typename T>
-static herr_t readPointerDataset(hid_t loc_id, 
-                                const std::string& dsetName, 
-                                T* data) 
+static herr_t readPointerDataset(hid_t loc_id,
+                                const std::string& dsetName,
+                                T* data)
 {
   hid_t did;
   herr_t err = 0;
@@ -903,14 +930,14 @@ static herr_t readPointerDataset(hid_t loc_id,
  * @param loc_id The parent location that contains the dataset to read
  * @param dsetName The name of the dataset to read
  * @param data A std::vector<T>. Note the vector WILL be resized to fit the data.
- * The best idea is to just allocate the vector but not to size it. The method 
+ * The best idea is to just allocate the vector but not to size it. The method
  * will size it for you.
  * @return Standard HDF error condition
  */
 template <typename T>
-static herr_t readVectorDataset(hid_t loc_id, 
-                          const std::string& dsetName, 
-                          std::vector<T> &data) 
+static herr_t readVectorDataset(hid_t loc_id,
+                          const std::string& dsetName,
+                          std::vector<T> &data)
 {
   hid_t   did;
   herr_t  err = 0;
@@ -941,7 +968,7 @@ static herr_t readVectorDataset(hid_t loc_id,
         rank = H5Sget_simple_extent_dims(spaceId, &(dims.front()), NULL);
         hsize_t numElements = 1;
         for (std::vector<hsize_t>::iterator iter = dims.begin(); iter < dims.end(); ++iter ) {
-          numElements = numElements * (*iter); 
+          numElements = numElements * (*iter);
         }
        // std::cout << "NumElements: " << numElements << std::endl;
         //Resize the vector
@@ -949,7 +976,7 @@ static herr_t readVectorDataset(hid_t loc_id,
        // for (uint32 i = 0; i<numElements; ++i) { data[i] = 55555555;  }
         err = H5Dread(did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &( data.front() ) );
         if (err < 0) {
-          std::cout << "Error Reading Data." << std::endl; 
+          std::cout << "Error Reading Data." << std::endl;
           retErr = err;
         }
       }
@@ -981,15 +1008,15 @@ static herr_t readVectorDataset(hid_t loc_id,
  * @return HDF error condition.
  */
 template <typename T>
-static herr_t readScalarDataset(hid_t loc_id, 
-                          const std::string& dsetName, 
+static herr_t readScalarDataset(hid_t loc_id,
+                          const std::string& dsetName,
                           T &data)
 {
   hid_t   did;
   herr_t  err = 0;
   herr_t retErr = 0;
   hid_t spaceId;
-  
+
   hid_t dataType = H5Lite::HDFTypeForPrimitive(data);
   if (dataType == -1)
   {
@@ -1011,11 +1038,11 @@ static herr_t readScalarDataset(hid_t loc_id,
         rank = H5Sget_simple_extent_dims(spaceId, &(dims.front()), NULL);
         hsize_t numElements = 1;
         for (std::vector<hsize_t>::iterator iter = dims.begin(); iter < dims.end(); ++iter ) {
-          numElements = numElements * (*iter); 
+          numElements = numElements * (*iter);
         }
         err = H5Dread(did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data );
         if (err < 0) {
-          std::cout << "Error Reading Data." << std::endl; 
+          std::cout << "Error Reading Data." << std::endl;
           retErr = err;
         }
       }
@@ -1039,15 +1066,15 @@ static herr_t readScalarDataset(hid_t loc_id,
 }
 
 
-/** 
+/**
  * @brief Reads a string dataset into the supplied string.
  * @param loc_id The parent group that holds the data object to read
  * @param dsetName The name of the dataset.
  * @param data The std::string to hold the data
  * @return Standard HDF error condition
  */
-static MXA_EXPORT herr_t readStringDataset(hid_t loc_id, 
-                                     const std::string& dsetName, 
+static MXA_EXPORT herr_t readStringDataset(hid_t loc_id,
+                                     const std::string& dsetName,
                                      std::string &data);
 
 
@@ -1059,17 +1086,17 @@ static MXA_EXPORT herr_t readStringDataset(hid_t loc_id,
  * @param dsetName The name of the dataset.
  * @param data pointer to the buffer
  * @return Standard HDF error condition
- */ 
+ */
 static MXA_EXPORT herr_t readStringDataset(hid_t loc_id,
                                            const std::string &dsetName,
                                            uint8* data);
 
 /**
  * @brief Reads an Attribute from an HDF5 Object.
- * 
- * Use this method if you already know the datatype of the attribute. If you do 
+ *
+ * Use this method if you already know the datatype of the attribute. If you do
  * not know this already then use another form of this method.
- * 
+ *
  * @param loc_id The Parent object that holds the object to which you want to read an attribute
  * @param objName The name of the object to which the attribute is to be read
  * @param attrName The name of the Attribute to read
@@ -1077,8 +1104,8 @@ static MXA_EXPORT herr_t readStringDataset(hid_t loc_id,
  * @return Standard HDF Error condition
  */
 template <typename T>
-static herr_t readVectorAttribute(hid_t loc_id, 
-                            const std::string& objName, 
+static herr_t readVectorAttribute(hid_t loc_id,
+                            const std::string& objName,
                             const std::string& attrName,
                             std::vector<T> &data)
 {
@@ -1101,11 +1128,11 @@ static herr_t readVectorAttribute(hid_t loc_id,
   if (err<0)
     return err;
   /* Open the object */
-  obj_id = H5Lite::openId( loc_id, objName, statbuf.type); 
+  obj_id = H5Lite::openId( loc_id, objName, statbuf.type);
   if ( obj_id >= 0)
   {
     attr_id = H5Aopen_name( obj_id, attrName.c_str() );
-    if ( attr_id >= 0 ) 
+    if ( attr_id >= 0 )
     {
       //Need to allocate the array size
       H5T_class_t type_class;
@@ -1129,7 +1156,7 @@ static herr_t readVectorAttribute(hid_t loc_id,
         std::cout << "Error Closing Attribute" << std::endl;
         retErr = err;
       }
-    } 
+    }
     else
     {
       retErr = attr_id;
@@ -1137,11 +1164,11 @@ static herr_t readVectorAttribute(hid_t loc_id,
     err = H5Lite::closeId( obj_id, statbuf.type );
     if ( err < 0 ) {
      std::cout << "Error Closing Object" << std::endl;
-     retErr = err; 
+     retErr = err;
     }
   }
   return retErr;
-}                    
+}
 
 /**
  * @brief Reads a scalar attribute value from a dataset
@@ -1152,8 +1179,8 @@ static herr_t readVectorAttribute(hid_t loc_id,
  * @return Standard HDF5 error condition
  */
 template <typename T>
-static herr_t  readScalarAttribute(hid_t loc_id, 
-                            const std::string& objName, 
+static herr_t  readScalarAttribute(hid_t loc_id,
+                            const std::string& objName,
                             const std::string& attrName,
                             T &data)
 {
@@ -1176,11 +1203,11 @@ static herr_t  readScalarAttribute(hid_t loc_id,
   if (err<0)
     return err;
   /* Open the object */
-  obj_id = H5Lite::openId( loc_id, objName, statbuf.type); 
+  obj_id = H5Lite::openId( loc_id, objName, statbuf.type);
   if ( obj_id >= 0)
   {
     attr_id = H5Aopen_name( obj_id, attrName.c_str() );
-    if ( attr_id >= 0 ) 
+    if ( attr_id >= 0 )
     {
       err = H5Aread( attr_id, dataType, &data );
       if ( err < 0 ) {
@@ -1193,18 +1220,18 @@ static herr_t  readScalarAttribute(hid_t loc_id,
         retErr = err;
       }
     }
-    else 
+    else
     {
       retErr = attr_id;
     }
     err = H5Lite::closeId( obj_id, statbuf.type );
     if ( err < 0 ) {
      std::cout << "Error Closing Object" << std::endl;
-     retErr = err; 
+     retErr = err;
     }
   }
   return retErr;
-} 
+}
 
 /**
  * @brief Reads the Attribute into a pre-allocated pointer
@@ -1215,8 +1242,8 @@ static herr_t  readScalarAttribute(hid_t loc_id,
  * @return Standard HDF5 error condition
  */
 template <typename T>
-static herr_t readPointerAttribute(hid_t loc_id, 
-                            const std::string& objName, 
+static herr_t readPointerAttribute(hid_t loc_id,
+                            const std::string& objName,
                             const std::string& attrName,
                             T* data)
 {
@@ -1238,11 +1265,11 @@ static herr_t readPointerAttribute(hid_t loc_id,
   if (err<0)
     return err;
   /* Open the object */
-  obj_id = H5Lite::openId( loc_id, objName, statbuf.type); 
+  obj_id = H5Lite::openId( loc_id, objName, statbuf.type);
   if ( obj_id >= 0)
   {
     attr_id = H5Aopen_name( obj_id, attrName.c_str() );
-    if ( attr_id >= 0 ) 
+    if ( attr_id >= 0 )
     {
       err = H5Aread( attr_id, dataType, data);
       if ( err < 0 ) {
@@ -1254,7 +1281,7 @@ static herr_t readPointerAttribute(hid_t loc_id,
         std::cout << "Error Closing Attribute" << std::endl;
         retErr = err;
       }
-    } 
+    }
     else
     {
       retErr = attr_id;
@@ -1262,11 +1289,11 @@ static herr_t readPointerAttribute(hid_t loc_id,
     err = H5Lite::closeId( obj_id, statbuf.type );
     if ( err < 0 ) {
      std::cout << "Error Closing Object" << std::endl;
-     retErr = err; 
+     retErr = err;
     }
   }
   return retErr;
-}                    
+}
 
 /**
  * @brief Reads a string attribute from an HDF object
@@ -1276,8 +1303,8 @@ static herr_t readPointerAttribute(hid_t loc_id,
  * @param data The memory to store the data
  * @return Standard HDF Error condition
  */
-static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id, 
-                                             const std::string& objName, 
+static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id,
+                                             const std::string& objName,
                                              const std::string& attrName,
                                              std::string &data);
 
@@ -1289,8 +1316,8 @@ static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id,
  * @param data The memory to store the data into
  * @return Standard HDF Error condition
  */
-static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id, 
-                                   const std::string& objName, 
+static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id,
+                                   const std::string& objName,
                                    const std::string& attrName,
                                    uint8* data);
 /**
@@ -1312,19 +1339,19 @@ static MXA_EXPORT hid_t getDatasetNDims(hid_t loc_id, const std::string& objName
 
 /**
  * @brief Returns the H5T value for a given dataset.
- * 
- * Returns the type of data stored in the dataset. You MUST use H5Tclose(tid) 
+ *
+ * Returns the type of data stored in the dataset. You MUST use H5Tclose(tid)
  * on the returned value or resource leaks will occur.
  * @param loc_id A Valid HDF5 file or group id.
  * @param dsetName Path to the dataset
- * @return 
+ * @return
  */
 static MXA_EXPORT hid_t getDatasetType(hid_t loc_id, const std::string &dsetName);
 
 /**
  * @brief Get the information about a dataset.
  *
- * @param loc_id The parent location of the Dataset 
+ * @param loc_id The parent location of the Dataset
  * @param dsetName The name of the dataset
  * @param dims A std::vector that will hold the sizes of the dimensions
  * @param type_class The HDF5 class type
@@ -1351,7 +1378,7 @@ static MXA_EXPORT herr_t getDatasetInfo( hid_t loc_id,
  * @param attr_type
  * @return
  */
-static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id, 
+static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id,
                                const std::string& objName,
                                const std::string& attr_name,
                                std::vector<uint64> &dims,
@@ -1370,4 +1397,4 @@ protected:
   ~H5Lite();
 };
 
-#endif 
+#endif

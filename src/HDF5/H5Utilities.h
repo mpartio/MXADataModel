@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,16 +30,16 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  */
 class H5Utilities
 {
 
 public:
-  
+
   virtual ~H5Utilities();
 
-  
+
   #if 1
   enum CustomHDFDataTypes {
    MXA_GROUP = 1,
@@ -49,7 +49,14 @@ public:
    MXA_ANY = 15
   };
   #endif
-  
+
+  // -----------HDF5 File Operations
+  static MXA_EXPORT hid_t openFile(const std::string &filename, bool readOnly=false);
+
+  static MXA_EXPORT hid_t createFile(const std::string &filename);
+
+  static MXA_EXPORT herr_t closeFile(hid_t &fileId);
+
   // -------------- HDF Indentifier Methods ----------------------------
   /**
   * @brief Retuirns the path to an object
@@ -58,7 +65,7 @@ public:
   * @return  The path to the object relative to the objId
   */
   static MXA_EXPORT std::string getObjectPath(hid_t objId, bool trim=false);
- 
+
   /**
   * @brief Returns the hdf object type
   * @param objId The hdf5 object id
@@ -67,7 +74,7 @@ public:
   * @return  Negative value on error
   */
   static MXA_EXPORT herr_t getObjectType(hid_t objId, const std::string &objName, int32 *objType);
- 
+
   /**
   * @brief Retrieves the object name for a given index
   * @param fileId The hdf5 object id
@@ -76,7 +83,7 @@ public:
   * @return Negative value is error
   */
   static MXA_EXPORT herr_t objectNameAtIndex(hid_t fileId, int32 idx, std::string &name);
- 
+
   /**
   * @brief Returns if a given hdf5 object is a group
   * @param objId The hdf5 object that contains an object with name objName
@@ -84,7 +91,7 @@ public:
   * @return True if the given hdf5 object id is a group
   */
   static MXA_EXPORT bool isGroup(hid_t objId, const std::string &objName);
-  
+
 
   /**
   * @brief Opens an HDF5 object for hdf5 operations
@@ -95,12 +102,14 @@ public:
   static MXA_EXPORT hid_t openHDF5Object(hid_t locId, const std::string &objectPath);
 
   /**
-  * @brief Closes the object id 
+  * @brief Closes the object id
   * @param locId The object id to close
   * @return Negative value is error.
   */
   static MXA_EXPORT herr_t closeHDF5Object(hid_t locId);
 
+
+  static MXA_EXPORT std::string HDFClassTypeAsStr(hid_t class_type);
 
   /**
   * @brief prints the class type of the given class
@@ -114,20 +123,20 @@ public:
   * @param loc_id The parent hdf5 id
   * @param typeFilter A filter to apply to the list
   * @param names Variable to store the list
-  * @return 
+  * @return
   */
   static MXA_EXPORT herr_t getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<std::string>& names);
-  
+
   /**
-   * @brief Creates a HDF Group by checking if the group already exists. If the 
-   * group already exists then that group is returned otherwise a new group is 
+   * @brief Creates a HDF Group by checking if the group already exists. If the
+   * group already exists then that group is returned otherwise a new group is
    * created.
    * @param loc_id The HDF unique id given to files or groups
    * @param group The name of the group to create. Note that this group name should
    * not be any sort of 'path'. It should be a single group.
    */
   static MXA_EXPORT hid_t createGroup(hid_t loc_id, const std::string &group);
-  
+
   /**
    * @brief Given a path relative to the Parent ID, this method will create all
    * the intermediate groups if necessary.
@@ -136,7 +145,7 @@ public:
    * @return Error Condition: Negative is error. Positive is success.
    */
   static MXA_EXPORT herr_t  createGroupsFromPath(const std::string &pathToCheck, hid_t parent);
-  
+
   /**
    * @brief Given a path relative to the Parent ID, this method will create all
    * the intermediate groups if necessary.
@@ -154,8 +163,8 @@ public:
   * @param attr_name The attribute to look for (by name)
   * @return True if the attribute exists.
   */
-  static MXA_EXPORT bool probeForAttribute(hid_t loc_id, 
-                                            const std::string &obj_name, 
+  static MXA_EXPORT bool probeForAttribute(hid_t loc_id,
+                                            const std::string &obj_name,
                                             const std::string &attr_name);
 
 
@@ -168,29 +177,29 @@ public:
   static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, std::list<std::string> &names);
 
   /**
-  * @brief Returns a list of all the attribute names 
+  * @brief Returns a list of all the attribute names
   * @param objId The parent object
   * @param obj_name The name of the object whose attribute names you want a list
   * @param names Variable to hold the list of attribute names
   * @return Negative value is error
   */
-  static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, const std::string &obj_name, 
+  static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, const std::string &obj_name,
                                                   std::list<std::string> &names);
 #if 0
   THIS IS REALLY BROKEN. DO NOT USE THIS METHOD
   /**
-  * @brief Returns a mapping of attribute names to attribute values. This is a pretty specialized 
+  * @brief Returns a mapping of attribute names to attribute values. This is a pretty specialized
   * method and should be used with great care. The outcome of the method is undefined for any type
   * of attribute except strings.
   * @param objId The hdf5 id of the parent object
   * @param obj_name The name of the object whose attributes you want a map of
   * @return A std::map<string, string> of attribute names to values
   */
-  static MXA_EXPORT  herr_t H5Utilities::getAttributesMap(hid_t loc_id, 
+  static MXA_EXPORT  herr_t H5Utilities::getAttributesMap(hid_t loc_id,
                                                           const std::string &obj_name,
                                                           std::map<std::string, std::string> &attributes);
-#endif  
-  
+#endif
+
 
   /**
    * @brief Returns a vector of IAttributes, one for each attribute of a given hdf5 object
@@ -199,8 +208,8 @@ public:
    * @param attributes Variable to store the attributes
    * @return Negative value on error
    */
-  static MXA_EXPORT herr_t readAllAttributes(hid_t fileId, 
-                                             const std::string &datasetPath, 
+  static MXA_EXPORT herr_t readAllAttributes(hid_t fileId,
+                                             const std::string &datasetPath,
                                              MXAAbstractAttributes &attributes);
 
 /**
@@ -212,9 +221,9 @@ public:
   * @return Boost shared pointer to the attribute
   */
   template<typename T>
-  static MXAAbstractAttributePtr readPrimitiveAttribute( hid_t locId, 
-                                                         const std::string &datasetPath, 
-                                                         const std::string &key, 
+  static MXAAbstractAttributePtr readPrimitiveAttribute( hid_t locId,
+                                                         const std::string &datasetPath,
+                                                         const std::string &key,
                                                          const std::vector<uint64> &dims)
   {
     herr_t err = -1;
@@ -223,15 +232,15 @@ public:
     {
       T data;
       err = H5Lite::readScalarAttribute(locId, datasetPath, key, data);
-      if (err >= 0) {   
+      if (err >= 0) {
         MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateScalarAttribute(datasetPath, key, data);
         if (attr.get() != NULL)
         {
           ptr = attr;
         }
       }
-    } 
-    else // Multi-Dimensional Data 
+    }
+    else // Multi-Dimensional Data
     {
       MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray(datasetPath, key, dims.size(), &(dims.front()));
       if (attr.get() == NULL)
@@ -241,15 +250,15 @@ public:
       // All the needed space is now preallocated in the attribute
       T* data = static_cast<T*>(attr->getVoidPointer(0) );
       err = H5Lite::readPointerAttribute(locId, datasetPath, key, data);
-      if (err >= 0) 
-      {   
+      if (err >= 0)
+      {
          ptr = attr;
       }
     }
     return ptr;
   }
 
-  
+
   /**
    * @brief Creates an absolute path suitable for create an HDF5 data set.
    * @param model The data model to use
@@ -257,10 +266,10 @@ public:
    * @param record The MXADataRecord to generate the path to
    * @return The hdf5 path
    */
-  static MXA_EXPORT std::string generateH5PathToDataset (  IDataModelPtr model, 
-                                                std::vector<int32> &indices,  
+  static MXA_EXPORT std::string generateH5PathToDataset (  IDataModelPtr model,
+                                                std::vector<int32> &indices,
                                                 IDataRecordPtr record);
- 
+
  /**
  * @brief Reads a dataset from an HDF5 data file into a newly allocated MXAAbstractData
  * derived object.
@@ -269,7 +278,7 @@ public:
  * @return
  */
   static MXA_EXPORT MXAAbstractDataPtr readDataArray(IDataFilePtr dataFile, const std::string &datasetPath);
-  
+
   /**
   * @brief Reads an attribute from an HDF5 data file into a newly allocated MXAAbstractAttribute
   * derived object.
@@ -277,14 +286,14 @@ public:
   * @param datasetPath The internal HDF5 path to the data, relative to the root of the data file
   * @param attributeKey The name of the attribute to read
   * @return
-  */ 
+  */
   static MXA_EXPORT MXAAbstractAttributePtr readAttributeArray(IDataFilePtr dataFile, const std::string &datasetPath, const std::string &attributeKey);
-  
-  
-  
+
+
+
 protected:
   H5Utilities() {}; //This is just a bunch of Static methods
-  
+
 private:
     H5Utilities(const H5Utilities&);   //Copy Constructor Not Implemented
     void operator=(const H5Utilities&); //Copy Assignment Not Implemented

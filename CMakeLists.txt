@@ -27,10 +27,14 @@ SET (EXECUTABLE_OUTPUT_PATH
 #  Define the location of the Resources Directory
 #-------------------------------------------------------------------------------
 SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
+SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
 
 #-------------------------------------------------------------------------------
-#  Run all the configure checks
+INCLUDE ( ${MXA_SOURCE_DIR}/Resources/vtkTestTypes.cmake )
 INCLUDE(${MXA_RESOURCES_DIR}/ConfigureChecks.cmake)
+
+#CONFIGURE_FILE(${MXA_SOURCE_DIR}/Resources/CTMDConfigure.h.in
+#               ${PROJECT_BINARY_DIR}/CTMDConfigure.h @ONLY IMMEDIATE)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 OPTION(BUILD_TESTING "Build MXADataModel Complete Testing" ON)
@@ -133,7 +137,7 @@ ENDIF(WIN32)
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
  # ADD_DEFINITIONS(-DDEBUG)
- # ADD_DEFINITIONS(-Wall)
+ ADD_DEFINITIONS(-Wall)
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
 IF(CMAKE_COMPILER_IS_GNUCC)
@@ -145,7 +149,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 #-- Configure the Header file and then add the Binary Directory to the Includes list
 CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
-               ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
+               ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE) 
 SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfiguration.h  )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 

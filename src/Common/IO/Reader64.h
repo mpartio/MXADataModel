@@ -64,7 +64,7 @@ standard C++ library."
  * sure that we can read files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 class Reader64
 {
@@ -97,7 +97,7 @@ public:
  * @param data The char pointer to read the data into
  * @param numBytes The number of bytes to read
  */
-  void rawRead(char* data, int64 numBytes)
+  void rawRead(char* data, std::streamsize numBytes)
   {
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
   DWORD nBytesToRead = static_cast<DWORD>(numBytes);

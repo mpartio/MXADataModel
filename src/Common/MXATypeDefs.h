@@ -46,7 +46,6 @@ class ImportDelegateManager;
 class H5TiffImportDelegateFactory;
 class IStringSection;
 
-class IDataset;
 class IDataArray;
 
 // Data Encapsulation 
