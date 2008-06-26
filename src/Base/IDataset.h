@@ -9,9 +9,9 @@
 * @brief 
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
-class IDataset : public IDataFileIO 
+class MXA_EXPORT IDataset : public IDataFileIO 
 {
   public:
     IDataset(){}

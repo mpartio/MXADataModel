@@ -18,9 +18,9 @@
 * @brief 
 * @author mjackson
 * @date Dec 19, 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
-class IFileReader 
+class MXA_EXPORT IFileReader 
 {
   public:
     IFileReader(){};

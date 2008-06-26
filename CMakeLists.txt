@@ -33,9 +33,6 @@ SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
 INCLUDE ( ${MXA_SOURCE_DIR}/Resources/vtkTestTypes.cmake )
 INCLUDE(${MXA_RESOURCES_DIR}/ConfigureChecks.cmake)
 
-#CONFIGURE_FILE(${MXA_SOURCE_DIR}/Resources/CTMDConfigure.h.in
-#               ${PROJECT_BINARY_DIR}/CTMDConfigure.h @ONLY IMMEDIATE)
-
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 OPTION(BUILD_TESTING "Build MXADataModel Complete Testing" ON)
 IF(BUILD_TESTING)
@@ -198,7 +195,7 @@ ENDIF (MSVC)
 INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
     LIBRARY DESTINATION lib 
     ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION lib
+    RUNTIME DESTINATION bin
     )
     
 SET (INSTALL_INCLUDES 

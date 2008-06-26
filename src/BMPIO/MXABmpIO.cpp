@@ -51,10 +51,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGray
   {
     return LOAD_TEXTUREBMP_COULD_NOT_FIND_OR_READ_FILE;
   }
-  
-  char* data;
-  int64 nBytes;
-  _reader64Ptr->rawRead(data, nBytes);
+
   bytesRead=0;
 
 // Read File Header
@@ -132,7 +129,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
   int32 index = 0;
   uint8 red, green, blue = 0;
   int32 componentNumBytes = 3;
-  int32 numBytes = width * componentNumBytes;
+  std::streamsize numBytes = width * componentNumBytes;
   int32 offset = 0;
   // 24-bit bitmaps cannot be encoded. Verify this.
   if (this->dibHeader.compressionMethod != BMP_BI_RGB)
@@ -155,7 +152,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
   for (int i = 0; i < height; i++)
   {
     //read a row of bytes
-    _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
+    _reader64Ptr->rawRead( (char*)(&(buffer.front())), numBytes);
     bytesRead += numBytes;
     offset = 0;  //Reset the offset to start of the buffer
     buffPtr = (char*)(&(buffer.front() ) );
@@ -212,7 +209,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
   int32 index = 0;
   uint8 color = 0;
   int32 componentNumBytes = 3;
-  int32 numBytes = width;
+  std::streamsize numBytes = width;
   int32 offset = 0;
   if (this->dibHeader.compressionMethod != BMP_BI_RGB && 
     this->dibHeader.compressionMethod != BMP_BI_RLE8) {
@@ -236,7 +233,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
     int targetRow = 0;
     for (int i = 0;i < height; ++i)
     { 
-      _reader64Ptr->rawRead( (char*)(&(buffer.front())), (int64)numBytes);
+      _reader64Ptr->rawRead( (char*)(&(buffer.front())), numBytes);
       bytesRead += numBytes;
       offset = 0;  //Reset the offset to start of the buffer
       buffPtr = (char*)(&(buffer.front() ) );
