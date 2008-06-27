@@ -30,8 +30,8 @@ SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
 SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
 
 #-------------------------------------------------------------------------------
-INCLUDE ( ${MXA_SOURCE_DIR}/Resources/vtkTestTypes.cmake )
-INCLUDE(${MXA_RESOURCES_DIR}/ConfigureChecks.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/Resources/vtkTestTypes.cmake )
+INCLUDE (${MXA_RESOURCES_DIR}/ConfigureChecks.cmake)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 OPTION(BUILD_TESTING "Build MXADataModel Complete Testing" ON)
@@ -47,8 +47,10 @@ INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
 # Build shared libraries
 OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 SET (LIB_TYPE STATIC)
+SET (MXA_BUILT_AS_DYNAMIC_LIB)
 IF (BUILD_SHARED_LIBS)
   SET (LIB_TYPE SHARED)
+  SET (MXA_BUILT_AS_DYNAMIC_LIB 1)
   IF (WIN32)
     ADD_DEFINITIONS("-DBUILD_SHARED_LIBS")
   ENDIF (WIN32)
@@ -153,36 +155,42 @@ CONFIGURE_FILE ( ${MXA_RESOURCES_DIR}/UseMXADataModel.cmake.in
 # - Combine all the source files together -----------------------------
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
+IF (BUILD_SHARED_LIBS)
+    SET (MXA_BUILT_AS_DYNAMIC_LIB 1)
+    IF (WIN32)
+        SET(LIB_RELEASE_NAME "MXADataModel")
+        SET(LIB_DEBUG_NAME "MXADataModel_D")
+    ELSE (WIN32)
+        SET(LIB_RELEASE_NAME "MXADataModel")
+        SET(LIB_DEBUG_NAME "MXADataModel_debug")
+    ENDIF(WIN32)
+ELSE (BUILD_SHARED_LIBS)
+    SET (MXA_BUILT_AS_DYNAMIC_LIB)
+    IF (WIN32)
+        SET(LIB_RELEASE_NAME "libMXADataModel")
+        SET(LIB_DEBUG_NAME "libMXADataModel_D")
+    ELSE (WIN32)
+        SET(LIB_RELEASE_NAME "MXADataModel")
+        SET(LIB_DEBUG_NAME "MXADataModel_debug")
+    ENDIF(WIN32)
+ENDIF (BUILD_SHARED_LIBS)
+
+
 #-- Add the MXADataModel Library and link to needed libraries-------------------
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
-
+#-- Set the Debug and Release names for the libraries
+SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME} 
+    PROPERTIES
+    DEBUG_OUTPUT_NAME ${LIB_DEBUG_NAME}
+    RELEASE_OUTPUT_NAME ${LIB_RELEASE_NAME}
+)
 # ----- OS X specific build settings
 IF ( APPLE )
   SET_TARGET_PROPERTIES (${MXADATAMODEL_LIB_NAME}
     PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib
     )  
 ENDIF ( APPLE )
-
-IF (MSVC)
-    SET (MXA_LIBRARY_DEBUG "")
-    SET (MXA_LIBRARY_RELEASE "")
-    SET (MXA_LIB_STATIC_PREFIX "")
-    #IF (WIN32)
-       SET (MXA_LIB_STATIC_PREFIX "lib")
-    #ENDIF(WIN32)
-    IF (BUILD_SHARED_LIBS)
-        SET(MXA_LIBRARY_RELEASE "MXADataModel")
-        SET(MXA_LIBRARY_DEBUG "MXADataModel_D")
-    ELSE (BUILD_SHARED_LIBS)
-        SET(MXA_LIBRARY_RELEASE "${MXA_LIB_STATIC_PREFIX}MXADataModel")
-        SET(MXA_LIBRARY_DEBUG "${MXA_LIB_STATIC_PREFIX}MXADataModel_D")
-    ENDIF(BUILD_SHARED_LIBS)
-    SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME}
-        PROPERTIES
-        DEBUG_OUTPUT_NAME ${MXA_LIBRARY_DEBUG}
-        RELEASE_OUTPUT_NAME ${MXA_LIBRARY_RELEASE}  )
-ENDIF (MSVC)
 
 #--- Set up the installation Code for Make Install
 INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 

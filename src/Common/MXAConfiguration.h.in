@@ -26,6 +26,9 @@
 
 #cmakedefine HAVE_SYS_TIME_GETTIMEOFDAY @HAVE_SYS_TIME_GETTIMEOFDAY@
 
+/* Define to 1 when expat is built as a dynamic library (All platforms)*/
+#cmakedefine MXA_BUILT_AS_DYNAMIC_LIB @MXA_BUILT_AS_DYNAMIC_LIB@
+
 /*
  * The below code was adapted from the Visualization Toolkit project.
  * Further information on VTK can be found below and at www.vtk.org
