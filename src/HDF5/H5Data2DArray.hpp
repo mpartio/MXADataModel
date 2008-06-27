@@ -26,10 +26,10 @@
 * @brief This class represents a generic 2D array of data.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 template<typename T>
-class MXA_EXPORT H5Data2DArray : public H5DataArrayTemplate<T> 
+class H5Data2DArray : public H5DataArrayTemplate<T> 
 {
   public:
     /**

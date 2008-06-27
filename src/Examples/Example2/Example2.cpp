@@ -153,6 +153,7 @@ int32 readData()
         std::cout << DEBUG_OUT(logTime) << "tempPath: " << tempPath << std::endl;
         return EXIT_FAILURE; 
       }
+
       // Now you can do something with the data... Print it, display it.. 
       
     }

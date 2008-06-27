@@ -8,7 +8,8 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+#ifndef _MXA_DLL_EXPORT_H_
+#define _MXA_DLL_EXPORT_H_
 
 /* Cmake will define MXADataModel_EXPORTS on Windows when it
 configures to build a shared library. If you are going to use
@@ -27,3 +28,6 @@ building a DLL on windows.
 #else /* defined (_WIN32) && defined (MXA_BUILD_SHARED_LIBS)  */
  #define MXA_EXPORT
 #endif
+
+
+#endif /* _MXA_DLL_EXPORT_H_ */
