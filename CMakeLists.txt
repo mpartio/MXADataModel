@@ -30,7 +30,7 @@ SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
 SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
 
 #-------------------------------------------------------------------------------
-INCLUDE (${MXA_SOURCE_DIR}/Resources/vtkTestTypes.cmake )
+INCLUDE (${MXA_RESOURCES_DIR}/vtkTestTypes.cmake )
 INCLUDE (${MXA_RESOURCES_DIR}/ConfigureChecks.cmake)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
@@ -158,20 +158,20 @@ SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 IF (BUILD_SHARED_LIBS)
     SET (MXA_BUILT_AS_DYNAMIC_LIB 1)
     IF (WIN32)
-        SET(LIB_RELEASE_NAME "MXADataModel")
-        SET(LIB_DEBUG_NAME "MXADataModel_D")
+        SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
+        SET(MXA_LIBRARY_DEBUG "MXADataModel_D" CACHE INTERNAL "" FORCE)
     ELSE (WIN32)
-        SET(LIB_RELEASE_NAME "MXADataModel")
-        SET(LIB_DEBUG_NAME "MXADataModel_debug")
+        SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
+        SET(MXA_LIBRARY_DEBUG "MXADataModel_debug" CACHE INTERNAL "" FORCE)
     ENDIF(WIN32)
 ELSE (BUILD_SHARED_LIBS)
     SET (MXA_BUILT_AS_DYNAMIC_LIB)
     IF (WIN32)
-        SET(LIB_RELEASE_NAME "libMXADataModel")
-        SET(LIB_DEBUG_NAME "libMXADataModel_D")
+        SET(MXA_LIBRARY_RELEASE "libMXADataModel" CACHE INTERNAL "" FORCE)
+        SET(MXA_LIBRARY_DEBUG "libMXADataModel_D" CACHE INTERNAL "" FORCE)
     ELSE (WIN32)
-        SET(LIB_RELEASE_NAME "MXADataModel")
-        SET(LIB_DEBUG_NAME "MXADataModel_debug")
+        SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
+        SET(MXA_LIBRARY_DEBUG "MXADataModel_debug" CACHE INTERNAL "" FORCE)
     ENDIF(WIN32)
 ENDIF (BUILD_SHARED_LIBS)
 
@@ -182,8 +182,8 @@ TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
 #-- Set the Debug and Release names for the libraries
 SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME} 
     PROPERTIES
-    DEBUG_OUTPUT_NAME ${LIB_DEBUG_NAME}
-    RELEASE_OUTPUT_NAME ${LIB_RELEASE_NAME}
+    DEBUG_OUTPUT_NAME ${MXA_LIBRARY_DEBUG}
+    RELEASE_OUTPUT_NAME ${MXA_LIBRARY_RELEASE}
 )
 # ----- OS X specific build settings
 IF ( APPLE )

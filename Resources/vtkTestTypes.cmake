@@ -20,7 +20,7 @@ IF(MXA_SIZEOF___INT64)
     MESSAGE(STATUS "Checking whether long and __int64 are the same type")
     TRY_COMPILE(MXA_TYPE_SAME_LONG_AND___INT64
       ${MXA_BINARY_DIR}/CMakeTmp
-      ${MXA_CMAKE_DIR}/vtkTestCompareTypes.cxx
+      ${MXA_RESOURCES_DIR}/vtkTestCompareTypes.cxx
       COMPILE_DEFINITIONS
       -DMXA_TEST_COMPARE_TYPE_1=long
       -DMXA_TEST_COMPARE_TYPE_2=__int64
@@ -46,7 +46,7 @@ IF(MXA_SIZEOF___INT64)
       MESSAGE(STATUS "Checking whether long long and __int64 are the same type")
       TRY_COMPILE(MXA_TYPE_SAME_LONG_LONG_AND___INT64
         ${MXA_BINARY_DIR}/CMakeTmp
-        ${MXA_CMAKE_DIR}/vtkTestCompareTypes.cxx
+        ${MXA_RESOURCES_DIR}/vtkTestCompareTypes.cxx
         COMPILE_DEFINITIONS
         -DMXA_TEST_COMPARE_TYPE_1=TYPE_LONG_LONG
         -DMXA_TEST_COMPARE_TYPE_2=__int64
@@ -76,7 +76,7 @@ IF(MXA_SIZEOF___INT64)
         MESSAGE(STATUS "Checking whether unsigned __int64 can convert to double")
         TRY_COMPILE(MXA_TYPE_CONVERT_UI64_TO_DOUBLE
           ${MXA_BINARY_DIR}/CMakeTmp
-          ${MXA_CMAKE_DIR}/vtkTestConvertTypes.cxx
+          ${MXA_RESOURCES_DIR}/vtkTestConvertTypes.cxx
           COMPILE_DEFINITIONS
           -DMXA_TEST_CONVERT_TYPE_FROM=TYPE_UNSIGNED___INT64
           -DMXA_TEST_CONVERT_TYPE_TO=double
