@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,17 +25,17 @@
 
 
 //TODO: Create Test Suite for these Methods
- 
+
 /**
  * @brief Just some convenience utilities for dealing with strings
- * @version $Revision: 1.13 $
+ * @version $Revision: 1.14 $
  */
 class StringUtils {
-  
+
 public:
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template <typename T>
 static bool stringToNum(T &t, const std::string &s, std::ios_base& (*f)(std::ios_base&))
@@ -45,7 +45,7 @@ static bool stringToNum(T &t, const std::string &s, std::ios_base& (*f)(std::ios
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template <typename T>
 static bool stringToNum(T &t, const std::string &s)
@@ -55,9 +55,9 @@ static bool stringToNum(T &t, const std::string &s)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-static MXA_EXPORT std::string numToString(int num) 
+static std::string numToString(int num)
 {
 	std::stringstream converter;
   converter << num;
@@ -65,10 +65,10 @@ static MXA_EXPORT std::string numToString(int num)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
-static std::string numToString(T num) 
+static std::string numToString(T num)
 {
   std::stringstream converter;
   converter << num;
@@ -76,39 +76,39 @@ static std::string numToString(T num)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-static MXA_EXPORT std::string numToString(size_t num)
+static  std::string numToString(size_t num)
 {
   std::stringstream converter;
   converter << num;
   return converter.str();
 }
-  
+
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-static MXA_EXPORT void addRightSlash(std::string &path)
+static void addRightSlash(std::string &path)
 {
-  //if (! (path.at(path.length()-1) == '/')) {  
+  //if (! (path.at(path.length()-1) == '/')) {
     path += "/";
   //}
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-static MXA_EXPORT bool hasRightSlash(const std::string &path)
+static bool hasRightSlash(const std::string &path)
 {
   return (path.at(path.length()-1) == '/');
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 //TODO: Fix this to be more efficient
 /* Returns a copy of the list. Not memory efficient at all */
-static MXA_EXPORT std::list<std::string> splitString(std::string sep, std::string str)
+static std::list<std::string> splitString(std::string sep, std::string str)
 {
   std::list<std::string> strings;
   int32 sep_length = sep.length();
@@ -124,9 +124,9 @@ static MXA_EXPORT std::list<std::string> splitString(std::string sep, std::strin
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-static MXA_EXPORT std::string joinList(std::string sep, std::list<std::string> strs)
+static std::string joinList(std::string sep, std::list<std::string> strs)
 {
   std::string result("");
   std::list<std::string>::const_iterator iter = strs.begin();
@@ -144,12 +144,12 @@ static MXA_EXPORT std::string joinList(std::string sep, std::list<std::string> s
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-static MXA_EXPORT std::string joinList(std::string sep, std::list<int> nums)
+static std::string joinList(std::string sep, std::list<int> nums)
 {
   std::string result("");
-  
+
   std::list<int>::const_iterator iter = nums.begin();
   result += numToString(*iter);
   if (iter != nums.end()) {
@@ -160,11 +160,11 @@ static MXA_EXPORT std::string joinList(std::string sep, std::list<int> nums)
   }
   return result;
 }
-  
+
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-static MXA_EXPORT std::string makePath(const std::string parentPath, const std::string name)
+static std::string makePath(const std::string parentPath, const std::string name)
 {
   std::string result;
   if (parentPath == "/") {
@@ -177,27 +177,26 @@ static MXA_EXPORT std::string makePath(const std::string parentPath, const std::
     }
   }
   return result;
-} 
+}
 
 // -----------------------------------------------------------------------------
 //  Determines if a string ends with another string
 // -----------------------------------------------------------------------------
-static MXA_EXPORT bool endsWith(const std::string &base, const std::string ending) {
+static bool endsWith(const std::string &base, const std::string ending) {
   std::string::size_type len = base.length();
   std::string::size_type eLen = ending.length();
   std::string::size_type npos = len - eLen;
-  std::string::size_type pos = base.find(ending, npos);  
+  std::string::size_type pos = base.find(ending, npos);
   return   ( pos != std::string::npos);
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-static MXA_EXPORT std::string indent(int32 depth)
+static std::string indent(int32 depth)
 {
   return std::string(2 * depth, ' ');
 }
-
 
 };
 

@@ -18,8 +18,10 @@ projects by hand you need to define MXADataModel_EXPORTS when
 building a DLL on windows.
 */
 
-#if defined (_WIN32) && defined (BUILD_SHARED_LIBS)
+#if defined (WIN32) && defined (BUILD_SHARED_LIBS)
+#if defined (_MSC_VER)
 #pragma warning(disable: 4251)
+#endif
   #if defined(MXADataModel_EXPORTS)
     #define  MXA_EXPORT __declspec(dllexport)
   #else
