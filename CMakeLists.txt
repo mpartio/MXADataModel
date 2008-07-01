@@ -1,5 +1,12 @@
 # set project's name
 PROJECT( MXADataModel )
+cmake_minimum_required(VERSION 2.4)
+
+#-- Need this for link line stuff?
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
 IF (NOT DEFINED MXA_SOURCE_DIR)
     SET (MXA_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 ENDIF(NOT DEFINED MXA_SOURCE_DIR)
@@ -67,7 +74,6 @@ INCLUDE (${MXA_SOURCE_DIR}/src/Core/Core_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/DataImport/DataImport_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/Utilities/Utilities_SourceList.cmake)
 
-
 # ------- Set up the MXADataModel Project Source Files -----------
 SET( MXADATAMODEL_SRCS
     ${MXA_BASE_SRCS}
@@ -121,7 +127,6 @@ IF ( MXA_USE_HDF5 )
     SET (TIFF_SUPPORT "1")
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
   ENDIF (MXA_USE_TIFF)
-
 ENDIF ( MXA_USE_HDF5 )
 
 # ---------- Set up the Project Options -----------------------
@@ -193,7 +198,7 @@ IF ( APPLE )
     )  
 ENDIF ( APPLE )
 
-#----- Use MSVC Naming conventions for Shared Libraries
+#----- Use MSVC Naming conventions for Shared Libraries for MinGW --------------
 IF (MINGW AND BUILD_SHARED_LIBS)
     SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME}
         PROPERTIES
@@ -202,13 +207,37 @@ IF (MINGW AND BUILD_SHARED_LIBS)
         PREFIX ""
     )
 ENDIF (MINGW AND BUILD_SHARED_LIBS)
+
 #--- Set up the installation Code for Make Install
-INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
-    LIBRARY DESTINATION lib 
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
+#----- Install Needed Runtime Libraries -----------------------------------
+include ( "${MXA_RESOURCES_DIR}/InstallMXASupportLibraries.cmake")
+
+#-------- Install the MXADataModel Library
+IF (WIN32 AND BUILD_SHARED_LIBS)
+    SET (MXA_CONFIG_DIR_Debug "")
+    SET (MXA_CONFIG_DIR_Release "")
+    IF (MSVC)
+        SET (MXA_CONFIG_DIR_Debug "Debug/")
+        SET (MXA_CONFIG_DIR_Release "Release/")
+    ENDIF (MSVC)  
+    INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${MXA_CONFIG_DIR_Debug}${MXA_LIBRARY_DEBUG}.dll 
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin 
+        CONFIGURATIONS Debug 
+        COMPONENT Runtime)
+    INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${MXA_CONFIG_DIR_Release}${MXA_LIBRARY_RELEASE}.dll 
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin 
+        CONFIGURATIONS Release 
+        COMPONENT Runtime)
+
+ELSEIF (WIN32 AND BUILD_SHARED_LIBS)
+    INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
+        LIBRARY DESTINATION lib 
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        COMPONENT Libraries
     )
-    
+ENDIF (WIN32 AND BUILD_SHARED_LIBS)
+
 SET (INSTALL_INCLUDES 
   ${MXA_SOURCE_DIR}/src/Base
   ${MXA_SOURCE_DIR}/src/BMPIO
@@ -220,7 +249,10 @@ SET (INSTALL_INCLUDES
   ${MXA_SOURCE_DIR}/src/XML
   )
   
-INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h DESTINATION include/MXADataModel )
+INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h 
+            DESTINATION include/MXADataModel 
+            COMPONENT Headers           
+)
 
 SET (MXA_INSTALLED_RESOURCES
         ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
@@ -232,7 +264,6 @@ SET (MXA_INSTALLED_RESOURCES
         ${MXA_RESOURCES_DIR}/MXAFindHDF5.cmake
         ${MXA_RESOURCES_DIR}/MXAFindSZip.cmake
         ${MXA_RESOURCES_DIR}/MXAFindTiff.cmake
-        
 )
 
 #-- Add Apple specific resources
@@ -243,12 +274,17 @@ IF (APPLE)
         )
 ENDIF (APPLE)
 
-INSTALL (FILES ${MXA_INSTALLED_RESOURCES} DESTINATION share/MXADataModel/Resources/ )
+INSTALL (FILES ${MXA_INSTALLED_RESOURCES} 
+        DESTINATION share/MXADataModel/Resources/ 
+        COMPONENT Resources)
 
-INSTALL(DIRECTORY ${INSTALL_INCLUDES}  DESTINATION include/MXADataModel
-  PATTERN "CVS" EXCLUDE
-  PATTERN "*.c*" EXCLUDE
-  PATTERN "*.in" EXCLUDE
+INSTALL(DIRECTORY ${INSTALL_INCLUDES}  
+    DESTINATION include/MXADataModel
+    COMPONENT Headers
+    PATTERN "CVS" EXCLUDE
+    PATTERN "*.c*" EXCLUDE
+    PATTERN "*.in" EXCLUDE
+    
 )
 
 #-- Include the MXADataModel Testing Sources
