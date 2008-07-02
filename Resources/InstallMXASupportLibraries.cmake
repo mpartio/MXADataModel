@@ -9,11 +9,11 @@ MACRO (MXA_INSTALL_SUPPORT_LIBRARY basename)
         GET_FILENAME_COMPONENT(${basename}_LIB_DEBUG_NAME ${${basename}_LIBRARY_DEBUG} NAME_WE)
         GET_FILENAME_COMPONENT(${basename}_LIB_RELEASE_NAME ${${basename}_LIBRARY_RELEASE} NAME_WE)
         INSTALL(FILES ${${basename}_BIN_DIR}/${${basename}_LIB_DEBUG_NAME}.dll 
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/bin 
+            DESTINATION bin 
             CONFIGURATIONS Debug 
             COMPONENT Runtime)
         INSTALL(FILES ${${basename}_BIN_DIR}/${${basename}_LIB_RELEASE_NAME}.dll 
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/bin 
+            DESTINATION bin 
             CONFIGURATIONS Release 
             COMPONENT Runtime)
       ENDIF (WIN32)
@@ -38,7 +38,7 @@ IF (MINGW)
     INCLUDE ( ${MXA_RESOURCES_DIR}/MXAFindMinGW.cmake )
     IF (MINGW_FOUND)
         INSTALL(FILES ${MINGW_LIBRARIES}
-                DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+                DESTINATION bin
                 COMPONENT Runtime)
     ENDIF (MINGW_FOUND)
 ENDIF (MINGW)
