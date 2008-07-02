@@ -12,3 +12,11 @@ SET (MXA_UTILITIES_HEADERS
   ${MXA_SOURCE_DIR}/src/Utilities/DataSourcePathBuilder.h
 )
 
+
+
+INSTALL (FILES ${MXA_UTILITIES_HEADERS}
+            DESTINATION include/MXADataModel/Utilities
+            COMPONENT Headers           
+)
+
+

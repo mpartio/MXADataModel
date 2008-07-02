@@ -16,4 +16,9 @@ SET (MXA_XML_HEADERS
     ${MXA_SOURCE_DIR}/src/XML/XMLUserMetaDataWriter.h
     ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.h
 )
-    
+
+INSTALL (FILES ${MXA_XML_HEADERS}
+            DESTINATION include/MXADataModel/XML
+            COMPONENT Headers           
+)
+

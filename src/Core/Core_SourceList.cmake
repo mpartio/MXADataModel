@@ -20,3 +20,9 @@ SET (MXA_CORE_HEADERS
   ${MXA_SOURCE_DIR}/src/Core/MXAAbstractData.h
 )
 
+
+INSTALL (FILES ${MXA_CORE_HEADERS}
+            DESTINATION include/MXADataModel/Core
+            COMPONENT Headers           
+)
+

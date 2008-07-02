@@ -29,3 +29,10 @@ SET (MXA_BASE_HEADERS
   ${MXA_SOURCE_DIR}/src/Base/IDataset.h
   ${MXA_SOURCE_DIR}/src/Base/IRequiredMetaData.h
 )
+
+
+INSTALL (FILES ${MXA_BASE_HEADERS}
+            DESTINATION include/MXADataModel/Base
+            COMPONENT Headers           
+)
+

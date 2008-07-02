@@ -12,3 +12,9 @@ SET (MXA_COMMON_HEADERS
   ${MXA_SOURCE_DIR}/src/Common/IO/Writer64.h
   ${MXA_SOURCE_DIR}/src/Common/Cast/Cast.h
 )
+
+INSTALL (FILES ${MXA_COMMON_HEADERS}
+            DESTINATION include/MXADataModel/Common
+            COMPONENT Headers           
+)
+
