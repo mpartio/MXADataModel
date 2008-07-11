@@ -82,6 +82,10 @@
 #  BOOST_SIGNALS_LIBRARY     The Boost signals libraries
 #  BOOST_SIGNALS_LIBRARY_DEBUG     The Boost signals debug library
 #  BOOST_SIGNALS_LIBRARY_RELEASE   The Boost signals release library
+
+#  BOOST_SYSTEM_LIBRARY     The Boost system libraries
+#  BOOST_SYSTEM_LIBRARY_DEBUG     The Boost system debug library
+#  BOOST_SYSTEM_LIBRARY_RELEASE   The Boost system release library
 #
 #  BOOST_TEST_EXEC_MONITOR_LIBRARY     The Boost test_exec_monitor libraries
 #  BOOST_TEST_EXEC_MONITOR_LIBRARY_DEBUG     The Boost test_exec_monitor debug library
@@ -110,11 +114,9 @@ OPTION (BOOST_USE_MULTITHREADED "Use the Multithreaded boost libraries" ON)
 MARK_AS_ADVANCED (BOOST_USE_MULTITHREADED)
 SET (BOOST_DEBUG 0)
 
-# MESSAGE(STATUS "Finding Boost libraries.... ")
-IF (NOT DEFINED BOOST_CURRENT_VERSION)
-  #SET ( BOOST_CURRENT_VERSION "1_35")
-  SET ( BOOST_CURRENT_VERSION "1_34_1")
-ENDIF (NOT DEFINED BOOST_CURRENT_VERSION)
+# List the versions of Boost that we are going to look for
+#"1.36.1" "1.36.0" "1.35.1" "1.35.0" "1.35" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33" )
+SET( _boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS} "1.35" )
 
 SET (BOOST_LIBRARIES "")
 SET (BOOST_INCLUDE_DIRS "")
@@ -125,15 +127,14 @@ ELSE (BOOST_INCLUDE_DIRS)
 
   # Add in some path suffixes. These will have to be updated whenever
   # a new Boost version comes out.
-  SET(BOOST_PATH_SUFFIX
-    boost-${BOOST_CURRENT_VERSION}
-  )
+  #SET(BOOST_PATH_SUFFIX
+  #  boost-${BOOST_CURRENT_VERSION}
+  #)
 
   SET(BOOST_INCLUDE_SEARCH_DIRS
     $ENV{BOOSTINCLUDEDIR}
     $ENV{BOOST_ROOT}/include
     C:/boost/include
-    "C:/Program Files/boost/boost_${BOOST_CURRENT_VERSION}"
     # D: is very often the cdrom drive, IF you don't have a
     # cdrom inserted it will popup a very annoying dialog
     #D:/boost/include
@@ -147,7 +148,6 @@ ELSE (BOOST_INCLUDE_DIRS)
     $ENV{BOOSTLIBDIR}
     $ENV{BOOST_ROOT}/lib
     C:/boost/lib
-    "C:/Program Files/boost/boost_${BOOST_CURRENT_VERSION}/lib"
     /usr/lib
     /usr/local/lib
     /opt/local/lib
@@ -171,14 +171,36 @@ ELSE (BOOST_INCLUDE_DIRS)
     SET(BOOST_LIB_DIAGNOSTIC_DEFINITIONS "-DBOOST_LIB_DIAGNOSTIC" "-DBOOST_ALL_NO_LIB")
   ENDIF(WIN32)
 
-  FIND_PATH(BOOST_INCLUDE_DIR
-    NAMES
-      boost/config.hpp
-    PATHS
-      ${BOOST_INCLUDE_SEARCH_DIRS}
-    PATH_SUFFIXES
-      ${BOOST_PATH_SUFFIX}
-  )
+  #Try first in our own include search paths (e.g. BOOST_ROOT)
+  # This was taken from the CMake 2.6 FindBoost module
+  FOREACH(_boost_VER ${_boost_TEST_VERSIONS})
+    IF( NOT BOOST_INCLUDE_DIR )
+      # Add in a path suffix, based on the required version, ideally we could
+      # read this from version.hpp, but for that to work we'd need to know the include
+      # dir already
+      SET(_boost_PATH_SUFFIX
+        boost-${_boost_VER}
+      )
+      
+      SET ( BOOST_CURRENT_VERSION ${_boost_VER} )
+
+      IF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+\\.[0-9]+")
+          STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1_\\2_\\3" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
+          STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1_\\2_\\3" BOOST_CURRENT_VERSION ${BOOST_CURRENT_VERSION})
+      ELSEIF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+")
+          STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1_\\2" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
+          STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1_\\2" BOOST_CURRENT_VERSION ${BOOST_CURRENT_VERSION})
+      ENDIF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+\\.[0-9]+")
+
+      FIND_PATH(BOOST_INCLUDE_DIR
+          NAMES         boost/config.hpp
+          PATHS         ${BOOST_INCLUDE_SEARCH_DIRS}
+          PATH_SUFFIXES ${_boost_PATH_SUFFIX}
+          NO_DEFAULT_PATH
+      )
+
+    ENDIF( NOT BOOST_INCLUDE_DIR )
+  ENDFOREACH(_boost_VER)
 
 ############################################
 #
@@ -303,44 +325,44 @@ IF (NOT DEFINED BOOST_COMPILER)
     SET (BOOST_EXTENSION "lib")
   ENDIF (MSVC)
 
-#MESSAGE (STATUS "BOOST_LIBRARIES_SEARCH_DIRS: ${BOOST_LIBRARIES_SEARCH_DIRS}")
+# MESSAGE (STATUS "BOOST_LIBRARIES_SEARCH_DIRS: ${BOOST_LIBRARIES_SEARCH_DIRS}")
 
 # ------------------------------------------------------------------------
 #  Begin finding boost libraries
 # ------------------------------------------------------------------------
 MACRO (_FIND_BOOST_LIBRARY basename libname)
 # -------- Find the date_time Library ------------- 
- SET (BOOST_LIB ${libname})
- SET (BOOST_DEBUG_LIB_NAME boost_${BOOST_LIB}${BOOST_COMPILER}${BOOST_MULTITHREADED}${BOOST_ABI_TAG}-${BOOST_CURRENT_VERSION})
- SET (BOOST_RELEASE_LIB_NAME boost_${BOOST_LIB}${BOOST_COMPILER}${BOOST_MULTITHREADED}-${BOOST_CURRENT_VERSION})
- if (BOOST_DEBUG)
-    message(STATUS "BOOST_DEBUG_LIB_NAME: ${BOOST_DEBUG_LIB_NAME}")
-    message(STATUS "BOOST_RELEASE_LIB_NAME: ${BOOST_RELEASE_LIB_NAME}")
-ENDIF (BOOST_DEBUG)
-#-- Find a Debug Library ---------------------------------------------
- FIND_LIBRARY(BOOST_${basename}_LIBRARY_DEBUG
-  NAMES ${BOOST_LIB_PREFIX}${BOOST_DEBUG_LIB_NAME}
-  PATHS ${BOOST_LIBRARIES_SEARCH_DIRS}
-  NO_DEFAULT_PATH
- )
- IF (BOOST_${basename}_LIBRARY_DEBUG)
-  SET(BOOST_DEBUG_LIBRARIES ${BOOST_DEBUG_LIBRARIES} ${BOOST_${basename}_LIBRARY_DEBUG} )
- ENDIF (BOOST_${basename}_LIBRARY_DEBUG)
-#-- Find a Release Library -------------------------------------------
- FIND_LIBRARY(BOOST_${basename}_LIBRARY_RELEASE
-  NAMES ${BOOST_LIB_PREFIX}${BOOST_RELEASE_LIB_NAME}
-  PATHS ${BOOST_LIBRARIES_SEARCH_DIRS}
-  NO_DEFAULT_PATH
- )
- IF (BOOST_${basename}_LIBRARY_RELEASE)
-  SET(BOOST_RELEASE_LIBRARIES ${BOOST_DEBUG_LIBRARIES} ${BOOST_${basename}_LIBRARY_RELEASE} )
- ENDIF (BOOST_${basename}_LIBRARY_RELEASE)
-# -- Adjust all the library variables --------------------------------
-_BOOST_ADJUST_LIB_VARS(${basename})
-if (BOOST_DEBUG)
-    message(STATUS "BOOST_${basename}_LIBRARY_DEBUG: ${BOOST_${basename}_LIBRARY_DEBUG}")
-    message(STATUS "BOOST_${basename}_LIBRARY_RELEASE: ${BOOST_${basename}_LIBRARY_RELEASE}")
-ENDIF (BOOST_DEBUG)
+   SET (BOOST_LIB ${libname})
+   SET (BOOST_DEBUG_LIB_NAME boost_${BOOST_LIB}${BOOST_COMPILER}${BOOST_MULTITHREADED}${BOOST_ABI_TAG}-${BOOST_CURRENT_VERSION})
+   SET (BOOST_RELEASE_LIB_NAME boost_${BOOST_LIB}${BOOST_COMPILER}${BOOST_MULTITHREADED}-${BOOST_CURRENT_VERSION})
+   IF (BOOST_DEBUG)
+      message(STATUS "${basename} BOOST_DEBUG_LIB_NAME: ${BOOST_DEBUG_LIB_NAME}")
+      message(STATUS "${basename} BOOST_RELEASE_LIB_NAME: ${BOOST_RELEASE_LIB_NAME}")
+   ENDIF (BOOST_DEBUG)
+  #-- Find a Debug Library ---------------------------------------------
+   FIND_LIBRARY(BOOST_${basename}_LIBRARY_DEBUG
+    NAMES ${BOOST_LIB_PREFIX}${BOOST_DEBUG_LIB_NAME}
+    PATHS ${BOOST_LIBRARIES_SEARCH_DIRS}
+    NO_DEFAULT_PATH
+   )
+   IF (BOOST_${basename}_LIBRARY_DEBUG)
+    SET(BOOST_DEBUG_LIBRARIES ${BOOST_DEBUG_LIBRARIES} ${BOOST_${basename}_LIBRARY_DEBUG} )
+   ENDIF (BOOST_${basename}_LIBRARY_DEBUG)
+  #-- Find a Release Library -------------------------------------------
+   FIND_LIBRARY(BOOST_${basename}_LIBRARY_RELEASE
+    NAMES ${BOOST_LIB_PREFIX}${BOOST_RELEASE_LIB_NAME}
+    PATHS ${BOOST_LIBRARIES_SEARCH_DIRS}
+    NO_DEFAULT_PATH
+   )
+   IF (BOOST_${basename}_LIBRARY_RELEASE)
+    SET(BOOST_RELEASE_LIBRARIES ${BOOST_DEBUG_LIBRARIES} ${BOOST_${basename}_LIBRARY_RELEASE} )
+   ENDIF (BOOST_${basename}_LIBRARY_RELEASE)
+  # -- Adjust all the library variables --------------------------------
+   _BOOST_ADJUST_LIB_VARS(${basename})
+   IF (BOOST_DEBUG)
+      message(STATUS "BOOST_${basename}_LIBRARY_DEBUG: ${BOOST_${basename}_LIBRARY_DEBUG}")
+      message(STATUS "BOOST_${basename}_LIBRARY_RELEASE: ${BOOST_${basename}_LIBRARY_RELEASE}")
+   ENDIF (BOOST_DEBUG)
 ENDMACRO(_FIND_BOOST_LIBRARY basename libname )
 
 # -------- Find the date_time Library -------------
@@ -403,7 +425,8 @@ ENDIF(BOOST_INCLUDE_DIRS)
 
 IF (BOOST_FOUND)
     IF (NOT Boost_FIND_QUIETLY)
-      MESSAGE(STATUS "Found The Following Boost Libraries:")
+      MESSAGE (STATUS "Found Boost Version ${BOOST_CURRENT_VERSION}" )
+      MESSAGE (STATUS "Found The Following Boost Libraries:")
       FOREACH (TMP_LIB  ${BOOST_LIBRARIES} )
         MESSAGE (STATUS "  ${TMP_LIB}")
       ENDFOREACH(TMP_LIB)

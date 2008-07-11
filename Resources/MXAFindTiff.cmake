@@ -115,12 +115,12 @@ ENDIF(NOT TIFF_FOUND)
 IF (TIFF_FOUND)
   INCLUDE(CheckSymbolExists)
   #############################################
-  # Find out if HDF5 was build using dll's
+  # Find out if TIFF was build using dll's
   #############################################
   # Save required variable
   SET(CMAKE_REQUIRED_INCLUDES_SAVE ${CMAKE_REQUIRED_INCLUDES})
   SET(CMAKE_REQUIRED_FLAGS_SAVE    ${CMAKE_REQUIRED_FLAGS})
-  # Add HDF5_INCLUDE_DIR to CMAKE_REQUIRED_INCLUDES
+  # Add TIFF_INCLUDE_DIR to CMAKE_REQUIRED_INCLUDES
   SET(CMAKE_REQUIRED_INCLUDES "${CMAKE_REQUIRED_INCLUDES};${TIFF_INCLUDE_DIRS}")
 
   CHECK_SYMBOL_EXISTS(TIFF_BUILT_AS_DYNAMIC_LIB "tif_config.h" HAVE_TIFF_DLL)

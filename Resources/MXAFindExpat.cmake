@@ -129,12 +129,12 @@ ENDIF(NOT EXPAT_FOUND)
 IF (EXPAT_FOUND)
   INCLUDE(CheckSymbolExists)
   #############################################
-  # Find out if HDF5 was build using dll's
+  # Find out if EXPAT was build using dll's
   #############################################
   # Save required variable
   SET(CMAKE_REQUIRED_INCLUDES_SAVE ${CMAKE_REQUIRED_INCLUDES})
   SET(CMAKE_REQUIRED_FLAGS_SAVE    ${CMAKE_REQUIRED_FLAGS})
-  # Add HDF5_INCLUDE_DIR to CMAKE_REQUIRED_INCLUDES
+  # Add EXPAT_INCLUDE_DIR to CMAKE_REQUIRED_INCLUDES
   SET(CMAKE_REQUIRED_INCLUDES "${CMAKE_REQUIRED_INCLUDES};${EXPAT_INCLUDE_DIRS}")
 
   CHECK_SYMBOL_EXISTS(EXPAT_BUILT_AS_DYNAMIC_LIB "expat_config.h" HAVE_EXPAT_DLL)
