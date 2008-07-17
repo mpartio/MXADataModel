@@ -56,7 +56,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.48 $
+ * @version $Revision: 1.49 $
  */
 class H5Lite
 {
@@ -124,7 +124,7 @@ static hid_t HDFTypeFromString(const std::string &value)
  */
 static std::string StringForHDFType(hid_t type)
 {
-  if ( H5Tequal(type ,H5T_NATIVE_INT8) ) return "H5T_NATIVE_INT8";
+  if (H5Tequal(type ,H5T_NATIVE_INT8) ) return "H5T_NATIVE_INT8";
   if (H5Tequal(type ,H5T_NATIVE_UINT8) ) return "H5T_NATIVE_UINT8";
 
   if (H5Tequal(type ,H5T_NATIVE_INT16) ) return "H5T_NATIVE_INT16";

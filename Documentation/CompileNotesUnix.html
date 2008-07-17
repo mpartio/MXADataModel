@@ -36,9 +36,13 @@ Compile Notes for OS X & Unix Systems
     <p>Use CMake to generate Makefiles for your platform. If you are running OS X and you 
     want Xcode projects have CMake geneate those projects for you.</p>
     
-    <p><B>When linking against Boost, use the static, multi-threaded versions of the boost libraries. There seems
+    <p><B>When linking against Boost 1.34.x, use the static, multi-threaded versions of the boost libraries. There seems
     to be a bug where linking against the unit_test_framework dynamic library will cause either segmentation faults
     or the tests will not run properly</B></p>
+    <p><b>Boost 1.35.x</b> - This version of boost seems to fix the unit test seg faults from previous versions of boost BUT 
+        the default compilation will yield dynamic libraries with no "install_name" set which means you will have to 
+        export the DYLD_LIBRARY_PATH with the appropriate folder value. If you hack the boost build system you can create 
+        static libraries which are easier to deal with.
     
 </td></tr>
 </table>

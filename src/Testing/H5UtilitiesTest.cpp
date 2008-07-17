@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@
 using namespace MXATypes;
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
@@ -54,7 +54,7 @@ void RemoveTestFiles()
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetName)
@@ -66,7 +66,7 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
   attributeKey = "1DArrayAttribute<" + attributeKey + ">";
   int32 rank = 1;
   T data[DIM0];
-  for(int i = 0; i < DIM0; ++i) 
+  for(int i = 0; i < DIM0; ++i)
   {
     data[i] = (T)(i);
   }
@@ -81,7 +81,7 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetName)
@@ -91,11 +91,11 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
   BOOST_REQUIRE(attributeKey.empty() == false);
-  
+
   attributeKey = "2DArrayAttribute<" + attributeKey + ">";
   int32 rank = RANK_2D;
   T data[DIM0][DIM1];
-  for(int i = 0; i < DIM0; ++i) 
+  for(int i = 0; i < DIM0; ++i)
   {
     for (int j = 0; j < DIM1; ++j) {
       data[i][j] = (T)(i * j);
@@ -111,7 +111,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetName)
@@ -126,7 +126,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
   for(int i = 0; i < DIM0; ++i) {
     for (int j = 0; j < DIM1; ++j) {
       for (int k = 0; k < DIM2; ++k) {
-        data[i][j][k] = (T)(i * j * k); 
+        data[i][j][k] = (T)(i * j * k);
       }
     }
   }
@@ -140,10 +140,10 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template <typename T>
-herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName ) 
+herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName )
 {
   T value = 0x0;
   herr_t err = -1;
@@ -167,7 +167,7 @@ herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName )
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 herr_t testWriteScalarAttribute(hid_t file_id, const std::string &dsetName)
@@ -187,16 +187,16 @@ herr_t testWriteScalarAttribute(hid_t file_id, const std::string &dsetName)
 //  Uses Raw Pointers to save data to the data file
 // -----------------------------------------------------------------------------
 template <typename T>
-herr_t testWritePointer2DArrayDataset(hid_t file_id) 
+herr_t testWritePointer2DArrayDataset(hid_t file_id)
 {
-  
+
   T value = 0x0;
   herr_t err = 1;
   int32 rank = 2;
   // Create the Dimensions
   uint64 dims[2];
   dims[0] = DIM0; dims[1] = DIM1;
-  
+
   /* Make dataset char */
   int32 tSize = dims[0] * dims[1];
  // T data[dimx*dimy];
@@ -204,7 +204,7 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   for (int32 i = 0; i < tSize; ++i) {
     data[i] = static_cast<T>( i * 5);
   }
-  
+
   std::string dsetName = H5Lite::HDFTypeForPrimitiveAsStr(value);
   dsetName = "Pointer2DArrayDataset<" + dsetName + ">";
   std::cout << "Running " << dsetName << " ... ";
@@ -270,7 +270,7 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5UtilitiesTest()
 {
@@ -279,35 +279,35 @@ void H5UtilitiesTest()
    /* Create a new file using default properties. */
    file_id = H5Fcreate( H5UTIL_TEST_FILE_NAME, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
    BOOST_REQUIRE(file_id > 0);
- 
+
    // std::cout << logTime() << "----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl;
    BOOST_REQUIRE ( testWritePointer2DArrayDataset<int32>(file_id) >= 0);
 
    hid_t dsetId = H5Utilities::openHDF5Object(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>");
    BOOST_REQUIRE(dsetId > 0);
-   
+
    BOOST_REQUIRE( H5Utilities::isGroup(file_id, "/") == true);
    BOOST_REQUIRE( H5Utilities::isGroup(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>") == false);
-   
+
    std::string objName;
    int32 err = H5Utilities::objectNameAtIndex(file_id, 0, objName);
    BOOST_REQUIRE(objName.compare("Pointer2DArrayDataset<H5T_NATIVE_INT32>") == 0);
-   
+
    hid_t objType = -1;
    err = H5Utilities::getObjectType(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", &objType);
    BOOST_REQUIRE(objType == H5G_DATASET);
    BOOST_REQUIRE(err >= 0);
-   
+
    err = H5Utilities::getObjectType(file_id, "/", &objType);
    BOOST_REQUIRE(objType == H5G_GROUP);
-   BOOST_REQUIRE(err >= 0); 
-   
+   BOOST_REQUIRE(err >= 0);
+
    std::string objPath = H5Utilities::getObjectPath(dsetId, false);
    BOOST_REQUIRE(objPath.compare("Pointer2DArrayDataset<H5T_NATIVE_INT32>") == 0);
-   
+
    err = H5Utilities::closeHDF5Object(dsetId);
    BOOST_REQUIRE(err >= 0);
-   
+
    BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 1", file_id) >= 0);
    BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 2/", file_id) >= 0);
    BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 3/", file_id) >= 0);
@@ -315,44 +315,56 @@ void H5UtilitiesTest()
    BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 4/Test Path 7", file_id) >= 0);
    BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 5/Test Path 8/", file_id) >= 0);
    BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 6/Test Path 9/", file_id) >= 0);
-   
-   
+
+   hid_t grpId = H5Utilities::openHDF5Object(file_id, "Test Path 1");
+   BOOST_REQUIRE(grpId > 0);
+   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 1", grpId) >= 0);
+   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 2/", grpId) >= 0);
+   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 3/", grpId) >= 0);
+   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/", grpId) < 0);
+   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 4/Test Path 7", grpId) >= 0);
+   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 5/Test Path 8/", grpId) >= 0);
+   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 6/Test Path 9/", grpId) >= 0);
+   err = H5Gclose(grpId);
+   BOOST_REQUIRE(err >= 0);
+
+
    hid_t gid = H5Utilities::createGroup(file_id, "test group");
    BOOST_REQUIRE(gid >= 0);
    err = H5Utilities::closeHDF5Object(gid);
-   
+
    std::list<std::string> groups;
    err = H5Utilities::getGroupObjects(file_id, H5Utilities::MXA_ANY, groups);
    BOOST_REQUIRE(err >= 0);
    BOOST_REQUIRE( groups.size() == 8);
-   
-   
+
+
    err = H5Utilities::createGroupsForDataset("/group1/group2/group3/data", file_id);
    BOOST_REQUIRE(err >= 0);
    gid = H5Utilities::openHDF5Object(file_id, "/group1/group2");
    BOOST_REQUIRE(gid >= 0);
    err = H5Utilities::closeHDF5Object(gid);
-   
+
    bool success = H5Utilities::probeForAttribute(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", "ScalarAttribute<H5T_NATIVE_INT32>" );
    BOOST_REQUIRE(success == true);
-   
+
    success = H5Utilities::probeForAttribute(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", "ScalarAttribute<>" );
    BOOST_REQUIRE(success == false);
-   
+
    std::list<std::string> attributes;
    err = H5Utilities::getAllAttributeNames(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", attributes);
    BOOST_REQUIRE(err >= 0);
    BOOST_REQUIRE(attributes.size() == 50);
-   
+
    dsetId = H5Utilities::openHDF5Object(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>");
-   BOOST_REQUIRE(dsetId > 0);  
+   BOOST_REQUIRE(dsetId > 0);
    attributes.clear();
    err = H5Utilities::getAllAttributeNames(dsetId, attributes);
    BOOST_REQUIRE(err >= 0);
    BOOST_REQUIRE(attributes.size() == 50);
    err = H5Utilities::closeHDF5Object(dsetId);
    BOOST_REQUIRE(err >= 0);
-//   
+//
    MXAAbstractAttributes allAttributes;
    err = H5Utilities::readAllAttributes(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", allAttributes );
    BOOST_REQUIRE(err >= 0);
@@ -367,7 +379,7 @@ boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv
   boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "H5Utilities Tests" );
   test->add( BOOST_TEST_CASE( &H5UtilitiesTest), 0);
   test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-  return test; 
+  return test;
 }
 
 

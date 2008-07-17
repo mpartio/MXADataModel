@@ -291,10 +291,14 @@ int32 H5Utilities::createGroupsForDataset(const std::string &datasetPath, hid_t 
   // Generate the internal HDF dataset path and create all the groups necessary to write the dataset
   uint32 pos = 0;
   pos = datasetPath.find_last_of("/");
-  std::string parentPath ( datasetPath.substr(0, pos)  );
-
+  //std::string parentPath;
+  if (pos != 0 && pos != std::string::npos)
+  {
+    std::string parentPath ( datasetPath.substr(0, pos)  );
+    return H5Utilities::createGroupsFromPath(parentPath, parent);
+  }
   //Make sure all the intermediary groups are in place in the HDF5 File
-  return H5Utilities::createGroupsFromPath(parentPath, parent);
+  return 1;
 }
 
 

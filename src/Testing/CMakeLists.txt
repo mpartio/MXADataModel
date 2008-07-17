@@ -86,6 +86,14 @@ IF (BUILD_TESTING)
     TARGET_LINK_LIBRARIES (BmpIOTest  ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS} )
     ADD_TEST(BmpIOTest ${EXECUTABLE_OUTPUT_PATH}/BmpIOTest)
    
+   # ------- H5ArrayTemplate Test
+     SET (H5ARRAYTEMPLATE_TEST_SRCS
+        H5ArrayTemplateTest.cpp
+    )
+    #ADD_EXECUTABLE(H5ArrayTemplateTest ${H5ARRAYTEMPLATE_TEST_SRCS})
+    #TARGET_LINK_LIBRARIES (H5ArrayTemplateTest  ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS} )
+    #ADD_TEST(H5ArrayTemplateTest ${EXECUTABLE_OUTPUT_PATH}/H5ArrayTemplateTest)  
+   
    # --------- XML Tests
     IF (MXA_USE_XML)
         SET (XML_TEST_SRCS
