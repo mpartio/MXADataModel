@@ -4,8 +4,7 @@ SET (MXA_CORE_SRCS
   ${MXA_SOURCE_DIR}/src/Core/MXADataModel.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataSource.cpp
   ${MXA_SOURCE_DIR}/src/Core/MXADataImport.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractAttribute.cpp
-  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractData.cpp
+
 )
 
 SET (MXA_CORE_HEADERS
@@ -16,8 +15,7 @@ SET (MXA_CORE_HEADERS
   ${MXA_SOURCE_DIR}/src/Core/MXADataModel.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataRecord.h
   ${MXA_SOURCE_DIR}/src/Core/MXADataSource.h
-  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractAttribute.h
-  ${MXA_SOURCE_DIR}/src/Core/MXAAbstractData.h
+
 )
 
 

@@ -15,7 +15,7 @@
 #include <Common/MXATypes.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
-#include <HDF5/H5Data2DArray.hpp>
+#include <DataWrappers/MXA2DArray.hpp>
 #include <Testing/TestDataFileLocations.h>
 
 //-- Boost Test Headers
@@ -46,6 +46,8 @@
 #define RANK_2D 2
 #define RANK_3D 3
 
+
+//TODO: Test the Read/Write IMXAArray methods
 
 /* Methods to test
  *

@@ -72,6 +72,7 @@ INCLUDE (${MXA_SOURCE_DIR}/src/BMPIO/BMPIO_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/Common/Common_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/Core/Core_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/DataImport/DataImport_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/src/DataWrappers/DataWrappers_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/Utilities/Utilities_SourceList.cmake)
 
 # ------- Set up the MXADataModel Project Source Files -----------
@@ -81,6 +82,7 @@ SET( MXADATAMODEL_SRCS
     ${MXA_COMMON_SRCS}
     ${MXA_CORE_SRCS}
     ${MXA_DATA_IMPORT_SRCS}
+    ${MXA_DATA_WRAPPERS_SRCS}
     ${MXA_UTILITIES_SRCS}
 )
   
@@ -91,6 +93,7 @@ SET (MXADATAMODEL_HEADERS
     ${MXA_COMMON_HEADERS}
     ${MXA_CORE_HEADERS}
     ${MXA_DATA_IMPORT_HEADERS}
+    ${MXA_DATA_WRAPPERS_HEADERS}
     ${MXA_UTILITIES_HEADERS}
 )
 

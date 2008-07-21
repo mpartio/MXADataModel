@@ -23,8 +23,8 @@ SET (MXA_BASE_HEADERS
   ${MXA_SOURCE_DIR}/src/Base/INode.h
   ${MXA_SOURCE_DIR}/src/Base/IFileReader.h
   ${MXA_SOURCE_DIR}/src/Base/IFileWriter.h
-  ${MXA_SOURCE_DIR}/src/Base/IAbstractDataArray.h
-  ${MXA_SOURCE_DIR}/src/Base/IAbstractDataset.h
+  ${MXA_SOURCE_DIR}/src/Base/IMXAArray.h
+ 
   ${MXA_SOURCE_DIR}/src/Base/IDataFileIO.h
   ${MXA_SOURCE_DIR}/src/Base/IDataset.h
   ${MXA_SOURCE_DIR}/src/Base/IRequiredMetaData.h

@@ -2,11 +2,12 @@
 #include <MXAConfiguration.h>
 #include <Common/LogTime.h>
 #include <Base/IFileIODelegate.h>
+#include <Base/IMXAArray.h>
 #include <Core/MXADataModel.h>
 #include <Utilities/StringUtils.h>
 #include <XML/XMLDataModelWriter.h>
 #include <Base/IRequiredMetaData.h>
-#include <Core/MXAAbstractAttribute.h>
+//#include <Core/MXAAbstractAttribute.h>
 //-- Standard Library Headers
 #include <iostream>
 
@@ -46,31 +47,31 @@ MXADataModelPtr MXADataModel::New(float modelVersion, const std::string &type, c
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-MXADataModel::~MXADataModel() 
+MXADataModel::~MXADataModel()
 {
 	//std::cout << "$-$-$-$-$ MXADataModel Destructor $-$-$-$-$" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-void MXADataModel::setModelVersion(float version) 
+void MXADataModel::setModelVersion(float version)
 {
   this->_fileVersion= version;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-float MXADataModel::getModelVersion() 
+float MXADataModel::getModelVersion()
 {
   return this->_fileVersion;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataModel::setModelType(const std::string &modelType)
 {
@@ -78,7 +79,7 @@ void MXADataModel::setModelType(const std::string &modelType)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 std::string MXADataModel::getModelType()
 {
@@ -86,7 +87,7 @@ std::string MXADataModel::getModelType()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataModel::setDefaultTypeAndVersion()
 {
@@ -94,9 +95,9 @@ void MXADataModel::setDefaultTypeAndVersion()
   this->_fileVersion = MXA::MXACurrentFileVersion;
 }
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-void MXADataModel::setDataRoot(const std::string &dataRoot) 
+void MXADataModel::setDataRoot(const std::string &dataRoot)
 {
   this->_dataRoot = dataRoot;
   if (false == StringUtils::hasRightSlash(this->_dataRoot))
@@ -106,7 +107,7 @@ void MXADataModel::setDataRoot(const std::string &dataRoot)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 std::string MXADataModel::getDataRoot()
 {
@@ -125,16 +126,16 @@ void MXADataModel::addDataDimension(IDataDimensionPtr dimension)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataDimensionPtr MXADataModel::addDataDimension(std::string name, std::string altName,
-                                int32 count, int32 startValue, 
+                                int32 count, int32 startValue,
                                 int32 endValue, int32 increment, int32 uniform)
 {
   int32 index = -1;
-  MXADataDimensionPtr dim = 
+  MXADataDimensionPtr dim =
     MXADataDimension::New(name, altName, index, count, startValue, endValue, increment, uniform);
-  
+
   if (endValue == -1) {
     dim->setEndValue (startValue + (increment * (count - 1) ) );
   }
@@ -169,7 +170,7 @@ int32 MXADataModel::insertDataDimension(IDataDimensionPtr dimension, int32 index
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataModel::squeezeDataDimensions()
 {
@@ -200,7 +201,7 @@ int32 MXADataModel::removeDataDimension(int32 index)
   int32 i = 0;
   for (IDataDimensions::iterator iter = _dataDimensions.begin(); iter != _dataDimensions.end(); ++iter)
   {
-    if ( index == i ) 
+    if ( index == i )
     {
       _dataDimensions.erase( iter );
       success = 1;
@@ -212,7 +213,7 @@ int32 MXADataModel::removeDataDimension(int32 index)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXADataModel::removeDataDimension(const std::string &dimensionName)
 {
@@ -248,7 +249,7 @@ int32 MXADataModel::moveDataDimension(int32 fromIndex, int32 toIndex)
      return -1;
    }
   if (fromIndex == toIndex) { return 1; } // Moving index to itself.
-  
+
   IDataDimensionPtr src = this->_dataDimensions[fromIndex];
   this->_dataDimensions.erase(this->_dataDimensions.begin() + fromIndex);
   this->_dataDimensions.insert(this->_dataDimensions.begin() + toIndex, src);
@@ -263,11 +264,11 @@ int32 MXADataModel::moveDataDimension(int32 fromIndex, int32 toIndex)
     ++index;
   }
 
-  return 1;  
+  return 1;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXADataModel::swapDataDimensions(int32 index1, int32 index2)
 {
@@ -278,18 +279,18 @@ int32 MXADataModel::swapDataDimensions(int32 index1, int32 index2)
      " and " << index2 << ". The valid range is 0 to " << this->_dataDimensions.size() - 1 << std::endl;
      return -1;
    }
-  
+
   if (index1 == index2)
   {
     return 1;
   }
-  
+
   IDataDimensionPtr src = this->_dataDimensions[index1];
   IDataDimensionPtr dest = this->_dataDimensions[index2];
-  
+
   this->_dataDimensions[index1] = dest;
   this->_dataDimensions[index2] = src;
-  
+
   //Update the index value for each dimension
   int32 index = 0;
   IDataDimension* dim;
@@ -299,12 +300,12 @@ int32 MXADataModel::swapDataDimensions(int32 index1, int32 index2)
     dim->setIndex(index);
     ++index;
   }
-  
+
   return 1;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataDimensions& MXADataModel::getDataDimensions()
 {
@@ -312,7 +313,7 @@ IDataDimensions& MXADataModel::getDataDimensions()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataDimensionPtr MXADataModel::getDataDimension(int32 index)
 {
@@ -326,7 +327,7 @@ IDataDimensionPtr MXADataModel::getDataDimension(int32 index)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataDimensionPtr MXADataModel::getDataDimension(std::string dimName)
 {
@@ -344,7 +345,7 @@ IDataDimensionPtr MXADataModel::getDataDimension(std::string dimName)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXADataModel::getNumberOfDataDimensions()
 {
@@ -376,7 +377,7 @@ void MXADataModel::addDataRecord(IDataRecordPtr record, IDataRecordPtr parent)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXADataModel::removeDataRecord(IDataRecordPtr record)
 {
@@ -387,7 +388,7 @@ int32 MXADataModel::removeDataRecord(IDataRecordPtr record)
     parentPtr->removeChild( record.get() );
     err = 1;
   }
-  
+
   if (NULL == parentPtr.get() || -1 == parentPtr->getGuid() )
 // The record does NOT have a valid parent and is a top level Data Record
   {
@@ -398,7 +399,7 @@ int32 MXADataModel::removeDataRecord(IDataRecordPtr record)
         this->_dataRecords.erase(iter);
         err = 1;
         break;
-      }  
+      }
     }
   }
   return err;
@@ -406,7 +407,7 @@ int32 MXADataModel::removeDataRecord(IDataRecordPtr record)
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataRecords& MXADataModel::getDataRecords()
 {
@@ -426,23 +427,23 @@ IDataRecordPtr MXADataModel::getDataRecordByNamedPath(const std::string &path, I
   std::string mPath (path);
   // remove any front slash
   std::string::size_type pos = mPath.find_first_of("/", 0);
-  if ( 0 == pos ) 
+  if ( 0 == pos )
   {
     mPath = mPath.substr(1, mPath.size());
   }
-  
+
   //Remove any trailing slash
   pos = mPath.find_last_of("/");
   if ( pos == (mPath.size() - 1) ) // slash was in the last position
   {
     mPath = mPath.substr(0, pos);
   }
-  
-  if (mPath.size() == 0) 
+
+  if (mPath.size() == 0)
   {
-    return rec; // The path that was passed in was only a slash.. 
+    return rec; // The path that was passed in was only a slash..
   }
-  
+
 
   std::string first;
   std::string second;
@@ -451,11 +452,11 @@ IDataRecordPtr MXADataModel::getDataRecordByNamedPath(const std::string &path, I
   {
     records = this->_dataRecords;
   }
-  else 
+  else
   {
      records = parent->getChildren();
   }
-  
+
   for (IDataRecords::iterator iter = records.begin(); iter != records.end(); ++iter)
   {
     currentRec = static_cast<MXADataRecord*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
@@ -465,8 +466,8 @@ IDataRecordPtr MXADataModel::getDataRecordByNamedPath(const std::string &path, I
     {
       first = mPath;
       second = "";
-    } 
-    else 
+    }
+    else
     {
       first = mPath.substr(0, pos);
       second = mPath.substr(pos, mPath.size());
@@ -474,9 +475,9 @@ IDataRecordPtr MXADataModel::getDataRecordByNamedPath(const std::string &path, I
     if ( first.compare(recName) == 0)
     {
       if (second.empty()) // Only return if we are at the end of the path
-      { 
+      {
         return boost::dynamic_pointer_cast<MXADataRecord>(*iter);
-      } 
+      }
       else
       {
         rec = getDataRecordByNamedPath(second, currentRec);
@@ -502,23 +503,23 @@ IDataRecordPtr MXADataModel::getDataRecordByInternalPath(const std::string &path
   std::string mPath(path);
   // remove any front slash
   std::string::size_type pos = mPath.find_first_of("/", 0);
-  if ( 0 == pos ) 
+  if ( 0 == pos )
   {
     mPath = mPath.substr(1, mPath.size());
   }
-  
+
   //Remove any trailing slash
   pos = mPath.find_last_of("/");
   if ( pos == (mPath.size() - 1) ) // slash was in the last position
   {
     mPath = mPath.substr(0, pos);
   }
-  
-  if (mPath.size() == 0) 
+
+  if (mPath.size() == 0)
   {
-    return rec; // The path that was passed in was only a slash.. 
+    return rec; // The path that was passed in was only a slash..
   }
-  
+
 
   std::string first;
   std::string second;
@@ -527,11 +528,11 @@ IDataRecordPtr MXADataModel::getDataRecordByInternalPath(const std::string &path
   {
     records = this->_dataRecords;
   }
-  else 
+  else
   {
      records = parent->getChildren();
   }
-  
+
   for (IDataRecords::iterator iter = records.begin(); iter != records.end(); ++iter)
   {
     currentRec = static_cast<MXADataRecord*>((*(iter)).get()); // Cast down to the MXADataRecord Pointer
@@ -541,8 +542,8 @@ IDataRecordPtr MXADataModel::getDataRecordByInternalPath(const std::string &path
     {
       first = mPath;
       second = "";
-    } 
-    else 
+    }
+    else
     {
       first = mPath.substr(0, pos);
       second = mPath.substr(pos, mPath.size());
@@ -550,9 +551,9 @@ IDataRecordPtr MXADataModel::getDataRecordByInternalPath(const std::string &path
     if ( first.compare(recName) == 0)
     {
       if (second.empty()) // Only return if we are ath the end of the path
-      { 
+      {
         return boost::dynamic_pointer_cast<IDataRecord>(*iter);
-      } 
+      }
       else
       {
         rec = getDataRecordByInternalPath(second, static_cast<IDataRecord*>(currentRec) );
@@ -569,23 +570,23 @@ IDataRecordPtr MXADataModel::getDataRecordByInternalPath(const std::string &path
 // -----------------------------------------------------------------------------
 //  Sets all the Required MetaData in one shot
 // -----------------------------------------------------------------------------
-int32 MXADataModel::setRequiredMetaData(std::string researcherName, 
-              std::string dateCreated, 
-				      std::string datasetName, 
+int32 MXADataModel::setRequiredMetaData(std::string researcherName,
+              std::string dateCreated,
+				      std::string datasetName,
               std::string description,
 				      std::string distributionRights,
 				      std::string releaseNumber,
-				      std::string pedigree, 
+				      std::string pedigree,
               std::string derivedSrcFile)
 {
 #if HDF5_SUPPORT
-  _requiredMetaData = H5MXARequiredMetaData::New( researcherName, 
-                                                  dateCreated, 
-                                                  datasetName, 
+  _requiredMetaData = H5MXARequiredMetaData::New( researcherName,
+                                                  dateCreated,
+                                                  datasetName,
                                                   description,
                                                   distributionRights,
                                                   releaseNumber,
-                                                  pedigree, 
+                                                  pedigree,
                                                   derivedSrcFile);
 #endif
   std::string message;
@@ -594,18 +595,18 @@ int32 MXADataModel::setRequiredMetaData(std::string researcherName,
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXADataModel::setRequiredMetaData(std::map<std::string, std::string> &requiredMetaData)
 {
 #if HDF5_SUPPORT
-  _requiredMetaData = H5MXARequiredMetaData::New( requiredMetaData[MXA::MXA_CREATOR_TAG], 
-                                                  requiredMetaData[MXA::MXA_DATE_TAG], 
-                                                  requiredMetaData[MXA::MXA_DSET_NAME_TAG], 
+  _requiredMetaData = H5MXARequiredMetaData::New( requiredMetaData[MXA::MXA_CREATOR_TAG],
+                                                  requiredMetaData[MXA::MXA_DATE_TAG],
+                                                  requiredMetaData[MXA::MXA_DSET_NAME_TAG],
                                                   requiredMetaData[MXA::MXA_DESCRIPTION_TAG],
                                                   requiredMetaData[MXA::MXA_RIGHTS_TAG],
                                                   requiredMetaData[MXA::MXA_RELEASE_NUMBER_TAG],
-                                                  requiredMetaData[MXA::MXA_PEDIGREE_TAG], 
+                                                  requiredMetaData[MXA::MXA_PEDIGREE_TAG],
                                                   requiredMetaData[MXA::MXA_DERIVED_SRC_TAG]);
 #endif
   std::string message;
@@ -614,7 +615,7 @@ int32 MXADataModel::setRequiredMetaData(std::map<std::string, std::string> &requ
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXADataModel::setRequiredMetaData(IRequiredMetaDataPtr metaData)
 {
@@ -625,7 +626,7 @@ int32 MXADataModel::setRequiredMetaData(IRequiredMetaDataPtr metaData)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IRequiredMetaDataPtr MXADataModel::getRequiredMetaData()
 {
@@ -635,32 +636,56 @@ IRequiredMetaDataPtr MXADataModel::getRequiredMetaData()
 // -----------------------------------------------------------------------------
 //  Adds a key/value pair to the User Meta Data section
 // -----------------------------------------------------------------------------
-void MXADataModel::addUserMetaData( MXAAbstractAttributePtr userMetaData)
+void MXADataModel::addUserMetaData(const std::string &attributeKey, IMXAArrayPtr userMetaData)
 {
-  
-  MXAAbstractAttribute* attr = NULL;
-  bool addMetaData = true;
-  for (MXAAbstractAttributes::iterator iter = this->_userMetaData.begin(); iter != this->_userMetaData.end(); ++iter ) {
-    attr = (*(iter)).get();
-    if (NULL != attr)
+
+  MXAAbstractAttributes::iterator iter = this->_userMetaData.find(attributeKey);
+  if ( iter != this->_userMetaData.end() )
+  {
+    //Key was already in the map of attributes
+    IMXAArrayPtr ptr = (*iter).second;
+    if (ptr.get() != userMetaData.get()  && (NULL != userMetaData.get() ))
     {
-      if (attr->getAttributeKey().compare(userMetaData->getAttributeKey()) == 0)
-      { // The keys are the same, so replace the current meta data with the new one.
-        this->_userMetaData.erase(iter);
-        this->_userMetaData.push_back(userMetaData);
-        addMetaData = false;
-        break;
-      }
+      //Attribute was NOT the same one
+      (*iter).second = userMetaData;
     }
   }
-  if (true == addMetaData) 
+  else // Key was not found in the attributes map so add it
   {
-    this->_userMetaData.push_back(userMetaData);
+    this->_userMetaData[attributeKey] = userMetaData;
   }
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
+// -----------------------------------------------------------------------------
+void MXADataModel::removeUserMetaData(const std::string &attributeKey)
+{
+  MXAAbstractAttributes::iterator iter = this->_userMetaData.find(attributeKey);
+  if ( iter != this->_userMetaData.end() )
+  {
+    this->_userMetaData.erase(attributeKey);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+IMXAArrayPtr MXADataModel::getUserMetaData(const std::string &attributeKey)
+{
+  MXAAbstractAttributes::iterator iter = this->_userMetaData.find(attributeKey);
+  if ( iter != this->_userMetaData.end() )
+  {
+    //Key was already in the map of attributes
+    IMXAArrayPtr ptr = (*iter).second;
+    return ptr;
+  }
+  IMXAArrayPtr ptr;
+  return ptr;
+}
+
+// -----------------------------------------------------------------------------
+//
 // -----------------------------------------------------------------------------
 void MXADataModel::setUserMetaData( MXAAbstractAttributes &attributes)
 {
@@ -669,15 +694,16 @@ void MXADataModel::setUserMetaData( MXAAbstractAttributes &attributes)
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 MXAAbstractAttributes  MXADataModel::getUserMetaData()
 // -----------------------------------------------------------------------------
 {
   return this->_userMetaData;
 }
 
+
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataModel::printModel(std::ostream& os, int32 indent)
 {
@@ -728,11 +754,11 @@ void MXADataModel::printDataDimensions(std::ostream& os, int32 indent)
     if (NULL == dim) { continue; }
     dim->printNode(os, indent);
     //(*(iter))->printNode(os, indent);
-  }  
+  }
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataModel::printRequiredMetaData(std::ostream& os, int32 indent)
 {
@@ -740,21 +766,22 @@ void MXADataModel::printRequiredMetaData(std::ostream& os, int32 indent)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataModel::printUserMetaData(std::ostream& os, int32 indent)
 {
   os << StringUtils::indent(indent) << "User Meta Data" << std::endl;
-  MXAAbstractAttribute* attr;
+  IMXAArray* attr;
   for (MXAAbstractAttributes::iterator iter = _userMetaData.begin(); iter != _userMetaData.end(); ++iter)
   {
-    attr = (*iter).get();
+    attr = (*iter).second.get();
     attr->printSelf(os, indent);
   }
 }
 
+
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 MXATypes::MXAError MXADataModel::validateRequiredMetaData(MXARequiredMetaData &requiredMetaData, std::string &message)
 {
@@ -815,13 +842,13 @@ MXATypes::MXAError MXADataModel::validateRequiredMetaData(MXARequiredMetaData &r
     message.append("Required MetaData Value for Key: ").append(MXA::MXA_RELEASE_NUMBER_TAG).append(" Not Found.").append("\n");
     err = -1;
   }
-  
+
   return err;
 }
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool MXADataModel::isValid(std::string &message)
 {
@@ -831,51 +858,51 @@ bool MXADataModel::isValid(std::string &message)
     valid = false;
     message.append("File Version is Unset.\n");
   }
-  
+
   if (this->_fileType.empty())
   {
     valid = false;
     message.append("File Type is not set.\n");
   }
-  
-  if ( this->_dataDimensions.size() == 0) 
+
+  if ( this->_dataDimensions.size() == 0)
   {
     valid = false;
     message.append("Model does not have any Data Dimensions. There should be at least one.\n");
   }
-  
+
   if (this->_dataRecords.size() == 0)
   {
     valid = false;
     message.append("Model does not have any Data Records. There should be at least one.\n");
   }
-  
+
   if (this->_dataRoot.empty())
   {
     message.append("The 'Data Root' property is empty..\n");
     valid = false;
   }
-  
+
   MXADataDimension* dim = NULL;
   for (IDataDimensions::iterator iter = this->_dataDimensions.begin(); iter != this->_dataDimensions.end(); ++iter ) {
     dim = static_cast<MXADataDimension*>((*(iter)).get());
-    if (NULL == dim) 
-    { 
-      valid = false; 
+    if (NULL == dim)
+    {
+      valid = false;
       message.append("MXA Data Dimension is NULL. All MXA Data Dimension objects must be valid.\n");
       break;
     }
     if ( dim->isValid(message) == false )
     {
       valid = false;
-    } 
+    }
   }
   if (this->_requiredMetaData.get() == NULL)
   {
     valid = false;
     message.append("Required Meta Data Object Container is NULL.\n");
   }
-  else 
+  else
   {
     if (_requiredMetaData->isValid(message) == false)
     {

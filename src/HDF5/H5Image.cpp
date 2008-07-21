@@ -94,7 +94,7 @@ herr_t H5Image::makeGrayScaleImage( hid_t loc_id,
  int32    rank = 2;
  hsize_t  dims[2];
  //herr_t err = -1;
- 
+
   /* Initialize the image dimensions */
  dims[0] = height;
  dims[1] = width;
@@ -146,7 +146,11 @@ herr_t H5Image::makeGrayScaleImage( hid_t loc_id,
  *-------------------------------------------------------------------------
  */
 
-herr_t H5Image::H5IMmake_image_24bit(hid_t loc_id, std::string datasetName, hsize_t width, hsize_t height, const std::string &interlace, const unsigned char *buffer)
+herr_t H5Image::H5IMmake_image_24bit(hid_t loc_id, std::string datasetName,
+                                     hsize_t width,
+                                     hsize_t height,
+                                     const std::string &interlace,
+                                     const unsigned char *buffer)
 {
   int32 rank = 3;
   hsize_t dims[3];
@@ -596,7 +600,7 @@ herr_t H5Image::H5IMlink_palette( hid_t loc_id,
    n_refs = H5Sget_simple_extent_npoints( attr_space_id );
 
    dim_ref = n_refs + 1;
-   
+
    refbuf = static_cast<hobj_ref_t*>(malloc( sizeof(hobj_ref_t) * (int)dim_ref ) );
 
    if ( H5Aread( attr_id, attr_type, refbuf ) < 0 )

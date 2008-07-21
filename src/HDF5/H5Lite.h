@@ -25,6 +25,10 @@
 #include <hdf5.h>
 #include <H5Tpublic.h>
 
+#ifdef H5LITE_USE_MXA_CONSTRUCTS
+class IMXAArray;
+#endif
+
 //TODO: Add tests for the find* methods
 
 #define CloseH5A(aid, err, retError)\
@@ -56,7 +60,7 @@
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.49 $
+ * @version $Revision: 1.50 $
  */
 class H5Lite
 {
@@ -372,6 +376,8 @@ static herr_t writePointerDataset (hid_t loc_id,
   }
   return retErr;
 }
+
+
 
 /**
  * @brief Creates a Dataset with the given name at the location defined by loc_id
@@ -1389,7 +1395,43 @@ static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id,
 
 
 
+#ifdef H5LITE_USE_MXA_CONSTRUCTS
+/**
+ * @brief
+ * @param loc_id
+ * @param dsetName
+ * @param rank
+ * @param dims
+ * @param array
+ * @return
+ */
+static herr_t writeMXAArray(hid_t loc_id,
+                            const std::string &dsetName,
+                            IMXAArray* array);
+/**
+ * @brief
+ * @param loc_id
+ * @param dsetName
+ * @param attributeKey
+ * @param array
+ */
+static herr_t writeMXAAttribute(hid_t loc_id,
+                            const std::string &dsetName,
+                            const std::string &attributeKey,
+                            IMXAArray* array);
 
+
+/**
+ * @brief
+ * @param loc_id
+ * @param dsetName
+ * @return IMXAArray Pointer. NULL value is possible on error
+ */
+static IMXAArray* readMXAArray(hid_t loc_id,
+                           const std::string &dsetName );
+
+
+#endif
 
 // -----------------------------------------------------------------------------
 protected:

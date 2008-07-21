@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.24 $
+ * @version $Revision: 1.25 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -52,7 +52,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return A boost shard_ptr to the newly created model
    */
   static MXADataModelPtr New(float modelVersion = 0.4f, const std::string &type = MXA::MXACurrentFileType, const std::string &dataRoot= "Data");
-  
+
   /**
    * @brief Validates that all the required Meta data is not empty
    * @param requiredMetaData
@@ -60,7 +60,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return Error - Negative is error. Zero or Positive is success
    */
   static MXATypes::MXAError validateRequiredMetaData(MXARequiredMetaData &requiredMetaData, std::string &message);
-  
+
   /**
    * @brief Returns the MXA File version that the model adheres to
    * @return MXA API Version
@@ -84,13 +84,13 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Sets the model type and version to the latest supported by this API
    */
   void setDefaultTypeAndVersion();
-  
+
   /**
    * @brief Sets the "Data Root"
    * @param  dataRoot
    */
   void setDataRoot(const std::string &dataRoot);
-  
+
   /**
    * @brief Returns the Data Root Value
    * @return
@@ -108,7 +108,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Creates and adds a new Data Dimension to the Model
    * @param name The name for the Data Dimensions
    * @param altName An Alternate Name for the Data Dimension
-   * @param count The total number of 
+   * @param count The total number of
    * @param startValue The value this dimension starts at
    * @param endValue The ending value (inclusive) this dimension ends at
    * @param increment The value to increment the dimension when iterating
@@ -128,36 +128,36 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return Error condition
    */
   int32 insertDataDimension(IDataDimensionPtr dimension, int32 index);
-  
+
   /**
-   * @brief This method will remove any NULL Data Dimensions from the internal 
+   * @brief This method will remove any NULL Data Dimensions from the internal
    * data structure that holds the list of Data Dimensions
    */
   void MXADataModel::squeezeDataDimensions();
-  
+
   /**
    * @brief Removes a data dimension by index
    * @param index
    */
   int32 removeDataDimension(int32 index);
-  
+
   /**
    * @brief Removed a Data Dimension by Name
    * @param dimensionName The 'name' property of the Data Dimension to remove
    * @return Error: Negative is error condition
    */
   int32 removeDataDimension(const std::string &dimensionName);
-  
+
   /**
    * @brief moves the data dimension at index 'fromIndex' to another index
-   * 'newIndex'. All Data Dimensions have new indices assigned to them after 
+   * 'newIndex'. All Data Dimensions have new indices assigned to them after
    * this operation.
    * @param fromIndex The current index of the data dimension to move
    * @param toIndex The new index to place the data dimension at
    * @return Error condition
    */
   int32 moveDataDimension(int32 fromIndex, int32 toIndex);
-  
+
   /**
    * @brief Swaps a pair of Data Dimensions in the index list
    * @param index1 The first Data Dimension
@@ -165,7 +165,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return Error Condition
    */
   int32 swapDataDimensions(int32 index1, int32 index2);
-  
+
   /**
    * @brief Returns the vector of Data Dimenions
    * @return
@@ -186,7 +186,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    */
   // IDataDimension* getDataDimension(std::string dimName);
   IDataDimensionPtr getDataDimension(std::string dimName);
-  
+
   /**
    * @brief
    * @return The Number of data dimensions
@@ -214,7 +214,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return Error Condition
    */
   int32 removeDataRecord(IDataRecordPtr record);
-  
+
   /**
    * @brief Returns the Hierarchy of Data Records
    * @return
@@ -228,7 +228,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return
    */
   IDataRecordPtr getDataRecordByNamedPath(const std::string &path, IDataRecord* parent=NULL);
-  
+
   /**
    * @brief Returns a Data Record based on an internal path representation
    * @param path
@@ -237,7 +237,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    */
   IDataRecordPtr getDataRecordByInternalPath(const std::string &path, IDataRecord* parent=NULL);
 
-  
+
   /**
    * @brief Sets the required meta data fields
    * @param researcherName
@@ -250,13 +250,13 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param derivedSrcFile
    * @return
    */
-  MXATypes::MXAError setRequiredMetaData( std::string researcherName, 
+  MXATypes::MXAError setRequiredMetaData( std::string researcherName,
       std::string dateCreated,
-      std::string datasetName, 
+      std::string datasetName,
       std::string description,
       std::string distributionRights,
       std::string releaseNumber,
-      std::string pedigree, 
+      std::string pedigree,
       std::string derivedSrcFile);
 
   /**
@@ -265,13 +265,13 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return
    */
   MXATypes::MXAError setRequiredMetaData(std::map<std::string, std::string> &metadata);
-  
+
   /**
    * @brief Sets the required meta data
    * @param metaData IRequiredMetaDataPtr object
    */
   int32 setRequiredMetaData(IRequiredMetaDataPtr metaData);
-  
+
   /**
    * @brief Returns the RequiredMeta Data in the provided std::map
    * @return IRequiredMetaDataPtr
@@ -279,22 +279,35 @@ class MXA_EXPORT MXADataModel : public IDataModel
   IRequiredMetaDataPtr getRequiredMetaData();
 
   /**
-   * @brief Adds an entry in the User Meta Data record
-   * @param  umd An MXAAbstractAttributePtr object
+    * @brief Adds User defined Meta data to the model
+    * @param attributeKey The attribute key name
+    * @param umd The Key/Value pair to append to the model
    */
-  void addUserMetaData ( MXAAbstractAttributePtr umd);
-  
+  void addUserMetaData (const std::string &attributeKey, IMXAArrayPtr umd);
+
+  /**
+   * @brief Removes specific user meta-data entry
+   * @param attributeKey The user meta-data to remove
+   */
+    void removeUserMetaData(const std::string &attributeKey);
+
+  /**
+   * @brief Returns a specific User meta data item
+   * @param attributeKey The value of the attribute key
+   */
+  IMXAArrayPtr getUserMetaData(const std::string &attributeKey);
+
   /**
    * @brief Sets all the user defined meta data for this model.Any previously
      * defined meta data will be erased.
    * @param attributes Vector of MXAAbstractAttributePtr objects
    */
   void setUserMetaData( MXAAbstractAttributes &attributes);
-  
+
 
   /** @brief Returns the Data Structure used to hold the user defined Meta Data */
   MXAAbstractAttributes getUserMetaData();
-   
+
   /**
    * @brief Prints the Data Model to the provided std::ostream
    * @param os
@@ -335,21 +348,21 @@ class MXA_EXPORT MXADataModel : public IDataModel
    */
   void printUserMetaData(std::ostream &os, int32 indent);
 
- 
+
    /**
     * @brief Performs some basic checks to make sure the model is valid.
     * @param message String to store messages relating to errors/omissions about the model
     */
    bool isValid(std::string &message);
-   
-   
+
+
   private:
    MXADataModel(const MXADataModel&);   //Copy Constructor Not Implemented
    void operator=(const MXADataModel&); //Copy Assignment Not Implemented
 
    float _fileVersion;
    std::string _fileType;
-   
+
    //Holds the 'path' to the root of the actual data in the data portion of the file
    std::string    _dataRoot;
    // Holds a vector of data dimensions

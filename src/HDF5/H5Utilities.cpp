@@ -1,12 +1,14 @@
+#include <HDF5/H5Utilities.h>
 
 #include <Base/IDataModel.h>
 #include <Base/IDataRecord.h>
-#include <HDF5/H5Utilities.h>
+#include <Base/IDataFile.h>
+
 #include <HDF5/H5Lite.h>
-#include <HDF5/H5DataArrayTemplate.hpp>
-#include <HDF5/H5AttributeArrayTemplate.hpp>
-#include <HDF5/H5AsciiStringAttribute.h>
-#include <HDF5/H5AsciiStringData.h>
+#include <DataWrappers/MXAArrayTemplate.hpp>
+//#include <HDF5/H5AttributeArrayTemplate.hpp>
+#include <DataWrappers/MXAAsciiStringData.h>
+
 #include <Utilities/StringUtils.h>
 #include <Common/LogTime.h>
 
@@ -391,6 +393,20 @@ int32 H5Utilities::createGroupsFromPath(const std::string &pathToCheck, hid_t pa
   return err;
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string H5Utilities::extractObjectName(const std::string &path)
+{
+  std::string::size_type pos;
+  pos = path.find_last_of('/');
+  if (pos == std::string::npos)
+  {
+    return path;
+  }
+  return path.substr(pos);
+}
+
 
 //--------------------------------------------------------------------//
 // HDF Attribute Methods
@@ -549,36 +565,36 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
         res.clear(); //Clear the string out first
         err = H5Lite::readStringAttribute(fileId, datasetPath, (*iter), res );
         if (err >= 0) {
-          MXAAbstractAttributePtr attr = H5AsciiStringAttribute::CreateAbstractAttributeArray(datasetPath, (*iter), res);
-          attributes.push_back(attr);
+          IMXAArrayPtr attr = MXAAsciiStringData::Create( res );
+          attributes[*iter] = attr;
         }
         break;
       case H5T_INTEGER:
         //std::cout << "User Meta Data Type is Integer" << std::endl;
         if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<uint8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<uint8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<uint16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<uint16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<uint32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<uint32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<uint64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<uint64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<int8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<int8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<int16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<int16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<int32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<int32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<int64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<int64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else {
           std::cout << "Unknown Type: " << typeId << " at " <<  datasetPath << std::endl;
           err = -1;
@@ -587,11 +603,11 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
         break;
       case H5T_FLOAT:
         if (attr_size == 4) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<float32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<float32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else if (attr_size == 8 ) {
-          MXAAbstractAttributePtr ptr = H5Utilities::readPrimitiveAttribute<float64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
-          attributes.push_back(ptr);
+          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<float64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          attributes[*iter] = ptr;
         } else {
           std::cout << "Unknown Floating point type" << std::endl;
           err = -1;
@@ -780,9 +796,9 @@ bool H5Utilities::isGroup(hid_t nodeId, const std::string &objName)   {
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::string &datasetPath)
+IMXAArrayPtr H5Utilities::readData(IDataFilePtr dataFile, const std::string &datasetPath)
 {
-  MXAAbstractDataPtr ptr;
+  IMXAArrayPtr ptr;
   hid_t fileId = dataFile->getFileId();
   if (fileId < 0)
   {
@@ -806,11 +822,7 @@ MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::
     std::cout << "dims.size() == 0. BAD" << std::endl;
     return ptr;
   }
-  mxaIdType numElements = 1;
-  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
-  {
-    numElements = numElements * dims[i];
-  }
+
   typeId = H5Lite::getDatasetType(fileId, datasetPath);
   if (typeId < 0)
   {
@@ -821,26 +833,26 @@ MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::
   {
   case H5T_STRING:
     res.clear(); //Clear the string out first
-    ptr = H5AsciiStringData::New(datasetPath, res);
+    ptr = MXAAsciiStringData::Create( res);
     break;
   case H5T_INTEGER:
     //std::cout << "User Meta Data Type is Integer" << std::endl;
     if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
-       ptr = H5DataArrayTemplate<uint8>::CreateAbstractDataArray(datasetPath, numElements);
+       ptr = readH5Data<uint8>(dataFile->getFileId(), datasetPath,  dims);
      } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
-       ptr = H5DataArrayTemplate<uint16>::CreateAbstractDataArray(datasetPath, numElements);
+       ptr = readH5Data<uint16>(dataFile->getFileId(), datasetPath,  dims);
      } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
-       ptr = H5DataArrayTemplate<uint32>::CreateAbstractDataArray(datasetPath, numElements);
+       ptr = readH5Data<uint32>(dataFile->getFileId(), datasetPath,  dims);
      } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
-       ptr = H5DataArrayTemplate<uint64>::CreateAbstractDataArray(datasetPath, numElements);
+       ptr = readH5Data<uint64>(dataFile->getFileId(), datasetPath,  dims);
      } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
-       ptr = H5DataArrayTemplate<int8>::CreateAbstractDataArray(datasetPath, numElements);
+       ptr = readH5Data<int8>(dataFile->getFileId(), datasetPath,  dims);
      } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
-       ptr = H5DataArrayTemplate<int16>::CreateAbstractDataArray(datasetPath, numElements);
+       ptr = readH5Data<int16>(dataFile->getFileId(), datasetPath,  dims);
      } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
-       ptr = H5DataArrayTemplate<int32>::CreateAbstractDataArray(datasetPath, numElements);
+       ptr = readH5Data<int32>(dataFile->getFileId(), datasetPath,  dims);
      } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
-       ptr = H5DataArrayTemplate<int64>::CreateAbstractDataArray(datasetPath, numElements);
+       ptr = readH5Data<int64>(dataFile->getFileId(), datasetPath,  dims);
     } else {
       std::cout << "Unknown Type: " << typeId << " at " <<  datasetPath << std::endl;
       err = -1;
@@ -849,9 +861,9 @@ MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::
     break;
   case H5T_FLOAT:
     if (attr_size == 4) {
-      ptr = H5DataArrayTemplate<float32>::CreateAbstractDataArray(datasetPath, numElements);
+      ptr = readH5Data<float32>(dataFile->getFileId(), datasetPath,  dims);
     } else if (attr_size == 8 ) {
-      ptr = H5DataArrayTemplate<float64>::CreateAbstractDataArray(datasetPath, numElements);
+      ptr = readH5Data<float64>(dataFile->getFileId(), datasetPath,  dims);
     } else {
       std::cout << "Unknown Floating point type" << std::endl;
       err = -1;
@@ -863,26 +875,18 @@ MXAAbstractDataPtr H5Utilities::readDataArray(IDataFilePtr dataFile, const std::
     H5Utilities::printHDFClassType(attr_type);
   }
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
-  if (ptr.get() != NULL)
-  {
-    err = ptr->readFromFile(dataFile);
-    if (err < 0)
-    {
-      MXAAbstractData* nullData = 0x0;
-      ptr.reset(nullData); // Swap in a null pointer
-    }
-  }
+
   return ptr;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXAAbstractAttributePtr H5Utilities::readAttributeArray(IDataFilePtr dataFile,
+IMXAArrayPtr H5Utilities::readAttribute(IDataFilePtr dataFile,
                                                         const std::string &datasetPath,
                                                         const std::string &attributeKey)
 {
-  MXAAbstractAttributePtr ptr;
+  IMXAArrayPtr ptr;
   hid_t fileId = dataFile->getFileId();
   if (fileId < 0)
   {
@@ -910,26 +914,26 @@ MXAAbstractAttributePtr H5Utilities::readAttributeArray(IDataFilePtr dataFile,
   {
   case H5T_STRING:
     res.clear(); //Clear the string out first
-    ptr = H5AsciiStringAttribute::CreateAbstractAttributeArray(datasetPath, attributeKey, res);
+    ptr = MXAAsciiStringData::Create( res);
     break;
   case H5T_INTEGER:
     //std::cout << "User Meta Data Type is Integer" << std::endl;
     if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
-      ptr = H5AttributeArrayTemplate<uint8>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+       ptr = readH5Attribute<uint8>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
-       ptr = H5AttributeArrayTemplate<uint16>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+       ptr = readH5Attribute<uint16>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
-       ptr = H5AttributeArrayTemplate<uint32>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+       ptr = readH5Attribute<uint32>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
-       ptr = H5AttributeArrayTemplate<uint64>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+       ptr = readH5Attribute<uint64>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
-       ptr = H5AttributeArrayTemplate<int8>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+       ptr = readH5Attribute<int8>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
-       ptr = H5AttributeArrayTemplate<int16>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+       ptr = readH5Attribute<int16>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
-       ptr = H5AttributeArrayTemplate<int32>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+       ptr = readH5Attribute<int32>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
-       ptr = H5AttributeArrayTemplate<int64>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+       ptr = readH5Attribute<int64>(dataFile->getFileId(), datasetPath, attributeKey, dims);
     } else {
       std::cout << DEBUG_OUT(logTime) << "Unknown Integer Type: " << typeId << " for attribute:'" << attributeKey << "' for dataset:'" <<  datasetPath <<"'" << std::endl;
       err = -1;
@@ -938,9 +942,9 @@ MXAAbstractAttributePtr H5Utilities::readAttributeArray(IDataFilePtr dataFile,
     break;
   case H5T_FLOAT:
     if (attr_size == 4) {
-      ptr = H5AttributeArrayTemplate<float32>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+      ptr = readH5Attribute<float32>(dataFile->getFileId(), datasetPath, attributeKey, dims);
     } else if (attr_size == 8 ) {
-      ptr = H5AttributeArrayTemplate<float64>::CreateAbstractAttributeArray(datasetPath, attributeKey, numElements);
+      ptr = readH5Attribute<float64>(dataFile->getFileId(), datasetPath, attributeKey, dims);
     } else {
       std::cout << DEBUG_OUT(logTime) << "Unknown Floating point type: " << typeId << " for attribute:'" << attributeKey << "' for dataset:'" <<  datasetPath <<"'" << std::endl;
       err = -1;
@@ -952,10 +956,7 @@ MXAAbstractAttributePtr H5Utilities::readAttributeArray(IDataFilePtr dataFile,
     H5Utilities::printHDFClassType(attr_type);
   }
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
-  if (ptr.get() != NULL)
-  {
-    ptr->readFromFile(dataFile);
-  }
+
   return ptr;
 }
 

@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,7 +23,8 @@
 #include <Core/MXADataRecord.h>
 #include <HDF5/H5MXADataFile.h>
 #include <HDF5/H5MXARequiredMetaData.h>
-#include <HDF5/H5AsciiStringAttribute.h>
+#include <DataWrappers/MXAArrayTemplate.hpp>
+#include <DataWrappers/MXAAsciiStringData.h>
 #include <Testing/TestDataFileLocations.h>
 
 // C++ Includes
@@ -44,7 +45,7 @@
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
@@ -56,17 +57,17 @@ void RemoveTestFiles()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 void MakeScalarAttribute(T value, std::string key, MXADataModel* model)
 {
-  MXAAbstractAttributePtr umd = H5AttributeArrayTemplate<T>::CreateScalarAttribute(MXA::UserMetaDataPath, key, value);
-  model->addUserMetaData(umd);
+  IMXAArrayPtr umd = MXAArrayTemplate<T>::CreateSingleValueArray( value);
+  model->addUserMetaData(key, umd);
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MXADataModel* model)
@@ -77,19 +78,15 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
     {
       numelements *= *(iter);
     }
-    
-    MXAAbstractAttributePtr vecPtr = 
-      H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray(MXA::UserMetaDataPath,
-                                                                                key, 
-                                                                                dims.size(), 
-                                                                                &(dims.front()) );
+
+    IMXAArrayPtr vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()) );
     // Copy data into the attribute container
     T* data = static_cast<T*>( vecPtr->getVoidPointer(0) );
     for (uint32 i = 0; i < numelements; ++i)
     {
       data[i] = static_cast<T>(i * 1.5);
     }
-    model->addUserMetaData(vecPtr);
+    model->addUserMetaData(key, vecPtr);
 }
 
 // -----------------------------------------------------------------------------
@@ -97,7 +94,7 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
 // -----------------------------------------------------------------------------
 void CreateAttributes(MXADataModel* model)
 {
- 
+
     int8  i8  = -8;
     uint8 ui8 = 8;
     int16 i16 = -16;
@@ -108,13 +105,13 @@ void CreateAttributes(MXADataModel* model)
     uint64 ui64 = 64;
     float32 f32 = 32.32f;
     float64 f64 = 64.64;
-     
-    
+
+
     //Create vector attributes
     std::vector<uint64> dims;
     dims.push_back(3);
     dims.push_back(3);
-    
+
     // integers
     MakeVectorAttribute( i8, "Vector Int8", dims, model);
     MakeVectorAttribute( ui8, "Vector UInt8", dims, model);
@@ -124,12 +121,12 @@ void CreateAttributes(MXADataModel* model)
     MakeVectorAttribute( ui32, "Vector UInt32", dims, model);
     MakeVectorAttribute( i64, "Vector Int64", dims, model);
     MakeVectorAttribute( ui64, "Vector UInt64", dims, model);
-    
+
     // Floating point
     MakeVectorAttribute( f32, "Vector Float 32", dims, model);
     MakeVectorAttribute( f64, "Vector Float 64", dims, model);
-  
-    
+
+
    //Integer Numbers
     MakeScalarAttribute( i8, "Scalar Int 8", model);
     MakeScalarAttribute( ui8, "Scalar UInt8", model);
@@ -144,8 +141,8 @@ void CreateAttributes(MXADataModel* model)
     MakeScalarAttribute( f64, "Scalar Float 64", model);
 
     // String attributes
-    MXAAbstractAttributePtr s1 = H5AsciiStringAttribute::CreateAbstractAttributeArray(MXA::UserMetaDataPath, "Password", "DaddyO");
-    model->addUserMetaData(s1);
+    IMXAArrayPtr s1 = MXAAsciiStringData::Create("DaddyO");
+    model->addUserMetaData("Password", s1);
 
 }
 
@@ -156,7 +153,7 @@ MXADataModelPtr createModel()
 {
 	  std::string errorMessage;
     MXADataModelPtr modelPtr = MXADataModel::New();
-	  
+
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 	  MXADataModel* model = modelPtr.get();
 	  model->setDataRoot(std::string("DataModelTest/Data/Root/Is/Here"));
@@ -176,9 +173,9 @@ MXADataModelPtr createModel()
 	  IDataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed",  10, 1000, 5000, 500, 1);
 	  IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS",  100, 0, 99, 1, 1);
 	  IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice",  256, 0, 255, 1, 1);
-	  	  
 
-	  
+
+
 	  MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
 	  model->addDataRecord(rec1);
 	  //Create Data Records with Parents
@@ -188,7 +185,7 @@ MXADataModelPtr createModel()
 	  model->addDataRecord(rec3, rec1);
 	  MXADataRecordPtr rec4 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
 	  model->addDataRecord(rec4, rec1);
-	  
+
 	   MXADataRecordPtr rec5 = MXADataRecord::New(3, std::string("Order Parameters 2"), std::string("OP 2") );
 	    model->addDataRecord(rec5, rec1);
 	    //Create Data Records with Parents
@@ -198,14 +195,14 @@ MXADataModelPtr createModel()
 	    model->addDataRecord(rec7, rec5);
 	    MXADataRecordPtr rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
 	    model->addDataRecord(rec8, rec5);
-	  
+
     //Create Data Records
     MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
     model->addDataRecord(rec0);
     errorMessage.clear();
     BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
-	  //Create the Required MetaData 
+	  //Create the Required MetaData
 	  std::map<std::string, std::string> md;
 	  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
 	  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
@@ -215,7 +212,7 @@ MXADataModelPtr createModel()
 	  md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
 	  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
 	  md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
-	  
+
 	  int32 err = -1;
 	  err = model->setRequiredMetaData(md);
 	  errorMessage.clear();
@@ -226,7 +223,7 @@ MXADataModelPtr createModel()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void TestRequiredMetaData()
 {
@@ -234,7 +231,7 @@ void TestRequiredMetaData()
   std::string errorMessage;
   std::cout << "TestRequiredMetaData Running...." ;
   MXADataModelPtr model = createModel();
-  
+
   // Test setting the Required MetaData by individual strings
   std::string researcherName("");
   std::string dateCreated("");
@@ -244,32 +241,32 @@ void TestRequiredMetaData()
   std::string releaseNumber("");
   std::string pedigree("");
   std::string derivedSrcFile("");
-  
-  IRequiredMetaDataPtr metaData = H5MXARequiredMetaData::New(researcherName, dateCreated, 
-                                   datasetName, description, distributionRights, 
+
+  IRequiredMetaDataPtr metaData = H5MXARequiredMetaData::New(researcherName, dateCreated,
+                                   datasetName, description, distributionRights,
                                    releaseNumber, pedigree, derivedSrcFile);
   BOOST_REQUIRE(metaData->isValid(errorMessage) == false);
-  
-  
-  
-  err = model->setRequiredMetaData(researcherName, dateCreated, 
-                                   datasetName, description, distributionRights, 
+
+
+
+  err = model->setRequiredMetaData(researcherName, dateCreated,
+                                   datasetName, description, distributionRights,
                                    releaseNumber, pedigree, derivedSrcFile);
   errorMessage.clear();
   BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
-  
+
   err = model->setRequiredMetaData(metaData);
   errorMessage.clear();
   BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
-  
-  
-  //Create the Required MetaData 
+
+
+  //Create the Required MetaData
   std::map<std::string, std::string> md;
   md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
   err = model->setRequiredMetaData(md);
   BOOST_REQUIRE(err == -1); // The data should NOT validate
   errorMessage.clear();
-  
+
   md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
   md[MXA::MXA_DSET_NAME_TAG] = "TESTING Example Data Model";
   md[MXA::MXA_DESCRIPTION_TAG] = "Just a test case showing how to organize OIM FIB data";
@@ -277,11 +274,11 @@ void TestRequiredMetaData()
   md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
   md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
   md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
-  
+
   err = model->setRequiredMetaData(md);
   errorMessage.clear();
   BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
-  
+
   researcherName = "Mike Jackson";
   dateCreated = "2006:12:24 15:34.51";
   datasetName = "TESTING Example Data Model";
@@ -290,28 +287,28 @@ void TestRequiredMetaData()
   releaseNumber = "AFRL/WS07-0476";
   pedigree = "Original";
   derivedSrcFile = "Original Data Files";
-  
-  err = model->setRequiredMetaData(researcherName, dateCreated, 
-                                   datasetName, description, distributionRights, 
+
+  err = model->setRequiredMetaData(researcherName, dateCreated,
+                                   datasetName, description, distributionRights,
                                    releaseNumber, pedigree, derivedSrcFile);
   errorMessage.clear();
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
-  
-  metaData = H5MXARequiredMetaData::New(researcherName, dateCreated, 
-                                     datasetName, description, distributionRights, 
+
+  metaData = H5MXARequiredMetaData::New(researcherName, dateCreated,
+                                     datasetName, description, distributionRights,
                                      releaseNumber, pedigree, derivedSrcFile);
   BOOST_REQUIRE(metaData->isValid(errorMessage) == true);
   err = model->setRequiredMetaData(metaData);
   errorMessage.clear();
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
-  
+
   std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool recordExists(MXADataModelPtr model, std::string recName)
 {
@@ -320,7 +317,7 @@ bool recordExists(MXADataModelPtr model, std::string recName)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool recordInternalPathExists(MXADataModelPtr model, std::string recName)
 {
@@ -329,7 +326,7 @@ bool recordInternalPathExists(MXADataModelPtr model, std::string recName)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void TestLookupTableGeneration()
 {
@@ -346,10 +343,10 @@ void TestLookupTableGeneration()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void TestRetrieveDataRecords()
-{ 
+{
   std::cout << "TestRetrieveDataRecords Running....";
   MXADataModelPtr model = createModel();
   BOOST_REQUIRE( recordExists(model, "/Order Parameters/Eta1/") == true);
@@ -370,7 +367,7 @@ void TestRetrieveDataRecords()
   BOOST_REQUIRE( recordExists(model, "/") == false);
   BOOST_REQUIRE( recordExists(model, "//") == false);
   BOOST_REQUIRE( recordExists(model, "///") == false);
-  
+
 
   BOOST_REQUIRE( recordInternalPathExists(model, "") == false);
   BOOST_REQUIRE( recordInternalPathExists(model, "/") == false);
@@ -388,14 +385,14 @@ void TestRetrieveDataRecords()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void TestDataDimensionMethods()
 {
   std::cout << "Test DataDimensionMethods Running....";
   MXADataModelPtr model = createModel(); // Created on the stack
   int32 error = 0;
-  
+
   IDataDimensionPtr dim0 = model->getDataDimension(0);
   IDataDimensionPtr dim1 = model->getDataDimension(1);
   IDataDimensionPtr dim2 = model->getDataDimension(2);
@@ -413,16 +410,16 @@ void TestDataDimensionMethods()
   IDataDimensionPtr test = model->getDataDimension(2);
   BOOST_REQUIRE(test != dim3);
   BOOST_REQUIRE(model->getDataDimensions().size() == 3);
-  
+
   error = model->removeDataDimension(4); // Remove the last Dimension
   BOOST_REQUIRE( error < 0);
   BOOST_REQUIRE(model->getDataDimensions().size() == 3);
-  
+
   //Test Removing by Name - This Dimension does exits and should decrement the count by 1
   error = model->removeDataDimension("Random Seed");
   BOOST_REQUIRE( error > 0);
   BOOST_REQUIRE(model->getDataDimensions().size() == 2);
-  
+
   // Test removing a Dimension by name that does NOT exist.
   error = model->removeDataDimension("Junk");
   BOOST_REQUIRE( error < 0);
@@ -431,7 +428,7 @@ void TestDataDimensionMethods()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void WriteTestModel()
 {
@@ -442,7 +439,7 @@ void WriteTestModel()
     BOOST_REQUIRE(dataFile.get() != 0x0);
     std::cout << "......Passed" << std::endl;
   }
-  
+
   {
     std::cout << "Read DataModel Running...." ;
     IDataFilePtr dataFile = H5MXADataFile::OpenFile(DATAMODEL_TEST_BEFORE_H5_FILE, false);
@@ -456,33 +453,33 @@ void WriteTestModel()
 }
 
 // -----------------------------------------------------------------------------
-//  Read a model from a data file on disk, then write that model back out to 
+//  Read a model from a data file on disk, then write that model back out to
 //  a new file. Use h5dump and diff to compare the files. They should be the same
 //  assuming the original file only had a DataModel in it.
 // -----------------------------------------------------------------------------
 void ReWriteModelTest()
 {
   std::cout << "ReWriteModelTest Running.....";
-  
+
   std::string inFilename(DATAMODEL_TEST_BEFORE_H5_FILE);
   std::string outFilename(DATAMODEL_TEST_AFTER_H5_FILE);
-  
+
   {
     IDataFilePtr dataFile = H5MXADataFile::OpenFile(inFilename, false);
     BOOST_REQUIRE(dataFile.get() != 0x0);
-    
+
     IDataModelPtr modelPtr  = dataFile->getDataModel();
     BOOST_REQUIRE(modelPtr.get() != 0x0);
-    
+
     IDataFilePtr outFile = H5MXADataFile::CreateFileWithModel(outFilename, modelPtr);
     BOOST_REQUIRE(outFile.get() != 0x0);
   }
-  
+
   std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void TestDimensionCount()
 {
@@ -490,46 +487,46 @@ void TestDimensionCount()
   IDataDimensionPtr dim = MXADataDimension::New("Test", "Test", 0, 10, 0, 9, 1, 1);
   int32 count = dim->calculateCount();
   BOOST_REQUIRE(count == 10);
-  
+
   dim->setStartValue(1);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 9);
-  
+
   dim->setStartValue(2);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 8);
-  
+
   dim->setStartValue(-1);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 11);
-  
-  
+
+
   dim->setStartValue(-10);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 20);
-  
+
   dim->setIncrement(3);
   dim->setStartValue(0);
   dim->setEndValue(8);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 3);
-  
+
   dim->setEndValue(9);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 4);
-  
+
   dim->setIncrement(2);
   dim->setStartValue(0);
   dim->setEndValue(8);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 5);
- 
+
   dim->setIncrement(3);
   dim->setStartValue(1);
   dim->setEndValue(30);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 10);
-  
+
   dim->setEndValue(31);
   count = dim->calculateCount();
   BOOST_REQUIRE(count == 11);
@@ -537,7 +534,7 @@ void TestDimensionCount()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void TestEndianSwap()
 {
@@ -545,7 +542,7 @@ void TestEndianSwap()
   uint32 value = 0xAABBCCDD;
   MXA::Endian::reverseBytes ( value );
   BOOST_REQUIRE(0xDDCCBBAA == value);
- 
+
   uint16 value16 = 0xAABB;
   MXA::Endian::reverseBytes( value16);
   BOOST_REQUIRE(0xBBAA == value16);
@@ -553,7 +550,7 @@ void TestEndianSwap()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void TestDataRecordRemoval()
 {
@@ -576,7 +573,7 @@ void TestDataRecordRemoval()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void TestDataModelOverWrite()
 {
@@ -584,14 +581,14 @@ void TestDataModelOverWrite()
   std::string outFilename (DATAMODEL_TEST_OVERWRITE_H5_FILE);
   {
 
-    
+
     MXADataModelPtr modelPtr = createModel();
     IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outFilename, modelPtr);
     // Make sure nothing went wrong in the file creation
     BOOST_REQUIRE(dataFile.get() != 0x0);
     //Make sure the model pointers are the same. They SHOULD be.
     BOOST_REQUIRE(dataFile->getDataModel().get() == modelPtr.get() );
-    
+
     MXADataModel* model = modelPtr.get();
     // Update one of the dimensions
     IDataDimensionPtr dim0 = model->getDataDimension(0);
@@ -638,7 +635,7 @@ void TestDataModelOverWrite()
     BOOST_REQUIRE ( dim0->getIncrement() == 1);
     BOOST_REQUIRE ( modelPtr->getDataRoot().compare("New/Data/Root/") == 0);
   }
-  
+
   std::cout << "......Passed" << std::endl;
 }
 
@@ -646,12 +643,12 @@ void TestDataModelOverWrite()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) 
+boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] )
 {
-  
+
   boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
   //test->add( new DataModelTest () );
-    
+
   test->add( BOOST_TEST_CASE( &WriteTestModel), 0);
   test->add( BOOST_TEST_CASE( &ReWriteModelTest), 0);
   test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );
@@ -662,5 +659,5 @@ boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv
   test->add (BOOST_TEST_CASE( &TestDataRecordRemoval), 0);
   test->add (BOOST_TEST_CASE( &TestDataModelOverWrite), 0);
   test->add (BOOST_TEST_CASE( &RemoveTestFiles), 0);
-  return test; 
+  return test;
 }

@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,25 +12,25 @@
 #define _XMLMXAAttributeWriter_h_
 
 #include <Common/MXATypeDefs.h>
-#include <Core/MXAAbstractAttribute.h>
+#include <Base/IMXAArray.h>
 #include <hdf5.h>
 /**
 * @class XMLMXAAttributeWriter XMLMXAAttributeWriter.hpp XML/XMLMXAAttributeWriter.hpp
 * @brief Delegate type class that writes attributes to an xml file
 * @author mjackson
 * @date Jan 15, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 
-class MXA_EXPORT XMLMXAAttributeWriter 
+class MXA_EXPORT XMLMXAAttributeWriter
 {
   public:
     XMLMXAAttributeWriter(boost::shared_ptr<std::ofstream> ofstreamPtr) :
       _ofstreamPtr(ofstreamPtr)
       {}
-    
-    virtual ~XMLMXAAttributeWriter() {} 
-    
+
+    virtual ~XMLMXAAttributeWriter() {}
+
 // -----------------------------------------------------------------------------
 //  Does indenting for pretty printing the XML
 // -----------------------------------------------------------------------------
@@ -39,90 +39,90 @@ class MXA_EXPORT XMLMXAAttributeWriter
         const int32 indentSize = 2;
         return std::string(indentSize * depth, ' ');
       }
-      
+
 /**
  * @brief Writes the attribute to the xml file
  * @param attribute The attribute to write
  * @return Error condition - Negative is error
  */
-    int32 writeAttribute(MXAAbstractAttributePtr attribute)
+    int32 writeAttribute(const std::string &attributeKey, IMXAArrayPtr attribute)
     {
       hid_t typeId = attribute->getDataType();
       herr_t err = -1;
       if (typeId == H5T_NATIVE_FLOAT)
       {
-        err = this->writeAttributeData<float32>(attribute);
+        err = this->writeAttributeData<float32>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_DOUBLE)
       {
-        err = this->writeAttributeData<float64>(attribute);
+        err = this->writeAttributeData<float64>(attributeKey, attribute);
       }
 
       else if (typeId == H5T_NATIVE_INT8)
       {
-        err = this->writeAttributeData<int8>(attribute);
+        err = this->writeAttributeData<int8>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_UINT8)
       {
-        err = this->writeAttributeData<uint8>(attribute);
+        err = this->writeAttributeData<uint8>(attributeKey, attribute);
       }
 
       else if (typeId == H5T_NATIVE_INT16)
       {
-        err = this->writeAttributeData<int16>(attribute);
+        err = this->writeAttributeData<int16>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_UINT16)
       {
-        err = this->writeAttributeData<uint16>(attribute);
+        err = this->writeAttributeData<uint16>(attributeKey, attribute);
       }
 
       else if (typeId == H5T_NATIVE_INT32)
       {
-        err = this->writeAttributeData<int32>(attribute);
+        err = this->writeAttributeData<int32>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_UINT32)
       {
-        err = this->writeAttributeData<uint32>(attribute);
+        err = this->writeAttributeData<uint32>(attributeKey, attribute);
       }
 
       else if (typeId == H5T_NATIVE_INT64)
       {
-        err = this->writeAttributeData<int64>(attribute);
+        err = this->writeAttributeData<int64>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_UINT64)
       {
-        err = this->writeAttributeData<uint64>(attribute);
+        err = this->writeAttributeData<uint64>(attributeKey, attribute);
       }
-      
+
       else if (typeId == H5T_STRING)
       {
-        err = this->writeStringAttributeData(attribute);
+        err = this->writeStringAttributeData(attributeKey, attribute);
       }
-      else 
+      else
       {
         std::cout << logTime() << "typeId for Attribute could not be determined." << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
       }
       return err;
     }
-    
+
 /**
  * @brief Template based method to write an attribute to an xml file
  * @param attribute The attribute to write to the xml file
  * @return Error Condition - Negative is Error.
  */
     template<typename T>
-    int32 writeAttributeData(MXAAbstractAttributePtr attribute)
+    int32 writeAttributeData(const std::string &attributeKey, IMXAArrayPtr attribute)
     {
       std::ofstream &stream = *(_ofstreamPtr.get());
       T* value = static_cast<T*> (attribute->getVoidPointer(0) );
       uint64 nElements = attribute->getNumberOfElements();
       int32 size = attribute->getNumberOfDimensions();
- 
+
       std::string sType = H5Lite::HDFTypeForPrimitiveAsStr(value[0]);
-      stream << indent(5) << "<UserMetaData key=\"" << attribute->getAttributeKey() << "\" dims=\"" ;
+      stream << indent(5) << "<UserMetaData key=\"" << attributeKey << "\" dims=\"" ;
       std::vector<uint64> dims(size, 0);
       attribute->getDimensions( &(dims.front() ) );
-   
+
       // Write the values of each dimension to the file
       for (int i = 0; i < size; ++i)
       {
@@ -133,9 +133,9 @@ class MXA_EXPORT XMLMXAAttributeWriter
         }
       }
       stream << "\" type=\"" << sType << "\">";
-      
+
       // Now Write the data
-      for(uint64 i = 0; i < nElements; ++i) 
+      for(uint64 i = 0; i < nElements; ++i)
       {
        if ( i%dims[0] == 0)
         {
@@ -148,23 +148,23 @@ class MXA_EXPORT XMLMXAAttributeWriter
         else
         {
           stream  << static_cast<int32>(value[i]);
-        } 
+        }
         stream << " ";
-       
+
       }
       stream << "\n"<< indent(5) << "</UserMetaData>\n";
       return 1;
     }
-    
+
 /**
  * @brief Writes a string based attribute to an xml file
  * @param attribute The attribute to write
  * @return Error Condition - Negative is error
  */
-    int32 writeStringAttributeData(MXAAbstractAttributePtr attribute)
+    int32 writeStringAttributeData(const std::string &attributeKey, IMXAArrayPtr attribute)
     {
       std::ofstream &stream = *(_ofstreamPtr.get());
-      stream << indent(5) << "<UserMetaData key=\"" << attribute->getAttributeKey() << "\" dims=\"1\" type=\"H5T_STRING\">";
+      stream << indent(5) << "<UserMetaData key=\"" << attributeKey << "\" dims=\"1\" type=\"H5T_STRING\">";
       char* s = static_cast<char*>(attribute->getVoidPointer(0));
       uint64 nElements = attribute->getNumberOfElements();
       if (s[nElements-1] == 0) // Null Terminated
@@ -172,19 +172,19 @@ class MXA_EXPORT XMLMXAAttributeWriter
         nElements -= 1;
       }
       std::string str(s, nElements);
-      
+
       stream << str << "</UserMetaData>" << std::endl;
       return 1;
     }
-    
-  protected:  
-  
+
+  protected:
+
   private:
     boost::shared_ptr<std::ofstream> _ofstreamPtr;
-    
+
     XMLMXAAttributeWriter(const XMLMXAAttributeWriter&);    //Not Implemented
     void operator=(const XMLMXAAttributeWriter&); //Not Implemented
-  
+
 };
 
 #endif //_XMLMXAAttributeWriter_h_

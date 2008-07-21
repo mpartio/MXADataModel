@@ -3,6 +3,8 @@ IF (NOT MXA_RESOURCES_DIR)
   GET_FILENAME_COMPONENT(MXA_RESOURCES_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
 ENDIF (NOT MXA_RESOURCES_DIR)
 #-- Include the Configure Checks
+#-------------------------------------------------------------------------------
+INCLUDE( "${MXA_RESOURCES_DIR}/vtkTestTypes.cmake" )
 INCLUDE( "${MXA_RESOURCES_DIR}/ConfigureChecks.cmake")
 
 
@@ -27,10 +29,16 @@ INCLUDE (${MXA_SOURCE_DIR}/src/BMPIO/BMPIO_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/Common/Common_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/Core/Core_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/DataImport/DataImport_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/src/DataWrappers/DataWrappers_SourceList.cmake)
 INCLUDE (${MXA_SOURCE_DIR}/src/Utilities/Utilities_SourceList.cmake)
 
+SET (MXA_USE_HDF5 1)
+SET (MXA_USE_XML 0)
+SET (MXA_USE_TIFF 0)
 SET (HDF5_SUPPORT "1")
 SET (HDF5_VTK_BRIDGE "0")
+SET (MXA_USE_HDF5_PRIMITIVE_TYPES 1)
+SET (H5LITE_USE_MXA_CONSTRUCTS 1)
 SET (TIFF_SUPPORT "0")
 SET (XML_SUPPORT "0")
 SET (BUILD_TESTING "0")
@@ -43,6 +51,7 @@ SET( MXADATAMODEL_SRCS
     ${MXA_COMMON_SRCS}
     ${MXA_CORE_SRCS}
     ${MXA_DATA_IMPORT_SRCS}
+    ${MXA_DATA_WRAPPERS_SRCS}
     ${MXA_UTILITIES_SRCS}
 )
   
@@ -53,6 +62,7 @@ SET (MXADATAMODEL_HEADERS
     ${MXA_COMMON_HEADERS}
     ${MXA_CORE_HEADERS}
     ${MXA_DATA_IMPORT_HEADERS}
+    ${MXA_DATA_WRAPPERS_HEADERS}
     ${MXA_UTILITIES_HEADERS}
 )
 

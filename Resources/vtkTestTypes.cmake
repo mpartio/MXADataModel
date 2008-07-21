@@ -123,7 +123,7 @@ IF("MXA_COMPILER_HAS_BOOL" MATCHES "^MXA_COMPILER_HAS_BOOL$")
   MESSAGE(STATUS "Checking support for C++ type bool")
   TRY_COMPILE(MXA_COMPILER_HAS_BOOL
               ${PROJECT_BINARY_DIR}/CMakeTmp/Bool
-              ${PROJECT_RESOURCES_DIR}/vtkTestBoolType.cxx
+              ${MXA_RESOURCES_DIR}/vtkTestBoolType.cxx
               OUTPUT_VARIABLE OUTPUT)
   IF(MXA_COMPILER_HAS_BOOL)
     MESSAGE(STATUS "Checking support for C++ type bool -- yes")
@@ -146,7 +146,7 @@ IF("MXA_TYPE_CHAR_IS_SIGNED" MATCHES "^MXA_TYPE_CHAR_IS_SIGNED$")
   MESSAGE(STATUS "Checking signedness of char")
   TRY_RUN(MXA_TYPE_CHAR_IS_SIGNED MXA_TYPE_CHAR_IS_SIGNED_COMPILED
           ${PROJECT_BINARY_DIR}/CMakeTmp/Char
-          ${PROJECT_RESOURCES_DIR}/vtkTestCharSignedness.cxx)
+          ${MXA_RESOURCES_DIR}/vtkTestCharSignedness.cxx)
   IF(MXA_TYPE_CHAR_IS_SIGNED_COMPILED)
     IF(MXA_TYPE_CHAR_IS_SIGNED)
       MESSAGE(STATUS "Checking signedness of char -- signed")

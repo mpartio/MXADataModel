@@ -15,7 +15,7 @@
 #include <Common/DLLExport.h>
 #include <Common/MXATypes.h>
 #include <Common/MXATypeDefs.h>
-#include <HDF5/H5AttributeArrayTemplate.hpp>
+#include <DataWrappers/MXAArrayTemplate.hpp>
 #include <HDF5/H5Lite.h>
 
 // C++ Includes
@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  */
 class H5Utilities
 {
@@ -155,6 +155,13 @@ public:
    */
   static MXA_EXPORT herr_t createGroupsForDataset(const std::string &datasetPath, hid_t parent);
 
+  /**
+  * @brief
+  * @param path
+  * @return
+  */
+  static MXA_EXPORT std::string extractObjectName(const std::string &path);
+
   // -------------- HDF Attribute Methods ----------------------------
   /**
   * @brief Looks for an attribute with a given name
@@ -185,20 +192,6 @@ public:
   */
   static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, const std::string &obj_name,
                                                   std::list<std::string> &names);
-#if 0
-  THIS IS REALLY BROKEN. DO NOT USE THIS METHOD
-  /**
-  * @brief Returns a mapping of attribute names to attribute values. This is a pretty specialized
-  * method and should be used with great care. The outcome of the method is undefined for any type
-  * of attribute except strings.
-  * @param objId The hdf5 id of the parent object
-  * @param obj_name The name of the object whose attributes you want a map of
-  * @return A std::map<string, string> of attribute names to values
-  */
-  static MXA_EXPORT  herr_t H5Utilities::getAttributesMap(hid_t loc_id,
-                                                          const std::string &obj_name,
-                                                          std::map<std::string, std::string> &attributes);
-#endif
 
 
   /**
@@ -212,6 +205,40 @@ public:
                                              const std::string &datasetPath,
                                              MXAAbstractAttributes &attributes);
 
+
+/**
+  * @brief Reads data  into an IMXAArrayPtr
+  * @param locId The hdf5 object id of the parent
+  * @param datasetPath The path to the data set containing the attributes you want
+  * @param dims The dimensions of the attribute
+  * @return Boost shared pointer to the data
+  */
+  template<typename T>
+  static IMXAArrayPtr readH5Data( hid_t locId,
+                                         const std::string &datasetPath,
+                                         const std::vector<uint64> &dims)
+  {
+    herr_t err = -1;
+    IMXAArrayPtr ptr;
+
+    ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()));
+    if (ptr.get() == NULL)
+    {
+      return ptr; // empty attribute
+    }
+    T* data = (T*)(ptr->getVoidPointer(0));
+    err = H5Lite::readPointerDataset(locId, datasetPath, data);
+    if ( err < 0)
+    {
+      std::cout << "readH5Data read error: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
+      IMXAArray* nullData = 0x0;
+      ptr.reset(nullData); // Swap in a null pointer
+    }
+    return ptr;
+  }
+
+
+
 /**
   * @brief Reads data from an Attribute into an IAttributePtr
   * @param locId The hdf5 object id of the parent
@@ -221,19 +248,19 @@ public:
   * @return Boost shared pointer to the attribute
   */
   template<typename T>
-  static MXAAbstractAttributePtr readPrimitiveAttribute( hid_t locId,
-                                                         const std::string &datasetPath,
-                                                         const std::string &key,
-                                                         const std::vector<uint64> &dims)
+  static IMXAArrayPtr readH5Attribute(  hid_t locId,
+                                               const std::string &datasetPath,
+                                               const std::string &key,
+                                               const std::vector<uint64> &dims)
   {
     herr_t err = -1;
-    MXAAbstractAttributePtr ptr;
+    IMXAArrayPtr ptr;
     if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
     {
       T data;
       err = H5Lite::readScalarAttribute(locId, datasetPath, key, data);
       if (err >= 0) {
-        MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateScalarAttribute(datasetPath, key, data);
+        IMXAArrayPtr attr = MXAArrayTemplate<T>::CreateSingleValueArray( data);
         if (attr.get() != NULL)
         {
           ptr = attr;
@@ -242,7 +269,7 @@ public:
     }
     else // Multi-Dimensional Data
     {
-      MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray(datasetPath, key, dims.size(), &(dims.front()));
+      IMXAArrayPtr attr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()));
       if (attr.get() == NULL)
       {
         return ptr; // empty attribute
@@ -277,7 +304,7 @@ public:
  * @param datasetPath The internal HDF5 path to the data, relative to the root of the data file
  * @return
  */
-  static MXA_EXPORT MXAAbstractDataPtr readDataArray(IDataFilePtr dataFile, const std::string &datasetPath);
+  static MXA_EXPORT IMXAArrayPtr readData(IDataFilePtr dataFile, const std::string &datasetPath);
 
   /**
   * @brief Reads an attribute from an HDF5 data file into a newly allocated MXAAbstractAttribute
@@ -287,7 +314,7 @@ public:
   * @param attributeKey The name of the attribute to read
   * @return
   */
-  static MXA_EXPORT MXAAbstractAttributePtr readAttributeArray(IDataFilePtr dataFile, const std::string &datasetPath, const std::string &attributeKey);
+  static MXA_EXPORT IMXAArrayPtr readAttribute(IDataFilePtr dataFile, const std::string &datasetPath, const std::string &attributeKey);
 
 
 

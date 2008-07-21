@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -16,7 +16,7 @@
 #include <Core/MXADataModel.h>
 #include <Base/IDataModelReader.h>
 #include <HDF5/H5Lite.h>
-#include <HDF5/H5AttributeArrayTemplate.hpp>
+#include <DataWrappers/MXAArrayTemplate.hpp>
 #include <XML/XMLIODelegate.h>
 #include <XML/ExpatParser.h>
 #include <XML/XMLConstants.h>
@@ -27,7 +27,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
  * class. This class is responsible for reading a data model from an XML File
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.17 $
+ * @version $Revision: 1.18 $
  * @class XMLDataModelReader XMLDataModelReader.h
  */
 class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,
@@ -36,7 +36,7 @@ class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,
 public:
 	XMLDataModelReader(IDataModelPtr dataModel, const std::string &fileName);
 	virtual ~XMLDataModelReader();
-	
+
 // -----------------------------------------------------------------------------
 //  IDataModelReader Implementation
 // -----------------------------------------------------------------------------
@@ -46,23 +46,23 @@ public:
   * @return Error: Negative is error Condition
   */
 	int32 readDataModel(int32 NOT_USED) ;
- 
+
 // -----------------------------------------------------------------------------
 //  ExpatEvtHandler Implementation
 // -----------------------------------------------------------------------------
   // Over ride from ExpatEvtHandler class
   void OnStartElement(const XML_Char* name, const XML_Char** attrs);
-  
+
   // Over ride from ExpatEvtHandler class
   void OnEndElement(const XML_Char* name);
-	
+
   void OnCharacterData(const XML_Char* data, int32 len);
-  
+
   /**
    * @brief Returns the current parser error.
    */
   int32 getParseError();
-	  
+
   /**
   * @brief Parses a string from the XML file that is data encoded as space delimited values
   * @param dims The dimensions of the data set
@@ -79,7 +79,7 @@ public:
     {
       size *= *iter;
     }
-    
+
     if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
     {
       //std::cout << logTime() << "  Scalar Value" << std::endl;
@@ -89,21 +89,21 @@ public:
       {
         if ( (istream >> tmp).good() )
         {
-          MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateScalarAttribute(MXA::UserMetaDataPath, this->_userMDKey,static_cast<T>(tmp) );
-          this->_dataModel->addUserMetaData(attr);
+          IMXAArrayPtr attr = MXAArrayTemplate<T>::CreateSingleValueArray( static_cast<T>(tmp) );
+          this->_dataModel->addUserMetaData(this->_userMDKey, attr);
         }
       }
-      else 
+      else
       {
         if ( (istream >> temp).good() )
         {
-          MXAAbstractAttributePtr attr = H5AttributeArrayTemplate<T>::CreateScalarAttribute(MXA::UserMetaDataPath, this->_userMDKey,static_cast<T>(temp) );
-          this->_dataModel->addUserMetaData(attr);
+          IMXAArrayPtr attr = MXAArrayTemplate<T>::CreateSingleValueArray( static_cast<T>(temp) );
+          this->_dataModel->addUserMetaData(this->_userMDKey, attr);
         }
       }
-            
-    } 
-    else // Multi-Dimensional Data 
+
+    }
+    else // Multi-Dimensional Data
     {
      // std::cout << logTime() << "  Vector Value" << std::endl;
       std::vector<T> data;
@@ -116,7 +116,7 @@ public:
           data.push_back( static_cast<T>(tmp) );
         }
       }
-      else 
+      else
       {
         while ( (istream >> temp).good() )
         {
@@ -126,23 +126,20 @@ public:
 
       if (data.size() == size)
       {
-        MXAAbstractAttributePtr attr = 
-          H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray( MXA::UserMetaDataPath, 
-                                                                                  this->_userMDKey, 
-                                                                                  dims.size(), 
-                                                                                  &(dims.front()) );
+        IMXAArrayPtr attr =
+          MXAArrayTemplate<T>::CreateMultiDimensionalArray(  dims.size(), &(dims.front()) );
         T* dest = static_cast<T*>(attr->getVoidPointer(0));
         ::memcpy(dest, &(data.front()), data.size() * sizeof(T) );
-        
-        this->_dataModel->addUserMetaData(attr);
+
+        this->_dataModel->addUserMetaData(this->_userMDKey, attr);
       } else {
         err = -1;
       }
     }
     return err;
-  } 
-  
-  
+  }
+
+
 private:
   //XMLIODelegate*    _ioDelegate;
   IDataModelPtr    _dataModel;
@@ -155,12 +152,12 @@ private:
   std::string       _userMDDims;
   std::string       _userMDType;
   ExpatParser*      _parser;
-  
+
   int32               _indent;
-  
+
   XMLDataModelReader(const XMLDataModelReader&);   //Copy Constructor Not Implemented
   void operator=(const XMLDataModelReader&); //Copy Assignment Not Implemented
-  
+
 
 // -----------------------------------------------------------------------------
 //  Methods to help with the parsing events
@@ -239,7 +236,7 @@ private:
   /** @brief Method that will be called when the 'UserMetaData' tag is Exited.  */
     void onUserMetaDataEndTag(const XML_Char* name);
 
-    
+
 };
 
 #endif /*XMLDATAMODELREADER_H_*/

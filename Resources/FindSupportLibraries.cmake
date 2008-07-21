@@ -31,6 +31,8 @@ ENDIF (MXA_USE_XML)
 #--- Find the HDF5 library ------------------------------------------------
 # Build with the HDF5 Libraries Enabled. This is the default
 SET(HDF5_SUPPORT "0")
+SET(MXA_USE_HDF5_PRIMITIVE_TYPES)
+SET(H5LITE_USE_MXA_CONSTRUCTS)
 SET(HDF5_VTK_BRIDGE "0")
 OPTION (MXA_USE_HDF5 "Compiles Sources dependent on HDF5 Libraries" ON)
 IF ( MXA_USE_HDF5 )
@@ -43,6 +45,8 @@ IF ( MXA_USE_HDF5 )
   ENDIF(NOT HDF5_FOUND)
   INCLUDE_DIRECTORIES( ${HDF5_INCLUDE_DIRS} )
   SET(DEP_LIBS ${DEP_LIBS} ${HDF5_LIBRARIES})
+  SET(MXA_USE_HDF5_PRIMITIVE_TYPES 1)
+  SET(H5LITE_USE_MXA_CONSTRUCTS 1)
 ENDIF ( MXA_USE_HDF5 )   
  
 #---- Find TIFF -------------------------------------------------------------

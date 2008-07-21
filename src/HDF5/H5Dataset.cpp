@@ -1,24 +1,26 @@
-#include "H5MXADataset.h"
-#include <Core/MXAAbstractData.h>
-#include <Core/MXAAbstractAttribute.h>
-#include <HDF5/H5DataArrayTemplate.hpp>
+#include "H5Dataset.h"
+#include <Base/IDataFile.h>
+#include <Base/IMXAArray.h>
+//#include <Core/MXAAbstractAttribute.h>
+#include <DataWrappers/MXAArrayTemplate.hpp>
 #include <HDF5/H5Utilities.h>
 
 #include <list>
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-IDatasetPtr H5MXADataset::LoadFromFile(IDataFilePtr dataFile, const std::string &datasetPath)
+IDatasetPtr H5Dataset::LoadFromFile(IDataFilePtr dataFile, const std::string &datasetPath)
 {
-  MXAAbstractDataPtr data = H5Utilities::readDataArray(dataFile, datasetPath);
+  IMXAArrayPtr data = H5Utilities::readData(dataFile, datasetPath);
+
   if (NULL == data.get() )
   {
     IDatasetPtr ptr;
     return ptr;
   }
-  IDatasetPtr ptr (new H5MXADataset(data));
+  IDatasetPtr ptr (new H5Dataset(datasetPath, data));
   //Load all the Attributes
   std::list<std::string> attributeNames;
   int32 err = H5Utilities::getAllAttributeNames(dataFile->getFileId(), datasetPath, attributeNames );
@@ -26,16 +28,16 @@ IDatasetPtr H5MXADataset::LoadFromFile(IDataFilePtr dataFile, const std::string 
   {
     return ptr;
   }
-  for (std::list<std::string>::iterator iter = attributeNames.begin(); iter != attributeNames.end(); ++iter ) 
+  for (std::list<std::string>::iterator iter = attributeNames.begin(); iter != attributeNames.end(); ++iter )
   {
-    MXAAbstractAttributePtr attr = H5Utilities::readAttributeArray(dataFile, datasetPath, *iter);
+    IMXAArrayPtr attr = H5Utilities::readAttribute(dataFile, datasetPath, *iter);
     if (attr.get() != NULL)
     {
-      ptr->addAttribute(attr);
+      ptr->addAttribute(*iter, attr);
     }
     else
     {  // Problems loading the attribute
-      H5MXADataset* nullPtr = 0x0;
+      H5Dataset* nullPtr = 0x0;
       ptr.reset(nullPtr);
       break;
     }
@@ -44,140 +46,157 @@ IDatasetPtr H5MXADataset::LoadFromFile(IDataFilePtr dataFile, const std::string 
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-IDatasetPtr H5MXADataset::CreateDatasetPtr(MXAAbstractDataPtr data)
+IDatasetPtr H5Dataset::CreateDatasetPtr(const std::string &datasetPath, IMXAArrayPtr data)
 {
-  IDatasetPtr ptr (new H5MXADataset(data));
+  IDatasetPtr ptr (new H5Dataset(datasetPath, data));
   return ptr;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-H5MXADataset::H5MXADataset(MXAAbstractDataPtr data) :
-_data(data)
+H5Dataset::H5Dataset(const std::string &datasetPath, IMXAArrayPtr data) :
+_data(data),
+_datasetPath(datasetPath)
 {
-  
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
- H5MXADataset::~H5MXADataset()
+ H5Dataset::~H5Dataset()
 {
-  
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-std::string H5MXADataset::getDatasetPath()
+void H5Dataset::setDatasetPath(const std::string &path)
 {
-  std::string path;
-  if (this->_data.get() != NULL)
-  {
-    path = this->_data->getDatasetPath();
-  }
-  return path;
+  this->_datasetPath = path;
+}
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string H5Dataset::getDatasetPath()
+{
+  return this->_datasetPath;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-void H5MXADataset::setData(MXAAbstractDataPtr data)
+void H5Dataset::setData(IMXAArrayPtr data)
 {
   this->_data = data;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-MXAAbstractDataPtr H5MXADataset::getData()
+IMXAArrayPtr H5Dataset::getData()
 {
   return this->_data;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-void H5MXADataset::addAttribute (MXAAbstractAttributePtr attribute)
+void H5Dataset::addAttribute (const std::string &attributeKey, IMXAArrayPtr attribute)
 {
-  for (MXAAbstractAttributes::iterator iter = _attributes.begin(); iter != _attributes.end(); ++iter)
+
+  MXAAbstractAttributes::iterator iter = _attributes.find(attributeKey);
+  if ( iter != _attributes.end() )
   {
-    if ( (*iter).get() == attribute.get() )
+    //Key was already in the map of attributes
+    IMXAArrayPtr ptr = (*iter).second;
+    if (ptr.get() != attribute.get()  && (NULL != attribute.get() ))
     {
-      return;
+      //Attribute was NOT the same one
+      (*iter).second = attribute;
     }
   }
-  this->_attributes.push_back(attribute);
-}
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-void H5MXADataset::removeAttribute (const std::string &attributeKey)
-{
-  for (MXAAbstractAttributes::iterator iter = _attributes.begin(); iter != _attributes.end(); ++iter)
+  else // Key was not found in the attributes map so add it
   {
-    if ( (*iter)->getAttributeKey().compare(attributeKey) == 0 )
-    {
-      this->_attributes.erase(iter);
-      return;
-    }
+    this->_attributes[attributeKey] = attribute;
   }
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-MXAAbstractAttributePtr H5MXADataset::getAttribute(const std::string &attributeKey)
+void H5Dataset::removeAttribute (const std::string &attributeKey)
 {
-  for (MXAAbstractAttributes::iterator iter = _attributes.begin(); iter != _attributes.end(); ++iter)
+  MXAAbstractAttributes::iterator iter = _attributes.find(attributeKey);
+  if ( iter != _attributes.end() )
   {
-     if ( (*iter)->getAttributeKey().compare(attributeKey) == 0 )
-    {
-      return *iter;
-    }
+    _attributes.erase(attributeKey);
   }
-  MXAAbstractAttributePtr ptr;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+IMXAArrayPtr H5Dataset::getAttribute(const std::string &attributeKey)
+{
+  MXAAbstractAttributes::iterator iter = _attributes.find(attributeKey);
+  if ( iter != _attributes.end() )
+  {
+    //Key was already in the map of attributes
+    IMXAArrayPtr ptr = (*iter).second;
+    return ptr;
+  }
+  IMXAArrayPtr ptr;
   return ptr;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-int32 H5MXADataset::writeToFile (IDataFilePtr dataFile)
+int32 H5Dataset::writeToFile (IDataFilePtr dataFile)
 {
   herr_t err = -1;
-  err = this->_data->writeToFile(dataFile);
+  err = H5Utilities::createGroupsForDataset( this->_datasetPath, dataFile->getFileId());
+  err = H5Lite::writeMXAArray(dataFile->getFileId(), this->_datasetPath, this->_data.get() );
   if (err < 0)
   {
+    std::cout << "Error Writing Array. " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
     return err;
   }
-  
+
+  IMXAArray* attr = NULL;
   for (MXAAbstractAttributes::iterator iter = this->_attributes.begin(); iter != this->_attributes.end(); ++iter)
   {
-    err = (*iter)->writeToFile(dataFile);
-    if (err < 0)
+    std::string attributeName = (*iter).first;
+    attr = (*iter).second.get();
+    if (NULL != attr)
     {
-      return err;
+      err = H5Lite::writeMXAAttribute(dataFile->getFileId(), this->_datasetPath, attributeName, attr);
+      if (err < 0)
+      {
+        std::cout << "Error Writing Attribute. " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
+        return err;
+      }
     }
   }
   return err;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-int32 H5MXADataset::readFromFile (IDataFilePtr dataFile)
+int32 H5Dataset::readFromFile (IDataFilePtr dataFile)
 {
   std::string datasetPath = this->getDatasetPath();
   if (datasetPath.empty() == true)
   {
     return -1;
   }
-  MXAAbstractDataPtr data = H5Utilities::readDataArray(dataFile, datasetPath );
+  IMXAArrayPtr data = H5Utilities::readData(dataFile, datasetPath );
   if (data.get() == NULL)
   {
     return -1;
@@ -192,10 +211,10 @@ int32 H5MXADataset::readFromFile (IDataFilePtr dataFile)
   }
   this->_attributes.clear(); // Clear any attributes first
   for (std::list<std::string>::iterator iter = attributeNames.begin(); iter != attributeNames.end(); ++iter ) {
-    MXAAbstractAttributePtr attr = H5Utilities::readAttributeArray(dataFile, datasetPath, *iter);
+    IMXAArrayPtr attr = H5Utilities::readAttribute(dataFile, datasetPath, *iter);
     if (attr.get() != NULL)
     {
-      this->addAttribute(attr);
+      this->addAttribute(*iter, attr);
     }
   }
   return err;

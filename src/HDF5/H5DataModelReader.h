@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -16,7 +16,7 @@
 #include <Core/MXADataModel.h>
 #include <Base/IDataModelReader.h>
 //#include <HDF5/H5IODelegate.h>
-#include <HDF5/H5AttributeArrayTemplate.hpp>
+//#include <HDF5/H5AttributeArrayTemplate.hpp>
 
 // C++ Headers
 #include <string>
@@ -30,7 +30,7 @@
  * from the HDF5 data file
  * @author Mike Jackson
  * @date Mar 2007
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  *   H5DataModelReader.h
  */
 class MXA_EXPORT H5DataModelReader : public IDataModelReader
@@ -43,68 +43,68 @@ public:
   * be over written with those from the file.
   */
   H5DataModelReader(IDataModelPtr dataModel);
-  
+
   virtual ~H5DataModelReader();
-  
-  
+
+
   // Loading Methods
   /**
-  * @brief Reads the Data model 
+  * @brief Reads the Data model
   * @param locId The HDF5 file or group id
   * @return Standard HDF5 Error Condition
   */
   herr_t readDataModel(hid_t locId);
- 
+
   /**
   * @brief Reads the model type
   * @param locId The HDF5 file or group id
-  * @return Standard HDF5 Error Condition 
+  * @return Standard HDF5 Error Condition
   */
   herr_t readModelType(hid_t locId);
- 
+
   /**
   * @brief reads the model version
   * @param locId The HDF5 file or group id
-  * @return Standard HDF5 Error Condition 
+  * @return Standard HDF5 Error Condition
   */
   herr_t readModelVersion(hid_t locId);
- 
+
   /**
   * @brief reads the data root
   * @param locId The HDF5 file or group id
-  * @return Standard HDF5 Error Condition 
+  * @return Standard HDF5 Error Condition
   */
   herr_t readDataRoot(hid_t locId);
- 
+
   /**
   * @brief reads the data dimensions
   * @param locId The HDF5 file or group id
-  * @return Standard HDF5 Error Condition 
+  * @return Standard HDF5 Error Condition
   */
   herr_t readDataDimensions(hid_t locId);
- 
+
   /**
   * @brief reads the data records
   * @param locId
-  * @return Standard HDF5 Error Condition 
+  * @return Standard HDF5 Error Condition
   */
   herr_t readDataRecords(hid_t locId);
- 
+
   /**
   * @brief reads the required meta data
   * @param locId The HDF5 file or group id
-  * @return Standard HDF5 Error Condition 
+  * @return Standard HDF5 Error Condition
   */
   herr_t readRequiredMetaData(hid_t locId);
- 
+
   /**
   * @brief reads the user meta data
   * @param locId The HDF5 file or group id
-  * @return Standard HDF5 Error Condition 
+  * @return Standard HDF5 Error Condition
   */
   herr_t readUserMetaData(hid_t locId);
 
-  
+
 protected:
   // ----- Helper methods to read data dimensions or data records --------------
   /**
@@ -130,12 +130,12 @@ protected:
   * @return IDataRecord shared pointer
   */
   MXADataRecordPtr _loadDataRecord(hid_t gid, std::string name);
-  
-  
+
+
 private:
-  
+
     IDataModelPtr _dataModel;
-  
+
     H5DataModelReader(const H5DataModelReader&);   //Copy Constructor Not Implemented
     void operator=(const H5DataModelReader&); //Copy Assignment Not Implemented
 };

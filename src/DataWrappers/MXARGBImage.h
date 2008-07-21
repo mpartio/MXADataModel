@@ -4,85 +4,92 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _H5RGBImage_h_
-#define _H5RGBImage_h_
+#ifndef _MXARGBImage_h_
+#define _MXARGBImage_h_
 
 
-#include <HDF5/H5DataArrayTemplate.hpp>
+#include <DataWrappers/MXAArrayTemplate.hpp>
 
 
 /**
-* @class H5RGBImage H5RGBImage.h HDF5/H5RGBImage.h
-* @brief This class represents a 2D array of rgb values. The data is written to 
+* @class MXARGBImage MXARGBImage.h HDF5/MXARGBImage.h
+* @brief This class represents a 2D array of rgb values. The data is written to
 * the data file using the H5Image protocol. This means that some extra attributes
-* are written to the dataset in addition to the data. If this is NOT what you want 
-* then use the generic H5Data2DArray class instead.
+* are written to the dataset in addition to the data. If this is NOT what you want
+* then use the generic MXA2DArray class instead.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.4 $
+* @version $Revision: 1.1 $
 */
-class MXA_EXPORT H5RGBImage : public H5DataArrayTemplate<uint8> 
+class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8>
 {
   public:
-    static MXAAbstractDataPtr CreateAbstractDataArray(const std::string &datasetPath, 
-                                  int32 width, int32 height);
-    
-    static H5RGBImage* New(const std::string &datasetPath, 
-                          int32 width, int32 height);
-    
-    virtual ~H5RGBImage();
-     
-  
+    static IMXAArrayPtr CreateRGBImageArray(int32 width, int32 height);
+
+    static MXARGBImage* New( int32 width, int32 height);
+
+    virtual ~MXARGBImage();
+
+
     /**
      * Returns the number of dimensions the data has.
      */
     virtual int32 getNumberOfDimensions ();
-    
+
+    // -----------------------------------------------------------------------------
+    //
+    // -----------------------------------------------------------------------------
+    virtual void getDimensions(uint64* dims)
+    {
+      dims[1] = _width;
+      dims[0] = _height;
+    }
+
     uint8* getPixelPointer(int32 x, int32 y);
-    virtual int32 getWidth() { return _width; }
+    virtual int32 getWidth() { return _width/3; }
     virtual int32 getHeight() { return _height; }
-    
+
 
     virtual int32 resize(uint64 size);
-        
+
     /**
      * @brief Resizes the data array to the specified width and height
      * @param width The new width of the array
      * @param height The new height of the array
-     * @return 1 on success and Zero (0) on failure 
+     * @return 1 on success and Zero (0) on failure
      */
     int32 resizeArray(mxaIdType width, mxaIdType height);
-    
+
+#if 0
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
     virtual int32 writeToFile (IDataFilePtr dataFile);
-    
+
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
     virtual int32 readFromFile(IDataFilePtr dataFile);
-    
-    
+#endif
+
     virtual std::string valueToString(char delimiter = ' ');
-    
-  protected:  
-      H5RGBImage(const std::string &datasetPath, 
-                 int32 width, int32 height);
+
+  protected:
+      MXARGBImage( int32 width, int32 height);
   private:
     int32 _width;
     int32 _height;
-    
-      H5RGBImage(const H5RGBImage&);    //Not Implemented
-      void operator=(const H5RGBImage&); //Not Implemented
-  
+
+    MXARGBImage(const MXARGBImage&);    //Not Implemented
+    void operator=(const MXARGBImage&); //Not Implemented
+
 };
 
-#endif //_H5RGBImage_h_
+#endif //_MXARGBImage_h_
 
 
 

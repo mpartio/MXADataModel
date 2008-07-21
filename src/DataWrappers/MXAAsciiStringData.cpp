@@ -1,23 +1,20 @@
-#include "H5AsciiStringAttribute.h"
+#include "MXAAsciiStringData.h"
 #include <Common/LogTime.h>
 #include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
+
 
 #include <iostream>
 
 #include <hdf5.h>
 
-
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-MXAAbstractAttributePtr H5AsciiStringAttribute::CreateAbstractAttributeArray(const std::string &datasetPath, 
-                                                    const std::string &attributeKey,
-                                                    const std::string &value)
+IMXAArrayPtr MXAAsciiStringData::Create(const std::string &value)
 {
-  MXAAbstractAttributePtr ptr;
+  IMXAArrayPtr ptr;
   int32 err = 1;
-  H5AsciiStringAttribute* d = new H5AsciiStringAttribute(datasetPath, attributeKey, 0);
+  MXAAsciiStringData* d = new MXAAsciiStringData( 0);
   std::string::size_type size = value.size();
   std::string::size_type nullTermSize = size + 1;
   if (size > 0) // NOT an empty String
@@ -32,7 +29,7 @@ MXAAbstractAttributePtr H5AsciiStringAttribute::CreateAbstractAttributeArray(con
   }
   if (err >= 0)
   { // No errors, swap in the pointer
-    ptr.reset(d); 
+    ptr.reset( static_cast<IMXAArray*>(d) );
   }
   else
   {
@@ -42,9 +39,36 @@ MXAAbstractAttributePtr H5AsciiStringAttribute::CreateAbstractAttributeArray(con
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-std::string H5AsciiStringAttribute::toStdString(H5AsciiStringAttribute* strData)
+MXAAsciiStringData* MXAAsciiStringData::New(const std::string &value)
+{
+  int32 err = 1;
+  MXAAsciiStringData* d = new MXAAsciiStringData( 0);
+  std::string::size_type size = value.size();
+  std::string::size_type nullTermSize = size + 1;
+  if (size > 0) // NOT an empty String
+  {
+    err = d->resize(nullTermSize);
+    if (err > 0) //copy data into array
+    {
+      uint8* dest = d->getPointer(0);
+      const char* source = value.c_str();
+      ::memcpy(dest, source, value.size() + 1 );
+    }
+  }
+  if (err < 0)
+  {
+    delete d; // Clean up the memory
+    d = NULL;
+  }
+  return d;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string MXAAsciiStringData::toStdString(MXAAsciiStringData* strData)
 {
   const char* p = static_cast<const char*>(strData->getVoidPointer(0) );
   std::string str (p, strData->getNumberOfElements());
@@ -52,9 +76,9 @@ std::string H5AsciiStringAttribute::toStdString(H5AsciiStringAttribute* strData)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-std::string H5AsciiStringAttribute::valueToString(char delimiter)
+std::string MXAAsciiStringData::valueToString(char delimiter)
 {
   const char* p = static_cast<const char*>(this->getVoidPointer(0) );
   std::string str (p, this->getNumberOfElements());
@@ -62,82 +86,69 @@ std::string H5AsciiStringAttribute::valueToString(char delimiter)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-H5AsciiStringAttribute::H5AsciiStringAttribute(const std::string &datasetPath, 
-                                               const std::string &attributeKey,
-                                               mxaIdType numElements) :
- H5AttributeArrayTemplate<uint8>(datasetPath, attributeKey, numElements, true)
+MXAAsciiStringData::MXAAsciiStringData( mxaIdType numElements) :
+ MXAArrayTemplate<uint8>( numElements, true)
 {
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-H5AsciiStringAttribute::~H5AsciiStringAttribute()
+MXAAsciiStringData::~MXAAsciiStringData()
 {
 
 }
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-int32 H5AsciiStringAttribute::getDataType()
+int32 MXAAsciiStringData::getDataType()
 {
   return H5T_STRING;
 }
 
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-const char* H5AsciiStringAttribute::getCharPointer(mxaIdType index)
-{
-  return static_cast<const char*>(this->getVoidPointer(index) );
-}
-
+#if 0
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
-int32 H5AsciiStringAttribute::writeToFile(IDataFilePtr dataFile)
+int32 MXAAsciiStringData::writeToFile(IDataFilePtr dataFile)
 {
-  if (dataFile->getFileId() < 0)
+  int32 err = -1;
+  std::vector<hsize_t> dims(1, this->getNumberOfElements() );
+  err = H5Utilities::createGroupsForDataset(this->getDatasetPath(), dataFile->getFileId() );
+  if (err < 0)
   {
-    return -1;
+    return err;
   }
-  if (this->getVoidPointer(0) == NULL)
-  {
-    return -1;
-  }
-  return H5Lite::writeStringAttribute(dataFile->getFileId(), this->getDatasetPath(), this->getAttributeKey(), this->getNumberOfElements(), this->getCharPointer(0) );
+  err = H5Lite::writeStringDataset(dataFile->getFileId(), this->getDatasetPath(), this->getNumberOfElements(), static_cast<const char*>(this->getVoidPointer(0) ) );
+  return err;
 }
 
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-int32 H5AsciiStringAttribute::readFromFile(IDataFilePtr dataFile)
+int32 MXAAsciiStringData::readFromFile(IDataFilePtr dataFile)
 {
   hid_t fileId = dataFile->getFileId();
   if (fileId < 0)
   {
-    return -1;
+    return fileId;
   }
   herr_t err = -1;
-  herr_t retErr = -1;
   H5T_class_t attr_type;
   size_t attr_size;
-  hid_t typeId = -1;
-  
-  std::vector<uint64> dims;  //Reusable for the loop
-   err = H5Lite::getAttributeInfo(fileId, this->getDatasetPath(), this->getAttributeKey(), dims, attr_type, attr_size, typeId);
-   
-   if (err < 0 )
-   {
-     CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
-     return err;
-   }
-   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
-  std::string::size_type size = attr_size;
+  std::string res;
+
+  std::vector<hsize_t> dims;
+  err = H5Lite::getDatasetInfo(fileId, this->getDatasetPath(), dims, attr_type, attr_size);
+  if (err < 0)
+  {
+    return err;
+  }
+  std::string::size_type size = dims[0];
   if (size > 0) // NOT an empty String
   {
     err = this->resize(size);
@@ -145,11 +156,13 @@ int32 H5AsciiStringAttribute::readFromFile(IDataFilePtr dataFile)
     {
       uint8* dest = static_cast<uint8*>(this->getVoidPointer(0) );
       if (NULL != dest) {
-        err = H5Lite::readStringAttribute(fileId, this->getDatasetPath(), this->getAttributeKey(), dest);
+        err = H5Lite::readStringDataset(fileId, this->getDatasetPath(), dest);
       }
     }
   }
-  
+
   return err;
 }
+
+#endif
 

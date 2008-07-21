@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,6 @@ class IFileReader;
 class IFileWriter;
 class MXADataModel;
 class MXANode;
-// class MXAAttribute;
 class MXADataRecord;
 class MXADataDimension;
 class MXADataSource;
@@ -48,19 +47,19 @@ class IStringSection;
 
 class IDataArray;
 
-// Data Encapsulation 
+// Data Encapsulation
 class IDataset;
-class MXAAbstractData;
-class MXAAbstractAttribute;
+class IMXAArray;
 
 // MXA Meta Data
 class IRequiredMetaData;
 class H5MXARequiredMetaData;
 
 typedef boost::shared_ptr<IDataset>                 IDatasetPtr;
-typedef boost::shared_ptr<MXAAbstractData>          MXAAbstractDataPtr;
-typedef boost::shared_ptr<MXAAbstractAttribute>     MXAAbstractAttributePtr;
-typedef std::vector<MXAAbstractAttributePtr>        MXAAbstractAttributes;
+typedef boost::shared_ptr<IMXAArray>                IMXAArrayPtr;
+//typedef boost::shared_ptr<MXAAbstractData>          MXAAbstractDataPtr;
+//typedef boost::shared_ptr<MXAAbstractAttribute>     MXAAbstractAttributePtr;
+typedef std::map<std::string, IMXAArrayPtr>        MXAAbstractAttributes;
 
 typedef boost::shared_ptr<IRequiredMetaData>        IRequiredMetaDataPtr;
 typedef boost::shared_ptr<H5MXARequiredMetaData>    H5MXARequiredMetaDataPtr;

@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -29,8 +29,7 @@
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
 #include <HDF5/H5MXADataFile.h>
-#include <HDF5/H5DataArrayTemplate.hpp>
-#include <HDF5/H5AttributeArrayTemplate.hpp>
+#include <DataWrappers/MXAArrayTemplate.hpp>
 
 // HDF5 Include
 #include <hdf5.h>
@@ -41,7 +40,7 @@
 #if defined (_WIN32)
   #define MXA_FILE "C:\\WINDOWS\\Temp\\MXA_Example1.h5"
 #define XML_FILE "C:\\WINDOWS\\Temp\\MXA_Example1.xml"
-#else 
+#else
   #define MXA_FILE "/tmp/MXA_Example1.h5"
 #define XML_FILE "/tmp/MXA_Example1.xml"
 #endif
@@ -53,7 +52,7 @@ void captureSampleImage(std::vector<uint8> &imageBuffer);
 void listUserMetaData(IDataFilePtr dataFile);
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int main(int argc, char **argv) {
   std::cout << "Starting Example 1." << std::endl;
@@ -61,10 +60,10 @@ int main(int argc, char **argv) {
   //Instatiate a new model using the predefined boost shared pointer type
   MXADataModelPtr modelPtr = MXADataModel::New();
   MXADataModel* model = modelPtr.get();
-  
+
   //Define at what path in the HDF5 file the data will be stored
   model->setDataRoot("/Experimental Data");
-  
+
   //Instantiate 2 Data Dimensions
   // The first dimension has 10 elements from 0 to 9 and increments by 1. Since this
   // is the first dimension we give it an index of 0
@@ -75,7 +74,7 @@ int main(int argc, char **argv) {
   int32 increment = 1;
   int32 uniform = 1;
   MXADataDimensionPtr dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
-  
+
   // The second dimension will have 4 elements ranging from 2 to 8 with an increment of 2;
   index = 1;
   count = 4;
@@ -84,24 +83,24 @@ int main(int argc, char **argv) {
   increment = 200;
   uniform = 1;
   MXADataDimensionPtr dim2 = MXADataDimension::New("Pressure", "Press (kPa)", index, count, start, end, increment, uniform);
-  
+
   //Next we need to add these dimensions to the model. Since we are using Boost shared pointers
   // the dimension objects are refcounted thus relieving us from having to worry about cleaning up
   // the memory allocations
   model->addDataDimension(dim1);
   model->addDataDimension(dim2);
-  
-  
+
+
   // Next we need to create a data record to hold one of the dependent variables for our experiment.
   // In our sample experiment we are going to measure the temperature and record an image of the sample.
   // The important argument is the 'luid' argument. These need to be unique within each group of Data Records.
   MXADataRecordPtr temp = MXADataRecord::New(0, "Temperature" , "Temp (K)");
   MXADataRecordPtr cameraImage = MXADataRecord::New(1, "Camera", "Camera Image");
-  
+
   // Next, add these Records to the Data Model
   model->addDataRecord(temp);
   model->addDataRecord(cameraImage);
-  
+
   //Lastly a certain number of meta data fields are required to be set to non-empty values
   std::map<std::string, std::string> md;
   md[MXA::MXA_CREATOR_TAG] = "Mike Jackson"; // Who is performing the experiment
@@ -113,7 +112,7 @@ int main(int argc, char **argv) {
   md[MXA::MXA_RIGHTS_TAG] = MXA::MXA_RIGHTS_UNLIMITED_VALUE; // There are no limitations on the distribution of the data
   md[MXA::MXA_RELEASE_NUMBER_TAG] = "90312901291239012390"; // The Data has been through a local public affairs office which assigned the data this unique ID
   model->setRequiredMetaData(md);
-  
+
   // So now our model should be valid. We can check the validity of the model with the following:
   std::string message;
   bool valid = model->isValid(message);
@@ -122,16 +121,16 @@ int main(int argc, char **argv) {
     std::cout << "Model was NOT valid. Exiting with Failure. Error message given was: \n" << message << std::endl;
     return EXIT_FAILURE;
   }
-  
+
   // Add some user defined Meta Data to the model
   float32 value = 12.234234f;
-  MXAAbstractAttributePtr umd = H5AttributeArrayTemplate<float32>::CreateScalarAttribute(MXA::UserMetaDataPath, "Float32 User Meta Data", value);
-  model->addUserMetaData(umd);
+  IMXAArrayPtr umd = MXAArrayTemplate<float32>::CreateSingleValueArray(value);
+  model->addUserMetaData("Float32 User Meta Data", umd);
+
   int32 iMDValue = 34212;
-  umd = H5AttributeArrayTemplate<int32>::CreateScalarAttribute(MXA::UserMetaDataPath, "Int32 User Meta Data", iMDValue);
-  model->addUserMetaData(umd);
-  
-  
+  IMXAArrayPtr iUmd = MXAArrayTemplate<int32>::CreateSingleValueArray(iMDValue);
+  model->addUserMetaData("Int32 User Meta Data", iUmd);
+
   // Export the Model to an XML File
   XMLDataModelWriter xmlWriter(modelPtr, XML_FILE);
   int32 err = xmlWriter.writeModelToFile(-1);
@@ -140,26 +139,26 @@ int main(int argc, char **argv) {
     std::cout << "Error writing model to an xml file" << std::endl;
     return -1;
   }
-  
+
   // List the Data Dimensions of the model
   listDataDimensions(model);
-  
+
   // List the Data Records in the model
   listDataRecords(model);
-  
+
   //Write the model to a new HDF5 file, deleting any existing file and
   // allowing the Hdf5 file to remain open for further processing
   IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(MXA_FILE, modelPtr);
-  
+
   if (NULL == dataFile.get() )
   {
     std::cout << "Error Writing Model to HDF5 File" << std::endl;
     return EXIT_FAILURE;
   }
-  
+
   //List the User Meta Data
   listUserMetaData(dataFile);
-  
+
   //Lets store some data into the HDF5 File. In our experiment we are recording the time
   // in 1 minute intervals for 10 minutes and also incrementing the pressure by
   // 200 KPa starting at 200 and ending at 800 KPa. At each combination of those
@@ -205,13 +204,13 @@ int main(int argc, char **argv) {
       }
     }
   }
- 
+
   std::cout << "... Ending Example 1" << std::endl;
   return EXIT_SUCCESS;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void captureSampleImage(std::vector<uint8> &imageBuffer)
 {
@@ -221,42 +220,43 @@ void captureSampleImage(std::vector<uint8> &imageBuffer)
       imageBuffer.push_back(i*j);
     }
   }
-  
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void listUserMetaData(IDataFilePtr dataFile)
 {
   IDataModelPtr modelPtr = dataFile->getDataModel();
   MXAAbstractAttributes userMetaData = modelPtr->getUserMetaData();
-  MXAAbstractAttributePtr attribute;
-  H5AttributeArrayTemplate<float32>* fAttr = NULL;
+
+  float32* fAttr = NULL;
+  IMXAArrayPtr attr;
   std::string key;
   //std::string value;
   for (MXAAbstractAttributes::iterator iter = userMetaData.begin(); iter != userMetaData.end(); ++iter ) {
-    attribute = (*iter);
-    key = attribute->getAttributeKey();
+    key = (*iter).first;
+    attr = (*iter).second;
     if (key.compare("Int32 User Meta Data") == 0)
     {
       // This works because we have a-priori knowledge of the type of data stored
-      int32* valuePtr = static_cast<int32*>( attribute->getVoidPointer(0) );
+      int32* valuePtr = static_cast<int32*>( attr->getVoidPointer(0) );
       std::cout << "Value is: " << *valuePtr << std::endl;
     }
-    
+
     if (key.compare("Float32 User Meta Data") == 0)
     {
       // This works because we have a-priori knowledge of the type of data stored
-      fAttr = dynamic_cast<H5AttributeArrayTemplate<float32>* >( attribute.get() );
-      std::cout << "Value is: " << fAttr->getValue(0) << std::endl;
+      fAttr = static_cast<float32*>(attr->getVoidPointer(0) );
+      std::cout << "Value is: " << *fAttr << std::endl;
     }
   }
 }
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void listDataDimensions(MXADataModel* model)
 {
@@ -276,12 +276,12 @@ void listDataDimensions(MXADataModel* model)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void listDataRecords(MXADataModel* model)
 {
   // We can get a list of Data Records and print out the top level records.
-  // Note that Data Records are stored in a tree structure, so without any type of 
+  // Note that Data Records are stored in a tree structure, so without any type of
   // tree traversal, this code will only print the top level records.
   IDataRecords records = model->getDataRecords();
   MXADataRecord* rec = NULL; //Create a convenience pointer

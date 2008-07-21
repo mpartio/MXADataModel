@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@
 #include <XML/XMLDataModelReader.h>
 #include <XML/XMLDataModelWriter.h>
 #include <Testing/TestDataFileLocations.h>
-#include <HDF5/H5AsciiStringAttribute.h>
+#include <DataWrappers/MXAAsciiStringData.h>
 
 //-- C++ includes
 #include <string>
@@ -35,7 +35,7 @@
 //typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
@@ -49,17 +49,17 @@ void RemoveTestFiles()
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 void MakeScalarAttribute(T value, std::string key, MXADataModel* model)
 {
-  MXAAbstractAttributePtr umd = H5AttributeArrayTemplate<T>::CreateScalarAttribute(MXA::UserMetaDataPath, key, value);
-  model->addUserMetaData(umd);
+  IMXAArrayPtr umd = MXAArrayTemplate<T>::CreateSingleValueArray(value);
+  model->addUserMetaData(key, umd);
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MXADataModel* model)
@@ -74,25 +74,21 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
   BOOST_REQUIRE(dims.size() == 2);
   BOOST_REQUIRE(dims[0] == 5);
   BOOST_REQUIRE(dims[1] == 2);
-  MXAAbstractAttributePtr vecPtr = 
-    H5AttributeArrayTemplate<T>::CreateAbstractAttributeMultiDimensionalArray(MXA::UserMetaDataPath,
-                                                                              key, 
-                                                                              dims.size(), 
-                                                                              &(dims.front()) );
+  IMXAArrayPtr vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()) );
   BOOST_REQUIRE ( vecPtr->getNumberOfElements() == numelements);
   BOOST_REQUIRE (vecPtr->getNumberOfDimensions() == 2);
    std::vector<uint64> mydims(dims.size(), 0);
   vecPtr->getDimensions( &(mydims.front() ) );
   BOOST_REQUIRE (mydims[0] == 5);
   BOOST_REQUIRE (mydims[1] == 2);
-  
+
   // Copy data into the attribute container
   T* data = static_cast<T*>( vecPtr->getVoidPointer(0) );
   for (uint64 i = 0; i < numelements; ++i)
   {
     data[i] = static_cast<T>(i * 1.5);
   }
-  model->addUserMetaData(vecPtr);
+  model->addUserMetaData(key, vecPtr);
 }
 
 // -----------------------------------------------------------------------------
@@ -110,12 +106,12 @@ void CreateAttributes(MXADataModel* model)
     uint64 ui64 = 64;
     float32 f32 = 32.32f;
     float64 f64 = 64.64;
-       
+
     //Create vector attributes
     std::vector<uint64> dims;
     dims.push_back(5);
     dims.push_back(2);
-    
+
 //    // integers
     MakeVectorAttribute( i8, "Vector Int8", dims, model);
     MakeVectorAttribute( ui8, "Vector UInt8", dims, model);
@@ -125,11 +121,11 @@ void CreateAttributes(MXADataModel* model)
     MakeVectorAttribute( ui32, "Vector UInt32", dims, model);
     MakeVectorAttribute( i64, "Vector Int64", dims, model);
     MakeVectorAttribute( ui64, "Vector UInt64", dims, model);
-    
+
     // Floating point
     MakeVectorAttribute( f32, "Vector Float 32", dims, model);
     MakeVectorAttribute( f64, "Vector Float 64", dims, model);
-//    
+//
 //   //Integer Numbers
     MakeScalarAttribute( i8, "Scalar Int 8", model);
     MakeScalarAttribute( ui8, "Scalar UInt8", model);
@@ -144,12 +140,12 @@ void CreateAttributes(MXADataModel* model)
     MakeScalarAttribute( f64, "Scalar Float 64", model);
 
     // String attributes
-    MXAAbstractAttributePtr s1 = H5AsciiStringAttribute::CreateAbstractAttributeArray(MXA::UserMetaDataPath, "Password", "DaddyO");
-    model->addUserMetaData(s1);
+    IMXAArrayPtr s1 = MXAAsciiStringData::Create( "DaddyO");
+    model->addUserMetaData("Password", s1);
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 MXADataModelPtr createModel()
 {
@@ -163,12 +159,12 @@ MXADataModelPtr createModel()
     IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 15, 20, 50, 2, 1);
     IDataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 10, 1000, 5000, 500, 1);
     IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS",100, 0, 99, 1, 1);
-    IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 256, 0, 255, 1, 1); 
-    
-    //Create Data Records  
+    IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 256, 0, 255, 1, 1);
+
+    //Create Data Records
     MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
     model->addDataRecord(rec0);
-    
+
     MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
     model->addDataRecord(rec1);
     //Create Data Records with Parents
@@ -178,7 +174,7 @@ MXADataModelPtr createModel()
     model->addDataRecord(rec3, rec1);
     MXADataRecordPtr rec4 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
     model->addDataRecord(rec4, rec1);
-    
+
     // Make this a child of the 'Order Parameters' Group
      MXADataRecordPtr rec5 = MXADataRecord::New(3, std::string("Order Parameters 2"), std::string("OP 2") );
      model->addDataRecord(rec5, rec1);
@@ -191,7 +187,7 @@ MXADataModelPtr createModel()
       model->addDataRecord(rec8, rec5);
 
 
-    //Create the Required MetaData 
+    //Create the Required MetaData
     std::map<std::string, std::string> md;
     md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
     md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
@@ -202,14 +198,14 @@ MXADataModelPtr createModel()
     md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
     md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
     model->setRequiredMetaData(md);
-    
+
     // Create User Defined MetaData
     CreateAttributes( model );
     return modelPtr;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 MXADataModelPtr createModelTemplate()
 {
@@ -224,22 +220,22 @@ MXADataModelPtr createModelTemplate()
     MXADataDimensionPtr dim1 = MXADataDimension::New("Random Seed", "Rnd Seed");
     MXADataDimensionPtr dim2 = MXADataDimension::New("Timestep", "TS");
     MXADataDimensionPtr dim3 = MXADataDimension::New("Slice", "slice");
-        
+
     model->addDataDimension(dim0);
     model->addDataDimension(dim1);
     model->addDataDimension(dim2);
     model->addDataDimension(dim3);
-    
+
     //Create Data Records
     MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
     model->addDataRecord(rec0);
-    
+
     MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
     model->addDataRecord(rec1);
     //Create Data Records with Parents
     MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
     model->addDataRecord(rec2, rec1);
-    
+
     MXADataRecordPtr rec5 = MXADataRecord::New(1, std::string("Order Parameters 2"), std::string("OP 2") );
      model->addDataRecord(rec5, rec1);
      //Create Data Records with Parents
@@ -249,13 +245,13 @@ MXADataModelPtr createModelTemplate()
      model->addDataRecord(rec7, rec5);
      MXADataRecordPtr rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
      model->addDataRecord(rec8, rec5);
-    
+
     MXADataRecordPtr rec3 = MXADataRecord::New(2, std::string("Eta2"), std::string("Alt Eta2") );
     model->addDataRecord(rec3, rec1);
     MXADataRecordPtr rec4 = MXADataRecord::New(3, std::string("Eta3"), std::string("Alt Eta3") );
     model->addDataRecord(rec4, rec1);
 
-    //Create the Required MetaData 
+    //Create the Required MetaData
     std::map<std::string, std::string> md;
     md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
     md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
@@ -266,14 +262,14 @@ MXADataModelPtr createModelTemplate()
     md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
     md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
     model->setRequiredMetaData(md);
-    
+
     // Create User Defined MetaData
    // CreateAttributes( model );
     return modelPtr;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void GenerateMasterXMLFile()
 {
@@ -287,7 +283,7 @@ void GenerateMasterXMLFile()
     MXAAbstractAttributes attributes = model->getUserMetaData();
     BOOST_REQUIRE(attributes.size() == 21);
   }
-  
+
   {
     IDataModelPtr model = MXADataModel::New();
     // Read the File back from xml
@@ -304,7 +300,7 @@ void GenerateMasterXMLFile()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void XMLModelTest()
 {
@@ -322,13 +318,13 @@ void XMLModelTest()
     MXAAbstractAttributes attributes = model->getUserMetaData();
     BOOST_REQUIRE(attributes.size() == 21);
   }
-  
+
   {
     XMLDataModelWriter writer(model, outFile);
     int32 err = writer.writeModelToFile(-1);
     BOOST_REQUIRE ( err >= 0);
   }
-  
+
   // Now compare the xml files
   std::vector<char> masterData;
   std::vector<char> testData;
@@ -341,7 +337,7 @@ void XMLModelTest()
     fclose(fp);
     fp = NULL;
   }
-  
+
   fp = fopen(outFile.c_str(), "r");
   if( NULL != fp)
   {
@@ -356,7 +352,7 @@ void XMLModelTest()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void XMLTemplateTest()
 {
@@ -375,36 +371,36 @@ void XMLTemplateTest()
   BOOST_REQUIRE ( err < 0); // This SHOULD fail because we read in a partial model
   BOOST_REQUIRE ( readModel->isValid(errorMessage) == false);
   BOOST_REQUIRE ( readModel->getDataRecords().size() == 2);
-  
+
   IDataDimensionPtr dim0 = readModel->getDataDimension(0);
   dim0->setCount(15);
   dim0->setStartValue(20);
   dim0->setEndValue(50);
   dim0->setIncrement(2);
   dim0->setUniform(1);
-  
+
   IDataDimensionPtr dim1 = readModel->getDataDimension(1);
   dim1->setCount(10);
   dim1->setStartValue(1000);
   dim1->setEndValue(5000);
   dim1->setIncrement(500);
   dim1->setUniform(1);
-  
+
   IDataDimensionPtr dim2 = readModel->getDataDimension(2);
   dim2->setCount(100);
   dim2->setStartValue(0);
   dim2->setEndValue(99);
   dim2->setIncrement(1);
   dim2->setUniform(1);
-  
+
   IDataDimensionPtr dim3 = readModel->getDataDimension(3);
   dim3->setCount(256);
   dim3->setStartValue(0);
   dim3->setEndValue(255);
   dim3->setIncrement(1);
   dim3->setUniform(1);
-  
-  BOOST_REQUIRE ( readModel->isValid(errorMessage) == true); //Model should now validate since we have reasonable values for each dimension 
+
+  BOOST_REQUIRE ( readModel->isValid(errorMessage) == true); //Model should now validate since we have reasonable values for each dimension
   //We can write the model back out to XML without any errors
   {
     XMLDataModelWriter writer(readModel, XML_TEMPLATE_COMPLETE_FILE);

@@ -4,15 +4,15 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _H5Data2DArray_h_
-#define _H5Data2DArray_h_
+#ifndef _MXA2DArray_h_
+#define _MXA2DArray_h_
 
 
-#include <HDF5/H5DataArrayTemplate.hpp>
+#include <DataWrappers/MXAArrayTemplate.hpp>
 #include <Common/LogTime.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Image.h>
@@ -22,14 +22,14 @@
 #include <hdf5.h>
 
 /**
-* @class H5Data2DArray H5Data2DArray.hpp HDF5/H5Data2DArray.hpp
+* @class MXA2DArray MXA2DArray.hpp HDF5/MXA2DArray.hpp
 * @brief This class represents a generic 2D array of data.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.6 $
+* @version $Revision: 1.1 $
 */
 template<typename T>
-class H5Data2DArray : public H5DataArrayTemplate<T> 
+class MXA2DArray : public MXAArrayTemplate<T>
 {
   public:
     /**
@@ -39,16 +39,15 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
      * @param height
      * @return
      */
-    static MXAAbstractDataPtr CreateAbstractDataArray(const std::string &datasetPath, 
-                                  int32 width, int32 height)
+    static IMXAArrayPtr CreateAbstractDataArray( int32 width, int32 height)
     {
-      MXAAbstractDataPtr ptr;
+      IMXAArrayPtr ptr;
       int32 err = 1;
-      H5Data2DArray<T>* d = new H5Data2DArray<T>(datasetPath, width, height);
+      MXA2DArray<T>* d = new MXA2DArray<T>( width, height);
       err = d->_allocate();
       if (err >= 0)
       { // No errors, swap in the pointer
-        ptr.reset(d); 
+        ptr.reset(d);
       }
       else
       {
@@ -56,7 +55,7 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
       }
       return ptr;
     }
-    
+
     /**
      * @brief
      * @param datasetPath
@@ -64,11 +63,10 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
      * @param height
      * @return
      */
-    static H5Data2DArray* New(const std::string &datasetPath, 
-                          int32 width, int32 height)
+    static MXA2DArray* New( int32 width, int32 height)
     {
       int32 err = 1;
-      H5Data2DArray* d = new H5Data2DArray(datasetPath, width, height);
+      MXA2DArray* d = new MXA2DArray( width, height);
       err = d->_allocate();
       if (err < 0)
       {
@@ -77,10 +75,10 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
       }
       return d;
     }
-    
-    virtual ~H5Data2DArray() {}
-     
-  
+
+    virtual ~MXA2DArray() {}
+
+
     /**
      * Returns the number of dimensions the data has.
      */
@@ -88,19 +86,19 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
     {
       return 2;
     }
-    
+
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-    virtual void getDimensions(mxaIdType* dims)
+    virtual void getDimensions(uint64* dims)
     {
       dims[0] = _width;
       dims[1] = _height;
     }
-        
+
     virtual int32 getWidth() { return _width; }
     virtual int32 getHeight() { return _height; }
-    
+
     /**
      * @brief Returns the a pointer to the data value located at pixel (x,y)
      * @param x The x location of the pixel
@@ -108,7 +106,7 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
      * @return A pointer to the value.
      */
     T* getPointer(int32 x, int32 y)
-    { 
+    {
       if (x < 0 || y < 0 || y >= _height || x >= _width)
       {
         return NULL;
@@ -118,7 +116,7 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
     }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
     virtual int32 resize(uint64 size)
     {
@@ -133,12 +131,12 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
         return 0;
         }
     }
-        
+
     /**
      * @brief Resizes the data array to the specified width and height
      * @param width The new width of the array
      * @param height The new height of the array
-     * @return 1 on success and Zero (0) on failure 
+     * @return 1 on success and Zero (0) on failure
      */
     int32 resizeArray(mxaIdType width, mxaIdType height)
     {
@@ -152,17 +150,18 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
       }
       return err;
     }
-    
+
 // -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------   
+//
+// -----------------------------------------------------------------------------
     virtual void initialize()
     {
-      H5DataArrayTemplate<T>::initialize();
+      MXAArrayTemplate<T>::initialize();
       this->_width = 0;
       this->_height = 0;
     }
-    
+
+#if 0
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
@@ -181,7 +180,7 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
 
       return err;
     }
-    
+
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
@@ -196,7 +195,7 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
       H5T_class_t attr_type;
       size_t attr_size;
       std::string res;
-     
+
       std::vector<hsize_t> dims;  //Reusable for the loop
       err = H5Lite::getDatasetInfo(fileId, this->getDatasetPath(), dims, attr_type, attr_size);
       if (err < 0 )
@@ -217,19 +216,20 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
         err = this->resize(numElements); //Resize the array to hold the data from the file
         if (err < 0) { return err; }
       }
-      
+
       this->_width = dims[0];
       this->_height = dims[1];
       err = H5Lite::readPointerDataset(fileId, this->getDatasetPath(), this->getPointer(0,0) );
       return err;
     }
-    
+#endif
+
     /**
      * @brief Converts the data array into a string delimited by the supplied
      * delimiter.
      * @param delimiter The delimiter to use between each value. Default is a single space
      * @return The generated string
-     */ 
+     */
     virtual std::string valueToString(char delimiter = ' ')
     {
       std::stringstream sstream;
@@ -237,7 +237,7 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
       uint64 limit = nElements - 1;
       int32 width = 0;
       T* data = this->getPointer(0, 0);
-      for(uint64 i = 0; i < nElements; ++i) 
+      for(uint64 i = 0; i < nElements; ++i)
       {
         if (sizeof(T) != 1 )
          {
@@ -246,7 +246,7 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
          else
          {
            sstream  << static_cast<int32>(data[i]);
-         } 
+         }
         if (i < limit && width != _width)
         {
           sstream << delimiter;
@@ -260,27 +260,22 @@ class H5Data2DArray : public H5DataArrayTemplate<T>
       }
       return sstream.str();
     }
-    
-    
-  protected:  
-      H5Data2DArray(const std::string &datasetPath, 
-                 int32 width, int32 height):
-        H5DataArrayTemplate<T>(datasetPath, width * height, true),
+
+
+  protected:
+      MXA2DArray( int32 width, int32 height):
+        MXAArrayTemplate<T>( width * height, true),
         _width(width),
         _height(height)
         { }
-        
+
   private:
     int32 _width;
     int32 _height;
-    
-      H5Data2DArray(const H5Data2DArray&);    //Not Implemented
-      void operator=(const H5Data2DArray&); //Not Implemented
-  
+
+      MXA2DArray(const MXA2DArray&);    //Not Implemented
+      void operator=(const MXA2DArray&); //Not Implemented
+
 };
 
-#endif //_H5Data2DArray_h_
-
-
-
-
+#endif //_MXA2DArray_h_

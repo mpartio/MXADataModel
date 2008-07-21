@@ -1,4 +1,4 @@
-#include "H5RGBImage.h"
+#include "MXARGBImage.h"
 #include <Common/LogTime.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Image.h>
@@ -8,18 +8,17 @@
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-MXAAbstractDataPtr H5RGBImage::CreateAbstractDataArray(const std::string &datasetPath, 
-                                          int32 width, int32 height)
+IMXAArrayPtr MXARGBImage::CreateRGBImageArray( int32 width, int32 height)
 {
-  MXAAbstractDataPtr ptr;
+  IMXAArrayPtr ptr;
   int32 err = 1;
-  H5RGBImage* d = new H5RGBImage(datasetPath, width, height);
+  MXARGBImage* d = new MXARGBImage(width, height);
   err = d->_allocate();
   if (err >= 0)
   { // No errors, swap in the pointer
-    ptr.reset(d); 
+    ptr.reset( static_cast<IMXAArray*>(d) );
   }
   else
   {
@@ -29,13 +28,12 @@ MXAAbstractDataPtr H5RGBImage::CreateAbstractDataArray(const std::string &datase
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-H5RGBImage* H5RGBImage::New(const std::string &datasetPath, 
-                            int32 width, int32 height)
+MXARGBImage* MXARGBImage::New( int32 width, int32 height)
 {
   int32 err = 1;
-  H5RGBImage* d = new H5RGBImage(datasetPath, width, height);
+  MXARGBImage* d = new MXARGBImage( width, height);
   err = d->_allocate();
   if (err < 0)
   {
@@ -48,45 +46,44 @@ H5RGBImage* H5RGBImage::New(const std::string &datasetPath,
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-H5RGBImage::H5RGBImage(const std::string &datasetPath, 
-                       int32 width, int32 height) :
-H5DataArrayTemplate<uint8>(datasetPath, (uint64)(width * height * 3), true),
-_width(width),
+MXARGBImage::MXARGBImage( int32 width, int32 height) :
+MXAArrayTemplate<uint8>( (uint64)(width * height * 3), true),
+_width(width * 3),
 _height(height)
 {
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-H5RGBImage::~H5RGBImage()
+MXARGBImage::~MXARGBImage()
 {
-  
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-int32 H5RGBImage::getNumberOfDimensions ()
+int32 MXARGBImage::getNumberOfDimensions ()
 {
   return 2;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-uint8* H5RGBImage::getPixelPointer(int32 x, int32 y)
+uint8* MXARGBImage::getPixelPointer(int32 x, int32 y)
 {
-  mxaIdType index = (_width * y * 3) + x * 3;
+  mxaIdType index = (_width * y ) + x * 3;
   return static_cast<uint8*>(this->getVoidPointer(index));
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-int32 H5RGBImage::resize(uint64 size)
+int32 MXARGBImage::resize(uint64 size)
 {
   if(this->_resizeAndExtend(size) || size <= 0)
     {
@@ -99,14 +96,14 @@ int32 H5RGBImage::resize(uint64 size)
     return 0;
     }
 }
-    
+
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-int32 H5RGBImage::resizeArray(mxaIdType width, mxaIdType height)
+int32 MXARGBImage::resizeArray(mxaIdType width, mxaIdType height)
 {
   int32 err =  this->resize(width * height * 3);
-  this->_width = width;
+  this->_width = width * 3;
   this->_height = height;
   if (err == 0)
   {
@@ -115,11 +112,12 @@ int32 H5RGBImage::resizeArray(mxaIdType width, mxaIdType height)
   }
   return err;
 }
-    
+
+#if 0
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
-int32 H5RGBImage::writeToFile(IDataFilePtr dataFile)
+int32 MXARGBImage::writeToFile(IDataFilePtr dataFile)
 {
   int32 err = -1;
   std::vector<uint64> dims (2, 0 );
@@ -139,7 +137,7 @@ int32 H5RGBImage::writeToFile(IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-int32 H5RGBImage::readFromFile(IDataFilePtr dataFile)
+int32 MXARGBImage::readFromFile(IDataFilePtr dataFile)
 {
   hid_t fileId = dataFile->getFileId();
   if (fileId < 0)
@@ -150,7 +148,7 @@ int32 H5RGBImage::readFromFile(IDataFilePtr dataFile)
   H5T_class_t attr_type;
   size_t attr_size;
   std::string res;
- 
+
   std::vector<hsize_t> dims;  //Reusable for the loop
   err = H5Lite::getDatasetInfo(fileId, this->getDatasetPath(), dims, attr_type, attr_size);
   if (err < 0 )
@@ -164,22 +162,23 @@ int32 H5RGBImage::readFromFile(IDataFilePtr dataFile)
   err = H5Lite::readPointerDataset(fileId, this->getDatasetPath(), getPixelPointer(0,0));
   return err;
 }
+#endif
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-std::string H5RGBImage::valueToString(char delimiter)
+std::string MXARGBImage::valueToString(char delimiter)
 {
   std::stringstream sstream;
-  
+
   uint64 nElements = this->getNumberOfElements();
   uint64 limit = nElements - 1;
   int32 wLimit = _width * 3;
   int32 width = 0;
   uint8* data = this->getPointer(0);
-  for(uint64 i = 0; i < nElements; i=i+3) 
+  for(uint64 i = 0; i < nElements; i=i+3)
   {
-    
+
     sstream << "[" << data[i] << "," << data[i+1] << "," << data[i+2] << "]";
     if (i < limit && width != wLimit)
     {
