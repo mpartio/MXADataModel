@@ -10,6 +10,7 @@ SET( MXA_HDF5_SRCS
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5Dataset.cpp
     ${MXA_SOURCE_DIR}/src/HDF5/H5MXARequiredMetaData.cpp
+    ${MXA_SOURCE_DIR}/src/HDF5/H5MXAUtilities.cpp
 )
   
 SET(MXA_HDF5_HEADERS
@@ -25,6 +26,7 @@ SET(MXA_HDF5_HEADERS
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5Dataset.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5MXARequiredMetaData.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5MXAUtilities.h
 )
 
 

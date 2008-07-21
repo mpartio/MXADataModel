@@ -28,6 +28,7 @@
 #include <XML/XMLDataModelWriter.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
+#include <HDF5/H5MXAUtilities.h>
 #include <HDF5/H5MXADataFile.h>
 #include <DataWrappers/MXAArrayTemplate.hpp>
 
@@ -182,8 +183,8 @@ int main(int argc, char **argv) {
     {
       temperature += (float)p;
       indices[1] = p;
-      temperaturePath = H5Utilities::generateH5PathToDataset(modelPtr, indices, temp );
-      cameraImagePath = H5Utilities::generateH5PathToDataset(modelPtr, indices, cameraImage );
+      temperaturePath = H5MXAUtilities::generateH5PathToDataset(modelPtr, indices, temp );
+      cameraImagePath = H5MXAUtilities::generateH5PathToDataset(modelPtr, indices, cameraImage );
       pos = temperaturePath.find_last_of("/");
       std::string parentPath ( temperaturePath.substr(0, pos) );
       // Make sure the path to the dataset in the HDF5 file is already created.

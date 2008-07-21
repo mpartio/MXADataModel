@@ -8,13 +8,13 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _HDF5UTILITIES_H_
-#define _HDF5UTILITIES_H_
+#ifndef _HDF5_UTILITIES_H_
+#define _HDF5_UTILITIES_H_
 
 
-#include <Common/DLLExport.h>
+//#include <Common/DLLExport.h>
 #include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
+//#include <Common/MXATypeDefs.h>
 #include <DataWrappers/MXAArrayTemplate.hpp>
 #include <HDF5/H5Lite.h>
 
@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.27 $
+ * @version $Revision: 1.28 $
  */
 class H5Utilities
 {
@@ -286,37 +286,6 @@ public:
   }
 
 
-  /**
-   * @brief Creates an absolute path suitable for create an HDF5 data set.
-   * @param model The data model to use
-   * @param indices The indices to use for the Data dimensions
-   * @param record The MXADataRecord to generate the path to
-   * @return The hdf5 path
-   */
-  static MXA_EXPORT std::string generateH5PathToDataset (  IDataModelPtr model,
-                                                std::vector<int32> &indices,
-                                                IDataRecordPtr record);
-
- /**
- * @brief Reads a dataset from an HDF5 data file into a newly allocated MXAAbstractData
- * derived object.
- * @param dataFile The IDataFile object to read from
- * @param datasetPath The internal HDF5 path to the data, relative to the root of the data file
- * @return
- */
-  static MXA_EXPORT IMXAArrayPtr readData(IDataFilePtr dataFile, const std::string &datasetPath);
-
-  /**
-  * @brief Reads an attribute from an HDF5 data file into a newly allocated MXAAbstractAttribute
-  * derived object.
-  * @param dataFile The IDataFile object to read from
-  * @param datasetPath The internal HDF5 path to the data, relative to the root of the data file
-  * @param attributeKey The name of the attribute to read
-  * @return
-  */
-  static MXA_EXPORT IMXAArrayPtr readAttribute(IDataFilePtr dataFile, const std::string &datasetPath, const std::string &attributeKey);
-
-
 
 protected:
   H5Utilities() {}; //This is just a bunch of Static methods
@@ -328,5 +297,5 @@ private:
 
 
 
-#endif /* _HDF5UTILITIES_H_ */
+#endif /* _HDF5_UTILITIES_H_ */
 

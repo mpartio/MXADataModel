@@ -4,13 +4,14 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include <Common/MXATypeDefs.h>
 #include <Common/LogTime.h>
 #include <HDF5/H5MXADataFile.h>
+#include <HDF5/H5MXAUtilities.h>
 #include <Testing/DataFileGenerator.h>
 #include <hdf5.h>
 
@@ -19,18 +20,18 @@
 // -----------------------------------------------------------------------------
 #if defined (_WIN32)
   #define FILE_NAME "C:\\WINDOWS\\Temp\\GetDataExample.h5"
-#else 
+#else
   #define FILE_NAME "/tmp/GetDataExample.h5"
 #endif
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
   std::cout << logTime() << "----- Running GetData Example ------------- " << std::endl;
-  
+
   herr_t err = 1;
   // Generate a Data file to use
   std::string outputFile(FILE_NAME);
@@ -41,7 +42,7 @@ int main(int argc, char **argv)
   {
     return EXIT_FAILURE;
   }
-  
+
 
   //First load the Data file
   IDataFilePtr dataFile = H5MXADataFile::OpenFile(FILE_NAME, true);
@@ -65,7 +66,7 @@ int main(int argc, char **argv)
       break;
     }
   }
-  
+
   // We know that the data dimensions have ranges of 1->2 and 1->3, so lets get the data for the first index of each one.
   std::vector<int32> indices;
   indices.push_back(1); indices.push_back(1);
@@ -76,10 +77,10 @@ int main(int argc, char **argv)
     std::cout << logTime() << "Error getting '2D Array' Data Record" << std::endl;
     return -1;
   }
-  
+
   // Have the DataModel generate the proper internal path relative to the root level and extending to the dataset
-  std::string dsetPath = H5Utilities::generateH5PathToDataset(modelPtr, indices, record );
-  
+  std::string dsetPath = H5MXAUtilities::generateH5PathToDataset(modelPtr, indices, record );
+
   std::vector<float32> data; // This will hold our data. The next call will call 'clear' and 'resize' the vector as needed
   err = H5Lite::readVectorDataset(fileId, dsetPath, data);
   if (err < 0)
@@ -93,9 +94,9 @@ int main(int argc, char **argv)
     std::cout << *iter << " ";
   }
   std::cout << std::endl;
-  
+
   //If you know nothing of the datatype then you will have to interrogate the dataset
-  // to find out... 
+  // to find out...
   //uint32 type_size = 0;
  // H5T_class_t type_class = -1;
  // err = H5Lite::getDatasetInfo(fileId, dsetPath, dims, type_class, type_size);
@@ -106,6 +107,6 @@ int main(int argc, char **argv)
   }
 
   std::cout << logTime() << "------------- GetData Example Complete ------------ " << std::endl;
-  
+
   return 0;
 }

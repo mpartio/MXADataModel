@@ -16,6 +16,7 @@
 #include <XML/XMLDataModelWriter.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
+#include <HDF5/H5MXAUtilities.h>
 #include <HDF5/H5Image.h>
 #include <HDF5/H5MXADataFile.h>
 #include <DataWrappers/MXAArrayTemplate.hpp>
@@ -141,8 +142,8 @@ int32 readData()
     for (int p = pressureDim->getStartValue(); p <= pressureDim->getEndValue(); p+=pressureDim->getIncrement() )
     {
       indices[1] = p;
-      std::string cameraPath = H5Utilities::generateH5PathToDataset(modelPtr, indices, cameraRec);
-      std::string tempPath = H5Utilities::generateH5PathToDataset(modelPtr, indices, tempRec);
+      std::string cameraPath = H5MXAUtilities::generateH5PathToDataset(modelPtr, indices, cameraRec);
+      std::string tempPath = H5MXAUtilities::generateH5PathToDataset(modelPtr, indices, tempRec);
 
       // We know the "Camera" signal was an RGBArray, so we create an MXARGBImage to hold the data;
       IMXAArrayPtr image = readRGBImageFromFile(dataFile, cameraPath);
@@ -274,8 +275,8 @@ int32 generateData()
     {
       temperature += (float)p;
       indices[1] = p;
-      temperaturePath = H5Utilities::generateH5PathToDataset(modelPtr, indices, temp );
-      cameraImagePath = H5Utilities::generateH5PathToDataset(modelPtr, indices, cameraImage );
+      temperaturePath = H5MXAUtilities::generateH5PathToDataset(modelPtr, indices, temp );
+      cameraImagePath = H5MXAUtilities::generateH5PathToDataset(modelPtr, indices, cameraImage );
 
       temperatureArray->setValue(0, temperature);
 

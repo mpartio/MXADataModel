@@ -19,6 +19,7 @@
 #include <Core/MXADataModel.h>
 #include <HDF5/H5MXADataFile.h>
 #include <HDF5/H5Utilities.h>
+#include <HDF5/H5MXAUtilities.h>
 #include <DataWrappers/MXAArrayTemplate.hpp>
 
 #include <HDF5/H5Dataset.h>
@@ -204,7 +205,7 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFilePtr dataFile)
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
-  std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
+  std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
   int32 err = 1;
 
   // Create the data
@@ -275,7 +276,7 @@ void _WriteStringDataTest ( const std::string &recName, IDataFilePtr dataFile)
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
-  std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
+  std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
   int32 err = 1;
 
   std::string stringData ("This is some string data");
@@ -318,7 +319,7 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFilePtr dataFile)
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
-  std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
+  std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
   int32 err = 1;
 
   // Create the data
@@ -402,7 +403,7 @@ void _WriteRGBImageTest( const std::string &recName, IDataFilePtr dataFile)
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
-  std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
+  std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
   int32 err = 1;
 
   // Create the data
@@ -512,7 +513,7 @@ int32 _readDatasetTest(const std::string &recName, IDataFilePtr dataFile)
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
-  std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
+  std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
 
   // This will also indirectly test H5Utilities.readDataArray and H5Utilities::readAttributeArray
   IDatasetPtr ds = H5Dataset::LoadFromFile(dataFile, dsPath);
@@ -531,11 +532,11 @@ int32 _readRGBImageTest(const std::string &recName, IDataFilePtr dataFile)
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
-  std::string dsPath = H5Utilities::generateH5PathToDataset(model, mxaDims, rec);
+  std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
 
   //MXARGBImage* data = MXARGBImage::New( 150, 101);
  // IMXAArrayPtr dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
-  IMXAArrayPtr dataPtr = H5Utilities::readData(dataFile, dsPath);
+  IMXAArrayPtr dataPtr = H5MXAUtilities::readData(dataFile, dsPath);
   uint64 numElements = 150 * 101 * 3;
   int rank = 2;
   std::vector<uint64> dims(rank, 0);

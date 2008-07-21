@@ -4,6 +4,7 @@
 //#include <Core/MXAAbstractAttribute.h>
 #include <DataWrappers/MXAArrayTemplate.hpp>
 #include <HDF5/H5Utilities.h>
+#include <HDF5/H5MXAUtilities.h>
 
 #include <list>
 
@@ -13,7 +14,7 @@
 // -----------------------------------------------------------------------------
 IDatasetPtr H5Dataset::LoadFromFile(IDataFilePtr dataFile, const std::string &datasetPath)
 {
-  IMXAArrayPtr data = H5Utilities::readData(dataFile, datasetPath);
+  IMXAArrayPtr data = H5MXAUtilities::readData(dataFile, datasetPath);
 
   if (NULL == data.get() )
   {
@@ -30,7 +31,7 @@ IDatasetPtr H5Dataset::LoadFromFile(IDataFilePtr dataFile, const std::string &da
   }
   for (std::list<std::string>::iterator iter = attributeNames.begin(); iter != attributeNames.end(); ++iter )
   {
-    IMXAArrayPtr attr = H5Utilities::readAttribute(dataFile, datasetPath, *iter);
+    IMXAArrayPtr attr = H5MXAUtilities::readAttribute(dataFile, datasetPath, *iter);
     if (attr.get() != NULL)
     {
       ptr->addAttribute(*iter, attr);
@@ -196,7 +197,7 @@ int32 H5Dataset::readFromFile (IDataFilePtr dataFile)
   {
     return -1;
   }
-  IMXAArrayPtr data = H5Utilities::readData(dataFile, datasetPath );
+  IMXAArrayPtr data = H5MXAUtilities::readData(dataFile, datasetPath );
   if (data.get() == NULL)
   {
     return -1;
@@ -211,7 +212,7 @@ int32 H5Dataset::readFromFile (IDataFilePtr dataFile)
   }
   this->_attributes.clear(); // Clear any attributes first
   for (std::list<std::string>::iterator iter = attributeNames.begin(); iter != attributeNames.end(); ++iter ) {
-    IMXAArrayPtr attr = H5Utilities::readAttribute(dataFile, datasetPath, *iter);
+    IMXAArrayPtr attr = H5MXAUtilities::readAttribute(dataFile, datasetPath, *iter);
     if (attr.get() != NULL)
     {
       this->addAttribute(*iter, attr);
