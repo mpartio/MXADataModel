@@ -248,9 +248,6 @@ int32 XMLDataModelWriter::writeUserMetaData(int32 depth)
   //int32 fileId = 0;
 
   MXAAbstractAttributes metadata = _dataModel->getUserMetaData();
-  IMXAArray* attr = NULL;
-
-  //XMLUserMetaDataWriter writer(_ofstreamPtr);
   for (MXAAbstractAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
     IMXAArrayPtr attr = (*iter).second;
     std::string attributeKey = (*iter).first;
