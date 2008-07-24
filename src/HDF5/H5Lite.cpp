@@ -1024,6 +1024,9 @@ herr_t H5Lite::writeMXAArray(hid_t loc_id,
   return retErr;
 }
 
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
 herr_t H5Lite::writeMXAAttribute(hid_t loc_id,
                             const std::string &objName,
                             const std::string &attrName,
@@ -1131,7 +1134,6 @@ herr_t H5Lite::writeMXAAttribute(hid_t loc_id,
 IMXAArray* H5Lite::readMXAArray(hid_t loc_id,
                            const std::string &dsetName)
 {
-#warning Unit Test Needed for this method
   hid_t   did;
   herr_t  err = 0;
   herr_t retErr = 0;
@@ -1163,7 +1165,6 @@ IMXAArray* H5Lite::readMXAArray(hid_t loc_id,
         switch(attr_type)
         {
         case H5T_STRING:
-
           err = H5Lite::readStringDataset(loc_id, dsetName, sData);
           data = MXAAsciiStringData::New(sData);
           break;
@@ -1244,6 +1245,129 @@ IMXAArray* H5Lite::readMXAArray(hid_t loc_id,
   }
   return data;
 }
+
+// -----------------------------------------------------------------------------
+//  
+// -----------------------------------------------------------------------------
+IMXAArray* H5Lite::readMXAAttribute(hid_t loc_id, 
+                                   const std::string &dsetName, 
+                                   const std::string &attributeKey)
+ {
+
+  /* identifiers */
+  hid_t      obj_id;
+  H5G_stat_t statbuf;
+  herr_t err = 0;
+  herr_t retErr = 0;
+  hid_t attr_id;
+  IMXAArray* data = NULL;
+  std::string sData;
+  //std::cout << "   Reading Vector Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
+  /* Get the type of object */
+  err = H5Gget_objinfo(loc_id, dsetName.c_str(), 1, &statbuf);
+  if (err<0)
+    return data;
+  /* Open the object */
+  obj_id = H5Lite::openId( loc_id, dsetName, statbuf.type);
+  if ( obj_id >= 0)
+  {
+    attr_id = H5Aopen_name( obj_id, attributeKey.c_str() );
+    if ( attr_id >= 0 )
+    {
+      //Need to allocate the array size
+      hid_t typeId = -1;
+      H5T_class_t type_class;
+      size_t attr_size;
+      std::vector<hsize_t> dims;
+      err = H5Lite::getAttributeInfo(loc_id, dsetName, attributeKey, dims, type_class, attr_size, typeId);
+      if (err < 0){  }
+      std::vector<uint64> _dims(dims.size(), 0);
+      for (unsigned int i = 0; i<dims.size(); ++i)
+      {
+        _dims[i] = static_cast<uint64>(dims[i]);
+      }
+      switch(type_class)
+      {
+        case H5T_STRING:
+          err = H5Lite::readStringAttribute(loc_id, dsetName, attributeKey, sData);
+          data = MXAAsciiStringData::New(sData);
+          break;
+        case H5T_INTEGER:
+          //std::cout << "User Meta Data Type is Integer" << std::endl;
+          if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
+             data = MXAArrayTemplate<uint8>::New(_dims.size(), &(_dims.front() ) );
+           } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
+             data = MXAArrayTemplate<uint16>::New(_dims.size(), &(_dims.front() ) );
+           } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
+             data = MXAArrayTemplate<uint32>::New(_dims.size(), &(_dims.front() ) );
+           } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
+             data = MXAArrayTemplate<uint64>::New(_dims.size(), &(_dims.front() ) );
+           } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
+             data = MXAArrayTemplate<int8>::New(_dims.size(), &(_dims.front() ) );
+           } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
+             data = MXAArrayTemplate<int16>::New(_dims.size(), &(_dims.front() ) );
+           } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
+             data = MXAArrayTemplate<int32>::New(_dims.size(), &(_dims.front() ) );
+           } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
+             data = MXAArrayTemplate<int64>::New(_dims.size(), &(_dims.front() ) );
+          } else {
+            std::cout << "Unknown Type: " << typeId << " at " <<  dsetName << __FILE__ << "(" << __LINE__ << ")"  << std::endl;
+            err = -1;
+            retErr = -1;
+          }
+          break;
+        case H5T_FLOAT:
+          if (attr_size == 4) {
+            data = MXAArrayTemplate<float32>::New(_dims.size(), &(_dims.front() ) );
+          } else if (attr_size == 8 ) {
+            data = MXAArrayTemplate<float64>::New(_dims.size(), &(_dims.front() ) );
+          } else {
+            std::cout << "Unknown Floating point type" << __FILE__ << "(" << __LINE__ << ")"  << std::endl;
+            err = -1;
+            retErr = -1;
+          }
+          break;
+        default:
+          std::cout << "Error:" << __FILE__ << "(" << __LINE__ << ")"  << std::endl;
+        
+      }
+      //  CloseH5T(typeId, err, retErr);
+      // hid_t dataType = data->getDataType();
+      if (typeId >= 0)
+      {
+        err = H5Aread( attr_id, typeId, data->getVoidPointer(0) );
+        if (err < 0) {
+          std::cout << "Error Reading Attribute for dataset '" << dsetName << "'" << std::endl;
+          retErr = err;
+          if (NULL != data) { delete data;}
+          data = NULL;
+        }
+      }
+      CloseH5T(typeId, err, retErr);
+      err = H5Aclose( attr_id );
+      if ( err < 0 ) {
+        std::cout << "Error Closing Attribute" << std::endl;
+        retErr = err;
+        if (NULL != data) { delete data;}
+        data = NULL;
+      }
+    }
+    else
+    {
+      retErr = attr_id;
+    }
+    err = H5Lite::closeId( obj_id, statbuf.type );
+    if ( err < 0 ) {
+     std::cout << "Error Closing Object" << std::endl;
+     retErr = err;
+     if (NULL != data) { delete data;}
+     data = NULL;
+    }
+  }
+  return data;
+ }
+
+
 
 
 #endif

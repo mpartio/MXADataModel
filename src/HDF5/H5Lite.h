@@ -60,7 +60,7 @@ class IMXAArray;
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.50 $
+ * @version $Revision: 1.51 $
  */
 class H5Lite
 {
@@ -1144,7 +1144,7 @@ static herr_t readVectorAttribute(hid_t loc_id,
       H5T_class_t type_class;
       size_t type_size;
       std::vector<uint64> dims;
-      H5Lite::getAttributeInfo(loc_id, objName, attrName, dims, type_class, type_size, tid);
+      err = H5Lite::getAttributeInfo(loc_id, objName, attrName, dims, type_class, type_size, tid);
       hsize_t numElements = 1;
       for (std::vector<uint64>::iterator iter = dims.begin(); iter < dims.end(); ++iter )
       {
@@ -1422,13 +1422,29 @@ static herr_t writeMXAAttribute(hid_t loc_id,
 
 
 /**
- * @brief
- * @param loc_id
- * @param dsetName
+ * @brief Reads the data from an HDF5 file into a newly allocated MXAArrayTemplate 
+ * object - PLEASE NOTE: You MUST call delete on the object or otherwise make
+ * arrangements to clean up the pointer otherwise memory leaks will occur.
+ * @param loc_id The HDF5 file or group Id into which to store the data
+ * @param dsetName The name/path of the data set
  * @return IMXAArray Pointer. NULL value is possible on error
  */
 static IMXAArray* readMXAArray(hid_t loc_id,
                            const std::string &dsetName );
+
+
+/**
+ * @brief Reads the attribute data from an HDF5 file into a newly allocated MXAArrayTemplate 
+ * object - PLEASE NOTE: You MUST call delete on the object or otherwise make
+ * arrangements to clean up the pointer otherwise memory leaks will occur.
+ * @param loc_id The HDF5 file or group Id into which to store the data
+ * @param dsetName The name/path of the data set
+ * @param attributeKey The name of the attribute
+ * @return IMXAArray Pointer. NULL value is possible on error
+ */
+static IMXAArray* readMXAAttribute(hid_t loc_id, 
+                                   const std::string &dsetName, 
+                                   const std::string &attributeKey);
 
 
 #endif
