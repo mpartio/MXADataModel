@@ -60,7 +60,7 @@ class IMXAArray;
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.51 $
+ * @version $Revision: 1.52 $
  */
 class H5Lite
 {
@@ -1405,7 +1405,7 @@ static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id,
  * @param array
  * @return
  */
-static herr_t writeMXAArray(hid_t loc_id,
+static MXA_EXPORT herr_t writeMXAArray(hid_t loc_id,
                             const std::string &dsetName,
                             IMXAArray* array);
 /**
@@ -1415,7 +1415,7 @@ static herr_t writeMXAArray(hid_t loc_id,
  * @param attributeKey
  * @param array
  */
-static herr_t writeMXAAttribute(hid_t loc_id,
+static MXA_EXPORT herr_t writeMXAAttribute(hid_t loc_id,
                             const std::string &dsetName,
                             const std::string &attributeKey,
                             IMXAArray* array);
@@ -1429,7 +1429,7 @@ static herr_t writeMXAAttribute(hid_t loc_id,
  * @param dsetName The name/path of the data set
  * @return IMXAArray Pointer. NULL value is possible on error
  */
-static IMXAArray* readMXAArray(hid_t loc_id,
+static MXA_EXPORT IMXAArray* readMXAArray(hid_t loc_id,
                            const std::string &dsetName );
 
 
@@ -1442,7 +1442,7 @@ static IMXAArray* readMXAArray(hid_t loc_id,
  * @param attributeKey The name of the attribute
  * @return IMXAArray Pointer. NULL value is possible on error
  */
-static IMXAArray* readMXAAttribute(hid_t loc_id, 
+static MXA_EXPORT IMXAArray* readMXAAttribute(hid_t loc_id, 
                                    const std::string &dsetName, 
                                    const std::string &attributeKey);
 

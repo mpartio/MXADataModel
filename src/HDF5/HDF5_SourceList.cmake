@@ -57,3 +57,4 @@ INSTALL (FILES ${MXA_HDF5_TIFF_HEADERS}
             COMPONENT Headers           
 )
 
+source_group(src\\HDF5 FILES ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS} )

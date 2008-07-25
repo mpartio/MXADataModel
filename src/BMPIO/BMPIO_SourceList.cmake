@@ -12,3 +12,4 @@ INSTALL (FILES ${MXA_BMPIO_HEADERS}
             COMPONENT Headers           
 )
 
+source_group(src\\BMPIO FILES ${MXA_BMPIO_HEADERS} ${MXA_BMPIO_SRCS} )

@@ -546,9 +546,9 @@ int32 _readRGBImageTest(const std::string &recName, IDataFilePtr dataFile)
   dataPtr->getDimensions( &(dims.front() ) );
   BOOST_REQUIRE(dims[1] == 150 * 3);
   BOOST_REQUIRE(dims[0] == 101);
-#if 1
+#if 0
 #warning RGBImage class needs to have special file writing code
-#else
+
   uint8* pixel = dataPtr->getPixelPointer(0,0);
   int32 xDim = 150;
   int32 yDim = 101;

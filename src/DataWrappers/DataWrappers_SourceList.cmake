@@ -17,3 +17,4 @@ INSTALL (FILES ${MXA_HDF5_HEADERS}
             COMPONENT Headers           
 )
 
+source_group(src\\DataWrappers FILES ${MXA_DATA_WRAPPERS_SRCS} ${MXA_DATA_WRAPPERS_HEADERS} )

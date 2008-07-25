@@ -19,4 +19,4 @@ INSTALL (FILES ${MXA_UTILITIES_HEADERS}
             COMPONENT Headers           
 )
 
-
+source_group(src\\Utilities FILES ${MXA_UTILITIES_SRCS} ${MXA_UTILITIES_HEADERS} )

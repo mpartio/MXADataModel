@@ -22,3 +22,5 @@ INSTALL (FILES ${MXA_XML_HEADERS}
             COMPONENT Headers           
 )
 
+source_group(src\\XML FILES ${MXA_XML_SRCS} ${MXA_XML_HEADERS} )
+

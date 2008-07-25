@@ -36,3 +36,4 @@ INSTALL (FILES ${MXA_BASE_HEADERS}
             COMPONENT Headers           
 )
 
+source_group(src\\Base FILES ${MXA_BASE_HEADERS})

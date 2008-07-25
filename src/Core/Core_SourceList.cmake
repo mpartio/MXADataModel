@@ -24,3 +24,4 @@ INSTALL (FILES ${MXA_CORE_HEADERS}
             COMPONENT Headers           
 )
 
+source_group(src\\Core FILES ${MXA_CORE_HEADERS} ${MXA_CORE_SRCS} )

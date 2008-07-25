@@ -18,3 +18,5 @@ INSTALL (FILES ${MXA_COMMON_HEADERS}
             COMPONENT Headers           
 )
 
+source_group(src\\Common FILES ${MXA_COMMON_HEADERS} ${MXA_COMMON_SRCS} )
+
