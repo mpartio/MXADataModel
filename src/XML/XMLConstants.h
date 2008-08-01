@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@
 
 /**
  * @brief Constants for dealing with MXA XML files
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 
 
@@ -34,13 +34,18 @@ namespace MXA_XML {
     const std::string UserDefined_MD ("UserDefined_MD");
     const std::string Model_Type("Model_Type");
     const std::string Model_Version("Model_Version");
-    
-    
+
+    /**
+     * @brief XML Tags for attributes
+     */
     namespace Attribute {
       const std::string Name("Name");
       const std::string AltName("Alt_Name");
     }
-    
+
+    /**
+     * @brief XML Tags for user meta data
+     */
     namespace UserMetaData
     {
       const std::string Tag ("UserMetaData");
@@ -49,7 +54,7 @@ namespace MXA_XML {
       const std::string Type("type");
     }
 
-    
+
 } // End Namespace MXA_XML
 
 

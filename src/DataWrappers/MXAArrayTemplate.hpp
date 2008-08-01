@@ -24,10 +24,10 @@
 
 /**
 * @class MXAArrayTemplate MXAArrayTemplate.hpp PathToHeader/MXAArrayTemplate.hpp
-* @brief
+* @brief Template class for wrapping raw arrays of data.
 * @author mjackson
-* @date Jan 3, 2008
-* @version $Revision: 1.2 $
+* @date July 3, 2008
+* @version $Revision: 1.3 $
 */
 template<typename T>
 class MXAArrayTemplate : public IMXAArray
@@ -132,22 +132,27 @@ class MXAArrayTemplate : public IMXAArray
     }
 
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-
+    /**
+     * @brief Makes this class responsible for freeing the memory
+     */
     virtual void takeOwnership()
     {
       this->_ownsData = true;
     }
+
+    /**
+     * @brief This class will NOT free the memory associated with the internal pointer.
+     * This can be useful if the user wishes to keep the data around after this
+     * class goes out of scope.
+     */
     virtual void releaseOwnership()
     {
       this->_ownsData = false;
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+/**
+ * @brief Initializes this class to zero bytes freeing any data that it currently owns
+ */
     virtual void initialize()
     {
       if(NULL != this->_data && true == this->_ownsData)
@@ -159,9 +164,12 @@ class MXAArrayTemplate : public IMXAArray
       this->_ownsData = true;
       this->_dims[0] = _nElements;
     }
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+
+    /**
+     * @brief Reseizes the internal array
+     * @param size The new size of the internal array
+     * @return 1 on success, 0 on failure
+     */
     virtual int32 resize(uint64 size)
     {
       if(this->_resizeAndExtend(size) || size <= 0)
@@ -174,9 +182,13 @@ class MXAArrayTemplate : public IMXAArray
         }
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+  /**
+   * @brief Returns a void pointer pointing to the index of the array. NULL
+   * pointers are entirely possible. No checks are performed to make sure
+   * the index is with in the range of the internal data array.
+   * @param i The index to have the returned pointer pointing to.
+   * @return Void Pointer. Possibly NULL.
+   */
     virtual void* getVoidPointer(uint64 i)
     {
       if (i >= this->getNumberOfElements() )
@@ -186,52 +198,58 @@ class MXAArrayTemplate : public IMXAArray
       return (void*)(&(_data[i]) );
     }
 
-/**
- * @brief Returns the value for a given index
- * @param i The index to return the value at
- * @return The value at index i
- */
+  /**
+   * @brief Returns the value for a given index
+   * @param i The index to return the value at
+   * @return The value at index i
+   */
     virtual T getValue(uint64 i)
     {
       return this->_data[i];
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+    /**
+     * @brief Returns the number of elements in the internal array.
+     */
     virtual uint64 getNumberOfElements()
     {
       return _nElements;
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+    /**
+     * @brief Copies the values of the dimensions into the supplied pointer
+     * @param dims Pointer to store the dimension values into
+     */
     virtual void getDimensions(uint64* dims)
     {
       uint64 nBytes = _dims.size() * sizeof(uint64);
       ::memcpy(dims, &(_dims.front()), nBytes );
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+    /**
+     * Returns the number of dimensions the data has.
+     */
     virtual int32 getNumberOfDimensions()
     {
       return this->_dims.size();
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+/**
+ * @brief Sets a specific value in the array
+ * @param i The index of the value to set
+ * @param value The new value to be set at the specified index
+ */
     void setValue(uint64 i, T value)
     {
       this->_data[i] = value;
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+
+    /**
+     * @brief Returns an enumerated type that can be used to find out the type
+     * of primitive stored in the internal array. Currently the HDF5 type is returned
+     * in order to use this class effectively with HDF5
+     */
     virtual int32 getDataType()
     {
       T t = 0x0;
@@ -242,13 +260,18 @@ class MXAArrayTemplate : public IMXAArray
 #endif
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+/**
+ * @brief Returns the pointer to a specific index into the array. No checks are made
+ * as to the correctness of the index being passed in. If you ask for an index off
+ * then end of the array they you will likely cause your program to abort.
+ * @param i The index to return the pointer to.
+ * @return The pointer to the index
+ */
     virtual T* getPointer(uint64 i)
     {
       return (T*)(&(_data[i]) );
     }
+
 #if 0
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation

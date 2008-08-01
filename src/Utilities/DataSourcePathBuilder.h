@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -17,27 +17,32 @@
 
 /**
 * @class DataSourcePathBuilder DataSourcePathBuilder.h Utilities/DataSourcePathBuilder.h
-* @brief 
+* @brief Utility class to help build up parts of a path
 * @author Mike Jackson
 * @date Nov 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT DataSourcePathBuilder
 {
-  
+
   public:
     DataSourcePathBuilder();
     virtual ~DataSourcePathBuilder();
-    
+
+    /**
+     * @brief Adds another section to the path
+     * @param part The part to add
+     */
     void addSection(IStringSectionPtr part);
-    
+
+    /**
+     * @brief Clears the sections
+     */
     void clearSections();
-    
-   // std::string build(std::vector<uint32> &dimValues, int8 &ok);
-    
+
   private:
     IStringSections _parts;
-   
+
     DataSourcePathBuilder(const DataSourcePathBuilder&);    // Copy Constructor Not Implemented
     void operator=(const DataSourcePathBuilder&);  // Operator '=' Not Implemented
 };

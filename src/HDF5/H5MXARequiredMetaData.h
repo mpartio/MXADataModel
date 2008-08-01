@@ -23,7 +23,7 @@
 * @brief Concrete implmentation of the IRequiredMetaData virtual class.
 * @author Mike Jackson  for IMTS.us
 * @date Jan 15, 2008
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
 {
@@ -78,7 +78,6 @@ class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
      * const std::string MXA_RIGHTS_UNLIMITED_VALUE("Unlimited");
      * const std::string MXA_RIGHTS_LIMITED_VALUE("Limited");
      * const std::string MXA_RELEASE_LIMITATION_TAG("Release_Limitation");
-     */
      */
     void setAll(std::string researcherName,
                 std::string dateCreated,

@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -15,25 +15,30 @@
 
 /**
 * @class IFileWriter IFileWriter.h Testing/IFileWriter.h
-* @brief 
+* @brief Defines a basic file writing interface
 * @author mjackson
 * @date Dec 19, 2007
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
-class MXA_EXPORT IFileWriter 
+class MXA_EXPORT IFileWriter
 {
   public:
     IFileWriter(){};
     virtual ~IFileWriter(){};
-      
+
+    /**
+     * @brief Method to write the implementing class to an IDataFile object
+     * @param dataFile The file to write the data into
+     * @return Error condition. 0 or positive is success. Negative is failure
+     */
     virtual int32 writeToFile(IDataFilePtr dataFile) = 0;
-    
-  protected:  
-  
+
+  protected:
+
   private:
       IFileWriter(const IFileWriter&);    //Not Implemented
       void operator=(const IFileWriter&); //Not Implemented
-  
+
 };
 
 #endif //_IFileWriter_h_

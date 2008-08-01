@@ -36,9 +36,9 @@
 
 /**
 * @class ExpatParser ExpatParser.h src/XML/ExpatParser.h
-* @brief A C++ wrapper around the Expat parser library.
+* @brief  C++ wrapper around the Expat parser library.
 * @date 2004
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class MXA_EXPORT ExpatParser
 {
