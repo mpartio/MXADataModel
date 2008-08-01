@@ -30,7 +30,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.28 $
+ * @version $Revision: 1.29 $
  */
 class H5Utilities
 {
@@ -156,9 +156,9 @@ public:
   static MXA_EXPORT herr_t createGroupsForDataset(const std::string &datasetPath, hid_t parent);
 
   /**
-  * @brief
-  * @param path
-  * @return
+  * @brief Extracts the object name from a given path
+  * @param path The path which to extract the object name
+  * @return The name of the object
   */
   static MXA_EXPORT std::string extractObjectName(const std::string &path);
 

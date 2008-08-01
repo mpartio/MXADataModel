@@ -25,6 +25,11 @@
 #include <hdf5.h>
 #include <H5Tpublic.h>
 
+/* H5LITE_USE_MXA_CONSTRUCTS is used to include MXADataModel Specific classes in
+ * this class. If this is being compiled as part of MXADataModel this should
+ * _always_ be defined. If this code is being used as part of another project
+ * then this should probably NOT be defined.
+ */
 #ifdef H5LITE_USE_MXA_CONSTRUCTS
 class IMXAArray;
 #endif
@@ -60,7 +65,7 @@ class IMXAArray;
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.52 $
+ * @version $Revision: 1.53 $
  */
 class H5Lite
 {
@@ -313,12 +318,12 @@ static herr_t writeVectorDataset (hid_t loc_id,
 
 /**
  * @brief Writes the data of a pointer to an HDF5 file
- * @param loc_id
- * @param dsetName
- * @param rank
- * @param dims
- * @param data
- * @return
+ * @param loc_id The hdf5 object id of the parent
+ * @param dsetName The name of the dataset to write to. This can be a name of Path
+ * @param rank The number of dimensions
+ * @param dims The sizes of each dimension
+ * @param data The data to be written.
+ * @return Standard hdf5 error condition.
  */
 template <typename T>
 static herr_t writePointerDataset (hid_t loc_id,
@@ -777,8 +782,9 @@ static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
  * in each set is the key, the second is the actual value of the attribute.
  * @param loc_id The location to look for objName
  * @param objName The Object to write the attribute to
- * @param attributes
- * @return Standard HDF error conditions
+ * @param attributes The attributes to be written where the first value is the name
+ * of the attribute, and the second is the actual value of the attribute.
+ * @return Standard HDF error condition
  */
 static MXA_EXPORT herr_t writeStringAttributes(hid_t loc_id,
                                      const std::string &objName,
@@ -787,6 +793,11 @@ static MXA_EXPORT herr_t writeStringAttributes(hid_t loc_id,
  * @brief Writes an attribute to the given object. This method is designed with
  * a Template parameter that represents a primitive value. If you need to write
  * an array, please use the other over loaded method that takes a vector.
+ * @param loc_id The location to look for objName
+ * @param objName The Object to write the attribute to
+ * @param attrName The  name of the attribute
+ * @param data The data to be written as the attribute
+ * @return Standard HDF error condition
  */
 template <typename T>
 static herr_t  writeScalarAttribute(hid_t loc_id,
@@ -932,7 +943,9 @@ static herr_t readPointerDataset(hid_t loc_id,
 
 
 /**
- * @brief Reads data from the HDF5 File
+ * @brief Reads data from the HDF5 File into an std::vector<T> object. If the dataset
+ * is very large this can be an expensive method to use. It is here for convenience
+ * using STL with hdf5.
  * @param loc_id The parent location that contains the dataset to read
  * @param dsetName The name of the dataset to read
  * @param data A std::vector<T>. Note the vector WILL be resized to fit the data.
@@ -1397,23 +1410,26 @@ static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id,
 
 #ifdef H5LITE_USE_MXA_CONSTRUCTS
 /**
- * @brief
- * @param loc_id
- * @param dsetName
- * @param rank
- * @param dims
- * @param array
- * @return
+ * @brief Writes the data contained within an IMXAArray object into an hdf5 file
+ * @param loc_id The parent ID of the dataset
+ * @param dsetName The name of the dataset, Can be a name or path within the hdf5 file. If
+ * it represents a path YOU need to make sure all intermediate groups are already
+ * crreated.
+ * @param array The IMXAArray class
+ * @return Standard hdf5 error condition
  */
 static MXA_EXPORT herr_t writeMXAArray(hid_t loc_id,
                             const std::string &dsetName,
                             IMXAArray* array);
 /**
- * @brief
- * @param loc_id
- * @param dsetName
- * @param attributeKey
- * @param array
+ * @brief Writes the data contained within an IMXAArray object into an hdf5 file
+ * @param loc_id The parent ID of the dataset
+ * @param dsetName The name of the dataset, Can be a name or path within the hdf5 file. If
+ * it represents a path YOU need to make sure all intermediate groups are already
+ * crreated.
+ * @param attributeKey The name of the attribute
+ * @param array The IMXAArray class
+ * @return Standard hdf5 error condition
  */
 static MXA_EXPORT herr_t writeMXAAttribute(hid_t loc_id,
                             const std::string &dsetName,
@@ -1422,7 +1438,7 @@ static MXA_EXPORT herr_t writeMXAAttribute(hid_t loc_id,
 
 
 /**
- * @brief Reads the data from an HDF5 file into a newly allocated MXAArrayTemplate 
+ * @brief Reads the data from an HDF5 file into a newly allocated MXAArrayTemplate
  * object - PLEASE NOTE: You MUST call delete on the object or otherwise make
  * arrangements to clean up the pointer otherwise memory leaks will occur.
  * @param loc_id The HDF5 file or group Id into which to store the data
@@ -1434,7 +1450,7 @@ static MXA_EXPORT IMXAArray* readMXAArray(hid_t loc_id,
 
 
 /**
- * @brief Reads the attribute data from an HDF5 file into a newly allocated MXAArrayTemplate 
+ * @brief Reads the attribute data from an HDF5 file into a newly allocated MXAArrayTemplate
  * object - PLEASE NOTE: You MUST call delete on the object or otherwise make
  * arrangements to clean up the pointer otherwise memory leaks will occur.
  * @param loc_id The HDF5 file or group Id into which to store the data
@@ -1442,8 +1458,8 @@ static MXA_EXPORT IMXAArray* readMXAArray(hid_t loc_id,
  * @param attributeKey The name of the attribute
  * @return IMXAArray Pointer. NULL value is possible on error
  */
-static MXA_EXPORT IMXAArray* readMXAAttribute(hid_t loc_id, 
-                                   const std::string &dsetName, 
+static MXA_EXPORT IMXAArray* readMXAAttribute(hid_t loc_id,
+                                   const std::string &dsetName,
                                    const std::string &attributeKey);
 
 

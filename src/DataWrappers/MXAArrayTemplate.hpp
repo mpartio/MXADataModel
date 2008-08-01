@@ -27,7 +27,7 @@
 * @brief
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 template<typename T>
 class MXAArrayTemplate : public IMXAArray
@@ -36,8 +36,6 @@ class MXAArrayTemplate : public IMXAArray
 
 /**
  * @brief Static constructor
- * @param datasetPath The path to the dataset in the HDF5 file
- * @param attributeKey The string name of the attribute
  * @param numElements The number of elements in the internal array.
  * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
  */
@@ -54,10 +52,8 @@ class MXAArrayTemplate : public IMXAArray
 
 /**
  * @brief Creates an IMXAArrayPtr object for the supplied arguments.
- * @param datasetPath The path to the dataset in the HDF5 file
- * @param attributeKey The string name of the attribute
- * @param nDims
- * @param dims
+ * @param nDims Number of dimensions
+ * @param dims Size of each dimension
  * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
  */
     static IMXAArrayPtr CreateMultiDimensionalArray(int32 nDims, const uint64* dims)
@@ -75,8 +71,6 @@ class MXAArrayTemplate : public IMXAArray
 
 /**
  * @brief Creates an Attribute from a single value
- * @param datasetPath The path to the dataset in the HDF5 file
- * @param attributeKey The string name of the attribute
  * @param value The value to store in the attribute
  * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
  */
@@ -96,8 +90,6 @@ class MXAArrayTemplate : public IMXAArray
 /**
  * @brief Static construction of MXAArrayTemplate objects. YOU are
  * responsible for cleaning up the memory that this method creates.
- * @param datasetPath The path to the dataset in the HDF5 file
- * @param attributeKey The string name of the attribute
  * @param numElements The number of elements in the internal array.
  * @return
  */
@@ -365,12 +357,11 @@ class MXAArrayTemplate : public IMXAArray
     }
 
   protected:
-/**
- * @brief Protected Constructor
- * @param datasetPath The path to the dataset in the HDF5 file
- * @param attributeKey The string name of the attribute
- * @param numElements The number of elements in the internal array.
- * @param takeOwnership Will the class clean up the memory. Default=true
+
+  /**
+   * @brief Protected Constructor
+   * @param numElements The number of elements in the internal array.
+   * @param takeOwnership Will the class clean up the memory. Default=true
      */
       MXAArrayTemplate(int32 numElements,
                                bool takeOwnership = true) :
@@ -382,14 +373,12 @@ class MXAArrayTemplate : public IMXAArray
         _dims[0] = numElements;
       }
 
-/**
- * @brief Constructor used to create an MXAArrayTemplate class that has multiple dimensions.
- * @param datasetPath The path to the dataset in the HDF5 file
- * @param attributeKey The string name of the attribute
- * @param numDims The number of dimensions to the data set.
- * @param dims The actual values of the dimensions.
- * @param takeOwnership Will the class clean up the memory. Default=true
- */
+  /**
+   * @brief Constructor used to create an MXAArrayTemplate class that has multiple dimensions.
+   * @param numDims The number of dimensions to the data set.
+   * @param dims The actual values of the dimensions.
+   * @param takeOwnership Will the class clean up the memory. Default=true
+   */
       MXAArrayTemplate(int32 numDims,
                        const uint64* dims,
                        bool takeOwnership = true) :
@@ -407,8 +396,8 @@ class MXAArrayTemplate : public IMXAArray
 
 
     /**
-     * @brief
-     * @return
+     * @brief Allocates the memory needed for this class
+     * @return 1 on success, -1 on failure
      */
         int32 _allocate()
         {

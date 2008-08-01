@@ -19,7 +19,7 @@
 * @brief Delegate type class that writes attributes to an xml file
 * @author mjackson
 * @date Jan 15, 2008
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 
 class MXA_EXPORT XMLMXAAttributeWriter
@@ -42,6 +42,7 @@ class MXA_EXPORT XMLMXAAttributeWriter
 
 /**
  * @brief Writes the attribute to the xml file
+ * @param attributeKey The name of the attribute to write
  * @param attribute The attribute to write
  * @return Error condition - Negative is error
  */
@@ -107,6 +108,7 @@ class MXA_EXPORT XMLMXAAttributeWriter
 
 /**
  * @brief Template based method to write an attribute to an xml file
+ * @param attributeKey The name of the attribute to write
  * @param attribute The attribute to write to the xml file
  * @return Error Condition - Negative is Error.
  */
@@ -158,6 +160,7 @@ class MXA_EXPORT XMLMXAAttributeWriter
 
 /**
  * @brief Writes a string based attribute to an xml file
+ * @param attributeKey The name of the attribute to write
  * @param attribute The attribute to write
  * @return Error Condition - Negative is error
  */

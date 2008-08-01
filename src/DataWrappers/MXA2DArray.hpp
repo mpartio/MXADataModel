@@ -26,18 +26,19 @@
 * @brief This class represents a generic 2D array of data.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 template<typename T>
 class MXA2DArray : public MXAArrayTemplate<T>
 {
   public:
     /**
-     * @brief
-     * @param datasetPath
-     * @param width
-     * @param height
-     * @return
+     * @brief Creates a MXA2DArray wrapped in a Boost::SharedPointer that represents a 2D array
+     * typically used for images. The memory is allocated immediately. If the memory
+     * can not be allocated then a NULL wrapped pointer is returned.
+     * @param width The width of the array
+     * @param height The height of the array.
+     * @return Boost::shared_pointer wrapped MXA2DArray pointer
      */
     static IMXAArrayPtr CreateAbstractDataArray( int32 width, int32 height)
     {
@@ -57,11 +58,11 @@ class MXA2DArray : public MXAArrayTemplate<T>
     }
 
     /**
-     * @brief
-     * @param datasetPath
-     * @param width
-     * @param height
-     * @return
+     * @brief Creates and allocates an MXA2DArray object. You are repsonsible for cleaning
+     * up the memory if you select to allocate the array in this way.
+     * @param width The width of the array
+     * @param height The height of the array.
+     * @return Pointer to an MXA2DArray Object
      */
     static MXA2DArray* New( int32 width, int32 height)
     {
@@ -80,23 +81,34 @@ class MXA2DArray : public MXAArrayTemplate<T>
 
 
     /**
-     * Returns the number of dimensions the data has.
+     * @brief Returns the number of dimensions the data has.
      */
     virtual int32 getNumberOfDimensions ()
     {
       return 2;
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+
+    /**
+     * @brief Returns the sizes of the dimensions
+     * @param dims A pointer to an array of at least size=2.
+     */
     virtual void getDimensions(uint64* dims)
     {
       dims[0] = _width;
       dims[1] = _height;
     }
 
+    /**
+     * @brief Returns the width of the array
+     * @return
+     */
     virtual int32 getWidth() { return _width; }
+
+    /**
+     * @brief Returns the height of the array.
+     * @return
+     */
     virtual int32 getHeight() { return _height; }
 
     /**
@@ -115,9 +127,12 @@ class MXA2DArray : public MXAArrayTemplate<T>
       return static_cast<T*>(this->getVoidPointer(index));
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+
+    /**
+     * @brief Resizes the array
+     * @param size The new size of the array
+     * @return 1 if the resize succeeded, 0 on error
+     */
     virtual int32 resize(uint64 size)
     {
       if(this->_resizeAndExtend(size) || size <= 0)
@@ -151,9 +166,10 @@ class MXA2DArray : public MXAArrayTemplate<T>
       return err;
     }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
+
+    /**
+     * @brief Initializes the array to widht and height  = 0
+     */
     virtual void initialize()
     {
       MXAArrayTemplate<T>::initialize();
