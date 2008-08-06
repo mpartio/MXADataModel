@@ -1,5 +1,6 @@
 #-------- Install the MXADataModel Library
 IF (WIN32 AND BUILD_SHARED_LIBS)
+message (STATUS "Hellow")
     SET (MXA_CONFIG_DIR_Debug "")
     SET (MXA_CONFIG_DIR_Release "")
     IF (MSVC)
@@ -14,20 +15,32 @@ IF (WIN32 AND BUILD_SHARED_LIBS)
         DESTINATION bin 
         CONFIGURATIONS Release 
         COMPONENT Runtime)
-
-ELSEIF (WIN32 AND BUILD_SHARED_LIBS)
     INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
-        LIBRARY DESTINATION lib 
+        LIBRARY DESTINATION bin 
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
         COMPONENT Libraries
     )
 ENDIF (WIN32 AND BUILD_SHARED_LIBS)
 
-
+IF (NOT WIN32)
+    INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
+        LIBRARY DESTINATION lib 
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        FRAMEWORK DESTINATION Frameworks
+        COMPONENT Libraries
+    )
+ENDIF (NOT WIN32)  
+    
 INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h 
             DESTINATION include/MXADataModel 
             COMPONENT Headers           
+)
+
+#-- This is for OS X Frameworks
+set_property(SOURCE ${PROJECT_BINARY_DIR}/MXAConfiguration.h
+ PROPERTY MACOSX_PACKAGE_LOCATION Headers
 )
 
 SET (MXA_INSTALLED_RESOURCES
