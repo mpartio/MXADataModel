@@ -1,7 +1,19 @@
-#MESSAGE (STATUS "IncludeMXADataModelSource.cmake")
+# This cmake file gathers all the needed source files that make up MXADataModel
+# and put those into a variable 'MXADATAMODEL_SRCS'. This list can then be used
+# as a list of files to compile if you want to directly include MXADataModel
+# sources in your project. 
+#  Typically you would build MXADataModel as a library and then "install" that
+# library onto your system. Your project can then just reference MXADataModel.dylib
+# instead of having to build it each time.
+
+
 IF (NOT MXA_RESOURCES_DIR)
   GET_FILENAME_COMPONENT(MXA_RESOURCES_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
 ENDIF (NOT MXA_RESOURCES_DIR)
+
+#--- Include some needed macros.
+INCLUDE (${MXA_RESOURCES_DIR}/MXA_CMakeMacros.cmake)
+
 #-- Include the Configure Checks
 #-------------------------------------------------------------------------------
 INCLUDE( "${MXA_RESOURCES_DIR}/vtkTestTypes.cmake" )
@@ -76,7 +88,7 @@ ENDIF(MXA_USE_XML)
 #------- HDF5 Dependant Sources ------------------------------
 IF ( MXA_USE_HDF5 )
   INCLUDE (${MXA_SOURCE_DIR}/src/HDF5/HDF5_SourceList.cmake)
-  MESSAGE(STATUS "MXA has HDF5 sources")
+ # MESSAGE(STATUS "MXA has HDF5 sources")
   
   SET(HDF5_SUPPORT "1")
  # OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)

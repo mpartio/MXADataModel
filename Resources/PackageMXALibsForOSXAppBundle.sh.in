@@ -1,5 +1,9 @@
 #!/bin/bash
 
+THIS FILE IS DEPRECATED AND SHOULD NOT BE USED. THERE ARE OTHER FACILITIES FOR
+COPYING AND ADJUSTING OS X LIBRARIES THAT SHOULD BE USED INSTEAD.
+
+
 # //TODO: Add Icon File and copy it to the bundle
 # This script attempts to copy needed 3rd party libraries and frameworks into 
 # the application bundle. It will then attempt to set the 'install_name' for 

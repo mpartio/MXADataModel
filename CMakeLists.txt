@@ -1,6 +1,6 @@
 # set project's name
 PROJECT( MXADataModel )
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.4)
 
 #-- Need this for link line stuff?
 if(COMMAND cmake_policy)

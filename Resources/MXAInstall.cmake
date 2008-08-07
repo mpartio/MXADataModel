@@ -28,7 +28,6 @@ IF (NOT WIN32)
         LIBRARY DESTINATION lib 
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
-        FRAMEWORK DESTINATION Frameworks
         COMPONENT Libraries
     )
 ENDIF (NOT WIN32)  
@@ -38,15 +37,10 @@ INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h
             COMPONENT Headers           
 )
 
-#-- This is for OS X Frameworks
-set_property(SOURCE ${PROJECT_BINARY_DIR}/MXAConfiguration.h
- PROPERTY MACOSX_PACKAGE_LOCATION Headers
-)
-
 SET (MXA_INSTALLED_RESOURCES
         ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
         ${MXA_RESOURCES_DIR}/ConfigureChecks.cmake
-        ${MXA_RESOURCES_DIR}/IncludeMXADataModelSource.cmake
+   #     ${MXA_RESOURCES_DIR}/IncludeMXADataModelSource.cmake
         ${MXA_RESOURCES_DIR}/MXAAdjustLibVars.cmake
         ${MXA_RESOURCES_DIR}/MXAFindBoost.cmake
         ${MXA_RESOURCES_DIR}/MXAFindExpat.cmake
@@ -57,12 +51,12 @@ SET (MXA_INSTALLED_RESOURCES
 )
 
 #-- Add Apple specific resources
-IF (APPLE)
-    SET (MXA_INSTALLED_RESOURCES ${MXA_INSTALLED_RESOURCES}
-        ${MXA_RESOURCES_DIR}/PackageMXALibsForOSXAppBundle.sh.in
-        ${MXA_RESOURCES_DIR}/CreateOSXBundle.sh.in
-        )
-ENDIF (APPLE)
+#IF (APPLE)
+#    SET (MXA_INSTALLED_RESOURCES ${MXA_INSTALLED_RESOURCES}
+#        ${MXA_RESOURCES_DIR}/PackageMXALibsForOSXAppBundle.sh.in
+#        ${MXA_RESOURCES_DIR}/CreateOSXBundle.sh.in
+#        )
+#ENDIF (APPLE)
 
 INSTALL (FILES ${MXA_INSTALLED_RESOURCES} 
         DESTINATION share/MXADataModel/Resources/ 
