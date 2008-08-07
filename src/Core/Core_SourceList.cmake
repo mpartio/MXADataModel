@@ -18,10 +18,4 @@ SET (MXA_CORE_HEADERS
 
 )
 
-
-INSTALL (FILES ${MXA_CORE_HEADERS}
-            DESTINATION include/MXADataModel/Core
-            COMPONENT Headers           
-)
-
-source_group(src\\Core FILES ${MXA_CORE_HEADERS} ${MXA_CORE_SRCS} )
+MXA_SOURCE_PROPERTIES(Core "${MXA_CORE_HEADERS}" "${MXA_CORE_SRCS}")

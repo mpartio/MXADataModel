@@ -1,6 +1,6 @@
 # set project's name
 PROJECT( MXADataModel )
-cmake_minimum_required(VERSION 2.4)
+cmake_minimum_required(VERSION 2.6)
 
 #-- Need this for link line stuff?
 if(COMMAND cmake_policy)
@@ -15,6 +15,8 @@ ENDIF(NOT DEFINED MXA_SOURCE_DIR)
 IF ( NOT DEFINED  MXADATAMODEL_LIB_NAME)
   SET (MXADATAMODEL_LIB_NAME MXADataModel)
 ENDIF ( NOT DEFINED MXADATAMODEL_LIB_NAME )
+
+SET (MXADATAMODEL_VER "1.0")
 
 # ---------- Setup output Directories -------------------------
 SET (LIBRARY_OUTPUT_PATH
@@ -65,6 +67,9 @@ ENDIF (BUILD_SHARED_LIBS)
 
 #-- Find all the support libraries needed
 INCLUDE (${MXA_RESOURCES_DIR}/FindSupportLibraries.cmake)
+
+#-- Include a Macro to setup source file properties
+INCLUDE ( ${MXA_RESOURCES_DIR}/MXA_CMakeMacros.cmake)
 
 #-- Include all the source files
 INCLUDE (${MXA_SOURCE_DIR}/src/Base/Base_SourceList.cmake)
@@ -187,6 +192,7 @@ ENDIF (BUILD_SHARED_LIBS)
 #-- Add the MXADataModel Library and link to needed libraries-------------------
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
+
 #-- Set the Debug and Release names for the libraries
 SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME} 
     PROPERTIES
@@ -194,12 +200,6 @@ SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME}
     RELEASE_OUTPUT_NAME ${MXA_LIBRARY_RELEASE}
 )
 
-# ----- OS X specific build settings
-IF ( APPLE )
-  SET_TARGET_PROPERTIES (${MXADATAMODEL_LIB_NAME}
-    PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib
-    )  
-ENDIF ( APPLE )
 
 #----- Use MSVC Naming conventions for Shared Libraries for MinGW --------------
 IF (MINGW AND BUILD_SHARED_LIBS)
@@ -215,7 +215,7 @@ ENDIF (MINGW AND BUILD_SHARED_LIBS)
 include ( "${MXA_RESOURCES_DIR}/MXAInstall.cmake")
 
 #----- Install Needed Runtime Libraries -----------------------------------
-include ( "${MXA_RESOURCES_DIR}/InstallMXASupportLibraries.cmake")
+#include ( "${MXA_RESOURCES_DIR}/InstallMXASupportLibraries.cmake")
 
 #-- Include the MXADataModel Testing Sources
 IF ( BUILD_TESTING )

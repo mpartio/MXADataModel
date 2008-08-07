@@ -11,10 +11,6 @@ SET (MXA_DATA_WRAPPERS_HEADERS
 
   )
   
+MXA_SOURCE_PROPERTIES(DataWrappers "${MXA_DATA_WRAPPERS_HEADERS}" "${MXA_DATA_WRAPPERS_SRCS}")
 
-INSTALL (FILES ${MXA_HDF5_HEADERS}
-            DESTINATION include/MXADataModel/DataWrappers
-            COMPONENT Headers           
-)
 
-source_group(src\\DataWrappers FILES ${MXA_DATA_WRAPPERS_SRCS} ${MXA_DATA_WRAPPERS_HEADERS} )

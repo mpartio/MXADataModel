@@ -17,10 +17,4 @@ SET (MXA_XML_HEADERS
     ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.h
 )
 
-INSTALL (FILES ${MXA_XML_HEADERS}
-            DESTINATION include/MXADataModel/XML
-            COMPONENT Headers           
-)
-
-source_group(src\\XML FILES ${MXA_XML_SRCS} ${MXA_XML_HEADERS} )
-
+MXA_SOURCE_PROPERTIES(XML "${MXA_XML_HEADERS}" "${MXA_XML_SRCS}")

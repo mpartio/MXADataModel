@@ -73,7 +73,7 @@ std::cout << logTime() << "Example 2 Starting" << std::endl;
  }
 
  miscTest();
-std::cout << logTime() << "Example 2 Ending"  << std::endl;
+ std::cout << logTime() << "Example 2 Ending"  << std::endl;
  return EXIT_SUCCESS;
 }
 

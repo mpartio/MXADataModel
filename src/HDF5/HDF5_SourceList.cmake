@@ -29,11 +29,7 @@ SET(MXA_HDF5_HEADERS
     ${MXA_SOURCE_DIR}/src/HDF5/H5MXAUtilities.h
 )
 
-
-INSTALL (FILES ${MXA_HDF5_HEADERS}
-            DESTINATION include/MXADataModel/HDF5
-            COMPONENT Headers           
-)
+MXA_SOURCE_PROPERTIES(HDF5 "${MXA_HDF5_HEADERS}" "${MXA_HDF5_SRCS}")
 
 
 #-------------------------------------------------------------------------------
@@ -52,9 +48,5 @@ SET(MXA_HDF5_TIFF_HEADERS
     )
         
 
-INSTALL (FILES ${MXA_HDF5_TIFF_HEADERS}
-            DESTINATION include/MXADataModel/HDF5
-            COMPONENT Headers           
-)
+MXA_SOURCE_PROPERTIES(HDF5 "${MXA_HDF5_TIFF_HEADERS}" "${MXA_HDF5_TIFF_SRCS}")
 
-source_group(src\\HDF5 FILES ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS} )

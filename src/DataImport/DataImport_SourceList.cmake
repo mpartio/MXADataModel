@@ -8,11 +8,5 @@ SET (MXA_DATA_IMPORT_HEADERS
 )
 
 
-INSTALL (FILES ${MXA_DATA_IMPORT_HEADERS}
-            DESTINATION include/MXADataModel/DataImport
-            COMPONENT Headers           
-)
-
-
-source_group(src\\DataImport FILES ${MXA_DATA_IMPORT_SRCS} ${MXA_DATA_IMPORT_HEADERS} )
+MXA_SOURCE_PROPERTIES(DataImport "${MXA_DATA_IMPORT_HEADERS}" "${MXA_DATA_IMPORT_SRCS}")
 

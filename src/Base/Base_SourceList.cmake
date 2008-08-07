@@ -1,6 +1,5 @@
 SET (MXA_BASE_SRCS
 
-
 )
 
 
@@ -24,16 +23,10 @@ SET (MXA_BASE_HEADERS
   ${MXA_SOURCE_DIR}/src/Base/IFileReader.h
   ${MXA_SOURCE_DIR}/src/Base/IFileWriter.h
   ${MXA_SOURCE_DIR}/src/Base/IMXAArray.h
- 
   ${MXA_SOURCE_DIR}/src/Base/IDataFileIO.h
   ${MXA_SOURCE_DIR}/src/Base/IDataset.h
   ${MXA_SOURCE_DIR}/src/Base/IRequiredMetaData.h
 )
 
+MXA_SOURCE_PROPERTIES(Base "${MXA_BASE_HEADERS}" "${MXA_BASE_SRCS}")
 
-INSTALL (FILES ${MXA_BASE_HEADERS}
-            DESTINATION include/MXADataModel/Base
-            COMPONENT Headers           
-)
-
-source_group(src\\Base FILES ${MXA_BASE_HEADERS})
