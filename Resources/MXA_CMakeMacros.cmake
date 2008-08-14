@@ -6,7 +6,7 @@ INSTALL (FILES ${HEADERS}
             COMPONENT Headers           
 )
 
-source_group(src\\Base FILES ${HEADERS} ${SOURCES})
+source_group(src\\${NAME} FILES ${HEADERS} ${SOURCES})
 
 #-- The following is needed if we ever start to use OS X Frameworks but only
 #--  works on CMake 2.6 and greater

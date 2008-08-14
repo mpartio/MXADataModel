@@ -1,6 +1,5 @@
 #-------- Install the MXADataModel Library
 IF (WIN32 AND BUILD_SHARED_LIBS)
-message (STATUS "Hellow")
     SET (MXA_CONFIG_DIR_Debug "")
     SET (MXA_CONFIG_DIR_Release "")
     IF (MSVC)
