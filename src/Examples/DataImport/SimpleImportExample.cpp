@@ -1,189 +1,195 @@
-#include <SimpleImportExample.h>
+#include <Examples/DataImport/SimpleImportExample.h>
 
-
-//-- MHD Headers
-#include <MXADataModel/MXADataModel.h>
-
-
+//-- MXA Headers
+#include <Base/IImportDelegate.h>
+#include <Core/MXADataModel.h>
+#include <Core/MXADataSource.h>
+#include <Core/MXADataImport.h>
+#include <HDF5/H5MXADataFile.h>
+#include <DataImport/ImportDelegateManager.h>
+#include <Examples/DataImport/ExampleImportDelegate.h>
+#include <Examples/DataImport/ExampleImportDelegateFactory.h>
 
 //-- STL Headers
 #include <iostream>
+#include <fstream>
 
 
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 SimpleImportExample::SimpleImportExample()
 {
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 SimpleImportExample::~SimpleImportExample()
 {
 }
 
-// Will create a data model for the Ni-Al-Cr sample
-//  This has 1 dimension (slice) and one record (image)
-//  For this sample - there will be 4 values the dimension slice
-//  can take on but I will only fill in 2 of them (sparse sample)
+// -----------------------------------------------------------------------------
 //
-// After the model is built - this app will write out three files:
-//   1) ni-al-cr-sample-datamodel.xml
-//   2) ni-al-cr-sample-datafile.hdf
-//   3) ni-al-cr-sample-datafile-w-sources.hdf
-// containting an XML copy of the datamodel and a written HDF file
-//  without the sample image sources and with the sample image sources
-//  respectively
-//
+// -----------------------------------------------------------------------------
+void SimpleImportExample::runImport(const std::string &outputFilePath)
+{
+  // Create a DataModel
+  MXADataModelPtr model = this->createSimpleModel();
 
-void SimpleImportExample::run()
+  // Create some external models that our import delegate will read
+  this->createTestFiles(model);
+
+  // Create a DataFile object which will create the actual file on disk.
+  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outputFilePath, model);
+
+  //Create the DataImport Class
+  MXADataImportPtr dataImport(new MXADataImport());
+  dataImport->setDataFile(dataFile);
+
+  // Get an instance to the ImportDelegateManager
+  ImportDelegateManagerPtr idManagerPtr = ImportDelegateManager::instance();
+  // Get a reference to an Import Delegate given the name of the class
+  IImportDelegatePtr delegatePtr = idManagerPtr->newDataImportDelegate(ExampleImport::Detail::ClassName);
+
+  // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
+  IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension
+  IDataDimensionPtr dim1 = model->getDataDimension(1); // Get the second Dimension
+
+  // Create a DataRecord entry for the Data Model
+  IDataRecordPtr record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
+
+  // Set the start/end/increment values for each Data Dimension
+  int32 dim0Start = dim0->getStartValue();
+  int32 dim0End = dim0->getEndValue();
+  int32 dim0Increment = dim0->getIncrement();
+
+  int32 dim1Start = dim1->getStartValue();
+  int32 dim1End = dim1->getEndValue();
+  int32 dim1Increment = dim1->getIncrement();
+
+  // Create a nested loop to create the necessary DataSource objects that will
+  //  be used to import the data into the HDF5 file
+  for (int32 i = dim0Start; i <= dim0End; i += dim0Increment)
+  {
+    for (int j = dim1Start; j <= dim1End; j = j + dim1Increment)
+    {
+      std::string filename(DataInputFile);
+      filename.append( StringUtils::numToString<int32>(i) );
+      filename.append("_").append(StringUtils::numToString<int32>(j)).append(".data");
+
+      //Create some Data Sources
+      MXADataSourcePtr ds(new MXADataSource());
+      std::vector<int32> dimValues;
+      dimValues.push_back(i);
+      dimValues.push_back(j);
+      ds->setDimensionValues(dimValues);
+      ds->setDataRecord(record);
+      ds->setSourcePath(filename); //Since we are doing everything in software, this is unused
+      ds->setImportDelegate(delegatePtr);
+      ds->setDataModel(model);
+      dataImport->addDataSource(ds);
+    }
+  }
+
+  // Import the Data into the HDF5 File
+  // std::cout << "IMPORTING DATA NOW" << std::endl;
+  int32 err = dataImport->import();
+  if (err < 0)
+  {
+
+  }
+  dataFile->closeFile(false);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void SimpleImportExample::createTestFiles(MXADataModelPtr model)
+{
+  // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
+    IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension
+    IDataDimensionPtr dim1 = model->getDataDimension(1); // Get the second Dimension
+
+    // Create a DataRecord entry for the Data Model
+    IDataRecordPtr record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
+
+    // Set the start/end/increment values for each Data Dimension
+    int32 dim0Start = dim0->getStartValue();
+    int32 dim0End = dim0->getEndValue();
+    int32 dim0Increment = dim0->getIncrement();
+
+    int32 dim1Start = dim1->getStartValue();
+    int32 dim1End = dim1->getEndValue();
+    int32 dim1Increment = dim1->getIncrement();
+
+    // Create a nested loop to create the necessary DataSource objects that will
+    //  be used to import the data into the HDF5 file
+    for (int32 i = dim0Start; i <= dim0End; i += dim0Increment)
+    {
+      for (int32 j = dim1Start; j <= dim1End; j = j + dim1Increment)
+      {
+        //Create some Data files
+        std::string filename(DataInputFile);
+        filename.append( StringUtils::numToString<int32>(i) );
+        filename.append("_").append(StringUtils::numToString<int32>(j)).append(".data");
+        std::ofstream file_stream;
+        file_stream.open(filename.c_str(), std::ios::binary );
+        std::cout << "Creating input file '" << filename << "'" << std::endl;
+        int32 NX = 5; /* dataset dimensions */
+        int32 NY = 3;
+        int32 value = 0;
+        for (int32 k = 0; k < NX; k++) {
+          for (int32 l = 0; l < NY; l++) {
+              value = l + k;
+              file_stream.write((char *)(&value), sizeof(value));
+          }
+        }
+        file_stream.flags();
+      }
+    }
+}
+
+// -----------------------------------------------------------------------------
+//  Creates a Data Model programmitically to use with our data import
+// -----------------------------------------------------------------------------
+MXADataModelPtr SimpleImportExample::createSimpleModel()
 {
   MXADataModelPtr modelPtr = MXADataModel::New();
   MXADataModel* model = modelPtr.get();
+  model->setDataRoot(std::string("DataImport Example Data"));
+  model->setModelType(MXA::MXACurrentFileType);
+  model->setModelVersion(MXA::MXACurrentFileVersion);
 
-  // Set the data root (Defaults to "Data/")
-  //  Note the MHDataModel code automatically assures the
-  //  data root will end with a /
-  //  If you pass in an empty string it will revert to the default
-  //    ie  setDataRoot("") == a data root of "Data/"
-  //  Note it currently does not ensure against strings
-  //   that contain only whitespace (on to do list)
-  //const std::string dataRoot("NI-AL-CR-ImageData");
-  model->setDataRoot( "NI-AL-CR-ImageData");
+  // ---------- Create 2 Data Dimensions
+  MXADataDimensionPtr dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
+  model->addDataDimension(dim0);
+  MXADataDimensionPtr dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
+  model->addDataDimension(dim1);
 
-  // Set the file version 
-  //  Note - this should NOT be called in most cases - the default
-  //   value is the currently supported version (currently 0.4)
-  model->setModelVersion( MXA::MXACurrentFileVersion );
+  // ---------- Create Data Records
+  MXADataRecordPtr rec1 = MXADataRecord::New(0, std::string("DataRecordContainer"), std::string("DRC1"));
+  model->addDataRecord(rec1);
 
-  // Set the file type
-  //  Note - this should NOT be called in most cases - the default
-  //   value is the currently supported file version (currently MHD or XMDA)
-  //  Note - case does matter  (on TO DO list)
-  model->setModelType( MXA::MXACurrentFileType );
+  // ---------- Create Data Records with Parents
+  MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Test Data"), std::string("Test Data"));
+  model->addDataRecord(rec2, rec1);
+  MXADataRecordPtr rec3 = MXADataRecord::New(0, std::string("Deep Nested Data"), std::string("Nested Data"));
+  model->addDataRecord(rec3, rec2);
 
-  
-  // For setting the required meta data you have a couple options
-  //  1) set each indidually by calling:
-  //      model->setRequiredMetaData(MHD_CREATOR_TAG, "Troublemaker");
-  //      model->setRequiredMetaData(MHD_DATE_TAG, "Dec 20, 2006");
-  //      ... 
-  //   
-  //  2) set them all at once by calling
-  //      model->setRequiredMetaData(creator, date, name, description,
-  //                 distribution_rights, release_number, pedigree, 
-  //                 original_source_file)
-  //     where each argument is a std::string
-  //       Pedigree must be one of:  Original  Derived
-  //       distribution_rights must be one of:  Unlimited  Proprietary
-  //         Case Matters
-  //         This is not enforced but there is currently no support
-  //         for any other types
-  // 
-  //  3) create a std::map<std::string, std::string> mymap of all the 
-  //         attributes
-  //       where the key is one of the MHD_<META DATA>_TAG constants
-  //          (see MHDConstants.h in the Meta data section for them)
-  //       and the value is the value and call:
-  //      model->setRequiredMetaData(mymap);
-  // 
-  //  side note:  calling  model->clearRequiredMetaData()
-  //    sets the required meta data to default values of all empty strings
-  //    except distribution rights (set to Unlimited) and pedigree (set
-  //    to Original)
-  model->setRequiredMetaData("Shawn", "12/20/2006 17:34:06", 
-            "ni-al-cr dataset sample", 
-            "A sample dataset showing images from an experiment using ni-al-cr",
-            "Unlimited", "Release v1.0", "Original", "");
+  // ---------- Create the Required MetaData
+  std::map<std::string, std::string> md;
+  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
+  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
+  md[MXA::MXA_DSET_NAME_TAG] = "Testing Data Import";
+  md[MXA::MXA_DESCRIPTION_TAG] = "Application to test importing data to the data file";
+  md[MXA::MXA_PEDIGREE_TAG] = "Original";
+  md[MXA::MXA_DERIVED_SRC_TAG] = "Original Data Files";
+  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
+  md[MXA::MXA_RELEASE_NUMBER_TAG] = "Not Applicable";
+  model->setRequiredMetaData(md);
 
-  
-  // For setting user defined meta data you have two choices
-  //  1) set each indidually by calling:
-  //      model->setUserMetaData("sample label", "sample value")
-  //      model->setUserMetaData("experimenter", "john doe");
-  //      ... 
-  //   
-  //  2) create a std::map<std::string, std::string> mymap of all the 
-  //         attributes
-  //       where the key is the label for the attribute
-  //       and the value is the value for the attribute
-  //     and then calling:
-  //      model->setUserMetaData(mymap);
-  //
-  model->addUserMetaData(std::string("Experimenter"), std::string("John Doe") );
-
-  
-  // Adding Dimensions
-  // See MHDataModel.h for the different methods for adding dimensions
-  //  The easiest way to add a dimension is to call
-  //     model->addDataDimension(name, alt_name) 
-  //   and then set any properties you want for it.  This call
-  //  creates a dimension with a uniform increment of 1 starting at 0
-  //  and having only 1 value it can take on.  
-  //    Using this method the order of the dimensions is set by
-  //  the order they are created (the first is dim 0, second dim 1, etc)
-  //  
-  //  non-uniform dimensions are not fully supported yet.
-
-  MXADataDimensionPtr dim = model->addDataDimension("Slice", "Image Slice", 0, 4, 100, 103, 1, 1);
-
-
-  // Adding Records
-  // See MHDataModel.h for the different methods for adding records
-  //   Like dimensions the easiest way is to call:
-  //     model->addDataRecord(name, alt_name, MHDNode *parent)
-  //   where parent is the node pointer from a previously added record
-  //   ex)
-  //    MHDNode *rec1 = model->addDataRecord("Image", "image data");
-  //    MHDNode *comp = model->addDataRecord("Composition", "composition");
-  //    MHDNode *eta1 = model->addDataRecord("eta1", "eta1", comp);
-  //
-  MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Image"), std::string("Ni-AL-CR Slice Image"));
-  model->addDataRecord(rec0);
-  //---------
-  // And that would be a complete Data Model description
-  //---------
-
-  // Writing this out to an HDF Data File (*.hdf *.h5  *.hdf5):
-  model->writeModel( MHD_FILE);
-
-//TODO: Export out to XML file
-  
-  
-  //---------
-  // Assigning data sources
-  //  Assigning data sources can also be done in a couple ways
-  //  This is currently still a work in progress
-  // Adding a data source uses the call:
-  //    model->addDataSource(dimensionValues, recordPath, recordLuid, 
-  //                           sourceFilePath);
-  //  where dimensionValues is a std::map<int, int>
-  //     where the key is the dimension order(index) and the value
-  //     is the value of that dimension 
-  //  recordPath is the path to the record from any parent records (luids)
-  //     image would have a record path of ""
-  //     composition for composition would have a record path of ""
-  //     composition/eta1 for eta1 would have a record path of "1"
-  //        assuming composition had the luid: 1
-  //  recordLuid is the luid for the data record being assigned a source
-  //  sourceFilePath is the path to the data source file
-  //
-  //  In this sample - we have 1 dimension (so the dimvals map will 
-  //    have only 1 key/val pair)
-  //   this dimension has values ranging from 100-103 (4 values)
-  //   I am only setting two of them.
-  
-#if 0
-  TiffToHDFDelegate delegate; //Allocate on the stack
-  
-  std::map<int, int> sample_dim_vals;
-  sample_dim_vals[0] = 100;
-  model->addDataSource(sample_dim_vals, "", 0, "/Users/mjackson/Task_7/Workspace/MHDataModel/UnitTests/100.tif", &delegate);
-  sample_dim_vals[0] = 101;
-  model->addDataSource(sample_dim_vals, "", 0, "/Users/mjackson/Task_7/Workspace/MHDataModel/UnitTests/101.tif", &delegate);
-  
-  //Clean up the memory
-  model->writeMHDFile(MHD_FILE_W_SOURCES);
-#endif
-
+  return modelPtr;
 }
-
-
-
 

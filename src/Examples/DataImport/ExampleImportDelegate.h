@@ -1,36 +1,41 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2008, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef EXAMPLEIMPORTDELEGATE_H_
 #define EXAMPLEIMPORTDELEGATE_H_
 
-
-#include <Base/IDataImportDelegate.h>
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Base/IImportDelegate.h>
 
 
 /**
 * @class ExampleImportDelegate ExampleImportDelegate.h src/Examples/DataImport/ExampleImportDelegate.h
-* @brief An example of how to write a basic IDataImportDelegate class 
+* @brief An example of how to write a basic IDataImportDelegate class
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
-class ExampleImportDelegate : public IDataImportDelegate
+class ExampleImportDelegate : public IImportDelegate
 {
 public:
 	ExampleImportDelegate();
 	virtual ~ExampleImportDelegate();
-  
-	/**
-	 * @brief Imports the data pointed to by the filepath into the HDF5 file
-	 * @param fileId The HDF5 fileid
-	 * @param recordGroup The Data record group 
-	 * @param recordName The data record name
-	 * @param filePath The path to the data file
-	 * @return Negative value on error
-	 */
-  int32 encodeSourceToHDF5( hid_t fileId, const std::string &recordGroup,
-                              const std::string &recordName, 
-                              const std::string &filePath);
-  
-  
+
+  /**
+   * @brief Imports the datasource to the data file
+   * @param dataSource The source of the data
+   * @param dataFile The IDataFile object
+   * @return
+   */
+	int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile);
+
+
   private:
       ExampleImportDelegate(const ExampleImportDelegate&);  //Copy constructor NOT implemented
       void operator=(const ExampleImportDelegate); //Copy assignment NOT implemented

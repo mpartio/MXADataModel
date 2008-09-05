@@ -1,35 +1,54 @@
-#ifndef SIMPLEEXAMPLE_H_
-#define SIMPLEEXAMPLE_H_
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2008, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+#ifndef _SIMPLE_IMPORT_EXAMPLE_H_
+#define _SIMPLE_IMPORT_EXAMPLE_H_
+
+#include <Common/MXATypeDefs.h>
 
 #include <string>
 
-const std::string DATAMODEL_FILE("ni-al-cr-sample-datamodel.xml");
-const std::string MHD_FILE("ni-al-cr-sample-datafile.h5");
-const std::string MHD_FILE_W_SOURCES ("ni-al-cr-sample-datafile-w-sources.h5");
+#if defined (_WIN32)
+const std::string DataInputFile("C:\\WINDOWS\\Temp\\DataInput_");
+#else
+const std::string DataInputFile("/tmp/DataInput_");
+#endif
 
 /**
-* @class SimpleImportExample SimpleImportExample.h UnitTests/ModelConstructionEx/SimpleImportExample.h
-* @brief 
-* @author
-* @date
-* @version
+* @class SimpleImportExample SimpleImportExample.h Examples/DataImport/SimpleImportExample.h
+* @brief
+* @author Michael A. Jackson. BlueQuartz Software http://www.bluequartz.net
+* @date Sept 2008
+* @version $Revision: 1.2 $
 */
 class SimpleImportExample
 {
 public:
 	SimpleImportExample();
 	virtual ~SimpleImportExample();
-  
+
   /**
    * @brief Runs the example
+   * @param outputFilePath The path to the HDF5 file that will be created
    */
-  void run();
-  
-  
+  void runImport(const std::string &outputFilePath);
+
+protected:
+
+  MXADataModelPtr createSimpleModel();
+
+  void createTestFiles(MXADataModelPtr model);
+
+
   private:
       SimpleImportExample(const SimpleImportExample&);  //Copy constructor NOT implemented
       void operator=(const SimpleImportExample); //Copy assignment NOT implemented
-    
+
 };
 
-#endif /*SIMPLEEXAMPLE_H_*/
+#endif /*_SIMPLE_IMPORT_EXAMPLE_H_*/

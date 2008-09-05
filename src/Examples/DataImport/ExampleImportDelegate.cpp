@@ -1,14 +1,18 @@
+#include <Examples/DataImport/ExampleImportDelegate.h>
 
+#include <Base/IDataFile.h>
+#include <Base/IDataSource.h>
+#include <HDF5/H5Utilities.h>
+#include <HDF5/H5Lite.h>
+#include <Examples/DataImport/SimpleImportExample.h>
 
-
-#include <ExampleImportDelegate.h>
-#include <MXAHDFInterface.h>
-#include <MXADataModel/HDFTools/ImageIO/MHDTiffIO.h>
-//#include <StringUtilities.h>
-
+//-- hdf5 includes
 #include <hdf5.h>
 
+//-- C++ includes
 #include <iostream>
+#include <fstream>
+#include <string>
 
 // -----------------------------------------------------------------------------
 //  Constructor
@@ -27,86 +31,47 @@ ExampleImportDelegate::~ExampleImportDelegate()
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-int32 ExampleImportDelegate::encodeSourceToHDF5( hid_t fileId, 
-                                                  const std::string &recordGroup,
-                                                  const std::string &recordName, 
-                                                  const std::string &filePath)
+int32 ExampleImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
 {
+  std::cout << "Importing data file '" << dataSource->getSourcePath() << "'" << std::endl;
   herr_t err = 0;
-  hid_t gid = MXAHDFInterface::openHDF5Object(fileId, recordGroup);
-  std::cout << " filePath: " << filePath << "\n";
-  std::cout << " recordGroup: " << recordGroup << std::endl;
-  std::cout << " recordName: " << recordName << std::endl;
- 
+  // The data file should already be open at this point but we can check to make sure
+  if (dataFile->isFileOpen() == false)
+  {
+    err = dataFile->openFile(false); // Open the file for write access
+    if (err < 0)
+    {
+      std::cout << "Could NOT open the data file '" << dataFile->getFilename() << "'" << std::endl;
+      return err;
+    }
+  }
+  IDataModelPtr model = dataFile->getDataModel();
+  std::string path(dataSource->generateInternalPath());
+  uint32 pos = path.find_last_of("/");
+  std::string parentPath(path.substr(0, pos));
+
+  hid_t fileId = dataFile->getFileId();
+  H5Utilities::createGroupsFromPath(parentPath, fileId);
+
+
+  // Create a 2D Dataset using the DataWrappers
+  int32 nDims = 2;
   int32 NX  =  5; /* dataset dimensions */
   int32 NY   =  3;
-  int32 RANK  = 2;
-
-  hid_t       dataset;         /* file and dataset handles */
-  hid_t       datatype, dataspace;   /* handles */
-  hsize_t     dimsf[2];              /* dataset dimensions */
-  herr_t      status;
-  int32         data[NX][NY];          /* data to write */
-  int32         i, j;
-
-    /*
-     * Data  and output buffer initialization.
-     */
-    for (j = 0; j < NX; j++) {
-      for (i = 0; i < NY; i++) {
-          data[j][i] = i + j;
-      }
-    }
-       
-    /*
-     * 0 1 2 3 4 5
-     * 1 2 3 4 5 6
-     * 2 3 4 5 6 7
-     * 3 4 5 6 7 8
-     * 4 5 6 7 8 9
-     */
+  uint64 dims[2] = {NX, NY};
+  IMXAArrayPtr array = MXAArrayTemplate<int32>::CreateMultiDimensionalArray(nDims, dims);
+  int32* data = static_cast<int32*>(array->getVoidPointer(0) );
 
 
-    /*
-     * Describe the size of the array and create the data space for fixed
-     * size dataset.
-     */
-    dimsf[0] = NX;
-    dimsf[1] = NY;
-    dataspace = H5Screate_simple(RANK, dimsf, NULL);
+  std::string inputFile = dataSource->getSourcePath();
+  std::ifstream fin(inputFile.c_str(), std::ios::binary);
 
-    /*
-     * Define datatype for the data in the file.
-     * We will store little endian int32 numbers.
-     */
-    datatype = H5Tcopy(H5T_NATIVE_INT);
-    status = H5Tset_order(datatype, H5T_ORDER_LE);
+  fin.read((char *)(data), array->getNumberOfElements() * sizeof(int32) );
 
-    /*
-     * Create a new dataset within the file using defined dataspace and
-     * datatype and default dataset creation properties.
-     */
-    dataset = H5Dcreate(gid, recordName.c_str(), datatype, dataspace, H5P_DEFAULT);
-
-    /*
-     * Write the data to the dataset using default transfer properties.
-     */
-    status = H5Dwrite(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
-
-    /*
-     * Close/release resources.
-     */
-    H5Sclose(dataspace);
-    H5Tclose(datatype);
-    H5Dclose(dataset);
-
-  
-  err = MXAHDFInterface::closeHDF5Object(gid);   
-  return err;  
+  //Write the Data to the HDF5 File
+  err = H5Lite::writeMXAArray(fileId, path, array.get() );
+  return err;
 }
-
-
-
 
