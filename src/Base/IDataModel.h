@@ -26,7 +26,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  *
  */
 class MXA_EXPORT IDataModel
@@ -36,53 +36,53 @@ class MXA_EXPORT IDataModel
     virtual ~IDataModel() {}
 
     /**
-     * @brief Returns the MXA File version that the model adheres to
+     * @brief Returns the MXA File version that the model adheres to.
      * @return MXA API Version
      */
     virtual float getModelVersion() = 0;
 
     /**
-    * @brief Sets the File Version of the MXA data file
+    * @brief Sets the File Version of the MXA data file.
     * @param version The API Version we are going to write
     */
     virtual void setModelVersion(float version) = 0;
 
     /**
-     * @brief Returns the type of file, should be MHD or MXA
+     * @brief Returns the type of file, should be MHD or MXA.
      */
     virtual std::string getModelType() = 0;
 
     /**
-    * @brief Returns the file type for the MXA Data File
+    * @brief Returns the file type for the MXA Data File.
     * @param fileType The filetype (should be MXA)
     */
     virtual void setModelType(const std::string &fileType) = 0;
 
     /**
-     * @brief This will set the default model version and type
+     * @brief This will set the default model version and type.
      */
     virtual void setDefaultTypeAndVersion() = 0;
     //------------------------------------------------------------
     /**
-    * @brief Sets the Data Root Value
+    * @brief Sets the Data Root Value.
     * @param dataRoot The data root to write to the model
     */
     virtual void setDataRoot(const std::string &dataRoot) = 0;
 
     /**
-    * @brief Returns the Data Root from the model
+    * @brief Returns the Data Root from the model.
     */
     virtual std::string getDataRoot() = 0;
 
     //------------- Data Dimension Methods ---------------------------------------
     /**
-    * @brief Adds a Data Dimension to the data model
+    * @brief Adds a Data Dimension to the data model.
     * @param dimension The IDataDimension to add to the model
     */
     virtual void addDataDimension(IDataDimensionPtr dimension ) = 0;
 
     /**
-    * @brief Adds a Data Dimension by declaring all the values of the data dimension
+    * @brief Adds a Data Dimension by declaring all the values of the data dimension.
     * @param name Name of the data dimension
     * @param altName An Alternate name for the data dimension
     * @param count The Number of entries this data dimension will have in the data file
@@ -109,12 +109,12 @@ class MXA_EXPORT IDataModel
 
     /**
      * @brief This method will remove any NULL Data Dimensions from the internal
-     * data structure that holds the list of Data Dimensions
+     * data structure that holds the list of Data Dimensions.
      */
     virtual void squeezeDataDimensions() = 0;
 
     /**
-    * @brief Removes a Data dimension using the index of the dimension
+    * @brief Removes a Data dimension using the index of the dimension.
     * @param index The index of the data dimension to remove
     * @return Standard HDF5 Error Condition
     */
@@ -122,7 +122,7 @@ class MXA_EXPORT IDataModel
 
     /**
      * @brief moves the data dimension at index 'fromIndex' to another index
-     * 'newIndex'
+     * 'newIndex'.
      * @param fromIndex The current index of the data dimension to move
      * @param toIndex The new index to place the data dimension at
      * @return Error condition
@@ -130,7 +130,7 @@ class MXA_EXPORT IDataModel
     virtual int32 moveDataDimension(int32 fromIndex, int32 toIndex) = 0;
 
     /**
-     * @brief Swaps a pair of Data Dimensions in the index list
+     * @brief Swaps a pair of Data Dimensions in the index list.
      * @param index1 The first Data Dimension
      * @param index2 The second Data Dimension to swap with the first
      * @return Error Condition
@@ -138,12 +138,12 @@ class MXA_EXPORT IDataModel
     virtual int32 swapDataDimensions(int32 index1, int32 index2) = 0;
 
     /**
-    * @brief Returns the data dimensions of the Model in a std::vector
+    * @brief Returns the data dimensions of the Model in a std::vector.
     * @return
     */
     virtual IDataDimensions& getDataDimensions() = 0;
     /**
-    * @brief Returns a specific Data Dimension from the model
+    * @brief Returns a specific Data Dimension from the model.
     * @param index The index to return
     * @return A Pointer to the data dimension or NULL if there is an error
     */
@@ -161,19 +161,19 @@ class MXA_EXPORT IDataModel
     virtual IDataDimensionPtr getDataDimension(std::string dimName) = 0;
 
     /**
-     * @brief Returns the number of data dimensions in the model
+     * @brief Returns the number of data dimensions in the model.
      */
     virtual int32 getNumberOfDataDimensions() = 0;
 
     //------------- Data Records Methods ---------------------------------------
     /**
-    * @brief Adds a data Record to the model
+    * @brief Adds a data Record to the model.
     * @param record The record to add to the model
     */
     virtual void addDataRecord(IDataRecordPtr record) = 0;
     /**
     * @brief Adds a Data record to the model using the given parent argument as
-    * the record's parent object
+    * the record's parent object.
     * @param record The record to add to the model
     * @param parent The parent of the record.
     * Note that this is equivelent to just setting the parnet of the record manually.
@@ -182,7 +182,7 @@ class MXA_EXPORT IDataModel
     virtual void addDataRecord(IDataRecordPtr record, IDataRecordPtr parent) = 0;
 
     /**
-     * @brief Removes the Data Record from the Model
+     * @brief Removes the Data Record from the Model.
      * @param record The record to remove from the Data model
      * @return Error Condition
      */
@@ -195,7 +195,17 @@ class MXA_EXPORT IDataModel
     virtual IDataRecords& getDataRecords() = 0;
 
     /**
-    * @brief Returns a Data Record that is found by giving the full path using the actual names of the data record(s)
+    * @brief Returns a Data Record that is found by giving the full path using the "RecordName" of the data record(s).
+    *
+    * For example, if you have a nested structure of data records with a top level DataRecord having
+    * a RecordName of "TopLevel" and child DataRecord with a RecordName of "ChildRecord", then using this
+    * method in the following way will retrieve the child DataRecord:
+    * <br><code><br>
+    * std::string path ("TopLevel/ChildRecord");<br>
+    * IDataRecordPtr datarecord = myDataModel.getDataRecordByNamedPath(path);<br>
+    * </code><br>
+    * You can also look at the Unit Testing Code for more examples.
+    *
     * @param path The path to the data record to return
     * @param parent The parent of the Data Record to return. If this is NULL then the
     * search will start at the top level of the data records.
@@ -204,7 +214,9 @@ class MXA_EXPORT IDataModel
     virtual IDataRecordPtr getDataRecordByNamedPath(const std::string &path, IDataRecord* parent=NULL) = 0;
 
     /**
-    * @brief Returns a Data Record that is found by giving the full path using the internal names of the data record(s)
+    * @brief Returns a Data Record that is found by giving the full path using the
+    * internal names of the data record(s). Internal names are given by the LUID
+    * value of each data record.
     * @param path The path to the data record to return
     * @param parent The parent of the Data Record to return. If this is NULL then the
     * search will start at the top level of the data records.
@@ -214,7 +226,7 @@ class MXA_EXPORT IDataModel
 
     //------------- Required Meta Data Methods -----------------------------------
     /**
-    * @brief Sets the Required Meta Data for the Data Model
+    * @brief Sets the Required Meta Data for the Data Model.
     * @param researcherName The name of the researcher doing to experiment
     * @param dateCreated The date the data was created
     * @param datasetName The name of the experiment/dataset

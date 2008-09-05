@@ -27,7 +27,7 @@
 * @brief Template class for wrapping raw arrays of data.
 * @author mjackson
 * @date July 3, 2008
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 template<typename T>
 class MXAArrayTemplate : public IMXAArray
@@ -164,6 +164,16 @@ class MXAArrayTemplate : public IMXAArray
       this->_ownsData = true;
       this->_dims[0] = _nElements;
     }
+
+    /**
+     * @brief Sets all the values to zero.
+     */
+    virtual void initializeWithZeros()
+    {
+      size_t typeSize = sizeof(T);
+      ::memset(this->_data, 0, this->_nElements * typeSize);
+    }
+
 
     /**
      * @brief Reseizes the internal array

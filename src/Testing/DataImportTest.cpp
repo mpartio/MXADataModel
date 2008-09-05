@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@
 #include <Testing/TestDataFileLocations.h>
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
@@ -55,30 +55,28 @@ void RemoveTestFiles()
 
 
 // -----------------------------------------------------------------------------
-//  Creates a DataImport class and some DataSources that then delegate out to 
+//  Creates a DataImport class and some DataSources that then delegate out to
 //  an instance of an IDataImportDelegate to do the actual import of data.
 // -----------------------------------------------------------------------------
 void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
 {
-  //Create the DataImport Class
-  MXADataImportPtr dataImport( new MXADataImport() );
-  // Set the HDF5 Output file to write all the data into
-  dataImport->setOutputFilePath(outputFilePath);
-  
   IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outputFilePath, model);
   BOOST_REQUIRE (NULL != dataFile.get() );
+
+  //Create the DataImport Class
+  MXADataImportPtr dataImport( new MXADataImport() );
   dataImport->setDataFile(dataFile);
-  
+
   // Create an Import Delegate to use for the DataSources
   IImportDelegatePtr delegatePtr( new H5ImportTestDelegate());
-  
+
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
   IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension, since there is only one this works
   BOOST_REQUIRE(dim0 != NULL); // Used for Boost Unit Test Framework
-  
+
   IDataDimensionPtr dim1 = model->getDataDimension(1);
   BOOST_REQUIRE(dim1 != NULL); // Used for Boost Unit Test Framework
-  
+
   // Create a DataRecord entry for the Data Model
   IDataRecordPtr record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
   BOOST_REQUIRE(NULL != record.get()); // Used for Boost Unit Test Framework
@@ -87,17 +85,17 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   int32 dim0Start = dim0->getStartValue();
   int32 dim0End = dim0->getEndValue();
   int32 dim0Increment = dim0->getIncrement();
-  
+
   int32 dim1Start = dim1->getStartValue();
   int32 dim1End = dim1->getEndValue();
   int32 dim1Increment = dim1->getIncrement();
-  
+
   // Create a nested loop to create the necessary DataSource objects that will
   //  be used to import the data into the HDF5 file
   //std::cout << "CREATING DATA SOURCES" << std::endl;
   for( int32 i = dim0Start; i <= dim0End; i += dim0Increment )
   {
-    for (int j = dim1Start; j <= dim1End; j = j+ dim1Increment) 
+    for (int j = dim1Start; j <= dim1End; j = j+ dim1Increment)
     {
       //Create some Data Sources
       MXADataSourcePtr ds( new MXADataSource() );
@@ -112,7 +110,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
       dataImport->addDataSource(ds);
     }
   }
-  
+
   // Import the Data into the HDF5 File
   //std::cout << "IMPORTING DATA NOW" << std::endl;
   int32 err = dataImport->import();
@@ -137,18 +135,18 @@ MXADataModelPtr createSimpleModel()
 	  model->addDataDimension(dim0);
     MXADataDimensionPtr dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
     model->addDataDimension(dim1);
-	  	  
+
 	  // ---------- Create Data Records
 	  MXADataRecordPtr rec1 = MXADataRecord::New(0, std::string("DataRecordContainer"), std::string("DRC1") );
 	  model->addDataRecord(rec1);
-	  
+
     // ---------- Create Data Records with Parents
 	  MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Test Data"), std::string("Test Data") );
 	  model->addDataRecord(rec2, rec1);
     MXADataRecordPtr rec3 = MXADataRecord::New(0, std::string("Deep Nested Data"), std::string("Nested Data") );
-    model->addDataRecord(rec3, rec2);   
+    model->addDataRecord(rec3, rec2);
 
-	  // ---------- Create the Required MetaData 
+	  // ---------- Create the Required MetaData
 	  std::map<std::string, std::string> md;
 	  md[MXA::MXA_CREATOR_TAG] = "Mike Jackson";
 	  md[MXA::MXA_DATE_TAG] = "2006:12:24 15:34.51";
@@ -159,14 +157,14 @@ MXADataModelPtr createSimpleModel()
 	  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
 	  md[MXA::MXA_RELEASE_NUMBER_TAG] = "Not Applicable";
 	  model->setRequiredMetaData(md);
-	  
+
 	  return modelPtr;
 }
 
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 //int DataImportTest ()
 //{
@@ -175,14 +173,14 @@ MXADataModelPtr createSimpleModel()
 //  MXADataModelPtr model = createSimpleModel();
 //  //Leave the file open for the import
 //  // Delete any existing file
-//  BOOST_REQUIRE(model->writeModel(outputFile, false, true) >= 0); 
+//  BOOST_REQUIRE(model->writeModel(outputFile, false, true) >= 0);
 //  ImportSimpleData(model, outputFile);
 //
 //  return 0;
 //}
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int XMLImportTest()
 {

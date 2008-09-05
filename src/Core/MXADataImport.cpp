@@ -8,21 +8,21 @@
 #include <iostream>
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-MXADataImport::MXADataImport ( ) 
+MXADataImport::MXADataImport ( )
 {
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-MXADataImport::~MXADataImport ( ) 
+MXADataImport::~MXADataImport ( )
 {
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXADataImport::import()
 {
@@ -33,7 +33,7 @@ int32 MXADataImport::import()
     err = _dataFile->openFile(false);
     if (err < 0)
     {
-      std::cout << DEBUG_OUT(logTime) << "MXADataImport::import - Error Opening file: " << this->getOutputFilePath() << std::endl;
+      std::cout << DEBUG_OUT(logTime) << "MXADataImport::import - Error Opening file: " << this->_dataFile->getFilename() << std::endl;
       return err;
     }
   }
@@ -50,50 +50,51 @@ int32 MXADataImport::import()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataImport::addDataSource (IDataSourcePtr dataSource ) {
   this->_dataSources.push_back(dataSource);
 }
 
- 
+#if 0
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataImport::setOutputFilePath ( std::string new_var ) {
   _outputFilePath = new_var;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 std::string MXADataImport::getOutputFilePath ( ) {
   return _outputFilePath;
 }
+#endif
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataImport::setDataFile ( IDataFilePtr new_var ) {
   _dataFile = new_var;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataFilePtr MXADataImport::getDataFile ( ) {
   return _dataFile;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXADataImport::setDataSources ( IDataSources &new_var ) {
   _dataSources = new_var;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataSources MXADataImport::getDataSources ( ) {
   return _dataSources;

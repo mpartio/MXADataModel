@@ -23,7 +23,7 @@
 * methods to meet my specific needs.
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT IMXAArray
 {
@@ -32,7 +32,7 @@ class MXA_EXPORT IMXAArray
     virtual ~IMXAArray() {}
 
     /**
-     * @brief Makes this class responsible for freeing the memory
+     * @brief Makes this class responsible for freeing the memory.
      */
     virtual void takeOwnership () = 0;
 
@@ -63,7 +63,7 @@ class MXA_EXPORT IMXAArray
     virtual int32 getNumberOfDimensions () = 0;
 
     /**
-     * @brief Copies the values of the dimensions into the supplied pointer
+     * @brief Copies the values of the dimensions into the supplied pointer.
      * @param dims
      */
     virtual void getDimensions(uint64* dims) = 0;
@@ -75,7 +75,12 @@ class MXA_EXPORT IMXAArray
     virtual int32 getDataType () = 0;
 
     /**
-     * @brief Prints information about the class to ostream
+     * @brief Sets all the values to zero.
+     */
+    virtual void initializeWithZeros() = 0;
+
+    /**
+     * @brief Prints information about the class to ostream.
      * @param os
      * @param indent
      */

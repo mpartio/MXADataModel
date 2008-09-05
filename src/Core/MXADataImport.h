@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -28,19 +28,19 @@
 
 
 /**
- * @brief Concrete implementation of the IDataImport abstract class and controls the main 
+ * @brief Concrete implementation of the IDataImport abstract class and controls the main
  * import loop.
- * 
+ *
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.7 $
- *  
+ * @version $Revision: 1.8 $
+ *
  */
 class MXA_EXPORT MXADataImport : public IDataImport
 {
 public:
 
-  
+
   /**
    * Empty Constructor
    */
@@ -59,7 +59,7 @@ public:
   {
     return IDataImportPtr( new MXADataImport );
   }
-  
+#if 0
   /**
    * Set the value of m_outputFilePath
    * @param outputFilePath the new value of m_outputFilePath
@@ -71,7 +71,7 @@ public:
    * @return the value of m_outputFilePath
    */
   std::string getOutputFilePath ( );
-
+#endif
 
   /**
    * Set the value of m_dataModel
@@ -115,7 +115,7 @@ private:
 
   MXADataImport(const MXADataImport&);   //Copy Constructor Not Implemented
   void operator=(const MXADataImport&); //Copy Assignment Not Implemented
- 
+
 };
 
 #endif // MXADATAIMPORT_H

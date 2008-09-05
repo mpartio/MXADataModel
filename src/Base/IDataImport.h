@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -16,17 +16,17 @@
 /**
  * @brief Abstract class that formally declares the methods used when implementing
  * a class to import data into the underlying data storage.
- * @author Mike Jackson 
+ * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.5 $
- *  
+ * @version $Revision: 1.6 $
+ *
  */
-class MXA_EXPORT IDataImport 
+class MXA_EXPORT IDataImport
 {
   public:
     IDataImport() {};
     virtual ~IDataImport() {};
-    
+#if 0
     /**
      * @brief Set the value of m_outputFilePath
      * @param outputFilePath the new value of m_outputFilePath
@@ -38,17 +38,17 @@ class MXA_EXPORT IDataImport
      * @return the value of m_outputFilePath
      */
     virtual std::string getOutputFilePath ( ) = 0;
-
+#endif
 
     /**
-     * Set the value of m_dataModel
-     * @param dataModel the new value of m_dataModel
+     * Set the value of datafile
+     * @param dataModel the new value of datafile
      */
-    virtual void setDataFile ( IDataFilePtr dataModel ) = 0;
+    virtual void setDataFile ( IDataFilePtr datafile ) = 0;
 
     /**
-     * Get the value of m_dataModel
-     * @return the value of m_dataModel
+     * Get the value of datafile
+     * @return the value of datafile
      */
     virtual IDataFilePtr getDataFile ( ) = 0;
 
@@ -74,7 +74,7 @@ class MXA_EXPORT IDataImport
     * @return Error Condition. Zero or Positive is Success
     */
     virtual int32 import() = 0;
-    
+
   private:
     IDataImport(const IDataImport&);    //Not Implemented
     void operator=(const IDataImport&); //Not Implemented

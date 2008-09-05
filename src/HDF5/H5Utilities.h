@@ -17,6 +17,7 @@
 //#include <Common/MXATypeDefs.h>
 #include <DataWrappers/MXAArrayTemplate.hpp>
 #include <HDF5/H5Lite.h>
+#include <HDF5/H5Utilities.h>
 
 // C++ Includes
 #include <map>
@@ -30,7 +31,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.29 $
+ * @version $Revision: 1.30 $
  */
 class H5Utilities
 {

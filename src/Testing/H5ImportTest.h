@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class H5ImportTestDelegate: public IImportDelegate
 {
@@ -33,13 +33,13 @@ public:
   virtual ~H5ImportTestDelegate(){};
 
 // -----------------------------------------------------------------------------
-//  Implemented Method from the IDataImportDelegate interface 
+//  Implemented Method from the IDataImportDelegate interface
 // -----------------------------------------------------------------------------
   /**
    * @brief Imports the datasource to the data file
    * @param dataSource The source of the data
    * @param dataFile The IDataFile object
-   * @return 
+   * @return
    */
   int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
   {
@@ -53,21 +53,24 @@ public:
     //Write the Data to the HDF5 File
     return H5Lite::writeScalarDataset(fileId, path, value);
   }
-  
+
 private:
   H5ImportTestDelegate(const H5ImportTestDelegate&);   //Copy Constructor Not Implemented
   void operator=(const H5ImportTestDelegate&); //Copy Assignment Not Implemented
-  
+
 };
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 
 // Declare our constant in a namespace
-namespace H5ImportTestDelegateFactory_Detail
+namespace H5ImportTest
 {
-  const std::string ClassName("H5ImportTestDelegate");
+  namespace Detail
+  {
+    const std::string ClassName("H5ImportTestDelegate");
+  }
 }
 
 /**
@@ -75,15 +78,15 @@ namespace H5ImportTestDelegateFactory_Detail
 * @brief Factory class to generate H5ImportTestDelegate objects
 * @author Mike Jackson
 * @date Sep 12, 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
 {
   public:
     H5ImportTestDelegateFactory() {}
     virtual ~H5ImportTestDelegateFactory() {}
-    
-    
+
+
   /**
    * @brief This method will return a new instance of H5ImportTestDelegate provided
    * the className matches.
@@ -92,26 +95,24 @@ class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
    * @param dataSource The data source to import
    * @return A new boost shared pointer to H5ImportTestDelegate
    */
-  IImportDelegatePtr newDataImportDelegate (const std::string &className,
-                                                IDataModelPtr dataModel,
-                                                IDataSourcePtr dataSource)
+  IImportDelegatePtr newDataImportDelegate (const std::string &className)
   {
     IImportDelegatePtr delegate; // Creates a Null Shared Pointer
-    if ( className.compare( H5ImportTestDelegateFactory_Detail::ClassName ) == 0)
+    if ( className.compare( H5ImportTest::Detail::ClassName ) == 0)
     {
       delegate.reset ( new H5ImportTestDelegate() );
     }
     return delegate;
   }
-  
+
   /**
    * @brief Returns the Classname of the delegate that this factory can create.
    */
   std::string delegateClassName()
   {
-    return H5ImportTestDelegateFactory_Detail::ClassName;
+    return H5ImportTest::Detail::ClassName;
   }
-  
+
   private:
     H5ImportTestDelegateFactory(const H5ImportTestDelegateFactory&);    //Not Implemented
     void operator=(const H5ImportTestDelegateFactory&);  //Not Implemented

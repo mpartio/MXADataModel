@@ -13,7 +13,7 @@
 #include <boost/filesystem/convenience.hpp>
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataFilePtr H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
 {
@@ -30,7 +30,7 @@ IDataFilePtr H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataFilePtr H5MXADataFile::CreateFileWithModel(const std::string &filename, IDataModelPtr model)
 {
@@ -53,13 +53,13 @@ IDataFilePtr H5MXADataFile::CreateFileWithModel(const std::string &filename, IDa
     H5MXADataFile* nullDataFile = 0x0;
     filePtr.reset(nullDataFile);
   }
-  
+
   return filePtr;
 }
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 H5MXADataFile::H5MXADataFile(const std::string &filename) :
   IDataFile(filename),
@@ -72,7 +72,7 @@ H5MXADataFile::H5MXADataFile(const std::string &filename) :
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 H5MXADataFile::H5MXADataFile(const std::string &filename, IDataModelPtr model) :
   IDataFile(filename),
@@ -90,7 +90,7 @@ H5MXADataFile::H5MXADataFile(const std::string &filename, IDataModelPtr model) :
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 H5MXADataFile::~H5MXADataFile()
 {
@@ -102,7 +102,7 @@ H5MXADataFile::~H5MXADataFile()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXADataFile::_setWeakPointer(boost::weak_ptr<IDataFile> weakPtr)
 {
@@ -110,7 +110,7 @@ void H5MXADataFile::_setWeakPointer(boost::weak_ptr<IDataFile> weakPtr)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataFilePtr H5MXADataFile::CreateEmptyFile(const std::string &filename)
 {
@@ -127,7 +127,7 @@ IDataFilePtr H5MXADataFile::CreateEmptyFile(const std::string &filename)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 std::string H5MXADataFile::getFilename()
 {
@@ -135,7 +135,7 @@ std::string H5MXADataFile::getFilename()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IDataModelPtr H5MXADataFile::getDataModel()
 {
@@ -143,7 +143,7 @@ IDataModelPtr H5MXADataFile::getDataModel()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::createFile()
 {
@@ -180,6 +180,7 @@ int32 H5MXADataFile::createFile()
     {
       std::cout << "Error Creating new MXA File" << std::endl;
       this->_isFileOpen = false;
+      HDF_ERROR_HANDLER_ON
       return _fileId;
     }
     HDF_ERROR_HANDLER_ON
@@ -191,42 +192,44 @@ int32 H5MXADataFile::createFile()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::openFile(bool readOnly)
 {
   this->_isReadOnly = readOnly;
-  
+
   HDF_ERROR_HANDLER_OFF
- 
+
   if (this->_isReadOnly) {
     this->_fileId = H5Fopen(this->_filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
   } else {
     this->_fileId = H5Fopen(this->_filename.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
   }
 
-  if (this->_fileId < 0) 
+  if (this->_fileId < 0)
   {
     std::cout << logTime() << "The mxa file could not be opened.\n\t[" << this->_filename << "]" << std::endl;
+    HDF_ERROR_HANDLER_ON
     return this->_fileId;
   }
-  
+
   // Now load the model from the file
   int32 err = this->_readDataModel();
   if (err < 0)
   {
     std::cout << logTime() << "The data model could NOT be loaded from the file.\n\t[" << this->_filename << "]" << std::endl;
+    HDF_ERROR_HANDLER_ON
     return err;
   }
-  
+
   HDF_ERROR_HANDLER_ON
-  
+
   this->_isFileOpen = true;
   return _fileId;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::closeFile(bool saveModel)
 {
@@ -235,7 +238,7 @@ int32 H5MXADataFile::closeFile(bool saveModel)
     this->_isFileOpen = false;
     return 1;
   }
-  
+
   //Save the model first if requested
   if (true == saveModel && false == this->_isReadOnly)
   {
@@ -246,7 +249,7 @@ int32 H5MXADataFile::closeFile(bool saveModel)
       return err;
     }
   }
-  
+
   // Get the number of open identifiers of all types
   //  except files
   int32 num_open = H5Fget_obj_count(_fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |
@@ -255,14 +258,14 @@ int32 H5MXADataFile::closeFile(bool saveModel)
     std::cout << "WARNING: Some IDs weren't closed. Closing them."  << std::endl;
     std::vector<hid_t> attr_ids(num_open, 0);
     H5Fget_obj_ids(this->_fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |
-       H5F_OBJ_DATATYPE | H5F_OBJ_ATTR, 
+       H5F_OBJ_DATATYPE | H5F_OBJ_ATTR,
        num_open, &(attr_ids.front()) );
-    for (int i=0; i<num_open; i++) 
+    for (int i=0; i<num_open; i++)
     {
       H5Utilities::closeHDF5Object(attr_ids[i]);
     }
   }
-    
+
   err = H5Fclose(_fileId);
   if (err < 0) {
     std::cout << logTime() << "H5IODelegate::closeMXAFile(): H5Fclose() caused error " << err << std::endl;
@@ -275,7 +278,7 @@ int32 H5MXADataFile::closeFile(bool saveModel)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 float H5MXADataFile::supportedMXAFileVersion()
 {
@@ -283,7 +286,7 @@ float H5MXADataFile::supportedMXAFileVersion()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool H5MXADataFile::isFileOpen()
 {
@@ -291,15 +294,15 @@ bool H5MXADataFile::isFileOpen()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool H5MXADataFile::isReadOnly()
 {
- return this->_isReadOnly; 
+ return this->_isReadOnly;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::saveDataModel()
 {
@@ -307,7 +310,7 @@ int32 H5MXADataFile::saveDataModel()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::_writeDataModel()
 {
@@ -316,7 +319,7 @@ int32 H5MXADataFile::_writeDataModel()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::_readDataModel()
 {
@@ -325,7 +328,7 @@ int32 H5MXADataFile::_readDataModel()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::writeData(const IDatasetPtr dataset)
 {
@@ -333,7 +336,7 @@ int32 H5MXADataFile::writeData(const IDatasetPtr dataset)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::readData(const IDatasetPtr dataset)
 {
@@ -341,7 +344,7 @@ int32 H5MXADataFile::readData(const IDatasetPtr dataset)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 hid_t H5MXADataFile::getFileId()
 {
