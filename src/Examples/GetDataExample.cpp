@@ -47,7 +47,7 @@ int main(int argc, char **argv)
   //First load the Data file
   IDataFilePtr dataFile = H5MXADataFile::OpenFile(FILE_NAME, true);
   IDataModelPtr modelPtr = dataFile->getDataModel();
-  hid_t fileId = dataFile->getFileId();
+  hid_t fileId = dataFile.get()->getFileId();
   if (fileId < 0)
   {
     std::cout << logTime() << "Error: FileId was not valid." << std::endl;

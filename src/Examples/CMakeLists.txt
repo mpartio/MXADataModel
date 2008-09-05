@@ -34,21 +34,18 @@ IF(BUILD_VTK_HDF5)
     SET(HDF5_VTK_BRIDGE "1")
 ENDIF(BUILD_VTK_HDF5) 
 
-IF (MXA_BUILD_SHARED_LIBS)
-    IF (WIN32)
-      ADD_DEFINITIONS(-D_HDF5USEDLL_)
-    ENDIF (WIN32)
-ENDIF (MXA_BUILD_SHARED_LIBS)
-
 
 SET (GETDATA_SRCS
   GetDataExample.cpp
   ${MXA_SOURCE_DIR}/src/Testing/DataFileGenerator.cpp
 )
 
+# ------------------------------------------------------------------------------
+#  Add Executable for GetDataExample
+# ------------------------------------------------------------------------------
 ADD_EXECUTABLE ( GetDataExample ${GETDATA_SRCS} )
 TARGET_LINK_LIBRARIES ( GetDataExample
-  MXADataModel
+  ${MXADATAMODEL_LIB_NAME}
   ${HDF5_LIBRARIES}
   ${DEP_LIBS} 
 )
@@ -57,14 +54,33 @@ TARGET_LINK_LIBRARIES ( GetDataExample
 #  Add Executable for Example 1
 # ------------------------------------------------------------------------------
 ADD_EXECUTABLE(Example1 Example1/Example1.cpp)
-TARGET_LINK_LIBRARIES(Example1 MXADataModel ${HDF5_LIBRARIES})
+TARGET_LINK_LIBRARIES(Example1 ${MXADATAMODEL_LIB_NAME} ${HDF5_LIBRARIES})
 
 
 # ------------------------------------------------------------------------------
 #  Add Executable for Example 2
 # ------------------------------------------------------------------------------
 ADD_EXECUTABLE(Example2 Example2/Example2.cpp)
-TARGET_LINK_LIBRARIES(Example2 MXADataModel ${HDF5_LIBRARIES})
+TARGET_LINK_LIBRARIES(Example2 ${MXADATAMODEL_LIB_NAME} ${HDF5_LIBRARIES})
+
+
+# ------------------------------------------------------------------------------
+#  Add Executable for DataWrapperExample
+# ------------------------------------------------------------------------------
+ADD_EXECUTABLE(DataWrapperExample DataWrapperExample.cpp)
+TARGET_LINK_LIBRARIES(DataWrapperExample ${MXADATAMODEL_LIB_NAME} ${HDF5_LIBRARIES})
+
+# ------------------------------------------------------------------------------
+#  Add Executable for DataImport Example
+# ------------------------------------------------------------------------------
+SET (DATAIMPORT_EXAMPLE_SOURCES
+${MXA_SOURCE_DIR}/src/Examples/DataImport/main.cpp
+${MXA_SOURCE_DIR}/src/Examples/DataImport/SimpleImportExample.cpp
+${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegate.cpp
+${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegateFactory.cpp
+)
+ADD_EXECUTABLE(DataImportExample ${DATAIMPORT_EXAMPLE_SOURCES})
+TARGET_LINK_LIBRARIES(DataImportExample ${MXADATAMODEL_LIB_NAME} ${HDF5_LIBRARIES}) 
 
 
 
