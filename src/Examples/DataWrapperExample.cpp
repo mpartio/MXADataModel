@@ -1,0 +1,200 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2008, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+
+
+//-- MXA Includes
+#include <Common/MXATypes.h>
+#include <DataWrappers/MXAArrayTemplate.hpp>
+#include <HDF5/H5Lite.h>
+#include <HDF5/H5Utilities.h>
+
+//-- C++ Includes
+#include <iostream>
+
+//-- HDF5 includes
+#include <hdf5.h>
+
+// -----------------------------------------------------------------------------
+//  Define where to put our temporary files
+// -----------------------------------------------------------------------------
+#if defined (_WIN32)
+  #define OUTPUT_FILE "C:\\WINDOWS\\Temp\\MXA_Example2.h5"
+#else
+  #define OUTPUT_FILE "/tmp/DataWrapper_Example.h5"
+#endif
+
+void InitializeFile()
+{
+  herr_t err = 0;
+  hid_t fileId = H5Utilities::createFile(OUTPUT_FILE);
+  if (fileId < 0)
+  {
+    std::cout << "COULD NOT CREATE OUTPUT FILE '" << OUTPUT_FILE << "'" << std::endl;
+    return;
+  }
+
+  err = H5Utilities::closeFile(fileId);
+}
+
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void WriteHDF5File(IMXAArray* data, const std::string &datasetname)
+{
+  herr_t err = 0;
+  hid_t fileId = H5Utilities::openFile(OUTPUT_FILE, false);
+  if (fileId < 0)
+  {
+    std::cout << "COULD NOT CREATE OUTPUT FILE '" << OUTPUT_FILE << "'" << std::endl;
+    return;
+  }
+
+  err = H5Lite::writeMXAArray(fileId, datasetname, data);
+  if (err < 0)
+  {
+    std::cout << "ERROR WRITING DATA ARRAY '" << datasetname << "'" << std::endl;
+  }
+
+  err = H5Utilities::closeFile(fileId);
+
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+/**
+ * @brief This example program simply shows how to use the DataWrapper classes to
+ * wrap some raw arrays with C++ style objects. Also included are examples of using
+ * the classes in combination with the boost::shared_ptr classes. At the end of running
+ * the example you can use h5dump to show the contents of the file.
+ *
+ * @param argc
+ * @param argv
+ * @return exit code.
+ */
+int main(int argc, char **argv) {
+  std::cout << "Running DataWrapper Example.." << std::endl;
+
+  // Create our output file, overwriting any existing file
+  InitializeFile();
+
+  int numValues = 10;
+  // Create an Array to hold a 1 Dimensional Array of 10 values of 32 bit integers
+  MXAArrayTemplate<int32>* int32array = MXAArrayTemplate<int32>::New(numValues);
+
+  // Since we used the static "New" method without any wrapper we are responsible for deleting the pointer.
+  // The array is full of junk values as we have not placed any default values into the array. You should
+  // not count on the compiler to set the values for you.
+
+  // We can Initialize the values 2 different ways. We can set each value in a loop using the
+  // setValue() method or we can get a pointer to the front of the array and then
+  // use pointer manipulations to set the values.
+  for (int i = 0; i < numValues; ++i)
+  {
+    int32array->setValue(i, 33);  // Set each value in the array to 33
+  }
+
+  int32* ptr32 = int32array->getPointer(0); // Get a pointer to the '0' index which is the first element in the array
+  for (int i = 0; i < numValues; ++i)
+  {
+    *ptr32 = 33;  // Set each value in the array to 33
+    ptr32++; // Increment the pointer
+  }
+
+  //Other operations on the data include resizing the array, which could potentially
+  // destroy any existing data, retrieving the number of dimensions and the sizes
+  // of the dimensions
+
+  int32 numDimensions = int32array->getNumberOfDimensions();
+  std::cout << "There are " << numDimensions << " dimensions in the array." << std::endl;
+  std::vector<uint64> dimensions(numDimensions);
+  int32array->getDimensions( &(dimensions.front() ) );
+
+  for (int i = 0; i < numDimensions; ++i) {
+    std::cout << "Dimension[" << i << "] = " << dimensions[i] << std::endl;
+  }
+  //Write the data
+  WriteHDF5File(int32array, "Int32PointerExampleData");
+
+  delete int32array; // Clean up the memory
+
+  std::cout << "-------------------------------------------------" << std::endl;
+
+  // We can create a Multi-Dimensional Array easily enough
+  numDimensions = 3;
+  // Add some more dimension sizes into the dimensions vector.
+  dimensions.push_back(3);
+  dimensions.push_back(5);
+
+  // Create a 3D array of size 10 x 3 x 5 of 8bit signed char values
+  MXAArrayTemplate<int8>* int8Array = MXAArrayTemplate<int8>::New(numDimensions, &(dimensions.front() ) );
+  numValues = int8Array->getNumberOfElements();
+
+  int8* ptr8 = int8Array->getPointer(0); // Get a pointer to the '0' index which is the first element in the array
+  for (int i = 0; i < numValues; ++i)
+  {
+    *ptr8 = 1;  // Set each value in the array to 33
+    ptr8++; // Increment the pointer
+  }
+
+  numDimensions = int8Array->getNumberOfDimensions();
+  std::cout << "There are " << numDimensions << " dimensions in the array." << std::endl;
+  dimensions.resize(numDimensions);
+  int8Array->getDimensions( &(dimensions.front() ) );
+
+  for (int i = 0; i < numDimensions; ++i) {
+    std::cout << "Dimension[" << i << "] = " << dimensions[i] << std::endl;
+  }
+
+  WriteHDF5File(int8Array, "RawPointerExampleData");
+
+  delete int8Array; // Clean up the memory
+
+  std::cout << "-------------------------------------------------" << std::endl;
+
+  /* The next section is basically the same as the above but uses the boost shared
+   * pointer wrapped versions. This is advantageous because it turns the pointer
+   * into a reference counted object and allows for easy memory management
+   */
+  {
+    numValues = 10;
+    IMXAArrayPtr bPtr32 = MXAArrayTemplate<int32>::CreateArray(numValues);
+    MXAArrayTemplate<int32>* wrappedPointer = dynamic_cast< MXAArrayTemplate<int32>* > (bPtr32.get() );
+
+    // bPtr32 is a boost::shared_ptr object that wraps the actual pointer to the MXAArrayTemplate
+    // bPtr32 will ALWAYS be valid. The contained pointer is what you want to check to make
+    // sure the allocation was successful. If the allocation was NOT successful then
+    // the contained pointer will be NULL.
+    if ( NULL == bPtr32.get() )
+    {
+      std::cout << "MXAArrayTemplate<int32> was NOT allocated properly." << std::endl;
+    }
+    // We can initialize the array in the same way since the operators for boost::shared_ptr are overloaded.
+    for (int i = 0; i < numValues; ++i)
+    {
+      wrappedPointer->setValue(i,33);
+    }
+    // Write the data to an HDF5 file
+    WriteHDF5File(wrappedPointer, "WrappedBoostSharedPointer");
+
+
+    // When this code section exits, the bPtr32 will go out of scope and the destructor
+    // for the MXAArrayTemplate class will get called and the array cleaned up. The
+    // pointer 'wrappedPointer' will also become invalid.
+    wrappedPointer = NULL;
+  }
+
+  std::cout << "Data Wrapper Example Complete." << std::endl;
+  return EXIT_SUCCESS;
+}
+
+
