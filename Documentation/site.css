@@ -39,7 +39,7 @@ A.resources:active			{ COLOR: #ff6600; TEXT-DECORATION: underline }
 	border-top:solid #333333 1px;
 }
 
-.content {
+div.content {
 	color: black;
 	font: 11pt Verdana, Arial, Helvetica, sans-serif;
 	text-decoration: none;
@@ -47,7 +47,7 @@ A.resources:active			{ COLOR: #ff6600; TEXT-DECORATION: underline }
 	padding-bottom: 2px;
 	padding-right: 5px;
 	padding-left: 5px;
-	vertical-align:top;
+	vertical-align: top;
 }
 
 .main_layout_table
@@ -129,7 +129,7 @@ div.entry
    background: #f5f7fa;
    margin: 8px;
    padding: 4px;
-   vertical-align: 0;
+   vertical-align: top;
    border: solid 1px #8c92a2;
  }
  
