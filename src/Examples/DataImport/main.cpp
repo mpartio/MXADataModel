@@ -19,22 +19,17 @@
  */
 
 
-
+//-- MXA Includes
 #include <DataImport/DataImportXmlParser.h>
 #include <DataImport/ImportDelegateManager.h>
 #include <Examples/DataImport/SimpleImportExample.h>
 #include <Examples/DataImport/ExampleImportDelegateFactory.h>
+#include <Examples/ExampleFileLocations.h>
 
+//-- C++ Includes
 #include <iostream>
 #include <string>
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-#if defined (_WIN32)
-const std::string SimpleImportFile("C:\\WINDOWS\\Temp\\SimpleImportExample.h5");
-#else
-const std::string SimpleImportFile("/tmp/SimpleImportExample.h5");
-#endif
+
 
 // -----------------------------------------------------------------------------
 //  This program takes NO arguments
@@ -42,15 +37,20 @@ const std::string SimpleImportFile("/tmp/SimpleImportExample.h5");
 int main(int argc, char **argv) {
   std::cout << "Starting SimpleImportExample" << std::endl;
 
-  // Instantiate the Instance Manager for import delegates
-  ImportDelegateManagerPtr idManager = ImportDelegateManager::instance();
+  // Register the known ImportDelegates, which will also instantiate the ImportDelegateManager instance.
+  // The ImportDelegateManager instance is a singleton so only one can ever be active per program.
+  ImportDelegateManager::registerKnownImportDeletegateFactories();
 
-  // Register our Import Delegate
+  // Register our Import Delegate by using the static methods from ImportDelegateManager
   AbstractImportDelegateFactoryPtr exampleImportDelegateFactory ( new ExampleImportDelegateFactory() );
-  idManager->registerDataImportFactory( exampleImportDelegateFactory );
+  ImportDelegateManager::registerImportDelegateFactory(exampleImportDelegateFactory);
 
+  // Instantiate the SimpleImportExample class
   SimpleImportExample simple;
-  simple.runImport( SimpleImportFile );
+  // Execute the import code
+  simple.runImport( Examples::SimpleImportExampleFile );
+
+
   return EXIT_SUCCESS;
 }
 

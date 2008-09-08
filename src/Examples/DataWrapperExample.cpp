@@ -13,6 +13,7 @@
 #include <DataWrappers/MXAArrayTemplate.hpp>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
+#include <Examples/ExampleFileLocations.h>
 
 //-- C++ Includes
 #include <iostream>
@@ -20,22 +21,17 @@
 //-- HDF5 includes
 #include <hdf5.h>
 
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-#if defined (_WIN32)
-  #define OUTPUT_FILE "C:\\WINDOWS\\Temp\\MXA_Example2.h5"
-#else
-  #define OUTPUT_FILE "/tmp/DataWrapper_Example.h5"
-#endif
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void InitializeFile()
 {
   herr_t err = 0;
-  hid_t fileId = H5Utilities::createFile(OUTPUT_FILE);
+  hid_t fileId = H5Utilities::createFile(Examples::DataWrapperExampleFile);
   if (fileId < 0)
   {
-    std::cout << "COULD NOT CREATE OUTPUT FILE '" << OUTPUT_FILE << "'" << std::endl;
+    std::cout << "COULD NOT CREATE OUTPUT FILE '" << Examples::DataWrapperExampleFile << "'" << std::endl;
     return;
   }
 
@@ -50,10 +46,10 @@ void InitializeFile()
 void WriteHDF5File(IMXAArray* data, const std::string &datasetname)
 {
   herr_t err = 0;
-  hid_t fileId = H5Utilities::openFile(OUTPUT_FILE, false);
+  hid_t fileId = H5Utilities::openFile(Examples::DataWrapperExampleFile, false);
   if (fileId < 0)
   {
-    std::cout << "COULD NOT CREATE OUTPUT FILE '" << OUTPUT_FILE << "'" << std::endl;
+    std::cout << "COULD NOT CREATE OUTPUT FILE '" << Examples::DataWrapperExampleFile << "'" << std::endl;
     return;
   }
 

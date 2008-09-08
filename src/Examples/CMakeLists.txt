@@ -17,6 +17,8 @@ SET (EXECUTABLE_OUTPUT_PATH
 INCLUDE_DIRECTORIES(${MXA_SOURCE_DIR}/src)
 
 INCLUDE( ${PROJECT_SOURCE_DIR}/../../Resources/MXAFindHDF5.cmake )
+SET (MXA_EXAMPLES_SOURCE_DIR ${MXA_SOURCE_DIR}/src/Examples)
+
 IF(NOT HDF5_FOUND)
   MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
 ENDIF(NOT HDF5_FOUND)
@@ -39,6 +41,21 @@ SET (GETDATA_SRCS
   GetDataExample.cpp
   ${MXA_SOURCE_DIR}/src/Testing/DataFileGenerator.cpp
 )
+
+# ------------------------------------------------------------------------------
+#  Configure the header file
+IF (WIN32)
+    SET (MXA_TEMP_DIR "C:\\\\WINDOWS\\\\Temp\\\\")
+ELSE (WIN32)
+    SET (MXA_TEMP_DIR "/tmp/")
+ENDIF(WIN32)
+
+IF (WIN32)
+ STRING(REPLACE "\\" "\\\\" DATAIMPORT_TEST_IMPORT_XML_FILE ${DATAIMPORT_TEST_IMPORT_XML_FILE} )
+ENDIF(WIN32)
+CONFIGURE_FILE(${MXA_EXAMPLES_SOURCE_DIR}/ExampleFileLocations.h.in
+               ${PROJECT_BINARY_DIR}/ExampleFileLocations.h @ONLY IMMEDIATE)
+
 
 # ------------------------------------------------------------------------------
 #  Add Executable for GetDataExample

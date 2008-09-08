@@ -21,10 +21,12 @@ const std::string DataInputFile("/tmp/DataInput_");
 
 /**
 * @class SimpleImportExample SimpleImportExample.h Examples/DataImport/SimpleImportExample.h
-* @brief
+* @brief This class shows how to write code that will read data from an external
+* file specified in an IDataSource object and write that data to the correct location
+* within the HDF5 file as specified in the MXA Data Model.
 * @author Michael A. Jackson. BlueQuartz Software http://www.bluequartz.net
 * @date Sept 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class SimpleImportExample
 {
@@ -40,8 +42,16 @@ public:
 
 protected:
 
+  /**
+   * @brief Creates a simple MXA model to use for this example.
+   * @return A valid MXA model object
+   */
   MXADataModelPtr createSimpleModel();
 
+  /**
+   * @brief Creates some files with binary data that are used as input for this example program.
+   * @param model The mxa data model
+   */
   void createTestFiles(MXADataModelPtr model);
 
 

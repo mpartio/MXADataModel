@@ -51,7 +51,7 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
   // Get an instance to the ImportDelegateManager
   ImportDelegateManagerPtr idManagerPtr = ImportDelegateManager::instance();
   // Get a reference to an Import Delegate given the name of the class
-  IImportDelegatePtr delegatePtr = idManagerPtr->newDataImportDelegate(ExampleImport::Detail::ClassName);
+  IImportDelegatePtr delegatePtr = ImportDelegateManager::createNewImportDelegate(ExampleImport::Detail::ClassName);
 
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
   IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension

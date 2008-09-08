@@ -31,20 +31,11 @@
 #include <HDF5/H5MXAUtilities.h>
 #include <HDF5/H5MXADataFile.h>
 #include <DataWrappers/MXAArrayTemplate.hpp>
+#include <Examples/ExampleFileLocations.h>
 
 // HDF5 Include
 #include <hdf5.h>
 
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-#if defined (_WIN32)
-  #define MXA_FILE "C:\\WINDOWS\\Temp\\MXA_Example1.h5"
-#define XML_FILE "C:\\WINDOWS\\Temp\\MXA_Example1.xml"
-#else
-  #define MXA_FILE "/tmp/MXA_Example1.h5"
-#define XML_FILE "/tmp/MXA_Example1.xml"
-#endif
 
 // Declare methods
 void listDataDimensions(MXADataModel* model);
@@ -133,7 +124,7 @@ int main(int argc, char **argv) {
   model->addUserMetaData("Int32 User Meta Data", iUmd);
 
   // Export the Model to an XML File
-  XMLDataModelWriter xmlWriter(modelPtr, XML_FILE);
+  XMLDataModelWriter xmlWriter(modelPtr, Examples::Example1_XMLFile);
   int32 err = xmlWriter.writeModelToFile(-1);
   if (err < 0)
   {
@@ -149,7 +140,7 @@ int main(int argc, char **argv) {
 
   //Write the model to a new HDF5 file, deleting any existing file and
   // allowing the Hdf5 file to remain open for further processing
-  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(MXA_FILE, modelPtr);
+  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(Examples::Example1File, modelPtr);
 
   if (NULL == dataFile.get() )
   {

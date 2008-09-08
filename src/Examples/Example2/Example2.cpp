@@ -23,6 +23,8 @@
 #include <DataWrappers/MXARGBImage.h>
 #include <DataWrappers/MXA2DArray.hpp>
 #include <HDF5/H5Dataset.h>
+#include <Examples/ExampleFileLocations.h>
+
 
 // HDF5 Include
 #include <hdf5.h>
@@ -33,18 +35,6 @@
  * a 'readData' method that shows how to use some of the predefined classes in
  * the MXA library that can fetch their data from an HDF5 data file
  */
-
-
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-#if defined (_WIN32)
-  #define MXA_FILE "C:\\WINDOWS\\Temp\\MXA_Example2.h5"
-#define XML_FILE "C:\\WINDOWS\\Temp\\MXA_Example2.xml"
-#else
-  #define MXA_FILE "/tmp/MXA_Example2.h5"
-#define XML_FILE "/tmp/MXA_Example2.xml"
-#endif
 
 // Declare methods
 void listDataDimensions(MXADataModel* model);
@@ -103,7 +93,7 @@ void miscTest()
 int32 readData()
 {
   // Open the data file in read-only mode
-  IDataFilePtr dataFile = H5MXADataFile::OpenFile(MXA_FILE, true);
+  IDataFilePtr dataFile = H5MXADataFile::OpenFile(Examples::Example2File, true);
   if (dataFile.get() == NULL)
   { // CHeck for a good open operation. If something failed during the open operation
     //  then the pointer will be NULL;
@@ -242,7 +232,7 @@ int32 generateData()
 
   //Write the model to a new HDF5 file, deleting any existing file and
   // allowing the Hdf5 file to remain open for further processing
-  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(MXA_FILE, modelPtr);
+  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(Examples::Example2File, modelPtr);
 
   if (NULL == dataFile.get() )
   {

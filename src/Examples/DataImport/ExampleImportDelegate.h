@@ -16,10 +16,10 @@
 
 /**
 * @class ExampleImportDelegate ExampleImportDelegate.h src/Examples/DataImport/ExampleImportDelegate.h
-* @brief An example of how to write a basic IDataImportDelegate class
+* @brief An example of how to write a basic IDataImportDelegate class.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 class ExampleImportDelegate : public IImportDelegate
 {
@@ -28,7 +28,7 @@ public:
 	virtual ~ExampleImportDelegate();
 
   /**
-   * @brief Imports the datasource to the data file
+   * @brief Imports the datasource to the data file.
    * @param dataSource The source of the data
    * @param dataFile The IDataFile object
    * @return

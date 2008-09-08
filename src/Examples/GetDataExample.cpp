@@ -13,16 +13,9 @@
 #include <HDF5/H5MXADataFile.h>
 #include <HDF5/H5MXAUtilities.h>
 #include <Testing/DataFileGenerator.h>
-#include <hdf5.h>
+#include <Examples/ExampleFileLocations.h>
 
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-#if defined (_WIN32)
-  #define FILE_NAME "C:\\WINDOWS\\Temp\\GetDataExample.h5"
-#else
-  #define FILE_NAME "/tmp/GetDataExample.h5"
-#endif
+#include <hdf5.h>
 
 
 // -----------------------------------------------------------------------------
@@ -34,7 +27,7 @@ int main(int argc, char **argv)
 
   herr_t err = 1;
   // Generate a Data file to use
-  std::string outputFile(FILE_NAME);
+  std::string outputFile(Examples::GetDataExampleFile);
   DataFileGenerator dfg;
   dfg.setFilePath(outputFile);
   err = dfg.generate();
@@ -45,7 +38,7 @@ int main(int argc, char **argv)
 
 
   //First load the Data file
-  IDataFilePtr dataFile = H5MXADataFile::OpenFile(FILE_NAME, true);
+  IDataFilePtr dataFile = H5MXADataFile::OpenFile(Examples::GetDataExampleFile, true);
   IDataModelPtr modelPtr = dataFile->getDataModel();
   hid_t fileId = dataFile.get()->getFileId();
   if (fileId < 0)
