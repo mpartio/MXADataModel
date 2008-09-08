@@ -13,21 +13,15 @@
 #include <Examples/DataImport/ExampleImportDelegate.h>
 
 
-// Declare our constant in a namespace
-namespace ExampleImport
-{
-  namespace Detail
-  {
-    const std::string ClassName("ExampleImport");
-  }
-}
+DEFINE_IMPORT_DELEGATE_NAMESPACE(ExampleImport)
+
 
 /**
 * @class ExampleImportDelegateFactory ExampleImportDelegateFactory.h Examples/DataImport/ExampleImportDelegateFactory.h
 * @brief Factory class to generate ExampleImportDelegateFactory objects
 * @author Mike Jackson
 * @date Sep 5, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class ExampleImportDelegateFactory : public AbstractImportDelegateFactory
 {

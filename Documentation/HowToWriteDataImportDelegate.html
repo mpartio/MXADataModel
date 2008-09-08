@@ -20,63 +20,129 @@
 		<!-- Begin Navigation Table Cell -->
 		<td class="nav_table_cell">
 		<div id="NavigationDiv"></div>
-		<script type="text/javascript">document.getElementById('NavigationDiv').innerHTML=navigationCells('How To Write a Data Import Delegate');
-</script></td>
+		<script type="text/javascript">
+	document.getElementById('NavigationDiv').innerHTML = navigationCells('How To Write a Data Import Delegate');
+</script>
+</td>
 		<!-- End Navigation Table Cell -->
 
 		<td class="content">
-		<div class="entry">In order to use MXA's built in facilities to import data
-		into HDF5 data files 2 classes need to be written. MXA uses the
-		Factory Design Pattern to register specific classes that are capable
-		of importing the type of data that is needed. There is a central class
-		that handles the registration of the various factory classes. Each
-		factory class can instantiate a single type of data import delegate. <br>
+		<div class="entry">In order to use MXA's built in facilities to
+		import data into HDF5 data files 2 classes need to be written. MXA
+		uses the Factory Design Pattern to register specific classes that are
+		capable of importing the type of data that is needed. There is a
+		central class that handles the registration of the various factory
+		classes. Each factory class can instantiate a single type of data
+		import delegate. The following code is based off the
+		&quot;SimpleImportExample&quot; that can be found in the
+		src/Examples/DataImport directory.<br>
 		<br>
-		The first class to implement is a subclass of <code>IImportDelegate</code>.
-		And the only method that you must implement is<br>
+		The first class we are going to implement will be an <i>ImportDelegate</i>
+		which is named <i>ExampleImportDelegate</i><br>
 		<br>
-		<code>virtual int32 importDataSource(IDataSourcePtr dataSource,
-		IDataModelPtr model);</code> <br>
 		<br>
-		In our example let us name this ImportDelegate 'MyDataImportDelegate'
+		<br>
+		<b>Contents of the ExampleImportDelegate.h File</b> <br>
+		<code> <br>
+		#include &lt;Common/MXATypes.h&gt; <br>
+		#include &lt;Common/MXATypeDefs.h&gt; <br>
+		#include &lt;Base/IImportDelegate.h&gt; <br>
+		<br>
+		class ExampleImportDelegate : public IImportDelegate { <br>
+		public: <br>
+		&nbsp; ExampleImportDelegate(); <br>
+		&nbsp; virtual ~ExampleImportDelegate(); <br>
+		<br>
+		&nbsp; int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr
+		dataFile); <br>
+		<br>
+		&nbsp; private: <br>
+		&nbsp; ExampleImportDelegate(const ExampleImportDelegate&); //Copy
+		constructor NOT implemented <br>
+		&nbsp; void operator=(const ExampleImportDelegate); //Copy assignment
+		NOT implemented <br>
+		}; <br>
+		</code> <br>
+		The implementation of <i>importDataSource</i> contains all the code
+		necessary to import a single data record's worth of data into the HDF5
+		file. <br>
+		<br>
+		The Second class to implement is a subclass of <i>AbstractImportDelegateFactory</i>.
+		Following along with our example code from the Examples/DataImport
+		directory we have created a class called <i>ExampleImportDelegateFactory</i>.
+		The implementation of which is (some content removed for brevity) <br>
+		<br>
+		<b>Contents of the ExampleImportDelegateFactory.h File</b> <br>
+		<code> <br>
+		#include &lt;DataImport/AbstractImportDelegateFactory.h&gt; <br>
+		#include &lt;Examples/DataImport/ExampleImportDelegate.h&gt; <br>
+		<br>
+		DEFINE_IMPORT_DELEGATE_NAMESPACE(ExampleImport) <br>
+		<br>
+		class ExampleImportDelegateFactory : public
+		AbstractImportDelegateFactory <br>
+		{ <br>
+		&nbsp;public: <br>
+		&nbsp;ExampleImportDelegateFactory(); <br>
+		&nbsp;virtual ~ExampleImportDelegateFactory(); <br>
+		&nbsp; <br>
+		&nbsp;IImportDelegatePtr newDataImportDelegate (const std::string
+		&amp;className ) <br>
+		&nbsp;{ <br>
+		&nbsp;&nbsp;IImportDelegatePtr delegate; // Creates a Null Shared
+		Pointer <br>
+		&nbsp;&nbsp;if (className.compare(ExampleImport::Detail::ClassName) ==
+		0) <br>
+		&nbsp;&nbsp;{ <br>
+		&nbsp;&nbsp;&nbsp; delegate.reset(new ExampleImportDelegate()); <br>
+		&nbsp;&nbsp;} <br>
+		&nbsp;&nbsp;return delegate; <br>
+		&nbsp;} <br>
+		&nbsp;std::string delegateClassName() <br>
+		&nbsp;{ <br>
+		&nbsp;&nbsp;return ExampleImport::Detail::ClassName; <br>
+		&nbsp;} <br>
+		&nbsp; <br>
+		&nbsp; private: <br>
+		&nbsp; ExampleImportDelegateFactory(const
+		ExampleImportDelegateFactory&); //Not Implemented <br>
+		&nbsp; void operator=(const ExampleImportDelegateFactory&); //Not
+		Implemented <br>
+		} <br>
+		&nbsp; </code> <br>
+		Some notes from the implementation:
+		<ul>
+			<li>DEFINE_IMPORT_DELEGATE_NAMESPACE(ExampleImport) is a macro
+			defined in the AbstractImportDelegateFactory header that will create
+			a namespace that contains a std::string constant that contains the
+			value of the classname as defined in the argument to the macro. This
+			string can be used in other parts of the code to instantiate an
+			import delegate during runtime if needed that could be read from an
+			xml file to direct the importer on what class should be used to
+			import the data.</li>
+			<li>The definition of 'delegateClassName' simply returns the
+			constant as defined above.</li>
 
-		<br>
-		<br>
-		The second class to implement is a subclass of <code>AbstractImportDelegateFactory</code>.
-		You must implement the following methods:
-		<ol>
-			<li><code>IImportDelegatePtr newDataImportDelegate (const
-			std::string &className );</code></li>
-			<li><code>std::string delegateClassName();</code></li>
-		</ol>
+		</ul>
 
-		<br>
-		The implementation of <code>delegateClassName()</code> should simply
-		return a std::string that uniquely identifies your DataImportDelegate,
-		so from our example, we could use <code>return
-		"MyDataImportDelegate";</code> <br>
-		For the implementation of <code>newDataImportDelegate</code> and using
-		our running example, the source code might look like the following: <br>
-
-		<code>IImportDelegatePtr
-		MyDataImportDelegate::newDataImportDelegate (const std::string
-		&className ) {</code><br>
-		<code> IImportDelegatePtr delegate; // Creates a Null Shared
-		Pointer</code><br>
-		<code> if ( className.compare( "MyDataImportDelegate" ) == 0)</code><br>
-		<code> {</code><br>
-		<code>    MyDataImportDelegate* d = new MyDataImportDelegate();</code><br>
-		<code>    delegate.reset ( d );</code><br>
-		<code> // insert custom code specific to the intialization<br>
-		// of MyDataImportDelegate here</code><br>
-		<code> }</code><br>
-		<code> return delegate;</code><br>
-		<code> }</code><br>
-
-
+<br>Now that the basic code is implemented this is how you might use the code. This code
+is located in src/Examples/DataImport/main.cpp
+<br>
+<code> 
+<br>&nbsp;//Register known formats if needed/wanted
+<br>&nbsp; ImportDelegateManager::registerKnownImportDeletegateFactories();
+<br>&nbsp;// Register our Import Delegate by using the static methods from ImportDelegateManager
+<br>&nbsp;AbstractImportDelegateFactoryPtr exampleImportDelegateFactory ( new ExampleImportDelegateFactory() );
+<br>&nbsp;ImportDelegateManager::registerImportDelegateFactory(exampleImportDelegateFactory);
+</code>
+<br>
+<br> You can now start using the rest of the MXA DataImport classes as needed. Please take a look 
+at src/Examples/DataImport/SimpleImportExample.cpp for more details on the use of those classes.
+<br>
+<br>
 		</div>
-		<div class="entry">For a more concrete example take a look at the source code
-		for the <b>H5TiffImportDelegate</b> and <b>H5TiffImportDelegateFactory</b>
+		<div class="entry">For a more concrete example take a look at
+		the source code for the <b>H5TiffImportDelegate</b> and <b>H5TiffImportDelegateFactory</b>
 		classes.</div>
 		</td>
 	</tr>
