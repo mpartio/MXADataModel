@@ -18,13 +18,7 @@
 #include <string>
 
 
-/**
- * @brief Constants for dealing with Tif files
- */
-namespace H5TiffImportDelegateFactory_Detail
-{
-  const std::string ClassName("H5TiffImport");
-}
+DEFINE_IMPORT_DELEGATE_NAMESPACE(H5TiffImport);
 
 // -----------------------------------------------------------------------------
 //  Factory Class to generate H5TiffImportDelegate Objects
@@ -34,7 +28,7 @@ namespace H5TiffImportDelegateFactory_Detail
 * @brief Factory Class to generate H5TiffImportDelegate Objects
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class MXA_EXPORT H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
 {

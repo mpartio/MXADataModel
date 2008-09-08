@@ -4,7 +4,7 @@
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 H5TiffImportDelegateFactory::H5TiffImportDelegateFactory() :
   _fileNotFoundIsError(false),
@@ -13,20 +13,20 @@ H5TiffImportDelegateFactory::H5TiffImportDelegateFactory() :
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 H5TiffImportDelegateFactory::~H5TiffImportDelegateFactory()
 {
-  
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IImportDelegatePtr H5TiffImportDelegateFactory::newDataImportDelegate (const std::string &className )
 {
   IImportDelegatePtr delegate; // Creates a Null Shared Pointer
-  if ( className.compare( H5TiffImportDelegateFactory_Detail::ClassName ) == 0)
+  if ( className.compare( H5TiffImport::Detail::ClassName ) == 0)
   {
     H5TiffImportDelegate* d = new H5TiffImportDelegate();
     delegate.reset ( d );
@@ -37,15 +37,15 @@ IImportDelegatePtr H5TiffImportDelegateFactory::newDataImportDelegate (const std
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 std::string H5TiffImportDelegateFactory::delegateClassName()
 {
-  return H5TiffImportDelegateFactory_Detail::ClassName;
+  return H5TiffImport::Detail::ClassName;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5TiffImportDelegateFactory::setFileNotFoundIsError(bool value)
 {
@@ -53,7 +53,7 @@ void H5TiffImportDelegateFactory::setFileNotFoundIsError(bool value)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5TiffImportDelegateFactory::setImportAsGrayScale(bool value)
 {

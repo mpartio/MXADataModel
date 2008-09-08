@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -19,14 +19,7 @@
 #include <string>
 
 
-// Declare our constant in a namespace
-namespace H5BmpImport
-{
-  namespace Detail 
-  {
-    const std::string ClassName("H5BmpImport");
-  }
-}
+DEFINE_IMPORT_DELEGATE_NAMESPACE(H5BmpImport);
 
 // -----------------------------------------------------------------------------
 //  Factory Class to generate H5BmpImportDelegate Objects
@@ -36,16 +29,16 @@ namespace H5BmpImport
 * @brief Factory Class to generate H5BmpImportDelegate Objects
 * @author Mike Jackson
 * @date Oct 2007
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFactory
 {
   public:
     H5BmpImportDelegateFactory();
-    
+
     virtual ~H5BmpImportDelegateFactory();
-    
-    
+
+
   /**
    * @brief This method will return a new instance of H5BmpImportDelegate provided
    * the className matches.
@@ -53,12 +46,12 @@ class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFacto
    * @return A new boost shared pointer to H5BmpImportDelegate
    */
   IImportDelegatePtr newDataImportDelegate (const std::string &className );
-  
+
   /**
    * @brief Returns the Classname of the delegate that this factory can create.
    */
   std::string delegateClassName();
-  
+
   /**
   * @brief Sets the 'FileNotFoundIsError' flag.
   * @param value If this is true then the import will abort if an input file can not be found
@@ -70,12 +63,12 @@ class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFacto
   * @param value If TRUE, then the tiff file will be converted to Grayscale
   */
   void setImportAsGrayScale(bool value);
-  
+
   private:
-    
+
     bool _fileNotFoundIsError;
     bool _importAsGrayScale;
-    
+
     H5BmpImportDelegateFactory(const H5BmpImportDelegateFactory&);    //Not Implemented
     void operator=(const H5BmpImportDelegateFactory&);  //Not Implemented
 };

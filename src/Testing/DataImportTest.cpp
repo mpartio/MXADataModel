@@ -25,10 +25,9 @@
 #include <HDF5/H5TiffImportDelegateFactory.h>
 #include <HDF5/H5BmpImportDelegateFactory.h>
 #include <HDF5/H5MXADataFile.h>
-
 #include <DataImport/DataImportXmlParser.h>
 #include <DataImport/ImportDelegateManager.h>
-
+#include <Testing/TestDataFileLocations.h>
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>
@@ -37,8 +36,6 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
 
-
-#include <Testing/TestDataFileLocations.h>
 
 // -----------------------------------------------------------------------------
 //
@@ -67,8 +64,26 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   MXADataImportPtr dataImport( new MXADataImport() );
   dataImport->setDataFile(dataFile);
 
+  // Register the known ImportDelegates, which will also instantiate the ImportDelegateManager instance.
+  // The ImportDelegateManager instance is a singleton so only one can ever be active per program.
+  ImportDelegateManager::registerKnownImportDeletegateFactories();
+
+  // Register our Import Delegate by using the static methods from ImportDelegateManager
+  AbstractImportDelegateFactoryPtr h5ImportTestDelegateFactory ( new H5ImportTestDelegateFactory() );
+  ImportDelegateManager::registerImportDelegateFactory(h5ImportTestDelegateFactory);
+
+  // Get an Instance to the ImportDelegateManager
+  ImportDelegateManagerPtr importManager = ImportDelegateManager::instance();
+
+  // Run a comparison of 2 AbstractImportDelegateFactoryPtrs to make sure they are the same.
+  AbstractImportDelegateFactoryPtr factoryPtr2 = importManager->getImportDelegateFactory(H5ImportTest::Detail::ClassName);
+  BOOST_REQUIRE (h5ImportTestDelegateFactory.get() == factoryPtr2.get() );
+
   // Create an Import Delegate to use for the DataSources
-  IImportDelegatePtr delegatePtr( new H5ImportTestDelegate());
+  IImportDelegatePtr delegatePtr = ImportDelegateManager::createNewImportDelegate(H5ImportTest::Detail::ClassName);
+  // We are now going to get a reference to the ImportDelegate so we can set the default value that it writes.
+  H5ImportTestDelegate* h5ImportDelegate = dynamic_cast<H5ImportTestDelegate*>(delegatePtr.get() );
+  h5ImportDelegate->setValue(55);
 
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
   IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension, since there is only one this works
@@ -162,23 +177,6 @@ MXADataModelPtr createSimpleModel()
 }
 
 
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-//int DataImportTest ()
-//{
-//  //std::cout << logTime() << "----- Running DataImport Test ------------- " << std::endl;
-//  std::string outputFile(DATAIMPORT_TEST_H5_FILE_BEFORE);
-//  MXADataModelPtr model = createSimpleModel();
-//  //Leave the file open for the import
-//  // Delete any existing file
-//  BOOST_REQUIRE(model->writeModel(outputFile, false, true) >= 0);
-//  ImportSimpleData(model, outputFile);
-//
-//  return 0;
-//}
-
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -193,7 +191,7 @@ int XMLImportTest()
   AbstractImportDelegateFactoryPtr h5TiffImportDelegateFactory(ptr);
   ptr->setImportAsGrayScale(true);
   ptr->setFileNotFoundIsError(false);
-  idManager->registerDataImportFactory(h5TiffImportDelegateFactory);
+  ImportDelegateManager::registerImportDelegateFactory(h5TiffImportDelegateFactory);
 
   // Create the XMLParser/Importer Object
   DataImportXmlParser importer;

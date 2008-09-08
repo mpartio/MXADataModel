@@ -24,12 +24,15 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 class H5ImportTestDelegate: public IImportDelegate
 {
 public:
-  H5ImportTestDelegate(){};
+  H5ImportTestDelegate() :
+    _value(10)
+    {};
+
   virtual ~H5ImportTestDelegate(){};
 
 // -----------------------------------------------------------------------------
@@ -47,14 +50,25 @@ public:
     std::string path ( dataSource->generateInternalPath() );
     uint32 pos = path.find_last_of("/");
     std::string parentPath ( path.substr(0, pos)  );
-    int32 value = 55;
+
     hid_t fileId = dataFile->getFileId();
     H5Utilities::createGroupsFromPath(parentPath,  fileId);
     //Write the Data to the HDF5 File
-    return H5Lite::writeScalarDataset(fileId, path, value);
+    return H5Lite::writeScalarDataset(fileId, path, this->_value);
+  }
+
+  /**
+   * @brief Sets the value to write to the h5 file
+   * @param value The value to write to the file
+   */
+  void setValue(int32 value)
+  {
+    this->_value = value;
   }
 
 private:
+  int32 _value;
+
   H5ImportTestDelegate(const H5ImportTestDelegate&);   //Copy Constructor Not Implemented
   void operator=(const H5ImportTestDelegate&); //Copy Assignment Not Implemented
 
@@ -65,20 +79,14 @@ private:
 // -----------------------------------------------------------------------------
 
 // Declare our constant in a namespace
-namespace H5ImportTest
-{
-  namespace Detail
-  {
-    const std::string ClassName("H5ImportTestDelegate");
-  }
-}
+DEFINE_IMPORT_DELEGATE_NAMESPACE(H5ImportTest);
 
 /**
 * @class H5ImportTestDelegateFactory H5ImportTest.h Testing/H5ImportTest.h
 * @brief Factory class to generate H5ImportTestDelegate objects
 * @author Mike Jackson
 * @date Sep 12, 2007
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
 {
@@ -104,6 +112,7 @@ class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
     }
     return delegate;
   }
+
 
   /**
    * @brief Returns the Classname of the delegate that this factory can create.
