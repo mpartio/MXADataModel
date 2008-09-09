@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) Mike Jackson, 
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//  This code was written under United States Air Force Contract number 
+//                           FA8650-04-C-5229
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef IIMPORTDELEGATE_H_
 #define IIMPORTDELEGATE_H_
 
@@ -11,7 +21,7 @@
  * a delegate to import data sources into HDF5 data files.
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  *  
  */
 class MXA_EXPORT IImportDelegate
