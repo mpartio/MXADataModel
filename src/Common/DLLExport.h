@@ -15,10 +15,12 @@
 configures to build a shared library. If you are going to use
 another build system on windows or create the visual studio
 projects by hand you need to define MXADataModel_EXPORTS when
-building a DLL on windows.
+building the MXADatModel DLL on windows.
+
+Other code that includes the MXADatModel DLL should only define BUILD_SHARED_LIBS
 */
 
-#if defined (WIN32) && defined (BUILD_SHARED_LIBS)
+#if defined (WIN32) && defined (MXA_BUILT_AS_DYNAMIC_LIB)
 #if defined (_MSC_VER)
 #pragma warning(disable: 4251)
 #endif
