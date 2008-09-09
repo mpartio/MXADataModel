@@ -40,10 +40,10 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  BOOST_REQUIRE ( boost::filesystem::remove(XML_TEST_FILE) == true );
-  BOOST_REQUIRE ( boost::filesystem::remove(MASTER_XML_FILE) == true );
-  BOOST_REQUIRE ( boost::filesystem::remove(XML_TEMPLATE_TEST_FILE) == true );
-  BOOST_REQUIRE ( boost::filesystem::remove(XML_TEMPLATE_COMPLETE_FILE) == true );
+boost::filesystem::remove(XML_TEST_FILE) ;
+boost::filesystem::remove(MASTER_XML_FILE);
+boost::filesystem::remove(XML_TEMPLATE_TEST_FILE) ;
+boost::filesystem::remove(XML_TEMPLATE_COMPLETE_FILE);
 #endif
 }
 

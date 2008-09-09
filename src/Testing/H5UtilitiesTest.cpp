@@ -48,7 +48,7 @@ using namespace MXATypes;
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  BOOST_REQUIRE ( boost::filesystem::remove(H5UTIL_TEST_FILE_NAME) == true );
+  boost::filesystem::remove(H5UTIL_TEST_FILE_NAME);
 #endif
 }
 

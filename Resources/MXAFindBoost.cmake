@@ -116,7 +116,7 @@ SET (BOOST_DEBUG 0)
 
 # List the versions of Boost that we are going to look for
 #"1.36.1" "1.36.0" "1.35.1" "1.35.0" "1.35" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33" )
-SET( _boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS} "1.36.1" "1.36.0" "1.35.1" "1.35.0" "1.35" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33" )
+SET( _boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS} "1.36.1" "1.36" "1.35.1" "1.35.0" "1.35" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33" )
 
 SET (BOOST_LIBRARIES "")
 SET (BOOST_INCLUDE_DIRS "")

@@ -50,9 +50,9 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  BOOST_REQUIRE ( boost::filesystem::remove(DATAMODEL_TEST_BEFORE_H5_FILE) == true );
-  BOOST_REQUIRE ( boost::filesystem::remove(DATAMODEL_TEST_AFTER_H5_FILE) == true );
-  BOOST_REQUIRE ( boost::filesystem::remove(DATAMODEL_TEST_OVERWRITE_H5_FILE) == true );
+  boost::filesystem::remove(DATAMODEL_TEST_BEFORE_H5_FILE);
+  boost::filesystem::remove(DATAMODEL_TEST_AFTER_H5_FILE);
+  boost::filesystem::remove(DATAMODEL_TEST_OVERWRITE_H5_FILE);
 #endif
 }
 

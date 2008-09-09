@@ -158,12 +158,12 @@ int32 H5MXADataFile::createFile()
     }
   }
 #if 1
-  bool didDeleteFile = true;
+  bool didDeleteFile = 1;
   // Now delete the file if it really exists
   if (true == boost::filesystem::exists(this->_filename) )
   {
-    didDeleteFile = boost::filesystem::remove(this->_filename);
-    if (false == didDeleteFile)
+    static_cast<void>(boost::filesystem::remove(this->_filename) );
+    if (true == boost::filesystem::exists(this->_filename) )
     {
       std::cout << "H5IODelegate::writeModelToFile: The file could not be deleted\n  " << this->_filename << std::endl;
       return -20;

@@ -43,9 +43,9 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
- // BOOST_REQUIRE ( boost::filesystem::remove(DATAIMPORT_TEST_H5_FILE_BEFORE) == true );
- // BOOST_REQUIRE ( boost::filesystem::remove(DATAIMPORT_TEST_H5_FILE_AFTER) == true );
-  BOOST_REQUIRE ( boost::filesystem::remove(DATA_IMPORT_TEST_OUTPUT_FILE) == true );
+ // boost::filesystem::remove(DATAIMPORT_TEST_H5_FILE_BEFORE) ;
+ //  boost::filesystem::remove(DATAIMPORT_TEST_H5_FILE_AFTER));
+  boost::filesystem::remove(DATA_IMPORT_TEST_OUTPUT_FILE);
 #endif
 }
 

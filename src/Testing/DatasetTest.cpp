@@ -68,7 +68,7 @@ int recLuid = 0;
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  BOOST_REQUIRE ( boost::filesystem::remove(DATASET_TEST_FILE) == true );
+  boost::filesystem::remove(DATASET_TEST_FILE) ;
 #endif
 }
 

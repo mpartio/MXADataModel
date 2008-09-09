@@ -101,8 +101,8 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  BOOST_REQUIRE ( boost::filesystem::remove(H5LITE_TEST_FILE_NAME) == true );
- // BOOST_REQUIRE ( boost::filesystem::remove(H5LITE_TEST_LARGE_FILE) == true );
+ boost::filesystem::remove(H5LITE_TEST_FILE_NAME);
+ // boost::filesystem::remove(H5LITE_TEST_LARGE_FILE));
 #endif
 }
 
