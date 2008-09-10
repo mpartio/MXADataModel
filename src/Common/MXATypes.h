@@ -15,8 +15,6 @@
 #ifndef __MXATypes_h
 #define __MXATypes_h
 
-#include "MXAConfiguration.h"
-/* The Following include MUST appear AFTER MXAConfiguration.h has been included */
 #include <Common/DLLExport.h>
 
 /*--------------------------------------------------------------------------*/
