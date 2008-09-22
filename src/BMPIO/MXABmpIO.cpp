@@ -16,7 +16,7 @@
 #include <string.h>
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 MXABmpIO::MXABmpIO() :
   width(0),
@@ -28,18 +28,18 @@ MXABmpIO::MXABmpIO() :
   _convertToGrayScale(false),
   bytesRead(0)
 {
- 
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 MXABmpIO::~MXABmpIO()
 {
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGrayScale )
 {
@@ -65,19 +65,19 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGray
 
   // Read Data
   res = readBitmapData();
- 
+
   // Only clean up bitmapData if there was an error.
   if (res == LOAD_TEXTUREBMP_SUCCESS)
   {
     numChannels = 3;
   }
-  // Reset the Shared Pointer forces the wrapped pointer to be deleted 
+  // Reset the Shared Pointer forces the wrapped pointer to be deleted
   //  and the underlying file closed
   Reader64Ptr nullReader;
   _reader64Ptr.swap(nullReader);
-  
+
   // Flip the y values of the image since the (0,0) is in the lower left of a bitmap file
-  if (false == this->_imageFlipped) 
+  if (false == this->_imageFlipped)
   {
     this->flipBitmap();
   }
@@ -91,11 +91,11 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGray
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData()
 {
-  
+
   // Make sure we have a large enough buffer
   this->bitmapDataVec.resize( width*height*3 );
   // Pad until byteoffset. Most images will need no padding
@@ -109,7 +109,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData()
   // The data reading procedure depends on the bit depth.
   switch(this->dibHeader.bitsPerPixel)
   {
-  case 1: 
+  case 1:
     return readBitmapData1Bit();
   case 4:
     return readBitmapData4Bit();
@@ -135,7 +135,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
   if (this->dibHeader.compressionMethod != BMP_BI_RGB)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
 
- 
+
   if (true == this->_convertToGrayScale) {
     this->bitmapDataVec.reserve(width * height);
     this->bitmapDataVec.resize(width * height);
@@ -156,7 +156,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
     bytesRead += numBytes;
     offset = 0;  //Reset the offset to start of the buffer
     buffPtr = (char*)(&(buffer.front() ) );
-    
+
     targetRow = height - i - 1;
     index = targetRow * widthByComponentNumBytes;
     for (int j=0;j<width;j++)
@@ -170,7 +170,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
         fTmp +=(float)(*(buffPtr++)) * 0.11f;
         bitmapData[temp] = (uint8)(fTmp);
       }
-      else 
+      else
       {
         blue = buffer[offset++];
         green = buffer[offset++];
@@ -184,9 +184,9 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
  //     bitmapData[index+j*3+2] = read8BitValue();
  //     bitmapData[index+j*3+1] = read8BitValue();
  //     bitmapData[index+j*3] = read8BitValue();
-    }                                             
+    }
 
-    for (int k=(width*3)%4; k!=0 && k<4;k++) 
+    for (int k=(width*3)%4; k!=0 && k<4;k++)
     {
         read8BitValue();
     }
@@ -211,11 +211,11 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
   int32 componentNumBytes = 3;
   std::streamsize numBytes = width;
   int32 offset = 0;
-  if (this->dibHeader.compressionMethod != BMP_BI_RGB && 
+  if (this->dibHeader.compressionMethod != BMP_BI_RGB &&
     this->dibHeader.compressionMethod != BMP_BI_RLE8) {
       return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
    }
-  
+
   //RoboMet Images fall into this category
   // We are going to flip the image as it gets read from the file
   // We are going to convert to grayscale on the fly if needed
@@ -223,16 +223,16 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
   {
     std::vector<uint8> buffer(numBytes, 0); // Create a buffer large enough to hold the colors
     char* buffPtr = (char*)(&(buffer.front() ) );
-    if (true == this->_convertToGrayScale) {   
+    if (true == this->_convertToGrayScale) {
       this->bitmapDataVec.resize(width * height);
       componentNumBytes = 1;
     }
     int32 widthByComponentNumBytes = componentNumBytes * width;
-   
+
     // For each scan line
     int targetRow = 0;
     for (int i = 0;i < height; ++i)
-    { 
+    {
       _reader64Ptr->rawRead( (char*)(&(buffer.front())), numBytes);
       bytesRead += numBytes;
       offset = 0;  //Reset the offset to start of the buffer
@@ -249,15 +249,15 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
             + (float)(palette[1][color]) * 0.59f
             + (float)(palette[2][color]) * 0.11f);
         }
-        else 
+        else
         {
 		      temp = index + j * 3;
           bitmapData[temp++] = palette[0][color];
           bitmapData[temp++] = palette[1][color];
           bitmapData[temp] = palette[2][color];
         }
-      }                                             
-      
+      }
+
       // go to next alignment of 4 bytes.
       int32 kEnd = width%4;
       for (int k = 0; k < kEnd; ++k) {
@@ -266,15 +266,15 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
          bytesRead+=1;
       }
     }
-    
+
     this->_imageFlipped = true;
     if (true == this->_convertToGrayScale) {
       this->_imageConvertedToGrayScale = true;
       this->numChannels = 1;
     }
-    
+
   }
-  
+
   if (this->dibHeader.compressionMethod == BMP_BI_RLE8)
   {
     // Drawing cursor pos
@@ -282,16 +282,16 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
     int32 y=0;
 
     bytesRead=0;
-    
-    // Clear bitmap data since it is legal not to 
+
+    // Clear bitmap data since it is legal not to
     // fill it all out.
     memset(bitmapData,0,sizeof(unsigned char)*width*height*3);
-    
+
     while(true)
     {
       unsigned char firstByte = read8BitValue();
       unsigned char secondByte = read8BitValue();
-      
+
       // Is this an escape code or absolute encoding?
       if (firstByte==0)
       {
@@ -310,13 +310,13 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
           {
             if (x>=width)
               return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-            color = read8BitValue(); 
+            color = read8BitValue();
             bitmapData[index+x*3] = palette[0][color];
             bitmapData[index+x*3+1] = palette[1][color];
-            bitmapData[index+x*3+2] = palette[2][color]; 
+            bitmapData[index+x*3+2] = palette[2][color];
             x++;
           } // end for (int i=0; i<secondByte; i++)
-          
+
           // Pad to 16-bit word boundery
           if (secondByte%2 == 1)
             read8BitValue();
@@ -338,84 +338,84 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
       }
     }
   }
-  
+
   return LOAD_TEXTUREBMP_SUCCESS;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readFileHeader()
 {
   // Read "BM" tag in ASCII.
   if (read8BitValue()!=66 || read8BitValue()!=77)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-  
+
   // Read file size. We do not need this. Ignore.
   this->fileHeader.fileSize = read32BitValue();
-  
+
   // Skip the two reserved areas
   this->fileHeader.reserved1 = read16BitValue();
   this->fileHeader.reserved2 = read16BitValue();
-  
+
   // Read the byte offset
   this->fileHeader.dataOffset = read32BitValue();
-  
+
   return LOAD_TEXTUREBMP_SUCCESS;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readInfoHeader()
 {
   // We expect this to be at least 40. If it is larger we read
   // some more bytes in the end to be forward compatible.
   uint32 sizeOfInfoHeader = (uint32)read32BitValue();
-  
+
   if (sizeOfInfoHeader<40)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-  
+
   width = dibHeader.width = read32BitValue();
-  
+
   height = dibHeader.height = read32BitValue();
-  
+
   // Read number of planes. According to the specification this
   // must be 1.
   if (read16BitValue()!=1)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-  
+
   dibHeader.bitsPerPixel = read16BitValue();
-  
-  if (this->dibHeader.bitsPerPixel != 1 && 
-      this->dibHeader.bitsPerPixel != 4 && 
-      this->dibHeader.bitsPerPixel != 8 && 
+
+  if (this->dibHeader.bitsPerPixel != 1 &&
+      this->dibHeader.bitsPerPixel != 4 &&
+      this->dibHeader.bitsPerPixel != 8 &&
       this->dibHeader.bitsPerPixel != 24)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-  
+
   dibHeader.compressionMethod = (CompressionType)read32BitValue();
-  
-  if (dibHeader.compressionMethod != BMP_BI_RGB && 
-      dibHeader.compressionMethod != BMP_BI_RLE8 && 
+
+  if (dibHeader.compressionMethod != BMP_BI_RGB &&
+      dibHeader.compressionMethod != BMP_BI_RLE8 &&
       dibHeader.compressionMethod != BMP_BI_RLE4)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-  
-  // Read image size. We do not need this since we have the 
+
+  // Read image size. We do not need this since we have the
   // image size.
   dibHeader.imageSize = read32BitValue();
-  
+
   // Pixel to device mapping. This is irrelevant since we simply
   // want the bitmap.
   dibHeader.horizontalResolution = read32BitValue();
   dibHeader.verticalResolution = read32BitValue();
-  
+
   // Read colors used. We do not need this, so it is ignored.
   dibHeader.numPaletteColors = read32BitValue();
-  
+
   // Read the number of important colors. This will not be needed
   // in OpenGL so we will ignore this.
   dibHeader.numImportantColors = read32BitValue();
-  
+
   // Apply padding in end of header to be forward compatible.
   sizeOfInfoHeader -= 40;
   while (sizeOfInfoHeader>0)
@@ -423,7 +423,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readInfoHeader()
     read8BitValue();
     sizeOfInfoHeader--;
   }
-  
+
   return LOAD_TEXTUREBMP_SUCCESS;
 }
 
@@ -437,30 +437,30 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readInfoHeader()
 //  BYTE    rgbReserved;
 // } RGBQUAD;
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readPalette()
-{ 
+{
   // 24-bit images are not paletted.
   if (this->dibHeader.bitsPerPixel == 24)
     return LOAD_TEXTUREBMP_SUCCESS;
-  
+
   int32 numColors = 1<<this->dibHeader.bitsPerPixel;
   for (int i=0;i<numColors;i++)
   {
     // Read RGB.
     for (int j=2;j>=0;j--)
       this->palette[j][i] = read8BitValue();
-    
+
     // Skip reversed byte.
     read8BitValue();
   }
-  
+
   return LOAD_TEXTUREBMP_SUCCESS;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData1Bit()
 {
@@ -479,19 +479,19 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData1Bit()
       {
         byteRead = read8BitValue();
       }
-      
+
       uint8 color = (byteRead >> (7-(x%8))) & 1;
-      
+
       bitmapData[index+x*3] = palette[0][color];
       bitmapData[index+x*3+1] = palette[1][color];
-      bitmapData[index+x*3+2] = palette[2][color]; 
+      bitmapData[index+x*3+2] = palette[2][color];
     }
 
     // Pad to 32-bit boundery.
     while(bytesRead%4 != 0)
       read8BitValue();
   }
-  
+
   return LOAD_TEXTUREBMP_SUCCESS;
 }
 
@@ -499,7 +499,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData1Bit()
 // This is called after the first byte has been found to be 0
 // and the second to be 0-2. This is only used in RLE-4 and RLE-8
 // encoding.
-bool MXABmpIO::handleEscapeCode(int secondByte, int* x, int* y, 
+bool MXABmpIO::handleEscapeCode(int secondByte, int* x, int* y,
                              LOAD_TEXTUREBMP_RESULT* res)
 {
   if (secondByte==0x00)
@@ -517,7 +517,7 @@ bool MXABmpIO::handleEscapeCode(int secondByte, int* x, int* y,
   {
     // End of bitmap
     *res = LOAD_TEXTUREBMP_SUCCESS;
-    return true;            
+    return true;
   }
   else // secondByte=0x02
   {
@@ -539,10 +539,10 @@ bool MXABmpIO::handleEscapeCode(int secondByte, int* x, int* y,
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit()
 {
   uint8* bitmapData = &(this->bitmapDataVec.front());
-  if (this->dibHeader.compressionMethod != BMP_BI_RGB && 
+  if (this->dibHeader.compressionMethod != BMP_BI_RGB &&
       this->dibHeader.compressionMethod != BMP_BI_RLE4)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-  
+
   // Uncompressed 4 bit encoding
   if (this->dibHeader.compressionMethod == BMP_BI_RGB)
   {
@@ -552,46 +552,46 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit()
       unsigned char byteValue;
       unsigned char color;
       for (int i=0;i<width;i++)
-      {      
+      {
         if (i%2==0)
         {
           byteValue = read8BitValue();
-          color = byteValue>>4;           
+          color = byteValue>>4;
         }
         else
         {
           color = byteValue & 0x0F;
         }
-        
+
         bitmapData[index+i*3] = palette[0][color];
         bitmapData[index+i*3+1] = palette[1][color];
         bitmapData[index+i*3+2] = palette[2][color];
       }
-      
+
       // Pad to 32-bit boundery.
       for (int k=0; k<(((width+1)/2)%4);k++)
         read8BitValue();
     }
   }
-  
+
   // RLE encoded 4-bit compression
   if (this->dibHeader.compressionMethod == BMP_BI_RLE4)
   {
-    // Drawing cursor pos  
+    // Drawing cursor pos
     int32 x=0;
     int32 y=0;
-    
-    // Clear bitmap data since it is legal not to 
+
+    // Clear bitmap data since it is legal not to
     // fill it all out.
     memset(bitmapData,0,sizeof(unsigned char)*width*height*3);
 
     bytesRead=0;
-    
+
     while(true)
     {
       unsigned char firstByte = read8BitValue();
       unsigned char secondByte = read8BitValue();
-      
+
       // Is this an escape code or absolute encoding?
       if (firstByte==0)
       {
@@ -625,10 +625,10 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit()
 
             bitmapData[index+x*3] = palette[0][color];
             bitmapData[index+x*3+1] = palette[1][color];
-            bitmapData[index+x*3+2] = palette[2][color]; 
+            bitmapData[index+x*3+2] = palette[2][color];
             x++;
           }
-          
+
           // Pad to 16-bit word boundery
           while (bytesRead%2 != 0)
             read8BitValue();
@@ -636,38 +636,38 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit()
       }
       else
       {
-        // If not absolute or escape code, perform data decode for next 
+        // If not absolute or escape code, perform data decode for next
         // length of colors
         int32 color1 = secondByte >> 4;
         int32 color2 = secondByte & 0x0F;
-        
+
         for (int i=0;i<firstByte;i++)
         {
           if (x>=width)
             return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-          
+
           int32 color;
           if (i%2==0)
             color = color1;
           else
             color = color2;
-          
+
           int32 index = y*width*3+x*3;
           bitmapData[index] = palette[0][color];
           bitmapData[index+1] = palette[1][color];
           bitmapData[index+2] = palette[2][color];
           x++;
-        }        
+        }
       }
     }
   }
-  
+
   return LOAD_TEXTUREBMP_SUCCESS;
 }
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXABmpIO::getHeight()
 {
@@ -675,7 +675,7 @@ int32 MXABmpIO::getHeight()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXABmpIO::getWidth()
 {
@@ -683,7 +683,7 @@ int32 MXABmpIO::getWidth()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 MXABmpIO::getNumberOfChannels()
 {
@@ -691,7 +691,7 @@ int32 MXABmpIO::getNumberOfChannels()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void MXABmpIO::flipBitmap()
 {
@@ -700,9 +700,9 @@ void MXABmpIO::flipBitmap()
   uint8* flippedImage = 0x0;
 //  uint8* temp;
   int32 element1, element2, width3, el1, el2;
-	
+
 	width3 = width * 3;
-	
+
   if ( !isGrayscale )
   {
   	flippedVec.resize(height * width3);
@@ -758,12 +758,12 @@ void MXABmpIO::convertToGrayscale()
   for ( int32 row = 0; row < height; row++ )
   {
     for ( int32 col = 0; col < width; col++ )
-    { 
+    {
       element1 = (row * width) + col;
       element2 = element1 * 3;
-      grayscaleImage[element1] = bitmapData[element2] * 0.3 + 
-        bitmapData[element2 + 1] * 0.59 + 
-        bitmapData[element2 + 2] * 0.11;
+      grayscaleImage[element1] = bitmapData[element2] * 0.299 +
+        bitmapData[element2 + 1] * 0.587 +
+        bitmapData[element2 + 2] * 0.114;
     }
   }
   isGrayscale = true;
@@ -773,7 +773,7 @@ void MXABmpIO::convertToGrayscale()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool MXABmpIO::isGrayscaleImage()
 {
@@ -790,11 +790,11 @@ void MXABmpIO::copyDataArray(std::vector<uint8> &buffer)
   std::vector<uint8>::size_type numElements;
   if ( isGrayscale )
     numElements = width * height;
-  else 
+  else
     numElements = width * height * 3;
   buffer.reserve(numElements);
   buffer.resize(numElements);
-  if (buffer.size() == 0 ) 
+  if (buffer.size() == 0 )
   {
 	  std::cout << "buffer size was 0" << std::endl;
   }
