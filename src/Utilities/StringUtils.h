@@ -28,11 +28,49 @@
 
 /**
  * @brief Just some convenience utilities for dealing with strings
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 class StringUtils {
 
 public:
+
+/**
+* @brief converts a string to a boolean. This method understands 'TRUE', "True", "true" as true
+* and "FALSE", "False", "false" as false. Also, "0" is false. ANY OTHER value in the string is considered true.
+* @param s
+* @return The boolean value
+*/
+static bool stringToBool(const std::string &s)
+{
+  if (s.compare("TRUE") == 0 ) return true;
+  if (s.compare("True") == 0 ) return true;
+  if (s.compare("true") == 0 ) return true;
+  if (s.compare("FALSE") == 0 ) return false;
+  if (s.compare("False") == 0 ) return false;
+  if (s.compare("false") == 0 ) return false;
+
+  bool ok = false;
+  int b;
+  ok = StringUtils::stringToNum<int>(b, s);
+  if (ok == false) return false;
+  if (b == 0) return false;
+  return true;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+static std::string boolStringToBool(const std::string &s)
+{
+  if (s.compare("TRUE") == 0 ) return "1";
+  if (s.compare("True") == 0 ) return "1";
+  if (s.compare("true") == 0 ) return "1";
+  if (s.compare("FALSE") == 0 ) return "0";
+  if (s.compare("False") == 0 ) return "0";
+  if (s.compare("false") == 0 ) return "0";
+  if (s.compare("0") == 0 ) return "0";
+  return "1";
+}
 
 // -----------------------------------------------------------------------------
 //
