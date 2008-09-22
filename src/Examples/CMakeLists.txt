@@ -94,8 +94,30 @@ ${MXA_SOURCE_DIR}/src/Examples/DataImport/SimpleImportExample.cpp
 ${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegate.cpp
 ${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegateFactory.cpp
 )
+SET (DATAIMPORT_EXAMPLE_HEADERS
+  ${MXA_SOURCE_DIR}/src/Examples/DataImport/SimpleImportExample.h
+  ${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegate.h
+  ${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegateFactory.h
+)
+source_group(src\\Examples\\DataImport FILES ${DATAIMPORT_EXAMPLE_SOURCES} ${DATAIMPORT_EXAMPLE_HEADERS})
 ADD_EXECUTABLE(DataImportExample ${DATAIMPORT_EXAMPLE_SOURCES})
 TARGET_LINK_LIBRARIES(DataImportExample ${MXADATAMODEL_LIB_NAME} ${HDF5_LIBRARIES}) 
+
+
+
+# ------------------------------------------------------------------------------
+#  Add Executable for MXAProperty Example
+# ------------------------------------------------------------------------------
+SET (MXA_PROPERTY_EXAMPLE_SRCS
+${MXA_SOURCE_DIR}/src/Examples/MXAPropertyExample/main.cpp
+${MXA_SOURCE_DIR}/src/Examples/MXAPropertyExample/MyPropertyClass.cpp
+)
+SET (MXA_PROPERTY_EXAMPLE_HEADERS
+${MXA_SOURCE_DIR}/src/Examples/MXAPropertyExample/MyPropertyClass.h
+)
+#source_group(src\\Examples\\MXAPropertyExample FILES ${MXA_PROPERTY_EXAMPLE_SRCS} ${MXA_PROPERTY_EXAMPLE_HEADERS})
+ADD_EXECUTABLE(MXAPropertyExample ${MXA_PROPERTY_EXAMPLE_SRCS} ${MXA_PROPERTY_EXAMPLE_HEADERS})
+TARGET_LINK_LIBRARIES(MXAPropertyExample ${MXADATAMODEL_LIB_NAME} ${HDF5_LIBRARIES}) 
 
 
 
