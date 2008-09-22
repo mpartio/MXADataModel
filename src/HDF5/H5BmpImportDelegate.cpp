@@ -50,28 +50,14 @@ H5BmpImportDelegate::~H5BmpImportDelegate()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-void H5BmpImportDelegate::setFileNotFoundIsError(bool value)
+int32 H5BmpImportDelegate::setProperty(const std::string &key, const std::string &value)
 {
-  this->_fileNotFoundIsError = value;
+  SET_PROPERTY_BODY(H5TiffImport, bool, FileNotFoundIsError, key, value);
+  SET_PROPERTY_BODY(H5TiffImport, bool, ImportAsGrayScale, key, value);
+  return 0;
 }
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-void H5BmpImportDelegate::setImportAsGrayScale(bool value)
-{
-  this->_importAsGrayScale = value;
-}
-
-// -----------------------------------------------------------------------------
-//  
-// -----------------------------------------------------------------------------
-//void H5BmpImportDelegate::setDataModel(IDataModelPtr model) {
-//  this->_modelPtr = model; 
-//}
-
 
 // -----------------------------------------------------------------------------
 //  
