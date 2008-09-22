@@ -19,7 +19,6 @@
 #include <Core/MXADataRecord.h>
 #include <Core/MXADataImport.h>
 #include <Core/MXADataSource.h>
-#include <Testing/H5ImportTest.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
 #include <HDF5/H5TiffImportDelegateFactory.h>
@@ -28,10 +27,13 @@
 #include <DataImport/DataImportXmlParser.h>
 #include <DataImport/ImportDelegateManager.h>
 #include <Testing/TestDataFileLocations.h>
+#include <Testing/H5ImportTest.h>
+#include <Testing/TiffMaker.h>
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
+
 //-- Boost Filesystem Headers
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
@@ -42,10 +44,11 @@
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
+  std::cout << "Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
  // boost::filesystem::remove(DATAIMPORT_TEST_H5_FILE_BEFORE) ;
- //  boost::filesystem::remove(DATAIMPORT_TEST_H5_FILE_AFTER));
-  boost::filesystem::remove(DATA_IMPORT_TEST_OUTPUT_FILE);
+  boost::filesystem::remove(DATAIMPORT_TEST_SIMPLE_IMPORT);
+  boost::filesystem::remove(DATAIMPORT_TEST_H5TIFF_OUTPUT_FILE);
 #endif
 }
 
@@ -83,6 +86,7 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
   IImportDelegatePtr delegatePtr = ImportDelegateManager::createNewImportDelegate(H5ImportTest::Detail::ClassName);
   // We are now going to get a reference to the ImportDelegate so we can set the default value that it writes.
   H5ImportTestDelegate* h5ImportDelegate = dynamic_cast<H5ImportTestDelegate*>(delegatePtr.get() );
+
   h5ImportDelegate->setValue(55);
 
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
@@ -176,13 +180,47 @@ MXADataModelPtr createSimpleModel()
 	  return modelPtr;
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int SimpleTest()
+{
+  std::cout << "-------- Running SimpleImportTest ------------------------" << std::endl;
+int32 err = 0;
+MXADataModelPtr model = createSimpleModel();
+ImportSimpleData(model, DATAIMPORT_TEST_SIMPLE_IMPORT);
+
+return err;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void CreateTiffImages()
+{
+  // Create the XMLParser/Importer Object
+  DataImportXmlParser importer;
+  importer.setXMLInputFile(DATAIMPORT_TEST_IMPORT_XML_FILE);
+  // The xmlfile will define the output file so we do NOT need to set it here.
+  int32 err = importer.parseXMLFile();
+  BOOST_REQUIRE(err >= 0);
+
+  IDataSources dataSources = importer.getDataSources();
+
+  TiffMaker tiffMaker;
+  for (IDataSources::iterator iter = dataSources.begin(); iter != dataSources.end(); ++iter ) {
+    std::string tiffPath = (*iter).get()->getSourcePath();
+   // std::cout << "Making Tiff at " << tiffPath << std::endl;
+    tiffMaker.createTiffFile(tiffPath);
+  }
+}
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 int XMLImportTest()
 {
-  std::cout << "------- Running XML Import Test ----------------" << std::endl;
+  std::cout << "-------- Starting With XML Based H5 Tiff import Test -----------------" << std::endl;
   // Instantiate the Instance Manager for import delegates
   ImportDelegateManagerPtr idManager = ImportDelegateManager::instance();
 
@@ -192,18 +230,22 @@ int XMLImportTest()
   ptr->setImportAsGrayScale(true);
   ptr->setFileNotFoundIsError(false);
   ImportDelegateManager::registerImportDelegateFactory(h5TiffImportDelegateFactory);
+  // Create the tiff images to use for the import test
+  CreateTiffImages();
 
-  // Create the XMLParser/Importer Object
   DataImportXmlParser importer;
   importer.setXMLInputFile(DATAIMPORT_TEST_IMPORT_XML_FILE);
+  // The xmlfile will define the output file so we do NOT need to set it here.
   int32 err = importer.import(); // Run the Import
   if (err < 0)
   {
     std::cout << "Error Importing Data Files. Check any output for possible error logs." << std::endl;
   }
   BOOST_REQUIRE (err >= 0);
+  std::cout << "-------- Done With XML Based H5 Tiff import Test -----------------" << std::endl;
   return err;
 }
+
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
@@ -211,7 +253,8 @@ int XMLImportTest()
 boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
 {
   boost::unit_test::test_suite* test= BOOST_TEST_SUITE ( "Data Import Test");
-  test->add( BOOST_TEST_CASE (&XMLImportTest), 0);
+  test->add( BOOST_TEST_CASE( &XMLImportTest), 0);
+  test->add( BOOST_TEST_CASE( &SimpleTest), 0);
   test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test;
 }
