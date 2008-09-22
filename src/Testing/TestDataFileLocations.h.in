@@ -25,10 +25,12 @@
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the DataImport test
 // -----------------------------------------------------------------------------
-#define DATA_IMPORT_TEST_OUTPUT_FILE "@MXA_TEMP_DIR@XML_Based_Data_Import_Test.h5"
-#define DATAIMPORT_TEST_H5_FILE_BEFORE "@MXA_TEMP_DIR@DataImportTest-Before.h5"
-#define DATAIMPORT_TEST_H5_FILE_AFTER "@MXA_TEMP_DIR@DataImportTest-After.h5"
+//#define DATAIMPORT_TEST_OUTPUT_FILE "@MXA_TEMP_DIR@XML_Based_Data_Import_Test.h5"
+#define DATAIMPORT_TEST_H5TIFF_OUTPUT_FILE "@DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE@"
+//#define DATAIMPORT_TEST_H5_FILE_BEFORE "@MXA_TEMP_DIR@DataImportTest-Before.h5"
+//#define DATAIMPORT_TEST_H5_FILE_AFTER "@MXA_TEMP_DIR@DataImportTest-After.h5"
 #define DATAIMPORT_TEST_IMPORT_XML_FILE "@DATAIMPORT_TEST_IMPORT_XML_FILE@"
+#define DATAIMPORT_TEST_SIMPLE_IMPORT "@MXA_TEMP_DIR@DataImportTestSimpleFile.h5"
 
 
 // -----------------------------------------------------------------------------
