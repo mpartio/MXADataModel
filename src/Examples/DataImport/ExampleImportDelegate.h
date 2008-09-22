@@ -19,7 +19,7 @@
 * @brief An example of how to write a basic IDataImportDelegate class.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 */
 class ExampleImportDelegate : public IImportDelegate
 {
@@ -35,6 +35,22 @@ public:
    */
 	int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile);
 
+  /**
+  * @brief Sets a property of this class with the given value.
+  * @param key The name of the property.
+  * @param value  The value to set the property to.
+  */
+  virtual int32 setProperty(const std::string &key, const std::string &value)
+  {
+    std::cout << "ExampleImportDelegate::setProperty is NOT implemented" << std::endl;
+    return 0;
+  }
+
+  virtual int32 getProperty(const std::string &key, const std::string &value)
+  { 
+    std::cout << "ExampleImportDelegate::getProperty is NOT implemented" << std::endl;
+    return 0;
+  }
 
   private:
       ExampleImportDelegate(const ExampleImportDelegate&);  //Copy constructor NOT implemented
