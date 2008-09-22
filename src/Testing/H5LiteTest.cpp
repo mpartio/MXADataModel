@@ -596,7 +596,7 @@ herr_t testReadScalarDataset(hid_t file_id)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 herr_t testMXAAttribute(hid_t file_id, const std::string &dsetName)
@@ -614,7 +614,7 @@ herr_t testMXAAttribute(hid_t file_id, const std::string &dsetName)
   }
   err = H5Lite::writeMXAAttribute(file_id, dsetName, attributeKey, array);
   BOOST_REQUIRE(err >= 0);
-  
+
   // Now Read the Attribute back into an MXAArray object and test against the previous for equality
   IMXAArray* rArray = H5Lite::readMXAAttribute(file_id, dsetName, attributeKey);
   BOOST_REQUIRE (rArray != NULL);
@@ -630,18 +630,18 @@ herr_t testMXAAttribute(hid_t file_id, const std::string &dsetName)
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 template<typename T>
 herr_t testWriteMXAArray(hid_t file_id)
 {
   herr_t err = 1;
   T value = 0x0F;
-  
+
   std::string dsetName = H5Lite::HDFTypeForPrimitiveAsStr<T>(value);
   dsetName = "MXAArrayDataset<" + dsetName + ">";
   std::cout << "Running " << dsetName << " ... ";
-  
+
   IMXAArray* array = MXAArrayTemplate<T>::New(10);
   IMXAArrayPtr arrayPtr (array);
   T* p = static_cast<T*>(array->getVoidPointer(0));
@@ -671,7 +671,7 @@ herr_t testWriteMXAArray(hid_t file_id)
  //    std::cout << "p=" << p[var] << "  r=" << (r[var]) << std::endl;
  //  }
    BOOST_REQUIRE( ::memcmp(r, p, sizeof(T) * 10) == 0);
- 
+
   std::cout << " Passed" << std::endl;
   return err;
 }
@@ -962,8 +962,8 @@ void H5LiteTest()
    BOOST_REQUIRE ( testWriteMXAArray<uint64>(file_id) >= 0);
    BOOST_REQUIRE ( testWriteMXAArray<float32>(file_id) >= 0);
    BOOST_REQUIRE ( testWriteMXAArray<float64>(file_id) >= 0);
-   
-   
+
+
 //  // ******************* Test Reading Data *************************************
    BOOST_REQUIRE ( testReadPointer2DArrayDataset<int8>(file_id) >= 0);
    BOOST_REQUIRE ( testReadPointer2DArrayDataset<uint8>(file_id) >= 0);
@@ -1042,7 +1042,7 @@ boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv
   boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "H5Lite Tests" );
   test->add( BOOST_TEST_CASE( &H5LiteTest), 0);
  // test->add( BOOST_TEST_CASE( &TestLargeFileSupport), 0);
- // test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
+  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
 
   return test;
 }
