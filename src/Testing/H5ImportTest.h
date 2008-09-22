@@ -24,7 +24,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 */
 class H5ImportTestDelegate: public IImportDelegate
 {
@@ -66,6 +66,13 @@ public:
     this->_value = value;
   }
 
+  /* Need these implemented but we are not going to make use of the functionality */
+  virtual int32 setProperty(const std::string &key, const std::string &value)
+    { return 0; }
+
+  virtual int32 getProperty(const std::string &key, const std::string &value)
+    { return 0; }
+
 private:
   int32 _value;
 
@@ -86,7 +93,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(H5ImportTest);
 * @brief Factory class to generate H5ImportTestDelegate objects
 * @author Mike Jackson
 * @date Sep 12, 2007
-* @version $Revision: 1.8 $
+* @version $Revision: 1.9 $
 */
 class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
 {

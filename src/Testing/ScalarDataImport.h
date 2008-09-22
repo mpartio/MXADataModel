@@ -23,7 +23,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class ScalarDataDelegate: public IImportDelegate
 {
@@ -52,6 +52,18 @@ public:
     H5Utilities::createGroupsFromPath(parentPath,  fileId);
     //Write the Data to the HDF5 File
     return H5Lite::writeScalarDataset(fileId, path, value);
+  }
+  
+  virtual int32 setProperty(const std::string &key, const std::string &value)
+  {
+    std::cout << "ScalarDataDelegate::setProperty is NOT implemented" << std::endl;
+    return 0;
+  }
+
+  virtual int32 getProperty(const std::string &key, const std::string &value)
+  { 
+    std::cout << "ScalarDataDelegate::getProperty is NOT implemented" << std::endl;
+    return 0;
   }
   
 private:

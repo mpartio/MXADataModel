@@ -22,7 +22,7 @@
 * @brief 
 * @author
 * @date
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class VectorDataDelegate: public IImportDelegate
 {
@@ -57,6 +57,18 @@ public:
     }
     
     return H5Lite::writeVectorDataset(fileId, path, dims, data);
+  }
+  
+  virtual int32 setProperty(const std::string &key, const std::string &value)
+  {
+    std::cout << "VectorDataDelegate::setProperty is NOT implemented" << std::endl;
+    return 0;
+  }
+
+  virtual int32 getProperty(const std::string &key, const std::string &value)
+  { 
+    std::cout << "VectorDataDelegate::getProperty is NOT implemented" << std::endl;
+    return 0;
   }
   
 private:
