@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,8 @@ namespace MXA_DataImport {
   const std::string Output_File ("Output_File");
   const std::string Text_Part ("Text_Part");
   const std::string Delete_Existing_File ("Delete_Existing_File");
-  
+  const std::string Import_Property ("Import_Property");
+
   //This section NOT auto-generated
   const std::string Attr_Template_File ("Template_File");
   const std::string Attr_Absolute_Path ("Absolute_Path");
@@ -52,19 +53,22 @@ namespace MXA_DataImport {
   const std::string Attr_Total_Char_Length("Total_Char_Length");
   const std::string Attr_Numeric_Type("Numeric_Type");
   const std::string Attr_Data_Dimension("Data_Dimension");
-  
+  const std::string Attr_Key ("Key");
+  const std::string Attr_Value ("Value");
+
 } // End Namespace
 
 typedef  std::map<std::string, std::string>        XMLAttributeMap;
-
+typedef  boost::shared_ptr<XMLAttributeMap>        XMLAttributeMapPtr;
+typedef std::pair<std::string, std::string>        XMLAttributeMapElement;
 
 /**
 * @brief This class will parse a Data Import XML configuration file using a SAX
-* like parsing algorithm based on the expat parser. 
+* like parsing algorithm based on the expat parser.
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.13 $
+* @version $Revision: 1.14 $
 */
 class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -72,7 +76,7 @@ class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImpor
 public:
   DataImportXmlParser();
   virtual ~DataImportXmlParser();
-  
+
   /**
    * @brief Sets the input file to parse
    * @param inputFile The path to an xml file
@@ -81,7 +85,7 @@ public:
   {
     this->_xmlFilename = inputFile;
   }
-  
+
   /**
    * @brief returns the XML File that this importer is using
    */
@@ -89,7 +93,7 @@ public:
   {
     return this->_xmlFilename;
   }
-  
+
   //------------- ExpatEvtHandler Methods --------------------------------------
   /**
    * @brief Called when the beginning of an element is found
@@ -116,12 +120,12 @@ public:
    * @return the value of m_outputFilePath
    */
   std::string getOutputFilePath ( );
-  
+
   /**
    * @brief Sets the OverWriteDataFile property
    */
   void setDeleteExistingDataFile( std::string deleteExistingDataFile);
-  
+
   /**
    * @brief returns the OverWriteDataFile property
    * @return The value of the OverWriteDataFile property
@@ -159,6 +163,14 @@ public:
    */
   void addDataSource (IDataSourcePtr dataSource );
 
+  /**
+   * @brief Does the actual work of parsing the xml file and creating all the
+   * datasources for the import
+   * @return Error condition
+   */
+  int32 parseXMLFile();
+
+
   /** @brief Imports the data into the data file
   * @return Error Condition. Zero or Positive is Success
   */
@@ -176,21 +188,22 @@ private:
   bool               _parseData;
   std::string        _errorMessage;
   ExpatParser*       _parser;
-  
+
   // - Implicit Data Source Variables
   std::vector<IDataDimensionPtr>                  _implDataDimensions;
   std::map<IDataDimensionPtr, IStringSectionPtr>  _implPathMap;
   IDataRecordPtr                                _implDataRecord;
   std::string                                   _implSourceType;
   std::string                                   _implPreTextSection;
-  
-  
+  XMLAttributeMapPtr                            _curImportPropertyMap;
+
   DataImportXmlParser(const DataImportXmlParser&); //Copy Constructor Not Implemented
   void operator=(const DataImportXmlParser&); //Copy Assignment Not Implemented
 
   void _createDataSource(std::string pathTemplate, std::vector<IDataDimension*>::size_type index, std::vector<int> &dimVals);
   void _createDataSource2();
-  
+  void getCurrentImportDelegateProperties(IImportDelegatePtr importDelegatePtr);
+
   //---------- Methods that are called for each starting and ending tag --------
   /** @brief Method that will be called when the 'Data_Dimensions' tag is found.  */
     void start_Data_Dimensions_Tag(const XML_Char* name, const XML_Char** attrs);
@@ -242,28 +255,24 @@ private:
   /** @brief Method that will be called when the 'Text_Part' tag is Exited.  */
     void end_Text_Part_Tag(const XML_Char* name);
 
-    
-    
-   //----------------------- Helper Methods ------------------------------------ 
+  /** @brief Method that will be called when the 'Text_Part' tag is found.  */
+    void start_Import_Property_Tag(const XML_Char* name, const XML_Char** attrs);
+  /** @brief Method that will be called when the 'Text_Part' tag is Exited.  */
+    void end_Import_Property_Tag(const XML_Char* name);
+
+   //----------------------- Helper Methods ------------------------------------
     /**
      * @brief Loads the data model from an xml file or HDF5 file
      * @param modelFile The xml or HDF5 file
      * @return Error condition
      */
     int32 _loadDataModelFromTemplateFile(const std::string &modelFile);
-    
-    /**
-     * @brief Does the actual work of parsing the xml file and creating all the
-     * datasources for the import
-     * @return Error condition
-     */
-    int32 _parseXMLFile();
-    
+
     /**
      * @brief Merges the Model in memory to the model resident on disk.
      */
     int32 _mergeModelToDisk();
-    
+
 }; // End Class DataImportXmlParser
 
 

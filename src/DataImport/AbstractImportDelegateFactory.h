@@ -13,6 +13,7 @@
 
 #include <Common/DLLExport.h>
 #include <Common/MXATypeDefs.h>
+
 #include <string>
 
 
@@ -32,7 +33,7 @@ namespace name \
 * @brief Abstract base class to inherit from when creating custom ImportDelegateFactories
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT AbstractImportDelegateFactory
 {
