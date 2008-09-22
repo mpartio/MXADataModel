@@ -11,9 +11,9 @@
 #ifndef IIMPORTDELEGATE_H_
 #define IIMPORTDELEGATE_H_
 
-
-#include <Common/DLLExport.h>
 #include <Common/MXATypeDefs.h>
+#include <Base/IImportProperty.h>
+#include <string>
 
 
 /**
@@ -21,10 +21,10 @@
  * a delegate to import data sources into HDF5 data files.
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  *  
  */
-class MXA_EXPORT IImportDelegate
+class MXA_EXPORT IImportDelegate : public IImportProperty
 {
 
 public:
@@ -39,8 +39,14 @@ public:
   * @return Zero or Positive on Success
   */
   virtual int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile) = 0;
+  #if 0
+  virtual int32 setProperty(const std::string &key, const std::string &value)
+    { return 0; }
+    
+  virtual int32 getProperty(const std::string &key, const std::string &value)
+    { return 0; }
+#endif
   
-
 };
 
 

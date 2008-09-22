@@ -12,6 +12,7 @@ SET (MXA_BASE_HEADERS
   ${MXA_SOURCE_DIR}/src/Base/IDataFile.h
   ${MXA_SOURCE_DIR}/src/Base/IDataImport.h
   ${MXA_SOURCE_DIR}/src/Base/IImportDelegate.h
+  ${MXA_SOURCE_DIR}/src/Base/IImportProperty.h
   ${MXA_SOURCE_DIR}/src/Base/IDataModel.h
   ${MXA_SOURCE_DIR}/src/Base/IDataModelReader.h
   ${MXA_SOURCE_DIR}/src/Base/IDataModelWriter.h
