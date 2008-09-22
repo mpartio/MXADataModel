@@ -32,6 +32,7 @@
 #  BOOST_USE_THREAD     Link against the thread Library
 #  BOOST_USE_UNIT_TEST_FRAMEWORK     Link against the unit_test_framework Library
 #  BOOST_USE_WSERIALIZATION     Link against the wserialization Library
+#  BOOST_USE_SYSTEM     Link against the boost::system Library
 #
 #  BOOST_DATE_TIME_FOUND               True IF Boost Date Time was found.
 #  BOOST_FILESYSTEM_FOUND              True IF Boost Filesystem was found.
@@ -46,6 +47,7 @@
 #  BOOST_THREAD-MT_FOUND               True IF Boost Thread was found.
 #  BOOST_UNIT_TEST_FRAMEWORK_FOUND     True IF Boost Unit Test Framework was found.
 #  BOOST_WSERIALIZATION_FOUND          True IF Boost WSerialization was found.
+#  BOOST_SYSTEM_FOUND                  True IF Boost System was found.
 #
 #  BOOST_DATE_TIME_LIBRARY     The Boost date_time libraries
 #  BOOST_DATE_TIME_LIBRARY_DEBUG     The Boost date_time debug library
@@ -102,6 +104,10 @@
 #  BOOST_WSERIALIZATION_LIBRARY     The Boost wserialization libraries
 #  BOOST_WSERIALIZATION_LIBRARY_DEBUG     The Boost wserialization debug library
 #  BOOST_WSERIALIZATION_LIBRARY_RELEASE   The Boost wserialization release library
+#
+#  BOOST_SYSTEM_LIBRARY           The Boost system libraries
+#  BOOST_SYSTEM_LIBRARY_DEBUG     The Boost system debug library
+#  BOOST_SYSTEM_LIBRARY_RELEASE   The Boost system release library
 #
 #  Copyright (c) 2006 Andreas Schneider <mail@cynapses.org>
 #  Copyright (c) 2007 Wengo
@@ -294,7 +300,7 @@ IF (NOT DEFINED BOOST_COMPILER)
     ENDIF (CYGWIN)
     IF (UNIX)
         IF (APPLE)
-            SET (BOOST_COMPILER "")
+            SET (BOOST_COMPILER "-xgcc40")
         ELSE (APPLE)
             IF (NOT CMAKE_COMPILER_IS_GNUCC)
                 SET (BOOST_COMPILER "-il")  # This is for the intel compiler

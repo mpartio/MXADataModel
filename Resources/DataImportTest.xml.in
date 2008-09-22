@@ -3,19 +3,19 @@
 <Data_Import>
 
 	<!-- Load a Template Model from an XML file -->
-	<Data_Model
-		Template_File="@DATA_MODEL_XML_FILE@">
+	<Data_Model Template_File="@DATA_MODEL_XML_FILE@">
+
 		<!-- Define the dimensions  -->
     <Data_Dimensions>
-        <Dimension Alt_Name="Rnd Seed" Count="4" End_Value="2500" Increment="500" Index="1" Name="Dim 1" Start_Value="1000" Uniform="1" />
-        <Dimension Alt_Name="TS" Count="5" End_Value="99" Increment="1" Index="2" Name="Dim 2" Start_Value="95" Uniform="1" />
-        <Dimension Alt_Name="Vol Frac" Count="3" End_Value="50" Increment="2" Index="0" Name="Dim 0" Start_Value="46" Uniform="1" />
-        <Dimension Alt_Name="slice" Count="5" End_Value="255" Increment="1" Index="3" Name="Dim 3" Start_Value="251" Uniform="1" />
+        <Dimension Name="@Dim_0_name@" Alt_Name="@Dim_0_alt_name@" Start_Value="@Dim_0_start@" Count="@Dim_0_count@" End_Value="@Dim_0_end@" Increment="@Dim_0_increment@" Index="@Dim_0_index@"  Uniform="1" />
+        <Dimension Name="@Dim_1_name@" Alt_Name="@Dim_1_alt_name@" Start_Value="@Dim_1_start@" Count="@Dim_1_count@" End_Value="@Dim_1_end@" Increment="@Dim_1_increment@" Index="@Dim_1_index@"  Uniform="1" />
+        <Dimension Name="@Dim_2_name@" Alt_Name="@Dim_2_alt_name@" Start_Value="@Dim_2_start@" Count="@Dim_2_count@" End_Value="@Dim_2_end@" Increment="@Dim_2_increment@" Index="@Dim_2_index@"  Uniform="1" />
+        <Dimension Name="@Dim_3_name@" Alt_Name="@Dim_3_alt_name@" Start_Value="@Dim_3_start@" Count="@Dim_3_count@" End_Value="@Dim_3_end@" Increment="@Dim_3_increment@" Index="@Dim_3_index@"  Uniform="1" />
     </Data_Dimensions>
 	</Data_Model>
 
 	<!--  Define the Output file to store the data -->
-	<Output_File Absolute_Path="@DATA_IMPORT_TEST_OUTPUT_FILE@" Delete_Existing_File="true"/>
+	<Output_File Absolute_Path="@DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE@" Delete_Existing_File="true"/>
 
 	<!--  Define the data sources for each Data Record and Dimension Values
 		/Users/mjackson/Task_7/Data/Mike-Uchic-Data/IN100_25JUN04_DISC1/7000_Series/7000.tif
@@ -23,29 +23,33 @@
 		Source_Type is the quick description of the contents of the file. This should
 		be from a known list of types that are supported or supplied by the user. -->
 	<Implicit_Data_Source Data_Record="Record 0" Source_Type="H5TiffImport">
+	  <Import_Property Key="FileNotFoundIsError" Value="1" />
+	  <Import_Property Key="ImportAsGrayScale" Value="1" />
 		<File_Path>
-			<Text_Part
-				Text="/tmp/test_data/Dim0-" />
+			<Text_Part Text="@MXA_TEMP_DIR@DataImportTest/test_data/" />
 			<Index_Part Padding_Char="0" 
-			 Total_Char_Length="3"
+			 Total_Char_Length="2"
 				Numeric_Type="Integer" 
-				Data_Dimension="Dim 0" />
-			<Text_Part Text="/Dim1-" />
+				Data_Dimension="@Dim_0_name@" />
+				
+			<Text_Part Text="-" />
 			<Index_Part Padding_Char="0" 
 			 Total_Char_Length="4"
 				Numeric_Type="Integer" 
-				Data_Dimension="Dim 1" />
-			<Text_Part Text="/Dim2-" />
+				Data_Dimension="@Dim_1_name@" />
+				
+			<Text_Part Text="-" />
       <Index_Part Padding_Char="0" 
-       Total_Char_Length="4"
+       Total_Char_Length="2"
         Numeric_Type="Integer" 
-        Data_Dimension="Dim 2" />
-      <Text_Part Text="/Dim3-" />
+        Data_Dimension="@Dim_2_name@" />
+        
+      <Text_Part Text="-" />
       <Index_Part Padding_Char="0" 
-       Total_Char_Length="6"
+       Total_Char_Length="3"
         Numeric_Type="Integer" 
-        Data_Dimension="Dim 3" />
-			<Text_Part Text=".tif" />
+        Data_Dimension="@Dim_3_name@" />
+			<Text_Part Text="-Record_0.tif" />
 		</File_Path>
 	</Implicit_Data_Source> 
 
@@ -55,12 +59,18 @@
 	<Explicit_Data_Source DataDimension_Values="7000 0"
 		Data_Record="Secondary Electron Image"
 		File_Path="/Users/mjackson/Desktop/VF40_t010.tif"
-		Source_Type="H5TiffImport" />
+		Source_Type="H5TiffImport" >
+		<Import_Property Key="FileNotFoundIsError" Value="0" />
+    <Import_Property Key="ImportAsGrayScale" Value="1" />
+    </Explicit_Data_Source>
 
 	<Explicit_Data_Source DataDimension_Values="7000 1"
 		Data_Record="Secondary Electron Image"
 		File_Path="/Users/mjackson/Desktop/VF40_t020.tif" 
-		Source_Type="H5TiffImport"/>
+		Source_Type="H5TiffImport">
+	  <Import_Property Key="FileNotFoundIsError" Value="0" />
+    <Import_Property Key="ImportAsGrayScale" Value="1" />
+  </Explicit_Data_Source>
 		
 		-->
 </Data_Import>

@@ -4,10 +4,10 @@
   <Data_Model Model_Type="MXA" Model_Version="0.4">
     <Data_Root Name="DataModelTest/Data/Root/Is/Here/" />
     <Data_Dimensions>
-        <Dimension Alt_Name="Vol Frac" Count="16" End_Value="50" Increment="2" Index="0" Name="Dim 0" Start_Value="20" Uniform="1" />
-        <Dimension Alt_Name="Rnd Seed" Count="9" End_Value="5000" Increment="500" Index="1" Name="Dim 1" Start_Value="1000" Uniform="1" />
-        <Dimension Alt_Name="TS" Count="100" End_Value="99" Increment="1" Index="2" Name="Dim 2" Start_Value="0" Uniform="1" />
-        <Dimension Alt_Name="slice" Count="256" End_Value="255" Increment="1" Index="3" Name="Dim 3" Start_Value="0" Uniform="1" />
+        <Dimension Alt_Name="Vol Frac" Count="16" End_Value="50" Increment="2" Index="0" Name="Dim_0" Start_Value="20" Uniform="1" />
+        <Dimension Alt_Name="Rnd Seed" Count="9" End_Value="5000" Increment="500" Index="1" Name="Dim_1" Start_Value="1000" Uniform="1" />
+        <Dimension Alt_Name="TS" Count="100" End_Value="99" Increment="1" Index="2" Name="Dim_2" Start_Value="0" Uniform="1" />
+        <Dimension Alt_Name="slice" Count="256" End_Value="255" Increment="1" Index="3" Name="Dim_3" Start_Value="0" Uniform="1" />
     </Data_Dimensions>
     <Data_Records>
         <Signal Alt_Name="Record 0" Name="Record 0" />
