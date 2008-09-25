@@ -46,20 +46,28 @@ class H5TiffImportDelegateFactory;
 class IStringSection;
 
 class IDataArray;
+class ISupportFile;
+//class ISupportFileContents;
 
 // Data Encapsulation
 class IDataset;
 class IMXAArray;
+class MXASupportFileContents;
 
 // MXA Meta Data
 class IRequiredMetaData;
 class H5MXARequiredMetaData;
 
+typedef boost::shared_ptr<ISupportFile>             ISupportFilePtr;
+typedef std::vector<ISupportFilePtr>                ISupportFiles;
+//typedef boost::shared_ptr<ISupportFileContents>   ISupportFileContentsPtr;
+typedef boost::shared_ptr<IMXAArray>                MXASupportFileContentsPtr;
+
 typedef boost::shared_ptr<IDataset>                 IDatasetPtr;
 typedef boost::shared_ptr<IMXAArray>                IMXAArrayPtr;
 //typedef boost::shared_ptr<MXAAbstractData>          MXAAbstractDataPtr;
 //typedef boost::shared_ptr<MXAAbstractAttribute>     MXAAbstractAttributePtr;
-typedef std::map<std::string, IMXAArrayPtr>        MXAAbstractAttributes;
+typedef std::map<std::string, IMXAArrayPtr>         MXAAbstractAttributes;
 
 typedef boost::shared_ptr<IRequiredMetaData>        IRequiredMetaDataPtr;
 typedef boost::shared_ptr<H5MXARequiredMetaData>    H5MXARequiredMetaDataPtr;

@@ -4,11 +4,13 @@
 #include <HDF5/H5DataModelReader.h>
 #include <DataWrappers/MXAAsciiStringData.h>
 #include <Core/MXAConstants.h>
-//#include <Core/MXAAttribute.h>
+#include <Core/MXASupportFile.h>
 #include <Utilities/StringUtils.h>
 
 //-- STL Headers
 #include <iostream>
+#include <list>
+#include <string>
 
 #define CheckValidLocId(locId)\
   if (locId < 0 ) {std::cout << "Invalid HDF Location ID: " << locId << std::endl;return -1;}
@@ -50,6 +52,8 @@ herr_t H5DataModelReader::readDataModel(hid_t locId)
   if ( (readRequiredMetaData(locId) ) < 0)
     return false;
   if ( (readUserMetaData(locId) ) < 0)
+    return false;
+  if ( (readSupportFiles(locId) ) < 0)
     return false;
 
   return true;
@@ -439,8 +443,27 @@ herr_t H5DataModelReader::readUserMetaData(hid_t locId)
   }
 
   return err;
-
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+herr_t H5DataModelReader::readSupportFiles(hid_t locId)
+{
+  herr_t err = 0;
+  hid_t gid = H5Gopen(locId, MXA::SupportFilesPath.c_str() );
+  if (gid < 0){
+    return -1;
+  }
+  std::list<std::string> indices;
+  err = H5Utilities::getGroupObjects(gid, H5Utilities::MXA_DATASET, indices);
 
+  for (std::list<std::string>::iterator iter = indices.begin(); iter != indices.end(); ++iter)
+  {
+    ISupportFilePtr file = MXASupportFile::NewFromMXAFile(locId, *iter, false);
+    this->_dataModel->addSupportFile(file);
+  }
+  err = H5Gclose(gid);
+  return err;
+}
 

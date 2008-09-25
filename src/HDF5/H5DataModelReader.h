@@ -30,7 +30,7 @@
  * from the HDF5 data file
  * @author Mike Jackson
  * @date Mar 2007
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  *   H5DataModelReader.h
  */
 class MXA_EXPORT H5DataModelReader : public IDataModelReader
@@ -103,6 +103,14 @@ public:
   * @return Standard HDF5 Error Condition
   */
   herr_t readUserMetaData(hid_t locId);
+
+ /**
+  * @brief reads the support files meta data from the MXA file without
+  * actually reading the file data
+  * @param locId The HDF5 file or group id
+  * @return Standard HDF5 Error Condition
+  */  
+  herr_t readSupportFiles(hid_t locId);
 
 
 protected:

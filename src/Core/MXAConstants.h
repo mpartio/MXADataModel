@@ -33,6 +33,7 @@ namespace MXA {
   const std::string MetaData("Meta Data");
   const std::string RequiredMetaData("Required");
   const std::string UserMetaData("User Defined");
+  const std::string SupportFiles("SupportFiles");
   
   // Defines the paths within the MXA Model Heirarchy
   const std::string ModelVersionPath("Model Version");
@@ -44,7 +45,14 @@ namespace MXA {
   const std::string MetaDataPath("Meta Data");
   const std::string RequiredMetaDataPath("Meta Data/Required");
   const std::string UserMetaDataPath("Meta Data/User Defined");
+  const std::string SupportFilesPath("SupportFiles");
   
+  // Support File Tags
+  const std::string MXA_ORIGINAL_FILE_PATH_TAG("Original_File_Path");
+  const std::string MXA_FILENAME_TAG("Filename");
+  const std::string MXA_FILETYPE_TAG("File_Type");
+  const std::string MXA_BINARY_TAG ("Binary");
+  const std::string MXA_TEXT_TAG ("Text");
   
   // Data Model Tags
   const std::string MXA_NAME_TAG("Name");

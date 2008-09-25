@@ -84,7 +84,7 @@ namespace MXA {
 inline unsigned long long int getMilliSeconds()
 {
 #ifdef _MSC_VER
-  return ::clock();
+  return (unsigned long long int)(::clock());
 #else 
   struct timeval t1;
   gettimeofday(&t1, NULL);

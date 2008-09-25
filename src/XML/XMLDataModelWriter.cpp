@@ -330,3 +330,10 @@ int32 XMLDataModelWriter::writeDataRecord(IDataRecord* record)
   return err;
 }
 
+// -----------------------------------------------------------------------------
+//  IDataModelWriter Interface
+// -----------------------------------------------------------------------------
+int32 XMLDataModelWriter::writeSupportFiles(int32 uniqueId)
+{
+  return -1;
+}

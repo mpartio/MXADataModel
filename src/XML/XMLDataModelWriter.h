@@ -34,7 +34,7 @@ class MXANode;
  * the data model to an XML file
  * @author  Mike Jackson
  * @date June 2007
- * @version $Revision: 1.16 $
+ * @version $Revision: 1.17 $
  *  
  */
 class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter, 
@@ -121,6 +121,13 @@ public:
   * @return Error Code: Negate is error condition
   */
   int32 writeDataRecord(IDataRecord* record);
+  
+  /**
+  * @brief Writes the support files to the hdf5 data file
+  * @param fileId, HDF5 file id to write to
+  * @return error code
+  */
+  int32 writeSupportFiles(int32 uniqueId);
 
 protected:
   static std::string _toUpper(const std::string value);

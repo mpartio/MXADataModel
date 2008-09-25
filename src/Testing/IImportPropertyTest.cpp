@@ -42,7 +42,7 @@ namespace MyPropertyNamespace {
 
 /**
 * @brief
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 * @author Michale A. Jackson
 */
 class MyPropertyClass : public IImportProperty
@@ -188,7 +188,7 @@ int32 PropertyTest()
   uint8 _uint8Prop = 'Z';
   uint16 _uint16Prop = 234;
   uint32 _uint32Prop = 2342342;
-  uint64 _uint64Prop = 908324923490324llu;
+  uint64 _uint64Prop = 908324923490324ull;
   std::string _strProp("The String Property");
   float _floatProp = 3.1415927f;
   double _doubleProp = 234234.234234234;
@@ -231,7 +231,7 @@ int32 PropertyTest()
   _uint32Prop = pclass.getUInt32Property();
   BOOST_REQUIRE (_uint32Prop == 2342342);
   _uint64Prop = pclass.getUInt64Property();
-  BOOST_REQUIRE (_uint64Prop == 908324923490324llu);
+  BOOST_REQUIRE (_uint64Prop == 908324923490324ull);
   _strProp = pclass.getStrProperty();
 
   BOOST_REQUIRE (_strProp.compare("The String Property") == 0);

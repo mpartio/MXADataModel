@@ -1,12 +1,20 @@
 //MXA Includes
 #include <HDF5/H5DataModelWriter.h>
+
+#include <Common/LogTime.h>
+#include <Base/IRequiredMetaData.h>
+#include <Base/ISupportFile.h>
+#include <Core/MXADataModel.h>
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Utilities.h>
 #include <HDF5/H5AttributeWriter.h>
-#include <Common/LogTime.h>
-#include <Base/IRequiredMetaData.h>
-#include <Core/MXADataModel.h>
 #include <Utilities/StringUtils.h>
+
+#include <boost/filesystem/operations.hpp>
+//--- Convenience code -----------------
+typedef boost::filesystem::path FilePath;
+namespace FileSystem = boost::filesystem;
+
 // #include <Core/MXAAbstractAttribute.h>
 // -----------------------------------------------------------------------------
 //
@@ -42,9 +50,52 @@ int32 H5DataModelWriter::writeModelToFile(hid_t fileId)
 //  std::cout << "Writing User MetaData...." << std::endl;printf("\n");
   if ( writeUserMetaData(fileId) < 0) return -1;
 //  std::cout << "Done Writing Model" << std::endl;printf("\n");
+  if ( writeSupportFiles(fileId) < 0) return -1;
+  // std::cout << "Done writing support files" << std::endl;printf("\n");
+
   return 1;
 }
 
+// -----------------------------------------------------------------------------
+//  Writes the support files to the HDF5 file
+// -----------------------------------------------------------------------------
+int32 H5DataModelWriter::writeSupportFiles(hid_t fileId)
+{
+  int32 err = -1;
+  uint64 fileSize[1] = { 0 };
+  uint8* fileContents = NULL;
+  int32 rank = 1;
+  ISupportFile* file = NULL;
+  ISupportFiles files = this->_dataModel->getSupportFiles();
+  int32 index = 0;
+  for (ISupportFiles::iterator iter = files.begin(); iter != files.end(); ++iter)
+  {
+    file = (*iter).get();
+    if (NULL != file)
+    {
+      err = file->readFromFileSystem();
+      if (err >= 0)
+      {
+        fileContents = file->getFilePointer(0);
+        fileSize[0] = file->getFileSize();
+        std::string dsetName = MXA::SupportFilesPath + "/" + StringUtils::numToString(index);
+        if (dsetName.empty() == false) {
+          err = H5Lite::writePointerDataset<uint8>(fileId, dsetName, rank, fileSize, fileContents);
+          err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_ORIGINAL_FILE_PATH_TAG, file->getFileSystemPath() );
+          err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILETYPE_TAG, file->getFileType() );
+          FilePath path( file->getFileSystemPath(), FileSystem::native );
+          err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILENAME_TAG, path.filename() );
+
+        } 
+        else 
+        { err = -1; }
+      }
+    }
+    if (err < 0) { break; } // Bail out of the loop if there is an error
+    ++index;
+  }
+  return err;
+}
 
 // -----------------------------------------------------------------------------
 //  Writes the basic groups of the data model and the file type/version
@@ -68,6 +119,12 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
   if (err < 0)
   {
     std::cout << logTime() << "Error Creating MetaData Group" << std::endl;
+    return err;
+  }
+  err = H5Utilities::createGroupsFromPath( MXA::SupportFilesPath, fileId);
+  if (err < 0)
+  {
+    std::cout << logTime() << "Error Creating SupportFiles Group" << std::endl;
     return err;
   }
 

@@ -37,7 +37,7 @@
  * @brief Main class used to work with the DataModel paradigm
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.25 $
+ * @version $Revision: 1.26 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -308,6 +308,14 @@ class MXA_EXPORT MXADataModel : public IDataModel
   /** @brief Returns the Data Structure used to hold the user defined Meta Data */
   MXAAbstractAttributes getUserMetaData();
 
+// ------------------------------------------------------------------------------
+// Arbitrary Support Files methods
+    void addSupportFile(ISupportFilePtr supportFile);
+    ISupportFiles getSupportFiles();
+    ISupportFilePtr getSupportFile(int index);
+
+// ------------------------------------------------------------------------------
+// Printing the model methods
   /**
    * @brief Prints the Data Model to the provided std::ostream
    * @param os
@@ -376,6 +384,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    // Holds the arbitrary User Meta Data
    MXAAbstractAttributes _userMetaData;
 
+   ISupportFiles         _supportFiles;
 };
 
 

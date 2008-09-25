@@ -913,3 +913,18 @@ bool MXADataModel::isValid(std::string &message)
 }
 
 
+void MXADataModel::addSupportFile(ISupportFilePtr supportFile)
+{
+  this->_supportFiles.push_back(supportFile);
+}
+
+
+ISupportFiles MXADataModel::getSupportFiles()
+{
+  return this->_supportFiles;
+}
+
+ISupportFilePtr MXADataModel::getSupportFile(int index)
+{
+  return this->_supportFiles.at(index);
+}

@@ -26,7 +26,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  *
  */
 class MXA_EXPORT IDataModel
@@ -298,7 +298,12 @@ class MXA_EXPORT IDataModel
     * @param indent The level of indentation to start with
     */
     virtual void printUserMetaData(std::ostream &os, int32 indent) = 0;
+ 
+    //-------------- Methods to add arbitrary support files to the model ----------
 
+    virtual void addSupportFile(ISupportFilePtr supportFile) = 0;
+    virtual ISupportFiles getSupportFiles() = 0;
+    virtual ISupportFilePtr getSupportFile(int index) = 0;
 
     //-------------- Methods to Print the DataModel to an outputstream ----------
     /**

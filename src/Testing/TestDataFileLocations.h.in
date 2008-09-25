@@ -16,6 +16,9 @@
 #ifndef SOURCEFILELOCATIONS_H_
 #define SOURCEFILELOCATIONS_H_
 
+#include <string>
+
+
 /* Define the following to '0' if you want to leave the test files on the filesystem.
  * This can be advantageous to check the contents to of the test files during
  * debugging process
@@ -75,6 +78,14 @@
 // -----------------------------------------------------------------------------
 #define H5ARRAY_TEMPLATE_TEST_FILE "@MXA_TEMP_DIR@H5ArrayTemplateTest.h5"
 
+// -----------------------------------------------------------------------------
+//  Define where to put our temporary files
+// -----------------------------------------------------------------------------
+namespace MXATest {
+  const std::string SupportFile_OutputFile("@MXA_TEMP_DIR@SupportFileTest.h5");
+  const std::string SupportFile_BinaryInputFile("@MXA_TEMP_DIR@SupportFileTest_Input.bin");
+  const std::string SupportFile_TextInputFile("@DATAIMPORT_TEST_IMPORT_XML_FILE@");
+}
 
 
 

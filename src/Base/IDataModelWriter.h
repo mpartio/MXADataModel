@@ -21,7 +21,7 @@
  * implement to be able to write data models to files or other media
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  *  
  */
 class MXA_EXPORT IDataModelWriter 
@@ -73,6 +73,13 @@ public:
   */
   virtual int32 writeUserMetaData(int32 uniqueId) = 0;
   
+  /**
+  * @brief Writes the support files to the hdf5 data file
+  * @param fileId, HDF5 file id to write to
+  * @return error code
+  */
+  virtual int32 writeSupportFiles(int32 uniqueId) = 0;
+
 protected:
     IDataModelWriter(){};
     

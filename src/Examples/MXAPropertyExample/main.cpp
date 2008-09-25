@@ -26,7 +26,7 @@ int main (int argc, char const *argv[])
   uint8 _uint8Prop = 'Z';
   uint16 _uint16Prop = 234;
   uint32 _uint32Prop = 2342342;
-  uint64 _uint64Prop = 908324923490324llu;
+  uint64 _uint64Prop = 908324923490324ull;
   std::string _strProp("The String Property");
   float _floatProp = 3.1415927f;
   double _doubleProp = 234234.234234234;
