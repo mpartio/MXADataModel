@@ -8,7 +8,7 @@
 <!ELEMENT Explicit_Data_Source EMPTY>
 <!ELEMENT Text_Part EMPTY>
 <!ELEMENT Index_Part EMPTY>
-
+<!ELEMENT Support_Files (Support_File)*>
 
 <!ATTLIST Data_Model
 	Template_File CDATA #REQUIRED>
@@ -39,4 +39,6 @@
 	File_Path CDATA #REQUIRED
 	Data_Record CDATA #REQUIRED
 	Source_Type CDATA #IMPLIED>
-	
+<!ATTLIST Support_File
+  FileSystem_Path CDATA #REQUIRED
+  File_Type (Text|Binary) "Binary">

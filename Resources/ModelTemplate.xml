@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE File_Root SYSTEM "http://titanium.imts.us/viewvc/Task_7/MXADataModel/Resources/mxa_0.4.dtd">
+<!DOCTYPE File_Root SYSTEM "http://echo1.bluequartz.net/viewvc/CTMD/MXADataModel/Resources/mxa_0.4.dtd">
 <File_Root>
   <Data_Model Model_Type="MXA" Model_Version="0.4">
     <Data_Root Name="DataModelTest/Data/Root/Is/Here/" />
@@ -17,12 +17,12 @@
     <Required_MD Creator="Mike Jackson" 
     Date="June 25 2007" 
     Description="Some description of your experiment or data set" 
-    Distribution_Rights="Publicly Released" 
+    Distribution_Rights="Unlimited" 
     Name="Test Data" 
     Original_Source_File="Description of where the data comes from: Directly from the Instrument or from files on disk." 
-    Pedigree="Where was the data generated. You can be as abstract or detailed as you want." 
+    Pedigree="Original" 
     Release_Number="Not Applicable" />
-    <UserDefined_MD>
-  </UserDefined_MD>
+
+    <UserDefined_MD/>
   </Meta_Data>
 </File_Root>

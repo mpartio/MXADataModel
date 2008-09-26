@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE File_Root SYSTEM "http://titanium.imts.us/viewvc/Task_7/MXADataModel/Resources/mxa_0.4.dtd">
+<!DOCTYPE File_Root SYSTEM "http://echo1.bluequartz.net/viewvc/CTMD/MXADataModel/Resources/mxa_0.4.dtd">
 <File_Root>
   <Data_Model Model_Type="MXA" Model_Version="0.4">
     <Data_Root Name="DataModelTest/Data/Root/Is/Here/" />
