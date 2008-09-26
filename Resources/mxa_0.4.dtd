@@ -1,4 +1,5 @@
-<!ELEMENT File_Root (Data_Model,Meta_Data)>
+<!-- This is the DTD file for the MXADataModel code base -->
+<!ELEMENT File_Root (Data_Model,Meta_Data,Support_Files*)>
 <!ELEMENT Data_Model (Data_Root,Data_Dimensions,Data_Records)>
 <!ELEMENT Data_Root EMPTY>
 <!ELEMENT Data_Dimensions (Dimension)+>
@@ -8,7 +9,8 @@
 <!ELEMENT Signal_Group (Signal|Signal_Group)+>
 <!ELEMENT Meta_Data (Required_MD,UserDefined_MD)>
 <!ELEMENT Required_MD EMPTY>
-<!ELEMENT UserDefined_MD EMPTY>
+<!ELEMENT UserDefined_MD (UserMetaData)*>
+<!ELEMENT Support_Files (Support_File)*>
 
 <!ATTLIST Data_Root Name CDATA #REQUIRED>
 <!ATTLIST Data_Model 
@@ -39,3 +41,12 @@
     Distribution_Rights (Limited|Unlimited) "Unlimited"
     Release_Limitation CDATA "Not Applicable"
     Release_Number CDATA "Not Applicable">
+ 
+<!ATTLIST UserMetaData
+    key CDATA #REQUIRED
+    dims CDATA #REQUIRED
+    type (H5T_STRING|H5T_NATIVE_INT8|H5T_NATIVE_INT16|H5T_NATIVE_INT32|H5T_NATIVE_INT64|H5T_NATIVE_UINT8|H5T_NATIVE_UINT16|H5T_NATIVE_UINT32|H5T_NATIVE_UINT64|H5T_NATIVE_FLOAT|H5T_NATIVE_DOUBLE) "H5T_NATIVE_INT32"
+    >
+<!ATTLIST Support_File
+  FileSystem_Path CDATA #REQUIRED
+  File_Type (Text|Binary) "Binary">
