@@ -34,10 +34,10 @@
 #include <boost/weak_ptr.hpp>
 
 /**
- * @brief Main class used to work with the DataModel paradigm
+ * @brief Main class used to work with the DataModel paradigm.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.26 $
+ * @version $Revision: 1.27 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -310,9 +310,29 @@ class MXA_EXPORT MXADataModel : public IDataModel
 
 // ------------------------------------------------------------------------------
 // Arbitrary Support Files methods
-    void addSupportFile(ISupportFilePtr supportFile);
-    ISupportFiles getSupportFiles();
-    ISupportFilePtr getSupportFile(int index);
+
+  /**
+   * @brief Adds a SupportFile Reference to the model
+   * @param supportFile An ISupportFile object or subclass
+   * @param updateIndex Update the internal index of the supportFile Object after
+   * it is added to the model
+   */
+  void addSupportFile(ISupportFilePtr supportFile, bool updateIndex = false);
+
+  /**
+   * @brief Returns the list of SupportFile objects from the model.
+   * @return The list of Support files for this model.
+   */
+  ISupportFiles getSupportFiles();
+
+  /**
+   * @brief Returns a specific ISupportFile instance from the model or a NULL
+   * wrapped pointer in case nothing was found or index is out of bounds.
+   * @param index The index (zero based) of the ISupportFile instance to return
+   * @return Boost Shared Pointer wrapping an ISupportFile subclass instance or NULL
+   * if nothing was found.
+   */
+  ISupportFilePtr getSupportFile(int index);
 
 // ------------------------------------------------------------------------------
 // Printing the model methods
@@ -377,13 +397,11 @@ class MXA_EXPORT MXADataModel : public IDataModel
    IDataDimensions _dataDimensions;
    //Holds a vector of hierarchacally ordered Data Records
    IDataRecords    _dataRecords;
-
    //Fields to hold the Required Meta Data Fields
    IRequiredMetaDataPtr _requiredMetaData;
-
    // Holds the arbitrary User Meta Data
    MXAAbstractAttributes _userMetaData;
-
+   // Holds the SUpport files references
    ISupportFiles         _supportFiles;
 };
 

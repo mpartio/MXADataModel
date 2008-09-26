@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,68 +21,68 @@
  * implement to be able to write data models to files or other media
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.8 $
- *  
+ * @version $Revision: 1.9 $
+ *
  */
-class MXA_EXPORT IDataModelWriter 
+class MXA_EXPORT IDataModelWriter
 {
 
 public:
   IDataModelWriter(IFileIODelegatePtr ioDelegate, IDataModelPtr dataModel){};
   virtual ~IDataModelWriter() {};
-  
+
   /**
   * @brief writes the model to the given file
   * @param fileId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeModelToFile(int32 fileId) = 0;
-  
+
   /**
-  * @brief 
+  * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeDataModelTemplate(int32 uniqueId) = 0;
-  
+
   /**
-  * @brief 
+  * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeDataDimensions(int32 uniqueId) = 0;
-  
+
   /**
-  * @brief 
+  * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeDataRecords(int32 uniqueId) = 0;
-  
+
   /**
-  * @brief 
+  * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeRequiredMetaData(int32 uniqueId) = 0;
-  
+
   /**
-  * @brief 
+  * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
   virtual int32 writeUserMetaData(int32 uniqueId) = 0;
-  
+
   /**
   * @brief Writes the support files to the hdf5 data file
-  * @param fileId, HDF5 file id to write to
+  * @param uniqueId HDF5 file id to write to
   * @return error code
   */
   virtual int32 writeSupportFiles(int32 uniqueId) = 0;
 
 protected:
     IDataModelWriter(){};
-    
+
 private:
     IDataModelWriter(const IDataModelWriter&);   //Copy Constructor Not Implemented
     void operator=(const IDataModelWriter&); //Copy Assignment Not Implemented

@@ -1,6 +1,8 @@
 
 
 #include <Common/LogTime.h>
+#include <Base/ISupportFile.h>
+#include <Core/MXASupportFile.h>
 #include <DataWrappers/MXAAsciiStringData.h>
 #include <XML/XMLDataModelReader.h>
 
@@ -150,6 +152,14 @@ void XMLDataModelReader::OnStartElement(const XML_Char* name, const XML_Char** a
     {
           onUserMetaDataStartTag(name, attrs);
     }
+    else if ( currentTag.compare(MXA::SupportFiles) == 0 )
+    {
+          onSupportFilesStartTag(name, attrs);
+    }
+    else if ( currentTag.compare(MXA_XML::Support_File) == 0 )
+    {
+          onSupportFileStartTag(name, attrs);
+    }
 } // End OnStartElement(...)
 
 
@@ -206,6 +216,14 @@ void XMLDataModelReader::OnEndElement(const XML_Char* name)
     else if ( currentTag.compare(MXA_XML::UserMetaData::Tag) == 0 )
     {
           onUserMetaDataEndTag(name);
+    }
+    else if ( currentTag.compare(MXA::SupportFiles) == 0 )
+    {
+          onSupportFilesEndTag(name);
+    }
+    else if ( currentTag.compare(MXA_XML::Support_File) == 0 )
+    {
+          onSupportFileEndTag(name);
     }
 } // End OnEndElement(...)
 
@@ -647,5 +665,51 @@ void XMLDataModelReader::onUserDefined_MDEndTag(const XML_Char* name)
     // printf("Ending %s\n", name);
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void XMLDataModelReader::onSupportFilesStartTag(const XML_Char* name, const XML_Char** attrs)
+{
 
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void XMLDataModelReader::onSupportFilesEndTag(const XML_Char* name)
+{
+  // Increment our counter
+
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void XMLDataModelReader::onSupportFileStartTag(const XML_Char* name, const XML_Char** attrs)
+{
+
+  ISupportFilePtr sfile = MXASupportFile::New();
+  for (int i = 0; attrs[i]; i += 2)
+  {
+    if (MXA::MXA_FILESYSTEM_PATH_TAG.compare(attrs[i]) == 0)
+    {
+      sfile->setFileSystemPath(attrs[i + 1] );
+    }
+    else if (MXA::MXA_FILETYPE_TAG.compare(attrs[i]) == 0)
+    {
+      sfile->setFileType(attrs[i + 1] );
+    }
+  }
+  // Adding the support file will set it's index correctly
+  this->_dataModel->addSupportFile(sfile);
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void XMLDataModelReader::onSupportFileEndTag(const XML_Char* name)
+{
+
+}
 

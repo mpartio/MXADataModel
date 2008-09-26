@@ -27,7 +27,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
  * class. This class is responsible for reading a data model from an XML File
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.18 $
+ * @version $Revision: 1.19 $
  * @class XMLDataModelReader XMLDataModelReader.h
  */
 class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,
@@ -142,7 +142,7 @@ public:
 
 private:
   //XMLIODelegate*    _ioDelegate;
-  IDataModelPtr    _dataModel;
+  IDataModelPtr     _dataModel;
   const std::string _fileName;
   int32             _xmlParseError;
   IDataRecordPtr    _currentParentRecord;
@@ -152,6 +152,7 @@ private:
   std::string       _userMDDims;
   std::string       _userMDType;
   ExpatParser*      _parser;
+
 
   int32               _indent;
 
@@ -199,6 +200,12 @@ private:
   /** @brief Method that will be called when the 'UserMetaData' tag is found.  */
     void onUserMetaDataStartTag(const XML_Char* name, const XML_Char** attrs);
 
+  /** @brief Method that will be called when the 'UserMetaData' tag is found.  */
+    void onSupportFilesStartTag(const XML_Char* name, const XML_Char** attrs);
+
+  /** @brief Method that will be called when the 'UserMetaData' tag is found.  */
+    void onSupportFileStartTag(const XML_Char* name, const XML_Char** attrs);
+
   // Methods for each End Tag that was encountered.
   /** @brief Method that will be called when the 'Data_Dimensions' tag is Exited.  */
     void onData_DimensionsEndTag(const XML_Char* name);
@@ -236,6 +243,11 @@ private:
   /** @brief Method that will be called when the 'UserMetaData' tag is Exited.  */
     void onUserMetaDataEndTag(const XML_Char* name);
 
+  /** @brief Method that will be called when the 'Support_Files' tag is Exited.  */
+    void onSupportFilesEndTag(const XML_Char* name);
+
+  /** @brief Method that will be called when the 'Support_File' tag is Exited.  */
+    void onSupportFileEndTag(const XML_Char* name);
 
 };
 

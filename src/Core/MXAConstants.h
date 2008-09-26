@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@
 // Data Model constant identifiers
 //------------------------------------------------------------
 namespace MXA {
-  
+
   const std::string MXACurrentFileType("MXA");
   const float  MXACurrentFileVersion = 0.4f;
 
@@ -34,7 +34,7 @@ namespace MXA {
   const std::string RequiredMetaData("Required");
   const std::string UserMetaData("User Defined");
   const std::string SupportFiles("SupportFiles");
-  
+
   // Defines the paths within the MXA Model Heirarchy
   const std::string ModelVersionPath("Model Version");
   const std::string ModelTypePath("Model Type");
@@ -46,14 +46,17 @@ namespace MXA {
   const std::string RequiredMetaDataPath("Meta Data/Required");
   const std::string UserMetaDataPath("Meta Data/User Defined");
   const std::string SupportFilesPath("SupportFiles");
-  
+
+  // DTD File Specification, which can be a url or file
+  const std::string XML_DTD_URL("http://echo1.bluequartz.net/viewvc/CTMD/MXADataModel/Resources/mxa_0.4.dtd");
+
   // Support File Tags
-  const std::string MXA_ORIGINAL_FILE_PATH_TAG("Original_File_Path");
-  const std::string MXA_FILENAME_TAG("Filename");
+  const std::string MXA_FILESYSTEM_PATH_TAG("FileSystem_Path");
   const std::string MXA_FILETYPE_TAG("File_Type");
+  const std::string MXA_FILENAME_TAG("Filename");
   const std::string MXA_BINARY_TAG ("Binary");
   const std::string MXA_TEXT_TAG ("Text");
-  
+
   // Data Model Tags
   const std::string MXA_NAME_TAG("Name");
   const std::string MXA_ALT_NAME_TAG("Alt_Name");
@@ -86,26 +89,26 @@ namespace MXA {
   const std::string MXA_PEDIGREE_ORIGINAL_VALUE("Original");
   const std::string MXA_PEDIGREE_DERIVED_VALUE("Derived");
 
-  
+
 // -----------------------------------------------------------------------------
 //  If the pedigree is derived then the value of Original_Source_File tag is
 //   the file path and name to the original data other wise use Not Applicable
 //   [MXA_NOT_APPLICABLE_VALUE] as the value
 // -----------------------------------------------------------------------------
   const std::string MXA_DERIVED_SRC_TAG("Original_Source_File");
-  
+
 // -----------------------------------------------------------------------------
-//  Distribution rights are either Unlimited or Limited. If Limited then the 
-//  Release Limitation should contain a description of the nature of the limitation, 
+//  Distribution rights are either Unlimited or Limited. If Limited then the
+//  Release Limitation should contain a description of the nature of the limitation,
 //  ie, who imposed the limitation, what groups CAN have possession of the data or what groups
 //  can NOT be in possession of the data.
 // -----------------------------------------------------------------------------
   const std::string MXA_RIGHTS_TAG("Distribution_Rights");
   //Constants for predefined values related to the Distribution Rights tag
   const std::string MXA_RIGHTS_UNLIMITED_VALUE("Unlimited");
-  const std::string MXA_RIGHTS_LIMITED_VALUE("Limited");  
+  const std::string MXA_RIGHTS_LIMITED_VALUE("Limited");
   const std::string MXA_RELEASE_LIMITATION_TAG("Release_Limitation");
-  
+
 // -----------------------------------------------------------------------------
 //  Some organizations assign a tracking value to data that is publicly released.
 //   That value should be placed in this tag otherwise use the [MXA_NOT_APPLICABLE_VALUE]
@@ -118,17 +121,19 @@ namespace MXA {
    * or other purposes. Use these constants to get the correct tag. */
   const std::string MD_Creator("REQ_MD_CREATOR");
   const std::string MD_DateCreated("REQ_MD_DATE_CREATED");
-  const std::string MD_DatasetName("REQ_MD_DATASET_NAME");  
+  const std::string MD_DatasetName("REQ_MD_DATASET_NAME");
   const std::string MD_Description("REQ_MD_DESCRIPTION");
   const std::string MD_Pedigree("REQ_MD_PEDIGREE");
   const std::string MD_DistributionRights("REQ_MD_DISTRIBUTION_RIGHTS");
   const std::string MD_DerivedSourceFiles("REQ_MD_DERIVED_SOURCE_FILES");
   const std::string MD_ReleaseNumber("REQ_MD_RELEASE_NUMBER");
-  
+
   /* Tags for Actual Data entries. Can help with parsers. Optional */
   const std::string FieldVariable(FIELD_VARIABLE);
   const std::string DataTypeImage(DATA_TYPE_IMAGE);
 }
+
+
 
 // -----------------------------------------------------------------------------
 //  Rendering Hint Attributes that can be added to datasets to help out data viewers

@@ -1,11 +1,12 @@
+#include <DataImport/DataImportXmlParser.h>
 
+#include <Common/LogTime.h>
 #include <Base/IDataSource.h>
 #include <Base/IImportDelegate.h>
 #include <Base/IDataFile.h>
 #include <Core/MXADataSource.h>
 #include <Core/MXADataImport.h>
-#include <Common/LogTime.h>
-#include <DataImport/DataImportXmlParser.h>
+#include <Core/MXASupportFile.h>
 #include <DataImport/ImportDelegateManager.h>
 #include <Utilities/StringUtils.h>
 #include <Utilities/DataSourcePathIndexSection.h>
@@ -361,6 +362,14 @@ void DataImportXmlParser::OnStartElement(const XML_Char* name, const XML_Char** 
     {
           start_Import_Property_Tag(name, attrs);
     }
+    else if ( currentTag.compare(MXA::SupportFiles) == 0 )
+    {
+          onSupportFilesStartTag(name, attrs);
+    }
+    else if ( currentTag.compare(MXA_XML::Support_File) == 0 )
+    {
+          onSupportFileStartTag(name, attrs);
+    }
 } // End OnStartElement(...)
 
 
@@ -414,6 +423,14 @@ void DataImportXmlParser::OnEndElement(const XML_Char* name)
     else if (currentTag.compare(MXA_DataImport::Import_Property) == 0)
     {
           end_Import_Property_Tag(name);
+    }
+    else if ( currentTag.compare(MXA::SupportFiles) == 0 )
+    {
+          onSupportFilesEndTag(name);
+    }
+    else if ( currentTag.compare(MXA_XML::Support_File) == 0 )
+    {
+          onSupportFileEndTag(name);
     }
 } // End OnEndElement(...)
 
@@ -837,5 +854,52 @@ void DataImportXmlParser::end_Import_Property_Tag(const XML_Char* name)
 
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void DataImportXmlParser::onSupportFilesStartTag(const XML_Char* name, const XML_Char** attrs)
+{
+
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void DataImportXmlParser::onSupportFilesEndTag(const XML_Char* name)
+{
+  // Increment our counter
+
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void DataImportXmlParser::onSupportFileStartTag(const XML_Char* name, const XML_Char** attrs)
+{
+
+  ISupportFilePtr sfile = MXASupportFile::New();
+  for (int i = 0; attrs[i]; i += 2)
+  {
+    if (MXA::MXA_FILESYSTEM_PATH_TAG.compare(attrs[i]) == 0)
+    {
+      sfile->setFileSystemPath(attrs[i + 1] );
+    }
+    else if (MXA::MXA_FILETYPE_TAG.compare(attrs[i]) == 0)
+    {
+      sfile->setFileType(attrs[i + 1] );
+    }
+  }
+  // Adding the support file will set it's index correctly
+  this->_dataModel->addSupportFile(sfile, true);
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void DataImportXmlParser::onSupportFileEndTag(const XML_Char* name)
+{
+
+}
 
 

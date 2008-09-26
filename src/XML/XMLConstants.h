@@ -15,7 +15,7 @@
 
 /**
  * @brief Constants for dealing with MXA XML files
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 
 
@@ -34,6 +34,7 @@ namespace MXA_XML {
     const std::string UserDefined_MD ("UserDefined_MD");
     const std::string Model_Type("Model_Type");
     const std::string Model_Version("Model_Version");
+    const std::string Support_File("Support_File");
 
     /**
      * @brief XML Tags for attributes

@@ -461,7 +461,7 @@ herr_t H5DataModelReader::readSupportFiles(hid_t locId)
   for (std::list<std::string>::iterator iter = indices.begin(); iter != indices.end(); ++iter)
   {
     ISupportFilePtr file = MXASupportFile::NewFromMXAFile(locId, *iter, false);
-    this->_dataModel->addSupportFile(file);
+    this->_dataModel->addSupportFile(file, false);
   }
   err = H5Gclose(gid);
   return err;

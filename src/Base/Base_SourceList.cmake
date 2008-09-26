@@ -28,7 +28,6 @@ SET (MXA_BASE_HEADERS
   ${MXA_SOURCE_DIR}/src/Base/IDataset.h
   ${MXA_SOURCE_DIR}/src/Base/IRequiredMetaData.h
   ${MXA_SOURCE_DIR}/src/Base/ISupportFile.h
- # ${MXA_SOURCE_DIR}/src/Base/ISupportFileContents.h
 )
 
 MXA_SOURCE_PROPERTIES(Base "${MXA_BASE_HEADERS}" "${MXA_BASE_SRCS}")

@@ -24,7 +24,7 @@ namespace FileSystem = boost::filesystem;
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ISupportFilePtr MXASupportFile::NewFromFileSystem(const std::string &filesystempath, 
+ISupportFilePtr MXASupportFile::NewFromFileSystem(const std::string &filesystempath,
                                                   const std::string &filetype,
                                                   bool cacheFile)
 {
@@ -48,7 +48,7 @@ ISupportFilePtr MXASupportFile::NewFromFileSystem(const std::string &filesystemp
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ISupportFilePtr MXASupportFile::NewFromMXAFile(hid_t dataFile, 
+ISupportFilePtr MXASupportFile::NewFromMXAFile(hid_t dataFile,
                                                const std::string &index,
                                                bool cacheFile)
 {
@@ -65,6 +65,32 @@ ISupportFilePtr MXASupportFile::NewFromMXAFile(hid_t dataFile,
       spPtr.swap(nullPtr);
     }
   }
+  return spPtr;
+}
+
+#if 0
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+ISupportFilePtr MXASupportFile::NewFromXMLModel(const std::string &filesystempath,
+                                       const std::string &filetype,
+                                       int index)
+{
+
+    ISupportFilePtr spPtr(new MXASupportFile());
+    spPtr->setFileSystemPath(filesystempath);
+    spPtr->setFileType(filetype);
+    spPtr->setIndex(index);
+    return spPtr;
+}
+#endif
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+ISupportFilePtr MXASupportFile::New()
+{
+  ISupportFilePtr spPtr(new MXASupportFile());
   return spPtr;
 }
 
@@ -126,11 +152,11 @@ int32 MXASupportFile::readFromMXAFile()
     err = 0;
     this->_fileContents.reset(contents);
   }
-  
-  err = H5Lite::readStringAttribute(fileId, dsetpath, MXA::MXA_ORIGINAL_FILE_PATH_TAG, this->_filesystemPath);
+
+  err = H5Lite::readStringAttribute(fileId, dsetpath, MXA::MXA_FILESYSTEM_PATH_TAG, this->_filesystemPath);
   if (err < 0)
   {
-    std::cout << "MXASupportFile could not read attribute '" << MXA::MXA_ORIGINAL_FILE_PATH_TAG << 
+    std::cout << "MXASupportFile could not read attribute '" << MXA::MXA_FILESYSTEM_PATH_TAG <<
       "' for Support file with index '" << this->_index << "'" << std::endl;
     return err;
   }
@@ -138,12 +164,12 @@ int32 MXASupportFile::readFromMXAFile()
   err = H5Lite::readStringAttribute(fileId, dsetpath, MXA::MXA_FILETYPE_TAG, this->_fileType);
   if (err < 0)
   {
-    std::cout << "MXASupportFile could not read attribute '" << MXA::MXA_FILETYPE_TAG << 
+    std::cout << "MXASupportFile could not read attribute '" << MXA::MXA_FILETYPE_TAG <<
       "' for Support file with index '" << this->_index << "'" << std::endl;
     return err;
   }
 
-  return err; 
+  return err;
 }
 
 // -----------------------------------------------------------------------------
@@ -205,7 +231,27 @@ uint64 MXASupportFile::getFileSize()
   {
     return _fileContents->getNumberOfElements();
   }
-    return 0;
+
+
+  FileSystem::path p( this->_filesystemPath, FileSystem::native );
+
+  // Make sure the file exists
+  if ( !FileSystem::exists( p ) )
+    {
+      std::cout << "Error at " << __FILE__ << "(" << __LINE__ << ")  ";
+      std::cout << this->_filesystemPath << " not found." << std::endl;
+      return 0;
+    }
+
+  // Check to make sure the file is regular
+  if ( !FileSystem::is_regular( p ) )
+    {
+      std::cout << "Error at " << __FILE__ << "(" << __LINE__ << ")  ";
+      std::cout << this->_filesystemPath << "not a regular file." << std::endl;
+      return 0;
+    }
+
+    return FileSystem::file_size(p);
 }
 
 // -----------------------------------------------------------------------------
@@ -241,14 +287,14 @@ int32 MXASupportFile::readFromFileSystem()
       std::cout << this->_filesystemPath << " not found." << std::endl;
       return -1;
     }
-  
+
   // Check to make sure the file is regular
   if ( !FileSystem::is_regular( p ) )
     {
       std::cout << this->_filesystemPath << "not a regular file." << std::endl;
       return -1;
     }
-   
+
    // std::cout << "size of " << argv[1] << " is " << fs::file_size( p )  << std::endl;
     boost::intmax_t fileSize = FileSystem::file_size(p);
 

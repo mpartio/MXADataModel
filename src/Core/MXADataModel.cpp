@@ -1,12 +1,14 @@
 //-- MXA Headers
-#include <MXAConfiguration.h>
 #include <Common/LogTime.h>
 #include <Base/IFileIODelegate.h>
 #include <Base/IMXAArray.h>
+#include <Base/IRequiredMetaData.h>
+#include <Base/ISupportFile.h>
 #include <Core/MXADataModel.h>
 #include <Utilities/StringUtils.h>
 #include <XML/XMLDataModelWriter.h>
-#include <Base/IRequiredMetaData.h>
+
+
 //#include <Core/MXAAbstractAttribute.h>
 //-- Standard Library Headers
 #include <iostream>
@@ -912,19 +914,34 @@ bool MXADataModel::isValid(std::string &message)
   return valid;
 }
 
-
-void MXADataModel::addSupportFile(ISupportFilePtr supportFile)
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void MXADataModel::addSupportFile(ISupportFilePtr supportFile, bool updateIndex)
 {
   this->_supportFiles.push_back(supportFile);
+  if (true == updateIndex) {
+    supportFile->setIndex(this->_supportFiles.size() -1);
+  }
 }
 
-
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 ISupportFiles MXADataModel::getSupportFiles()
 {
   return this->_supportFiles;
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 ISupportFilePtr MXADataModel::getSupportFile(int index)
 {
-  return this->_supportFiles.at(index);
+  if (index >=0 && (unsigned int)(index) < this->_supportFiles.size() )
+  return this->_supportFiles[index];
+
+  // Return a NULL pointer if we are out of bounds
+  ISupportFilePtr sfile;
+  return sfile;
 }

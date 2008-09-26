@@ -12,6 +12,7 @@
 #include <MXAConfiguration.h>
 #include <Common/MXATypeDefs.h>
 #include <Core/MXADataModel.h>
+#include <Core/MXASupportFile.h>
 #include <XML/XMLDataModelReader.h>
 #include <XML/XMLDataModelWriter.h>
 #include <Testing/TestDataFileLocations.h>
@@ -40,10 +41,10 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-boost::filesystem::remove(XML_TEST_FILE) ;
-boost::filesystem::remove(MASTER_XML_FILE);
-boost::filesystem::remove(XML_TEMPLATE_TEST_FILE) ;
-boost::filesystem::remove(XML_TEMPLATE_COMPLETE_FILE);
+//boost::filesystem::remove(XML_TEST_FILE) ;
+//boost::filesystem::remove(MASTER_XML_FILE);
+//boost::filesystem::remove(XML_TEMPLATE_TEST_FILE) ;
+//boost::filesystem::remove(XML_TEMPLATE_COMPLETE_FILE);
 #endif
 }
 
@@ -201,6 +202,9 @@ MXADataModelPtr createModel()
 
     // Create User Defined MetaData
     CreateAttributes( model );
+
+    ISupportFilePtr spFile = MXASupportFile::NewFromFileSystem(MXATest::SupportFile_TextInputFile, SupportFile::FileType::Text, false);
+    model->addSupportFile(spFile);
     return modelPtr;
 }
 
@@ -295,6 +299,7 @@ void GenerateMasterXMLFile()
     BOOST_REQUIRE (model->isValid(errorMessage) == true);
     MXAAbstractAttributes attributes = model->getUserMetaData();
     BOOST_REQUIRE(attributes.size() == 21);
+    BOOST_REQUIRE(model->getSupportFiles().size() == 1);
     std::cout << "....... Passed" << std::endl;
   }
 }

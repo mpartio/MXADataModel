@@ -1,7 +1,11 @@
 #include <XML/XMLDataModelWriter.h>
+
+#include <Base/IRequiredMetaData.h>
+#include <Base/ISupportFile.h>
+
+
 #include <XML/XMLUserMetaDataWriter.h>
 #include <XML/XMLConstants.h>
-#include <Base/IRequiredMetaData.h>
 #include <XML/XMLMXAAttributeWriter.hpp>
 
 // -----------------------------------------------------------------------------
@@ -41,26 +45,36 @@ int32 XMLDataModelWriter::writeModelToFile(int32 NOT_USED)
 
 
   stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-       << "<!DOCTYPE File_Root SYSTEM \"http://titanium.imts.us/viewvc/Task_7/MXADataModel/Resources/mxa_0.4.dtd\">\n";
+       << "<!DOCTYPE File_Root SYSTEM \"" << MXA::XML_DTD_URL << "\">\n";
 
   std::map<std::string, std::string> attrs;
   attrs[MXA_XML::Model_Type] = _dataModel->getModelType();
   std::stringstream sstream;
   sstream << _dataModel->getModelVersion();
   attrs[MXA_XML::Model_Version] = sstream.str();
- // attrs["Something"] = "Bad bad bad";
+
+  // Write the File_Root opening tag
   _openTag(MXA_XML::File_Root, 0);
 
+  // Write the Data_Model tag and contents
   _openTag(MXA_XML::Data_Model, 1, true, attrs);
   _writeDataRoot(2);
   writeDataDimensions(2);
   writeDataRecords(2);
   _closeGroupTag(MXA_XML::Data_Model, 1);
 
+  // Write the Meta_Data tag and contents
   _openTag(MXA_XML::Meta_Data, 1);
   writeRequiredMetaData(2);
   writeUserMetaData(2);
   _closeGroupTag(MXA_XML::Meta_Data, 1);
+
+
+  // Write the Support_Files tag and contents
+  _openTag(MXA::SupportFiles, 1, true);
+  writeSupportFiles(2);
+  _closeGroupTag(MXA::SupportFiles, 1);
+
   _closeGroupTag(MXA_XML::File_Root, 0);
   return 1;
 }
@@ -333,7 +347,22 @@ int32 XMLDataModelWriter::writeDataRecord(IDataRecord* record)
 // -----------------------------------------------------------------------------
 //  IDataModelWriter Interface
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeSupportFiles(int32 uniqueId)
+int32 XMLDataModelWriter::writeSupportFiles(int32 indentDepth)
 {
-  return -1;
+  int32 err = 0;
+  std::map<std::string, std::string> attrs;
+  ISupportFiles files = this->_dataModel->getSupportFiles();
+  ISupportFile* file;
+  for (ISupportFiles::iterator iter = files.begin(); iter != files.end(); ++iter ) {
+    file = (*iter).get();
+    if (NULL != file)
+    {
+      attrs.clear(); // Clear any attributes
+      attrs[MXA::MXA_FILESYSTEM_PATH_TAG] = file->getFileSystemPath();
+      attrs[MXA::MXA_FILETYPE_TAG] = file->getFileType();
+      _openTag(MXA_XML::Support_File, indentDepth, false, attrs);
+    }
+  }
+
+  return err;
 }

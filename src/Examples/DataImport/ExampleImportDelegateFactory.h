@@ -21,7 +21,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(ExampleImport)
 * @brief Factory class to generate ExampleImportDelegateFactory objects
 * @author Mike Jackson
 * @date Sep 5, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class ExampleImportDelegateFactory : public AbstractImportDelegateFactory
 {
@@ -33,8 +33,6 @@ class ExampleImportDelegateFactory : public AbstractImportDelegateFactory
      * @brief This method will return a new instance of ExampleImportDelegateFactory provided
      * the className matches.
      * @param className The name of the Delegate class that will be returned
-     * @param dataModel The data model to use
-     * @param dataSource The data source to import
      * @return A new boost shared pointer to H5ImportTestDelegate
      */
     IImportDelegatePtr newDataImportDelegate (const std::string &className );

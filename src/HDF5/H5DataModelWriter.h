@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,8 +34,8 @@ class MXANode;
  * @brief Writes the DataModel to an HDF5 file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.17 $
- *  
+ * @version $Revision: 1.18 $
+ *
  */
 class MXA_EXPORT H5DataModelWriter : public IDataModelWriter
 {
@@ -57,28 +57,28 @@ public:
    * @return
    */
   int32 writeDataModelTemplate(hid_t uniqueId);
-  
+
   /**
    * @brief Writes the Data Dimensions from the Model
   * @param fileId HDF5 FileId to write to
   * @return
   */
   int32 writeDataDimensions(hid_t fileId);
-  
+
   /**
   * @brief Writes the Data Records
   * @param fileId HDF5 FileId to write to
   * @return
   */
   int32 writeDataRecords(hid_t fileId);
-  
+
   /**
    * @brief Writes the Required MetaData
   * @param fileId HDF5 FileId to write to
   * @return
   */
   int32 writeRequiredMetaData(hid_t fileId);
-  
+
   /**
    * @brief Writes the User Meta Data
   * @param fileId HDF5 FileId to write to
@@ -88,13 +88,13 @@ public:
 
   /**
   * @brief Writes the support files to the hdf5 data file
-  * @param fileId, HDF5 file id to write to
+  * @param fileId HDF5 file id to write to
   * @return error code
   */
   int32 writeSupportFiles(hid_t fileId);
 
 protected:
-  
+
   /**
    * @brief Walks the Data records hierarchy
 * @param gid
@@ -102,7 +102,7 @@ protected:
 * @return
 */
   int32 _traverseDataRecords(hid_t gid,  IDataRecords &records);
-  
+
   /**
    * @brief Writes a std::string as a HDF Dataset.
    * @param loc_id The Parent location to write the dataset
@@ -111,16 +111,16 @@ protected:
    * @param overwrite Overwrite the existing data
    * @return Standard HDF5 error conditions
    */
-  herr_t  _writeStringDataset (hid_t loc_id, 
-                               const std::string& dsetName, 
+  herr_t  _writeStringDataset (hid_t loc_id,
+                               const std::string& dsetName,
                                const std::string& data,
                                bool overwrite = false);
-  
+
 /**
  * @brief Creates a Dataset with the given name at the location defined by loc_id.
- * This version of writeDataset should be used with a single scalar value. If you 
+ * This version of writeDataset should be used with a single scalar value. If you
  * need to write an array of values, use the form that takes an std::vector<>
- * 
+ *
  * @param loc_id The Parent location to store the data
  * @param dsetName The name of the dataset
  * @param value The value to write to the HDF5 dataset
@@ -129,7 +129,7 @@ protected:
   template <typename T>
   static herr_t _writeScalarDataset (hid_t loc_id,
                               const std::string& dsetName,
-                              T &value) 
+                              T &value)
   {
     herr_t err = -1;
     hid_t did = -1;
@@ -144,7 +144,7 @@ protected:
     }
     //Create the DataSpace
     sid = H5Screate_simple( rank, &(dims), NULL );
-    if (sid < 0) 
+    if (sid < 0)
     {
       return sid;
     }
@@ -156,7 +156,7 @@ protected:
     {
       did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
     }
-    if ( did >= 0 ) 
+    if ( did >= 0 )
     {
       err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value );
       if (err < 0 ) {
@@ -175,15 +175,15 @@ protected:
     err = H5Sclose( sid );
     if (err< 0) {
       std::cout << "Error Closing Dataspace" << std::endl;
-      retErr = err; 
+      retErr = err;
     }
     return retErr;
   }
-  
+
 private:
   IDataModelPtr _dataModel;
   IDataFilePtr  _dataFile;
-  
+
   H5DataModelWriter(const H5DataModelWriter&);   //Copy Constructor Not Implemented
   void operator=(const H5DataModelWriter&); //Copy Assignment Not Implemented
 };

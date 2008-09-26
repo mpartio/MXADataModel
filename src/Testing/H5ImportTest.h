@@ -24,7 +24,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.9 $
+* @version $Revision: 1.10 $
 */
 class H5ImportTestDelegate: public IImportDelegate
 {
@@ -93,7 +93,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(H5ImportTest);
 * @brief Factory class to generate H5ImportTestDelegate objects
 * @author Mike Jackson
 * @date Sep 12, 2007
-* @version $Revision: 1.9 $
+* @version $Revision: 1.10 $
 */
 class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
 {
@@ -106,8 +106,6 @@ class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
    * @brief This method will return a new instance of H5ImportTestDelegate provided
    * the className matches.
    * @param className The name of the Delegate class that will be returned
-   * @param dataModel The data model to use
-   * @param dataSource The data source to import
    * @return A new boost shared pointer to H5ImportTestDelegate
    */
   IImportDelegatePtr newDataImportDelegate (const std::string &className)

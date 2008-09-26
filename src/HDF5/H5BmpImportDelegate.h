@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -45,30 +45,30 @@ MXA_PROPERTY_CONSTANT(ImportAsGrayScale);
  * @author Mike Jackson
  * @date April 2007
  * @class H5BmpImportDelegate HDF5/H5BmpImportDelegate.h HDF5/H5BmpImportDelegate.h
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 class MXA_EXPORT H5BmpImportDelegate : public IImportDelegate
 {
 public:
   H5BmpImportDelegate();
   virtual ~H5BmpImportDelegate();
-  
+
   /**
   * @brief Implementation from the IDataImportDelegate class
   */
   int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile);
 
-  
+
   /**
   * @brief Sets the 'FileNotFoundIsError' flag.
-  * @param value If this is true then the import will abort if an input file can not be found
+  * @param _fileNotFoundIsError If this is true then the import will abort if an input file can not be found
   */
   //void setFileNotFoundIsError(bool value);
   MXA_PROPERTY(bool, FileNotFoundIsError, _fileNotFoundIsError);
 
   /**
   * @brief Sets the 'ImportAsGrayScale' value
-  * @param value If TRUE, then the tiff file will be converted to Grayscale
+  * @param _importAsGrayScale If TRUE, then the tiff file will be converted to Grayscale
   */
   //void setImportAsGrayScale(bool value);
   MXA_PROPERTY(bool, ImportAsGrayScale, _importAsGrayScale);
@@ -79,9 +79,9 @@ public:
   * @param value  The value to set the property to.
   */
   virtual int32 setProperty(const std::string &key, const std::string &value);
-    
-  virtual int32 getProperty(const std::string &key, const std::string &value) 
-  { 
+
+  virtual int32 getProperty(const std::string &key, const std::string &value)
+  {
     std::cout << "H5BmpImportDelegate::getProperty is NOT implemented" << std::endl;
     return 0;
   }
@@ -96,12 +96,12 @@ public:
     GET_PROPERTY_BODY(H5TiffImport, T, ImportAsGrayScale, _importAsGrayScale, key, value);
     return 0;
   }
-    
+
 private:
   IDataModelPtr      _modelPtr;
   bool _fileNotFoundIsError;
   bool _importAsGrayScale;
-  
+
   H5BmpImportDelegate(const H5BmpImportDelegate&);   //Copy Constructor Not Implemented
   void operator=(const H5BmpImportDelegate&); //Copy Assignment Not Implemented
 };

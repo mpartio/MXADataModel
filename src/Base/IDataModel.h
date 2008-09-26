@@ -26,7 +26,7 @@
  * compatible with this code base
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.20 $
+ * @version $Revision: 1.21 $
  *
  */
 class MXA_EXPORT IDataModel
@@ -298,11 +298,28 @@ class MXA_EXPORT IDataModel
     * @param indent The level of indentation to start with
     */
     virtual void printUserMetaData(std::ostream &os, int32 indent) = 0;
- 
-    //-------------- Methods to add arbitrary support files to the model ----------
 
-    virtual void addSupportFile(ISupportFilePtr supportFile) = 0;
+    //-------------- Methods to add arbitrary support files to the model ----------
+    /**
+     * @brief Adds a SupportFile Reference to the model
+     * @param supportFile An ISupportFile object or subclass
+     * @param updateIndex Should the "index" property of the supportFile object be updated
+     */
+    virtual void addSupportFile(ISupportFilePtr supportFile, bool updateIndex = false) = 0;
+
+    /**
+     * @brief Returns the list of SupportFile objects from the model.
+     * @return The list of Support files for this model.
+     */
     virtual ISupportFiles getSupportFiles() = 0;
+
+    /**
+     * @brief Returns a specific ISupportFile instance from the model or a NULL
+     * wrapped pointer in case nothing was found or index is out of bounds.
+     * @param index The index (zero based) of the ISupportFile instance to return
+     * @return Boost Shared Pointer wrapping an ISupportFile subclass instance or NULL
+     * if nothing was found.
+     */
     virtual ISupportFilePtr getSupportFile(int index) = 0;
 
     //-------------- Methods to Print the DataModel to an outputstream ----------

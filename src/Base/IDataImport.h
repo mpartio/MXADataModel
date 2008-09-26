@@ -18,7 +18,7 @@
  * a class to import data into the underlying data storage.
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *
  */
 class MXA_EXPORT IDataImport
@@ -41,8 +41,8 @@ class MXA_EXPORT IDataImport
 #endif
 
     /**
-     * Set the value of datafile
-     * @param dataModel the new value of datafile
+     * @brief Set the value of datafile
+     * @param datafile the new value of datafile
      */
     virtual void setDataFile ( IDataFilePtr datafile ) = 0;
 

@@ -68,7 +68,7 @@ typedef std::pair<std::string, std::string>        XMLAttributeMapElement;
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.14 $
+* @version $Revision: 1.15 $
 */
 class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {
@@ -259,6 +259,18 @@ private:
     void start_Import_Property_Tag(const XML_Char* name, const XML_Char** attrs);
   /** @brief Method that will be called when the 'Text_Part' tag is Exited.  */
     void end_Import_Property_Tag(const XML_Char* name);
+
+  /** @brief Method that will be called when the 'UserMetaData' tag is found.  */
+    void onSupportFilesStartTag(const XML_Char* name, const XML_Char** attrs);
+
+  /** @brief Method that will be called when the 'UserMetaData' tag is found.  */
+    void onSupportFileStartTag(const XML_Char* name, const XML_Char** attrs);
+
+  /** @brief Method that will be called when the 'Support_Files' tag is Exited.  */
+    void onSupportFilesEndTag(const XML_Char* name);
+
+  /** @brief Method that will be called when the 'Support_File' tag is Exited.  */
+    void onSupportFileEndTag(const XML_Char* name);
 
    //----------------------- Helper Methods ------------------------------------
     /**

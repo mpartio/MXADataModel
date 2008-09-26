@@ -61,13 +61,13 @@ int32 H5DataModelWriter::writeModelToFile(hid_t fileId)
 // -----------------------------------------------------------------------------
 int32 H5DataModelWriter::writeSupportFiles(hid_t fileId)
 {
-  int32 err = -1;
+  int32 err = 0;
   uint64 fileSize[1] = { 0 };
   uint8* fileContents = NULL;
   int32 rank = 1;
   ISupportFile* file = NULL;
   ISupportFiles files = this->_dataModel->getSupportFiles();
-  int32 index = 0;
+
   for (ISupportFiles::iterator iter = files.begin(); iter != files.end(); ++iter)
   {
     file = (*iter).get();
@@ -78,21 +78,24 @@ int32 H5DataModelWriter::writeSupportFiles(hid_t fileId)
       {
         fileContents = file->getFilePointer(0);
         fileSize[0] = file->getFileSize();
-        std::string dsetName = MXA::SupportFilesPath + "/" + StringUtils::numToString(index);
+        std::string dsetName = MXA::SupportFilesPath + "/" + StringUtils::numToString(file->getIndex());
         if (dsetName.empty() == false) {
           err = H5Lite::writePointerDataset<uint8>(fileId, dsetName, rank, fileSize, fileContents);
-          err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_ORIGINAL_FILE_PATH_TAG, file->getFileSystemPath() );
+          err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILESYSTEM_PATH_TAG, file->getFileSystemPath() );
           err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILETYPE_TAG, file->getFileType() );
           FilePath path( file->getFileSystemPath(), FileSystem::native );
           err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILENAME_TAG, path.filename() );
 
-        } 
-        else 
+        }
+        else
         { err = -1; }
       }
     }
+    else
+    {
+      err = -1;
+    }
     if (err < 0) { break; } // Bail out of the loop if there is an error
-    ++index;
   }
   return err;
 }
