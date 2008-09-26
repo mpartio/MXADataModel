@@ -72,4 +72,13 @@
     <Import_Property Key="ImportAsGrayScale" Value="1" />
   </Explicit_Data_Source>
   -->
+  
+  
+    
+  <Support_Files>
+        <Support_File FileSystem_Path="@DATA_MODEL_XML_FILE@" File_Type="Text" />
+  </Support_Files>
+  
+  
+  
 </Data_Import>
