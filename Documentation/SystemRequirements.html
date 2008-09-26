@@ -38,20 +38,34 @@ code base will be updated. You can download version 1.6.6 from our CVS server <a
 <li><a href="http://www.remotesensing.org/libtiff/">Tiff Library</a> - Needed for reading Tiff images. We have created a CMake build system for libTiff. You can download 
 a tar ball of the source directory <a href="http://titanium.imts.us/viewvc/Task_7/tiff.tar.gz?view=tar">here</a></li>
 <li><a href="http://expat.sourceforge.net/">Expat XML Library</a> - The current version of expat that is utilized is 2.0.1. We have created a CMake based build system
-for expat. You can download the source tree from our cvs repository <a href="http://titanium.imts.us/viewvc/Task_7/expat.tar.gz?view=tar">here</a>.</li>
-<li><a href="http://www.boost.org">Boost 1.36.0</a> - This is the earliest version that has been tested. 
-There were some bug fixes for OS X compilation in the 1.36.0 series
-so this the earliest release that is being used at this time. For compiling MXA Data Model you 
-only need the headers from Boost. The Boost Filesystem library is utilized in the 
-tiff support so if you enable the tiff support you will need to have the Boost Filesystem library
-compiled. Other projects that use the MXA Data Model code base DO 
-utilized the 'FileSystem' and 'Program Options' libraries from boost. If you choose
-to build the "Testing" target of the MXA Data Model code then you will need the 
-Boost Unit Test Framework libraries.</li>
+for expat. You can download the source tree from our cvs repository 
+<a href="http://titanium.imts.us/viewvc/Task_7/expat.tar.gz?view=tar">here</a>.
+</li>
 <li><a href="http://www.vtk.org">VTK</a> - There are some optional bindings for 
 VTK in the MXA Source code. These are optional to build. If you do build them VTK version
 5 is required.</li>
 </ul>
+<div class="entry">
+<a href="http://www.boost.org">Boost 1.36.0</a> - This is the earliest version that has been tested. 
+There were some bug fixes for OS X compilation in the 1.36.0 series
+so this the earliest release that is being used at this time. 
+You will need to build the following boost libraries<br/>
+
+
+<ul>
+<li>system</li>
+<li>filesystem</li>
+<li>test</li>
+</ul>
+
+Some other boost libraries that are convenient to have but are optional:
+<ul>
+<li>thread</li>
+<li>program_options</li>
+</ul>
+
+</div>
+
 
 I would suggest compiling in the following order:
 <ol>
