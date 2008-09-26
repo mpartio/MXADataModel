@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Data_Import SYSTEM "http://titanium.imts.us/viewvc/Task_7/MXADataModel/Resources/mxa_import.dtd">
+<!DOCTYPE Data_Import SYSTEM "http://echo1.bluequartz.net/viewvc/CTMD/MXADataModel/Resources/mxa_import.dtd">
 <Data_Import>
 
 	<!-- Load a Template Model from an XML file -->
@@ -71,6 +71,5 @@
 	  <Import_Property Key="FileNotFoundIsError" Value="0" />
     <Import_Property Key="ImportAsGrayScale" Value="1" />
   </Explicit_Data_Source>
-		
-		-->
+  -->
 </Data_Import>

@@ -3,7 +3,7 @@
 <!ELEMENT Output_File EMPTY>
 <!ELEMENT Data_Dimensions (Dimension+)>
 <!ELEMENT Dimension EMPTY>
-<!ELEMENT Implicit_Data_Source (File_Path+)>
+<!ELEMENT Implicit_Data_Source (Import_Property*,File_Path+)>
 <!ELEMENT File_Path (Text_Part*|Index_Part+)+>
 <!ELEMENT Explicit_Data_Source EMPTY>
 <!ELEMENT Text_Part EMPTY>
