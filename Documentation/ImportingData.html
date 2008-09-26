@@ -31,21 +31,42 @@
     
 
     There are 2 ways to import data into an HDF5 based MXA data file.
-    <div class="entry"> First way
+    <div class="entry"> <b>First way</b>
     <ul>
     <li>A data Model (preferably in an XML file, but another HDF5 file will work also)</li>
-    <li>A Data Import XML file listing the data model file, the output file, corrections to the Data Model and Data Sources</li>
-    <li>Some Sources of Data. Either Tiff/BMP images or other sources that you have custom code to parse</li>
+    <li>A Data Import XML file listing the data model file, the output file, corrections 
+    to the Data Model and Data Sources</li>
+    <li>Some Sources of Data. Either Tiff/BMP images or other sources that you have 
+    custom code to parse</li>
     </ul>
     </div>
-        <div class="entry"> Second way
-    <br> Write custom c++ code to complete any or all of the above tasks. This is the course of action to take if your data is in custom data files or 
-    in files that the current set of importers understand. Each of the above tasks can be programmitcally completed if needed. Quicker solutions
-    can be obtained if the model is stored in an XML file. This will cut down on the programatic creation of the data model. If your data happens to be images
-     in the form of TIFF or to a lesser extent BMP, then you can use the existing Data Import functionality. <br>
-     If your data is in custom files then you will need to write a parser for that data. See the page on creating an ImportDelegate for more information. <br>
-     If your data is laid out on your hard drive in such a way that the Import XML can be used this will help reduce the amount of code that needs
-     to be written to find the data sources on your hard drive. Instead the locations are describe with some MXA xml tags.
+        <div class="entry"> <b>Second way</b>
+    <br> Write custom c++ code to complete any or all of the above tasks. This is the 
+    course of action to take if your data is in custom data files or 
+    in files that the current set of importers do understand. Each of the above tasks 
+    can be programmitcally completed if needed. Quicker solutions
+    can be obtained if the model is stored in an XML file. This will cut down on 
+    the programatic creation of the data model. If your data happens to be images
+     in the form of TIFF or to a lesser extent BMP, then you can use the existing 
+     Data Import functionality. <br>
+     If your data is in custom files then you will need to write a parser for that 
+     data. See the page on creating an ImportDelegate for more information. <br>
+     If your data is laid out on your hard drive in such a way that the Import XML 
+     can be used this will help reduce the amount of code that needs
+     to be written to find the data sources on your hard drive. Instead the locations 
+     are describe with some MXA xml tags.
+    </div>
+    <div class="entry"> <B>Code Maintainer Notes</B>
+    <br>
+      If you add more xml tags to the list there are a few code places that will need
+      to be updated. src/XML/DataImportXMLParser will need to be updated. Specifically
+      you will need to update the following method:
+      <code>void DataImportXmlParser::OnStartElement(const XML_Char* name, const XML_Char** attrs)</code>
+      <code>void DataImportXmlParser::OnEndElement(const XML_Char* name, const XML_Char** attrs)</code>
+      <br>In those methods you will need to add additional conditional statements to check for
+      the specific tag you are adding.
+      <br> You will then need to add the appropriate <code>onXXXXStartTag(...) and onXXXXEndTag(...) </code>
+      methods to actually process the tags. Look at the rest of the code for examples on how to do that.
     </div>
         </td>
   </tr>

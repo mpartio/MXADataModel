@@ -37,8 +37,8 @@ of the Data Dimension entity are optional in the XML file. If these values are o
 the xml file it is assumed that the values will be gathered through another mechanism such
 as a GUI or configuration/initialization file for the experiment.  If needed, the 
 complete data model can be exported including all attributes. Below is a sample XML 
-file that shows every option being used.
-<p><div class="content"><pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+file that shows most options being used.
+<p><div class="entry"><pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE File_Root SYSTEM "<a href="http://titanium.imts.us/viewvc/Task_7/MXADataModel/Resources/mxa_0.4.dtd">http://titanium.imts.us/viewvc/Task_7/MXADataModel/Resources/mxa_0.4.dtd</a>"&gt;
 &lt;File_Root&gt;
   &lt;Data_Model Model_Type="MXA" Model_Version="0.4"&gt;
@@ -82,6 +82,17 @@ file that shows every option being used.
 &lt;/File_Root&gt;
 </pre></div>
 </p>
+<div class="entry"><b>Code Maintainer Notes</b><br>
+
+If you add more tags to the MXA XML set there are several files that will need to be updated.
+<ul>
+<li>The Resources/mxa_0.4.dtd will need to be updated</li>
+<li>The Resources/ModelTemplate.xml</li>
+<li>DataImporttest.xml.in if you want to test your new tags</li>
+<li>The HDF5/H5DataModelReader and the HDF5DataModelWriter classes</li>
+<li>The XML/XMLDataModelReader and XML/XMLDataModelWriter classes</li>
+</ul>
+</div>
 </td>
 </tr>
 </table>
