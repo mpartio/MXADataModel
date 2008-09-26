@@ -1,4 +1,4 @@
-<!ELEMENT Data_Import (Data_Model,Output_File,Implicit_Data_Source*,Explicit_Data_Source*)>
+<!ELEMENT Data_Import (Data_Model,Output_File,Implicit_Data_Source*,Explicit_Data_Source*,Support_Files*)>
 <!ELEMENT Data_Model (Data_Dimensions)>
 <!ELEMENT Output_File EMPTY>
 <!ELEMENT Data_Dimensions (Dimension+)>
@@ -9,6 +9,8 @@
 <!ELEMENT Text_Part EMPTY>
 <!ELEMENT Index_Part EMPTY>
 <!ELEMENT Support_Files (Support_File)*>
+<!ELEMENT Import_Property EMPTY>
+<!ELEMENT Support_File EMPTY>
 
 <!ATTLIST Data_Model
 	Template_File CDATA #REQUIRED>
@@ -42,3 +44,6 @@
 <!ATTLIST Support_File
   FileSystem_Path CDATA #REQUIRED
   File_Type (Text|Binary) "Binary">
+<!ATTLIST Import_Property
+  Key CDATA #REQUIRED
+  Value CDATA #REQUIRED>
