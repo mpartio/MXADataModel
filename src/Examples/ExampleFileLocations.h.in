@@ -25,18 +25,21 @@
  * This can be advantageous to check the contents to of the test files during
  * debugging process
  */
-#define REMOVE_EXAMPLE_FILES 1
+#define REMOVE_EXAMPLE_FILES 0
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 namespace Examples
 {
+  const std::string SimportImportDataInputFile("@MXA_TEMP_DIR@DataInput_");
   const std::string SimpleImportExampleFile("@MXA_TEMP_DIR@SimpleImportExample.h5" );
   const std::string DataWrapperExampleFile ("@MXA_TEMP_DIR@DataWrapperExampleFile.h5");
   const std::string GetDataExampleFile ("@MXA_TEMP_DIR@GetDataExample.h5");
   const std::string Example1File ("@MXA_TEMP_DIR@MXA_Example1.h5");
   const std::string Example1_XMLFile ("@MXA_TEMP_DIR@MXA_Example1.xml");
   const std::string Example2File ("@MXA_TEMP_DIR@MXA_Example2.h5");
+  const std::string SupportFileLocation("@MXA_TEMP_DIR@SupportFileExample.h5");
+  const std::string SupportFileInput("@MXA_TEMP_DIR@SupportFileExample.tiff");
 }
 #endif /*_EXAMPLE_SOURCEFILELOCATIONS_H_*/

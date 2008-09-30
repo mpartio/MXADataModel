@@ -7,6 +7,7 @@
 #include <Core/MXADataImport.h>
 #include <HDF5/H5MXADataFile.h>
 #include <DataImport/ImportDelegateManager.h>
+#include <Examples/ExampleFileLocations.h>
 #include <Examples/DataImport/ExampleImportDelegate.h>
 #include <Examples/DataImport/ExampleImportDelegateFactory.h>
 
@@ -75,7 +76,7 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
   {
     for (int j = dim1Start; j <= dim1End; j = j + dim1Increment)
     {
-      std::string filename(DataInputFile);
+      std::string filename(Examples::SimportImportDataInputFile);
       filename.append( StringUtils::numToString<int32>(i) );
       filename.append("_").append(StringUtils::numToString<int32>(j)).append(".data");
 
@@ -131,7 +132,7 @@ void SimpleImportExample::createTestFiles(MXADataModelPtr model)
       for (int32 j = dim1Start; j <= dim1End; j = j + dim1Increment)
       {
         //Create some Data files
-        std::string filename(DataInputFile);
+        std::string filename(Examples::SimportImportDataInputFile);
         filename.append( StringUtils::numToString<int32>(i) );
         filename.append("_").append(StringUtils::numToString<int32>(j)).append(".data");
         std::ofstream file_stream;

@@ -13,11 +13,6 @@
 
 #include <string>
 
-#if defined (_WIN32)
-const std::string DataInputFile("C:\\WINDOWS\\Temp\\DataInput_");
-#else
-const std::string DataInputFile("/tmp/DataInput_");
-#endif
 
 /**
 * @class SimpleImportExample SimpleImportExample.h Examples/DataImport/SimpleImportExample.h
@@ -26,7 +21,7 @@ const std::string DataInputFile("/tmp/DataInput_");
 * within the HDF5 file as specified in the MXA Data Model.
 * @author Michael A. Jackson. BlueQuartz Software http://www.bluequartz.net
 * @date Sept 2008
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class SimpleImportExample
 {
