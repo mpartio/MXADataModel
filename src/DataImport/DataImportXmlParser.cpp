@@ -793,16 +793,45 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
     attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
   }
 
-
+  XMLAttributeMap::iterator mapIter = attrMap.end();
   uint32 index = _implDataDimensions.size();
-  std::string paddingChar ( attrMap[ MXA_DataImport::Attr_Padding_Char] );
-  int8 fillChar = paddingChar.at(0);
-  std::string charLength ( attrMap[MXA_DataImport::Attr_Total_Char_Length] );
-  int32 width = 1;
-  StringUtils::stringToNum(width, charLength);
+  std::string paddingChar;
+  mapIter = attrMap.find(MXA_DataImport::Attr_Padding_Char);
+  // Check for the Padding_Char attribute
+  if (mapIter != attrMap.end() )
+  {
+    paddingChar = (*mapIter).second;
+  }
+
+  // Check for the Max size of the character string to generate
+  int32 width = -1; // Default to -1 so the string grows as needed
+  std::string charLength("");
+  mapIter = attrMap.find(MXA_DataImport::Attr_Max_Char_Length);
+  if (mapIter != attrMap.end() )
+  {
+    charLength = (*mapIter).second;
+    if (charLength.empty() == false )
+    {
+      StringUtils::stringToNum(width, charLength);
+    }
+  }
+
+  char check = 0;
+  if ( !paddingChar.empty() ) { check = check | 0x01; }
+  if ( !charLength.empty()  ) { check = check | 0x02; }
+  if (check == 1 || check == 2)
+  {
+    std::cout << "Dataimport xml parsing error: The tag 'Index_Part' is missing an attriubte." << std::endl;
+    std::cout << "  Either '" << MXA_DataImport::Attr_Max_Char_Length << "' and '" << MXA_DataImport::Attr_Padding_Char
+      << "' must BOTH appear or NEITHER must appear." << std::endl;
+    this->_xmlParseError = -12;
+    return;
+  }
+
+  // Get the Numeric type (int or float)
   std::string numericType ( attrMap[MXA_DataImport::Attr_Numeric_Type] );
 
-  IStringSectionPtr section (new DataSourcePathIndexSection(index, fillChar, width, numericType) );
+  IStringSectionPtr section (new DataSourcePathIndexSection(index, paddingChar, width, numericType) );
   section->setPreText(_implPreTextSection);
 
   std::string dimName = attrMap[MXA_DataImport::Attr_Data_Dimension];

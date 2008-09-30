@@ -65,6 +65,10 @@ ISupportFilePtr MXASupportFile::NewFromMXAFile(hid_t dataFile,
       spPtr.swap(nullPtr);
     }
   }
+
+  {
+
+  }
   return spPtr;
 }
 
@@ -99,7 +103,8 @@ ISupportFilePtr MXASupportFile::New()
 //
 // -----------------------------------------------------------------------------
 MXASupportFile::MXASupportFile() :
-_index (0)
+_index (0),
+_fileId(0)
 {
 }
 
@@ -232,6 +237,20 @@ uint64 MXASupportFile::getFileSize()
     return _fileContents->getNumberOfElements();
   }
 
+  if (this->_fileId > 0)
+  {
+    std::vector<hsize_t> dims;
+    H5T_class_t type_class;
+    size_t type_size;
+    std::string dsetpath = MXA::SupportFilesPath + "/" + StringUtils::numToString(this->_index);
+    herr_t err = H5Lite::getDatasetInfo(this->_fileId, dsetpath, dims, type_class, type_size);
+    if (err < 0)
+    {
+      return 0;
+    }
+    hsize_t fileSize = dims[0];
+    return (uint64)(fileSize);
+  }
 
   FileSystem::path p( this->_filesystemPath, FileSystem::native );
 
@@ -239,7 +258,7 @@ uint64 MXASupportFile::getFileSize()
   if ( !FileSystem::exists( p ) )
     {
       std::cout << "Error at " << __FILE__ << "(" << __LINE__ << ")  ";
-      std::cout << this->_filesystemPath << " not found." << std::endl;
+      std::cout << "File '" << this->_filesystemPath << "' not found." << std::endl;
       return 0;
     }
 
@@ -247,7 +266,7 @@ uint64 MXASupportFile::getFileSize()
   if ( !FileSystem::is_regular( p ) )
     {
       std::cout << "Error at " << __FILE__ << "(" << __LINE__ << ")  ";
-      std::cout << this->_filesystemPath << "not a regular file." << std::endl;
+      std::cout << "File '" << this->_filesystemPath << "' not a regular file." << std::endl;
       return 0;
     }
 

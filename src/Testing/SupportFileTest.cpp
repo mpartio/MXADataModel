@@ -95,16 +95,16 @@ void CreateInputFiles()
 
 void TestMXASupportFile()
 {
-  std::cout << "   Basic MXASupportFile Test" << std::endl;
-  ISupportFilePtr file = 
-      MXASupportFile::NewFromFileSystem(MXATest::SupportFile_BinaryInputFile, SupportFile::FileType::Binary);
+  std::cout << "|--TestMXASupportFile" << std::endl;
+  ISupportFilePtr file =
+      MXASupportFile::NewFromFileSystem(MXATest::SupportFile_BinaryInputFile, SupportFile::FileType::Binary, false);
   uint8* contents = NULL;
   // Get the contents which should be NULL because the file has NOT been read yet
   contents = file->getFilePointer(0);
   BOOST_REQUIRE(contents == NULL);
   // Make sure the file is NOT cached in the object
   BOOST_REQUIRE (file->isFileCached() == false);
-  BOOST_REQUIRE (file->getFileSize() == 0); // The file size should be Zero
+  BOOST_REQUIRE (file->getFileSize() > 0); // The file size should be Zero
 
   BOOST_REQUIRE (file->readFromFileSystem() >= 0); // Read the file into the object
   BOOST_REQUIRE (file->getFilePointer(0) != NULL);
@@ -113,17 +113,17 @@ void TestMXASupportFile()
 
   file->flushCachedFile();
   BOOST_REQUIRE (file->getFilePointer(0) == NULL);
-  BOOST_REQUIRE (file->getFileSize() == 0);
+  BOOST_REQUIRE (file->getFileSize() > 0);
   BOOST_REQUIRE (file->isFileCached() == false);
 
   // Read the file again
-  BOOST_REQUIRE (file->readFromFileSystem() >= 0); // Read the file into the object 
+  BOOST_REQUIRE (file->readFromFileSystem() >= 0); // Read the file into the object
   file->setFileSystemPath(MXATest::SupportFile_TextInputFile);
   BOOST_REQUIRE (file->getFilePointer(0) == NULL);
-  BOOST_REQUIRE (file->getFileSize() == 0);
+  BOOST_REQUIRE (file->getFileSize() > 0);
   BOOST_REQUIRE (file->isFileCached() == false);
 
-  
+
 
 }
 
@@ -132,17 +132,17 @@ void TestMXASupportFile()
 // -----------------------------------------------------------------------------
 void TestMXARead()
 {
-  std::cout << "   MXARead Test" << std::endl;
+  std::cout << "|--MXARead Test" << std::endl;
   IDataFilePtr datafile = H5MXADataFile::OpenFile(MXATest::SupportFile_OutputFile, true);
   BOOST_REQUIRE( datafile.get() != NULL);
-  
+
   ISupportFiles files = datafile->getDataModel()->getSupportFiles();
   ISupportFilePtr file;
   for (ISupportFiles::iterator iter = files.begin(); iter != files.end(); ++iter)
   {
     file = *iter;
     BOOST_REQUIRE (file->getFilePointer(0) == NULL);
-    BOOST_REQUIRE (file->getFileSize() == 0);
+    BOOST_REQUIRE (file->getFileSize() > 0);
     BOOST_REQUIRE (file->isFileCached() == false);
 
     BOOST_REQUIRE (file->readFromMXAFile() >= 0); // Read the file into the object
@@ -151,7 +151,7 @@ void TestMXARead()
     BOOST_REQUIRE (file->isFileCached() == true);
      file->flushCachedFile();
     BOOST_REQUIRE (file->getFilePointer(0) == NULL);
-    BOOST_REQUIRE (file->getFileSize() == 0);
+    BOOST_REQUIRE (file->getFileSize() > 0);
     BOOST_REQUIRE (file->isFileCached() == false);
   }
 
@@ -163,13 +163,13 @@ void TestMXARead()
 // -----------------------------------------------------------------------------
 void TestMXAWrite()
 {
-  std::cout << "   MXAWrite Test" << std::endl;
+  std::cout << "|--MXAWrite Test" << std::endl;
   int32 err = 0;
   MXADataModelPtr model = createSimpleModel();
   ISupportFilePtr binaryFile = MXASupportFile::NewFromFileSystem(MXATest::SupportFile_BinaryInputFile, SupportFile::FileType::Binary);
   ISupportFilePtr textFile = MXASupportFile::NewFromFileSystem(MXATest::SupportFile_TextInputFile, SupportFile::FileType::Text);
-  model->addSupportFile(binaryFile);
-  model->addSupportFile(textFile);
+  model->addSupportFile(binaryFile, true);
+  model->addSupportFile(textFile, true);
 
   IDataFilePtr mxaDataFile = H5MXADataFile::CreateFileWithModel(MXATest::SupportFile_OutputFile, model);
   if ( NULL == mxaDataFile.get()) { err = -1; } else { err = 0; };

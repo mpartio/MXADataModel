@@ -50,7 +50,7 @@ namespace MXA_DataImport {
   const std::string Attr_Text("Text");
   const std::string Attr_Source_Type ("Source_Type");
   const std::string Attr_Padding_Char ("Padding_Char");
-  const std::string Attr_Total_Char_Length("Total_Char_Length");
+  const std::string Attr_Max_Char_Length("Max_Char_Length");
   const std::string Attr_Numeric_Type("Numeric_Type");
   const std::string Attr_Data_Dimension("Data_Dimension");
   const std::string Attr_Key ("Key");
@@ -68,7 +68,7 @@ typedef std::pair<std::string, std::string>        XMLAttributeMapElement;
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.15 $
+* @version $Revision: 1.16 $
 */
 class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {

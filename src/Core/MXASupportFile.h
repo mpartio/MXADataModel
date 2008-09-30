@@ -23,7 +23,7 @@
 * file from the filesystem.
 * @author  Mike Jackson for BlueQuartz Software
 * @date Sep 23, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT MXASupportFile: public ISupportFile
 {
@@ -152,6 +152,7 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
     IMXAArrayPtr _fileContents;
     int          _index;
     hid_t        _fileId;
+    int          _source;
 
     MXASupportFile(const MXASupportFile&);    // Copy Constructor Not Implemented
     void operator=(const MXASupportFile&);  // Operator '=' Not Implemented

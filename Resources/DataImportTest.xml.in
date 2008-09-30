@@ -27,26 +27,26 @@
 	  <Import_Property Key="ImportAsGrayScale" Value="1" />
 		<File_Path>
 			<Text_Part Text="@MXA_TEMP_DIR@DataImportTest/test_data/" />
-			<Index_Part Padding_Char="0" 
-			 Total_Char_Length="2"
+			<Index_Part
+			  Padding_Char="0" 
+        Max_Char_Length="4"
 				Numeric_Type="Integer" 
 				Data_Dimension="@Dim_0_name@" />
 				
 			<Text_Part Text="-" />
-			<Index_Part Padding_Char="0" 
-			 Total_Char_Length="4"
+			<Index_Part 
 				Numeric_Type="Integer" 
 				Data_Dimension="@Dim_1_name@" />
 				
 			<Text_Part Text="-" />
-      <Index_Part Padding_Char="0" 
-       Total_Char_Length="2"
+      <Index_Part 
+        Padding_Char="0" 
+        Max_Char_Length="2"
         Numeric_Type="Integer" 
         Data_Dimension="@Dim_2_name@" />
         
       <Text_Part Text="-" />
-      <Index_Part Padding_Char="0" 
-       Total_Char_Length="3"
+      <Index_Part 
         Numeric_Type="Integer" 
         Data_Dimension="@Dim_3_name@" />
 			<Text_Part Text="-Record_0.tif" />

@@ -9,7 +9,10 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-DataSourcePathIndexSection::DataSourcePathIndexSection(  int32 dimIndex, int8 fillChar, int32 width, const std::string &numericType) :
+DataSourcePathIndexSection::DataSourcePathIndexSection(  int32 dimIndex,
+                                                         const std::string  &fillChar,
+                                                         int32 width,
+                                                         const std::string &numericType) :
   _index(dimIndex),
   _fillChar (fillChar),
   _width (width),
@@ -34,13 +37,46 @@ std::string DataSourcePathIndexSection::toString (int value, int8 &ok)
 //    return std::string(); // Return an empty string
 //  }
 //
+
+  // Sanity check first.
+  if (this->_fillChar.empty() == true && this->_width != -1)
+  {
+    ok = 0;
+    std::string str;
+    return str;
+  }
+
+  if (this->_width == -1 && this->_fillChar.empty() == false)
+  {
+    ok = 0;
+    std::string str;
+    return str;
+  }
+
   std::stringstream strStream;
   strStream.clear();
-  strStream.setf(std::ios::fixed);
-  strStream.fill(_fillChar);
 
-  strStream << _preText << std::setw(_width) << value << this->_postText;
-  ok = true;
+  if (this->_fillChar.empty() == false
+      && this->_fillChar.size() == 1
+      && this->_width != -1)
+  {
+    strStream.setf(std::ios::fixed);
+    strStream.fill(_fillChar[0]);
+    strStream << _preText << std::setw(_width) << value << this->_postText;
+    ok = true;
+  }
+  else if (this->_fillChar.empty() == true
+           && this->_width == -1)
+  {
+    strStream << _preText << value << this->_postText;
+    ok = true;
+  }
+  else
+  {
+    ok = false;
+    std::string str;
+    return str;
+  }
   return strStream.str();
 }
 

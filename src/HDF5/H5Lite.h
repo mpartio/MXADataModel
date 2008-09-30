@@ -65,7 +65,7 @@ class IMXAArray;
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.53 $
+ * @version $Revision: 1.54 $
  */
 class H5Lite
 {
@@ -1388,13 +1388,13 @@ static MXA_EXPORT herr_t getDatasetInfo( hid_t loc_id,
  * You must close the attributeType argument or resource leaks will occur. Use
  *  H5Tclose(attr_type); after your call to this method if you do not need the id for
  *   anything.
- * @param loc_id
- * @param objName
- * @param attr_name
- * @param dims
- * @param type_class
- * @param type_size
- * @param attr_type
+ * @param loc_id The parent location of the Dataset
+ * @param objName The name of the dataset
+ * @param attr_name The name of the attribute
+ * @param dims A std::vector that will hold the sizes of the dimensions
+ * @param type_class The HDF5 class type
+ * @param type_size THe HDF5 size of the data
+ * @param attr_type The Attribute ID - which needs to be closed after you are finished with the data
  * @return
  */
 static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id,

@@ -23,7 +23,7 @@
 * @brief Represents the index value (a number) of a data source path.
 * @author Mike Jackson
 * @date Nov 2007
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT DataSourcePathIndexSection : public IStringSection
 {
@@ -37,7 +37,7 @@ public:
    * @param width The number of characters to use when creating the vnumber
    * @param numericType The type of number to create.
    */
-  DataSourcePathIndexSection( int32 dimIndex, int8 fillChar,
+  DataSourcePathIndexSection( int32 dimIndex, const std::string  &fillChar,
                               int32 width, const std::string &numericType);
 
   virtual ~DataSourcePathIndexSection();
@@ -64,7 +64,7 @@ public:
 
  private:
    int32 _index;
-   int8 _fillChar;
+   std::string _fillChar;
    int32 _width;
    std::string _numericType;
    std::string _preText;

@@ -46,8 +46,8 @@ void RemoveTestFiles()
 {
   std::cout << "Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
-//  boost::filesystem::remove(DATAIMPORT_TEST_SIMPLE_IMPORT);
-//  boost::filesystem::remove(DATAIMPORT_TEST_H5TIFF_OUTPUT_FILE);
+  boost::filesystem::remove(DATAIMPORT_TEST_SIMPLE_IMPORT);
+  boost::filesystem::remove(DATAIMPORT_TEST_H5TIFF_OUTPUT_FILE);
 #endif
 }
 

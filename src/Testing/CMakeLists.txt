@@ -73,10 +73,10 @@ IF (BUILD_TESTING)
           ${MXA_TESTING_DIR}/TiffMaker.h
         )
 
-        DataImportTestSetup("Dim_0" "Vol Frac" 46 2 48 2 0)
-        DataImportTestSetup("Dim_1" "Rnd Seed" 1000 2 1400 400 1)
-        DataImportTestSetup("Dim_2" "TS" 95 2 98 3 2)
-        DataImportTestSetup("Dim_3" "Slice" 251 3 253 1 3)
+        DataImportTestSetup("Dim_0" "Vol Frac" 0 6 125 25 0)
+        DataImportTestSetup("Dim_1" "Rnd Seed" 0 6 125 25 1)
+        DataImportTestSetup("Dim_2" "TS" 0 6 125 25 2)
+        DataImportTestSetup("Dim_3" "Slice" 0 6 125 25 3)
         FILE(MAKE_DIRECTORY "@MXA_TEMP_DIR@DataImportTest/test_data/" )
     #    source_group(src\\Testing FILES ${MXADATAIMPORT_TEST_SRCS} ${MXADATAIMPORT_TEST_HEADERS})
         ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} ${MXADATAIMPORT_TEST_HEADERS})
@@ -97,14 +97,22 @@ IF (BUILD_TESTING)
     TARGET_LINK_LIBRARIES (H5LiteTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS})
     ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
 
-    # ------- H5Lite Test
+    # ------- H5Utilities Test
     SET (H5UTIL_TEST_SRCS
       ${MXA_TESTING_DIR}/H5UtilitiesTest.cpp
     )
     ADD_EXECUTABLE ( H5UtilitiesTest ${H5UTIL_TEST_SRCS} )
     TARGET_LINK_LIBRARIES (H5UtilitiesTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS})
     ADD_TEST(H5UtilitiesTest ${EXECUTABLE_OUTPUT_PATH}/H5UtilitiesTest)
-        
+ 
+    # ------- DataSourcePathIndexSection  Test
+    SET (DATASOURCEPATHINDEXSECTION_TEST_SRCS
+      ${MXA_TESTING_DIR}/DataSourcePathIndexSectionTest.cpp
+    )
+    ADD_EXECUTABLE ( DataSourcePathIndexSectionTest ${DATASOURCEPATHINDEXSECTION_TEST_SRCS} )
+    TARGET_LINK_LIBRARIES (DataSourcePathIndexSectionTest ${MXADATAMODEL_LIB_NAME} ${TEST_BOOST_LIBS} ${DEP_LIBS})
+    ADD_TEST(DataSourcePathIndexSectionTest ${EXECUTABLE_OUTPUT_PATH}/DataSourcePathIndexSectionTest)
+           
     # --------- BMP IO Test
     SET (BMP_IO_TEST_SRCS
         ${MXA_TESTING_DIR}/BmpIOTest.cpp
