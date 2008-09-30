@@ -9,13 +9,7 @@
 <meta content="max-age=0, must-revalidate" http-equiv="Cache-Control">
 <script type="text/javascript" src="Navigation.js"></script>
 </head>
-
-
-
 <body>
-
-
-
 <table class="main_layout_table">
 <tr>
 <td colspan="2">
@@ -35,24 +29,41 @@ API Usage Examples
 <!--  Start Page Content -->
 <td class="content">
 
-<br/>
+<h4>Data Import Example</h4>
+<div class="entry">
+  This example shows how to create a 'ImportDelegate' class to handle specialized importing
+  code. The top level entry point is the 'main.cpp' source file. Supporting classes are
+  the <i>ExampleImportDelegateFactory</i> and the <i>ExampleImportDelegate</i>. This example
+  also shows off the <b>Factory</b> design pattern that is used when creating your
+  own importers. The example generates a number of binary data files that are then used
+  as input data sources for the import code.</div>
+
 <h4>Example 1 - Basic model building and storage of data.</h4>
-<div> This example illustrates some basic concepts for the MXA Data Model. The code
+<div class="entry"> This example illustrates some basic concepts for the MXA Data Model. The code
 walks through how to create a Data Model through code, list the data dimensions and 
 data records that have been created, export the model to an XML file and then store
 some auto generated data into the HDF5 file. It also shows how to retrieve some data
 stored in the User Defined Meta Data Section.</div>
 <br/>
 <h4>Example 2 - Retrieving data from an HDF5 based MXA Datafile</h4>
-<div>This example shows how to use some of the existing MXA data classes to 
+<div  class="entry">This example shows how to use some of the existing MXA data classes to 
 retrieve data from an HDF5 data file. The same model layout as in example 1 is 
 utilized.</div>
-<br/>
-<h4>DataWrapper Example - Basic use of the DataWrapper classes</h4>
-<div>This example shows how to instantiate and use the MXAArrayTemplate classes located
+
+
+<h4>Support File Example</h4>
+<div class="entry">
+  This short example shows how to store a file from the local filesystem as a 'Support' file
+  in the HDF5 based MXA data file. The example program generates a tiff image and an 
+  example data model. A reference to the tiff image is then added to the data model and
+  then the data model is saved to the HDF5 based mxa data file. You can use any number
+  of utilities, including the MXADataViewer to view the file and it's contents.
+</div>
+
+<h4>DataWrapper Example</h4>
+<div class="entry">This example shows how to instantiate and use the MXAArrayTemplate classes located
 in the DataWrapper folder. These classes can be used for easier storage and retrieval
 of data from HDF5 files using the H5Lite methods.</div>
-
 
 
 
