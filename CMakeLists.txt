@@ -31,7 +31,11 @@ SET (EXECUTABLE_OUTPUT_PATH
   CACHE PATH
   "Single Directory for all Executables."
   )
-  
+
+#-------------------------------------------------------------------------------
+#  Define the location of the Build Directory
+SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
 #-------------------------------------------------------------------------------
 #  Define the location of the Resources Directory
 #-------------------------------------------------------------------------------
