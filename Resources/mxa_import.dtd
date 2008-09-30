@@ -32,8 +32,8 @@
 <!ATTLIST Text_Part
 	Text CDATA #REQUIRED>
 <!ATTLIST Index_Part
-	Padding_Char CDATA #REQUIRED
-	Total_Char_Length CDATA #REQUIRED
+	Padding_Char CDATA "0"
+	Max_Char_Length CDATA #IMPLIED
 	Numeric_Type (Integer|Float) "Integer"
 	Data_Dimension CDATA #REQUIRED>
 <!ATTLIST Explicit_Data_Source
