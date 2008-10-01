@@ -52,7 +52,7 @@ div.content {
 
 .main_layout_table
 {
-    width: 800px;
+    width: 900px;
     padding: 0;
     border: solid 0px #000000;
 }
@@ -66,6 +66,16 @@ div.content {
    border-bottom: solid 1px #000000;
 }
 
+table.explanation 
+{ 
+   color: #000; 
+   font-family: Arial, Helvetica;
+  /* background: #f5f7fa; */
+   margin: 2px;
+   padding: 2px;
+   vertical-align: top;
+   border: solid 1px #8c92a2;
+ }
 
 div.header
 {
@@ -131,6 +141,13 @@ div.entry
    padding: 4px;
    vertical-align: top;
    border: solid 1px #8c92a2;
+ }
+ 
+ code.small
+ {
+   color: #000; 
+   font-family: monospace;
+   font-size: 9pt;
  }
  
  .cell_header 
