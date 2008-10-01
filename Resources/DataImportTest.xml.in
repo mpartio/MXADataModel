@@ -18,10 +18,10 @@
 	<Output_File Absolute_Path="@DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE@" Delete_Existing_File="true"/>
 
 	<!--  Define the data sources for each Data Record and Dimension Values
-		/Users/mjackson/Task_7/Data/Mike-Uchic-Data/IN100_25JUN04_DISC1/7000_Series/7000.tif
 		Data_Record needs to be the full path to the Data Record 
 		Source_Type is the quick description of the contents of the file. This should
-		be from a known list of types that are supported or supplied by the user. -->
+		be from a known list of types that are supported or supplied by the user. 
+  -->
 	<Implicit_Data_Source Data_Record="Record 0" Source_Type="H5TiffImport">
 	  <Import_Property Key="FileNotFoundIsError" Value="1" />
 	  <Import_Property Key="ImportAsGrayScale" Value="1" />
@@ -52,33 +52,27 @@
 			<Text_Part Text="-Record_0.tif" />
 		</File_Path>
 	</Implicit_Data_Source> 
-
-
 	
-	<!-- We can also explicitly declare each source file to be imported
+	<!-- We can also explicitly declare each source file to be imported.
 	<Explicit_Data_Source DataDimension_Values="7000 0"
-		Data_Record="Secondary Electron Image"
-		File_Path="/Users/mjackson/Desktop/VF40_t010.tif"
+		Data_Record="Record 0"
+		File_Path="@MXA_TEMP_DIR@VF40_t010.tif"
 		Source_Type="H5TiffImport" >
-		<Import_Property Key="FileNotFoundIsError" Value="0" />
+		<Import_Property Key="FileNotFoundIsError" Value="1" />
     <Import_Property Key="ImportAsGrayScale" Value="1" />
     </Explicit_Data_Source>
 
 	<Explicit_Data_Source DataDimension_Values="7000 1"
-		Data_Record="Secondary Electron Image"
-		File_Path="/Users/mjackson/Desktop/VF40_t020.tif" 
+		Data_Record="Record 0"
+		File_Path="@MXA_TEMP_DIR@VF40_t020.tif" 
 		Source_Type="H5TiffImport">
-	  <Import_Property Key="FileNotFoundIsError" Value="0" />
+	  <Import_Property Key="FileNotFoundIsError" Value="1" />
     <Import_Property Key="ImportAsGrayScale" Value="1" />
   </Explicit_Data_Source>
   -->
   
-  
-    
   <Support_Files>
         <Support_File FileSystem_Path="@DATA_MODEL_XML_FILE@" File_Type="Text" />
   </Support_Files>
-  
-  
   
 </Data_Import>
