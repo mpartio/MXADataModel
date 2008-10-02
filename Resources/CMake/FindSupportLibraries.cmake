@@ -16,24 +16,27 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
 SET(DEP_LIBS ${DEP_LIBS} ${Boost_LIBRARIES})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
-#---- Find Expat -------------
+#-------------------------------------------------------------------------------
+#- Find Expat Library -------------
 SET (MXA_XML_SUPPORT "0")
 IF (NOT DEFINED MXA_USE_XML)
     OPTION(MXA_USE_XML "Adds Ability to read/write models to XML Files" ON)
 ENDIF (NOT DEFINED MXA_USE_XML)
 
 IF (MXA_USE_XML)
-    INCLUDE ( ${MXA_CMAKE_DIR}/MXAFindExpat.cmake)
+    IF (NOT DEFINED MXA_EXTERNAL_EXPAT_LIBRARY)
+        INCLUDE ( ${MXA_CMAKE_DIR}/MXAFindExpat.cmake)
+    ENDIF (NOT DEFINED MXA_EXTERNAL_EXPAT_LIBRARY)
     IF (NOT EXPAT_FOUND)
-      MESSAGE (FATAL_ERROR "Expat Library was NOT Found and is needed.")
+        MESSAGE (FATAL_ERROR "Expat Library was NOT Found and is needed.")
     ENDIF (NOT EXPAT_FOUND)
     INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIRS} )
     SET(DEP_LIBS ${DEP_LIBS} ${EXPAT_LIBRARIES})
 ENDIF (MXA_USE_XML)
 
-
-#--- Find the HDF5 library ------------------------------------------------
-# Build with the HDF5 Libraries Enabled. This is the default
+#-------------------------------------------------------------------------------
+#- Find the HDF5 library ------------------------------------------------
+#- Build with the HDF5 Libraries Enabled. This is the default
 SET(MXA_HDF5_SUPPORT "0")
 SET(MXA_USE_HDF5_PRIMITIVE_TYPES)
 SET(H5LITE_USE_MXA_CONSTRUCTS)
@@ -49,27 +52,27 @@ IF ( MXA_USE_HDF5 )
   SET (HDF5_USE_HIGH_LEVEL FALSE)
   IF (NOT DEFINED MXA_EXTERNAL_HDF5_LIBRARY)
       INCLUDE( ${MXA_CMAKE_DIR}/MXAFindHDF5.cmake )
-      IF(NOT HDF5_FOUND)
-        MESSAGE(FATAL_ERROR " HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
-      ENDIF(NOT HDF5_FOUND)
-      INCLUDE_DIRECTORIES( ${HDF5_INCLUDE_DIRS} )
-      SET(DEP_LIBS ${DEP_LIBS} ${HDF5_LIBRARIES})
-  ELSE (NOT DEFINED MXA_EXTERNAL_HDF5_LIBRARY)    
-      SET(DEP_LIBS ${DEP_LIBS} ${MXA_EXTERNAL_HDF5_LIBRARY})
   ENDIF (NOT DEFINED MXA_EXTERNAL_HDF5_LIBRARY)
-
+  IF(NOT HDF5_FOUND)
+    MESSAGE(FATAL_ERROR " HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
+  ENDIF(NOT HDF5_FOUND)
+  INCLUDE_DIRECTORIES( ${HDF5_INCLUDE_DIRS} )
+  SET(DEP_LIBS ${DEP_LIBS} ${HDF5_LIBRARIES})
   SET(MXA_USE_HDF5_PRIMITIVE_TYPES 1)
   SET(H5LITE_USE_MXA_CONSTRUCTS 1)
 ENDIF ( MXA_USE_HDF5 )   
- 
-#---- Find TIFF -------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# Find TIFF Library 
 SET (MXA_TIFF_SUPPORT "0")
 IF (NOT DEFINED MXA_USE_TIFF)
     OPTION(MXA_USE_TIFF "Compiles source code that depends on having the Tif Lib installed" ON)
 ENDIF (NOT DEFINED MXA_USE_TIFF)
 
 IF(MXA_USE_TIFF)
-    INCLUDE ( ${MXA_CMAKE_DIR}/MXAFindTiff.cmake)
+    IF (NOT DEFINED MXA_USE_EXTERNAL_TIFF_LIBRARY)
+        INCLUDE ( ${MXA_CMAKE_DIR}/MXAFindTiff.cmake)
+    ENDIF (NOT DEFINED MXA_USE_EXTERNAL_TIFF_LIBRARY)
     IF (NOT TIFF_FOUND)
       MESSAGE (FATAL_ERROR " Tiff Library was NOT Found and is needed.")
     ENDIF (NOT TIFF_FOUND)

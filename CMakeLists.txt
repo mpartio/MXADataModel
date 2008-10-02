@@ -242,10 +242,10 @@ IF ( BUILD_TESTING )
 ENDIF ( BUILD_TESTING )
 
 #-- Include the Examples Directory
-OPTION(BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
-IF(BUILD_EXAMPLES)
+OPTION(MXA_BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
+IF(MXA_BUILD_EXAMPLES)
     ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
-ENDIF(BUILD_EXAMPLES)
+ENDIF(MXA_BUILD_EXAMPLES)
 
 # ------------------------------------------------------------------------------
 #  Build simple test programs. This should always be commented out
