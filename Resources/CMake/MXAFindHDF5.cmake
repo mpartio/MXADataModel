@@ -10,14 +10,17 @@
 #  HDF5_LIBRARIES - The List of HDF5 libraries that were found. This variable can be used in a LINK_LIBRARIES(...) command
 #  HDF5_LIBRARY_DEBUG - Debug Version of HDF5 library
 #  HDF5_LIBRARY_RELEASE - Release Version of HDF5 library
+#
+#  To make finding HDF5 easier set the "HDF5_INSTALL" environment variable to the location
+#  where HDF5 is installed.
 
 # MESSAGE(STATUS "Finding HDF5 Library... " )
-
+#
 #-- Clear the Library List 
 # SET (HDF5_LIBRARIES "")
 #-- Clear the include Directories
 # SET (HDF5_INCLUDE_DIRS "")
-
+#
 # ------------------ START FIND HDF5 LIBS --------------------------------------
 SET (HDF5_FOUND "NO")
 SET (HDF5_HL_FOUND "NO")
@@ -119,13 +122,13 @@ ENDIF(HDF5_INCLUDE_DIR AND HDF5_LIBRARY)
 # Report the results.
 IF(NOT HDF5_FOUND)
   SET(HDF5_DIR_MESSAGE
-    "HDF5 was not found. Make sure HDF5_LIBRARY and HDF5_INCLUDE_DIR are set.")
+    "HDF5 was not found. Make sure HDF5_LIBRARY and HDF5_INCLUDE_DIR are set or set the HDF5_INSTALL environment variable.")
   IF(NOT HDF5_FIND_QUIETLY)
     MESSAGE(STATUS "${HDF5_DIR_MESSAGE}")
   ELSE(NOT HDF5_FIND_QUIETLY)
     IF(HDF5_FIND_REQUIRED)
       # MESSAGE(FATAL_ERROR "${HDF5_DIR_MESSAGE}")
-      MESSAGE(FATAL_ERROR "Expat was NOT found and is Required by this project")
+      MESSAGE(FATAL_ERROR "HDF5 was NOT found and is Required by this project")
     ENDIF(HDF5_FIND_REQUIRED)
   ENDIF(NOT HDF5_FIND_QUIETLY)
 ENDIF(NOT HDF5_FOUND)
