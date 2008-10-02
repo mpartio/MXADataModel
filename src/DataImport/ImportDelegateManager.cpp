@@ -1,6 +1,6 @@
 #include <DataImport/ImportDelegateManager.h>
 #include <DataImport/AbstractImportDelegateFactory.h>
-#if TIFF_SUPPORT
+#if MXA_TIFF_SUPPORT
 #include <HDF5/H5TiffImportDelegateFactory.h>
 #endif
 #include <HDF5/H5BmpImportDelegateFactory.h>
@@ -43,7 +43,7 @@ ImportDelegateManagerPtr ImportDelegateManager::instance()
 // -----------------------------------------------------------------------------
 void ImportDelegateManager::registerKnownImportDeletegateFactories()
 {
-#if TIFF_SUPPORT
+#if MXA_TIFF_SUPPORT
     //Register to be able to import Tiff images
     AbstractImportDelegateFactoryPtr h5TiffImportDelegateFactory ( new H5TiffImportDelegateFactory() );
     ImportDelegateManager::registerImportDelegateFactory(h5TiffImportDelegateFactory);

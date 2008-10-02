@@ -7,6 +7,7 @@ if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
+# - Set the variable where to find the top level project sources
 IF (NOT DEFINED MXA_SOURCE_DIR)
     SET (MXA_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 ENDIF(NOT DEFINED MXA_SOURCE_DIR)
@@ -16,6 +17,12 @@ IF ( NOT DEFINED  MXADATAMODEL_LIB_NAME)
   SET (MXADATAMODEL_LIB_NAME MXADataModel)
 ENDIF ( NOT DEFINED MXADATAMODEL_LIB_NAME )
 
+# - Check to see if another project is over riding the naming of the libraries
+IF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
+  SET (MXA_USE_DEBUG_LIBRARY_NAME TRUE)
+ENDIF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
+
+# - Set our Library Version
 SET (MXADATAMODEL_VER "1.0")
 
 # ---------- Setup output Directories -------------------------
@@ -40,11 +47,12 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 #  Define the location of the Resources Directory
 #-------------------------------------------------------------------------------
 SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
+SET (MXA_CMAKE_DIR ${MXA_RESOURCES_DIR}/CMake)
 SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
 
 #-------------------------------------------------------------------------------
-INCLUDE (${MXA_RESOURCES_DIR}/vtkTestTypes.cmake )
-INCLUDE (${MXA_RESOURCES_DIR}/ConfigureChecks.cmake)
+INCLUDE (${MXA_CMAKE_DIR}/vtkTestTypes.cmake )
+INCLUDE (${MXA_CMAKE_DIR}/ConfigureChecks.cmake)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 OPTION(BUILD_TESTING "Build MXADataModel Complete Testing" ON)
@@ -70,10 +78,10 @@ IF (BUILD_SHARED_LIBS)
 ENDIF (BUILD_SHARED_LIBS)
 
 #-- Find all the support libraries needed
-INCLUDE (${MXA_RESOURCES_DIR}/FindSupportLibraries.cmake)
+INCLUDE (${MXA_CMAKE_DIR}/FindSupportLibraries.cmake)
 
 #-- Include a Macro to setup source file properties
-INCLUDE ( ${MXA_RESOURCES_DIR}/MXA_CMakeMacros.cmake)
+INCLUDE ( ${MXA_CMAKE_DIR}/MXA_CMakeMacros.cmake)
 
 #-- Include all the source files
 INCLUDE (${MXA_SOURCE_DIR}/src/Base/Base_SourceList.cmake)
@@ -110,13 +118,13 @@ SET (MXADATAMODEL_HEADERS
 IF (MXA_USE_XML)
     INCLUDE (${MXA_SOURCE_DIR}/src/XML/XML_SourceList.cmake)
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
-    SET (XML_SUPPORT "1")
+    SET (MXA_XML_SUPPORT "1")
 ENDIF(MXA_USE_XML)
 
 #------- HDF5 Dependant Sources ------------------------------
 IF ( MXA_USE_HDF5 )
   INCLUDE (${MXA_SOURCE_DIR}/src/HDF5/HDF5_SourceList.cmake)
-  SET(HDF5_SUPPORT "1")
+  SET(MXA_HDF5_SUPPORT "1")
   OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
   IF(BUILD_VTK_HDF5)
     #-- Find VTK packages -----------------------------------------
@@ -136,7 +144,7 @@ IF ( MXA_USE_HDF5 )
   
   # ------------------ Check for and Include Tif Lib dependent code --------------
   IF(MXA_USE_TIFF)
-    SET (TIFF_SUPPORT "1")
+    SET (MXA_TIFF_SUPPORT "1")
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
   ENDIF (MXA_USE_TIFF)
 ENDIF ( MXA_USE_HDF5 )
@@ -166,31 +174,38 @@ SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfi
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
 #-- Configure our UseMXADataModel.cmake file
-CONFIGURE_FILE ( ${MXA_RESOURCES_DIR}/UseMXADataModel.cmake.in
+CONFIGURE_FILE ( ${MXA_CMAKE_DIR}/UseMXADataModel.cmake.in
                  ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake @ONLY IMMEDIATE)
 
 # - Combine all the source files together -----------------------------
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
-IF (BUILD_SHARED_LIBS)
-    SET (MXA_BUILT_AS_DYNAMIC_LIB 1)
-    IF (WIN32 AND NOT MINGW)
-        SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
-        SET(MXA_LIBRARY_DEBUG "MXADataModel_D" CACHE INTERNAL "" FORCE)
-    ELSE (WIN32 AND NOT MINGW)
-        SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
-        SET(MXA_LIBRARY_DEBUG "MXADataModel_debug" CACHE INTERNAL "" FORCE)
-    ENDIF(WIN32 AND NOT MINGW)
-ELSE (BUILD_SHARED_LIBS)
-    SET (MXA_BUILT_AS_DYNAMIC_LIB)
-    IF (WIN32 AND NOT MINGW)
-        SET(MXA_LIBRARY_RELEASE "libMXADataModel" CACHE INTERNAL "" FORCE)
-        SET(MXA_LIBRARY_DEBUG "libMXADataModel_D" CACHE INTERNAL "" FORCE)
-    ELSE (WIN32 AND NOT MINGW)
-        SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
-        SET(MXA_LIBRARY_DEBUG "MXADataModel_debug" CACHE INTERNAL "" FORCE)
-    ENDIF(WIN32 AND NOT MINGW)
-ENDIF (BUILD_SHARED_LIBS)
+IF (MXA_USE_DEBUG_LIBRARY_NAME)
+
+    IF (BUILD_SHARED_LIBS)
+        SET (MXA_BUILT_AS_DYNAMIC_LIB 1)
+        IF (WIN32 AND NOT MINGW)
+            SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
+            SET(MXA_LIBRARY_DEBUG "MXADataModel_D" CACHE INTERNAL "" FORCE)
+        ELSE (WIN32 AND NOT MINGW)
+            SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
+            SET(MXA_LIBRARY_DEBUG "MXADataModel_debug" CACHE INTERNAL "" FORCE)
+        ENDIF(WIN32 AND NOT MINGW)
+    ELSE (BUILD_SHARED_LIBS)
+        SET (MXA_BUILT_AS_DYNAMIC_LIB)
+        IF (WIN32 AND NOT MINGW)
+            SET(MXA_LIBRARY_RELEASE "libMXADataModel" CACHE INTERNAL "" FORCE)
+            SET(MXA_LIBRARY_DEBUG "libMXADataModel_D" CACHE INTERNAL "" FORCE)
+        ELSE (WIN32 AND NOT MINGW)
+            SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
+            SET(MXA_LIBRARY_DEBUG "MXADataModel_debug" CACHE INTERNAL "" FORCE)
+        ENDIF(WIN32 AND NOT MINGW)
+    ENDIF (BUILD_SHARED_LIBS)
+ELSE (MXA_USE_DEBUG_LIBRARY_NAME)
+    SET(MXA_LIBRARY_RELEASE "MXADataModel" CACHE INTERNAL "" FORCE)
+    SET(MXA_LIBRARY_DEBUG "MXADataModel" CACHE INTERNAL "" FORCE)
+ENDIF (MXA_USE_DEBUG_LIBRARY_NAME)
+
 
 
 #-- Add the MXADataModel Library and link to needed libraries-------------------
@@ -216,7 +231,7 @@ IF (MINGW AND BUILD_SHARED_LIBS)
 ENDIF (MINGW AND BUILD_SHARED_LIBS)
 
 #--- Set up the installation Code for Make Install
-include ( "${MXA_RESOURCES_DIR}/MXAInstall.cmake")
+include ( "${MXA_CMAKE_DIR}/MXAInstall.cmake")
 
 #----- Install Needed Runtime Libraries -----------------------------------
 #include ( "${MXA_RESOURCES_DIR}/InstallMXASupportLibraries.cmake")

@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo "<<<<<<<<<<< DO NOT USE THIS FILE >>>>>>>>>>>>>>>>>>>>>>"
-echo "USE FILE PackageMXALibsForOSXAppBundle.sh.in INSTEAD"
-echo "* ---------------------------------------------------- "
-
