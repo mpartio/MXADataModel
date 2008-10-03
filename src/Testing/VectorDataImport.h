@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -19,10 +19,10 @@
 
 /**
 * @class VectorDataDelegate VectorDataImport.h Testing/VectorDataImport.h
-* @brief 
+* @brief
 * @author
 * @date
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 class VectorDataDelegate: public IImportDelegate
 {
@@ -31,7 +31,7 @@ public:
   virtual ~VectorDataDelegate(){};
 
 // -----------------------------------------------------------------------------
-//  Implemented Method from the IDataImportDelegate interface 
+//  Implemented Method from the IDataImportDelegate interface
 // -----------------------------------------------------------------------------
   int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
   {
@@ -55,26 +55,26 @@ public:
         data.push_back( (i*j *k) * 255);
       }
     }
-    
+
     return H5Lite::writeVectorDataset(fileId, path, dims, data);
   }
-  
+
   virtual int32 setProperty(const std::string &key, const std::string &value)
   {
     std::cout << "VectorDataDelegate::setProperty is NOT implemented" << std::endl;
-    return 0;
+    return -1;
   }
 
-  virtual int32 getProperty(const std::string &key, const std::string &value)
-  { 
+  virtual int32 getProperty(const std::string &key, std::string &value)
+  {
     std::cout << "VectorDataDelegate::getProperty is NOT implemented" << std::endl;
-    return 0;
+    return -1;
   }
-  
+
 private:
   VectorDataDelegate(const VectorDataDelegate&);   //Copy Constructor Not Implemented
   void operator=(const VectorDataDelegate&); //Copy Assignment Not Implemented
-  
+
 };
 
 // -----------------------------------------------------------------------------
@@ -89,7 +89,7 @@ namespace VectorDataDelegateFactory_Detail
 
 /**
 * @class VectorDataDelegateFactory VectorDataImport.h Testing/VectorDataImport.h
-* @brief 
+* @brief
 * @author
 * @date
 * @version
@@ -99,8 +99,8 @@ class VectorDataDelegateFactory : public AbstractImportDelegateFactory
   public:
     VectorDataDelegateFactory() {}
     virtual ~VectorDataDelegateFactory() {}
-    
-    
+
+
   /**
    * @brief This method will return a new instance of VectorDataDelegate provided
    * the className matches.
@@ -120,7 +120,7 @@ class VectorDataDelegateFactory : public AbstractImportDelegateFactory
     }
     return delegate;
   }
-  
+
   /**
    * @brief Returns the Classname of the delegate that this factory can create.
    */
@@ -128,7 +128,7 @@ class VectorDataDelegateFactory : public AbstractImportDelegateFactory
   {
     return VectorDataDelegateFactory_Detail::ClassName;
   }
-  
+
   private:
     VectorDataDelegateFactory(const VectorDataDelegateFactory&);    //Not Implemented
     void operator=(const VectorDataDelegateFactory&);  //Not Implemented

@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Copyright (c) Mike Jackson, 
+//  Copyright (c) Mike Jackson,
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,11 +88,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief  
+ * @brief
  * @author Mike Jackson
  * @date Septermber 2008
- * @version $Revision: 1.1 $
- *  
+ * @version $Revision: 1.2 $
+ *
  */
 class MXA_EXPORT IImportProperty
 {
@@ -102,10 +102,10 @@ public:
   virtual ~IImportProperty(){};
 
   virtual int32 setProperty(const std::string &key, const std::string &value) = 0;
-    
-  virtual int32 getProperty(const std::string &key, const std::string &value) = 0;
 
-  
+  virtual int32 getProperty(const std::string &key, std::string &value) = 0;
+
+
 };
 
 #endif /*_IIMPORT_PROPERTY_H_*/

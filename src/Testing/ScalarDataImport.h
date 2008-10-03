@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class ScalarDataDelegate: public IImportDelegate
 {
@@ -32,17 +32,17 @@ public:
   virtual ~ScalarDataDelegate(){};
 
 // -----------------------------------------------------------------------------
-//  Implemented Method from the IDataImportDelegate interface 
+//  Implemented Method from the IDataImportDelegate interface
 // -----------------------------------------------------------------------------
   /**
    * @brief Imports the datasource to the data file
    * @param dataSource The source of the data
    * @param dataFile The IDataFile object
-   * @return 
+   * @return
    */
   int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
   {
-    
+
     std::string path ( dataSource->generateInternalPath() );
   //  std::cout << logTime() << "ScalarDataDelegate::importDataSource() " << path << std::endl;
     uint32 pos = path.find_last_of("/");
@@ -53,23 +53,23 @@ public:
     //Write the Data to the HDF5 File
     return H5Lite::writeScalarDataset(fileId, path, value);
   }
-  
+
   virtual int32 setProperty(const std::string &key, const std::string &value)
   {
     std::cout << "ScalarDataDelegate::setProperty is NOT implemented" << std::endl;
-    return 0;
+    return -1;
   }
 
-  virtual int32 getProperty(const std::string &key, const std::string &value)
-  { 
+  virtual int32 getProperty(const std::string &key, std::string &value)
+  {
     std::cout << "ScalarDataDelegate::getProperty is NOT implemented" << std::endl;
-    return 0;
+    return -1;
   }
-  
+
 private:
   ScalarDataDelegate(const ScalarDataDelegate&);   //Copy Constructor Not Implemented
   void operator=(const ScalarDataDelegate&); //Copy Assignment Not Implemented
-  
+
 };
 
 // -----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ namespace ScalarDataDelegateFactory_Detail
 
 /**
 * @class ScalarDataDelegateFactory ScalarDataIMport.h Testing/ScalarDataIMport.h
-* @brief 
+* @brief
 * @author
 * @date
 * @version
@@ -94,8 +94,8 @@ class ScalarDataDelegateFactory : public AbstractImportDelegateFactory
   public:
     ScalarDataDelegateFactory() {}
     virtual ~ScalarDataDelegateFactory() {}
-    
-    
+
+
   /**
    * @brief This method will return a new instance of ScalarDataDelegate provided
    * the className matches.
@@ -115,7 +115,7 @@ class ScalarDataDelegateFactory : public AbstractImportDelegateFactory
     }
     return delegate;
   }
-  
+
   /**
    * @brief Returns the Classname of the delegate that this factory can create.
    */
@@ -123,7 +123,7 @@ class ScalarDataDelegateFactory : public AbstractImportDelegateFactory
   {
     return ScalarDataDelegateFactory_Detail::ClassName;
   }
-  
+
   private:
     ScalarDataDelegateFactory(const ScalarDataDelegateFactory&);    //Not Implemented
     void operator=(const ScalarDataDelegateFactory&);  //Not Implemented

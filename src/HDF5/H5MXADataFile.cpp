@@ -158,7 +158,7 @@ int32 H5MXADataFile::createFile()
     }
   }
 #if 1
-  bool didDeleteFile = 1;
+  //bool didDeleteFile = 1;
   // Now delete the file if it really exists
   if (true == boost::filesystem::exists(this->_filename) )
   {

@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Copyright (c) Mike Jackson, 
+//  Copyright (c) Mike Jackson,
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,8 +21,8 @@
  * a delegate to import data sources into HDF5 data files.
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.6 $
- *  
+ * @version $Revision: 1.7 $
+ *
  */
 class MXA_EXPORT IImportDelegate : public IImportProperty
 {
@@ -30,7 +30,7 @@ class MXA_EXPORT IImportDelegate : public IImportProperty
 public:
   IImportDelegate(){};
   virtual ~IImportDelegate(){};
-  
+
   /**
   * @brief Imports a Data source into the underlying data storage mechanism. This is the method that subclasses
   * should over ride and implement.
@@ -42,11 +42,11 @@ public:
   #if 0
   virtual int32 setProperty(const std::string &key, const std::string &value)
     { return 0; }
-    
-  virtual int32 getProperty(const std::string &key, const std::string &value)
+
+  virtual int32 getProperty(const std::string &key,  std::string &value)
     { return 0; }
 #endif
-  
+
 };
 
 

@@ -105,9 +105,9 @@ public:
     return 0;
   }
 
-  virtual int32 getProperty(const std::string &key, const std::string &value)
+  virtual int32 getProperty(const std::string &key, std::string &value)
   {
-    return 0;
+    return -1;
   }
   // -----------------------------------------------------------------------------
   //  If you want to implement a generic "get" method that will retrieve the proper

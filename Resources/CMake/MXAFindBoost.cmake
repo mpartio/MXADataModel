@@ -339,7 +339,9 @@ IF (NOT DEFINED Boost_COMPILER)
 MACRO (_FIND_Boost_LIBRARY basename libname)
   
    IF (Boost_USE_${basename})
-    # MESSAGE (STATUS "Looking for ${basename}...")
+    IF (Boost_DEBUG)
+      MESSAGE (STATUS "Looking for ${basename}...")
+    ENDIF (Boost_DEBUG)
 # -------- Find the date_time Library ------------- 
    SET (Boost_LIB ${libname})
    SET (Boost_DEBUG_LIB_NAME boost_${Boost_LIB}${Boost_COMPILER}${Boost_MULTITHREADED}${Boost_ABI_TAG}-${Boost_CURRENT_VERSION})
@@ -347,6 +349,8 @@ MACRO (_FIND_Boost_LIBRARY basename libname)
    IF (Boost_DEBUG)
       message(STATUS "${basename} Boost_DEBUG_LIB_NAME: ${Boost_DEBUG_LIB_NAME}")
       message(STATUS "${basename} Boost_RELEASE_LIB_NAME: ${Boost_RELEASE_LIB_NAME}")
+      message(STATUS "NAMES: ${Boost_LIB_PREFIX}${Boost_DEBUG_LIB_NAME}")
+      message(STATUS "PATHS: ${Boost_LIBRARIES_SEARCH_DIRS}")
    ENDIF (Boost_DEBUG)
   #-- Find a Debug Library ---------------------------------------------
    FIND_LIBRARY(Boost_${basename}_LIBRARY_DEBUG

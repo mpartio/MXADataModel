@@ -42,7 +42,7 @@ MXA_PROPERTY_CONSTANT(ImportAsGrayScale);
  * @author Mike Jackson
  * @date April 2007
  * @class H5TiffImportDelegate HDF5/H5TiffImportDelegate.h HDF5/H5TiffImportDelegate.h
- * @version $Revision: 1.14 $
+ * @version $Revision: 1.15 $
  */
 class MXA_EXPORT H5TiffImportDelegate : public IImportDelegate
 {
@@ -80,10 +80,21 @@ public:
   */
   virtual int32 setProperty(const std::string &key, const std::string &value);
 
-  virtual int32 getProperty(const std::string &key, const std::string &value)
+  virtual int32 getProperty(const std::string &key, std::string &value)
   {
-    std::cout << "H5TiffImportDelegate::getProperty is NOT implemented" << std::endl;
-    return 0;
+    if (key.compare(H5TiffImport::FileNotFoundIsError) == 0)
+    {
+      if (this->_fileNotFoundIsError == true) {  value = "1"; }
+      else {  value = "0"; }
+      return 0;
+    }
+    if (key.compare(H5TiffImport::ImportAsGrayScale) == 0)
+    {
+      if (this->_importAsGrayScale == true) {  value = "1"; }
+      else {  value = "0"; }
+      return 0;
+    }
+    return -1;
   }
 
   // -----------------------------------------------------------------------------
