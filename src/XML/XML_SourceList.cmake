@@ -4,7 +4,6 @@ SET ( MXA_XML_SRCS
     ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.cpp
     ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.cpp
     ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.cpp
-    ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.cpp
 )
 
 SET (MXA_XML_HEADERS
@@ -14,7 +13,19 @@ SET (MXA_XML_HEADERS
     ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.h
     ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.h
     ${MXA_SOURCE_DIR}/src/XML/XMLUserMetaDataWriter.h
+)
+
+IF (MXA_USE_HDF5)
+SET ( MXA_XML_SRCS 
+    ${MXA_XML_SRCS}
+    ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.cpp
+)
+
+SET (MXA_XML_HEADERS
+    ${MXA_XML_HEADERS}
     ${MXA_SOURCE_DIR}/src/DataImport/DataImportXmlParser.h
 )
+
+ENDIF (MXA_USE_HDF5)
 
 MXA_SOURCE_PROPERTIES(XML "${MXA_XML_HEADERS}" "${MXA_XML_SRCS}")

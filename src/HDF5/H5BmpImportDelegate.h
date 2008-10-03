@@ -45,7 +45,7 @@ MXA_PROPERTY_CONSTANT(ImportAsGrayScale);
  * @author Mike Jackson
  * @date April 2007
  * @class H5BmpImportDelegate HDF5/H5BmpImportDelegate.h HDF5/H5BmpImportDelegate.h
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 class MXA_EXPORT H5BmpImportDelegate : public IImportDelegate
 {
@@ -61,16 +61,14 @@ public:
 
   /**
   * @brief Sets the 'FileNotFoundIsError' flag.
-  * @param _fileNotFoundIsError If this is true then the import will abort if an input file can not be found
+  * @param value If this is true then the import will abort if an input file can not be found
   */
-  //void setFileNotFoundIsError(bool value);
   MXA_PROPERTY(bool, FileNotFoundIsError, _fileNotFoundIsError);
 
   /**
   * @brief Sets the 'ImportAsGrayScale' value
-  * @param _importAsGrayScale If TRUE, then the tiff file will be converted to Grayscale
+  * @param value If TRUE, then the tiff file will be converted to Grayscale
   */
-  //void setImportAsGrayScale(bool value);
   MXA_PROPERTY(bool, ImportAsGrayScale, _importAsGrayScale);
 
   /**

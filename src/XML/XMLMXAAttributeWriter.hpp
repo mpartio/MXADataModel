@@ -13,13 +13,15 @@
 
 #include <Common/MXATypeDefs.h>
 #include <Base/IMXAArray.h>
+#if MXA_HDF5_SUPPORT
 #include <hdf5.h>
+#endif
 /**
 * @class XMLMXAAttributeWriter XMLMXAAttributeWriter.hpp XML/XMLMXAAttributeWriter.hpp
 * @brief Delegate type class that writes attributes to an xml file
 * @author mjackson
 * @date Jan 15, 2008
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 
 class MXA_EXPORT XMLMXAAttributeWriter
@@ -48,8 +50,8 @@ class MXA_EXPORT XMLMXAAttributeWriter
  */
     int32 writeAttribute(const std::string &attributeKey, IMXAArrayPtr attribute)
     {
-      hid_t typeId = attribute->getDataType();
-      herr_t err = -1;
+      int32 typeId = attribute->getDataType();
+      int32 err = -1;
       if (typeId == H5T_NATIVE_FLOAT)
       {
         err = this->writeAttributeData<float32>(attributeKey, attribute);

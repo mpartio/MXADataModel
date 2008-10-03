@@ -15,7 +15,9 @@
 #include <Common/DLLExport.h>
 #include <Core/MXADataModel.h>
 #include <Base/IDataModelReader.h>
+#if MXA_HDF5_SUPPORT
 #include <HDF5/H5Lite.h>
+#endif
 #include <DataWrappers/MXAArrayTemplate.hpp>
 #include <XML/XMLIODelegate.h>
 #include <XML/ExpatParser.h>
@@ -27,7 +29,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
  * class. This class is responsible for reading a data model from an XML File
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.19 $
+ * @version $Revision: 1.20 $
  * @class XMLDataModelReader XMLDataModelReader.h
  */
 class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,
@@ -72,7 +74,7 @@ public:
   int32 readPrimitiveAttribute( const std::vector<uint64> &dims)
   {
     //std::cout << logTime() << "readPrimitiveAttribute: " << this->_userMDKey << std::endl;
-    herr_t err = 1;
+    int32 err = 1;
     std::istringstream istream (this->_userAttributeData);
     uint64 size = 1;
     for (std::vector<uint64>::const_iterator iter = dims.begin(); iter != dims.end(); ++iter )

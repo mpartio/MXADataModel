@@ -54,31 +54,37 @@ CONFIGURE_FILE(${MXA_EXAMPLES_SOURCE_DIR}/ExampleFileLocations.h.in
 # ------------------------------------------------------------------------------
 #  Add Executable for GetDataExample
 # ------------------------------------------------------------------------------
+IF ( MXA_USE_HDF5 )
 ADD_EXECUTABLE ( GetDataExample ${GETDATA_SRCS} )
 TARGET_LINK_LIBRARIES ( GetDataExample
   ${MXADATAMODEL_LIB_NAME}
   ${DEP_LIBS} 
 )
+ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
 #  Add Executable for Example 1
 # ------------------------------------------------------------------------------
+IF ( MXA_USE_HDF5 )
 ADD_EXECUTABLE(Example1 Example1/Example1.cpp)
 TARGET_LINK_LIBRARIES(Example1 ${MXADATAMODEL_LIB_NAME} )
-
+ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
 #  Add Executable for Example 2
 # ------------------------------------------------------------------------------
+IF ( MXA_USE_HDF5 )
 ADD_EXECUTABLE(Example2 Example2/Example2.cpp)
 TARGET_LINK_LIBRARIES(Example2 ${MXADATAMODEL_LIB_NAME})
-
+ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
 #  Add Executable for DataWrapperExample
 # ------------------------------------------------------------------------------
+IF ( MXA_USE_HDF5 )
 ADD_EXECUTABLE(DataWrapperExample DataWrapperExample.cpp)
 TARGET_LINK_LIBRARIES(DataWrapperExample ${MXADATAMODEL_LIB_NAME})
+ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
 #  Add Executable for DataImport Example
@@ -95,9 +101,10 @@ SET (DATAIMPORT_EXAMPLE_HEADERS
   ${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegateFactory.h
 )
 source_group(src\\Examples\\DataImport FILES ${DATAIMPORT_EXAMPLE_SOURCES} ${DATAIMPORT_EXAMPLE_HEADERS})
+IF ( MXA_USE_HDF5 )
 ADD_EXECUTABLE(DataImportExample ${DATAIMPORT_EXAMPLE_SOURCES})
 TARGET_LINK_LIBRARIES(DataImportExample ${MXADATAMODEL_LIB_NAME} ) 
-
+ENDIF ( MXA_USE_HDF5 )
 
 
 # ------------------------------------------------------------------------------
@@ -126,7 +133,8 @@ SET (SUPPORT_FILE_EXAMPLE_HEADERS
     
 )
 #source_group(src\\Examples\\MXAPropertyExample FILES ${MXA_PROPERTY_EXAMPLE_SRCS} ${MXA_PROPERTY_EXAMPLE_HEADERS})
+IF ( MXA_USE_HDF5 )
 ADD_EXECUTABLE(SupportFileExample ${SUPPORT_FILE_EXAMPLE_SRCS} ${SUPPORT_FILE_EXAMPLE_HEADERS})
 TARGET_LINK_LIBRARIES(SupportFileExample ${MXADATAMODEL_LIB_NAME} ) 
-
+ENDIF ( MXA_USE_HDF5 )
 

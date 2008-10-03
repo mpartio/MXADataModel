@@ -12,7 +12,10 @@
 #include <Utilities/DataSourcePathIndexSection.h>
 #include <Utilities/DataSourcePathTextSection.h>
 #include <XML/XMLDataModelReader.h>
+
+#if MXA_HDF5_SUPPORT
 #include <HDF5/H5MXADataFile.h>
+#endif
 
 //-- C++ stdlib includes
 #include <iostream>

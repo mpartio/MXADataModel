@@ -26,7 +26,7 @@ SET(MXA_HDF5_HEADERS
     ${MXA_SOURCE_DIR}/src/HDF5/H5BmpImportDelegateFactory.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5Dataset.h
     ${MXA_SOURCE_DIR}/src/HDF5/H5MXARequiredMetaData.h
-    ${MXA_SOURCE_DIR}/src/HDF5/H5MXAUtilities.h
+    ${MXA_SOURCE_DIR}/src/HDF5/H5MXAUtilities.h 
 )
 
 MXA_SOURCE_PROPERTIES(HDF5 "${MXA_HDF5_HEADERS}" "${MXA_HDF5_SRCS}")

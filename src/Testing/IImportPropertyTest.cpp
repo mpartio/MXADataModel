@@ -40,11 +40,7 @@ namespace MyPropertyNamespace {
 
 }; // End Namespace
 
-/**
-* @brief
-* @version $Revision: 1.2 $
-* @author Michale A. Jackson
-*/
+
 class MyPropertyClass : public IImportProperty
 {
 public:

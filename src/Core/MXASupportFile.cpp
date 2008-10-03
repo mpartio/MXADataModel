@@ -8,7 +8,9 @@
 #include "MXASupportFile.h"
 #include <Common/IO/Reader64.h>
 #include <Core/MXAConstants.h>
+#if MXA_HDF5_SUPPORT
 #include <HDF5/H5MXADataFile.h>
+#endif
 #include <DataWrappers/MXAArrayTemplate.hpp>
 
 #include <boost/iostreams/device/file.hpp>
@@ -44,7 +46,7 @@ ISupportFilePtr MXASupportFile::NewFromFileSystem(const std::string &filesystemp
   return spPtr;
 }
 
-
+#if MXA_HDF5_SUPPORT
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -71,6 +73,7 @@ ISupportFilePtr MXASupportFile::NewFromMXAFile(hid_t dataFile,
   }
   return spPtr;
 }
+#endif
 
 #if 0
 // -----------------------------------------------------------------------------
@@ -111,12 +114,13 @@ _fileId(0)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+#if MXA_HDF5_SUPPORT
 MXASupportFile::MXASupportFile(hid_t fileId, int index) :
 _index(index),
 _fileId(fileId)
 {
 }
-
+#endif
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -147,7 +151,9 @@ int MXASupportFile::getIndex()
 // -----------------------------------------------------------------------------
 int32 MXASupportFile::readFromMXAFile()
 {
+
   int32 err = -1;
+#if MXA_HDF5_SUPPORT
   hid_t fileId = this->_fileId;
   std::string dsetpath = MXA::SupportFilesPath + "/" + StringUtils::numToString(this->_index);
   // Read the contents of the file into an array
@@ -173,7 +179,7 @@ int32 MXASupportFile::readFromMXAFile()
       "' for Support file with index '" << this->_index << "'" << std::endl;
     return err;
   }
-
+#endif
   return err;
 }
 
@@ -239,6 +245,7 @@ uint64 MXASupportFile::getFileSize()
 
   if (this->_fileId > 0)
   {
+#if MXA_HDF5_SUPPORT
     std::vector<hsize_t> dims;
     H5T_class_t type_class;
     size_t type_size;
@@ -250,6 +257,7 @@ uint64 MXASupportFile::getFileSize()
     }
     hsize_t fileSize = dims[0];
     return (uint64)(fileSize);
+#endif
   }
 
   FileSystem::path p( this->_filesystemPath, FileSystem::native );

@@ -3,7 +3,10 @@
 #if MXA_TIFF_SUPPORT
 #include <HDF5/H5TiffImportDelegateFactory.h>
 #endif
+
+#if MXA_HDF5_SUPPORT
 #include <HDF5/H5BmpImportDelegateFactory.h>
+#endif
 
 #include <iostream>
 
@@ -49,9 +52,11 @@ void ImportDelegateManager::registerKnownImportDeletegateFactories()
     ImportDelegateManager::registerImportDelegateFactory(h5TiffImportDelegateFactory);
 #endif
 
+#if MXA_HDF5_SUPPORT
     //Register to be able to import BMP images
     AbstractImportDelegateFactoryPtr h5BmpImportDelegateFactory ( new H5BmpImportDelegateFactory() );
     ImportDelegateManager::registerImportDelegateFactory(h5BmpImportDelegateFactory);
+#endif
 }
 
 // -----------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 #include <Core/MXADataModel.h>
 #include <Utilities/StringUtils.h>
 #include <XML/XMLDataModelWriter.h>
-
+#include <Core/RequiredMetaData.h>
 
 //#include <Core/MXAAbstractAttribute.h>
 //-- Standard Library Headers
@@ -610,7 +610,16 @@ int32 MXADataModel::setRequiredMetaData(std::map<std::string, std::string> &requ
                                                   requiredMetaData[MXA::MXA_RELEASE_NUMBER_TAG],
                                                   requiredMetaData[MXA::MXA_PEDIGREE_TAG],
                                                   requiredMetaData[MXA::MXA_DERIVED_SRC_TAG]);
-#endif
+#else
+ _requiredMetaData = RequiredMetaData::New( requiredMetaData[MXA::MXA_CREATOR_TAG],
+                                            requiredMetaData[MXA::MXA_DATE_TAG],
+                                            requiredMetaData[MXA::MXA_DSET_NAME_TAG],
+                                            requiredMetaData[MXA::MXA_DESCRIPTION_TAG],
+                                            requiredMetaData[MXA::MXA_RIGHTS_TAG],
+                                            requiredMetaData[MXA::MXA_RELEASE_NUMBER_TAG],
+                                            requiredMetaData[MXA::MXA_PEDIGREE_TAG],
+                                            requiredMetaData[MXA::MXA_DERIVED_SRC_TAG]);
+  #endif
   std::string message;
   if ( _requiredMetaData->isValid(message) == true) { return 1; }
   return -1;

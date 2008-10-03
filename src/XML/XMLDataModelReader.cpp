@@ -529,29 +529,29 @@ void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
       istream >> temp;
       dims.push_back(temp);
     }
-    hid_t typeId = H5Lite::HDFTypeFromString(this->_userMDType);
-    if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
+   // int32 typeId = H5Lite::HDFTypeFromString(this->_userMDType);
+    if ( this->_userMDType.compare("H5T_NATIVE_UINT8") == 0) {
       this->_xmlParseError = readPrimitiveAttribute<uint8>( dims);
-    } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
+    } else if ( this->_userMDType.compare("H5T_NATIVE_UINT16") == 0) {
       this->_xmlParseError = readPrimitiveAttribute<uint16>( dims);
-    } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
+    } else if ( this->_userMDType.compare("H5T_NATIVE_UINT32") == 0) {
       this->_xmlParseError = readPrimitiveAttribute<uint32>( dims);
-    } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
+    } else if ( this->_userMDType.compare("H5T_NATIVE_UINT64") == 0) {
       this->_xmlParseError = readPrimitiveAttribute<uint64>( dims);
-    } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
+    } else if ( this->_userMDType.compare("H5T_NATIVE_INT8") == 0) {
       this->_xmlParseError = readPrimitiveAttribute<int8>( dims);
-    } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
+    } else if ( this->_userMDType.compare("H5T_NATIVE_INT16") == 0) {
       this->_xmlParseError = readPrimitiveAttribute<int16>( dims);
-    } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
+    } else if ( this->_userMDType.compare("H5T_NATIVE_INT32") == 0) {
       this->_xmlParseError = readPrimitiveAttribute<int32>( dims);
-    } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
+    } else if ( this->_userMDType.compare("H5T_NATIVE_INT64") == 0 ) {
       this->_xmlParseError = readPrimitiveAttribute<int64>( dims);
-    } else if ( H5Tequal(typeId, H5T_NATIVE_FLOAT)  ) {
+    } else if ( this->_userMDType.compare("H5T_NATIVE_FLOAT") == 0) {
       this->_xmlParseError = readPrimitiveAttribute<float>( dims);
-    } else if ( H5Tequal(typeId, H5T_NATIVE_DOUBLE)  ) {
+    } else if ( this->_userMDType.compare("H5T_NATIVE_DOUBLE") == 0) {
       this->_xmlParseError = readPrimitiveAttribute<double>( dims);
     } else {
-      std::cout << "Unknown Type: " << typeId << " for a read value of " << this->_userMDType << std::endl;
+      std::cout << "Unknown Type: " << this->_userMDType << " for a read value of " << this->_userMDType << std::endl;
       this->_xmlParseError = -1;
     }
   }

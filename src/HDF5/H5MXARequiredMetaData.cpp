@@ -3,63 +3,64 @@
 #include <Base/IDataFile.h>
 #include <Core/MXAConstants.h>
 #include <Utilities/StringUtils.h>
+#if MXA_HDF5_SUPPORT
 #include <HDF5/H5Lite.h>
-
+#endif
 //-- C++ includes
 #include <string>
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-IRequiredMetaDataPtr H5MXARequiredMetaData::New( std::string researcherName, 
-                                                        std::string dateCreated, 
-                                                        std::string datasetName, 
+IRequiredMetaDataPtr H5MXARequiredMetaData::New( std::string researcherName,
+                                                        std::string dateCreated,
+                                                        std::string datasetName,
                                                         std::string description,
                                                         std::string distributionRights,
                                                         std::string releaseNumber,
-                                                        std::string pedigree, 
+                                                        std::string pedigree,
                                                         std::string derivedSrcFile)
 {
-  H5MXARequiredMetaData* md = new H5MXARequiredMetaData( researcherName, 
-                                                         dateCreated, 
-                                                         datasetName, 
+  H5MXARequiredMetaData* md = new H5MXARequiredMetaData( researcherName,
+                                                         dateCreated,
+                                                         datasetName,
                                                          description,
                                                          distributionRights,
                                                          releaseNumber,
-                                                         pedigree, 
+                                                         pedigree,
                                                          derivedSrcFile);
   IRequiredMetaDataPtr ptr(md);
   return ptr;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IRequiredMetaDataPtr H5MXARequiredMetaData::DefaultMetaData()
 {
-  H5MXARequiredMetaData* md = new H5MXARequiredMetaData( "researcherName", 
-                                                         "2007/12/23 16:00:00", 
-                                                         "datasetName", 
+  H5MXARequiredMetaData* md = new H5MXARequiredMetaData( "researcherName",
+                                                         "2007/12/23 16:00:00",
+                                                         "datasetName",
                                                          "description",
                                                          "Unlimited",
                                                          "releaseNumber",
-                                                         "Derived", 
+                                                         "Derived",
                                                          "derivedSrcFile");
   IRequiredMetaDataPtr ptr(md);
   return ptr;
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-H5MXARequiredMetaData::H5MXARequiredMetaData( std::string researcherName, 
-                                              std::string dateCreated, 
-                                              std::string datasetName, 
+H5MXARequiredMetaData::H5MXARequiredMetaData( std::string researcherName,
+                                              std::string dateCreated,
+                                              std::string datasetName,
                                               std::string description,
                                               std::string distributionRights,
                                               std::string releaseNumber,
-                                              std::string pedigree, 
+                                              std::string pedigree,
                                               std::string derivedSrcFile) :
 _researcherName( researcherName),
 _dateCreated(dateCreated ),
@@ -69,29 +70,29 @@ _distributionRights( distributionRights),
 _releaseNumber( releaseNumber),
 _pedigree( pedigree),
 _derivedSrcFile( derivedSrcFile)
-{ 
+{
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 H5MXARequiredMetaData::~H5MXARequiredMetaData()
 {
-  
+
 }
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-void H5MXARequiredMetaData::setAll( std::string researcherName, 
-                                              std::string dateCreated, 
-                                              std::string datasetName, 
+void H5MXARequiredMetaData::setAll( std::string researcherName,
+                                              std::string dateCreated,
+                                              std::string datasetName,
                                               std::string description,
                                               std::string distributionRights,
                                               std::string releaseNumber,
-                                              std::string pedigree, 
-                                              std::string derivedSrcFile) 
+                                              std::string pedigree,
+                                              std::string derivedSrcFile)
 {
   this->_researcherName = researcherName;
   this->_dateCreated = dateCreated ;
@@ -104,7 +105,7 @@ void H5MXARequiredMetaData::setAll( std::string researcherName,
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::setResearcherName(const std::string &researcherName)
 {
@@ -116,7 +117,7 @@ std::string H5MXARequiredMetaData::getResearcherName()
   }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::setDateTimeCreated(const std::string &dateTime)
 {
@@ -128,7 +129,7 @@ std::string H5MXARequiredMetaData::getDateTimeCreated()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::setDatasetName(const std::string &datasetName)
 {
@@ -140,7 +141,7 @@ std::string H5MXARequiredMetaData::getDatasetName(const std::string &datasetName
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::setDescription(const std::string &description)
 {
@@ -152,7 +153,7 @@ std::string H5MXARequiredMetaData::getDescription()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::setDistributionRights(const std::string &distributionRights)
 {
@@ -164,12 +165,12 @@ std::string H5MXARequiredMetaData::getDistributionRights()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::setReleaseNumber(const std::string &releaseNumber)
 {
   this->_releaseNumber = releaseNumber;
-  
+
 }
 std::string H5MXARequiredMetaData::getReleaseNumber()
 {
@@ -177,7 +178,7 @@ std::string H5MXARequiredMetaData::getReleaseNumber()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::setPedigree(const std::string &pedigree)
 {
@@ -189,7 +190,7 @@ std::string H5MXARequiredMetaData::getPedigree()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::setDerivedSourceFile(const std::string &derivedSourceFile)
 {
@@ -201,7 +202,7 @@ std::string H5MXARequiredMetaData::getDerivedSourceFile()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXARequiredMetaData::setValueForKey(const std::string &key, const std::string &value)
 {
@@ -237,7 +238,7 @@ int32 H5MXARequiredMetaData::setValueForKey(const std::string &key, const std::s
     }
   if (key.compare(MXA::MXA_DERIVED_SRC_TAG) == 0 )
     {
-      this->_derivedSrcFile = value; 
+      this->_derivedSrcFile = value;
       return 1;
     }
   std::cout << logTime() << "A key value of '" << key << "' does not match any of the known keys. The Meta Data value was not set." << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
@@ -245,7 +246,7 @@ int32 H5MXARequiredMetaData::setValueForKey(const std::string &key, const std::s
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 std::string H5MXARequiredMetaData::getValueForKey(const std::string &key)
 {
@@ -284,7 +285,7 @@ std::string H5MXARequiredMetaData::getValueForKey(const std::string &key)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXARequiredMetaData::writeToFile(IDataFilePtr dataFile)
 {
@@ -293,7 +294,7 @@ int32 H5MXARequiredMetaData::writeToFile(IDataFilePtr dataFile)
   hid_t fileId = dataFile->getFileId();
   //err = this->_writeScalarDataset(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), data);
   err = H5Lite::writeScalarDataset(fileId,const_cast<std::string&>(MXA::RequiredMetaDataPath), data );
-  
+
   if (err < 0)
   {
     std::cout << logTime() << "Error Creating Dataset for RequiredMetaData." << err << std::endl;
@@ -310,13 +311,13 @@ int32 H5MXARequiredMetaData::writeToFile(IDataFilePtr dataFile)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 H5MXARequiredMetaData::readFromFile(IDataFilePtr dataFile)
 {
 
   hid_t fileId = dataFile->getFileId();
-  if (fileId < 0 ) 
+  if (fileId < 0 )
   {
     std::cout << logTime() << "Invalid HDF FileId: " << fileId << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
     return -1;
@@ -324,43 +325,43 @@ int32 H5MXARequiredMetaData::readFromFile(IDataFilePtr dataFile)
   herr_t err = -1;
 
   err = H5Lite::readStringAttribute(fileId, MXA::RequiredMetaDataPath, MXA::MXA_CREATOR_TAG, _researcherName);
-  if (err < 0) { 
+  if (err < 0) {
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
-  
+
   err = H5Lite::readStringAttribute(fileId, MXA::RequiredMetaDataPath, MXA::MXA_DATE_TAG, _dateCreated);
-  if (err < 0) { 
+  if (err < 0) {
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
   err = H5Lite::readStringAttribute(fileId, MXA::RequiredMetaDataPath, MXA::MXA_DSET_NAME_TAG, _datasetName);
-  if (err < 0) { 
+  if (err < 0) {
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
   err = H5Lite::readStringAttribute(fileId, MXA::RequiredMetaDataPath, MXA::MXA_DESCRIPTION_TAG, _description);
-  if (err < 0) { 
+  if (err < 0) {
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
   err = H5Lite::readStringAttribute(fileId, MXA::RequiredMetaDataPath, MXA::MXA_PEDIGREE_TAG, _pedigree);
-  if (err < 0) { 
+  if (err < 0) {
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
   err = H5Lite::readStringAttribute(fileId, MXA::RequiredMetaDataPath, MXA::MXA_DERIVED_SRC_TAG, _derivedSrcFile);
-  if (err < 0) { 
+  if (err < 0) {
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
   err = H5Lite::readStringAttribute(fileId, MXA::RequiredMetaDataPath, MXA::MXA_RIGHTS_TAG, _distributionRights);
-  if (err < 0) { 
+  if (err < 0) {
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
   err = H5Lite::readStringAttribute(fileId, MXA::RequiredMetaDataPath, MXA::MXA_RELEASE_NUMBER_TAG, _releaseNumber);
-  if (err < 0) { 
+  if (err < 0) {
     std::cout << "Error reading data record name value" << std::endl;
     return -1;
   }
@@ -370,7 +371,7 @@ int32 H5MXARequiredMetaData::readFromFile(IDataFilePtr dataFile)
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool H5MXARequiredMetaData::isValid(std::string message)
 {
@@ -380,37 +381,37 @@ bool H5MXARequiredMetaData::isValid(std::string message)
     valid = false;
     message.append("Required Meta Data {_researcherName} missing value.\n");
   }
-  
+
   if (_dateCreated.empty() )
   {
     valid = false;
     message.append("Required Meta Data {_datasetDateCreated} missing value.\n");
   }
-  
+
   if (_derivedSrcFile.empty() )
   {
     valid = false;
     message.append("Required Meta Data {_derivedSourceFile} missing value.\n");
   }
-  
+
   if (_description.empty() )
   {
     valid = false;
     message.append("Required Meta Data {_datasetDescription} missing value.\n");
   }
-  
+
   if (_distributionRights.empty() )
   {
     valid = false;
     message.append("Required Meta Data {_distributionRights} missing value.\n");
   }
-  
+
   if (_pedigree.empty() )
   {
     valid = false;
     message.append("Required Meta Data {_datasetPedigree} missing value.\n");
   }
-  
+
   if (_releaseNumber.empty() )
   {
     valid = false;
@@ -421,7 +422,7 @@ bool H5MXARequiredMetaData::isValid(std::string message)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::generateKeyValueMap(std::map<std::string, std::string> &requiredMetaData)
 {
@@ -436,7 +437,7 @@ void H5MXARequiredMetaData::generateKeyValueMap(std::map<std::string, std::strin
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5MXARequiredMetaData::printSelf(std::ostream& os, int32 indent)
 {

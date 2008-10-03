@@ -13,8 +13,9 @@
 #include <Base/ISupportFile.h>
 
 #include <string>
-
+#if MXA_HDF5_SUPPORT
 #include <hdf5.h>
+#endif
 
 /**
 * @class MXASupportFile MXASupportFile.h src/Core/MXASupportFile.h
@@ -23,7 +24,7 @@
 * file from the filesystem.
 * @author  Mike Jackson for BlueQuartz Software
 * @date Sep 23, 2008
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class MXA_EXPORT MXASupportFile: public ISupportFile
 {
@@ -58,10 +59,11 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
      * goes wrong during the initialization then it is possible to get a NULL pointer
      * returned.
      */
-    static ISupportFilePtr NewFromMXAFile(hid_t dataFile,
+#if MXA_HDF5_SUPPORT
+    static ISupportFilePtr NewFromMXAFile(int32 dataFile,
                                                const std::string &index,
                                                bool cacheFile);
-
+#endif
     /**
      * @brief Creates a new MXASupportFile object with default values.
      */
@@ -144,14 +146,14 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
 
   protected:
     MXASupportFile();
-    MXASupportFile(hid_t datafile, int index);
+    MXASupportFile(int32 datafile, int index);
 
   private:
     std::string  _filesystemPath;
     std::string  _fileType;
     IMXAArrayPtr _fileContents;
     int          _index;
-    hid_t        _fileId;
+    int32        _fileId;
     int          _source;
 
     MXASupportFile(const MXASupportFile&);    // Copy Constructor Not Implemented

@@ -95,7 +95,6 @@ INCLUDE (${MXA_SOURCE_DIR}/src/Utilities/Utilities_SourceList.cmake)
 # ------- Set up the MXADataModel Project Source Files -----------
 SET( MXADATAMODEL_SRCS
     ${MXA_BASE_SRCS}
-    ${MXA_BMPIO_SRCS}
     ${MXA_COMMON_SRCS}
     ${MXA_CORE_SRCS}
     ${MXA_DATA_IMPORT_SRCS}
@@ -106,7 +105,6 @@ SET( MXADATAMODEL_SRCS
 #--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
 SET (MXADATAMODEL_HEADERS
     ${MXA_BASE_HEADERS}
-    ${MXA_BMPIO_HEADERS}
     ${MXA_COMMON_HEADERS}
     ${MXA_CORE_HEADERS}
     ${MXA_DATA_IMPORT_HEADERS}
@@ -147,6 +145,10 @@ IF ( MXA_USE_HDF5 )
     SET (MXA_TIFF_SUPPORT "1")
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
   ENDIF (MXA_USE_TIFF)
+  
+  #-- The BMP IO Classes are dependent on HDF5
+  SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_BMPIO_SRCS} ${MXA_BMPIO_HEADERS})
+  
 ENDIF ( MXA_USE_HDF5 )
 
 # ---------- Set up the Project Options -----------------------

@@ -1,10 +1,7 @@
 #include "MXARGBImage.h"
 #include <Common/LogTime.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Image.h>
 #include <iostream>
 
-#include <hdf5.h>
 
 
 // -----------------------------------------------------------------------------
@@ -113,56 +110,6 @@ int32 MXARGBImage::resizeArray(mxaIdType width, mxaIdType height)
   return err;
 }
 
-#if 0
-// -----------------------------------------------------------------------------
-//  IDataFileIO Implementation (IFileWriter)
-// -----------------------------------------------------------------------------
-int32 MXARGBImage::writeToFile(IDataFilePtr dataFile)
-{
-  int32 err = -1;
-  std::vector<uint64> dims (2, 0 );
-  dims[0] = this->_width * 3;
-  dims[1] = this->_height;
-  err = H5Utilities::createGroupsForDataset(this->getDatasetPath(), dataFile->getFileId() );
-  if (err < 0)
-  {
-    return err;
-  }
-  err = H5Lite::writePointerDataset(dataFile->getFileId(), this->getDatasetPath(), 2, &(dims.front()), this->getPixelPointer(0, 0) );
-
-  return err;
-}
-
-
-// -----------------------------------------------------------------------------
-//  IDataFileIO Implementation (IFileReader)
-// -----------------------------------------------------------------------------
-int32 MXARGBImage::readFromFile(IDataFilePtr dataFile)
-{
-  hid_t fileId = dataFile->getFileId();
-  if (fileId < 0)
-  {
-    return fileId;
-  }
-  herr_t err = -1;
-  H5T_class_t attr_type;
-  size_t attr_size;
-  std::string res;
-
-  std::vector<hsize_t> dims;  //Reusable for the loop
-  err = H5Lite::getDatasetInfo(fileId, this->getDatasetPath(), dims, attr_type, attr_size);
-  if (err < 0 )
-  {
-    return err;
-  }
-  int32 width = dims[0] / 3;
-  int32 height = dims[1];
-  err = this->resizeArray(width, height); //Resize the array to hold the data from the file
-  if (err < 0) { return err; }
-  err = H5Lite::readPointerDataset(fileId, this->getDatasetPath(), getPixelPointer(0,0));
-  return err;
-}
-#endif
 
 // -----------------------------------------------------------------------------
 //

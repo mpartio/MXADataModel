@@ -11,8 +11,9 @@
 #ifndef _MXAArrayTemplate_h_
 #define _MXAArrayTemplate_h_
 
-#include <Base/IMXAArray.h>
 #include <Common/MXATypeDefs.h>
+#include <Common/LogTime.h>
+#include <Base/IMXAArray.h>
 
 #ifdef MXA_USE_HDF5_PRIMITIVE_TYPES
 #include <HDF5/H5Lite.h>
@@ -22,12 +23,13 @@
 // STL Includes
 #include <sstream>
 
+
 /**
 * @class MXAArrayTemplate MXAArrayTemplate.hpp PathToHeader/MXAArrayTemplate.hpp
 * @brief Template class for wrapping raw arrays of data.
 * @author mjackson
 * @date July 3, 2008
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 template<typename T>
 class MXAArrayTemplate : public IMXAArray
@@ -254,7 +256,6 @@ class MXAArrayTemplate : public IMXAArray
       this->_data[i] = value;
     }
 
-
     /**
      * @brief Returns an enumerated type that can be used to find out the type
      * of primitive stored in the internal array. Currently the HDF5 type is returned
@@ -262,12 +263,8 @@ class MXAArrayTemplate : public IMXAArray
      */
     virtual int32 getDataType()
     {
-      T t = 0x0;
-#ifdef MXA_USE_HDF5_PRIMITIVE_TYPES
-      return H5Lite::HDFTypeForPrimitive(t);
-#else
-#error This needs to be implemented for the NON-NDF5 case
-#endif
+      T value = 0x0;
+      return H5Lite::HDFTypeForPrimitive<T>(value);
     }
 
 /**

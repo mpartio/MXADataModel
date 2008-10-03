@@ -70,6 +70,10 @@ int DataSourcePathIndexSectionTest_EntryPoint()
     section->setPreText(preText);
     int index = 1;
     std::cout <<  "'" << section->toString(index, ok) << "'" << std::endl;
+
+    DataSourcePathIndexSection* ptr = dynamic_cast<DataSourcePathIndexSection*>(section.get());
+    std::string s = ptr->toString(index, ok);
+
     BOOST_REQUIRE_EQUAL(section->toString(index,ok).compare("0-Test_1"), 0);
     index = 10;
     std::cout <<  "'" << section->toString(index, ok) << "'" << std::endl;

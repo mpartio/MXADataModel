@@ -1,3 +1,4 @@
+
 # - Find TIFF library
 # - Derived from the FindTiff.cmake that is included with cmake
 # Find the native TIFF includes and library
@@ -134,5 +135,4 @@ IF (TIFF_FOUND)
   SET(CMAKE_REQUIRED_FLAGS    ${CMAKE_REQUIRED_FLAGS_SAVE})
   #
   #############################################
-
 ENDIF (TIFF_FOUND)
