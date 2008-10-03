@@ -1,0 +1,53 @@
+
+#ifndef _@PROJECT_NAME@_IMPORT_DELEGATEFACTORY_H_
+#define _@PROJECT_NAME@_IMPORT_DELEGATEFACTORY_H_
+
+//-- MXA Includes
+#include <DataImport/AbstractImportDelegateFactory.h>
+
+//-- C++ includes
+#include <string>
+
+
+DEFINE_IMPORT_DELEGATE_NAMESPACE(@PROJECT_NAME@);
+
+// -----------------------------------------------------------------------------
+//  Factory Class to generate @PROJECT_NAME@Delegate Objects
+// -----------------------------------------------------------------------------
+/**
+* @class @PROJECT_NAME@DelegateFactory @PROJECT_NAME@DelegateFactory.h HDF5/@PROJECT_NAME@DelegateFactory.h
+* @brief Factory Class to generate @PROJECT_NAME@Delegate Objects
+* @author Mike Jackson
+* @date Sept 2007
+* @version $Revision: 1.1 $
+*/
+class MXA_EXPORT @PROJECT_NAME@DelegateFactory : public AbstractImportDelegateFactory
+{
+  public:
+    @PROJECT_NAME@DelegateFactory();
+
+    virtual ~@PROJECT_NAME@DelegateFactory();
+
+
+  /**
+   * @brief This method will return a new instance of @PROJECT_NAME@Delegate provided
+   * the className matches.
+   * @param className The name of the Delegate class that will be returned
+   * @return A new boost shared pointer to @PROJECT_NAME@Delegate
+   */
+  IImportDelegatePtr newDataImportDelegate (const std::string &className );
+
+  /**
+   * @brief Returns the Classname of the delegate that this factory can create.
+   */
+  std::string delegateClassName();
+
+  private:
+
+    @PROJECT_NAME@DelegateFactory(const @PROJECT_NAME@DelegateFactory&);    //Not Implemented
+    void operator=(const @PROJECT_NAME@DelegateFactory&);  //Not Implemented
+};
+
+
+
+#endif /*_IMPORT_DELEGATEFACTORY_H_*/

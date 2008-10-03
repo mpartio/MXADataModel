@@ -1,0 +1,55 @@
+# set project's name
+PROJECT( @PROJECT_NAME@ )
+cmake_minimum_required(VERSION 2.4)
+
+
+# ---------- Setup output Directories -------------------------
+SET (LIBRARY_OUTPUT_PATH
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all Libraries"
+  )
+
+# --------- Setup the Executable output Directory -------------
+SET (EXECUTABLE_OUTPUT_PATH
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all Executables."
+  )
+
+IF (NOT DEFINED @PROJECT_NAME@_SOURCE_DIR)
+    SET (@PROJECT_NAME@_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+ENDIF(NOT DEFINED @PROJECT_NAME@_SOURCE_DIR)
+
+#-------------------------------------------------------------------------------
+#  Define the location of the Resources Directory
+#-------------------------------------------------------------------------------
+SET (@PROJECT_NAME@_RESOURCES_DIR ${@PROJECT_NAME@_SOURCE_DIR}/Resources)
+SET (PROJECT_RESOURCES_DIR ${@PROJECT_NAME@_RESOURCES_DIR})
+
+INCLUDE_DIRECTORIES(${@PROJECT_NAME@_SOURCE_DIR}/src)
+
+# List the source files here
+SET (@PROJECT_NAME@_SRCS
+  ${@PROJECT_NAME@_SOURCE_DIR}/src/@PROJECT_NAME@Delegate.cpp
+  ${@PROJECT_NAME@_SOURCE_DIR}/src/@PROJECT_NAME@DelegateFactory.cpp
+  ${@PROJECT_NAME@_SOURCE_DIR}/src/main.cpp
+)
+
+# List the source files here
+SET (@PROJECT_NAME@_HEADERS
+  ${@PROJECT_NAME@_SOURCE_DIR}/src/@PROJECT_NAME@Delegate.h
+  ${@PROJECT_NAME@_SOURCE_DIR}/src/@PROJECT_NAME@DelegateFactory.h
+)
+
+# - Need to find the MXADataModel Installation
+INCLUDE (FindMXADataModel.cmake)
+INCLUDE_DIRECTORIES(${MXADATAMODEL_INCLUDE_DIRS})
+INCLUDE(${MXADATAMODEL_RESOURCES_DIR}/CMake/UseMXADataModel.cmake)
+
+
+# - Create the Executable and Link to the MXA Library
+ADD_EXECUTABLE(@PROJECT_NAME@ ${@PROJECT_NAME@_SRCS} ${@PROJECT_NAME@_HEADERS})
+TARGET_LINK_LIBRARIES(@PROJECT_NAME@ ${MXADATAMODEL_LIBRARIES})
+
+

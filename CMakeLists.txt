@@ -249,6 +249,11 @@ IF(MXA_BUILD_EXAMPLES)
     ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
 ENDIF(MXA_BUILD_EXAMPLES)
 
+OPTION(MXA_BUILD_UTILITIES "Build programs that help with extending MXADataModel" ON)
+IF (MXA_BUILD_UTILITIES)
+    ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/Utilities ${PROJECT_BINARY_DIR}/Utilities)
+ENDIF (MXA_BUILD_UTILITIES)
+
 # ------------------------------------------------------------------------------
 #  Build simple test programs. This should always be commented out
 # ------------------------------------------------------------------------------

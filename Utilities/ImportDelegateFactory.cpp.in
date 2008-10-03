@@ -1,0 +1,44 @@
+#include <@PROJECT_NAME@DelegateFactory.h>
+#include <@PROJECT_NAME@Delegate.h>
+
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+@PROJECT_NAME@DelegateFactory::@PROJECT_NAME@DelegateFactory()
+{
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+@PROJECT_NAME@DelegateFactory::~@PROJECT_NAME@DelegateFactory()
+{
+
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+IImportDelegatePtr @PROJECT_NAME@DelegateFactory::newDataImportDelegate (const std::string &className )
+{
+  IImportDelegatePtr delegate; // Creates a Null Shared Pointer
+  if ( className.compare( @PROJECT_NAME@::Detail::ClassName ) == 0)
+  {
+    @PROJECT_NAME@Delegate* d = new @PROJECT_NAME@Delegate();
+    delegate.reset ( d );
+    // If you want to set any properties that you might have to a default value, now is a good time
+  }
+  return delegate;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string @PROJECT_NAME@DelegateFactory::delegateClassName()
+{
+  return @PROJECT_NAME@::Detail::ClassName;
+}
+
+

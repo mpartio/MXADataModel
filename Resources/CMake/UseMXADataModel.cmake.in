@@ -15,14 +15,16 @@ SET (Boost_FIND_QUIETLY TRUE)
 SET (Boost_USE_FILESYSTEM TRUE)
 SET (Boost_USE_SYSTEM TRUE)
 SET (MXA_RESOURCES_DIR "@CMAKE_INSTALL_PREFIX@/share/MXADataModel/Resources")
-INCLUDE (${MXA_RESOURCES_DIR}/CMake/MXAFindBoost.cmake)
-INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})  # Include the Boost Headers
+GET_FILENAME_COMPONENT(CURRENT_SOURCE_PARENT ${CMAKE_CURRENT_LIST_FILE} PATH)
+SET (MXA_CMAKE_DIR ${CURRENT_SOURCE_PARENT})
+INCLUDE (${CURRENT_SOURCE_PARENT}/MXAFindBoost.cmake)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
 SET(MXA_SUPPORT_LIBRARIES ${MXA_SUPPORT_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS}) 
 
 #---- Find Expat -------------
 IF (MXA_USE_XML)
-    INCLUDE ( ${MXA_RESOURCES_DIR}/CMake/MXAFindExpat.cmake)
+    INCLUDE ( ${CURRENT_SOURCE_PARENT}//MXAFindExpat.cmake)
     IF (NOT EXPAT_FOUND)
       MESSAGE (FATAL_ERROR "Expat Library was NOT Found and is needed.")
     ENDIF (NOT EXPAT_FOUND)
@@ -37,7 +39,7 @@ IF ( MXA_USE_HDF5 )
   # ---------- DO NOT use the High Level APIs from the HDF5
   # group as those API's will not compile correctly under windows --------------
   SET (HDF5_USE_HIGH_LEVEL FALSE)
-  INCLUDE( ${MXA_RESOURCES_DIR}/CMake/MXAFindHDF5.cmake )
+  INCLUDE( ${CURRENT_SOURCE_PARENT}//MXAFindHDF5.cmake )
   IF(NOT HDF5_FOUND)
     MESSAGE(FATAL_ERROR " HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
   ENDIF(NOT HDF5_FOUND)
@@ -47,7 +49,7 @@ ENDIF ( MXA_USE_HDF5 )
  
 #---- Find TIFF -------------------------------------------------------------
 IF(MXA_USE_TIFF)
-    INCLUDE ( ${MXA_RESOURCES_DIR}/CMake/MXAFindTiff.cmake)
+    INCLUDE ( ${CURRENT_SOURCE_PARENT}/MXAFindTiff.cmake)
     IF (NOT TIFF_FOUND)
       MESSAGE (FATAL_ERROR " Tiff Library was NOT Found and is needed.")
     ENDIF (NOT TIFF_FOUND)

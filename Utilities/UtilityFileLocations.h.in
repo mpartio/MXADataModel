@@ -1,0 +1,16 @@
+
+
+#include <string>
+
+
+namespace ImportGenerator
+{
+  const std::string ImportDelegateInputHeader("@UTILITIES_DIR@/ImportDelegate.h.in");
+  const std::string ImportDelegateInputSource("@UTILITIES_DIR@/ImportDelegate.cpp.in");
+  const std::string ImportDelegateFactoryInputHeader("@UTILITIES_DIR@/ImportDelegateFactory.h.in");
+  const std::string ImportDelegateFactoryInputSource("@UTILITIES_DIR@/ImportDelegateFactory.cpp.in");
+  const std::string MainInputSource("@UTILITIES_DIR@/main.cpp.in");
+  const std::string CMakeListsInput("@UTILITIES_DIR@/CMakeLists.txt.in");
+  const std::string FindMXADataModelInput("@UTILITIES_DIR@/FindMXADataModel.cmake");
+
+}
