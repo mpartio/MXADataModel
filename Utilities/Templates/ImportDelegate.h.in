@@ -8,6 +8,7 @@
 #include <Common/MXATypeDefs.h>
 #include <Base/IImportDelegate.h>
 #include <DataImport/AbstractImportDelegateFactory.h>
+#include <HDF5/H5Utilities.h>
 
 // C++ STL headers
 #include <string>
@@ -20,6 +21,10 @@ class MXADataModel;
 namespace @PROJECT_NAME@
 {
 /* Put properties in here */
+
+  // YOU REALLY want to change this to something more useful for your situation/
+//#warning Change the below line to something more useful then delete this line.
+  const std::string FileExt("dat");
 }
 
 /**

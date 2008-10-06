@@ -1,0 +1,113 @@
+
+
+#include <@PROJECT_NAME@Delegate.h>
+
+//-- MXA Includes
+#include <Common/MXAErrorDefinitions.h>
+#include <Common/LogTime.h>
+#include <Base/IDataFile.h>
+#include <Core/MXADataModel.h>
+#include <Core/MXADataSource.h>
+
+
+//-- STL Includes
+#include <iostream>
+
+//-- HDF5 Includes
+#include <hdf5.h>
+
+
+//-- Boost Filesystem Headers
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+namespace FileSystem = boost::filesystem;
+
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+@PROJECT_NAME@Delegate::@PROJECT_NAME@Delegate()
+{
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+@PROJECT_NAME@Delegate::~@PROJECT_NAME@Delegate()
+{
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int32 @PROJECT_NAME@Delegate::setProperty(const std::string &key, const std::string &value)
+{
+
+  return 0;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int32 @PROJECT_NAME@Delegate::importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
+{
+  // Set this to 1 if your import succeeded, otherwise set it to -1
+  herr_t err = -1;
+  // Make sure the file Exists first before we go much further
+  FileSystem::path sourcePath ( dataSource->getSourcePath() ); //create a boost::filesystem::path object
+  if ( !FileSystem::exists(sourcePath) )
+  {
+    std::cout << logTime() << "Error: data file not found: " << sourcePath.native_file_string() << std::endl;
+    return -1;
+  }
+
+
+  //Possibly Check for valid file extension - This code would check for a tiff file extension
+  // You may want to change this to what your data files are using.
+  std::string fileExt( boost::filesystem::extension(sourcePath) );
+  std::transform ( fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower );
+  if ( fileExt != @PROJECT_NAME@::FileExt )
+  {
+      std::cout << logTime() << "Only import of files with extensions of '" << @PROJECT_NAME@::FileExt << "' are supported." << std::endl;
+      return MXA_ERROR_IMAGE_FORMAT_NOT_SUPPORTED;
+  }
+
+  hid_t fileId = dataFile->getFileId();
+  if (fileId < 0)
+  {
+    std::cout << "FileId was not Valid [" << fileId << "]. Data was NOT imported" << std::endl;
+    return -1;
+  }
+
+  // Generate the internal HDF dataset path and create all the groups necessary to write the dataset
+  uint32 pos = 0;
+  std::string datasetPath( dataSource->generateInternalPath() );;
+  pos = datasetPath.find_last_of("/");
+  std::string parentPath ( datasetPath.substr(0, pos)  );
+
+  //Make sure all the intermediary groups are in place in the HDF5 File
+  err = H5Utilities::createGroupsFromPath(parentPath, fileId);
+  if (err < 0)
+  {
+    std::cout << logTime() << "Error: Could not create HDF5 Group paths for path: " << parentPath << std::endl;
+    return -1;
+  }
+
+  // Read your data from the file and store into the MXA file
+  std::vector<hsize_t> dims;
+  // dims.push_back(first_dimension_size);
+  // dims.push_back(second_dimension_size);
+  std::vector<char> data;
+  // Read the raw file into the 'data' vector
+    /*  ***** IMPLEMENT THIS PART ******** */
+
+  // Write the raw data into the MXA Data file
+  err = H5Lite::writeVectorDataset(fileId, datasetPath, dims, data);
+
+
+  return err;
+}
+
+
+

@@ -1,0 +1,63 @@
+
+
+#include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
+#include <Common/LogTime.h>
+#include <DataImport/DataImportXmlParser.h>
+#include <DataImport/ImportDelegateManager.h>
+#include <@PROJECT_NAME@DelegateFactory.h>
+#include <@PROJECT_NAME@Delegate.h>
+
+
+/**
+ * @brief
+ *
+ * @author
+ * @date
+ * @version
+ * @return Success or Failure
+ */
+int main(int argc, char **argv)
+{
+
+  // Register the known ImportDelegates, which will also instantiate the ImportDelegateManager instance.
+  // The ImportDelegateManager instance is a singleton so only one can ever be active per program.
+  ImportDelegateManager::registerKnownImportDeletegateFactories();
+
+  // Register our Import Delegate by using the static methods from ImportDelegateManager
+  AbstractImportDelegateFactoryPtr importDelegateFactory ( new @PROJECT_NAME@DelegateFactory() );
+  ImportDelegateManager::registerImportDelegateFactory(importDelegateFactory);
+
+
+
+
+
+#if 0
+  // There are serveral different ways to get data into the MXA file. This way shows
+  // the xml import method. For this method you will need 2 more files. An XML file
+  // describing your data model and an XML file describing your data file layout.
+  // Look at the src/Testing/DataImportTest.cpp from the source code to see how this method
+  // is written. Below is the basic high level code.
+  // Get the path to the xml file that has all the needed information
+  std::string xmlFile;
+  // Create the XMLParser/Importer Object
+  DataImportXmlParser importer;
+  importer.setXMLInputFile( xmlFile );
+  err = importer.import(); // Run the Import
+  if (err < 0) {
+    std::cout << logTime()  << "Error (" << err << ") occurred during Import of Data Files. Check any output for possible error logs." << std::endl;
+  }
+  std::cout << "Data Import DONE" << std::endl;
+#endif
+
+#if 0
+  // The second way to get data into the MXA File is to directly use all the import
+  // classes available. This requires a bit more C++ code but you ultimately have
+  // more control over how the import progresses. Take a look at the src/Examples/SimpleImportExample.cpp
+  // for an example of how this method works.
+
+
+#endif
+
+  return EXIT_SUCCESS;
+}

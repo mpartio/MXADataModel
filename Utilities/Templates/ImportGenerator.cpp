@@ -7,7 +7,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-// Wheret to find our code templates
+
+// #define USE_BUILD_TREE 0
 #include <UtilityFileLocations.h>
 
 // STL includes
@@ -16,6 +17,7 @@
 #include <sstream>
 
 #include <boost/algorithm/string.hpp>
+
 #include <boost/iostreams/device/file.hpp>
 
 //-- Boost Filesystem Headers
@@ -23,6 +25,7 @@
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/fstream.hpp>
+
 namespace FileSystem = boost::filesystem;
 
 // Boost program options
@@ -30,9 +33,7 @@ namespace FileSystem = boost::filesystem;
 namespace ProgramOptions = boost::program_options;
 
 
-/**
- * @namespace ImportGenerator
- */
+
 namespace ImportGenerator
 {
 
@@ -67,22 +68,16 @@ else {\
 }
 
 
-/**
- * @brief This method will parse the template code file, perform the necessary replacements
- * and then write out the new file to the proper location based on the output directory
- * and the project name.
- * @param inputFile The input template file
- * @param outputFile The output source code file to generate
- * @param projectName The name of the project.
- * @return Error condition. Zero is NO error.
- */
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 int parseTemplate(const std::string &inputFile,
                   const std::string &outputFile,
                   const std::string &projectName)
 {
   //std::cout << "inputFile: " << inputFile << std::endl;
-  //std::cout << "Generating: " << outputFile << std::endl;
-  //std::cout << "-----------------------------------------------" << std::endl;
+  std::cout << "Generating: " << outputFile << std::endl;
+  std::cout << "-----------------------------------------------" << std::endl;
   //std::cout << "projectName: " << projectName << std::endl;
 
 
@@ -119,8 +114,7 @@ int parseTemplate(const std::string &inputFile,
   }
 
   out.write(str.c_str(), str.size() );
-  out.flush();
-  std::cout << "Generated: " << outputFile << std::endl;
+
   return err;
 }
 
@@ -128,7 +122,7 @@ int parseTemplate(const std::string &inputFile,
 
 
 /**
- * @brief This is the main entry point for this program. Run the program and "ImportGenerator --outputdir [arg] --projectname [arg]"
+ *
  * @param argc
  * @param argv
  * @return
@@ -140,16 +134,18 @@ int main(int argc, char **argv)
   std::string projectName;
   try
   {
+   // int opt;
+    //int ProgramOptionsrtnum;
     ProgramOptions::options_description desc("Allowed options");
     desc.add_options()("help", "produce help message")
-    (ImportGenerator::ProjectName.c_str(), ProgramOptions::value<std::string>(), "Name of the Project. Something like RawImporter or BinaryImporter")
-    (ImportGenerator::OutputDir.c_str(), ProgramOptions::value<std::string>(), "Output Directory for Project files. Something like /tmp or C:/Workspace/");
+    (ImportGenerator::ProjectName.c_str(), ProgramOptions::value<std::string>(), "Name of the Project.")
+    (ImportGenerator::OutputDir.c_str(), ProgramOptions::value<std::string>(), "Output Directory for Project files.");
 
     ProgramOptions::variables_map vm;
     ProgramOptions::store(ProgramOptions::command_line_parser(argc, argv).options(desc).run(), vm);
     ProgramOptions::notify(vm);
 
-    if (vm.size() == 0 || vm.count("help"))
+    if (vm.count("help"))
     {
       std::cout << "Usage: options_description [options]\n";
       std::cout << desc;
@@ -160,7 +156,7 @@ int main(int argc, char **argv)
     if (vm.count(ImportGenerator::OutputDir))
     {
       outputDir =  vm[ImportGenerator::OutputDir].as<std::string> ();
-      //std::cout << "Adding Option: " << ImportGenerator::OutputDir << " --> " << vm[ImportGenerator::OutputDir].as<std::string> () << std::endl;
+      std::cout << "Adding Option: " << ImportGenerator::OutputDir << " --> " << vm[ImportGenerator::OutputDir].as<std::string> () << std::endl;
     }
     else
     {
@@ -172,7 +168,7 @@ int main(int argc, char **argv)
     if (vm.count(ImportGenerator::ProjectName))
     {
       projectName =  vm[ImportGenerator::ProjectName].as<std::string> ();
-      //std::cout << "Adding Option: " << ImportGenerator::ProjectName << " --> " << vm[ImportGenerator::ProjectName].as<std::string> () << std::endl;
+      std::cout << "Adding Option: " << ImportGenerator::ProjectName << " --> " << vm[ImportGenerator::ProjectName].as<std::string> () << std::endl;
     }
     else
     {
@@ -192,12 +188,8 @@ int main(int argc, char **argv)
   // Create the output directory
   FileSystem::path outputPath(outputDir);
   outputPath = outputPath / projectName;
-  std::cout << "Creating directory: " << outputPath.native_directory_string() << std::endl;
   boost::filesystem::create_directories(outputPath);
-  std::cout << "Creating directory: " << outputPath.native_directory_string() << "/src" << std::endl;
   boost::filesystem::create_directories(outputPath/"src");
-
-
   int err = 0;
   {
     // Create the new CMakeLists.txt file
@@ -278,9 +270,6 @@ int main(int argc, char **argv)
     }
   }
 
-  std::cout << "ImportGenerator is now complete. You can find your new project at " << outputPath.native_directory_string() << std::endl;
-  std::cout << "The project is automatically setup to use CMake." << std::endl;
-  std::cout << "Setting the environment variable 'MXADataModel_INSTALL' will help this new project configure more quickly." << std::endl;
 
   return EXIT_SUCCESS;
 }

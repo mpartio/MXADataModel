@@ -1,16 +1,44 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2008, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
 
+
+/**
+* This variable will be defined if the MXA Library build is being done for an
+* installation into the @CMAKE_INSTALL_PREFIX@ directory. If you are building to
+* run from the build tree then MXA_USE_RPATH should be set to "OFF".
+*/
+#cmakedefine MXA_USE_INSTALL_TREE @MXA_USE_RPATH@
 
 #include <string>
 
-
+#ifdef MXA_USE_INSTALL_TREE
 namespace ImportGenerator
 {
-  const std::string ImportDelegateInputHeader("@UTILITIES_DIR@/ImportDelegate.h.in");
-  const std::string ImportDelegateInputSource("@UTILITIES_DIR@/ImportDelegate.cpp.in");
-  const std::string ImportDelegateFactoryInputHeader("@UTILITIES_DIR@/ImportDelegateFactory.h.in");
-  const std::string ImportDelegateFactoryInputSource("@UTILITIES_DIR@/ImportDelegateFactory.cpp.in");
-  const std::string MainInputSource("@UTILITIES_DIR@/main.cpp.in");
-  const std::string CMakeListsInput("@UTILITIES_DIR@/CMakeLists.txt.in");
-  const std::string FindMXADataModelInput("@UTILITIES_DIR@/FindMXADataModel.cmake");
+  const std::string ImportDelegateInputHeader("../share/MXADataModel/Resources/Templates/ImportDelegate.h.in");
+  const std::string ImportDelegateInputSource("../share/MXADataModel/Resources/Templates/ImportDelegate.cpp.in");
+  const std::string ImportDelegateFactoryInputHeader("../share/MXADataModel/Resources/Templates/ImportDelegateFactory.h.in");
+  const std::string ImportDelegateFactoryInputSource("../share/MXADataModel/Resources/Templates/ImportDelegateFactory.cpp.in");
+  const std::string MainInputSource("../share/MXADataModel/Resources/Templates/main.cpp.in");
+  const std::string CMakeListsInput("../share/MXADataModel/Resources/Templates/CMakeLists.txt.in");
+  const std::string FindMXADataModelInput("../share/MXADataModel/Resources/CMake/FindMXADataModel.cmake");
+}
+#else
+namespace ImportGenerator
+{
+  const std::string ImportDelegateInputHeader("@UTILITIES_DIR@/Templates/ImportDelegate.h.in");
+  const std::string ImportDelegateInputSource("@UTILITIES_DIR@/Templates/ImportDelegate.cpp.in");
+  const std::string ImportDelegateFactoryInputHeader("@UTILITIES_DIR@/Templates/ImportDelegateFactory.h.in");
+  const std::string ImportDelegateFactoryInputSource("@UTILITIES_DIR@/Templates/ImportDelegateFactory.cpp.in");
+  const std::string MainInputSource("@UTILITIES_DIR@/Templates/main.cpp.in");
+  const std::string CMakeListsInput("@UTILITIES_DIR@/Templates/CMakeLists.txt.in");
+  const std::string FindMXADataModelInput("@MXA_CMAKE_DIR@/FindMXADataModel.cmake");
 
 }
+#endif
+
