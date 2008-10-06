@@ -19,9 +19,9 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(@PROJECT_NAME@);
 * @brief Factory Class to generate @PROJECT_NAME@Delegate Objects
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
-class MXA_EXPORT @PROJECT_NAME@DelegateFactory : public AbstractImportDelegateFactory
+class @PROJECT_NAME@DelegateFactory : public AbstractImportDelegateFactory
 {
   public:
     @PROJECT_NAME@DelegateFactory();
