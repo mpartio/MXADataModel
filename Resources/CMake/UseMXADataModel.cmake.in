@@ -24,7 +24,7 @@ LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
 #---- Find Expat -------------
 IF (MXA_USE_XML)
-    INCLUDE ( ${CURRENT_SOURCE_PARENT}//MXAFindExpat.cmake)
+    INCLUDE ( ${CURRENT_SOURCE_PARENT}/MXAFindExpat.cmake)
     IF (NOT EXPAT_FOUND)
       MESSAGE (FATAL_ERROR "Expat Library was NOT Found and is needed.")
     ENDIF (NOT EXPAT_FOUND)
@@ -39,7 +39,7 @@ IF ( MXA_USE_HDF5 )
   # ---------- DO NOT use the High Level APIs from the HDF5
   # group as those API's will not compile correctly under windows --------------
   SET (HDF5_USE_HIGH_LEVEL FALSE)
-  INCLUDE( ${CURRENT_SOURCE_PARENT}//MXAFindHDF5.cmake )
+  INCLUDE( ${CURRENT_SOURCE_PARENT}/MXAFindHDF5.cmake )
   IF(NOT HDF5_FOUND)
     MESSAGE(FATAL_ERROR " HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
   ENDIF(NOT HDF5_FOUND)

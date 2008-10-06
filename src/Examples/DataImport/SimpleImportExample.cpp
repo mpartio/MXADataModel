@@ -39,7 +39,7 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
   // Create a DataModel
   MXADataModelPtr model = this->createSimpleModel();
 
-  // Create some external models that our import delegate will read
+  // Create some external files that our import delegate will read
   this->createTestFiles(model);
 
   // Create a DataFile object which will create the actual file on disk.

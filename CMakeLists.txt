@@ -23,7 +23,10 @@ IF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
 ENDIF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
 
 # - Set our Library Version
-SET (MXADATAMODEL_VER "1.0")
+SET (MXADATAMODEL_VER_MAJOR "1")
+SET (MXADATAMODEL_VER_MINOR "0")
+SET (MXADATAMODEL_VER_PATCH "0")
+SET (MXADATAMODEL_VER ${MXADATAMODEL_VER_MAJOR}.${MXADATAMODEL_VER_MINOR}.${MXADATAMODEL_VER_PATCH})
 
 # ---------- Setup output Directories -------------------------
 SET (LIBRARY_OUTPUT_PATH
@@ -221,6 +224,17 @@ SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME}
     RELEASE_OUTPUT_NAME ${MXA_LIBRARY_RELEASE}
 )
 
+IF (APPLE)
+  OPTION (MXA_USE_RPATH "Build Libraries with the install_name set to the installation prefix. This is good if you are going to run from the installation location" OFF)
+  IF(MXA_USE_RPATH)
+  SET_TARGET_PROPERTIES(${MXADATAMODEL_LIB_NAME}
+     PROPERTIES
+     LINK_FLAGS "-current_version ${MXADATAMODEL_VER} -compatibility_version ${MXADATAMODEL_VER}"
+     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
+     BUILD_WITH_INSTALL_RPATH TRUE
+  )
+  ENDIF(MXA_USE_RPATH)
+ENDIF (APPLE)
 
 #----- Use MSVC Naming conventions for Shared Libraries for MinGW --------------
 IF (MINGW AND BUILD_SHARED_LIBS)
