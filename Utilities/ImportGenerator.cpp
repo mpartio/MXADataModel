@@ -56,16 +56,6 @@ namespace ImportGenerator
     } \
 
 
-#define GET_REQUIRED_OPTION(option)\
-  if (vm.count(option ) ) {\
-    options.insert(option, vm[option.toStdString() ].as<std::string>()  ); \
-    std::cout << "Adding Option: " << option << " --> " <<  vm[option].as<std::string>() << std::endl;\
-    } \
-else {\
-  std::cout << "Required Option " << option << " was not found. Exiting" << std::endl;\
-  exit(-1);\
-}
-
 
 /**
  * @brief This method will parse the template code file, perform the necessary replacements
