@@ -1,6 +1,6 @@
 var pageNames = new Array()
 var pageFiles = new Array()
-var arraySize = 12
+var arraySize = 13
 pageNames[0] = "Home"
 pageFiles[0] = "index.html"
 pageNames[1] = "Background"
@@ -25,6 +25,9 @@ pageNames[10] = "How To Write a Data Import Delegate"
 pageFiles[10] = "HowToWriteDataImportDelegate.html"
 pageNames[11] = "Importing Data into HDF5 using MXA APIs"
 pageFiles[11] = "ImportingData.html"
+pageNames[12] = "MXA Utilities"
+pageFiles[12] = "MXAUtilities.html"
+	
 function navigationCells(activePage)
 {
 

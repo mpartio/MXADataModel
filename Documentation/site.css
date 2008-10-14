@@ -150,6 +150,36 @@ div.entry
    font-size: 9pt;
  }
  
+ table.bordered
+ {
+ border: solid 1px #8c92a2;
+ font:  10pt Bitstream Vera Sans, Lucida, Helvetica, Arial, sans-serif;
+ padding: 2px 2px 2px 2px;
+ text-align: center;
+ vertical-align: center;
+ }
+ 
+  th.bordered
+ {
+  border: solid 1px #8c92a2;
+ font:  bold 10pt Bitstream Vera Sans, Lucida, Helvetica, Arial, sans-serif;
+ padding: 2px 2px 2px 2px;
+ text-align: center;
+ vertical-align: center;
+ }
+ 
+ 
+ 
+ td.bordered
+ {
+  border: solid 1px #8c92a2;
+ font:  10pt Bitstream Vera Sans, Lucida, Helvetica, Arial, sans-serif;
+ padding: 2px 2px 2px 2px;
+ text-align: center;
+ vertical-align: center;
+ }
+ 
+ 
  .cell_header 
  {
     background: #d1d0ff;
