@@ -51,6 +51,23 @@
 
 
 /**
+* @brief Creates a "setter" method to set the property.
+*/
+#define MXA_SET_STRING_PROPERTY( prpty, varname) \
+  void set##prpty(const std::string &value) { this->varname = value; }
+
+/**
+* @brief Creates a "getter" method to retrieve the value of the property.
+*/
+#define MXA_GET_STRING_PROPERTY( prpty, varname) \
+  std::string get##prpty() { return varname; }
+
+
+#define MXA_STRING_PROPERTY(prpty, varname)\
+  MXA_SET_STRING_PROPERTY(prpty, varname)\
+  MXA_GET_STRING_PROPERTY(prpty, varname)
+
+/**
 * @brief Creates an if conditional where the key is tested against the values constant
 * and if a match found then the property value is set
 * @param name_space
@@ -79,8 +96,8 @@
 * @param key
 * @param value
 */
-#define GET_PROPERTY_BODY(class, type, prpty, varname, key, value)\
-  if (class::prpty.compare(key) == 0) {  \
+#define GET_PROPERTY_BODY(name_space, type, prpty, varname, key, value)\
+  if (name_space::prpty.compare(key) == 0) {  \
   try { value = boost::any_cast<type>(varname); return 1;} \
   catch(boost::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
 
@@ -91,7 +108,7 @@
  * @brief
  * @author Mike Jackson
  * @date Septermber 2008
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  *
  */
 class MXA_EXPORT IImportProperty

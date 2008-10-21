@@ -12,6 +12,7 @@
 #define _IAbstractDataArray_h_
 
 #include <Common/MXATypes.h>
+#include <Common/MXATypeDefs.h>
 #include <iostream>
 
 /**
@@ -23,7 +24,7 @@
 * methods to meet my specific needs.
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.2 $
+* @version $Revision: 1.3 $
 */
 class MXA_EXPORT IMXAArray
 {
@@ -75,6 +76,21 @@ class MXA_EXPORT IMXAArray
     virtual int32 getDataType () = 0;
 
     /**
+     * @brief Returns the number of bytes that make up the data type.
+     * 1 = char
+     * 2 = 16 bit integer
+     * 4 = 32 bit integer/Float
+     * 8 = 64 bit integer/Double
+     */
+    virtual size_t getTypeSize() = 0;
+
+    /**
+     * @brief Byte swaps the Elements in the array. Needed if you want to convert
+     * the endianess of the data.
+     */
+    virtual void byteSwapElements() = 0;
+
+    /**
      * @brief Sets all the values to zero.
      */
     virtual void initializeWithZeros() = 0;
@@ -93,6 +109,17 @@ class MXA_EXPORT IMXAArray
      * @return The generated string
      */
     virtual std::string valueToString(char delimiter) = 0;
+
+
+    /**
+     * @brief
+     * @param filepath
+     * @param fileType
+     * @param delimiter
+     * @param endianType
+     * @return
+     */
+    virtual int32 exportToFile(DataExportPropertiesPtr expProps) = 0;
 
   protected:
 

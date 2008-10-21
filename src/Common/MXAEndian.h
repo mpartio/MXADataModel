@@ -43,7 +43,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Compile-time detection of byte order. See boost/detail/endian.hpp and 
+//  Compile-time detection of byte order. See boost/detail/endian.hpp and
 //  http://www.unixpapa.com/incnote/byteorder.html
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,6 @@ inline bool isLittle()
 
 namespace Detail {
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  Reverse the bytes of the integer.
@@ -149,7 +148,7 @@ inline void _reverseBytes ( uint16 &n )
 
 inline void _reverseBytes ( float32 &n )
 {
-  n = static_cast < float32 > 
+  n = static_cast < float32 >
       ( ((((uint32)n)<<24) & 0xFF000000) |
         ((((uint32)n)<< 8) & 0x00FF0000) |
         ((((uint32)n)>> 8) & 0x0000FF00) |
@@ -181,13 +180,13 @@ inline void _reverseBytes ( uint64 &n )
 {
   typedef uint64 UInt64;
 
- n = ( ((((UInt64)n)<<56) & 0xFF00000000000000ULL) | 
-       ((((UInt64)n)<<40) & 0x00FF000000000000ULL) | 
-       ((((UInt64)n)<<24) & 0x0000FF0000000000ULL) | 
-       ((((UInt64)n)<< 8) & 0x000000FF00000000ULL) | 
-       ((((UInt64)n)>> 8) & 0x00000000FF000000ULL) | 
-       ((((UInt64)n)>>24) & 0x0000000000FF0000ULL) | 
-       ((((UInt64)n)>>40) & 0x000000000000FF00ULL) | 
+ n = ( ((((UInt64)n)<<56) & 0xFF00000000000000ULL) |
+       ((((UInt64)n)<<40) & 0x00FF000000000000ULL) |
+       ((((UInt64)n)<<24) & 0x0000FF0000000000ULL) |
+       ((((UInt64)n)<< 8) & 0x000000FF00000000ULL) |
+       ((((UInt64)n)>> 8) & 0x00000000FF000000ULL) |
+       ((((UInt64)n)>>24) & 0x0000000000FF0000ULL) |
+       ((((UInt64)n)>>40) & 0x000000000000FF00ULL) |
        ((((UInt64)n)>>56) & 0x00000000000000FFULL) );
 }
 
@@ -257,7 +256,7 @@ template <> struct ReverseBytes < sizeof ( uint64 ) >
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template < class Type > 
+template < class Type >
 inline void reverseBytes ( Type &n )
 {
   typedef MXA::Endian::Detail::ReverseBytes < sizeof ( Type ) > ReverseBytes;
@@ -270,6 +269,7 @@ inline void reverseBytes ( Type &n )
 //  Convert the bytes.
 //
 ///////////////////////////////////////////////////////////////////////////////
+
 struct ByteSwapper
 {
  template < class T > static void convert ( T &t )
@@ -302,7 +302,7 @@ struct FromSystemToBig
     this->convert ( t );
   }
   void getEndianType(char* type) {
-    ::memcpy(type, MXA::Endian::BIGE, 4); 
+    ::memcpy(type, MXA::Endian::BIGE, 4);
   }
 };
 
@@ -326,7 +326,7 @@ struct FromSystemToLittle
     this->convert ( t );
   }
   void getEndianType(char* type) {
-    memcpy(type, MXA::Endian::LITE, 4); 
+    memcpy(type, MXA::Endian::LITE, 4);
   }
 };
 
@@ -350,7 +350,7 @@ struct FromBigToSystem
     this->convert ( t );
   }
   void getEndianType(char* type) {
-    ::memcpy(type, MXA::Endian::BIGE, 4); 
+    ::memcpy(type, MXA::Endian::BIGE, 4);
   }
 };
 
@@ -374,9 +374,11 @@ struct FromLittleToSystem
     this->convert ( t );
   }
   void getEndianType(char* type) {
-    ::memcpy(type, MXA::Endian::LITE, 4); 
+    ::memcpy(type, MXA::Endian::LITE, 4);
   }
 };
+
+
 
 
 } // namespace Endian

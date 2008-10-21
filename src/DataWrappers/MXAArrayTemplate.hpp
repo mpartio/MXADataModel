@@ -13,7 +13,9 @@
 
 #include <Common/MXATypeDefs.h>
 #include <Common/LogTime.h>
+#include <Common/MXAEndian.h>
 #include <Base/IMXAArray.h>
+#include <DataWrappers/DataExportProperties.h>
 
 #ifdef MXA_USE_HDF5_PRIMITIVE_TYPES
 #include <HDF5/H5Lite.h>
@@ -23,13 +25,28 @@
 // STL Includes
 #include <sstream>
 
+// -- Boost algorithms
+#include <boost/iostreams/device/file.hpp>
+
+//-- Boost Filesystem Headers
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/fstream.hpp>
+//namespace FileSystem = boost::filesystem;
+
+
+#define mxa_bswap(s,d,t)\
+  t[0] = ptr[s];\
+  ptr[s] = ptr[d];\
+  ptr[d] = t[0];
 
 /**
 * @class MXAArrayTemplate MXAArrayTemplate.hpp PathToHeader/MXAArrayTemplate.hpp
 * @brief Template class for wrapping raw arrays of data.
 * @author mjackson
 * @date July 3, 2008
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 template<typename T>
 class MXAArrayTemplate : public IMXAArray
@@ -267,6 +284,49 @@ class MXAArrayTemplate : public IMXAArray
       return H5Lite::HDFTypeForPrimitive<T>(value);
     }
 
+    /**
+     * @brief Returns the number of bytes that make up the data type.
+     * 1 = char
+     * 2 = 16 bit integer
+     * 4 = 32 bit integer/Float
+     * 8 = 64 bit integer/Double
+     */
+    virtual size_t getTypeSize()
+    {
+      return sizeof(T);
+    }
+
+
+    /**
+     * @brief
+     */
+    virtual void byteSwapElements()
+    {
+      char* ptr = (char*)(_data);
+      char t[8];
+      size_t size = getTypeSize();
+      for (uint64 var = 0; var < _nElements; ++var)
+      {
+        if (sizeof(T) == 2) {
+          mxa_bswap(0, 1, t);
+        }
+        else if (sizeof(T) == 4 )
+        {
+          mxa_bswap(0, 3, t);
+          mxa_bswap(1, 2, t);
+        }
+        else if (sizeof(T) == 8)
+        {
+          mxa_bswap(0,7,t);
+          mxa_bswap(1,6,t);
+          mxa_bswap(2,5,t);
+          mxa_bswap(3,4,t);
+        }
+        ptr += size; // increment the pointer
+      }
+    }
+
+
 /**
  * @brief Returns the pointer to a specific index into the array. No checks are made
  * as to the correctness of the index being passed in. If you ask for an index off
@@ -278,6 +338,114 @@ class MXAArrayTemplate : public IMXAArray
     {
       return (T*)(&(_data[i]) );
     }
+
+/**
+ * @brief
+ * @param filepath
+ * @param fileType
+ * @param delimiter
+ * @param endianType
+ * @return
+ */
+    virtual int32 exportToFile(DataExportPropertiesPtr expProps)
+    {
+      int32 err = -1;
+      if (expProps->getFileType() == MXA::Export::Binary)
+      {
+        err = _binaryExport(expProps);
+      }
+      else if (expProps->getFileType() == MXA::Export::Ascii)
+      {
+        err = _asciiExport(expProps);
+      }
+
+      return err;
+    }
+
+    // -----------------------------------------------------------------------------
+    //
+    // -----------------------------------------------------------------------------
+    int32 _binaryExport(DataExportPropertiesPtr expProps)
+    {
+      int32 err = -1;
+    #ifdef MXA_LITTLE_ENDIAN
+      int system = MXA::Export::LittleEndian;
+    #elif defined MXA_BIG_ENDIAN
+      int system = MXA::Export::BigEndian;
+    #else
+    #error The Endianness of the system could NOT be determined
+    #endif
+
+      int endianType = expProps->getEndian();
+      if (system != endianType )
+      {
+        byteSwapElements();
+      }
+
+      std::string filepath = expProps->getExportFile();
+      // Create our output file
+      boost::filesystem::ofstream out;
+      out.open(filepath, BOOST_IOS::out | BOOST_IOS::trunc);
+      if (out.is_open()==false)
+      {
+        std::cout << "Output file could not be opened.'" << filepath << "'" << std::endl;
+        return -1;
+      }
+
+      {
+        out.write( (char*)(_data), _nElements * sizeof(T) );
+        err = 1;
+      }
+
+      // Put the bytes back the way they were.
+      if (system != endianType )
+      {
+        byteSwapElements();
+      }
+
+      return err;
+    }
+
+    // -----------------------------------------------------------------------------
+    //
+    // -----------------------------------------------------------------------------
+    int32 _asciiExport(DataExportPropertiesPtr expProps)
+    {
+      int32 err = -1;
+      std::string delimiter = expProps->getAsciiDelimiter();
+
+      // Create our output file
+      boost::filesystem::ofstream out;
+      out.open(expProps->getExportFile(), BOOST_IOS::out | BOOST_IOS::trunc);
+      if (out.is_open()==false)
+      {
+        std::cout << "Output file could not be opened.'" << expProps->getExportFile() << "'" << std::endl;
+        return -1;
+      }
+
+      //std::stringstream sstream;
+      uint64 limit = _nElements - 1;
+      for(uint64 i = 0; i < _nElements; ++i)
+      {
+        if (sizeof(T) != 1 )
+         {
+          out << _data[i];
+         }
+         else
+         {
+           out << static_cast<int32>(_data[i]);
+         }
+        if (i < limit)
+        {
+          out << delimiter;
+        }
+      }
+      out.flush();
+      err = 1;
+      return err;
+    }
+
+
 
 #if 0
 // -----------------------------------------------------------------------------

@@ -594,6 +594,49 @@ void ReadDatasetTest( )
 }
 
 // -----------------------------------------------------------------------------
+//  This will test the byte swapping routine of the MXAArrayTemplate.hpp class
+// -----------------------------------------------------------------------------
+void TestDataWrapper()
+{
+  uint32 i32Array[10] = { 0x00000001,0x00000002,0x00000003,0x00000004,0x00000005,
+                          0x00000006,0x00000007,0x00000008,0x00000009,0x0000000A};
+  uint32 i32ArraySwap[10] = { 0x01000000,0x02000000,0x03000000,0x04000000,0x05000000,
+                              0x06000000,0x07000000,0x08000000,0x09000000,0x0A000000};
+
+  MXAArrayTemplate<uint32>* ui32;
+  IMXAArrayPtr ptr32 = MXAArrayTemplate<uint32>::CreateArray(10);
+  ui32 = dynamic_cast<MXAArrayTemplate<uint32>*>(ptr32.get());
+  for (uint32 i = 0; i < 10; ++i) {
+    ui32->setValue(i, i32Array[i]);
+  }
+  ui32->byteSwapElements();
+  for (int i = 0; i < 10; ++i) {
+   //  std::cout << ui32->getValue(i) << std::endl;
+     BOOST_REQUIRE(ui32->getValue(i) == i32ArraySwap[i]);
+  }
+
+
+  uint64 i64Array[10] = { 0x0000000000000001,0x0000000000000002,0x0000000000000003,0x0000000000000004,0x0000000000000005,
+                          0x0000000000000006,0x0000000000000007,0x0000000000000008,0x0000000000000009,0x000000000000000A};
+  uint64 i64ArraySwap[10] = { 0x0100000000000000ull,0x0200000000000000ull,0x0300000000000000ull,0x0400000000000000ull,0x0500000000000000ull,
+                              0x0600000000000000ull,0x0700000000000000ull,0x0800000000000000ull,0x0900000000000000ull,0x0A00000000000000ull};
+  MXAArrayTemplate<uint64>* ui64;
+  IMXAArrayPtr ptr64 = MXAArrayTemplate<uint64>::CreateArray(10);
+  ui64 = dynamic_cast<MXAArrayTemplate<uint64>*>(ptr64.get());
+  for (uint64 i = 0; i < 10; ++i) {
+    ui64->setValue(i, i64Array[i]);
+  }
+  ui64->byteSwapElements();
+  for (int i = 0; i < 10; ++i) {
+   //  std::cout << ui32->getValue(i) << std::endl;
+     BOOST_REQUIRE(ui64->getValue(i) == i64ArraySwap[i]);
+  }
+
+
+}
+
+
+// -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] )
@@ -601,7 +644,8 @@ boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv
   boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "Dataset Tests" );
   test->add( BOOST_TEST_CASE( &WriteDatasetTest), 0);
   test->add( BOOST_TEST_CASE( &ReadDatasetTest), 0);
-  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
+  test->add( BOOST_TEST_CASE( &TestDataWrapper), 0);
+  //test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test;
 }
 

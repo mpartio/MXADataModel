@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,13 +23,13 @@
 // Conditional Includes/Defines for Large File Support on Windows
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
 /*
-"It's a known, long-standing bug in the compiler system's headers.  For 
-some reason the manufacturer, in its infinite wisdom, chose to #define 
-macros min() and max() in violation of the upper-case convention and so 
-break any legitimate functions with those names, including those in the 
+"It's a known, long-standing bug in the compiler system's headers.  For
+some reason the manufacturer, in its infinite wisdom, chose to #define
+macros min() and max() in violation of the upper-case convention and so
+break any legitimate functions with those names, including those in the
 standard C++ library."
 */
-#define NOMINMAX 
+#define NOMINMAX
 #include <io.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -38,7 +38,7 @@ standard C++ library."
 #include <windows.h>
 #define WRITER64_OUTPUT_STREAM HANDLE
 
-#else  // Non Windows Platform 
+#else  // Non Windows Platform
 #include <fstream>
 #define WRITER64_OUTPUT_STREAM std::ofstream
 #endif
@@ -58,23 +58,23 @@ standard C++ library."
  * sure that we can write files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 class Writer64
 {
 
-  
+
 public:
-  Writer64(const std::string &filename);
-  
+  explicit Writer64(const std::string &filename);
+
   virtual ~Writer64();
-  
+
   /**
    * @brief Initializes our stream object and opens the file
    * @return True on success. False on any failure
    */
   bool initWriter();
-  
+
   /**
  * @brief Reads a number of bytes from the underlying stream
  * @param data The char pointer to read the data into
@@ -85,12 +85,12 @@ public:
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
   DWORD nBytesToWrite = static_cast<DWORD>(numBytes);
   DWORD nBytesWritten = 0;
-  int error = WriteFile(_outStream,  // Which is really an HANDLE hFile on Windows 
-                   data, 
-                   nBytesToWrite, 
-                   &nBytesWritten, 
+  int error = WriteFile(_outStream,  // Which is really an HANDLE hFile on Windows
+                   data,
+                   nBytesToWrite,
+                   &nBytesWritten,
                    NULL) ;
-  if (nBytesToWrite != nBytesWritten) 
+  if (nBytesToWrite != nBytesWritten)
   {
     throw std::runtime_error ( "Error: Number of bytes written did not match number of bytes asked." );
   }
@@ -128,12 +128,12 @@ public:
     offset.QuadPart = 0;
     SetFilePointerEx(_outStream, offset, &posOut , FILE_CURRENT); //From where we are now
     return posOut.QuadPart;
-#else 
+#else
     return _outStream.tellp();
 #endif
   }
 
-  
+
 private:
   std::string _filename;
   WRITER64_OUTPUT_STREAM _outStream;

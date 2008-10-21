@@ -62,6 +62,10 @@ class MXASupportFileContents;
 class IRequiredMetaData;
 class H5MXARequiredMetaData;
 
+class DataExportProperties;
+
+typedef boost::shared_ptr<DataExportProperties>     DataExportPropertiesPtr;
+
 typedef boost::shared_ptr<ISupportFile>             ISupportFilePtr;
 typedef std::vector<ISupportFilePtr>                ISupportFiles;
 //typedef boost::shared_ptr<ISupportFileContents>   ISupportFileContentsPtr;
@@ -84,12 +88,6 @@ typedef boost::shared_ptr<IDataFile>                IDataFilePtr;
 typedef boost::shared_ptr<IFileReader>              IFileReaderPtr;
 typedef boost::shared_ptr<IFileWriter>              IFileWriterPtr;
 
-//typedef boost::shared_ptr<MXAAttribute>           MXAAttributePtr;
-//typedef boost::shared_ptr<IAttribute>             IAttributePtr;
-//typedef std::vector<MXAAttributePtr>              MXAAttributes;
-//typedef std::vector<IAttributePtr>                IAttributes;
-//typedef std::map<std::string, MXAAttributePtr>    MXAAttributeMap;
-//typedef std::vector<MXAAttributePtr>              MXAUserMetaData;
 typedef std::map<std::string, std::string>        MXARequiredMetaData;
 typedef boost::shared_ptr<IFileIODelegate>        IFileIODelegatePtr;
 

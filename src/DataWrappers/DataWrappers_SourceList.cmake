@@ -8,6 +8,7 @@ SET (MXA_DATA_WRAPPERS_HEADERS
   ${MXA_SOURCE_DIR}/src/DataWrappers/MXAArrayTemplate.hpp
   ${MXA_SOURCE_DIR}/src/DataWrappers/MXAAsciiStringData.h
   ${MXA_SOURCE_DIR}/src/DataWrappers/MXARGBImage.h
+  ${MXA_SOURCE_DIR}/src/DataWrappers/DataExportProperties.h
   )
   
 MXA_SOURCE_PROPERTIES(DataWrappers "${MXA_DATA_WRAPPERS_HEADERS}" "${MXA_DATA_WRAPPERS_SRCS}")

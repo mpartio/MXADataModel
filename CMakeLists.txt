@@ -157,6 +157,7 @@ ENDIF ( MXA_USE_HDF5 )
 # ---------- Set up the Project Options -----------------------
 IF(WIN32)
  SET(GUI_TYPE WIN32)
+ SET(WINDOWS_LARGE_FILE_SUPPORT "1")
 ENDIF(WIN32)
 
 # -------- Add some definitions for Debug Builds -----------------
