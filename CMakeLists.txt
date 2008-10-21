@@ -52,6 +52,7 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
 SET (MXA_CMAKE_DIR ${MXA_RESOURCES_DIR}/CMake)
 SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
+SET (MXA_DOCUMENTATION_DIR ${MXA_SOURCE_DIR}/Documentation)
 
 #-------------------------------------------------------------------------------
 INCLUDE (${MXA_CMAKE_DIR}/vtkTestTypes.cmake )
@@ -212,8 +213,6 @@ ELSE (MXA_USE_DEBUG_LIBRARY_NAME)
     SET(MXA_LIBRARY_DEBUG "MXADataModel" CACHE INTERNAL "" FORCE)
 ENDIF (MXA_USE_DEBUG_LIBRARY_NAME)
 
-
-
 #-- Add the MXADataModel Library and link to needed libraries-------------------
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
@@ -268,10 +267,3 @@ OPTION(MXA_BUILD_UTILITIES "Build programs that help with extending MXADataModel
 IF (MXA_BUILD_UTILITIES)
     ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/Utilities ${PROJECT_BINARY_DIR}/Utilities)
 ENDIF (MXA_BUILD_UTILITIES)
-
-# ------------------------------------------------------------------------------
-#  Build simple test programs. This should always be commented out
-# ------------------------------------------------------------------------------
-#ADD_EXECUTABLE(OverLoadTest ${MXA_SOURCE_DIR}/src/Misc/OverLoadTest.cpp)
-#TARGET_LINK_LIBRARIES(OverLoadTest ${MXADATAMODEL_LIB_NAME} ${DEP_LIBS})
-

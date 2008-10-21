@@ -24,7 +24,7 @@
 * methods to meet my specific needs.
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class MXA_EXPORT IMXAArray
 {
@@ -112,12 +112,9 @@ class MXA_EXPORT IMXAArray
 
 
     /**
-     * @brief
-     * @param filepath
-     * @param fileType
-     * @param delimiter
-     * @param endianType
-     * @return
+     * @brief Saves the array to an external file on the system
+     * @param expProps The properties to use when saving the array
+     * @return Error code.
      */
     virtual int32 exportToFile(DataExportPropertiesPtr expProps) = 0;
 

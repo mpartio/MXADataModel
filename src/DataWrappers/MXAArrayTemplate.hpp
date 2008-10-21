@@ -46,7 +46,7 @@
 * @brief Template class for wrapping raw arrays of data.
 * @author mjackson
 * @date July 3, 2008
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 template<typename T>
 class MXAArrayTemplate : public IMXAArray
@@ -339,14 +339,11 @@ class MXAArrayTemplate : public IMXAArray
       return (T*)(&(_data[i]) );
     }
 
-/**
- * @brief
- * @param filepath
- * @param fileType
- * @param delimiter
- * @param endianType
- * @return
- */
+    /**
+     * @brief Saves the array to an external file on the system
+     * @param expProps The properties to use when saving the array
+     * @return Error code.
+     */
     virtual int32 exportToFile(DataExportPropertiesPtr expProps)
     {
       int32 err = -1;

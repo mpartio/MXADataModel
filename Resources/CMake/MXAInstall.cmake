@@ -39,7 +39,6 @@ INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h
 SET (MXA_INSTALLED_RESOURCES
         ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
         ${MXA_CMAKE_DIR}/ConfigureChecks.cmake
-   #     ${MXA_RESOURCES_DIR}/IncludeMXADataModelSource.cmake
         ${MXA_CMAKE_DIR}/MXAAdjustLibVars.cmake
         ${MXA_CMAKE_DIR}/MXAFindBoost.cmake
         ${MXA_CMAKE_DIR}/MXAFindExpat.cmake
@@ -53,3 +52,35 @@ INSTALL (FILES ${MXA_INSTALLED_RESOURCES}
         DESTINATION share/MXADataModel/Resources/CMake
         COMPONENT Resources)
 
+SET (DOCS
+  ${MXA_DOCUMENTATION_DIR}/Background.html
+  ${MXA_DOCUMENTATION_DIR}/CompileNotesUnix.html
+  ${MXA_DOCUMENTATION_DIR}/CompileNotesXP.html
+  ${MXA_DOCUMENTATION_DIR}/Examples.html
+  ${MXA_DOCUMENTATION_DIR}/HowToWriteDataImportDelegate.html
+  ${MXA_DOCUMENTATION_DIR}/ImportingData.html
+  ${MXA_DOCUMENTATION_DIR}/index.html
+  ${MXA_DOCUMENTATION_DIR}/MXAUtilities.html
+  ${MXA_DOCUMENTATION_DIR}/Navigation.js
+  ${MXA_DOCUMENTATION_DIR}/site.css
+  ${MXA_DOCUMENTATION_DIR}/SystemRequirements.html
+  ${MXA_DOCUMENTATION_DIR}/Todo.html
+  ${MXA_DOCUMENTATION_DIR}/UsingMXAInOtherProjects.html
+  ${MXA_DOCUMENTATION_DIR}/XML_Usage.html
+)
+
+#-- Install the HTML based documentation
+INSTALL (FILES ${DOCS}
+            DESTINATION doc/MXADataModel
+            COMPONENT Documentation           
+)
+
+#-- Install the generated Doxygen documentation
+INSTALL(DIRECTORY ${MXA_SOURCE_DIR}/API-Docs
+DESTINATION doc/MXADataModel
+COMPONENT Documentation)
+
+INSTALL(FILES ${MXA_SOURCE_DIR}/Resources/ReadMe.txt
+        DESTINATION .
+        COMPONENT Documentation)
+        
