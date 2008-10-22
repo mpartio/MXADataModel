@@ -56,6 +56,7 @@ SET (DOCS
   ${MXA_DOCUMENTATION_DIR}/Background.html
   ${MXA_DOCUMENTATION_DIR}/CompileNotesUnix.html
   ${MXA_DOCUMENTATION_DIR}/CompileNotesXP.html
+  ${MXA_DOCUMENTATION_DIR}/default.css
   ${MXA_DOCUMENTATION_DIR}/Examples.html
   ${MXA_DOCUMENTATION_DIR}/HowToWriteDataImportDelegate.html
   ${MXA_DOCUMENTATION_DIR}/ImportingData.html
@@ -67,6 +68,12 @@ SET (DOCS
   ${MXA_DOCUMENTATION_DIR}/Todo.html
   ${MXA_DOCUMENTATION_DIR}/UsingMXAInOtherProjects.html
   ${MXA_DOCUMENTATION_DIR}/XML_Usage.html
+  ${MXA_DOCUMENTATION_DIR}/img/body.jpg
+  ${MXA_DOCUMENTATION_DIR}/img/container.jpg
+  ${MXA_DOCUMENTATION_DIR}/img/header.jpg
+  ${MXA_DOCUMENTATION_DIR}/img/li.gif
+  ${MXA_DOCUMENTATION_DIR}/img/main.gif
+  ${MXA_DOCUMENTATION_DIR}/img/quote.gif
 )
 
 #-- Install the HTML based documentation

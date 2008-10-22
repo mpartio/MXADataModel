@@ -3,83 +3,102 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Background Information</title>
-<link rel="stylesheet" type="text/css" href="./site.css">
+<link rel="stylesheet" type="text/css" href="default.css" media="screen" />
 <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
 <meta content="All By Hand" name="generator">
 <meta content="max-age=0, must-revalidate" http-equiv="Cache-Control">
 <script type="text/javascript" src="Navigation.js"></script>
 </head>
+
 <body>
 
+<div class="outer-container">
 
+<div class="inner-container">
 
-<table class="main_layout_table">
-<tr>
-<td colspan="2"><div class="title">
-Background Information
-</div></td>
-</tr>
-<tr>
-<!-- Begin Navigation Table Cell -->
-<td class="nav_table_cell">
-<div  id="NavigationDiv" > </div>
-<script type="text/javascript">document.getElementById('NavigationDiv').innerHTML=navigationCells('Background');
-</script>
-</td>
-<!-- End Navigation Table Cell -->
+<div class="header">
 
-<!--  Start Page Content -->
-<td class="content">
-  <h4>Section 1: Too Many Files</h4>
- While doing research many data files are usuall created. Typically these files are 
-  stored in a mish-mash of folders scattered about a users computer system. Important 
-  information about the experiment may or may not follow the data. Losing this meta data
-  may render the actual data useless to the researcher. Each of these files could be 
-  stored in different formats which can be either proprietary or opensource
-  
-  <h4>Section 2: Data Organization</h4>
- The goal of the MXA project is to allow the researcher to gather all the information and
-  data that pertains to a particular experiment and store that information in a single
-  location in an open format. Thus allowing the researcher to easily share data with thier
-  peers for further analysis.
-  
-  <h4>Section 3: Data Storage & HDF5</h4>
-  HDF5 is a scientific file format under ongoing development at UIUC. The HDF format
-  was originally designed to store data being produced on High Performance Computing (HPC)
-  systems. After a number of revisions to the HDF specification a complete rewrite was under taken
-   to solve some of the limiting issues that had arisen during production use. The latest
-   revisiion is version 5, or HDF5. This file format organizes data in a "Directed Graph" which in
-   its simplest form can be used in a heirarchical fashion. Any type of data can be stored
-   into the file in any organization that the researcher desires. In this way the HDF5
-   format is a highly flexible storage format in which to store vast amounts of data.
-  
-  <h4>Section 4: Data Model</h4>
-  The concept of a "Data Model" is introduced in order to bring some consistancy to
-  the layout of the data within an HDF5 file. The data model consists of 3 main parts and tries to
-  follow generally accepted experimental methods.
-  <ol>
-  <li>Data Dimensions are the independent variables of a particular data set or experiment</li>
-  <li>Data Records are the the dependent variables of the experiment</li>
-  <li>Data Root is used to describe the location within the HDF5 file where the actual data
-  resides</li>
-  </ol>
-  The data model is stored in the HDF5 file in a strict location and follows a specification
-  that states how the information is stored. By using this type of system, exchange of MXA files
-  between algorithms becomes easier and more straight forward. Note that the values that are
-  written to the "Data Model" part of the HDF5 file only describe the experiment and the
-  layout of the data within the HDF5 file. The actual data is stored in another location
-  inside the HDF5 data file.
-  <p>The "Data Root" is a value that holds the 'path' to the actual experimental data as it is stored
-within the HDF5 data file. The data is stored according to the heirarchy that is laid out in the Data
-Model. Using this approach, any piece of data can be quickly found either by a human being or by 
-automated processes.</p>
-</p>
+<div class="title"><span class="sitename"><a href="index.html">MXADataModel
+Documentation</a></span>
+<div class="slogan" id="slogan">APIs for the Programmer</div>
+</div>
+</div>
 
+<div class="path" id="breadcrumb"><a href="index.html">Home</a></div>
 
-</td>
-<!-- End Page Content -->
-</tr>
+<div class="main">
+<table border="0" cellpadding="5" cellspacing="5">
+  <tr>
+    <td valign="top"><!-- NAVIGATION STARTS HERE -->
+    <div class="navigation"><script type="text/javascript">GenerateNavigation('Background', 'Background.html');</script>
+    </div>
+    <div class="clearer">&nbsp;</div>
+    <!-- NAVIGATION ENDS HERE --></td>
+    <!-- CONTENT STARTS HERE -->
+    <td valign="top">
+    <div class="content">
+
+    <h3>Section 1: Too Many Files</h3>
+    While doing research many data files are usually created. Typically these
+    files are stored in a mish-mash of folders scattered about a users computer
+    system. Important information about the experiment may or may not follow the
+    data. Losing this meta data may render the actual data useless to the
+    researcher. Each of these files could be stored in different formats which
+    can be either proprietary or opensource
+
+    <h3>Section 2: Data Organization</h3>
+    The goal of the MXA project is to allow the researcher to gather all the
+    information and data that pertains to a particular experiment and store that
+    information in a single location in an open format. Thus allowing the
+    researcher to easily share data with thier peers for further analysis.
+
+    <h3>Section 3: Data Storage and HDF5</h3>
+    HDF5 is a scientific file format under ongoing development at UIUC. The HDF
+    format was originally designed to store data being produced on High
+    Performance Computing (HPC) systems. After a number of revisions to the HDF
+    specification a complete rewrite was under taken to solve some of the
+    limiting issues that had arisen during production use. The latest revisiion
+    is version 5, or HDF5. This file format organizes data in a "Directed Graph"
+    which in its simplest form can be used in a heirarchical fashion. Any type
+    of data can be stored into the file in any organization that the researcher
+    desires. In this way the HDF5 format is a highly flexible storage format in
+    which to store vast amounts of data.
+
+    <h3>Section 4: Data Model</h3>
+    The concept of a "Data Model" is introduced in order to bring some
+    consistancy to the layout of the data within an HDF5 file. The data model
+    consists of 3 main parts and tries to follow generally accepted experimental
+    methods.
+    <ol>
+      <li>Data Dimensions are the independent variables of a particular
+      data set or experiment</li>
+      <li>Data Records are the the dependent variables of the experiment</li>
+      <li>Data Root is used to describe the location within the HDF5 file
+      where the actual data resides</li>
+    </ol>
+    The data model is stored in the HDF5 file in a strict location and follows a
+    specification that states how the information is stored. By using this type
+    of system, exchange of MXA files between algorithms becomes easier and more
+    straight forward. Note that the values that are written to the "Data Model"
+    part of the HDF5 file only describe the experiment and the layout of the
+    data within the HDF5 file. The actual data is stored in another location
+    inside the HDF5 data file.
+    <p>The "Data Root" is a value that holds the 'path' to the actual
+    experimental data as it is stored within the HDF5 data file. The data is
+    stored according to the heirarchy that is laid out in the Data Model. Using
+    this approach, any piece of data can be quickly found either by a human
+    being or by automated processes.</p>
+    </div>
+    <!-- CONTENT ENDS HERE --></td>
+
+  </tr>
 </table>
+<div class="footer"><script type="text/javascript">generateFooter();</script>
+</div>
+</div>
+</div>
+</div>
 </body>
+
 </html>
 
