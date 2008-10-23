@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>MXADataModel Documentation</title>
+<link rel="stylesheet" type="text/css" href="default.css" media="screen">
+<meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
+<meta content="All By Hand" name="generator">
+<meta content="max-age=0, must-revalidate" http-equiv="Cache-Control">
+<script type="text/javascript" src="Navigation.js"></script>
+</head>
+<body>
+<div class="outer-container">
+<div class="inner-container">
+<div class="header">
+<div class="title"><span class="sitename"><a href="index.html">MXADataModel
+Documentation</a></span>
+<div class="slogan" id="slogan">APIs for the Programmer</div>
+</div>
+</div>
+<div class="path" id="breadcrumb"><a href="index.html">Home</a></div>
+<div class="main">
+<table border="0" cellpadding="5" cellspacing="5">
+  <tbody>
+    <tr>
+      <td valign="top"><!-- NAVIGATION STARTS HERE -->
+      <div class="navigation"><script type="text/javascript">GenerateNavigation('MXA Specification', 'MXASpecification.html');</script>
+      </div>
+      <div class="clearer">&nbsp;</div>
+      <!-- NAVIGATION ENDS HERE --><br>
+      </td>
+
+      <td valign="top">
+      <div class="content">
+      <!-- CONTENT STARTS HERE -->
+<h2>Introduction</h2>
+    &nbsp;&nbsp;&nbsp;&nbsp;The MXA File format is based on the HDF5 file format so every MXA file is just an HDF5 file. What the MXA API does is bring some order to the HDF5 file and how the data is stored. The format is excellent for 'Field' or Image type data. Data such as 3D mesh or other complex representations may find it difficult to encode into MXADataModel files. The specification laid out in the tables below always refers to HDF5 Groups or Datasets in absolute terms, ie, from the 'root' node of the HDF5 file.
+
+<h2>HDF5 Specification</h2>
+<!-- /Data Model Table Begin -->
+<table border="1px" cellspacing="3" cellpadding="2">
+  <tr>
+    <td colspan="4">
+    <h3>/Data Model</h3>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4"><b>HDF5 Object Type</b> - HDF Group</td>
+  </tr>
+  <tr>
+    <td colspan="4">This group holds the main portion of the model description. It contains 2 groups, 1 data set and 
+        has 2 attributes attached to the group itself.</td>
+  </tr>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>HDF5 Type</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td><strong>Groups</strong></td>
+    <td>Data Dimensions</td>
+    <td>H5G_GROUP</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Data Records</td>
+    <td>H5G_GROUP</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><strong>Attributes</strong></td>
+    <td>Model Type</td>
+    <td>H5T_STRING</td>
+    <td>'MXA'</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Model Version</td>
+    <td>H5T_FLOAT</td>
+    <td>'0.4'</td>
+  </tr>
+    <tr>
+    <td><strong>Data Sets</strong></td>
+    <td>Data Root</td>
+    <td>H5T_STRING</td>
+    <td>'Data' (Default Value. User can set another name)</td>
+  </tr>
+</table>
+
+<!-- /Data Model Table End -->
+<br>
+<!-- /Meta Data Table Begin -->
+<table border="1px" cellspacing="3" cellpadding="2">
+  <tr>
+    <td colspan="4">
+    <h3>/Meta Data</h3>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4"><b>HDF5 Object Type</b> - HDF Group</td>
+  </tr>
+  <tr>
+    <td colspan="4">Meta Data is broken into 2 data sets. The
+    Required and the 'User Defined'. See the table 'Required' for a
+    complete list of attributes that will be found attached to the
+    'Required' Data set. Actual values are stored as &quot;key-Value&quot; pairs of attributes.</td>
+  </tr>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>HDF5 Type</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td><strong>Data Sets</strong></td>
+    <td>Required</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>User Defined</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>0</td>
+  </tr>
+</table>
+
+<br>
+<!-- /SupportFiles Table Begin -->
+<table border="1px" cellspacing="3" cellpadding="2">
+  <tr>
+    <td colspan="4">
+    <h3>/SupportFiles</h3>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4"><b>HDF5 Object Type</b> - HDF Group</td>
+  </tr>
+  <tr>
+    <td colspan="4">Any file can be stored in this group. Files can be marked
+    as either text or binary.</td>
+  </tr>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>HDF5 Type</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td><strong>Data Sets</strong></td>
+    <td>*increasing index number</td>
+    <td>H5T_NATIVE_UINT8</td>
+    <td>0</td>
+  </tr>
+</table>
+
+<br>
+<!-- /Data Model/Data Dimensions Table Begin -->
+<table border="1px" cellspacing="3" cellpadding="2">
+  <tr>
+    <td colspan="4">
+    <h3>/Data Model/Data Dimensions</h3>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4"><b>HDF5 Object Type</b> - HDF Group</td>
+  </tr>
+  <tr>
+    <td colspan="4">There are 'n' number of datasets in this group. Each data set will have 
+        the following attributes and value. <br><b>Data Value Description</b>: 
+        The value of this HDF5 Dataset is the index of this Data dimension. The 
+        Dimensions need to be ordered in the HDF5 File so that appropriate paths 
+        can be created. This is the value of the index of the data dimension in 
+        that ordering. The indexing should start from zero (0). The HDF5 Object 
+        Name is also the index, just in string form.</td>
+  </tr>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>HDF5 Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>Data Set</strong></td>
+    <td>Data Dimension Index</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>0</td>
+    </tr>
+    <tr>
+    <td><strong>Attributes</strong></td>
+    <td>Name</td>
+    <td>H5T_STRING</td>
+    <td>This is a String that can be used in GUI programs to show the name of the Data Record instead of using the HDF5 Object Name</td>
+</tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Alt_Name</td>
+    <td>H5T_STRING</td>
+    <td>This is also a string based attribute that can give an alternate name to the dataset.</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Start_Value</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>The integer index that elements along this dimension will start at</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Increment</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>The integer value that is added to a current index to get to the next element.</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>End_Value</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>The integer index that elements along this dimension will end at.</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Count</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>The total number of discrete elements along this dimension</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Index</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>This is the index of the Data Dimension. The data dimensions are indexed incrementatlly from zero.</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Uniform</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>Tells if the data dimension increments uniformly from its start value to end value</td>
+    </tr>
+
+</table>
+<br>
+<!-- /Data Model/Data Records Table Begin -->
+<table border="1px" cellspacing="3" cellpadding="2">
+  <tr>
+    <td colspan="4">
+    <h3>/Data Model/Data Records</h3>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4"><b>HDF5 Object Type</b> - HDF Group</td>
+  </tr>
+  <tr>
+    <td colspan="4">Data Records can be a flat list or have a hierarchy to them in order to organize the data better. Each 'Data
+        Record' is an individual HDF5 data set with the following name, value and attributes. If the 'Data Record' is an organizational element (HDF5 Group) then the HDF5 group will still have the following attributes. </td>
+  </tr>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>HDF5 Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>Data Set</strong></td>
+    <td>LUID Value</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>0 (Not used for anything meaningful)</td>
+    </tr>
+    <tr>
+    <td><strong>Attributes</strong></td>
+    <td>Name</td>
+    <td>H5T_STRING</td>
+    <td>This is a String that can be used in GUI programs to show the name of the Data Record instead of using the HDF5 Object Name</td>
+</tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Alt_Name</td>
+    <td>H5T_STRING</td>
+    <td>This is also a string based attribute that can give an alternate name to the dataset.</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>GUID</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>This is a Global Unique Identifier. Each Data Record Entry must have a unique Id. These values start at Zero.</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>LUID</td>
+    <td>H5T_NATIVE_INT32</td>
+    <td>This is a Local Unique Identifier. Each Data Record Entry within a Data Record Group has a unique ID starting at Zero value.</td>
+    </tr>
+</table>
+<br>
+<!-- /Meta Data/Required Table Begin -->
+<table border="1px" cellspacing="3" cellpadding="2">
+  <tr>
+    <td colspan="4">
+    <h3>/Meta Data/Required</h3>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4"><b>HDF5 Object Type</b> - HDF Dataset</td>
+  </tr>
+  <tr>
+    <td colspan="4"><b>Data Value Description</b>
+          The value of the dataset is a 4 byte integer with a value of 0.</td>
+  </tr>
+  <tr>
+    <th></th>
+    <th>Name</th>
+    <th>HDF5 Type</th>
+    <th>Description</th>
+  </tr>
+    <tr>
+    <td><strong>Attributes</strong></td>
+    <td>Creator</td>
+    <td>H5T_STRING</td>
+    <td>The full name of the person who ran the experiment, simulation or otherwise collected the data.</td>
+</tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Date</td>
+    <td>H5T_STRING</td>
+    <td>The date and time the experiment or data was collected in the following format: yyyy/MM/dd HH:mm:ss</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Description</td>
+    <td>H5T_STRING</td>
+    <td>Short description of the data set or experiment.</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Distribution_Rights</td>
+    <td>H5T_STRING</td>
+    <td>1 of the following 3 values: {'Unlimited', 'Limited', 'Release_Limitation'}</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Name</td>
+    <td>H5T_STRING</td>
+    <td>A Name given to the experiment.</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Original_Source_File</td>
+    <td>H5T_STRING</td>
+    <td>Either the path to the original source file on the computer system or 'Not Applicable' if the data was store
+        directly to the MXA file.</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Pedigree</td>
+    <td>H5T_STRING</td>
+    <td>Either the value 'Original' or 'Derived'</td>
+    </tr>
+    <tr>
+    <td><strong></strong></td>
+    <td>Release_Number</td>
+    <td>H5T_STRING</td>
+    <td>A tracking number assigned to the data or 'Not Applicable' if there is no tracking number.</td>
+    </tr>
+</table>
+<br>
+<!-- /[Data Root] -->
+<table border="1px" cellspacing="3" cellpadding="2">
+  <tr>
+    <td colspan="4">
+    <h3>/[Data Root]</h3>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4"><b>HDF5 Object Type</b> - HDF Group</td>
+  </tr>
+  <tr>
+    <td colspan="4">The value for this group is take from the '/Data Model/Data Root' data set. It can be a single group or
+        consist of nested groups. Attaching attributes to the group is entirely up to the user and while the MXA Library
+        will ignore the attributes some programs may find it more convenient to encode meta data into the these groups
+        instead of in the 'Meta Data' group.</td>
+  </tr>
+</table>
+
+      <!-- CONTENT ENDS HERE -->
+      </div>
+    </td>
+    </tr>
+  </tbody>
+</table>
+<div class="footer"><script type="text/javascript">generateFooter();</script></div>
+</div>
+</div>
+</div>
+</body>
+</html>

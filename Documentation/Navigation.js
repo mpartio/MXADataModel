@@ -29,6 +29,7 @@ function IntroductionNavGroup()
 	var pages = new Array();
 	pages.push("Home", "index.html");
 	pages.push("Background", "Background.html");
+	pages.push("MXA Specification", "MXASpecification.html");
 	for(i = 0; i < pages.length; i=i+2)
 	{
 		html = html + "<li><a href=\"" + pages[i+1] + "\">" + pages[i] + "</a></li>";
