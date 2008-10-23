@@ -62,6 +62,7 @@ SET (DOCS
   ${MXA_DOCUMENTATION_DIR}/ImportingData.html
   ${MXA_DOCUMENTATION_DIR}/index.html
   ${MXA_DOCUMENTATION_DIR}/MXAUtilities.html
+  ${MXA_DOCUMENTATION_DIR}/MXASpecification.html
   ${MXA_DOCUMENTATION_DIR}/Navigation.js
   ${MXA_DOCUMENTATION_DIR}/site.css
   ${MXA_DOCUMENTATION_DIR}/SystemRequirements.html
