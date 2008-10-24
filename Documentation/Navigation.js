@@ -78,7 +78,7 @@ function DocumentationNavGroup()
 	var pages = new Array();
 	pages.push("XML Usage", "XML_Usage.html");
 	pages.push("Examples", "Examples.html");
-	pages.push("Doxygen API", "API-Docs/html/classes.html");
+	pages.push("Doxygen API", "../API-Docs/html/classes.html");
 	for(i = 0; i < pages.length; i=i+2)
 	{
 		html = html + "<li><a href=\"" + pages[i+1] + "\">" + pages[i] + "</a></li>";

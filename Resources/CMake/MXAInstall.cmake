@@ -69,24 +69,20 @@ SET (DOCS
   ${MXA_DOCUMENTATION_DIR}/Todo.html
   ${MXA_DOCUMENTATION_DIR}/UsingMXAInOtherProjects.html
   ${MXA_DOCUMENTATION_DIR}/XML_Usage.html
-  ${MXA_DOCUMENTATION_DIR}/img/body.jpg
-  ${MXA_DOCUMENTATION_DIR}/img/container.jpg
-  ${MXA_DOCUMENTATION_DIR}/img/header.jpg
   ${MXA_DOCUMENTATION_DIR}/img/li.gif
-  ${MXA_DOCUMENTATION_DIR}/img/main.gif
   ${MXA_DOCUMENTATION_DIR}/img/quote.gif
 )
 
 #-- Install the HTML based documentation
-INSTALL (FILES ${DOCS}
+INSTALL (DIRECTORY ${MXA_DOCUMENTATION_DIR}
             DESTINATION doc/MXADataModel
-            COMPONENT Documentation           
-)
+            COMPONENT Documentation
+            PATTERN "CVS" EXCLUDE)
 
 #-- Install the generated Doxygen documentation
 INSTALL(DIRECTORY ${MXA_SOURCE_DIR}/API-Docs
-DESTINATION doc/MXADataModel
-COMPONENT Documentation)
+        DESTINATION doc/MXADataModel
+        COMPONENT Documentation)
 
 INSTALL(FILES ${MXA_SOURCE_DIR}/Resources/ReadMe.txt
         DESTINATION .
