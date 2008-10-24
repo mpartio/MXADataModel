@@ -21,7 +21,7 @@
 namespace MXA {
 
   const std::string MXACurrentFileType("MXA");
-  const float  MXACurrentFileVersion = 0.4f;
+  const float  MXACurrentFileVersion = 1.0f;
 
   // Defines the paths within the MXA Model Heirarchy
   const std::string ModelVersion("Model Version");
