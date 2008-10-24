@@ -645,7 +645,7 @@ boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv
   test->add( BOOST_TEST_CASE( &WriteDatasetTest), 0);
   test->add( BOOST_TEST_CASE( &ReadDatasetTest), 0);
   test->add( BOOST_TEST_CASE( &TestDataWrapper), 0);
-  //test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
+  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test;
 }
 
