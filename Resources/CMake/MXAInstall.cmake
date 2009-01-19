@@ -1,26 +1,33 @@
 #-------- Install the MXADataModel Library
-IF (WIN32 AND BUILD_SHARED_LIBS)
+IF (WIN32)
+
     SET (MXA_CONFIG_DIR_Debug "")
     SET (MXA_CONFIG_DIR_Release "")
     IF (MSVC)
         SET (MXA_CONFIG_DIR_Debug "Debug/")
         SET (MXA_CONFIG_DIR_Release "Release/")
-    ENDIF (MSVC)  
-    INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${MXA_CONFIG_DIR_Debug}${MXA_LIBRARY_DEBUG}.dll 
-        DESTINATION bin 
-        CONFIGURATIONS Debug 
-        COMPONENT Runtime)
-    INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${MXA_CONFIG_DIR_Release}${MXA_LIBRARY_RELEASE}.dll 
-        DESTINATION bin 
-        CONFIGURATIONS Release 
-        COMPONENT Runtime)
+    ENDIF (MSVC)
+    # If we are building Shared Libraries put a copy of the DLL into the bin directory
+    # so that the executables will work
+    if (BUILD_SHARED_LIBS)
+        INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${MXA_CONFIG_DIR_Debug}${MXA_LIBRARY_DEBUG}.dll 
+            DESTINATION lib 
+            CONFIGURATIONS Debug 
+            COMPONENT Runtime)
+        INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${MXA_CONFIG_DIR_Release}${MXA_LIBRARY_RELEASE}.dll 
+            DESTINATION lib 
+            CONFIGURATIONS Release 
+            COMPONENT Runtime)
+    endif(BUILD_SHARED_LIBS)
     INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
         LIBRARY DESTINATION bin 
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
         COMPONENT Libraries
     )
-ENDIF (WIN32 AND BUILD_SHARED_LIBS)
+   
+ENDIF (WIN32)
+
 
 IF (NOT WIN32)
     INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
@@ -46,6 +53,9 @@ SET (MXA_INSTALLED_RESOURCES
         ${MXA_CMAKE_DIR}/MXAFindMinGW.cmake
         ${MXA_CMAKE_DIR}/MXAFindSZip.cmake
         ${MXA_CMAKE_DIR}/MXAFindTiff.cmake
+        ${MXA_CMAKE_DIR}/GetTimeOfDayTest.cpp
+        ${MXA_CMAKE_DIR}/FindSupportLibraries.cmake
+        ${MXA_CMAKE_DIR}/InstallMXASupportLibraries.cmake
 )
 
 INSTALL (FILES ${MXA_INSTALLED_RESOURCES} 

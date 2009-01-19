@@ -58,9 +58,9 @@ standard C++ library."
  * sure that we can write files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
-class Writer64
+class MXA_EXPORT Writer64
 {
 
 

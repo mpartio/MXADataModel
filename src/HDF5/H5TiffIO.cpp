@@ -1,9 +1,12 @@
+#include <tif_config.h>
+
 
 //-- MXA Headers
 #include <HDF5/H5Lite.h>
 #include <HDF5/H5Image.h>
 #include <HDF5/H5TiffIO.h>
 #include <Common/LogTime.h>
+#include <Utilities/StringUtils.h>
 
 //-- STL Headers
 #include <iostream>
@@ -472,10 +475,16 @@ herr_t H5TiffIO::exportTiff(hid_t fileId,
   }
 
   int32 imageClass = _determineTiffOutputImageClass(fileId, img_dataset_name);
+  char h5_filename[1024];
+  ::memset(h5_filename, 0,1024);  // Zero everything out
+  size_t filename_size = 1024;
+  err = H5Fget_name(fileId, h5_filename, filename_size);
+
+
 
   switch (imageClass) {
     case GrayscaleTiffImage:
-      err = _exportGrayScaleTiff(out, &(data.front() ), width, height);
+      err = _exportGrayScaleTiff(out, &(data.front() ), width, height, h5_filename, img_dataset_name);
       break;
     case PaletteColorTiffImage:
       //err = _export8BitTiff(out, fileId, img_dataset_name, &(data.front() ), width, height, numpalettes);
@@ -518,19 +527,41 @@ herr_t H5TiffIO::_exportRGBFullColorTiff(TIFF* out,
 herr_t H5TiffIO::_exportGrayScaleTiff(TIFF *image,
                                      uint8* data,
                                      hsize_t width,
-                                     hsize_t height)
+                                     hsize_t height,
+                                     const std::string &documentName,
+                                     const std::string &imageDescription)
 {
   herr_t err = 0;
 
   // set the basic values
-  TIFFSetField(image, TIFFTAG_IMAGEWIDTH, (int) width);
-  TIFFSetField(image, TIFFTAG_IMAGELENGTH, (int) height);
-  TIFFSetField(image, TIFFTAG_BITSPERSAMPLE, 8);
-  TIFFSetField(image, TIFFTAG_SAMPLESPERPIXEL, 1);
-  TIFFSetField(image, TIFFTAG_ROWSPERSTRIP, (int) height); // 1 strip
+  err = TIFFSetField(image, TIFFTAG_IMAGEWIDTH, (int) width);
+  err = TIFFSetField(image, TIFFTAG_IMAGELENGTH, (int) height);
+  err = TIFFSetField(image, TIFFTAG_BITSPERSAMPLE, 8);
+  err = TIFFSetField(image, TIFFTAG_SAMPLESPERPIXEL, 1);
+  err = TIFFSetField(image, TIFFTAG_ROWSPERSTRIP, (int) height); // 1 strip
 
-  TIFFSetField(image, TIFFTAG_COMPRESSION, 1);
-  TIFFSetField(image, TIFFTAG_PHOTOMETRIC, 1);
+  err = TIFFSetField(image, TIFFTAG_COMPRESSION, 1);
+  std::string datetime = tifDateTime();
+  err = TIFFSetField(image, TIFFTAG_DATETIME, datetime.c_str());
+  // String based tags
+  if (documentName.length() > 0) {
+    err = TIFFSetField(image, TIFFTAG_DOCUMENTNAME, documentName.c_str());
+  }
+  if (imageDescription.length() > 0) {
+    err = TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, imageDescription.c_str());
+  }
+
+  err = TIFFSetField(image, TIFFTAG_ORIENTATION, 1);
+  err = TIFFSetField(image, TIFFTAG_PHOTOMETRIC, 1);
+
+
+  // Insert Resolution Units here if possible
+
+  std::string software ("MXADataModel Version ");
+  software.append(MXADATAMODEL_LIBRARY_VERSION).append(" using ").append(PACKAGE_STRING);
+  err = TIFFSetField(image, TIFFTAG_SOFTWARE, software.c_str());
+
+  err = TIFFSetField(image, TIFFTAG_HOSTCOMPUTER, MXADATAMODEL_SYSTEM);
 
   // Write the information to the file
   tsize_t area = static_cast<tsize_t>(width* height);

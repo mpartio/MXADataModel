@@ -5,9 +5,10 @@
 #------- Macro to find and install the proper dynamic libraries ----------------
 MACRO (MXA_INSTALL_SUPPORT_LIBRARY basename)
     IF (HAVE_${basename}_DLL)
-      IF (WIN32)
+      IF (WIN32 AND HAVE_${basename}_DLL STREQUAL "1")
         GET_FILENAME_COMPONENT(${basename}_LIB_DEBUG_NAME ${${basename}_LIBRARY_DEBUG} NAME_WE)
         GET_FILENAME_COMPONENT(${basename}_LIB_RELEASE_NAME ${${basename}_LIBRARY_RELEASE} NAME_WE)
+
         INSTALL(FILES ${${basename}_BIN_DIR}/${${basename}_LIB_DEBUG_NAME}.dll 
             DESTINATION bin 
             CONFIGURATIONS Debug 
@@ -16,7 +17,7 @@ MACRO (MXA_INSTALL_SUPPORT_LIBRARY basename)
             DESTINATION bin 
             CONFIGURATIONS Release 
             COMPONENT Runtime)
-      ENDIF (WIN32)
+      ENDIF (WIN32 AND HAVE_${basename}_DLL STREQUAL "1")
     ENDIF (HAVE_${basename}_DLL)
 ENDMACRO(MXA_INSTALL_SUPPORT_LIBRARY basename)
 

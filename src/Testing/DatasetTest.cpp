@@ -88,7 +88,7 @@ void MakeDataRecord( const std::string &key, IDataModelPtr model)
 template<typename T>
 void MakeAttribute(const std::string &dsPath, IDatasetPtr dataset)
 {
-  int32 numElements = 4;
+  int32 numElements = 1;
   T value = 0xFF;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
   attributeKey = "H5Attribute<" + attributeKey + ">";
@@ -631,8 +631,20 @@ void TestDataWrapper()
    //  std::cout << ui32->getValue(i) << std::endl;
      BOOST_REQUIRE(ui64->getValue(i) == i64ArraySwap[i]);
   }
+}
 
-
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void ATest()
+{
+  std::string testFile(DATASET_TEST_FILE);
+  IDataFilePtr dataFile = H5MXADataFile::OpenFile(testFile, true);
+  BOOST_REQUIRE(dataFile.get() != NULL);
+  hid_t fileId = dataFile->getFileId();
+  double d = 1111111.111111;
+  int err = H5Lite::readScalarAttribute(fileId, "/DatasetTest/2/0", "2H5Attribute<H5T_NATIVE_DOUBLE>", d);
+  BOOST_REQUIRE(err >= 0);
 }
 
 
@@ -642,6 +654,7 @@ void TestDataWrapper()
 boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] )
 {
   boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "Dataset Tests" );
+
   test->add( BOOST_TEST_CASE( &WriteDatasetTest), 0);
   test->add( BOOST_TEST_CASE( &ReadDatasetTest), 0);
   test->add( BOOST_TEST_CASE( &TestDataWrapper), 0);

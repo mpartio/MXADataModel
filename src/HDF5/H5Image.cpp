@@ -256,7 +256,7 @@ herr_t H5Image::H5IM_find_palette( hid_t loc_id )
  *
  *-------------------------------------------------------------------------
  */
-
+//TODO: There is a problem with number of planes and grayscale images
 herr_t H5Image::H5IMget_image_info(hid_t loc_id, std::string datasetName, hsize_t *width, hsize_t *height, hsize_t *planes, std::string &interlace, hssize_t *npals)
 {
   hid_t did, sid;

@@ -1,6 +1,6 @@
 # set project's name
 PROJECT( MXADataModel )
-cmake_minimum_required(VERSION 2.4)
+cmake_minimum_required(VERSION 2.6)
 
 #-- Need this for link line stuff?
 if(COMMAND cmake_policy)
@@ -26,7 +26,7 @@ ENDIF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
 SET (MXADATAMODEL_VER_MAJOR "1")
 SET (MXADATAMODEL_VER_MINOR "0")
 SET (MXADATAMODEL_VER_PATCH "0")
-SET (MXADATAMODEL_VER ${MXADATAMODEL_VER_MAJOR}.${MXADATAMODEL_VER_MINOR}.${MXADATAMODEL_VER_PATCH})
+SET (MXADATAMODEL_LIBRARY_VERSION ${MXADATAMODEL_VER_MAJOR}.${MXADATAMODEL_VER_MINOR}.${MXADATAMODEL_VER_PATCH})
 
 # ---------- Setup output Directories -------------------------
 SET (LIBRARY_OUTPUT_PATH
@@ -161,6 +161,10 @@ IF(WIN32)
  SET(WINDOWS_LARGE_FILE_SUPPORT "1")
 ENDIF(WIN32)
 
+#-- Configure the Header file and then add the Binary Directory to the Includes list
+CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
+               ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
+                 
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
  # ADD_DEFINITIONS(-DDEBUG)
@@ -174,11 +178,10 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-#-- Configure the Header file and then add the Binary Directory to the Includes list
-CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
-               ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE) 
+
 SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfiguration.h  )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
+
 
 #-- Configure our UseMXADataModel.cmake file
 CONFIGURE_FILE ( ${MXA_CMAKE_DIR}/UseMXADataModel.cmake.in
@@ -229,7 +232,7 @@ IF (APPLE)
   IF(MXA_USE_RPATH)
   SET_TARGET_PROPERTIES(${MXADATAMODEL_LIB_NAME}
      PROPERTIES
-     LINK_FLAGS "-current_version ${MXADATAMODEL_VER} -compatibility_version ${MXADATAMODEL_VER}"
+     LINK_FLAGS "-current_version ${MXADATAMODEL_LIBRARY_VERSION} -compatibility_version ${MXADATAMODEL_LIBRARY_VERSION}"
      INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
      BUILD_WITH_INSTALL_RPATH TRUE
   )

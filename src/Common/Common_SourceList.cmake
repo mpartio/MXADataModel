@@ -14,5 +14,23 @@ SET (MXA_COMMON_HEADERS
   ${MXA_SOURCE_DIR}/src/Common/Cast/Cast.h
 )
 
+if (MSVC)
+    INSTALL (FILES   ${MXA_SOURCE_DIR}/src/Common/Win32Defines.h
+             DESTINATION include/MXADataModel/Common
+             COMPONENT Headers           
+    )
+endif(MSVC)
+
 MXA_SOURCE_PROPERTIES(Common "${MXA_COMMON_HEADERS}" "${MXA_COMMON_SRCS}")
+
+INSTALL (FILES   ${MXA_SOURCE_DIR}/src/Common/IO/Reader64.h
+                 ${MXA_SOURCE_DIR}/src/Common/IO/Writer64.h
+         DESTINATION include/MXADataModel/Common/IO
+         COMPONENT Headers           
+)
+
+INSTALL (FILES   ${MXA_SOURCE_DIR}/src/Common/Cast/Cast.h
+         DESTINATION include/MXADataModel/Common/Cast
+         COMPONENT Headers           
+)
 

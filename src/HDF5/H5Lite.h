@@ -65,7 +65,7 @@ class IMXAArray;
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.54 $
+ * @version $Revision: 1.55 $
  */
 class H5Lite
 {
@@ -1216,7 +1216,7 @@ static herr_t  readScalarAttribute(hid_t loc_id,
   {
     return -1;
   }
- // std::cout << "Reading Scalar style Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
+  //std::cout << "Reading Scalar style Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
   err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
   if (err<0)

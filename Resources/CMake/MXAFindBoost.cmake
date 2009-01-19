@@ -189,7 +189,7 @@ ELSE (Boost_INCLUDE_DIRS)
       )
       
       SET ( Boost_CURRENT_VERSION ${_boost_VER} )
-
+      #message(STATUS "Boost_CURRENT_VERSION: ${Boost_CURRENT_VERSION}")
       IF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+\\.[0-9]+")
           STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1_\\2_\\3" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
           STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)\\.([0-9]+)" "\\1_\\2_\\3" Boost_CURRENT_VERSION ${Boost_CURRENT_VERSION})
@@ -197,7 +197,8 @@ ELSE (Boost_INCLUDE_DIRS)
           STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1_\\2" _boost_PATH_SUFFIX ${_boost_PATH_SUFFIX})
           STRING(REGEX REPLACE "([0-9]+)\\.([0-9]+)" "\\1_\\2" Boost_CURRENT_VERSION ${Boost_CURRENT_VERSION})
       ENDIF(_boost_PATH_SUFFIX MATCHES "[0-9]+\\.[0-9]+\\.[0-9]+")
-
+    
+     # message(STATUS "_boost_PATH_SUFFIX: ${_boost_PATH_SUFFIX}")
       FIND_PATH(Boost_INCLUDE_DIR
           NAMES         boost/config.hpp
           PATHS         ${Boost_INCLUDE_SEARCH_DIRS}

@@ -64,9 +64,9 @@ standard C++ library."
  * sure that we can read files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
-class Reader64
+class MXA_EXPORT Reader64
 {
 
   
