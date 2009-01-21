@@ -42,7 +42,7 @@ const std::string H5IM_INTERLACE_PIXEL("INTERLACE_PIXEL");
 * @brief General IO class for TIFF images
 * @author Mike Jackson/Shawn Nicholson
 * @date March 2007
-* @version $Revision: 1.13 $
+* @version $Revision: 1.14 $
 */
 class MXA_EXPORT H5TiffIO
 {
@@ -52,7 +52,7 @@ class MXA_EXPORT H5TiffIO
 
   void setFileId(hid_t fileId) { this->_fileId = fileId; }
   /**
-   * @brief imports a Tiff image into the MHDataModel
+   * @brief imports a Tiff image into the MXADataModel
    *
    * @param filename The absolute path to the Tiff file
    * @param groupId The HDF Group/FileId to store the imported data
@@ -67,7 +67,7 @@ class MXA_EXPORT H5TiffIO
 
 
   /**
-   * @brief exports a TIFF image from the MHDataModel
+   * @brief exports a TIFF image from the MXADataModel
    *
    * @param fileId - the hdf fileID
    * @param filename - the output file to write the tiff to

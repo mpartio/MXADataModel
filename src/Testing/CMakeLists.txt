@@ -17,7 +17,7 @@ endmacro (DataImportTestSetup name alt_name start count end increment index)
     
 SET (TEST_Boost_LIBS ${Boost_TEST_EXEC_MONITOR_LIBRARY} )
         
-OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
+OPTION(MXA_BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
 
 IF (BUILD_TESTING)
 
@@ -173,7 +173,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
 #    ADD_TEST(UtilitiesTest ${EXECUTABLE_OUTPUT_PATH}/UtilitiesTest)
 
     # ------- Vtk to HDF5 Bridge test
-    IF(BUILD_VTK_HDF5)
+    IF(MXA_BUILD_VTK_HDF5)
         SET (VTK_HDF5_SRCS
           ${MXA_TESTING_DIR}/VtkHDF5Test.cpp
           ${MXA_TESTING_DIR}/DataFileGenerator.cpp
@@ -186,7 +186,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
                 ${vtkLocal_LIBS}
         )
         ADD_TEST(vtkHDF5Test ${EXECUTABLE_OUTPUT_PATH}/vtkHDF5Test)
-    ENDIF(BUILD_VTK_HDF5)
+    ENDIF(MXA_BUILD_VTK_HDF5)
                    
 ENDIF (BUILD_TESTING)
 

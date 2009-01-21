@@ -23,8 +23,8 @@ IF(NOT HDF5_FOUND)
   MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
 ENDIF(NOT HDF5_FOUND)
 
-OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
-IF(BUILD_VTK_HDF5)
+OPTION(MXA_BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
+IF(MXA_BUILD_VTK_HDF5)
      #-- Find VTK packages -----------------------------------------
     FIND_PACKAGE(VTK REQUIRED)
     INCLUDE(${VTK_USE_FILE})
@@ -34,7 +34,7 @@ IF(BUILD_VTK_HDF5)
     
     SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
     SET(HDF5_VTK_BRIDGE "1")
-ENDIF(BUILD_VTK_HDF5) 
+ENDIF(MXA_BUILD_VTK_HDF5) 
 
 
 SET (GETDATA_SRCS

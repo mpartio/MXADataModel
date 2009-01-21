@@ -127,8 +127,8 @@ ENDIF(MXA_USE_XML)
 IF ( MXA_USE_HDF5 )
   INCLUDE (${MXA_SOURCE_DIR}/src/HDF5/HDF5_SourceList.cmake)
   SET(MXA_HDF5_SUPPORT "1")
-  OPTION(BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
-  IF(BUILD_VTK_HDF5)
+  OPTION(MXA_BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
+  IF(MXA_BUILD_VTK_HDF5)
     #-- Find VTK packages -----------------------------------------
     FIND_PACKAGE(VTK REQUIRED)
     INCLUDE(${VTK_USE_FILE})
@@ -140,7 +140,7 @@ IF ( MXA_USE_HDF5 )
     SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} ${MXA_SOURCE_DIR}/src/HDF5/vtkHDF5.h)
     SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
     SET(HDF5_VTK_BRIDGE "1")
-  ENDIF (BUILD_VTK_HDF5)
+  ENDIF (MXA_BUILD_VTK_HDF5)
   #-- Finally include all the sources and headers from the HDf5 and vtk sections
   SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
   
@@ -228,15 +228,15 @@ SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME}
 )
 
 IF (APPLE)
-  OPTION (MXA_USE_RPATH "Build Libraries with the install_name set to the installation prefix. This is good if you are going to run from the installation location" OFF)
-  IF(MXA_USE_RPATH)
+  OPTION (MXA_BUILD_WITH_INSTALL_NAME "Build Libraries with the install_name set to the installation prefix. This is good if you are going to run from the installation location" OFF)
+  IF(MXA_BUILD_WITH_INSTALL_NAME)
   SET_TARGET_PROPERTIES(${MXADATAMODEL_LIB_NAME}
      PROPERTIES
      LINK_FLAGS "-current_version ${MXADATAMODEL_LIBRARY_VERSION} -compatibility_version ${MXADATAMODEL_LIBRARY_VERSION}"
      INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
-     BUILD_WITH_INSTALL_RPATH TRUE
+     BUILD_WITH_INSTALL_RPATH ${MXA_BUILD_WITH_INSTALL_NAME}
   )
-  ENDIF(MXA_USE_RPATH)
+  ENDIF(MXA_BUILD_WITH_INSTALL_NAME)
 ENDIF (APPLE)
 
 #----- Use MSVC Naming conventions for Shared Libraries for MinGW --------------
