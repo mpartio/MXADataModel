@@ -29,7 +29,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(H5BmpImport);
 * @brief Factory Class to generate H5BmpImportDelegate Objects
 * @author Mike Jackson
 * @date Oct 2007
-* @version $Revision: 1.3 $
+* @version $Revision: 1.4 $
 */
 class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFactory
 {

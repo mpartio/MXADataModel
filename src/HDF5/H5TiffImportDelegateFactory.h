@@ -28,7 +28,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(H5TiffImport);
 * @brief Factory Class to generate H5TiffImportDelegate Objects
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
 {

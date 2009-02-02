@@ -26,7 +26,7 @@
 * from a factory class
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class MXA_EXPORT ImportDelegateManager
 {

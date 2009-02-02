@@ -42,7 +42,7 @@ namespace ExampleConstants {
 * @brief Shows a more involved example of importing data into the MXA file format
 * @author Mike Jackson
 * @date May 2007
-* @version $Revision: 1.6 $
+* @version $Revision: 1.7 $
 */
 class ComplexImportExample
 {
