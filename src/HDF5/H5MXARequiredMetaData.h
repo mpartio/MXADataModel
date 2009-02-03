@@ -23,7 +23,7 @@
 * @brief Concrete implmentation of the IRequiredMetaData virtual class.
 * @author Mike Jackson  for IMTS.us
 * @date Jan 15, 2008
-* @version $Revision: 1.5 $
+* @version $Revision: 1.6 $
 */
 class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
 {
@@ -96,7 +96,7 @@ class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
     std::string getDateTimeCreated();
 
     void setDatasetName(const std::string &datasetName);
-    std::string getDatasetName(const std::string &datasetName);
+    std::string getDatasetName();
 
     void setDescription(const std::string &description);
     std::string getDescription();

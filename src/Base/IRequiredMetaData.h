@@ -21,7 +21,7 @@
 * MXADataModel and is included in each data file.
 * @author Mike Jackson for IMTS.us
 * @date Jan 15, 2008
-* @version $Revision: 1.4 $
+* @version $Revision: 1.5 $
 */
 class MXA_EXPORT IRequiredMetaData : public IDataFileIO
 {
@@ -89,7 +89,7 @@ class MXA_EXPORT IRequiredMetaData : public IDataFileIO
      * @brief Returns the name given to the data set.
      * @return
      */
-    virtual std::string getDatasetName(const std::string &datasetName) = 0;
+    virtual std::string getDatasetName() = 0;
 
     /**
      * @brief Provides a description for the data in the data file

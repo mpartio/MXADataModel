@@ -135,7 +135,7 @@ void H5MXARequiredMetaData::setDatasetName(const std::string &datasetName)
 {
   this->_datasetName = datasetName;
 }
-std::string H5MXARequiredMetaData::getDatasetName(const std::string &datasetName)
+std::string H5MXARequiredMetaData::getDatasetName()
 {
   return this->_datasetName;
 }

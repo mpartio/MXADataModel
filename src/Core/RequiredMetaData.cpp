@@ -133,7 +133,7 @@ void RequiredMetaData::setDatasetName(const std::string &datasetName)
 {
   this->_datasetName = datasetName;
 }
-std::string RequiredMetaData::getDatasetName(const std::string &datasetName)
+std::string RequiredMetaData::getDatasetName()
 {
   return this->_datasetName;
 }
