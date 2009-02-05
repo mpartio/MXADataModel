@@ -38,7 +38,7 @@ IF (NOT WIN32)
 ENDIF (NOT WIN32)  
     
 INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h 
-            DESTINATION include/MXADataModel 
+            DESTINATION include/MXA 
             COMPONENT Headers           
 )
 
@@ -94,11 +94,15 @@ INSTALL (DIRECTORY ${MXA_DOCUMENTATION_DIR}
             PATTERN "CVS" EXCLUDE)
 
 #-- Install the generated Doxygen documentation
-INSTALL(DIRECTORY ${MXA_SOURCE_DIR}/API-Docs
+INSTALL(DIRECTORY ${MXADataModel_BINARY_DIR}/API-Docs
         DESTINATION doc/MXADataModel
         COMPONENT Documentation)
 
-INSTALL(FILES ${MXA_SOURCE_DIR}/Resources/ReadMe.txt
+INSTALL(FILES ${MXADataModel_SOURCE_DIR}/Resources/ReadMe.txt
+        DESTINATION .
+        COMPONENT Documentation)
+        
+INSTALL(FILES ${MXADataModel_SOURCE_DIR}/License.txt
         DESTINATION .
         COMPONENT Documentation)
         

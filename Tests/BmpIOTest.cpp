@@ -8,9 +8,12 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
+//-- MXA Headers
 #include <MXA/Common/MXATypes.h>
 #include <MXA/BMPIO/MXABmpIO.h>
-#include "TestDataFileLocations.h"
+
+//-- MXA Unit Test Headers
+#include "MXAUnitTestDataFileLocations.h"
 
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>

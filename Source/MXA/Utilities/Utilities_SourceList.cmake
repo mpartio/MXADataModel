@@ -15,7 +15,7 @@ SET (MXA_UTILITIES_HEADERS
 
 
 INSTALL (FILES ${MXA_UTILITIES_HEADERS}
-            DESTINATION include/MXADataModel/Utilities
+            DESTINATION include/MXA/Utilities
             COMPONENT Headers           
 )
 

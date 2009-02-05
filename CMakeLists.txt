@@ -271,6 +271,18 @@ IF (MXA_BUILD_UTILITIES)
     ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Utilities ${PROJECT_BINARY_DIR}/Utilities)
 ENDIF (MXA_BUILD_UTILITIES)
 
+option(MXA_BUILD_API_DOCS "Use Doxygen to create the HTML based API documentation" OFF)
+if(MXA_BUILD_API_DOCS)
+  FIND_PACKAGE(Doxygen)
+  if (NOT DOXYGEN_FOUND)
+    message(FATAL_ERROR "Doxygen is needed to build the documentation. Please install it correctly")
+  endif()
+  configure_file(${MXA_RESOURCES_DIR}/MXADataModel.doxyfile.in 
+                 ${MXADataModel_BINARY_DIR}/MXADataModel.doxyfile  @ONLY IMMEDIATE)
+  add_custom_command(TARGET ${MXADATAMODEL_LIB_NAME} POST_BUILD COMMAND ${DOXYGEN_EXECUTABLE} ${MXADataModel_BINARY_DIR}/MXADataModel.doxyfile)
+  
+endif(MXA_BUILD_API_DOCS)
+
 
 #--- Set up the installation Code for Make Install
 include ( "${MXA_CMAKE_DIR}/MXAInstall.cmake")
