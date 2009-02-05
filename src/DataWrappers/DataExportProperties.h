@@ -11,6 +11,7 @@
 
 #include <Common/MXATypes.h>
 #include <Common/MXATypeDefs.h>
+#include <Common/MXASetGetMacros.h>
 #include <Base/IImportProperty.h>
 
 //-- HDF includes
@@ -51,7 +52,7 @@ namespace Export
 * @brief Base class for Data Exporters
 * @author Michael Jackson for BlueQuartz Software
 * @date Oct 20, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT DataExportProperties
 {

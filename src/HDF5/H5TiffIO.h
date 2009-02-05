@@ -42,7 +42,7 @@ const std::string H5IM_INTERLACE_PIXEL("INTERLACE_PIXEL");
 * @brief General IO class for TIFF images
 * @author Mike Jackson/Shawn Nicholson
 * @date March 2007
-* @version $Revision: 1.14 $
+* @version $Revision: 1.15 $
 */
 class MXA_EXPORT H5TiffIO
 {
@@ -183,14 +183,16 @@ class MXA_EXPORT H5TiffIO
    * @param data The tiff data to be written
    * @param width The width of the image
    * @param height The height of the image
+   * @param documentName The name of the file
+   * @param imageDescription A short description to be added to the file
    * @return Standard HDF5 error condition
    */
-  herr_t _exportGrayScaleTiff(TIFF *image,
-                                       uint8* data,
-                                       hsize_t width,
-                                       hsize_t height,
-                                       const std::string &documentName,
-                                       const std::string &imageDescription);
+  herr_t _exportGrayScaleTiff(TIFF* image,
+                               uint8* data,
+                               hsize_t width,
+                               hsize_t height,
+                               const std::string &documentName,
+                               const std::string &imageDescription);
 
   /**
    * @brief Exports an Image data set as a true color tiff file

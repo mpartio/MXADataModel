@@ -14,6 +14,7 @@
 #include <Common/MXATypeDefs.h>
 #include <Common/LogTime.h>
 #include <Common/MXAEndian.h>
+#include <Common/MXASetGetMacros.h>
 #include <Base/IMXAArray.h>
 #include <DataWrappers/DataExportProperties.h>
 
@@ -46,7 +47,7 @@
 * @brief Template class for wrapping raw arrays of data.
 * @author mjackson
 * @date July 3, 2008
-* @version $Revision: 1.7 $
+* @version $Revision: 1.8 $
 */
 template<typename T>
 class MXAArrayTemplate : public IMXAArray

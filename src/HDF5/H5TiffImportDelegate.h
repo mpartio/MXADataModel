@@ -15,6 +15,7 @@
 //-- MXA Includes
 #include <Common/MXATypes.h>
 #include <Common/MXATypeDefs.h>
+#include <Common/MXASetGetMacros.h>
 #include <Base/IImportDelegate.h>
 #include <DataImport/AbstractImportDelegateFactory.h>
 
@@ -42,7 +43,7 @@ MXA_PROPERTY_CONSTANT(ImportAsGrayScale);
  * @author Mike Jackson
  * @date April 2007
  * @class H5TiffImportDelegate HDF5/H5TiffImportDelegate.h HDF5/H5TiffImportDelegate.h
- * @version $Revision: 1.15 $
+ * @version $Revision: 1.16 $
  */
 class MXA_EXPORT H5TiffImportDelegate : public IImportDelegate
 {
@@ -61,13 +62,13 @@ public:
    */
   void setDataModel(IDataModelPtr model);
 
-  /**
+  /*
   * @brief Sets the 'FileNotFoundIsError' flag.
   * @param value If this is true then the import will abort if an input file can not be found
   */
   MXA_PROPERTY(bool, FileNotFoundIsError, _fileNotFoundIsError);
 
-  /**
+  /*
   * @brief Sets the 'ImportAsGrayScale' value
   * @param value If TRUE, then the tiff file will be converted to Grayscale
   */

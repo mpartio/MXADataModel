@@ -11,6 +11,7 @@
 
 
 #include <Common/MXATypes.h>
+#include <Common/MXASetGetMacros.h>
 #include <Base/IImportProperty.h>
 
 //C++ includes
@@ -33,12 +34,12 @@ namespace MyPropertyNamespace {
 
   MXA_PROPERTY_CONSTANT(FloatProperty)
   MXA_PROPERTY_CONSTANT(DoubleProperty)
-  
+
 }; // End Namespace
 
 /**
 * @brief
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 * @author Michale A. Jackson
 */
 class MyPropertyClass
@@ -46,7 +47,7 @@ class MyPropertyClass
 public:
   MyPropertyClass();
   virtual ~MyPropertyClass();
-  
+
 // -----------------------------------------------------------------------------
 //  Start the Properties Declarations using our macros from Common/MXAMacros.h
 //  These macros will create the named get/set methods for each property
@@ -59,30 +60,30 @@ public:
   // results. Try using int16 or uint16 to store these types of values instead.
   MXA_PROPERTY(uint8, UInt8Property,  _uint8Prop)
   MXA_PROPERTY(int8,  Int8Property,  _int8Prop)
-  
+
   // Signed integer Properties
   MXA_PROPERTY(int16, Int16Property, _int16Prop)
   MXA_PROPERTY(int32, Int32Property, _int32Prop)
   MXA_PROPERTY(int64, Int64Property, _int64Prop)
-  
+
   // Unsigned Integer properties
   MXA_PROPERTY(uint16, UInt16Property, _uint16Prop)
   MXA_PROPERTY(uint32, UInt32Property, _uint32Prop)
   MXA_PROPERTY(uint64, UInt64Property, _uint64Prop)
-  
+
   // String properties
   MXA_PROPERTY(std::string, StrProperty, _strProp)
   // Floating point properties
   MXA_PROPERTY(float, FloatProperty, _floatProp)
   MXA_PROPERTY(double, DoubleProperty, _doubleProp)
-  
+
   // -----------------------------------------------------------------------------
   //  If you want to add a generic 'set' method that takes a string key and string
   //   value then implement the following method
   // -----------------------------------------------------------------------------
   virtual int32 setProperty(const std::string &key, const std::string &value);
-  
-  
+
+
   // -----------------------------------------------------------------------------
   //  If you want to implement a generic "get" method that will retrieve the proper
   //  type of value from the object then you can use a C++ template function.
@@ -92,7 +93,7 @@ public:
   *  by reference.
   * @param key The property key
   * @param value The variable to store the property into
-  * @return Success Code. Zero means there was a problem with the retrieval. 1 Means the 
+  * @return Success Code. Zero means there was a problem with the retrieval. 1 Means the
   * retrieval was successful. There may also be error messages printed to the std::cout device
   */
     template<typename T>
@@ -119,12 +120,12 @@ public:
       GET_PROPERTY_BODY(MyPropertyNamespace, T, DoubleProperty, _doubleProp, key, value);
       return 0;
     }
-    
+
   private:
     bool _boolProp;
     int8 _int8Prop;
     int16 _int16Prop;
-    int32 _int32Prop;  
+    int32 _int32Prop;
     int64 _int64Prop;
     uint8 _uint8Prop;
     uint16 _uint16Prop;
@@ -132,12 +133,12 @@ public:
     uint64 _uint64Prop;
     std::string _strProp;
     float _floatProp;
-    double _doubleProp;     
-      
-      
+    double _doubleProp;
+
+
       MyPropertyClass(const MyPropertyClass&);   //Copy Constructor Not Implemented
       void operator=(const MyPropertyClass&); //Copy Assignment Not Implemented
-  
+
 };
 
 

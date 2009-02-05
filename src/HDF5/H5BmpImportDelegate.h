@@ -16,6 +16,7 @@
 #include <Common/DLLExport.h>
 #include <Common/MXATypes.h>
 #include <Common/MXATypeDefs.h>
+#include <Common/MXASetGetMacros.h>
 #include <Base/IImportDelegate.h>
 #include <DataImport/AbstractImportDelegateFactory.h>
 
@@ -45,7 +46,7 @@ MXA_PROPERTY_CONSTANT(ImportAsGrayScale);
  * @author Mike Jackson
  * @date April 2007
  * @class H5BmpImportDelegate HDF5/H5BmpImportDelegate.h HDF5/H5BmpImportDelegate.h
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  */
 class MXA_EXPORT H5BmpImportDelegate : public IImportDelegate
 {
@@ -59,15 +60,19 @@ public:
   int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile);
 
 
-  /**
+  /*
   * @brief Sets the 'FileNotFoundIsError' flag.
-  * @param value If this is true then the import will abort if an input file can not be found
+  * @param bool If this is true then the import will abort if an input file can not be found
+  * @param FileNotFoundIsError If the input file is NOT found, consider this on error
+  * @param _fileNotFoundIsError Internal Storage variable
   */
   MXA_PROPERTY(bool, FileNotFoundIsError, _fileNotFoundIsError);
 
-  /**
+  /*
   * @brief Sets the 'ImportAsGrayScale' value
-  * @param value If TRUE, then the tiff file will be converted to Grayscale
+  * @param bool If TRUE, then the tiff file will be converted to Grayscale
+  * @param ImportAsGrayScale Import the image as a grayscale image
+  * @param _importAsGrayScale Internal Storage variable
   */
   MXA_PROPERTY(bool, ImportAsGrayScale, _importAsGrayScale);
 

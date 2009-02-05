@@ -10,6 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <Common/MXATypes.h>
+#include <Common/MXASetGetMacros.h>
 #include <Base/IImportProperty.h>
 
 

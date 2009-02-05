@@ -9,6 +9,7 @@ SET (MXA_COMMON_HEADERS
   ${MXA_SOURCE_DIR}/src/Common/MXATypeDefs.h
   ${MXA_SOURCE_DIR}/src/Common/MXATypes.h
   ${MXA_SOURCE_DIR}/src/Common/MXAErrorDefinitions.h
+  ${MXA_SOURCE_DIR}/src/Common/MXASetGetMacros.h
   ${MXA_SOURCE_DIR}/src/Common/IO/Reader64.h
   ${MXA_SOURCE_DIR}/src/Common/IO/Writer64.h
   ${MXA_SOURCE_DIR}/src/Common/Cast/Cast.h

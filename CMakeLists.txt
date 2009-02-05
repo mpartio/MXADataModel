@@ -9,7 +9,7 @@ endif(COMMAND cmake_policy)
 
 # - Set the variable where to find the top level project sources
 IF (NOT DEFINED MXA_SOURCE_DIR)
-    SET (MXA_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    SET (MXA_SOURCE_DIR ${MXADataModel_SOURCE_DIR})
 ENDIF(NOT DEFINED MXA_SOURCE_DIR)
 
 # - Check to see if any other project is redefining the library names
