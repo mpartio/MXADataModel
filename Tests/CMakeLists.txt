@@ -71,7 +71,7 @@ IF (BUILD_TESTING)
    IF ( MXA_USE_HDF5 AND MXA_USE_TIFF )
     ADD_EXECUTABLE(DatasetTest ${MXADataset_TEST_SRCS} ${MXADataset_TEST_HEADERS})
     TARGET_LINK_LIBRARIES( DatasetTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} )
-    ADD_TEST(DatasetTest ${EXECUTABLE_OUTPUT_PATH}/DatasetTest)
+    ADD_TEST(DatasetTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DatasetTest)
    ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
     
     # -------- Data Model Test
@@ -82,7 +82,7 @@ IF (BUILD_TESTING)
   IF ( MXA_USE_HDF5 )
     ADD_EXECUTABLE ( DataModelTest ${MXADATAMODEL_TEST_SRCS} )
     TARGET_LINK_LIBRARIES ( DataModelTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS}  )
-    ADD_TEST(DataModelTest ${EXECUTABLE_OUTPUT_PATH}/DataModelTest)
+    ADD_TEST(DataModelTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DataModelTest)
   ENDIF ( MXA_USE_HDF5 )
   
 # ------ DataImport Test
@@ -106,7 +106,7 @@ IF (MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     include_directories(${MXATests_BINARY_DIR})
     ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} ${MXADATAIMPORT_TEST_HEADERS})
     TARGET_LINK_LIBRARIES ( DataImportTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
-    ADD_TEST(DataImportTest ${EXECUTABLE_OUTPUT_PATH}/DataImportTest)
+    ADD_TEST(DataImportTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DataImportTest)
 
     #-- Configure the XML file to correctly find the XML Model file
     SET (DATA_MODEL_XML_FILE ${MXADataModel_SOURCE_DIR}/Resources/XML/ModelTemplate.xml)
@@ -122,7 +122,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
         ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
         TARGET_LINK_LIBRARIES (H5LiteTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
-        ADD_TEST(H5LiteTest ${EXECUTABLE_OUTPUT_PATH}/H5LiteTest)
+        ADD_TEST(H5LiteTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/H5LiteTest)
     ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
     
 # ------- H5Utilities Test
@@ -132,7 +132,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     IF ( MXA_USE_HDF5 )
         ADD_EXECUTABLE ( H5UtilitiesTest ${H5UTIL_TEST_SRCS} )
         TARGET_LINK_LIBRARIES (H5UtilitiesTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
-        ADD_TEST(H5UtilitiesTest ${EXECUTABLE_OUTPUT_PATH}/H5UtilitiesTest)
+        ADD_TEST(H5UtilitiesTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/H5UtilitiesTest)
     ENDIF ( MXA_USE_HDF5 )
     
 # ------- DataSourcePathIndexSection  Test
@@ -141,7 +141,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     )
     ADD_EXECUTABLE ( DataSourcePathIndexSectionTest ${DATASOURCEPATHINDEXSECTION_TEST_SRCS} )
     TARGET_LINK_LIBRARIES (DataSourcePathIndexSectionTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
-    ADD_TEST(DataSourcePathIndexSectionTest ${EXECUTABLE_OUTPUT_PATH}/DataSourcePathIndexSectionTest)
+    ADD_TEST(DataSourcePathIndexSectionTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DataSourcePathIndexSectionTest)
            
 # --------- BMP IO Test
     SET (BMP_IO_TEST_SRCS
@@ -150,7 +150,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     IF ( MXA_USE_HDF5 )
         ADD_EXECUTABLE(BmpIOTest ${BMP_IO_TEST_SRCS})
         TARGET_LINK_LIBRARIES (BmpIOTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
-        ADD_TEST(BmpIOTest ${EXECUTABLE_OUTPUT_PATH}/BmpIOTest)
+        ADD_TEST(BmpIOTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/BmpIOTest)
     ENDIF ( MXA_USE_HDF5 )
        
 # ------- H5ArrayTemplate Test
@@ -159,7 +159,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     )
     #ADD_EXECUTABLE(H5ArrayTemplateTest ${H5ARRAYTEMPLATE_TEST_SRCS})
     #TARGET_LINK_LIBRARIES (H5ArrayTemplateTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
-    #ADD_TEST(H5ArrayTemplateTest ${EXECUTABLE_OUTPUT_PATH}/H5ArrayTemplateTest)  
+    #ADD_TEST(H5ArrayTemplateTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/H5ArrayTemplateTest)  
    
 # --------- XML Tests
     IF (MXA_USE_XML)
@@ -168,7 +168,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
             )
         ADD_EXECUTABLE( XMLTest ${XML_TEST_SRCS} )
         TARGET_LINK_LIBRARIES (XMLTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
-        ADD_TEST(XMLTest ${EXECUTABLE_OUTPUT_PATH}/XMLTest)      
+        ADD_TEST(XMLTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/XMLTest)      
     ENDIF(MXA_USE_XML)
     
 # --------- IImportProperty Test
@@ -177,7 +177,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     )
     ADD_EXECUTABLE(IImportPropertyTest ${IIMPORT_PROPERTY_TEST_SRCS})
     TARGET_LINK_LIBRARIES (IImportPropertyTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
-    ADD_TEST(IImportPropertyTest ${EXECUTABLE_OUTPUT_PATH}/IImportPropertyTest) 
+    ADD_TEST(IImportPropertyTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/IImportPropertyTest) 
   
 # --------- SupportFile Test
     SET (SUPPORT_FILE_TEST_SRCS
@@ -187,12 +187,12 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
         ADD_EXECUTABLE(SupportFileTest ${SUPPORT_FILE_TEST_SRCS})
         TARGET_LINK_LIBRARIES (SupportFileTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
-        ADD_TEST(SupportFileTest ${EXECUTABLE_OUTPUT_PATH}/SupportFileTest) 
+        ADD_TEST(SupportFileTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/SupportFileTest) 
     ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF ) 
     
 #    ADD_EXECUTABLE( UtilitiesTest UtilitiesTest.cpp )
 #    TARGET_LINK_LIBRARIES(UtilitiesTest MXADataModel ${HDF5_LIBRARIES} ${Boost_MXA_LIBS})
-#    ADD_TEST(UtilitiesTest ${EXECUTABLE_OUTPUT_PATH}/UtilitiesTest)
+#    ADD_TEST(UtilitiesTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/UtilitiesTest)
 
     # ------- Vtk to HDF5 Bridge test
     IF(MXA_BUILD_VTK_HDF5)
@@ -207,7 +207,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
                 ${DEP_LIBS}   
                 ${vtkLocal_LIBS}
         )
-        ADD_TEST(vtkHDF5Test ${EXECUTABLE_OUTPUT_PATH}/vtkHDF5Test)
+        ADD_TEST(vtkHDF5Test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vtkHDF5Test)
     ENDIF(MXA_BUILD_VTK_HDF5)
                    
 ENDIF (BUILD_TESTING)

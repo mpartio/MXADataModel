@@ -279,7 +279,8 @@ if(MXA_BUILD_API_DOCS)
   endif()
   configure_file(${MXA_RESOURCES_DIR}/MXADataModel.doxyfile.in 
                  ${MXADataModel_BINARY_DIR}/MXADataModel.doxyfile  @ONLY IMMEDIATE)
-  add_custom_command(TARGET ${MXADATAMODEL_LIB_NAME} POST_BUILD COMMAND ${DOXYGEN_EXECUTABLE} ${MXADataModel_BINARY_DIR}/MXADataModel.doxyfile)
+  add_custom_command(TARGET ${MXADATAMODEL_LIB_NAME} 
+                     POST_BUILD COMMAND ${DOXYGEN_EXECUTABLE} ${MXADataModel_BINARY_DIR}/MXADataModel.doxyfile)
   
 endif(MXA_BUILD_API_DOCS)
 

@@ -94,9 +94,12 @@ INSTALL (DIRECTORY ${MXA_DOCUMENTATION_DIR}
             PATTERN "CVS" EXCLUDE)
 
 #-- Install the generated Doxygen documentation
-INSTALL(DIRECTORY ${MXADataModel_BINARY_DIR}/API-Docs
-        DESTINATION doc/MXADataModel
-        COMPONENT Documentation)
+if (${MXA_BUILD_API_DOCS})
+    INSTALL(DIRECTORY ${MXADataModel_BINARY_DIR}/API-Docs
+            DESTINATION doc/MXADataModel
+            COMPONENT Documentation)
+endif()
+
 
 INSTALL(FILES ${MXADataModel_SOURCE_DIR}/Resources/ReadMe.txt
         DESTINATION .

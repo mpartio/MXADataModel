@@ -15,7 +15,7 @@ SET (Boost_USE_PROGRAM_OPTIONS TRUE)
 
 INCLUDE (${MXA_CMAKE_DIR}/MXAFindBoost.cmake)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
-SET(DEP_LIBS ${DEP_LIBS} ${Boost_LIBRARIES})
+SET(MXA_SUPPORT_LIBRARIES ${MXA_SUPPORT_LIBRARIES} ${Boost_LIBRARIES})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
 #-------------------------------------------------------------------------------
@@ -28,16 +28,14 @@ IF ("ON" STREQUAL "@MXA_USE_XML@")
         MESSAGE (FATAL_ERROR "Expat Library was NOT Found and is needed.")
     ENDIF (NOT EXPAT_FOUND)
     INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIRS} )
-    SET(DEP_LIBS ${DEP_LIBS} ${EXPAT_LIBRARIES})
+    SET(MXA_SUPPORT_LIBRARIES ${MXA_SUPPORT_LIBRARIES} ${EXPAT_LIBRARIES})
 ENDIF ()
 
 #-------------------------------------------------------------------------------
 #- Find the HDF5 library ------------------------------------------------
 #- Build with the HDF5 Libraries Enabled. This is the default
 SET(MXA_HDF5_SUPPORT @MXA_USE_HDF5@)
-SET(MXA_USE_HDF5_PRIMITIVE_TYPES)
-SET(H5LITE_USE_MXA_CONSTRUCTS 0)
-SET(HDF5_VTK_BRIDGE "0")
+SET(HDF5_VTK_BRIDGE "@MXA_BUILD_VTK_HDF5@")
 
 IF ( "ON" STREQUAL "@MXA_USE_HDF5@")
   # ---------- DO NOT use the High Level APIs from the HDF5
@@ -52,9 +50,9 @@ IF ( "ON" STREQUAL "@MXA_USE_HDF5@")
     MESSAGE(FATAL_ERROR " HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
   ENDIF(NOT HDF5_FOUND)
   INCLUDE_DIRECTORIES( ${HDF5_INCLUDE_DIRS} )
-  SET(DEP_LIBS ${DEP_LIBS} ${HDF5_LIBRARIES})
-  SET(MXA_USE_HDF5_PRIMITIVE_TYPES 1)
-  SET(H5LITE_USE_MXA_CONSTRUCTS 1)
+  SET(MXA_SUPPORT_LIBRARIES ${MXA_SUPPORT_LIBRARIES} ${HDF5_LIBRARIES})
+  SET(MXA_USE_HDF5_PRIMITIVE_TYPES @MXA_USE_HDF5_PRIMITIVE_TYPES@)
+  SET(H5LITE_USE_MXA_CONSTRUCTS @H5LITE_USE_MXA_CONSTRUCTS@)
 ENDIF()   
 
 #-------------------------------------------------------------------------------
@@ -67,7 +65,7 @@ IF("ON" STREQUAL "@MXA_USE_TIFF@")
       MESSAGE (FATAL_ERROR " Tiff Library was NOT Found and is needed.")
     ENDIF (NOT TIFF_FOUND)
     INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIRS})
-    SET(DEP_LIBS ${DEP_LIBS} ${TIFF_LIBRARIES})
+    SET(MXA_SUPPORT_LIBRARIES ${MXA_SUPPORT_LIBRARIES} ${TIFF_LIBRARIES})
 ENDIF()
  
 #-- These need to be run also
