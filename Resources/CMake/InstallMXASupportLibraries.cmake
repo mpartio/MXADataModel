@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------ 
 # This CMake code installs the needed support libraries on NON OSX platforms
 # ------------------------------------------------------------------------------ 
-
+message(FATAL_ERROR " This file is NOT used anymore. ")
 #------- Macro to find and install the proper dynamic libraries ----------------
 MACRO (MXA_INSTALL_SUPPORT_LIBRARY basename)
     IF (HAVE_${basename}_DLL)
