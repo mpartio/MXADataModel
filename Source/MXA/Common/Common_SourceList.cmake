@@ -13,14 +13,9 @@ SET (MXA_COMMON_HEADERS
   ${MXA_SOURCE_DIR}/MXA/Common/IO/Reader64.h
   ${MXA_SOURCE_DIR}/MXA/Common/IO/Writer64.h
   ${MXA_SOURCE_DIR}/MXA/Common/Cast/Cast.h
+  ${MXA_SOURCE_DIR}/MXA/Common/Win32Defines.h
 )
 
-if (MSVC)
-    INSTALL (FILES   ${MXA_SOURCE_DIR}/MXA/Common/Win32Defines.h
-             DESTINATION include/MXA/Common
-             COMPONENT Headers           
-    )
-endif(MSVC)
 
 MXA_SOURCE_PROPERTIES(Common "${MXA_COMMON_HEADERS}" "${MXA_COMMON_SRCS}")
 

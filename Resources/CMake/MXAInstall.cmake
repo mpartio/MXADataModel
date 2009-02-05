@@ -37,9 +37,9 @@ IF (NOT WIN32)
     )
 ENDIF (NOT WIN32)  
     
-INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h 
-            DESTINATION include/MXA 
-            COMPONENT Headers           
+INSTALL (FILES ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h 
+         DESTINATION include/MXA 
+         COMPONENT Headers           
 )
 
 CONFIGURE_FILE(${MXA_CMAKE_DIR}/UseMXADataModel.cmake.in 

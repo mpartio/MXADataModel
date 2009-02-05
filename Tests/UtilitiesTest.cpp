@@ -9,7 +9,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXAConfiguration.h>
+#include <MXA/MXAConfiguration.h>
 
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXATypes.h>

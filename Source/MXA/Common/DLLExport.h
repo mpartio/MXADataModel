@@ -11,7 +11,7 @@
 #ifndef _MXA_DLL_EXPORT_H_
 #define _MXA_DLL_EXPORT_H_
 
-#include <MXAConfiguration.h>
+#include <MXA/MXAConfiguration.h>
 
 /* Cmake will define MXADataModel_EXPORTS on Windows when it
 configures to build a shared library. If you are going to use
