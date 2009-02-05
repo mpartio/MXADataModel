@@ -11,8 +11,8 @@
 #ifndef _IATTRIBUTECONVERTER_H_
 #define _IATTRIBUTECONVERTER_H_
 
-#include <Common/DLLExport.h>
-#include <Base/IAttributeWriter.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Base/IAttributeWriter.h>
 
 /**
  * @brief Abstract Class that defines an interface for a helper class for Attributes. 
@@ -20,7 +20,7 @@
  * 
  * @author Mike Jackson
  * @date Mach 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *   MXADataModel/IAttributeHelper.h
  */
 class MXA_EXPORT IAttributeHelper 

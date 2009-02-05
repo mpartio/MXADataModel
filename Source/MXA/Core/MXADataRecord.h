@@ -13,13 +13,13 @@
 
 //TODO: Add ability to append any type of attribute to this Data Record
 
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Base/IDataRecord.h>
-#include <Base/IDataRecordWriter.h>
-#include <Core/MXAConstants.h>
-#include <Utilities/StringUtils.h>
-// #include <Core/MXAAttribute.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IDataRecord.h>
+#include <MXA/Base/IDataRecordWriter.h>
+#include <MXA/Core/MXAConstants.h>
+#include <MXA/Utilities/StringUtils.h>
+// #include <MXA/Core/MXAAttribute.h>
 
 //Include Boost Headers
 #include <boost/shared_ptr.hpp>
@@ -31,7 +31,7 @@
  * data record. Data records can have any number of children but only one parent.
  * @author  Mike Jackson
  * @date March 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *  
  */
 class MXA_EXPORT MXADataRecord :  public IDataRecord

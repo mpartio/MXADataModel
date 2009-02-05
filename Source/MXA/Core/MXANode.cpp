@@ -1,6 +1,6 @@
 //-- MHD Headers
 #include <MXANode.h>
-#include <Core/MXAAttribute.h>
+#include <MXA/Core/MXAAttribute.h>
 
 //-- STL Headers
 #include <iostream>

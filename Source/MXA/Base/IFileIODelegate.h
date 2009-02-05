@@ -12,9 +12,9 @@
 #define _IFILEIO_DELEGATE_H
 
 //MXA Includes
-#include <Common/DLLExport.h>
-#include <Common/MXATypes.h>
-#include <Core/MXADataModel.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Core/MXADataModel.h>
 
 //-- STL Includes
 #include <string>
@@ -26,7 +26,7 @@ class MXADataModel;
  * to serialize/deserialize the model from a data file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *   IMXADataModelCode.h
  */
 class MXA_EXPORT IFileIODelegate

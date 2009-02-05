@@ -8,9 +8,9 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include <Testing/DataFileGenerator.h>
+#include "DataFileGenerator.h"
 
-#include <HDF5/H5MXADataFile.h>
+#include <MXA/HDF5/H5MXADataFile.h>
 
 // -----------------------------------------------------------------------------
 //

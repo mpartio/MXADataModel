@@ -12,7 +12,7 @@
 #define _MXARGBImage_h_
 
 
-#include <DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 
 
 /**
@@ -23,7 +23,7 @@
 * then use the generic MXA2DArray class instead.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8>
 {

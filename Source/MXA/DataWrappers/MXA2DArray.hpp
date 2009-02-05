@@ -12,11 +12,11 @@
 #define _MXA2DArray_h_
 
 
-#include <DataWrappers/MXAArrayTemplate.hpp>
-#include <Common/LogTime.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Image.h>
-#include <HDF5/H5TiffIO.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/Common/LogTime.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Image.h>
+#include <MXA/HDF5/H5TiffIO.h>
 #include <iostream>
 
 #include <hdf5.h>
@@ -26,7 +26,7 @@
 * @brief This class represents a generic 2D array of data.
 * @author mjackson
 * @date Jan 9, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 template<typename T>
 class MXA2DArray : public MXAArrayTemplate<T>

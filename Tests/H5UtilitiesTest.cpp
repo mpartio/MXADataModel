@@ -11,11 +11,11 @@
 
 //--MXA Includes
 #include <MXAConfiguration.h>
-#include <Common/LogTime.h>
-#include <Common/MXATypes.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
-#include <Testing/TestDataFileLocations.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include "MXAUnitTestDataFileLocations.h"
 
 //-- C++ includes
 #include <list>

@@ -11,8 +11,8 @@
 #ifndef _IAbstractDataArray_h_
 #define _IAbstractDataArray_h_
 
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
 #include <iostream>
 
 /**
@@ -24,7 +24,7 @@
 * methods to meet my specific needs.
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT IMXAArray
 {

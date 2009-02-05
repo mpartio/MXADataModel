@@ -1,10 +1,10 @@
 #include "H5Dataset.h"
-#include <Base/IDataFile.h>
-#include <Base/IMXAArray.h>
-//#include <Core/MXAAbstractAttribute.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
-#include <HDF5/H5Utilities.h>
-#include <HDF5/H5MXAUtilities.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/Base/IMXAArray.h>
+//#include <MXA/Core/MXAAbstractAttribute.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/HDF5/H5MXAUtilities.h>
 
 #include <list>
 

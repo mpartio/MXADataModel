@@ -11,7 +11,7 @@
 #ifndef _H5MXADataFile_h_
 #define _H5MXADataFile_h_
 
-#include <Base/IDataFile.h>
+#include <MXA/Base/IDataFile.h>
 
 #include <hdf5.h>
 
@@ -22,7 +22,7 @@
  * @brief
  * @author mjackson
  * @date Dec 17, 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class MXA_EXPORT H5MXADataFile : public IDataFile
 {

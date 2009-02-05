@@ -11,22 +11,22 @@
 
 //-- MXA Includes
 #include <MXAConfiguration.h>
-#include <Testing/TestDataFileLocations.h>
-#include <Common/MXATypeDefs.h>
-#include <Base/IDataFile.h>
-#include <Base/IDataModel.h>
-#include <Base/IFileWriter.h>
-#include <Core/MXADataModel.h>
-#include <HDF5/H5MXADataFile.h>
-#include <HDF5/H5Utilities.h>
-#include <HDF5/H5MXAUtilities.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
+#include "MXAUnitTestDataFileLocations.h"
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/Base/IDataModel.h>
+#include <MXA/Base/IFileWriter.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/HDF5/H5MXADataFile.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/HDF5/H5MXAUtilities.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 
-#include <HDF5/H5Dataset.h>
-#include <DataWrappers/MXAAsciiStringData.h>
+#include <MXA/HDF5/H5Dataset.h>
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
 
-#include <DataWrappers/MXA2DArray.hpp>
-#include <DataWrappers/MXARGBImage.h>
+#include <MXA/DataWrappers/MXA2DArray.hpp>
+#include <MXA/DataWrappers/MXARGBImage.h>
 
 
 // C++ Includes

@@ -7,12 +7,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <Common/MXATypeDefs.h>
-#include <Core/MXASupportFile.h>
-#include <Core/MXADataModel.h>
-#include <HDF5/H5MXADataFile.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Core/MXASupportFile.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/HDF5/H5MXADataFile.h>
 #include <Examples/ExampleFileLocations.h>
-#include <Testing/TiffMaker.h>
+#include <Tests/TiffMaker.h>
 
 #include <iostream>
 

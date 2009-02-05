@@ -12,16 +12,16 @@
 #define XMLDATAMODELREADER_H_
 
 //MXA Includes
-#include <Common/DLLExport.h>
-#include <Core/MXADataModel.h>
-#include <Base/IDataModelReader.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Base/IDataModelReader.h>
 #if MXA_HDF5_SUPPORT
-#include <HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Lite.h>
 #endif
-#include <DataWrappers/MXAArrayTemplate.hpp>
-#include <XML/XMLIODelegate.h>
-#include <XML/ExpatParser.h>
-#include <XML/XMLConstants.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/XML/XMLIODelegate.h>
+#include <MXA/XML/ExpatParser.h>
+#include <MXA/XML/XMLConstants.h>
 
 typedef  std::map<std::string, std::string>        XMLAttributeMap;
 /**
@@ -29,7 +29,7 @@ typedef  std::map<std::string, std::string>        XMLAttributeMap;
  * class. This class is responsible for reading a data model from an XML File
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @class XMLDataModelReader XMLDataModelReader.h
  */
 class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,

@@ -8,11 +8,11 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include <Common/MXATypeDefs.h>
-#include <Common/LogTime.h>
-#include <HDF5/H5MXADataFile.h>
-#include <HDF5/H5MXAUtilities.h>
-#include <Testing/DataFileGenerator.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/HDF5/H5MXADataFile.h>
+#include <MXA/HDF5/H5MXAUtilities.h>
+#include <Tests/DataFileGenerator.h>
 #include <Examples/ExampleFileLocations.h>
 
 #include <hdf5.h>

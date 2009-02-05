@@ -1,8 +1,8 @@
-#include <HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Lite.h>
 
 #ifdef H5LITE_USE_MXA_CONSTRUCTS
-#include <Base/IMXAArray.h>
-#include <DataWrappers/MXAAsciiStringData.h>
+#include <MXA/Base/IMXAArray.h>
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
 #endif
 
 

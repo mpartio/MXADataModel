@@ -11,13 +11,13 @@
 
 //--MXA Includes
 #include <MXAConfiguration.h>
-#include <Common/LogTime.h>
-#include <Common/MXATypes.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
-#include <DataWrappers/MXA2DArray.hpp>
-#include <Testing/TestDataFileLocations.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/DataWrappers/MXA2DArray.hpp>
+#include "MXAUnitTestDataFileLocations.h"
 
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>

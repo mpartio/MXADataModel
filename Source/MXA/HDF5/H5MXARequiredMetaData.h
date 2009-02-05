@@ -12,7 +12,7 @@
 #define _H5MXARequiredMetaData_h_
 
 
-#include <Base/IRequiredMetaData.h>
+#include <MXA/Base/IRequiredMetaData.h>
 
 
 #include <iostream>
@@ -23,7 +23,7 @@
 * @brief Concrete implmentation of the IRequiredMetaData virtual class.
 * @author Mike Jackson  for IMTS.us
 * @date Jan 15, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
 {

@@ -1,9 +1,9 @@
 
 
 
-#include <Core/MXADataSource.h>
-#include <Core/MXADataModel.h>
-#include <Utilities/StringUtils.h>
+#include <MXA/Core/MXADataSource.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Utilities/StringUtils.h>
 
 #include <iostream>
 

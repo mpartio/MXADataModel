@@ -1,20 +1,20 @@
 SET ( MXA_XML_SRCS
-    ${MXA_SOURCE_DIR}/src/XML/ExpatParser.cpp
-    ${MXA_SOURCE_DIR}/src/XML/ExpatEvtHandler.cpp
-    ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.cpp
-    ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.cpp
-    ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.cpp
+    ${MXA_SOURCE_DIR}/MXA/XML/ExpatParser.cpp
+    ${MXA_SOURCE_DIR}/MXA/XML/ExpatEvtHandler.cpp
+    ${MXA_SOURCE_DIR}/MXA/XML/XMLIODelegate.cpp
+    ${MXA_SOURCE_DIR}/MXA/XML/XMLDataModelWriter.cpp
+    ${MXA_SOURCE_DIR}/MXA/XML/XMLDataModelReader.cpp
 )
 
 SET (MXA_XML_HEADERS
-    ${MXA_SOURCE_DIR}/src/XML/ExpatParser.h
-    ${MXA_SOURCE_DIR}/src/XML/ExpatEvtHandler.h
-    ${MXA_SOURCE_DIR}/src/XML/XMLIODelegate.h
-    ${MXA_SOURCE_DIR}/src/XML/XMLDataModelWriter.h
-    ${MXA_SOURCE_DIR}/src/XML/XMLDataModelReader.h
-    ${MXA_SOURCE_DIR}/src/XML/XMLMXAAttributeWriter.hpp
-    ${MXA_SOURCE_DIR}/src/XML/XMLUserMetaDataWriter.h
-    ${MXA_SOURCE_DIR}/src/XML/XMLConstants.h
+    ${MXA_SOURCE_DIR}/MXA/XML/ExpatParser.h
+    ${MXA_SOURCE_DIR}/MXA/XML/ExpatEvtHandler.h
+    ${MXA_SOURCE_DIR}/MXA/XML/XMLIODelegate.h
+    ${MXA_SOURCE_DIR}/MXA/XML/XMLDataModelWriter.h
+    ${MXA_SOURCE_DIR}/MXA/XML/XMLDataModelReader.h
+    ${MXA_SOURCE_DIR}/MXA/XML/XMLMXAAttributeWriter.hpp
+    ${MXA_SOURCE_DIR}/MXA/XML/XMLUserMetaDataWriter.h
+    ${MXA_SOURCE_DIR}/MXA/XML/XMLConstants.h
     
 )
 

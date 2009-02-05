@@ -51,7 +51,7 @@
 
 
 /* The Following include MUST appear AFTER MXA_BUILT_AS_DYNAMIC_LIB has been defined */
-#include <Common/DLLExport.h>
+#include <MXA/Common/DLLExport.h>
 
 /*
  * The below code was adapted from the Visualization Toolkit project.

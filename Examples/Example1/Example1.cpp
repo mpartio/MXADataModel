@@ -21,16 +21,16 @@
  */
 
 //-- MXA Includes
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Common/LogTime.h>
-#include <Core/MXADataModel.h>
-#include <XML/XMLDataModelWriter.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
-#include <HDF5/H5MXAUtilities.h>
-#include <HDF5/H5MXADataFile.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/XML/XMLDataModelWriter.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/HDF5/H5MXAUtilities.h>
+#include <MXA/HDF5/H5MXADataFile.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <Examples/ExampleFileLocations.h>
 
 // HDF5 Include

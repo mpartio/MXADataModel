@@ -11,17 +11,17 @@
 #ifndef _MXAArrayTemplate_h_
 #define _MXAArrayTemplate_h_
 
-#include <Common/MXATypeDefs.h>
-#include <Common/LogTime.h>
-#include <Common/MXAEndian.h>
-#include <Common/MXASetGetMacros.h>
-#include <Base/IMXAArray.h>
-#include <DataWrappers/DataExportProperties.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Common/MXAEndian.h>
+#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IMXAArray.h>
+#include <MXA/DataWrappers/DataExportProperties.h>
 
 #ifdef MXA_USE_HDF5_PRIMITIVE_TYPES
-#include <HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Lite.h>
 #endif
-#include <Utilities/StringUtils.h>
+#include <MXA/Utilities/StringUtils.h>
 
 // STL Includes
 #include <sstream>
@@ -47,7 +47,7 @@
 * @brief Template class for wrapping raw arrays of data.
 * @author mjackson
 * @date July 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 template<typename T>
 class MXAArrayTemplate : public IMXAArray

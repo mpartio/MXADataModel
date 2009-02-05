@@ -12,12 +12,12 @@
 #define _HDF5_UTILITIES_H_
 
 
-//#include <Common/DLLExport.h>
-#include <Common/MXATypes.h>
-//#include <Common/MXATypeDefs.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
+//#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypes.h>
+//#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
 
 // C++ Includes
 #include <map>
@@ -31,7 +31,7 @@
  * @brief General Utilities for working with the HDF5 data files and API
  * @author Mike Jackson/Shawn Nicholson
  * @date March 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class H5Utilities
 {

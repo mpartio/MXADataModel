@@ -32,13 +32,13 @@
 #define XMLPARSER_H_INCLUDED
 
 #include <expat.h>
-#include <XML/ExpatEvtHandler.h>
+#include <MXA/XML/ExpatEvtHandler.h>
 
 /**
 * @class ExpatParser ExpatParser.h src/XML/ExpatParser.h
 * @brief  C++ wrapper around the Expat parser library.
 * @date 2004
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT ExpatParser
 {

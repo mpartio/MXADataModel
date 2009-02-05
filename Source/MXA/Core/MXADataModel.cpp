@@ -1,20 +1,20 @@
 //-- MXA Headers
-#include <Common/LogTime.h>
-#include <Base/IFileIODelegate.h>
-#include <Base/IMXAArray.h>
-#include <Base/IRequiredMetaData.h>
-#include <Base/ISupportFile.h>
-#include <Core/MXADataModel.h>
-#include <Utilities/StringUtils.h>
-#include <XML/XMLDataModelWriter.h>
-#include <Core/RequiredMetaData.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/IFileIODelegate.h>
+#include <MXA/Base/IMXAArray.h>
+#include <MXA/Base/IRequiredMetaData.h>
+#include <MXA/Base/ISupportFile.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Utilities/StringUtils.h>
+#include <MXA/XML/XMLDataModelWriter.h>
+#include <MXA/Core/RequiredMetaData.h>
 
-//#include <Core/MXAAbstractAttribute.h>
+//#include <MXA/Core/MXAAbstractAttribute.h>
 //-- Standard Library Headers
 #include <iostream>
 
 #if MXA_HDF5_SUPPORT
-#include <HDF5/H5MXARequiredMetaData.h>
+#include <MXA/HDF5/H5MXARequiredMetaData.h>
 #endif
 
 using namespace MXA;

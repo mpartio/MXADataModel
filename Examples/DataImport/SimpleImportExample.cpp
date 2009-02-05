@@ -1,12 +1,12 @@
 #include <Examples/DataImport/SimpleImportExample.h>
 
 //-- MXA Headers
-#include <Base/IImportDelegate.h>
-#include <Core/MXADataModel.h>
-#include <Core/MXADataSource.h>
-#include <Core/MXADataImport.h>
-#include <HDF5/H5MXADataFile.h>
-#include <DataImport/ImportDelegateManager.h>
+#include <MXA/Base/IImportDelegate.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Core/MXADataSource.h>
+#include <MXA/Core/MXADataImport.h>
+#include <MXA/HDF5/H5MXADataFile.h>
+#include <MXA/DataImport/ImportDelegateManager.h>
 #include <Examples/ExampleFileLocations.h>
 #include <Examples/DataImport/ExampleImportDelegate.h>
 #include <Examples/DataImport/ExampleImportDelegateFactory.h>

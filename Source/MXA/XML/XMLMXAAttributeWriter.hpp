@@ -11,8 +11,8 @@
 #ifndef _XMLMXAAttributeWriter_h_
 #define _XMLMXAAttributeWriter_h_
 
-#include <Common/MXATypeDefs.h>
-#include <Base/IMXAArray.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IMXAArray.h>
 #if MXA_HDF5_SUPPORT
 #include <hdf5.h>
 #endif
@@ -21,7 +21,7 @@
 * @brief Delegate type class that writes attributes to an xml file
 * @author mjackson
 * @date Jan 15, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 
 class MXA_EXPORT XMLMXAAttributeWriter

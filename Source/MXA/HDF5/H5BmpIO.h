@@ -12,9 +12,9 @@
 #define _H5BMPIO_H_
 
 //-- MXA Headers
-#include <Common/DLLExport.h>
-#include <Common/MXATypes.h>
-#include <BMPIO/MXABmpIO.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/BMPIO/MXABmpIO.h>
 
 //-- HDF Headers
 #include <hdf5.h>
@@ -36,7 +36,7 @@ namespace MXA
 * @brief General IO class for Bmp images
 * @author Mike Jackson/Herb Mullens
 * @date October 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT H5BmpIO 
 {

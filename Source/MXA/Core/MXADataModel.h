@@ -18,11 +18,11 @@
 
 
 //-- MXA Headers
-#include <Common/MXATypeDefs.h>
-#include <Base/IDataModel.h>
-#include <Core/MXAConstants.h>
-#include <Core/MXADataDimension.h>
-#include <Core/MXADataRecord.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IDataModel.h>
+#include <MXA/Core/MXAConstants.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
 
 
 //-- STL Headers
@@ -37,7 +37,7 @@
  * @brief Main class used to work with the DataModel paradigm.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel

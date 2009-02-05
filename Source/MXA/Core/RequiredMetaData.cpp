@@ -1,8 +1,8 @@
 #include "RequiredMetaData.h"
-#include <Common/LogTime.h>
-#include <Base/IDataFile.h>
-#include <Core/MXAConstants.h>
-#include <Utilities/StringUtils.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/Core/MXAConstants.h>
+#include <MXA/Utilities/StringUtils.h>
 
 //-- C++ includes
 #include <string>

@@ -11,9 +11,9 @@
 #ifndef _IDATAMODELWRITER_H_
 #define _IDATAMODELWRITER_H_
 
-#include <Common/DLLExport.h>
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
 
 
 /**
@@ -21,7 +21,7 @@
  * implement to be able to write data models to files or other media
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  */
 class MXA_EXPORT IDataModelWriter

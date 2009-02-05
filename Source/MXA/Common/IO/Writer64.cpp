@@ -1,19 +1,19 @@
-#include "Writer64.h"
+#include <MXA/Common/IO/Writer64.h>
 
 
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 Writer64::Writer64(const std::string &filename) :
   _filename(filename)
 {
-  
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 Writer64::~Writer64()
 {
@@ -27,12 +27,12 @@ Writer64::~Writer64()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool Writer64::initWriter()
 {
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
-   
+
 	_outStream = CreateFile(TEXT(this->_filename.c_str()),    // file to open
                    GENERIC_WRITE,          // open for writing
                    FILE_SHARE_WRITE,       // share for writing
@@ -40,13 +40,13 @@ bool Writer64::initWriter()
                    CREATE_ALWAYS,         // Always create a new file, regardless if the file exists or not
                    FILE_ATTRIBUTE_NORMAL, // normal file
                    NULL);                 // no attr. template
-  if (_outStream == INVALID_HANDLE_VALUE) 
-  { 
+  if (_outStream == INVALID_HANDLE_VALUE)
+  {
     std::cout << "Error: Failed to open file: " + std::string(this->_filename) << " Error code:(" << GetLastError() << ")" << std::endl;
     return false;
   }
 #else
- 
+
   _outStream.open(this->_filename.c_str(), std::ios::out | std::ios::binary);
   if ( _outStream.fail() ) {
     std::cout << "Output File " << this->_filename << "\n  could not be opened for writing. Please" <<

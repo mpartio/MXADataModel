@@ -2,7 +2,7 @@
 MACRO (MXA_SOURCE_PROPERTIES NAME HEADERS SOURCES)
 
 INSTALL (FILES ${HEADERS}
-            DESTINATION include/MXADataModel/${NAME}
+            DESTINATION include/${NAME}
             COMPONENT Headers           
 )
 

@@ -1,6 +1,6 @@
-#include <Core/MXADataDimension.h>
-#include <Utilities/StringUtils.h>
-#include <Common/LogTime.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Utilities/StringUtils.h>
+#include <MXA/Common/LogTime.h>
 
 // -----------------------------------------------------------------------------
 //  Constructor

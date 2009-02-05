@@ -13,7 +13,7 @@
 
 
 //-- MXA Includes
-#include <DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 //-- C++ includes
 #include <string>
@@ -29,7 +29,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(H5BmpImport);
 * @brief Factory Class to generate H5BmpImportDelegate Objects
 * @author Mike Jackson
 * @date Oct 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFactory
 {

@@ -9,7 +9,7 @@
 #ifndef EXAMPLEIMPORTDELEGATEFACTORY_H_
 #define EXAMPLEIMPORTDELEGATEFACTORY_H_
 
-#include <DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 #include <Examples/DataImport/ExampleImportDelegate.h>
 
 
@@ -21,7 +21,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(ExampleImport)
 * @brief Factory class to generate ExampleImportDelegateFactory objects
 * @author Mike Jackson
 * @date Sep 5, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class ExampleImportDelegateFactory : public AbstractImportDelegateFactory
 {

@@ -14,11 +14,11 @@
 
 
 #if defined (_MSC_VER)
-#include "Common/Win32Defines.h"
+#include <MXA/Common/Win32Defines.h>
 #endif
 // PVDislocation Headers
-#include "Common/MXATypes.h"
-#include "Common/MXAEndian.h"
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXAEndian.h>
 
 // Conditional Includes/Defines for Large File Support on Windows
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
@@ -58,7 +58,7 @@ standard C++ library."
  * sure that we can write files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class MXA_EXPORT Writer64
 {

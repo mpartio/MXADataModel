@@ -11,16 +11,16 @@
 #ifndef DATASOURCEPATHBUILDER_H_
 #define DATASOURCEPATHBUILDER_H_
 
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Utilities/IStringSection.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Utilities/IStringSection.h>
 
 /**
 * @class DataSourcePathBuilder DataSourcePathBuilder.h Utilities/DataSourcePathBuilder.h
 * @brief Utility class to help build up parts of a path
 * @author Mike Jackson
 * @date Nov 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT DataSourcePathBuilder
 {

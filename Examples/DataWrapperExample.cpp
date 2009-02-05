@@ -9,15 +9,15 @@
 
 
 //-- MXA Includes
-#include <Common/MXATypes.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 
 #if MXA_HDF5_SUPPORT
 //-- HDF5 includes
 #include <hdf5.h>
 
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
 #endif
 
 #include <Examples/ExampleFileLocations.h>

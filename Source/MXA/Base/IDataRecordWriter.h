@@ -11,7 +11,7 @@
 #ifndef _IDATARECORDWRITER_H_
 #define _IDATARECORDWRITER_H_
 
-#include <Common/DLLExport.h>
+#include <MXA/Common/DLLExport.h>
 
 class IDataRecord;
 
@@ -20,7 +20,7 @@ class IDataRecord;
  * data record to a file
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *  
  */
 class MXA_EXPORT IDataRecordWriter

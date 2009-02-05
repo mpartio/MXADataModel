@@ -1,15 +1,15 @@
 #ifndef _IDATASOURCE_H_
 #define _IDATASOURCE_H_
 
-#include <Common/DLLExport.h>
-#include <Common/MXATypeDefs.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypeDefs.h>
 
 
 /**
  * @brief Interface that defines the methods of a "Data Source" Object
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class MXA_EXPORT IDataSource
 {

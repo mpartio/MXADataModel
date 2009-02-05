@@ -13,12 +13,12 @@
 
 
 //-- MXA Includes
-#include <Common/DLLExport.h>
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Common/MXASetGetMacros.h>
-#include <Base/IImportDelegate.h>
-#include <DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IImportDelegate.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 // C++ STL headers
 #include <string>
@@ -46,7 +46,7 @@ MXA_PROPERTY_CONSTANT(ImportAsGrayScale);
  * @author Mike Jackson
  * @date April 2007
  * @class H5BmpImportDelegate HDF5/H5BmpImportDelegate.h HDF5/H5BmpImportDelegate.h
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class MXA_EXPORT H5BmpImportDelegate : public IImportDelegate
 {

@@ -5,9 +5,13 @@
  *      Author: mjackson
  */
 
-#include "Testing/TiffMaker.h"
+#include "TiffMaker.h"
+
+//-- Tif headers
 #include "tif_config.h"
 #include "tiffio.h"
+
+//-- std C++ headers
 #include <iostream>
 
 // -----------------------------------------------------------------------------

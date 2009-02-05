@@ -1,9 +1,9 @@
 #include "MXAAsciiStringData.h"
-#include <Common/LogTime.h>
+#include <MXA/Common/LogTime.h>
 
 #if MXA_HDF5_SUPPORT
 #include <hdf5.h>
-#include <HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Lite.h>
 
 #endif
 

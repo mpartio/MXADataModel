@@ -1,5 +1,5 @@
-#include <Core/MXADataRecord.h>
-#include <Common/LogTime.h>
+#include <MXA/Core/MXADataRecord.h>
+#include <MXA/Common/LogTime.h>
 
 // Set the initial value of the _uniqueGUIDValue
 int32 MXADataRecord::_uniqueGUIDValue(0);

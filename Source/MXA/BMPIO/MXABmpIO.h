@@ -12,9 +12,9 @@
 #define MXA_BMP_IO_H
 
 //MXA Includes
-#include <Common/MXATypes.h>
-#include <Common/DLLExport.h>
-#include <BMPIO/MXABmpHeaders.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/BMPIO/MXABmpHeaders.h>
 
 //STL includes
 #include <vector>
@@ -48,7 +48,7 @@ enum LOAD_TEXTUREBMP_RESULT {
 * @brief This class Handles the Reading of Windows Bitmap files (.bmp)
 * @author Herb Mullens
 * @date Oct 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT MXABmpIO
 {

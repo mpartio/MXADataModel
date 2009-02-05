@@ -12,7 +12,7 @@
 #define H5TIFFIMPORTDELEGATEFACTORY_H_
 
 //-- MXA Includes
-#include <DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 //-- C++ includes
 #include <string>
@@ -28,7 +28,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(H5TiffImport);
 * @brief Factory Class to generate H5TiffImportDelegate Objects
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
 {

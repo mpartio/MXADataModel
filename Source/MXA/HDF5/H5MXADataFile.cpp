@@ -1,12 +1,12 @@
 
 #include "H5MXADataFile.h"
-#include <Base/IFileWriter.h>
-#include <Base/IFileReader.h>
-#include <Core/MXAConstants.h>
-#include <HDF5/H5DataModelWriter.h>
-#include <HDF5/H5DataModelReader.h>
-#include <HDF5/H5Utilities.h>
-#include <Base/IDataset.h>
+#include <MXA/Base/IFileWriter.h>
+#include <MXA/Base/IFileReader.h>
+#include <MXA/Core/MXAConstants.h>
+#include <MXA/HDF5/H5DataModelWriter.h>
+#include <MXA/HDF5/H5DataModelReader.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/Base/IDataset.h>
 
 //-- Boost Filesystem Headers
 #include <boost/filesystem/operations.hpp>

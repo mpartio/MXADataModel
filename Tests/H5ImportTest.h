@@ -11,10 +11,10 @@
 #ifndef H5IMPORTTEST_H_
 #define H5IMPORTTEST_H_
 
-#include <Base/IDataFile.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
-#include <DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 #include <string>
 
@@ -24,7 +24,7 @@
 *  will simply write a single value to the HDF5 file.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class H5ImportTestDelegate: public IImportDelegate
 {
@@ -93,7 +93,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(H5ImportTest);
 * @brief Factory class to generate H5ImportTestDelegate objects
 * @author Mike Jackson
 * @date Sep 12, 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
 {

@@ -4,13 +4,13 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include <Common/MXATypes.h>
-#include <BMPIO/MXABmpIO.h>
-#include <Testing/TestDataFileLocations.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/BMPIO/MXABmpIO.h>
+#include "TestDataFileLocations.h"
 
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
@@ -21,7 +21,7 @@
 #include <boost/filesystem/convenience.hpp>
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
@@ -31,17 +31,17 @@ void RemoveTestFiles()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void TestBMPIO()
 {
   // Insert Test Code here.
-  /**************Test stub I was using to develop class, 
+  /**************Test stub I was using to develop class,
   ***************needs modified for use with test framework
 	MXABmpIO* reader = new MXABmpIO();
 	cout<<"New MXABmpIO class created\n";
 	LOAD_TEXTUREBMP_RESULT res = reader->loadBMPData("/Users/hmullens/Desktop/RoboMetData/mosaic_test3_0816_10.bmp");
-	
+
 	switch(res)
   	{
   	case LOAD_TEXTUREBMP_SUCCESS:
@@ -71,15 +71,15 @@ void TestBMPIO()
     		cout<<"System ran out of memory when allocating array for bitmap data\n";
     		break;
     	}
-  	default: 
+  	default:
     	{
     		cout<<"Unhandled error occurred"<<endl<<flush;
     		break;
     	}
   }
   */
-  
-  
+
+
 }
 
 
@@ -89,8 +89,8 @@ void TestBMPIO()
 // -----------------------------------------------------------------------------
 boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
   boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "Bitmap IO Testing" );
-    
+
     test->add( BOOST_TEST_CASE( &TestBMPIO), 0);
     test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-    return test; 
+    return test;
 }

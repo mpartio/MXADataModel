@@ -11,7 +11,7 @@
 #ifndef _IDATADIMENSIONWRITER_H_
 #define _IDATADIMENSIONWRITER_H_
 
-#include <Common/DLLExport.h>
+#include <MXA/Common/DLLExport.h>
 
 class IDataDimension;
 
@@ -20,7 +20,7 @@ class IDataDimension;
  * serialization capabilities.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *  
  */
 class MXA_EXPORT IDataDimensionWriter

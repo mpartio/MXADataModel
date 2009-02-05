@@ -1,20 +1,20 @@
-#include <DataImport/DataImportXmlParser.h>
+#include <MXA/DataImport/DataImportXmlParser.h>
 
-#include <Common/LogTime.h>
-#include <Base/IDataSource.h>
-#include <Base/IImportDelegate.h>
-#include <Base/IDataFile.h>
-#include <Core/MXADataSource.h>
-#include <Core/MXADataImport.h>
-#include <Core/MXASupportFile.h>
-#include <DataImport/ImportDelegateManager.h>
-#include <Utilities/StringUtils.h>
-#include <Utilities/DataSourcePathIndexSection.h>
-#include <Utilities/DataSourcePathTextSection.h>
-#include <XML/XMLDataModelReader.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/IDataSource.h>
+#include <MXA/Base/IImportDelegate.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/Core/MXADataSource.h>
+#include <MXA/Core/MXADataImport.h>
+#include <MXA/Core/MXASupportFile.h>
+#include <MXA/DataImport/ImportDelegateManager.h>
+#include <MXA/Utilities/StringUtils.h>
+#include <MXA/Utilities/DataSourcePathIndexSection.h>
+#include <MXA/Utilities/DataSourcePathTextSection.h>
+#include <MXA/XML/XMLDataModelReader.h>
 
 #if MXA_HDF5_SUPPORT
-#include <HDF5/H5MXADataFile.h>
+#include <MXA/HDF5/H5MXADataFile.h>
 #endif
 
 //-- C++ stdlib includes

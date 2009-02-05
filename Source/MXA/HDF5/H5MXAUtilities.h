@@ -11,15 +11,15 @@
 #ifndef H5MXAUTILITIES_H_
 #define H5MXAUTILITIES_H_
 
-// #include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
+// #include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
 
 /**
 * @class H5MXAUtilities H5MXAUtilities.h HDF5/H5MXAUtilities.h
 * @brief Utility methods that combine hdf5 functions with MXA objects
 * @author Mike Jackson
 * @date July 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class H5MXAUtilities
 {

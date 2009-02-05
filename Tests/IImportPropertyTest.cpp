@@ -9,9 +9,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <Common/MXATypes.h>
-#include <Common/MXASetGetMacros.h>
-#include <Base/IImportProperty.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IImportProperty.h>
 
 
 //-- Boost Unit Testing Framework

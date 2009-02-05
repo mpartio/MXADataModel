@@ -1,20 +1,20 @@
-#include "Common/MXAEndian.h"
-#include "Common/IO/Reader64.h"
+#include <MXA/Common/MXAEndian.h>
+#include <MXA/Common/IO/Reader64.h>
 
 
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 Reader64::Reader64(const std::string &filename) :
   _filename(filename)
 {
-  
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 Reader64::~Reader64()
 {
@@ -28,12 +28,12 @@ Reader64::~Reader64()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool Reader64::initReader()
 {
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
-   
+
 	_instream = CreateFile(TEXT(this->_filename.c_str()),    // file to open
                    GENERIC_READ,          // open for reading
                    FILE_SHARE_READ,       // share for reading
@@ -41,8 +41,8 @@ bool Reader64::initReader()
                    OPEN_EXISTING,         // existing file only
                    FILE_FLAG_SEQUENTIAL_SCAN, // normal file
                    NULL);                 // no attr. template
-  if (_instream == INVALID_HANDLE_VALUE) 
-  { 
+  if (_instream == INVALID_HANDLE_VALUE)
+  {
     std::cout << "Error: Failed to open file: " + std::string(this->_filename) << " Error code:(" << GetLastError() << ")" << std::endl;
     return false;
   }

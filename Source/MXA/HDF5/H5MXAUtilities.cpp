@@ -7,15 +7,15 @@
 
 #include "H5MXAUtilities.h"
 //-- MXA Includes
-#include <Common/LogTime.h>
-#include <Base/IDataModel.h>
-#include <Base/IDataRecord.h>
-#include <Base/IDataFile.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
-#include <DataWrappers/MXAAsciiStringData.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
-#include <Utilities/StringUtils.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/IDataModel.h>
+#include <MXA/Base/IDataRecord.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/Utilities/StringUtils.h>
 
 //-- hdf5 includes
 #include <hdf5.h>

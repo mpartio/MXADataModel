@@ -12,7 +12,7 @@
 #define _IRequiredMetaData_h_
 
 //-- MXA includes
-#include <Base/IDataFileIO.h>
+#include <MXA/Base/IDataFileIO.h>
 
 
 /**
@@ -21,7 +21,7 @@
 * MXADataModel and is included in each data file.
 * @author Mike Jackson for IMTS.us
 * @date Jan 15, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT IRequiredMetaData : public IDataFileIO
 {

@@ -1,6 +1,6 @@
 #include <vtkHDF5.h>
-#include <HDF5/H5Utilities.h>
-#include <Common/LogTime.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/Common/LogTime.h>
 
 
 #define CHECK_ERR_WITH_RETURN(err, message)\

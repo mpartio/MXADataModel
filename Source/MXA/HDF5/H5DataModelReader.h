@@ -12,11 +12,11 @@
 #define _HDFREADER_H_
 
 //MXA Includes
-#include <Common/DLLExport.h>
-#include <Core/MXADataModel.h>
-#include <Base/IDataModelReader.h>
-//#include <HDF5/H5IODelegate.h>
-//#include <HDF5/H5AttributeArrayTemplate.hpp>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Base/IDataModelReader.h>
+//#include <MXA/HDF5/H5IODelegate.h>
+//#include <MXA/HDF5/H5AttributeArrayTemplate.hpp>
 
 // C++ Headers
 #include <string>
@@ -30,7 +30,7 @@
  * from the HDF5 data file
  * @author Mike Jackson
  * @date Mar 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *   H5DataModelReader.h
  */
 class MXA_EXPORT H5DataModelReader : public IDataModelReader

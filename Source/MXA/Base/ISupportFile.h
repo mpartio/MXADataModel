@@ -10,9 +10,9 @@
 
 #include <string>
 
-#include <Common/MXATypeDefs.h>
-#include <Core/MXAConstants.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Core/MXAConstants.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 
 
 namespace SupportFile
@@ -31,7 +31,7 @@ namespace SupportFile
 * @brief Formal Interface for managing arbitrary files that will be added to the HDF5 file.
 * @author  Mike Jackson for BlueQuartz Software
 * @date Sep 23, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT ISupportFile
 {

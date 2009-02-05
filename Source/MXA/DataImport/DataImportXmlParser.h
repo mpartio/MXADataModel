@@ -12,15 +12,15 @@
 #define _DataImportXmlParser_H_
 
 //-- MXA Includes
-#include <Common/MXATypeDefs.h>
-#include <Common/MXATypes.h>
-#include <Base/IDataModel.h>
-#include <Base/IDataImport.h>
-#include <Core/MXADataModel.h>
-#include <XML/ExpatParser.h>
-#include <XML/ExpatEvtHandler.h>
-#include <XML/XMLConstants.h>
-#include <Utilities/DataSourcePathBuilder.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Base/IDataModel.h>
+#include <MXA/Base/IDataImport.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/XML/ExpatParser.h>
+#include <MXA/XML/ExpatEvtHandler.h>
+#include <MXA/XML/XMLConstants.h>
+#include <MXA/Utilities/DataSourcePathBuilder.h>
 
 //-- STL includes
 #include <string>
@@ -68,7 +68,7 @@ typedef std::pair<std::string, std::string>        XMLAttributeMapElement;
 * @class DataImportXmlParser DataImportXmlParser.h DataImportXmlParser.h
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImport
 {

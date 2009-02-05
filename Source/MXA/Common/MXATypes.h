@@ -15,7 +15,7 @@
 #ifndef __MXATypes_h
 #define __MXATypes_h
 
-#include <Common/DLLExport.h>
+#include <MXA/Common/DLLExport.h>
 
 /*--------------------------------------------------------------------------*/
 /* Define a unique integer identifier for each native scalar type.  */

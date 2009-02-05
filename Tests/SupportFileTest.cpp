@@ -6,16 +6,17 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Common/LogTime.h>
-#include <Base/ISupportFile.h>
-#include <Core/MXADataModel.h>
-#include <Core/MXASupportFile.h>
-#include <Testing/TestDataFileLocations.h>
-#include <Testing/TiffMaker.h>
-#include <HDF5/H5MXADataFile.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/ISupportFile.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Core/MXASupportFile.h>
+#include <MXA/HDF5/H5MXADataFile.h>
 
+//-- MXA Unit Test Headers
+#include "MXAUnitTestDataFileLocations.h"
+#include "TiffMaker.h"
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>

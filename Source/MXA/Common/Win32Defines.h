@@ -16,7 +16,7 @@
   #include <cstdlib>
   #include <string>
   #include <stdio.h>
-  #include <Common/MXATypes.h>
+  #include <MXA/Common/MXATypes.h>
   #define NOMINMAX
   #define WINDOWS_LARGE_FILE_SUPPORT
 	#if _MSC_VER < 1400

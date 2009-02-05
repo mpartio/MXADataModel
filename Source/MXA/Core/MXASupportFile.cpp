@@ -6,12 +6,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include "MXASupportFile.h"
-#include <Common/IO/Reader64.h>
-#include <Core/MXAConstants.h>
+#include <MXA/Common/IO/Reader64.h>
+#include <MXA/Core/MXAConstants.h>
 #if MXA_HDF5_SUPPORT
-#include <HDF5/H5MXADataFile.h>
+#include <MXA/HDF5/H5MXADataFile.h>
 #endif
-#include <DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 
 #include <boost/iostreams/device/file.hpp>
 #include <boost/filesystem/operations.hpp>

@@ -11,14 +11,14 @@
 #ifndef IDATAIMPORT_H_
 #define IDATAIMPORT_H_
 
-#include <Common/DLLExport.h>
+#include <MXA/Common/DLLExport.h>
 
 /**
  * @brief Abstract class that formally declares the methods used when implementing
  * a class to import data into the underlying data storage.
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  */
 class MXA_EXPORT IDataImport

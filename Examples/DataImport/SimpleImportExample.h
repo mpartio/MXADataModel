@@ -9,7 +9,7 @@
 #ifndef _SIMPLE_IMPORT_EXAMPLE_H_
 #define _SIMPLE_IMPORT_EXAMPLE_H_
 
-#include <Common/MXATypeDefs.h>
+#include <MXA/Common/MXATypeDefs.h>
 
 #include <string>
 
@@ -21,7 +21,7 @@
 * within the HDF5 file as specified in the MXA Data Model.
 * @author Michael A. Jackson. BlueQuartz Software http://www.bluequartz.net
 * @date Sept 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class SimpleImportExample
 {

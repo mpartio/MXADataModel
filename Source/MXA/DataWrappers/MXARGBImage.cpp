@@ -1,5 +1,5 @@
 #include "MXARGBImage.h"
-#include <Common/LogTime.h>
+#include <MXA/Common/LogTime.h>
 #include <iostream>
 
 

@@ -9,12 +9,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <Common/MXATypeDefs.h>
-#include <Common/LogTime.h>
-#include <Core/MXADataModel.h>
-#include <Core/MXADataRecord.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/vtkHDF5.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Core/MXADataRecord.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/vtkHDF5.h>
 #include <Testing/DataFileGenerator.h>
 #include <TestDataFileLocations.h>
 

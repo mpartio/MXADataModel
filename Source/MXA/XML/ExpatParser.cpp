@@ -28,7 +28,7 @@
  *  5. This notice may not be removed or altered.
  */
 
-#include <XML/ExpatParser.h>
+#include <MXA/XML/ExpatParser.h>
 #include <expat.h>
 #include <assert.h>
 #include <string.h>

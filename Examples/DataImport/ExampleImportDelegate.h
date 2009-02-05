@@ -9,10 +9,10 @@
 #ifndef EXAMPLEIMPORTDELEGATE_H_
 #define EXAMPLEIMPORTDELEGATE_H_
 
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Common/MXASetGetMacros.h>
-#include <Base/IImportDelegate.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IImportDelegate.h>
 
 
 /**
@@ -20,7 +20,7 @@
 * @brief An example of how to write a basic IDataImportDelegate class.
 * @author Mike Jackson
 * @date April 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class ExampleImportDelegate : public IImportDelegate
 {

@@ -2,9 +2,9 @@
 
 
 //-- MXA Headers
-#include <Common/LogTime.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Image.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Image.h>
 
 
 

@@ -11,9 +11,9 @@
 #ifndef DataSourcePathIndexSection_H_
 #define DataSourcePathIndexSection_H_
 
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Utilities/IStringSection.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Utilities/IStringSection.h>
 
 #include <string>
 #include <vector>
@@ -23,7 +23,7 @@
 * @brief Represents the index value (a number) of a data source path.
 * @author Mike Jackson
 * @date Nov 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT DataSourcePathIndexSection : public IStringSection
 {

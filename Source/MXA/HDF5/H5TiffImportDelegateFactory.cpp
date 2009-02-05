@@ -1,5 +1,5 @@
-#include <HDF5/H5TiffImportDelegateFactory.h>
-#include <HDF5/H5TiffImportDelegate.h>
+#include <MXA/HDF5/H5TiffImportDelegateFactory.h>
+#include <MXA/HDF5/H5TiffImportDelegate.h>
 
 
 

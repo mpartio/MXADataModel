@@ -11,9 +11,9 @@
 #ifndef _H5DATASET_H_
 #define _H5DATASET_H_
 
-#include <Common/DLLExport.h>
-#include <Common/MXATypeDefs.h>
-#include <Base/IDataset.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IDataset.h>
 
 
 /**
@@ -23,7 +23,7 @@
  * @class H5Dataset H5Dataset.h HDF5/H5Dataset.h
  * @author Mike Jackson
  * @date Jan 3, 2008
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class MXA_EXPORT H5Dataset : public IDataset
 {

@@ -12,20 +12,20 @@
 //TODO: Write a Unit Test for Data Dimension Insertion
 
 #include <MXAConfiguration.h>
-#include <Common/MXATypeDefs.h>
-#include <Common/MXAEndian.h>
-#include <Base/IDataFile.h>
-#include <Base/IRequiredMetaData.h>
-#include <Core/MXAConstants.h>
-//#include <Core/MXAAttribute.h>
-#include <Core/MXADataModel.h>
-#include <Core/MXADataDimension.h>
-#include <Core/MXADataRecord.h>
-#include <HDF5/H5MXADataFile.h>
-#include <HDF5/H5MXARequiredMetaData.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
-#include <DataWrappers/MXAAsciiStringData.h>
-#include <Testing/TestDataFileLocations.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXAEndian.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/Base/IRequiredMetaData.h>
+#include <MXA/Core/MXAConstants.h>
+//#include <MXA/Core/MXAAttribute.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
+#include <MXA/HDF5/H5MXADataFile.h>
+#include <MXA/HDF5/H5MXARequiredMetaData.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
+#include "MXAUnitTestDataFileLocations.h"
 
 // C++ Includes
 #include <iostream>

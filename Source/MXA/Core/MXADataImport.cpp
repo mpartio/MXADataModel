@@ -1,9 +1,9 @@
-#include <Core/MXADataImport.h>
-#include <Common/LogTime.h>
-#include <Base/IImportDelegate.h>
-#include <Core/MXADataSource.h>
-#include <Core/MXADataModel.h>
-#include <Base/IDataFile.h>
+#include <MXA/Core/MXADataImport.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/IImportDelegate.h>
+#include <MXA/Core/MXADataSource.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Base/IDataFile.h>
 
 #include <iostream>
 

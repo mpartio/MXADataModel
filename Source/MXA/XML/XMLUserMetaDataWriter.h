@@ -12,10 +12,10 @@
 #define _XML_USERATTRIBUTE_WRITER_H_
 
 //-- MXA Includes
-#include <Base/IAttributeWriter.h>
-#include <XML/XMLConstants.h>
+#include <MXA/Base/IAttributeWriter.h>
+#include <MXA/XML/XMLConstants.h>
 #if MXA_HDF5_SUPPORT
-#include <HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Lite.h>
 #endif
 
 //-- boost includes
@@ -26,7 +26,7 @@
  * @brief This class writes User meta data from the data model to an xml file
  * @author Mike Jackson
  * @date June 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  */
 class MXA_EXPORT XMLUserMetaDataWriter : public IAttributeWriter

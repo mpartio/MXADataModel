@@ -1,7 +1,7 @@
 #ifndef _IDataset_h_
 #define _IDataset_h_
 
-#include <Base/IDataFileIO.h>
+#include <MXA/Base/IDataFileIO.h>
 
 
 /**
@@ -10,7 +10,7 @@
 * so that the data could be written to an underlying data file. Currently HDF5.
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT IDataset : public IDataFileIO
 {

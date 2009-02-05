@@ -10,13 +10,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <MXAConfiguration.h>
-#include <Common/MXATypeDefs.h>
-#include <Core/MXADataModel.h>
-#include <Core/MXASupportFile.h>
-#include <XML/XMLDataModelReader.h>
-#include <XML/XMLDataModelWriter.h>
-#include <Testing/TestDataFileLocations.h>
-#include <DataWrappers/MXAAsciiStringData.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Core/MXASupportFile.h>
+#include <MXA/XML/XMLDataModelReader.h>
+#include <MXA/XML/XMLDataModelWriter.h>
+#include "MXAUnitTestDataFileLocations.h"
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
 
 //-- C++ includes
 #include <string>

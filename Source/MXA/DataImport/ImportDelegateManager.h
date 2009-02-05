@@ -11,8 +11,8 @@
 #ifndef IMPORTDELEGATEMANAGER_H_
 #define IMPORTDELEGATEMANAGER_H_
 
-#include <Common/DLLExport.h>
-#include <Common/MXATypeDefs.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypeDefs.h>
 
 //-- C++ Includes
 #include <string>
@@ -26,7 +26,7 @@
 * from a factory class
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT ImportDelegateManager
 {

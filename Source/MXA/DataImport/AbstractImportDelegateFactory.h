@@ -11,8 +11,8 @@
 #ifndef ABSTRACTFACTORY_H_
 #define ABSTRACTFACTORY_H_
 
-#include <Common/DLLExport.h>
-#include <Common/MXATypeDefs.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypeDefs.h>
 
 #include <string>
 
@@ -33,7 +33,7 @@ namespace name \
 * @brief Abstract base class to inherit from when creating custom ImportDelegateFactories
 * @author Mike Jackson
 * @date Sept 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT AbstractImportDelegateFactory
 {

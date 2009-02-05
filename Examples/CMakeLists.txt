@@ -1,23 +1,32 @@
 PROJECT (MXAExamples)
 
 # ---------- Setup output Directories -------------------------
-SET (LIBRARY_OUTPUT_PATH
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
   CACHE PATH
   "Single Directory for all Libraries"
   )
 
 # --------- Setup the Executable output Directory -------------
-SET (EXECUTABLE_OUTPUT_PATH
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
   CACHE PATH
   "Single Directory for all Executables."
   )
 
-INCLUDE_DIRECTORIES(${MXA_SOURCE_DIR}/src)
+# --------- Setup the Executable output Directory -------------
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all static libraries."
+  )
 
-INCLUDE( ${PROJECT_SOURCE_DIR}/../../Resources/CMake/MXAFindHDF5.cmake )
-SET (MXA_EXAMPLES_SOURCE_DIR ${MXA_SOURCE_DIR}/src/Examples)
+
+INCLUDE_DIRECTORIES(${MXA_SOURCE_DIR}/MXA)
+include_directories(${MXADataModel_SOURCE_DIR})
+
+INCLUDE( ${MXA_CMAKE_DIR}/MXAFindHDF5.cmake )
+SET (MXA_EXAMPLES_SOURCE_DIR ${MXA_SOURCE_DIR}/MXA/Examples)
 
 IF(NOT HDF5_FOUND)
   MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
@@ -38,8 +47,8 @@ ENDIF(MXA_BUILD_VTK_HDF5)
 
 
 SET (GETDATA_SRCS
-  GetDataExample.cpp
-  ${MXA_SOURCE_DIR}/src/Testing/DataFileGenerator.cpp
+  ${MXAExamples_SOURCE_DIR}/GetDataExample.cpp
+  ${MXATests_SOURCE_DIR}/DataFileGenerator.cpp
 )
 
 # ------------------------------------------------------------------------------
@@ -47,7 +56,7 @@ SET (GETDATA_SRCS
 SET (MXA_TEMP_DIR "${MXA_BUILD_DIR}/Bin/")
 
 
-CONFIGURE_FILE(${MXA_EXAMPLES_SOURCE_DIR}/ExampleFileLocations.h.in
+CONFIGURE_FILE(${MXAExamples_SOURCE_DIR}/ExampleFileLocations.h.in
                ${PROJECT_BINARY_DIR}/ExampleFileLocations.h @ONLY IMMEDIATE)
 
 
@@ -66,7 +75,7 @@ ENDIF ( MXA_USE_HDF5 )
 #  Add Executable for Example 1
 # ------------------------------------------------------------------------------
 IF ( MXA_USE_HDF5 )
-ADD_EXECUTABLE(Example1 Example1/Example1.cpp)
+ADD_EXECUTABLE(Example1 ${MXAExamples_SOURCE_DIR}/Example1/Example1.cpp)
 TARGET_LINK_LIBRARIES(Example1 ${MXADATAMODEL_LIB_NAME} )
 ENDIF ( MXA_USE_HDF5 )
 
@@ -74,7 +83,7 @@ ENDIF ( MXA_USE_HDF5 )
 #  Add Executable for Example 2
 # ------------------------------------------------------------------------------
 IF ( MXA_USE_HDF5 )
-ADD_EXECUTABLE(Example2 Example2/Example2.cpp)
+ADD_EXECUTABLE(Example2 ${MXAExamples_SOURCE_DIR}/Example2/Example2.cpp)
 TARGET_LINK_LIBRARIES(Example2 ${MXADATAMODEL_LIB_NAME})
 ENDIF ( MXA_USE_HDF5 )
 
@@ -82,7 +91,7 @@ ENDIF ( MXA_USE_HDF5 )
 #  Add Executable for DataWrapperExample
 # ------------------------------------------------------------------------------
 IF ( MXA_USE_HDF5 )
-ADD_EXECUTABLE(DataWrapperExample DataWrapperExample.cpp)
+ADD_EXECUTABLE(DataWrapperExample ${MXAExamples_SOURCE_DIR}/DataWrapperExample.cpp)
 TARGET_LINK_LIBRARIES(DataWrapperExample ${MXADATAMODEL_LIB_NAME})
 ENDIF ( MXA_USE_HDF5 )
 
@@ -90,15 +99,15 @@ ENDIF ( MXA_USE_HDF5 )
 #  Add Executable for DataImport Example
 # ------------------------------------------------------------------------------
 SET (DATAIMPORT_EXAMPLE_SOURCES
-    ${MXA_SOURCE_DIR}/src/Examples/DataImport/main.cpp
-    ${MXA_SOURCE_DIR}/src/Examples/DataImport/SimpleImportExample.cpp
-    ${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegate.cpp
-    ${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegateFactory.cpp
+    ${MXAExamples_SOURCE_DIR}/DataImport/main.cpp
+    ${MXAExamples_SOURCE_DIR}/DataImport/SimpleImportExample.cpp
+    ${MXAExamples_SOURCE_DIR}/DataImport/ExampleImportDelegate.cpp
+    ${MXAExamples_SOURCE_DIR}/DataImport/ExampleImportDelegateFactory.cpp
 )
 SET (DATAIMPORT_EXAMPLE_HEADERS
-  ${MXA_SOURCE_DIR}/src/Examples/DataImport/SimpleImportExample.h
-  ${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegate.h
-  ${MXA_SOURCE_DIR}/src/Examples/DataImport/ExampleImportDelegateFactory.h
+  ${MXAExamples_SOURCE_DIR}/DataImport/SimpleImportExample.h
+  ${MXAExamples_SOURCE_DIR}/DataImport/ExampleImportDelegate.h
+  ${MXAExamples_SOURCE_DIR}/DataImport/ExampleImportDelegateFactory.h
 )
 source_group(src\\Examples\\DataImport FILES ${DATAIMPORT_EXAMPLE_SOURCES} ${DATAIMPORT_EXAMPLE_HEADERS})
 IF ( MXA_USE_HDF5 )
@@ -111,11 +120,11 @@ ENDIF ( MXA_USE_HDF5 )
 #  Add Executable for MXAProperty Example
 # ------------------------------------------------------------------------------
 SET (MXA_PROPERTY_EXAMPLE_SRCS
-${MXA_SOURCE_DIR}/src/Examples/MXAPropertyExample/main.cpp
-${MXA_SOURCE_DIR}/src/Examples/MXAPropertyExample/MyPropertyClass.cpp
+${MXAExamples_SOURCE_DIR}/MXAPropertyExample/main.cpp
+${MXAExamples_SOURCE_DIR}/MXAPropertyExample/MyPropertyClass.cpp
 )
 SET (MXA_PROPERTY_EXAMPLE_HEADERS
-${MXA_SOURCE_DIR}/src/Examples/MXAPropertyExample/MyPropertyClass.h
+${MXAExamples_SOURCE_DIR}/MXAPropertyExample/MyPropertyClass.h
 )
 #source_group(src\\Examples\\MXAPropertyExample FILES ${MXA_PROPERTY_EXAMPLE_SRCS} ${MXA_PROPERTY_EXAMPLE_HEADERS})
 ADD_EXECUTABLE(MXAPropertyExample ${MXA_PROPERTY_EXAMPLE_SRCS} ${MXA_PROPERTY_EXAMPLE_HEADERS})
@@ -126,8 +135,8 @@ TARGET_LINK_LIBRARIES(MXAPropertyExample ${MXADATAMODEL_LIB_NAME} )
 #  Add Executable for Arbitrary File Example
 # ------------------------------------------------------------------------------
 SET (SUPPORT_FILE_EXAMPLE_SRCS
-    ${MXA_SOURCE_DIR}/src/Examples/SupportFileExample.cpp
-    ${MXA_SOURCE_DIR}/src/Testing/TiffMaker.cpp
+    ${MXAExamples_SOURCE_DIR}/SupportFileExample.cpp
+    ${MXATests_SOURCE_DIR}/TiffMaker.cpp
 )
 SET (SUPPORT_FILE_EXAMPLE_HEADERS
     

@@ -1,21 +1,21 @@
 //MXA Includes
-#include <HDF5/H5DataModelWriter.h>
+#include <MXA/HDF5/H5DataModelWriter.h>
 
-#include <Common/LogTime.h>
-#include <Base/IRequiredMetaData.h>
-#include <Base/ISupportFile.h>
-#include <Core/MXADataModel.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
-#include <HDF5/H5AttributeWriter.h>
-#include <Utilities/StringUtils.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/IRequiredMetaData.h>
+#include <MXA/Base/ISupportFile.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/HDF5/H5AttributeWriter.h>
+#include <MXA/Utilities/StringUtils.h>
 
 #include <boost/filesystem/operations.hpp>
 //--- Convenience code -----------------
 typedef boost::filesystem::path FilePath;
 namespace FileSystem = boost::filesystem;
 
-// #include <Core/MXAAbstractAttribute.h>
+// #include <MXA/Core/MXAAbstractAttribute.h>
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------

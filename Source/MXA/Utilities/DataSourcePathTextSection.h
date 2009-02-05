@@ -11,9 +11,9 @@
 #ifndef DataSourcePathTextSection_H_
 #define DataSourcePathTextSection_H_
 
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Utilities/IStringSection.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Utilities/IStringSection.h>
 
 #include <string>
 #include <vector>
@@ -24,7 +24,7 @@
 * @brief Represents the text section of a Data Source path.
 * @author Mike Jackson
 * @date Nov 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT DataSourcePathTextSection : public IStringSection
 {

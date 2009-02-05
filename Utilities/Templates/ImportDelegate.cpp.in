@@ -3,11 +3,11 @@
 #include <@PROJECT_NAME@Delegate.h>
 
 //-- MXA Includes
-#include <Common/MXAErrorDefinitions.h>
-#include <Common/LogTime.h>
-#include <Base/IDataFile.h>
-#include <Core/MXADataModel.h>
-#include <Core/MXADataSource.h>
+#include <MXA/Common/MXAErrorDefinitions.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Core/MXADataSource.h>
 
 
 //-- STL Includes

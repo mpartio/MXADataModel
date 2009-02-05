@@ -1,8 +1,8 @@
 
 
-#include <XML/XMLIODelegate.h>
-#include <XML/XMLDataModelWriter.h>
-#include <XML/XMLDataModelReader.h>
+#include <MXA/XML/XMLIODelegate.h>
+#include <MXA/XML/XMLDataModelWriter.h>
+#include <MXA/XML/XMLDataModelReader.h>
 
 
 // -----------------------------------------------------------------------------

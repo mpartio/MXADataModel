@@ -20,8 +20,8 @@
 
 
 //-- MXA Includes
-#include <DataImport/DataImportXmlParser.h>
-#include <DataImport/ImportDelegateManager.h>
+#include <MXA/DataImport/DataImportXmlParser.h>
+#include <MXA/DataImport/ImportDelegateManager.h>
 #include <Examples/DataImport/SimpleImportExample.h>
 #include <Examples/DataImport/ExampleImportDelegateFactory.h>
 #include <Examples/ExampleFileLocations.h>

@@ -11,9 +11,9 @@
 #ifndef _HDF5_LITE_H_
 #define _HDF5_LITE_H_
 
-#include <Common/DLLExport.h>
-#include <Common/MXATypes.h>
-#include <Common/LogTime.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/LogTime.h>
 
 //-- STL Headers
 #include <string>
@@ -65,7 +65,7 @@ class IMXAArray;
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class H5Lite
 {

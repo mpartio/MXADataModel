@@ -13,14 +13,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <Common/DLLExport.h>
+#include <MXA/Common/DLLExport.h>
 
 
 /**
  * @brief
  * @author Mike Jackson
  * @date Septermber 2008
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  */
 class MXA_EXPORT IImportProperty

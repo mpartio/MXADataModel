@@ -10,9 +10,9 @@
 #define _MYPROPERTYCLASS_H_
 
 
-#include <Common/MXATypes.h>
-#include <Common/MXASetGetMacros.h>
-#include <Base/IImportProperty.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IImportProperty.h>
 
 //C++ includes
 #include <string>
@@ -39,7 +39,7 @@ namespace MyPropertyNamespace {
 
 /**
 * @brief
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 * @author Michale A. Jackson
 */
 class MyPropertyClass

@@ -17,8 +17,8 @@
 //TODO: Add ImageSpec Version attribute
 
 //MXA Includes
-#include <Common/DLLExport.h>
-#include <Common/MXATypes.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypes.h>
 
 //-- STL headers
 #include <string>
@@ -62,7 +62,7 @@ namespace MXA
 /**
 * @brief Reimplementation of the H5IM API from the HDF5 High Level API set.
 * @date April 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class H5Image
 {

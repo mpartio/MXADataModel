@@ -1,35 +1,39 @@
 # set project's name
-PROJECT( ImportGenerator )
+PROJECT( MXAUtilities )
 cmake_minimum_required(VERSION 2.6)
 
 
 # ---------- Setup output Directories -------------------------
-SET (LIBRARY_OUTPUT_PATH
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
   CACHE PATH
   "Single Directory for all Libraries"
   )
 
 # --------- Setup the Executable output Directory -------------
-SET (EXECUTABLE_OUTPUT_PATH
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
   CACHE PATH
   "Single Directory for all Executables."
   )
 
+# --------- Setup the Executable output Directory -------------
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all static libraries."
+  )
 
-#INCLUDE_DIRECTORIES(${ImportGenerator_SOURCE_DIR}/src)
 
-# List the source files here
-SET (ImportGenerator_SRCS
-    ImportGenerator.cpp
-)
-
-SET (UTILITIES_DIR ${MXA_SOURCE_DIR}/Utilities)
-CONFIGURE_FILE(${UTILITIES_DIR}/UtilityFileLocations.h.in ${PROJECT_BINARY_DIR}/UtilityFileLocations.h)
+CONFIGURE_FILE(${MXAUtilities_SOURCE_DIR}/UtilityFileLocations.h.in ${PROJECT_BINARY_DIR}/UtilityFileLocations.h)
 
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR})
 
+
+# List the source files here
+SET (ImportGenerator_SRCS
+    ${MXAUtilities_SOURCE_DIR}/ImportGenerator.cpp
+)
 ADD_EXECUTABLE(ImportGenerator ${ImportGenerator_SRCS} )
 TARGET_LINK_LIBRARIES(ImportGenerator ${MXADATAMODEL_LIB_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY} )
 
@@ -37,12 +41,12 @@ TARGET_LINK_LIBRARIES(ImportGenerator ${MXADATAMODEL_LIB_NAME} ${Boost_PROGRAM_O
 INSTALL(TARGETS ImportGenerator RUNTIME DESTINATION bin/)
         
 SET (IMPORTGENERATOR_INSTALLED_RESOURCES
-        ${UTILITIES_DIR}/Templates/CMakeLists.txt.in
-        ${UTILITIES_DIR}/Templates/ImportDelegate.cpp.in
-        ${UTILITIES_DIR}/Templates/ImportDelegate.h.in
-        ${UTILITIES_DIR}/Templates/ImportDelegateFactory.cpp.in
-        ${UTILITIES_DIR}/Templates/ImportDelegateFactory.h.in
-        ${UTILITIES_DIR}/Templates/main.cpp.in
+        ${MXAUtilities_SOURCE_DIR}/Templates/CMakeLists.txt.in
+        ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegate.cpp.in
+        ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegate.h.in
+        ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegateFactory.cpp.in
+        ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegateFactory.h.in
+        ${MXAUtilities_SOURCE_DIR}/Templates/main.cpp.in
 )
 
 INSTALL (FILES ${IMPORTGENERATOR_INSTALLED_RESOURCES} 

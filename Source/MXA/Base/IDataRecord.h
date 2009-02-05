@@ -11,7 +11,7 @@
 #ifndef IDATARECORD_H_
 #define IDATARECORD_H_
 
-#include <Common/DLLExport.h>
+#include <MXA/Common/DLLExport.h>
 
 class IDataRecordWriter;
 
@@ -19,7 +19,7 @@ class IDataRecordWriter;
  * @brief Abstract class defining the DataRecord public interface
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *  
  */
 class MXA_EXPORT IDataRecord 

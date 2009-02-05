@@ -11,12 +11,12 @@
 
 #include <MXAConfiguration.h>
 
-#include <Common/MXATypeDefs.h>
-#include <Common/MXATypes.h>
-#include <Utilities/DataSourcePathBuilder.h>
-#include <Utilities/IStringSection.h>
-#include <Utilities/DataSourcePathTextSection.h>
-#include <Utilities/DataSourcePathIndexSection.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Utilities/DataSourcePathBuilder.h>
+#include <MXA/Utilities/IStringSection.h>
+#include <MXA/Utilities/DataSourcePathTextSection.h>
+#include <MXA/Utilities/DataSourcePathIndexSection.h>
 
 #include <iostream>
 

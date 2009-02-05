@@ -8,27 +8,27 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Common/LogTime.h>
-#include <Base/IImportDelegate.h>
-#include <Base/IFileIODelegate.h>
-#include <Core/MXAConstants.h>
-#include <Core/MXADataModel.h>
-#include <Core/MXADataDimension.h>
-#include <Core/MXADataRecord.h>
-#include <Core/MXADataImport.h>
-#include <Core/MXADataSource.h>
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
-#include <HDF5/H5TiffImportDelegateFactory.h>
-#include <HDF5/H5BmpImportDelegateFactory.h>
-#include <HDF5/H5MXADataFile.h>
-#include <DataImport/DataImportXmlParser.h>
-#include <DataImport/ImportDelegateManager.h>
-#include <Testing/TestDataFileLocations.h>
-#include <Testing/H5ImportTest.h>
-#include <Testing/TiffMaker.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/IImportDelegate.h>
+#include <MXA/Base/IFileIODelegate.h>
+#include <MXA/Core/MXAConstants.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
+#include <MXA/Core/MXADataImport.h>
+#include <MXA/Core/MXADataSource.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/HDF5/H5TiffImportDelegateFactory.h>
+#include <MXA/HDF5/H5BmpImportDelegateFactory.h>
+#include <MXA/HDF5/H5MXADataFile.h>
+#include <MXA/DataImport/DataImportXmlParser.h>
+#include <MXA/DataImport/ImportDelegateManager.h>
+#include "MXAUnitTestDataFileLocations.h"
+#include "H5ImportTest.h"
+#include "TiffMaker.h"
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>

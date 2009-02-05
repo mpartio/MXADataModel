@@ -1,10 +1,10 @@
 #include "H5MXARequiredMetaData.h"
-#include <Common/LogTime.h>
-#include <Base/IDataFile.h>
-#include <Core/MXAConstants.h>
-#include <Utilities/StringUtils.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/Core/MXAConstants.h>
+#include <MXA/Utilities/StringUtils.h>
 #if MXA_HDF5_SUPPORT
-#include <HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Lite.h>
 #endif
 //-- C++ includes
 #include <string>

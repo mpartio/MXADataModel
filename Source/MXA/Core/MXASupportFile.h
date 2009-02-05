@@ -9,8 +9,8 @@
 #ifndef MXASUPPORTFILE_H_
 #define MXASUPPORTFILE_H_
 
-#include <Common/MXATypeDefs.h>
-#include <Base/ISupportFile.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/ISupportFile.h>
 
 #include <string>
 #if MXA_HDF5_SUPPORT
@@ -24,7 +24,7 @@
 * file from the filesystem.
 * @author  Mike Jackson for BlueQuartz Software
 * @date Sep 23, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT MXASupportFile: public ISupportFile
 {

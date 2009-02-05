@@ -1,12 +1,12 @@
-#include <HDF5/H5Utilities.h>
+#include <MXA/HDF5/H5Utilities.h>
 
 
-#include <HDF5/H5Lite.h>
-#include <DataWrappers/MXAArrayTemplate.hpp>
-#include <DataWrappers/MXAAsciiStringData.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
 
-#include <Utilities/StringUtils.h>
-#include <Common/LogTime.h>
+#include <MXA/Utilities/StringUtils.h>
+#include <MXA/Common/LogTime.h>
 
 // C++ Includes
 #include <iostream>

@@ -2,12 +2,12 @@
 #include <iostream>
 
 //-- MXA Includes
-#include <Common/LogTime.h>
-#include <Common/MXAEndian.h>
-#include <Common/MXATypes.h>
-#include <Common/DLLExport.h>
-#include <Common/IO/Reader64.h>
-#include <BMPIO/MXABmpHeaders.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Common/MXAEndian.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/IO/Reader64.h>
+#include <MXA/BMPIO/MXABmpHeaders.h>
 
 //-- C Includes
 #include <stdio.h>

@@ -11,8 +11,8 @@
 #ifndef IMXAFILE_H_
 #define IMXAFILE_H_
 
-#include <Common/DLLExport.h>
-#include <Common/MXATypeDefs.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypeDefs.h>
 
 #include <string>
 
@@ -22,7 +22,7 @@
 * be performed on that file
 * @author mjackson
 * @date Dec 14, 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT IDataFile
 {

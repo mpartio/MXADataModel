@@ -1,11 +1,11 @@
-#include <DataImport/ImportDelegateManager.h>
-#include <DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/DataImport/ImportDelegateManager.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 #if MXA_TIFF_SUPPORT
-#include <HDF5/H5TiffImportDelegateFactory.h>
+#include <MXA/HDF5/H5TiffImportDelegateFactory.h>
 #endif
 
 #if MXA_HDF5_SUPPORT
-#include <HDF5/H5BmpImportDelegateFactory.h>
+#include <MXA/HDF5/H5BmpImportDelegateFactory.h>
 #endif
 
 #include <iostream>

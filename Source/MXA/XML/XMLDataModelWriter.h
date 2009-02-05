@@ -12,14 +12,14 @@
 #define _XML_DATAMODEL_WRITER_H_
 
 // MXA Includes
-#include <Common/DLLExport.h>
-#include <Core/MXADataModel.h>
-#include <Base/IDataModelWriter.h>
-#include <Base/IDataDimensionWriter.h>
-#include <Base/IDataDimension.h>
-#include <Base/IDataRecordWriter.h>
-#include <Base/IDataRecord.h>
-#include <XML/XMLIODelegate.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Core/MXADataModel.h>
+#include <MXA/Base/IDataModelWriter.h>
+#include <MXA/Base/IDataDimensionWriter.h>
+#include <MXA/Base/IDataDimension.h>
+#include <MXA/Base/IDataRecordWriter.h>
+#include <MXA/Base/IDataRecord.h>
+#include <MXA/XML/XMLIODelegate.h>
 
 //-- STL Headers
 #include <iostream>
@@ -34,7 +34,7 @@ class MXANode;
  * the data model to an XML file
  * @author  Mike Jackson
  * @date June 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  */
 class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter,

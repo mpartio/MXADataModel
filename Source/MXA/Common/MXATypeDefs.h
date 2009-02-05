@@ -20,7 +20,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
-#include <Common/MXATypes.h>
+#include <MXA/Common/MXATypes.h>
 
 /** @file MXATypeDefs.h
  * @brief This file contains many common typdefs used through out the MXA Source code
@@ -131,7 +131,7 @@ typedef std::vector<IStringSectionPtr>             IStringSections;
 /* If we are compiling WITHOUT HDF5 support then we need some enumerated types */
 #if  MXA_HDF5_SUPPORT == 0
 
-#include <Common/LogTime.h>
+#include <MXA/Common/LogTime.h>
 #define H5T_NATIVE_INT8 1
 #define H5T_NATIVE_INT8  1
 #define H5T_NATIVE_UINT8  2

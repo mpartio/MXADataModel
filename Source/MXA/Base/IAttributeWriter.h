@@ -11,8 +11,8 @@
 #ifndef _IATTRIBUTEWRITER_H_
 #define _IATTRIBUTEWRITER_H_
 
-#include <Common/DLLExport.h>
-#include <Common/MXATypes.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypes.h>
 
 #include <string>
 
@@ -20,7 +20,7 @@
  * @brief Writes an IAttribute to the underlying data storage.
  * @author Mike Jackson
  * @date march 2007
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *  
  */
 class MXA_EXPORT IAttributeWriter

@@ -11,17 +11,17 @@
 #ifndef _IDataFileIO_h_
 #define _IDataFileIO_h_
 
-#include <Common/DLLExport.h>
-#include <Common/MXATypeDefs.h>
-#include <Base/IFileWriter.h>
-#include <Base/IFileReader.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IFileWriter.h>
+#include <MXA/Base/IFileReader.h>
 
 /**
 * @class IDataFileIO IDataFileIO.h PathToHeader/IDataFileIO.h
 * @brief Pure Virtual class that combines IFileWriter and IFileReader classes
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT IDataFileIO  : public IFileWriter, public IFileReader
 {

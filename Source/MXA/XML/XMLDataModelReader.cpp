@@ -1,10 +1,10 @@
 
 
-#include <Common/LogTime.h>
-#include <Base/ISupportFile.h>
-#include <Core/MXASupportFile.h>
-#include <DataWrappers/MXAAsciiStringData.h>
-#include <XML/XMLDataModelReader.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Base/ISupportFile.h>
+#include <MXA/Core/MXASupportFile.h>
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
+#include <MXA/XML/XMLDataModelReader.h>
 
 #include <sstream>
 

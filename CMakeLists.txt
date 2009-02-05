@@ -8,9 +8,9 @@ if(COMMAND cmake_policy)
 endif(COMMAND cmake_policy)
 
 # - Set the variable where to find the top level project sources
-IF (NOT DEFINED MXA_SOURCE_DIR)
-    SET (MXA_SOURCE_DIR ${MXADataModel_SOURCE_DIR})
-ENDIF(NOT DEFINED MXA_SOURCE_DIR)
+IF (NOT DEFINED MXADataModel_SOURCE_DIR)
+    SET (MXADataModel_SOURCE_DIR ${MXADataModel_SOURCE_DIR})
+ENDIF(NOT DEFINED MXADataModel_SOURCE_DIR)
 
 # - Check to see if any other project is redefining the library names
 IF ( NOT DEFINED  MXADATAMODEL_LIB_NAME)
@@ -24,22 +24,30 @@ ENDIF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
 
 # - Set our Library Version
 SET (MXADATAMODEL_VER_MAJOR "1")
-SET (MXADATAMODEL_VER_MINOR "1")
+SET (MXADATAMODEL_VER_MINOR "3")
 SET (MXADATAMODEL_VER_PATCH "0")
 SET (MXADATAMODEL_LIBRARY_VERSION ${MXADATAMODEL_VER_MAJOR}.${MXADATAMODEL_VER_MINOR}.${MXADATAMODEL_VER_PATCH})
 
+
 # ---------- Setup output Directories -------------------------
-SET (LIBRARY_OUTPUT_PATH
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
   CACHE PATH
   "Single Directory for all Libraries"
   )
 
 # --------- Setup the Executable output Directory -------------
-SET (EXECUTABLE_OUTPUT_PATH
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
   CACHE PATH
   "Single Directory for all Executables."
+  )
+
+# --------- Setup the Executable output Directory -------------
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all static libraries."
   )
 
 #-------------------------------------------------------------------------------
@@ -49,23 +57,26 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 #-------------------------------------------------------------------------------
 #  Define the location of the Resources Directory
 #-------------------------------------------------------------------------------
-SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
+SET (MXA_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
+SET (MXA_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Source)
 SET (MXA_CMAKE_DIR ${MXA_RESOURCES_DIR}/CMake)
+SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
+SET (MXAExamples_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Examples)
 SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
-SET (MXA_DOCUMENTATION_DIR ${MXA_SOURCE_DIR}/Documentation)
+SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
 
 #-------------------------------------------------------------------------------
 INCLUDE (${MXA_CMAKE_DIR}/vtkTestTypes.cmake )
 INCLUDE (${MXA_CMAKE_DIR}/ConfigureChecks.cmake)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
-OPTION(BUILD_TESTING "Build MXADataModel Complete Testing" ON)
+OPTION(BUILD_TESTING "Build MXADataModel Unit Testing" ON)
 IF(BUILD_TESTING)
   ENABLE_TESTING()
 ENDIF(BUILD_TESTING)
 
 # Extend the include path to include the MXADataModel source directory
-INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}/src" )
+INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}" )
 # ----- Also include our binary directory as some headers are generated into that directory
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
 
@@ -88,13 +99,13 @@ INCLUDE (${MXA_CMAKE_DIR}/FindSupportLibraries.cmake)
 INCLUDE ( ${MXA_CMAKE_DIR}/MXA_CMakeMacros.cmake)
 
 #-- Include all the source files
-INCLUDE (${MXA_SOURCE_DIR}/src/Base/Base_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/src/BMPIO/BMPIO_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/src/Common/Common_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/src/Core/Core_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/src/DataImport/DataImport_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/src/DataWrappers/DataWrappers_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/src/Utilities/Utilities_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/MXA/Base/Base_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/MXA/BMPIO/BMPIO_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/MXA/Common/Common_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/MXA/Core/Core_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/MXA/DataImport/DataImport_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/MXA/DataWrappers/DataWrappers_SourceList.cmake)
+INCLUDE (${MXA_SOURCE_DIR}/MXA/Utilities/Utilities_SourceList.cmake)
 
 # ------- Set up the MXADataModel Project Source Files -----------
 SET( MXADATAMODEL_SRCS
@@ -118,14 +129,14 @@ SET (MXADATAMODEL_HEADERS
 
 #--------- XML Sources ---------------------------------------------------
 IF (MXA_USE_XML)
-    INCLUDE (${MXA_SOURCE_DIR}/src/XML/XML_SourceList.cmake)
+    INCLUDE (${MXA_SOURCE_DIR}/MXA/XML/XML_SourceList.cmake)
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
     SET (MXA_XML_SUPPORT "1")
 ENDIF(MXA_USE_XML)
 
 #------- HDF5 Dependant Sources ------------------------------
 IF ( MXA_USE_HDF5 )
-  INCLUDE (${MXA_SOURCE_DIR}/src/HDF5/HDF5_SourceList.cmake)
+  INCLUDE (${MXA_SOURCE_DIR}/MXA/HDF5/HDF5_SourceList.cmake)
   SET(MXA_HDF5_SUPPORT "1")
   OPTION(MXA_BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
   IF(MXA_BUILD_VTK_HDF5)
@@ -136,8 +147,8 @@ IF ( MXA_USE_HDF5 )
     # List the kits from VTK that are needed by this project.
     SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
     
-    SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} ${MXA_SOURCE_DIR}/src/HDF5/vtkHDF5.cpp)
-    SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} ${MXA_SOURCE_DIR}/src/HDF5/vtkHDF5.h)
+    SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} ${MXA_SOURCE_DIR}/MXA/HDF5/vtkHDF5.cpp)
+    SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} ${MXA_SOURCE_DIR}/MXA/HDF5/vtkHDF5.h)
     SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
     SET(HDF5_VTK_BRIDGE "1")
   ENDIF (MXA_BUILD_VTK_HDF5)
@@ -162,7 +173,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 #-- Configure the Header file and then add the Binary Directory to the Includes list
-CONFIGURE_FILE(${MXA_SOURCE_DIR}/src/Common/MXAConfiguration.h.in
+CONFIGURE_FILE(${MXA_SOURCE_DIR}/MXA/Common/MXAConfiguration.h.in
                ${PROJECT_BINARY_DIR}/MXAConfiguration.h @ONLY IMMEDIATE)
                  
 # -------- Add some definitions for Debug Builds -----------------
@@ -246,18 +257,18 @@ ENDIF (MINGW AND BUILD_SHARED_LIBS)
 
 #-- Include the MXADataModel Testing Sources
 IF ( BUILD_TESTING )
-  ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
+  ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Tests ${PROJECT_BINARY_DIR}/Tests)
 ENDIF ( BUILD_TESTING )
 
 #-- Include the Examples Directory
 OPTION(MXA_BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
 IF(MXA_BUILD_EXAMPLES)
-    ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Examples ${PROJECT_BINARY_DIR}/Examples)
+    ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Examples ${PROJECT_BINARY_DIR}/Examples)
 ENDIF(MXA_BUILD_EXAMPLES)
 
 OPTION(MXA_BUILD_UTILITIES "Build programs that help with extending MXADataModel" OFF)
 IF (MXA_BUILD_UTILITIES)
-    ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/Utilities ${PROJECT_BINARY_DIR}/Utilities)
+    ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Utilities ${PROJECT_BINARY_DIR}/Utilities)
 ENDIF (MXA_BUILD_UTILITIES)
 
 

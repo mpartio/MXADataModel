@@ -1,11 +1,11 @@
 //-- MXA Headers
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Utilities.h>
-#include <HDF5/H5DataModelReader.h>
-#include <DataWrappers/MXAAsciiStringData.h>
-#include <Core/MXAConstants.h>
-#include <Core/MXASupportFile.h>
-#include <Utilities/StringUtils.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/HDF5/H5DataModelReader.h>
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
+#include <MXA/Core/MXAConstants.h>
+#include <MXA/Core/MXASupportFile.h>
+#include <MXA/Utilities/StringUtils.h>
 
 //-- STL Headers
 #include <iostream>

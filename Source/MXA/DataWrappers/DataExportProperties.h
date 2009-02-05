@@ -9,10 +9,10 @@
 #ifndef _DataExportProperties_h_
 #define _DataExportProperties_h_
 
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Common/MXASetGetMacros.h>
-#include <Base/IImportProperty.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IImportProperty.h>
 
 //-- HDF includes
 #include <hdf5.h>
@@ -52,7 +52,7 @@ namespace Export
 * @brief Base class for Data Exporters
 * @author Michael Jackson for BlueQuartz Software
 * @date Oct 20, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT DataExportProperties
 {

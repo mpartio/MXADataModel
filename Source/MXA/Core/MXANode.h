@@ -14,9 +14,9 @@
 #define _MHDNODE_H_
 
 //MXA Includes
-#include <Common/MXATypes.h>
-#include <Common/MXATypeDefs.h>
-#include <Base/INode.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/INode.h>
 #include <MXAAttribute.h>
 
 //-- C++ Headers
@@ -37,7 +37,7 @@
 * be subclassed by other classes that need to maintain parent/child relationships
 * @author Mike Jackson
 * @date March 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT MXANode : public INode
 {

@@ -11,7 +11,7 @@
 #ifndef _H5AsciiAttribute_h_
 #define _H5AsciiAttribute_h_
 
-#include <DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <string>
 
 
@@ -20,7 +20,7 @@
 * @brief
 * @author mjackson
 * @date Jan 4, 2008
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT MXAAsciiStringData : public MXAArrayTemplate<uint8>
 {

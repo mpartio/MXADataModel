@@ -7,11 +7,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <Common/MXATypes.h>
-#include <DataImport/DataImportXmlParser.h>
-#include <Utilities/IStringSection.h>
-#include <Utilities/DataSourcePathIndexSection.h>
-#include <Testing/TestDataFileLocations.h>
+#include <MXA/Common/MXATypes.h>
+#include <MXA/DataImport/DataImportXmlParser.h>
+#include <MXA/Utilities/IStringSection.h>
+#include <MXA/Utilities/DataSourcePathIndexSection.h>
+#include "MXAUnitTestDataFileLocations.h"
 
 //-- STL includes
 #include <iostream>

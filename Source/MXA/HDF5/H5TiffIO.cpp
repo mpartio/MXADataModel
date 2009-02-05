@@ -2,11 +2,11 @@
 
 
 //-- MXA Headers
-#include <HDF5/H5Lite.h>
-#include <HDF5/H5Image.h>
-#include <HDF5/H5TiffIO.h>
-#include <Common/LogTime.h>
-#include <Utilities/StringUtils.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Image.h>
+#include <MXA/HDF5/H5TiffIO.h>
+#include <MXA/Common/LogTime.h>
+#include <MXA/Utilities/StringUtils.h>
 
 //-- STL Headers
 #include <iostream>

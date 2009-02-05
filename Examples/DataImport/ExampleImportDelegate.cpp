@@ -1,9 +1,9 @@
 #include <Examples/DataImport/ExampleImportDelegate.h>
 
-#include <Base/IDataFile.h>
-#include <Base/IDataSource.h>
-#include <HDF5/H5Utilities.h>
-#include <HDF5/H5Lite.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/Base/IDataSource.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/HDF5/H5Lite.h>
 #include <Examples/DataImport/SimpleImportExample.h>
 
 //-- hdf5 includes

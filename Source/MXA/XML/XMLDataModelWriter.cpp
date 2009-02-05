@@ -1,12 +1,12 @@
-#include <XML/XMLDataModelWriter.h>
+#include <MXA/XML/XMLDataModelWriter.h>
 
-#include <Base/IRequiredMetaData.h>
-#include <Base/ISupportFile.h>
+#include <MXA/Base/IRequiredMetaData.h>
+#include <MXA/Base/ISupportFile.h>
 
 
-#include <XML/XMLUserMetaDataWriter.h>
-#include <XML/XMLConstants.h>
-#include <XML/XMLMXAAttributeWriter.hpp>
+#include <MXA/XML/XMLUserMetaDataWriter.h>
+#include <MXA/XML/XMLConstants.h>
+#include <MXA/XML/XMLMXAAttributeWriter.hpp>
 
 // -----------------------------------------------------------------------------
 //

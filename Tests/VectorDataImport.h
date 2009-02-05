@@ -12,8 +12,8 @@
 #define VECTORDATAIMPORT_H_
 
 
-#include <Common/MXATypeDefs.h>
-#include <DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 #include <string>
 
@@ -22,7 +22,7 @@
 * @brief
 * @author
 * @date
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class VectorDataDelegate: public IImportDelegate
 {

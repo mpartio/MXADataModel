@@ -11,14 +11,14 @@
 #ifndef _IFileReader_h_
 #define _IFileReader_h_
 
-#include <Common/MXATypeDefs.h>
+#include <MXA/Common/MXATypeDefs.h>
 
 /**
 * @class IFileReader IFileReader.h Testing/IFileReader.h
 * @brief Defines a basic file reading interface
 * @author mjackson
 * @date Dec 19, 2007
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 */
 class MXA_EXPORT IFileReader
 {

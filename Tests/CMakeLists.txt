@@ -1,6 +1,25 @@
-PROJECT (MXATesting)
+PROJECT (MXATests)
 
-SET (MXA_TESTING_DIR ${MXA_SOURCE_DIR}/src/Testing)
+# ---------- Setup output Directories -------------------------
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all Libraries"
+  )
+
+# --------- Setup the Executable output Directory -------------
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all Executables."
+  )
+
+# --------- Setup the Executable output Directory -------------
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all static libraries."
+  )
 
 # --------------------------------------------------------------------------
 macro (DataImportTestSetup name alt_name start count end  increment index)
@@ -34,19 +53,19 @@ IF (BUILD_TESTING)
     ENDIF(WIN32)
     
     CONFIGURE_FILE(${MXA_TEST_SRC_DIR}/TestDataFileLocations.h.in
-               ${PROJECT_BINARY_DIR}/TestDataFileLocations.h @ONLY IMMEDIATE)
+               ${PROJECT_BINARY_DIR}/MXAUnitTestDataFileLocations.h @ONLY IMMEDIATE)
 
     # -------- Dataset Test
     SET (MXADataset_TEST_SRCS
-        ${MXA_TESTING_DIR}/DatasetTest.cpp
+        ${MXATests_SOURCE_DIR}/DatasetTest.cpp
     )
     SET (MXADataset_TEST_HEADERS 
-      ${MXA_SOURCE_DIR}/src/DataWrappers/MXAArrayTemplate.hpp
-      ${MXA_SOURCE_DIR}/src/HDF5/H5Dataset.h
-      ${MXA_SOURCE_DIR}/src/Base/IFileReader.h
-      ${MXA_SOURCE_DIR}/src/Base/IFileWriter.h
-      ${MXA_SOURCE_DIR}/src/Base/IMXAArray.h
-      ${MXA_SOURCE_DIR}/src/Base/IDataFileIO.h
+      ${MXA_SOURCE_DIR}/MXA/DataWrappers/MXAArrayTemplate.hpp
+      ${MXA_SOURCE_DIR}/MXA/HDF5/H5Dataset.h
+      ${MXA_SOURCE_DIR}/MXA/Base/IFileReader.h
+      ${MXA_SOURCE_DIR}/MXA/Base/IFileWriter.h
+      ${MXA_SOURCE_DIR}/MXA/Base/IMXAArray.h
+      ${MXA_SOURCE_DIR}/MXA/Base/IDataFileIO.h
       )
    # source_group(src\\Testing FILES ${MXADataset_TEST_SRCS} ${MXADataset_TEST_HEADERS})
    IF ( MXA_USE_HDF5 AND MXA_USE_TIFF )
@@ -57,7 +76,7 @@ IF (BUILD_TESTING)
     
     # -------- Data Model Test
     SET (MXADATAMODEL_TEST_SRCS
-      ${MXA_TESTING_DIR}/DataModelTest.cpp
+      ${MXATests_SOURCE_DIR}/DataModelTest.cpp
     )
   #  source_group(src\\Testing FILES ${MXADATAMODEL_TEST_SRCS})
   IF ( MXA_USE_HDF5 )
@@ -69,12 +88,12 @@ IF (BUILD_TESTING)
 # ------ DataImport Test
 IF (MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     SET (MXADATAIMPORT_TEST_SRCS
-      ${MXA_TESTING_DIR}/DataImportTest.cpp
-      ${MXA_TESTING_DIR}/TiffMaker.cpp
+      ${MXATests_SOURCE_DIR}/DataImportTest.cpp
+      ${MXATests_SOURCE_DIR}/TiffMaker.cpp
     )
     SET (MXADATAIMPORT_TEST_HEADERS
-      ${MXA_TESTING_DIR}/H5ImportTest.h
-      ${MXA_TESTING_DIR}/TiffMaker.h
+      ${MXATests_SOURCE_DIR}/H5ImportTest.h
+      ${MXATests_SOURCE_DIR}/TiffMaker.h
     )
 
     DataImportTestSetup("Dim_0" "Vol Frac" 0 6 125 25 0)
@@ -82,20 +101,23 @@ IF (MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     DataImportTestSetup("Dim_2" "TS" 0 6 125 25 2)
     DataImportTestSetup("Dim_3" "Slice" 0 6 125 25 3)
     FILE(MAKE_DIRECTORY "@MXA_TEMP_DIR@DataImportTest/test_data/" )
-#    source_group(src\\Testing FILES ${MXADATAIMPORT_TEST_SRCS} ${MXADATAIMPORT_TEST_HEADERS})
+
+
+    include_directories(${MXATests_BINARY_DIR})
     ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} ${MXADATAIMPORT_TEST_HEADERS})
     TARGET_LINK_LIBRARIES ( DataImportTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
     ADD_TEST(DataImportTest ${EXECUTABLE_OUTPUT_PATH}/DataImportTest)
+
     #-- Configure the XML file to correctly find the XML Model file
-    SET (DATA_MODEL_XML_FILE ${MXA_SOURCE_DIR}/Resources/XML/ModelTemplate.xml)
-    CONFIGURE_FILE(${MXA_SOURCE_DIR}/Resources/XML/DataImportTest.xml.in
+    SET (DATA_MODEL_XML_FILE ${MXADataModel_SOURCE_DIR}/Resources/XML/ModelTemplate.xml)
+    CONFIGURE_FILE(${MXADataModel_SOURCE_DIR}/Resources/XML/DataImportTest.xml.in
                     ${CMAKE_BINARY_DIR}/DataImportTest.xml @ONLY IMMEDIATE)
 ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     
 # ------- H5Lite Test
     SET (H5LITE_TEST_SRCS
-      ${MXA_TESTING_DIR}/H5LiteTest.cpp
-      ${PROJECT_BINARY_DIR}/TestDataFileLocations.h
+      ${MXATests_SOURCE_DIR}/H5LiteTest.cpp
+      ${PROJECT_BINARY_DIR}/MXAUnitTestDataFileLocations.h
     )
     IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
         ADD_EXECUTABLE ( H5LiteTest ${H5LITE_TEST_SRCS} )
@@ -105,7 +127,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     
 # ------- H5Utilities Test
     SET (H5UTIL_TEST_SRCS
-      ${MXA_TESTING_DIR}/H5UtilitiesTest.cpp
+      ${MXATests_SOURCE_DIR}/H5UtilitiesTest.cpp
     )
     IF ( MXA_USE_HDF5 )
         ADD_EXECUTABLE ( H5UtilitiesTest ${H5UTIL_TEST_SRCS} )
@@ -115,7 +137,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     
 # ------- DataSourcePathIndexSection  Test
     SET (DATASOURCEPATHINDEXSECTION_TEST_SRCS
-      ${MXA_TESTING_DIR}/DataSourcePathIndexSectionTest.cpp
+      ${MXATests_SOURCE_DIR}/DataSourcePathIndexSectionTest.cpp
     )
     ADD_EXECUTABLE ( DataSourcePathIndexSectionTest ${DATASOURCEPATHINDEXSECTION_TEST_SRCS} )
     TARGET_LINK_LIBRARIES (DataSourcePathIndexSectionTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
@@ -123,7 +145,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
            
 # --------- BMP IO Test
     SET (BMP_IO_TEST_SRCS
-        ${MXA_TESTING_DIR}/BmpIOTest.cpp
+        ${MXATests_SOURCE_DIR}/BmpIOTest.cpp
     )
     IF ( MXA_USE_HDF5 )
         ADD_EXECUTABLE(BmpIOTest ${BMP_IO_TEST_SRCS})
@@ -133,7 +155,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
        
 # ------- H5ArrayTemplate Test
      SET (H5ARRAYTEMPLATE_TEST_SRCS
-        ${MXA_TESTING_DIR}/H5ArrayTemplateTest.cpp
+        ${MXATests_SOURCE_DIR}/H5ArrayTemplateTest.cpp
     )
     #ADD_EXECUTABLE(H5ArrayTemplateTest ${H5ARRAYTEMPLATE_TEST_SRCS})
     #TARGET_LINK_LIBRARIES (H5ArrayTemplateTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
@@ -142,7 +164,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
 # --------- XML Tests
     IF (MXA_USE_XML)
         SET (XML_TEST_SRCS
-            ${MXA_TESTING_DIR}/XMLTest.cpp
+            ${MXATests_SOURCE_DIR}/XMLTest.cpp
             )
         ADD_EXECUTABLE( XMLTest ${XML_TEST_SRCS} )
         TARGET_LINK_LIBRARIES (XMLTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
@@ -151,7 +173,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     
 # --------- IImportProperty Test
     SET (IIMPORT_PROPERTY_TEST_SRCS
-        ${MXA_TESTING_DIR}/IImportPropertyTest.cpp
+        ${MXATests_SOURCE_DIR}/IImportPropertyTest.cpp
     )
     ADD_EXECUTABLE(IImportPropertyTest ${IIMPORT_PROPERTY_TEST_SRCS})
     TARGET_LINK_LIBRARIES (IImportPropertyTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
@@ -159,8 +181,8 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
   
 # --------- SupportFile Test
     SET (SUPPORT_FILE_TEST_SRCS
-        ${MXA_TESTING_DIR}/SupportFileTest.cpp
-        ${MXA_TESTING_DIR}/TiffMaker.cpp
+        ${MXATests_SOURCE_DIR}/SupportFileTest.cpp
+        ${MXATests_SOURCE_DIR}/TiffMaker.cpp
     )
     IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
         ADD_EXECUTABLE(SupportFileTest ${SUPPORT_FILE_TEST_SRCS})
@@ -175,8 +197,8 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     # ------- Vtk to HDF5 Bridge test
     IF(MXA_BUILD_VTK_HDF5)
         SET (VTK_HDF5_SRCS
-          ${MXA_TESTING_DIR}/VtkHDF5Test.cpp
-          ${MXA_TESTING_DIR}/DataFileGenerator.cpp
+          ${MXATests_SOURCE_DIR}/VtkHDF5Test.cpp
+          ${MXATests_SOURCE_DIR}/DataFileGenerator.cpp
         )
         ADD_EXECUTABLE( vtkHDF5Test ${VTK_HDF5_SRCS} )
         TARGET_LINK_LIBRARIES (vtkHDF5Test MXADataModel  
