@@ -28,7 +28,6 @@ IF (WIN32)
    
 ENDIF (WIN32)
 
-
 IF (NOT WIN32)
     INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
         LIBRARY DESTINATION lib 
@@ -43,8 +42,14 @@ INSTALL (FILES ${PROJECT_BINARY_DIR}/MXAConfiguration.h
             COMPONENT Headers           
 )
 
+CONFIGURE_FILE(${MXA_CMAKE_DIR}/UseMXADataModel.cmake.in 
+                ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake @ONLY IMMEDIATE)
+CONFIGURE_FILE(${MXA_CMAKE_DIR}/InstallMXASupportLibraries.cmake.in 
+                ${PROJECT_BINARY_DIR}/InstallMXASupportLibraries.cmake @ONLY IMMEDIATE)
+
 SET (MXA_INSTALLED_RESOURCES
         ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
+        ${PROJECT_BINARY_DIR}/InstallMXASupportLibraries.cmake
         ${MXA_CMAKE_DIR}/ConfigureChecks.cmake
         ${MXA_CMAKE_DIR}/MXAAdjustLibVars.cmake
         ${MXA_CMAKE_DIR}/MXAFindBoost.cmake
@@ -54,8 +59,7 @@ SET (MXA_INSTALLED_RESOURCES
         ${MXA_CMAKE_DIR}/MXAFindSZip.cmake
         ${MXA_CMAKE_DIR}/MXAFindTiff.cmake
         ${MXA_CMAKE_DIR}/GetTimeOfDayTest.cpp
-        ${MXA_CMAKE_DIR}/FindSupportLibraries.cmake
-        ${MXA_CMAKE_DIR}/InstallMXASupportLibraries.cmake
+        ${MXA_CMAKE_DIR}/FindSupportLibraries.cmake   
 )
 
 INSTALL (FILES ${MXA_INSTALLED_RESOURCES} 

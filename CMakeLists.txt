@@ -24,7 +24,7 @@ ENDIF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
 
 # - Set our Library Version
 SET (MXADATAMODEL_VER_MAJOR "1")
-SET (MXADATAMODEL_VER_MINOR "0")
+SET (MXADATAMODEL_VER_MINOR "1")
 SET (MXADATAMODEL_VER_PATCH "0")
 SET (MXADATAMODEL_LIBRARY_VERSION ${MXADATAMODEL_VER_MAJOR}.${MXADATAMODEL_VER_MINOR}.${MXADATAMODEL_VER_PATCH})
 
@@ -182,11 +182,6 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 SET (MXADATAMODEL_HEADERS ${MXADATAMODEL_HEADERS} ${PROJECT_BINARY_DIR}/MXAConfiguration.h  )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
-
-#-- Configure our UseMXADataModel.cmake file
-CONFIGURE_FILE ( ${MXA_CMAKE_DIR}/UseMXADataModel.cmake.in
-                 ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake @ONLY IMMEDIATE)
-
 # - Combine all the source files together -----------------------------
 SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
 
@@ -249,12 +244,6 @@ IF (MINGW AND BUILD_SHARED_LIBS)
     )
 ENDIF (MINGW AND BUILD_SHARED_LIBS)
 
-#--- Set up the installation Code for Make Install
-include ( "${MXA_CMAKE_DIR}/MXAInstall.cmake")
-
-#----- Install Needed Runtime Libraries -----------------------------------
-#include ( "${MXA_RESOURCES_DIR}/InstallMXASupportLibraries.cmake")
-
 #-- Include the MXADataModel Testing Sources
 IF ( BUILD_TESTING )
   ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/src/Testing ${PROJECT_BINARY_DIR}/Testing)
@@ -270,3 +259,7 @@ OPTION(MXA_BUILD_UTILITIES "Build programs that help with extending MXADataModel
 IF (MXA_BUILD_UTILITIES)
     ADD_SUBDIRECTORY(${MXA_SOURCE_DIR}/Utilities ${PROJECT_BINARY_DIR}/Utilities)
 ENDIF (MXA_BUILD_UTILITIES)
+
+
+#--- Set up the installation Code for Make Install
+include ( "${MXA_CMAKE_DIR}/MXAInstall.cmake")
