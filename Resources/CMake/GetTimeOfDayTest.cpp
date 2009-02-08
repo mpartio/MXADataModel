@@ -1,5 +1,6 @@
 #if defined (TRY_SYS_TIME_H)
 #include <sys/time.h>
+#include <time.h>
 #endif
 
 

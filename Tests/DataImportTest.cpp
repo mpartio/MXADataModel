@@ -26,7 +26,7 @@
 #include <MXA/HDF5/H5MXADataFile.h>
 #include <MXA/DataImport/DataImportXmlParser.h>
 #include <MXA/DataImport/ImportDelegateManager.h>
-#include "MXAUnitTestDataFileLocations.h"
+#include "Tests/MXAUnitTestDataFileLocations.h"
 #include "H5ImportTest.h"
 #include "TiffMaker.h"
 
