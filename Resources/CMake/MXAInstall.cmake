@@ -1,5 +1,5 @@
 #-------- Install the MXADataModel Library
-IF (WIN32)
+IF (MSVC)
 
     SET (MXA_CONFIG_DIR_Debug "")
     SET (MXA_CONFIG_DIR_Release "")
@@ -10,11 +10,11 @@ IF (WIN32)
     # If we are building Shared Libraries put a copy of the DLL into the bin directory
     # so that the executables will work
     if (BUILD_SHARED_LIBS)
-        INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${MXA_CONFIG_DIR_Debug}${MXA_LIBRARY_DEBUG}.dll 
+        INSTALL(FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${MXA_CONFIG_DIR_Debug}${MXA_LIBRARY_DEBUG}.dll 
             DESTINATION lib 
             CONFIGURATIONS Debug 
             COMPONENT Runtime)
-        INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/${MXA_CONFIG_DIR_Release}${MXA_LIBRARY_RELEASE}.dll 
+        INSTALL(FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${MXA_CONFIG_DIR_Release}${MXA_LIBRARY_RELEASE}.dll 
             DESTINATION lib 
             CONFIGURATIONS Release 
             COMPONENT Runtime)
@@ -26,16 +26,16 @@ IF (WIN32)
         COMPONENT Libraries
     )
    
-ENDIF (WIN32)
+ENDIF (MSVC)
 
-IF (NOT WIN32)
+IF (NOT MSVC)
     INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
         LIBRARY DESTINATION lib 
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
         COMPONENT Libraries
     )
-ENDIF (NOT WIN32)  
+ENDIF (NOT MSVC)  
     
 INSTALL (FILES ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h 
          DESTINATION include/MXA 
