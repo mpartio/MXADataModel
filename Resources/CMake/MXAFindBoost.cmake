@@ -118,12 +118,11 @@
 #
 OPTION (Boost_USE_MULTITHREADED "Use the Multithreaded boost libraries" ON)
 MARK_AS_ADVANCED (Boost_USE_MULTITHREADED)
-SET (Boost_DEBUG 1)
+SET (Boost_DEBUG 0)
 
 # List the versions of Boost that we are going to look for
 #"1.36.1" "1.36.0" "1.35.1" "1.35.0" "1.35" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33" )
-SET( _boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS} "1.36.1" "1.36" "1.35.1" "1.35.0" "1.35" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33" )
-
+SET( _boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS} "1.38 1.37 1.36.1" "1.36" "1.35.1" "1.35.0" "1.35" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33" )
 SET (Boost_LIBRARIES "")
 SET (Boost_INCLUDE_DIRS "")
 IF (Boost_INCLUDE_DIRS)
