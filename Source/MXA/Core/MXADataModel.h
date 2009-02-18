@@ -37,7 +37,7 @@
  * @brief Main class used to work with the DataModel paradigm.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
@@ -133,7 +133,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief This method will remove any NULL Data Dimensions from the internal
    * data structure that holds the list of Data Dimensions
    */
-  void MXADataModel::squeezeDataDimensions();
+  void squeezeDataDimensions();
 
   /**
    * @brief Removes a data dimension by index

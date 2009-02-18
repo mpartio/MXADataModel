@@ -36,7 +36,7 @@ TiffMaker::~TiffMaker()
 // -----------------------------------------------------------------------------
 void TiffMaker::createTiffFile(const std::string &filename)
 {
-
+  //TODO: Return on Error code with this function.
   const char* outfilename = filename.c_str();
 
   TIFF *output;
@@ -58,7 +58,7 @@ void TiffMaker::createTiffFile(const std::string &filename)
   if (raster == NULL)
   {
     fprintf(stderr, "Could not allocate enough memory\n");
-    exit(42);
+    return;
   }
 
   // Write some color data into the raster

@@ -118,7 +118,7 @@
 #
 OPTION (Boost_USE_MULTITHREADED "Use the Multithreaded boost libraries" ON)
 MARK_AS_ADVANCED (Boost_USE_MULTITHREADED)
-SET (Boost_DEBUG 0)
+SET (Boost_DEBUG 1)
 
 # List the versions of Boost that we are going to look for
 #"1.36.1" "1.36.0" "1.35.1" "1.35.0" "1.35" "1.34.1" "1.34.0" "1.34" "1.33.1" "1.33.0" "1.33" )
@@ -290,7 +290,7 @@ IF (NOT DEFINED Boost_COMPILER)
     ENDIF (MSVC90)
     IF (MINGW)
         EXEC_PROGRAM(${CMAKE_CXX_COMPILER}
-            ARGS --version
+            ARGS -dumpversion
             OUTPUT_VARIABLE _boost_COMPILER_VERSION
         )
         STRING(REGEX REPLACE ".* ([0-9])\\.([0-9])\\.[0-9] .*" "\\1\\2"
@@ -308,7 +308,7 @@ IF (NOT DEFINED Boost_COMPILER)
                 SET (Boost_COMPILER "-il")  # This is for the intel compiler
             ELSE (NOT CMAKE_COMPILER_IS_GNUCC)
                 EXEC_PROGRAM(${CMAKE_CXX_COMPILER}
-                    ARGS --version
+                    ARGS -dumpversion
                     OUTPUT_VARIABLE _boost_COMPILER_VERSION
                 )
                 STRING(REGEX REPLACE ".* ([0-9])\\.([0-9])\\.[0-9] .*" "\\1\\2"

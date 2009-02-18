@@ -15,6 +15,9 @@
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/LogTime.h>
 
+//--C++ Headers
+#include <typeinfo>
+
 //-- STL Headers
 #include <string>
 #include <iostream>
@@ -65,7 +68,7 @@ class IMXAArray;
  * @class H5Lite
  * @author Mike Jackson
  * @date April 2007
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 class H5Lite
 {
@@ -212,7 +215,8 @@ static hid_t HDFTypeForPrimitive(T value)
   if (typeid(value) == typeid(bool)) return H5T_NATIVE_UINT8;
 
   std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
-  if (typeid(value).name() == "l" ) {
+  const char* name = typeid(value).name();
+  if (NULL != name && name[0] == 'l' ) {
     std::cout << "You are using 'long int' as a type which is not 32/64 bit safe. Suggest you use one of the MXATypes defined in <Common/MXATypes.h> such as int32 or uint32." << std::endl;
   }
   return -1;

@@ -12,9 +12,10 @@ SET (Boost_USE_SYSTEM TRUE)
 SET (Boost_USE_UNIT_TEST_FRAMEWORK TRUE)
 SET (Boost_USE_TEST_EXEC_MONITOR TRUE)
 SET (Boost_USE_PROGRAM_OPTIONS TRUE)
+set (Boost_USE_MULTITHREADED TRUE)
 
-INCLUDE (${MXA_CMAKE_DIR}/MXAFindBoost.cmake)
-#FIND_PACKAGE(Boost 1.36 COMPONENTS program_options system filesystem)
+#INCLUDE (${MXA_CMAKE_DIR}/MXAFindBoost.cmake)
+FIND_PACKAGE(Boost 1.36 COMPONENTS program_options system filesystem unit_test_framework test_exec_monitor thread)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
 SET(DEP_LIBS ${DEP_LIBS} ${Boost_LIBRARIES})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})

@@ -12,6 +12,9 @@
 #include <iostream>
 #include <math.h>
 
+//-- C includes
+#include <string.h>
+
 
 H5TiffIO::H5TiffIO(hid_t fileId) :
   _fileId(fileId)

@@ -28,6 +28,9 @@
 #include <iosfwd>
 #include <string>
 
+//-- Needed for the memcpy function
+#include <string.h>
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -326,7 +329,7 @@ struct FromSystemToLittle
     this->convert ( t );
   }
   void getEndianType(char* type) {
-    memcpy(type, MXA::Endian::LITE, 4);
+    ::memcpy(type, MXA::Endian::LITE, 4);
   }
 };
 

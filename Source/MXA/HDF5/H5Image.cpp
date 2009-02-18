@@ -20,7 +20,11 @@
 
 //-- STL Includes
 #include <string>
-//#include <stdlib.h>
+
+//-- C includes
+#include <string.h>
+#include <stdlib.h>
+
 
 #if 1
 /*-------------------------------------------------------------------------
