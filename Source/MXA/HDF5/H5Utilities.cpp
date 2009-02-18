@@ -235,10 +235,10 @@ herr_t H5Utilities::getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<st
       names.push_back(objName);
     } else {
       type = H5Gget_objtype_by_idx(loc_id, i);
-      if ((type == H5G_GROUP) && (MXA_GROUP & typeFilter) ||
-          (type == H5G_DATASET) && (MXA_DATASET & typeFilter) ||
-          (type == H5G_TYPE) && (MXA_TYPE & typeFilter) ||
-          (type == H5G_LINK) && (MXA_LINK & typeFilter))
+      if ( ((type == H5G_GROUP) && (MXA_GROUP & typeFilter)) ||
+          ((type == H5G_DATASET) && (MXA_DATASET & typeFilter)) ||
+          ((type == H5G_TYPE) && (MXA_TYPE & typeFilter)) ||
+          ((type == H5G_LINK) && (MXA_LINK & typeFilter)) )
       {
         std::string objName( &(name.front()) );
         names.push_back(objName);
