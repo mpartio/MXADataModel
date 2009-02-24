@@ -1,4 +1,4 @@
-# set project's name
+# Set project's name
 PROJECT( MXADataModel )
 cmake_minimum_required(VERSION 2.6)
 
