@@ -1,6 +1,6 @@
 
 
-#MESSAGE (STATUS "[${MODULE_NAME}] MXADATAMODEL_TARGET_ADDED: '${MXADATAMODEL_TARGET_ADDED}'")
+MESSAGE (STATUS "[${MODULE_NAME}] MXADATAMODEL_TARGET_ADDED: '${MXADATAMODEL_TARGET_ADDED}'")
 IF (NOT DEFINED MXADATAMODEL_TARGET_ADDED OR NOT MXADATAMODEL_TARGET_ADDED)
     # ------ Add support for HDF5
     SET(MXA_USE_HDF5 ON)
@@ -41,13 +41,17 @@ IF (NOT DEFINED MXADATAMODEL_TARGET_ADDED OR NOT MXADATAMODEL_TARGET_ADDED)
     SET (MXADATAMODEL_TARGET_ADDED TRUE )
     
     #-------------------------------------------------------------------------------
-    #  Find Boost so we can get the Include Directories
+    # ---------- Find Boost Headers/Libraries -----------------------
     SET (Boost_FIND_REQUIRED TRUE)
     SET (Boost_FIND_QUIETLY TRUE)
     SET (Boost_USE_FILESYSTEM TRUE)
     SET (Boost_USE_SYSTEM TRUE)
-    SET (Boost_USE_PROGRAM_OPTIONS TRUE)
-    INCLUDE (${MXADataModel_SOURCE_DIR}/Resources/CMake/MXAFindBoost.cmake)
+    #SET (Boost_USE_UNIT_TEST_FRAMEWORK TRUE)
+    #SET (Boost_USE_TEST_EXEC_MONITOR TRUE)
+    #SET (Boost_USE_PROGRAM_OPTIONS TRUE)
+    #set (Boost_USE_MULTITHREADED TRUE)
+    
+    FIND_PACKAGE(Boost 1.36 COMPONENTS  system filesystem)
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
     LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
     #- Add the required Libraries for MXA to function
