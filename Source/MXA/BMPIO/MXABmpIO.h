@@ -22,8 +22,8 @@
 //--Boost Includes
 #include <boost/shared_ptr.hpp>
 
-class Reader64;
-typedef boost::shared_ptr<Reader64>    Reader64Ptr;
+class MXAFILEREADER_CLASS_NAME;
+typedef boost::shared_ptr<MXAFILEREADER_CLASS_NAME>    Reader64Ptr;
 
 // The following is the function return type. Use this to
 // get information about how the loading operation went.

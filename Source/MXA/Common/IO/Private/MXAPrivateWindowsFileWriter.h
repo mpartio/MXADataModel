@@ -1,24 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Copyright (c) 2008, mjackson
+//  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number
-//                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _WRITER64_H_
-#define _WRITER64_H_
-
-
+#ifndef WINDOWSFILEWRITER_H_
+#define WINDOWSFILEWRITER_H_
 
 #if defined (_MSC_VER)
 #include <MXA/Common/Win32Defines.h>
 #endif
-// PVDislocation Headers
-#include <MXA/Common/MXATypes.h>
-#include <MXA/Common/MXAEndian.h>
+//
+
 
 // Conditional Includes/Defines for Large File Support on Windows
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
@@ -53,21 +48,21 @@ standard C++ library."
 #include <stdexcept>
 
 /**
- * @class Writer64 Writer64.h Common/IO/Writer64.h
+ * @class MXAFILEWRITER_CLASS_NAME MXAFILEWRITER_CLASS_NAME.h Common/IO/MXAFILEWRITER_CLASS_NAME.h
  * @brief This class is a wrapper around platform specific native streams to make
  * sure that we can write files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
  * @version $Revision: 1.2 $
  */
-class MXA_EXPORT Writer64
+class  MXAFILEWRITER_CLASS_NAME
 {
 
 
 public:
-  explicit Writer64(const std::string &filename);
+  explicit MXAFILEWRITER_CLASS_NAME(const std::string &filename);
 
-  virtual ~Writer64();
+  virtual ~MXAFILEWRITER_CLASS_NAME();
 
   /**
    * @brief Initializes our stream object and opens the file
@@ -80,9 +75,8 @@ public:
  * @param data The char pointer to read the data into
  * @param numBytes The number of bytes to read
  */
-  void write(char* data, int64 numBytes)
+  bool write(char* data, int64 numBytes)
   {
-#if defined (WINDOWS_LARGE_FILE_SUPPORT)
   DWORD nBytesToWrite = static_cast<DWORD>(numBytes);
   DWORD nBytesWritten = 0;
   int error = WriteFile(_outStream,  // Which is really an HANDLE hFile on Windows
@@ -90,15 +84,59 @@ public:
                    nBytesToWrite,
                    &nBytesWritten,
                    NULL) ;
-  if (nBytesToWrite != nBytesWritten)
+    if (nBytesToWrite != nBytesWritten)
+    {
+      //throw std::runtime_error ( "Error: Number of bytes written did not match number of bytes asked." );
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * @brief Writes a single value to a file with no byte swapping performed
+   * @param value The value to write to the file
+   */
+  template<typename T>
+  bool writeValue(T* value)
   {
-    throw std::runtime_error ( "Error: Number of bytes written did not match number of bytes asked." );
+    DWORD nBytesToWrite = static_cast<DWORD>(sizeof(T));
+    DWORD nBytesWritten = 0;
+    int error = WriteFile(_outStream,  // Which is really an HANDLE hFile on Windows
+                          (char*)(value),
+                          nBytesToWrite,
+                          &nBytesWritten,
+                          NULL) ;
+    if (nBytesToWrite != nBytesWritten)
+    {
+     // throw std::runtime_error ( "Error: Number of bytes written did not match number of bytes asked." );
+      return false;
+    }
+    return true;
   }
-#else
-    _outStream.write(data, numBytes);
-#endif
-  //  std::cout << "Done Writing" << std::endl;
+
+  /**
+   * @brief Writes a "C" array into the file
+   * @param front pointer to the location in the array to start writing
+   * @param number of elements of the array to write
+   */
+  template<typename T>
+  bool writeArray(T* front, int64 numElements)
+  {
+    DWORD nBytesToWrite = static_cast<DWORD>(sizeof(T) + numElements);
+    DWORD nBytesWritten = 0;
+    int error = WriteFile(_outStream,  // Which is really an HANDLE hFile on Windows
+                          (char*)(front),
+                          nBytesToWrite,
+                          &nBytesWritten,
+                          NULL) ;
+    if (nBytesToWrite != nBytesWritten)
+    {
+     // throw std::runtime_error ( "Error: Number of bytes written did not match number of bytes asked." );
+      return false;
+    }
+    return true;
   }
+
 
   /**
  * @brief Sets the filepointer of the underlying stream
@@ -106,14 +144,11 @@ public:
  */
   void setFilePointer64( int64 position )
   {
-#if defined (WINDOWS_LARGE_FILE_SUPPORT)
     LARGE_INTEGER posOut;
     LARGE_INTEGER offset;
     offset.QuadPart = position;
     SetFilePointerEx(_outStream, offset, &posOut , FILE_BEGIN); //Seek from the beginning of file
-#else
-    _outStream.seekp(position);
-#endif
+
   }
 
 /**
@@ -122,15 +157,11 @@ public:
  */
   int64 getFilePointer64()
   {
-#if defined (WINDOWS_LARGE_FILE_SUPPORT)
     LARGE_INTEGER posOut;
     LARGE_INTEGER offset;
     offset.QuadPart = 0;
     SetFilePointerEx(_outStream, offset, &posOut , FILE_CURRENT); //From where we are now
     return posOut.QuadPart;
-#else
-    return _outStream.tellp();
-#endif
   }
 
 
@@ -141,4 +172,4 @@ private:
 
 };
 
-#endif // _WRITER64_H_
+#endif /* WINDOWSFILEWRITER_H_ */

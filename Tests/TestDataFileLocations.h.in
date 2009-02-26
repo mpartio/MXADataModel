@@ -87,7 +87,15 @@ namespace MXATest {
   const std::string SupportFile_TextInputFile("@DATAIMPORT_TEST_IMPORT_XML_FILE@");
 }
 
+namespace Testing {
 
+namespace MXAFileReaderWriterTest {
+
+  const std::string OutputFile("@MXA_TEMP_DIR@MXAFileReaderWriter.bin");
+
+}
+
+}
 
 
 #endif /*SOURCEFILELOCATIONS_H_*/

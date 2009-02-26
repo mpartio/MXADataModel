@@ -82,11 +82,8 @@
       defined ( __alpha     )
 #define MXA_LITTLE_ENDIAN
 #else
-#error Unknown endian type in MXA/Endian/Endian.h
+#error Unknown endian type in MXA/Endian.h
 #endif
-
-
-
 
 
 namespace MXA {

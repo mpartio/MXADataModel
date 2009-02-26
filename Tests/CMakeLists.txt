@@ -54,8 +54,16 @@ IF (BUILD_TESTING)
     
     CONFIGURE_FILE(${MXA_TEST_SRC_DIR}/TestDataFileLocations.h.in
                ${PROJECT_BINARY_DIR}/MXAUnitTestDataFileLocations.h @ONLY IMMEDIATE)
+  
+# --------- FileReader/Writer Test
+    SET (FILEREADERWRITER_TEST_SRCS
+        ${MXATests_SOURCE_DIR}/MXAFileReaderWriterTest.cpp
+    )
+    ADD_EXECUTABLE(MXAFileReaderWriterTest ${FILEREADERWRITER_TEST_SRCS})
+    TARGET_LINK_LIBRARIES (MXAFileReaderWriterTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
+    ADD_TEST(MXAFileReaderWriterTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXAFileReaderWriterTest) 
 
-    # -------- Dataset Test
+# -------- Dataset Test
     SET (MXADataset_TEST_SRCS
         ${MXATests_SOURCE_DIR}/DatasetTest.cpp
     )
@@ -190,10 +198,6 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
         ADD_TEST(SupportFileTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/SupportFileTest) 
     ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF ) 
     
-#    ADD_EXECUTABLE( UtilitiesTest UtilitiesTest.cpp )
-#    TARGET_LINK_LIBRARIES(UtilitiesTest MXADataModel ${HDF5_LIBRARIES} ${Boost_MXA_LIBS})
-#    ADD_TEST(UtilitiesTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/UtilitiesTest)
-
     # ------- Vtk to HDF5 Bridge test
     IF(MXA_BUILD_VTK_HDF5)
         SET (VTK_HDF5_SRCS

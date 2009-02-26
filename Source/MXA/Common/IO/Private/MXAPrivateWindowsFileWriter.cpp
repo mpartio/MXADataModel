@@ -1,4 +1,12 @@
-#include <MXA/Common/IO/Writer64.h>
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+#include "MXAPrivateWindowsFileWriter.h"
 
 
 
@@ -6,7 +14,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-Writer64::Writer64(const std::string &filename) :
+MXAFILEWRITER_CLASS_NAME::MXAFILEWRITER_CLASS_NAME(const std::string &filename) :
   _filename(filename)
 {
 
@@ -15,13 +23,13 @@ Writer64::Writer64(const std::string &filename) :
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-Writer64::~Writer64()
+MXAFILEWRITER_CLASS_NAME::~MXAFILEWRITER_CLASS_NAME()
 {
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
   int error = CloseHandle(_outStream); //Close the file
   if (0 == error)
   {
-    std::cout << "Writer64:: Error Closing File " << _filename << std::endl;
+    std::cout << "MXAFILEWRITER_CLASS_NAME:: Error Closing File " << _filename << std::endl;
   }
 #endif
 }
@@ -29,11 +37,11 @@ Writer64::~Writer64()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool Writer64::initWriter()
+bool MXAFILEWRITER_CLASS_NAME::initWriter()
 {
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
 
-	_outStream = CreateFile(TEXT(this->_filename.c_str()),    // file to open
+  _outStream = CreateFile(TEXT(this->_filename.c_str()),    // file to open
                    GENERIC_WRITE,          // open for writing
                    FILE_SHARE_WRITE,       // share for writing
                    NULL,                  // default security

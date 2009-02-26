@@ -1,24 +1,22 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Copyright (c) 2007, mjackson
+//  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number
-//                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef WINDOWSFILEREADER_H_
+#define WINDOWSFILEREADER_H_
 
-#ifndef _CTMDREADER64_H_
-#define _CTMDREADER64_H_
-
-#if defined (_MSC_VER)
-#include <MXA/Common/Win32Defines.h>
-// This will define WINDOWS_LARGE_FILE_SUPPORT to true, which is what we want
+#ifndef _WIN32_
+#error THIS FILE IS FOR WINDOWS ONLY. If this is being included on any other platform\
+  please file a bug report.
 #endif
 
 #include <MXA/Common/MXATypes.h>
-
+#include <MXA/Common/Win32Defines.h>
+// This will define WINDOWS_LARGE_FILE_SUPPORT to true, which is what we want
 
 // Conditional Includes/Defines for Large File Support on Windows
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
@@ -45,35 +43,22 @@ standard C++ library."
 
 #endif
 
-
-// Hard set our stream buffer to 4096 bytes
-#define BUFF_SIZE 4096
-
-
-
-// C++ Includes
-#include <string>
-#include <iostream>
-#include <vector>
-#include <stdexcept>
-
-
 /**
- * @class Reader64 Reader64.h PVDislocation/Reader64.h
+ * @class MXAFILEREADER_CLASS_NAME MXAFILEREADER_CLASS_NAME.h PVDislocation/MXAFILEREADER_CLASS_NAME.h
  * @brief This class is a wrapper around platform specific native streams to make
  * sure that we can read files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
  * @version $Revision: 1.2 $
  */
-class MXA_EXPORT Reader64
+class MXA_EXPORT MXAFILEREADER_CLASS_NAME
 {
 
 
 public:
-  Reader64(const std::string &filename);
+  MXAFILEREADER_CLASS_NAME(const std::string &filename);
 
-  virtual ~Reader64();
+  virtual ~MXAFILEREADER_CLASS_NAME();
 
   /**
    * @brief Initializes our stream object and opens the file
@@ -86,10 +71,11 @@ public:
  * @param t The value to read the value into
 */
   template <typename EndianPolicy, typename P>
-  void read(P &t)
+  bool read(P &t)
   {
-    this->readPrimitive<P>(t);
+    bool ok = this->readPrimitive<P>(t);
     EndianPolicy::convert(t);
+    return ok;
   }
 
 /**
@@ -97,9 +83,8 @@ public:
  * @param data The char pointer to read the data into
  * @param numBytes The number of bytes to read
  */
-  void rawRead(char* data, std::streamsize numBytes)
+  bool rawRead(char* data, std::streamsize numBytes)
   {
-#if defined (WINDOWS_LARGE_FILE_SUPPORT)
   DWORD nBytesToRead = static_cast<DWORD>(numBytes);
   DWORD nBytesRead = 0;
   int error = ReadFile(_instream,  // Which is really an HANDLE hFile on Windows
@@ -109,19 +94,10 @@ public:
                    NULL) ;
   if (nBytesRead != nBytesToRead)
   {
-    throw std::runtime_error ( "Error: Number of bytes read does NOT match size of input." );
+   // throw std::runtime_error ( "Error: Number of bytes read does NOT match size of input." );
+    return false;
   }
-#else
-   if ( EOF == _instream.peek() )
-   {
-      throw std::runtime_error ( "Error: Unexpected end of file reached" );
-   }
-   _instream.read ( data, numBytes );
-   if (_instream.gcount() != numBytes)
-   {
-     throw std::runtime_error ( "Error: Number of bytes read does NOT match size of input." );
-   }
-#endif
+  return true;
   }
 
 /**
@@ -130,9 +106,8 @@ public:
  * @param t The value to read the primitive into
  */
   template <  typename P >
-  void readPrimitive ( P &t )
+  bool readValue ( P &t )
   {
-#if defined (WINDOWS_LARGE_FILE_SUPPORT)
   DWORD nBytesToRead = sizeof(P);
   DWORD nBytesRead = 0;
   int error = ReadFile(_instream,  // Which is really an HANDLE hFile on Windows
@@ -142,15 +117,10 @@ public:
                    NULL) ;
   if (nBytesRead != nBytesToRead)
   {
-    throw std::runtime_error ( "Error: Number of bytes read does NOT match size of data type." );
+   // throw std::runtime_error ( "Error: Number of bytes read does NOT match size of data type." );
+    return false;
   }
-#else
-   if ( EOF == _instream.peek() )
-   {
-      throw std::runtime_error ( "Error: Unexpected end of file reached" );
-   }
-   _instream.read ( reinterpret_cast<char*>( &t ), sizeof ( P ) );
-#endif
+  return true;
   }
 
 
@@ -163,13 +133,28 @@ public:
   template < typename EndianPolicy, typename P>
   void readArrayWithSwap(P* t, int32 size)
   {
+    bool ok = false;
     for (int32 i = 0; i < size; ++i)
     {
-      read<EndianPolicy>(t[i]);
+      ok = read<EndianPolicy>(t[i]);
+      if (!ok)
+      {return ok;}
     }
-
+    return true;
   }
 
+  /**
+   * @brief This method will read an array of values and swap each value
+   * @param t Pointer to the front of the array where the values will be stored.
+   * The array MUST already be preallocated.
+   * @param size The number of elements in the array
+   */
+  template <typename T>
+  bool readArray(T* t, int64 numElements)
+  {
+    int64 numBytes = numElements * sizeof(T);
+    return rawRead(reinterpret_cast<char*>(t), numBytes);
+  }
 
 
 /**
@@ -178,14 +163,10 @@ public:
  */
   void setFilePointer64( int64 position )
   {
-#if defined (WINDOWS_LARGE_FILE_SUPPORT)
     LARGE_INTEGER posOut;
     LARGE_INTEGER offset;
     offset.QuadPart = position;
     SetFilePointerEx(_instream, offset, &posOut , FILE_BEGIN); //Seek from the beginning of file
-#else
-    _instream.seekg(position);
-#endif
   }
 
 /**
@@ -194,15 +175,11 @@ public:
  */
   int64 getFilePointer64()
   {
-#if defined (WINDOWS_LARGE_FILE_SUPPORT)
     LARGE_INTEGER posOut;
     LARGE_INTEGER offset;
     offset.QuadPart = 0;
     SetFilePointerEx(_instream, offset, &posOut , FILE_CURRENT); //From where we are now
     return posOut.QuadPart;
-#else
-    return _instream.tellg();
-#endif
   }
 
 
@@ -214,4 +191,5 @@ private:
 
 };
 
-#endif /*_CTMDREADER64_H_*/
+
+#endif /* WINDOWSFILEREADER_H_ */

@@ -6,7 +6,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include "MXASupportFile.h"
-#include <MXA/Common/IO/Reader64.h>
+#include <MXA/Common/IO/MXAFileReader64.h>
 #include <MXA/Core/MXAConstants.h>
 #if MXA_HDF5_SUPPORT
 #include <MXA/HDF5/H5MXADataFile.h>

@@ -1,5 +1,14 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+#include "MXAFILEREADER_CLASS_NAME.h"
 #include <MXA/Common/MXAEndian.h>
-#include <MXA/Common/IO/Reader64.h>
+
 
 
 
@@ -7,7 +16,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-Reader64::Reader64(const std::string &filename) :
+MXAFILEREADER_CLASS_NAME::MXAFILEREADER_CLASS_NAME(const std::string &filename) :
   _filename(filename)
 {
 
@@ -16,13 +25,13 @@ Reader64::Reader64(const std::string &filename) :
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-Reader64::~Reader64()
+MXAFILEREADER_CLASS_NAME::~MXAFILEREADER_CLASS_NAME()
 {
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
   int error = CloseHandle(_instream); //Close the file
   if (0 == error)
   {
-    std::cout << "Reader64:: Error Closing File " << _filename << std::endl;
+    std::cout << "MXAFILEREADER_CLASS_NAME:: Error Closing File " << _filename << std::endl;
   }
 #endif
 }
@@ -30,11 +39,11 @@ Reader64::~Reader64()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool Reader64::initReader()
+bool MXAFILEREADER_CLASS_NAME::initReader()
 {
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
 
-	_instream = CreateFile(TEXT(this->_filename.c_str()),    // file to open
+  _instream = CreateFile(TEXT(this->_filename.c_str()),    // file to open
                    GENERIC_READ,          // open for reading
                    FILE_SHARE_READ,       // share for reading
                    NULL,                  // default security

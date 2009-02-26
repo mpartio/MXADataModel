@@ -6,7 +6,7 @@
 #include <MXA/Common/MXAEndian.h>
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/IO/Reader64.h>
+#include <MXA/Common/IO/MXAFileReader64.h>
 #include <MXA/BMPIO/MXABmpHeaders.h>
 
 //-- C Includes
@@ -46,7 +46,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGray
   this->_convertToGrayScale = readAsGrayScale;
   // Open file for buffered read.
   LOAD_TEXTUREBMP_RESULT res = LOAD_TEXTUREBMP_SUCCESS;
-  _reader64Ptr = Reader64Ptr(new Reader64(fName) );
+  _reader64Ptr = Reader64Ptr(new MXAFILEREADER_CLASS_NAME(fName) );
   if ( false == _reader64Ptr->initReader() )
   {
     return LOAD_TEXTUREBMP_COULD_NOT_FIND_OR_READ_FILE;
@@ -262,7 +262,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
       int32 kEnd = width%4;
       for (int k = 0; k < kEnd; ++k) {
          char value;
-         this->_reader64Ptr->readPrimitive(value);
+         this->_reader64Ptr->readValue(value);
          bytesRead+=1;
       }
     }
@@ -829,7 +829,7 @@ int16 MXABmpIO::read16BitValue()
 uint8 MXABmpIO::read8BitValue()
 {
   uint8 value;
-  this->_reader64Ptr->readPrimitive(value);
+  this->_reader64Ptr->readValue(value);
   bytesRead+=1;
   return value;
 }
