@@ -6,10 +6,10 @@
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include "MXAFILEREADER_CLASS_NAME.h"
+#include "MXAPrivateWindowsFileReader.h"
 #include <MXA/Common/MXAEndian.h>
 
-
+#include <iostream>
 
 
 

@@ -122,7 +122,7 @@ public:
   template<typename T>
   bool writeArray(T* front, int64 numElements)
   {
-    DWORD nBytesToWrite = static_cast<DWORD>(sizeof(T) + numElements);
+    DWORD nBytesToWrite = static_cast<DWORD>(sizeof(T) * numElements);
     DWORD nBytesWritten = 0;
     int error = WriteFile(_outStream,  // Which is really an HANDLE hFile on Windows
                           (char*)(front),

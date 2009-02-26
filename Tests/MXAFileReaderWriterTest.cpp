@@ -51,12 +51,13 @@ typedef MXA::Endian::FromBigToSystem    EndianPolicy;
 #endif
 
 #define ARRAY_SIZE 4
+
 #define WriteArray(type, initValue) \
-  type* type##Array = new type[ARRAY_SIZE];\
+{type* type##Array = new type[ARRAY_SIZE];\
   for (int index = 0; index < ARRAY_SIZE; ++index) { type##Array[index] = initValue; }\
   ok = writer.writeArray<type>(type##Array, (int64)(ARRAY_SIZE) );\
   BOOST_REQUIRE_EQUAL(ok, true);\
-  delete type##Array;\
+  delete type##Array;}\
   /*writer.write( &newLine, 1);*/
 
 #define WriteCharArray(type, initValue) \
@@ -67,8 +68,6 @@ typedef MXA::Endian::FromBigToSystem    EndianPolicy;
   BOOST_REQUIRE_EQUAL(ok, true);\
   delete type##CharArray;\
   /*writer.write( &newLine, 1);*/
-
-
 
 #define REMOVE_TEST_FILES 0
 // -----------------------------------------------------------------------------
@@ -114,7 +113,7 @@ int TestMXAFileWriter()
   float f = fd.f;
   double d = ed.d;
 
- // numBytes = sizeof(ascii);
+  // numBytes = sizeof(ascii);
  // writer.write(ascii, numBytes);
   writer.writeValue<char>(&c);
   writer.writeValue<int16>(&s);
@@ -129,16 +128,26 @@ int TestMXAFileWriter()
   WriteCharArray(int64, ll);
   WriteCharArray(float, f);
   WriteCharArray(double, d);
-
+std::cout << "Pos: " << writer.getFilePointer64() << std::endl;
   // Should be at byte 31 at this point
 
-  WriteArray(int8, c);
+ // WriteArray(int8, c);
+{
+  int8* int8Array = new int8[ARRAY_SIZE];
+  for (int index = 0; index < ARRAY_SIZE; ++index) { int8Array[index] = c; }
+  ok = writer.writeArray<int8>(int8Array, (int64)(ARRAY_SIZE) );
+  BOOST_REQUIRE_EQUAL(ok, true);
+  delete int8Array;
+}
+
+  std::cout << "Pos: " << writer.getFilePointer64() << std::endl;
   WriteArray(int16, s);
+  std::cout << "Pos: " << writer.getFilePointer64() << std::endl;
   WriteArray(int32, i);
   WriteArray(int64, ll);
   WriteArray(float, f);
   WriteArray(double, d);
-
+std::cout << "Pos: " << writer.getFilePointer64() << std::endl;
   int64 pos = writer.getFilePointer64();
   BOOST_REQUIRE_EQUAL(pos, 243);
 

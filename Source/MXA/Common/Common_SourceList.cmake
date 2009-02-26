@@ -1,4 +1,4 @@
-if (WIN32)
+if (MSVC)
     SET (MXA_WIN_COMMON_SRCS
       ${MXA_SOURCE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileReader.cpp
       ${MXA_SOURCE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileWriter.cpp
@@ -7,7 +7,7 @@ if (WIN32)
       ${MXA_SOURCE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileReader.h
       ${MXA_SOURCE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileWriter.h
     )
-else(WIN32)
+else(MSVC)
     SET (MXA_UNIX_COMMON_SRCS
       ${MXA_SOURCE_DIR}/MXA/Common/IO/Private/MXAPrivateFileReader.cpp
       ${MXA_SOURCE_DIR}/MXA/Common/IO/Private/MXAPrivateFileWriter.cpp
