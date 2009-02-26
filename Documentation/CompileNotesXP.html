@@ -43,14 +43,16 @@
     <H3>Boost 1.36.x</H3>
     <code>Boost 1.36.x
 bjam.exe toolset=msvc --with-test --with-filesystem --with-program_options 
---with-iostreams --with-threads --prefix=C:\Developer\VS9\Boost 
-variant=release,debug threading=multi link=static runtime-link=shared install
+--with-iostreams --with-threads --prefix=C:\Developer\VS9\boost_1_36
+ variant=release,debug threading=multi link=static runtime-link=shared install
 </code>
     Let this go for a looong time after which Boost will be installed into C:\Developer\VS9\Boost. If
     you would like Boost installed somewhere else then add --prefix=C:\Path\To\Install to the above
     configuration line.
     It is helpful to set the "Boost_ROOT" environment variable. This will let cmake find 
     boost easier. It should be set to the same path as the "install" path from above.
+<br /><strong>If you <b>really</b> want the easy route go to BoostPro.com and download their installer. Run the installer
+and pick only the libraries that you need and of the types that you need. That would be static libs with dynamic runtime linking to the compiler version that you are using. Program Options, System, File System, Unit Test framework are all needed.</strong>
 
     
     <h3>Support Libraries</h3>Tiff, Expat and HDF5-166 can be downloaded from our 

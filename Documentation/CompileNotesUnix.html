@@ -55,10 +55,11 @@
     <br>
     <h3>Boost 1.36.x Notes</h3>
         The default compilation will yield dynamic libraries with no "install_name" 
-        set which means you will have to 
-        export the DYLD_LIBRARY_PATH with the appropriate folder value. If you hack 
-        the boost build system you can create 
-        static libraries which are easier to deal with.
+        set which means you will have to export the DYLD_LIBRARY_PATH with the appropriate 
+		folder value. If you hack the boost build system you can create 
+        static libraries which are easier to deal with. 
+<code>./configure --with-libraries=thread,test,program_options,system,filesystem 
+--prefix=/Users/Shared/Toolkits/boost-1_36</code>
 <!-- CONTENT ENDS HERE -->
     </div>
     

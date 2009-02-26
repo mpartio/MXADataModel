@@ -17,9 +17,8 @@ set (Boost_USE_MULTITHREADED TRUE)
 #INCLUDE (${MXA_CMAKE_DIR}/MXAFindBoost.cmake)
 set(Boost_FIND_QUIETLY FALSE)
 #-- We build static boost libraries on windows. Just easier that way.
-if (MSVC)
-    set(Boost_USE_STATIC_LIBS TRUE)
-endif(MSVC)
+set(Boost_USE_STATIC_LIBS TRUE)
+
 FIND_PACKAGE(Boost 1.36 COMPONENTS program_options system filesystem unit_test_framework test_exec_monitor thread)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
 SET(DEP_LIBS ${DEP_LIBS} ${Boost_LIBRARIES})

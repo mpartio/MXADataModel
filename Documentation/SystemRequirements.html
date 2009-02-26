@@ -36,10 +36,10 @@ Documentation</a></span>
     <ul>
       <li><a href="http://www.cmake.org">CMake</a> - Compile or otherwise
       install on your system.</li>
-      <li><a href="http://hdf.ncsa.uiuc.edu/">HDF5 version 1.6.6</a> - This
+      <li><a href="http://hdf.ncsa.uiuc.edu/">HDF5 version 1.6.8</a> - This
       is the latest stable production version. When the next version is released
-      the MXA code base will be updated. You can download version 1.6.6 from our
-      CVS server <a href="http://echo1.bluequartz.net/viewvc/Support/hdf5-166.tar.gz?view=tar">here.</a>
+      the MXA code base will be updated. You can download version 1.6.8 from our
+      git server <a href="http://echo1.bluequartz.net/cgi-bin/gitweb/gitweb.cgi">here.</a>
       Currently the MXA Data Model does <strong>NOT</strong> employ the inline compression
       available in the HDF5 library. Because of this, you will NOT need to have
       'szip' installed on your system. You only need the HDF5 library compiled
@@ -48,12 +48,12 @@ Documentation</a></span>
       <li><a href="http://www.remotesensing.org/libtiff/">Tiff Library</a>
       - Needed for reading Tiff images. We have created a CMake build system for
       libTiff. You can download a tar ball of the source directory <a
-        href="http://echo1.bluequartz.net/viewvc/Support/tiff.tar.gz?view=tar">here</a></li>
+        href="http://echo1.bluequartz.net/cgi-bin/gitweb/gitweb.cgi">here</a></li>
       <li><a href="http://expat.sourceforge.net/">Expat XML Library</a> -
       The current version of expat that is utilized is 2.0.1. We have created a
       CMake based build system for expat. You can download the source tree from
       our cvs repository <a
-        href="http://echo1.bluequartz.net/viewvc/Support/expat.tar.gz?view=tar">here</a>.
+        href="http://echo1.bluequartz.net/cgi-bin/gitweb/gitweb.cgi">here</a>.
       </li>
 
       <li><a href="http://www.boost.org">Boost 1.36.0</a> - This is the
@@ -82,7 +82,7 @@ Documentation</a></span>
       <li>Tiff</li>
       <li>Expat</li>
       <li>Zlib and/or szip (These are optional)</li>
-      <li>HDF5 Version 166</li>
+      <li>HDF5 Version 1.6.8</li>
       <li>VTK - Only if you need to use VTK from the MXA Data Model</li>
       <li>Qt - Only if you need to use GUI applications</li>
       <li>MXADataModel</li>
@@ -100,7 +100,7 @@ Documentation</a></span>
       <tr class="row">
         <td>OS X 10.5.x</td>
         <td>GCC 4.x (Xcode 3.1 Tooling)</td>
-        <td>OS X 10.4.9 should be supported without any issues. Both PPC and i386 are also supported.</td>
+        <td>OS X 10.4.11 should be supported without any issues. Both PPC and i386 are also supported.</td>
       </tr>
             <tr class="row">
         <td>Windows XP SP2</td>
@@ -115,9 +115,9 @@ Documentation</a></span>
         things easier.</td>
       </tr>
       <tr class="row">
-        <td>Linux - Rocks Cluster Distribution</td>
-        <td>Intel C++ Version 10.1</td>
-        <td>This test is old and has NOT been updated to something newer. MXADataModel should compile on a linux machine with GCC.</td>
+        <td>Ubuntu 8.10</td>
+        <td>GCC 4.2</td>
+        <td>Should compile just fine. Large file support, greater than 2GB, may be an issue.</td>
       </tr>
 
       <tr class="row">

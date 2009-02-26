@@ -69,7 +69,6 @@ typedef MXA::Endian::FromBigToSystem    EndianPolicy;
   delete type##CharArray;\
   /*writer.write( &newLine, 1);*/
 
-#define REMOVE_TEST_FILES 0
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
