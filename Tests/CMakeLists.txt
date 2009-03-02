@@ -104,10 +104,10 @@ IF (MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
       ${MXATests_SOURCE_DIR}/TiffMaker.h
     )
 
-    DataImportTestSetup("Dim_0" "Vol Frac" 0 6 125 25 0)
-    DataImportTestSetup("Dim_1" "Rnd Seed" 0 6 125 25 1)
-    DataImportTestSetup("Dim_2" "TS" 0 6 125 25 2)
-    DataImportTestSetup("Dim_3" "Slice" 0 6 125 25 3)
+    DataImportTestSetup("Dim_0" "Vol Frac" 0 4 75 25 0)
+    DataImportTestSetup("Dim_1" "Rnd Seed" 0 3 50 25 1)
+    DataImportTestSetup("Dim_2" "TS" 0 4 75 25 2)
+    DataImportTestSetup("Dim_3" "Slice" 0 3 2 1 3)
     FILE(MAKE_DIRECTORY "@MXA_TEMP_DIR@DataImportTest/test_data/" )
 
 

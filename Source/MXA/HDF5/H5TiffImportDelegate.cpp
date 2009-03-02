@@ -81,7 +81,9 @@ int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFil
       return 1;
     }
   }
+#if 0
   std::cout << "H5TiffImportDelegate::importDataSource '" << dataSource->getSourcePath() << "'" << std::endl;
+#endif
   //Check for valid TIFF file extension - tif or tiff.
   std::string fileExt( boost::filesystem::extension(sourcePath) );
   std::transform ( fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower );
@@ -95,16 +97,6 @@ int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFil
   }
 
   //Basic Checks are OK. Now Import the Tiff image into the HDF5 File
-#if 0
-  std::string filename = dataFile->getFilename();
-  err = dataFile->closeFile(false);
-  if (err < 0)
-  {
-    std::cout << logTime() << "H5BmpImportDelegate::importDataSource Could not close data file: [" << filename << "]" << std::endl;
-    return err;
-  }
-  dataFile->openFile(false);
-#endif
   hid_t fileId = dataFile->getFileId();
   if (fileId < 0)
   {

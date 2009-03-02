@@ -184,12 +184,12 @@ MXADataModelPtr createSimpleModel()
 // -----------------------------------------------------------------------------
 int SimpleTest()
 {
-  std::cout << "-------- Running SimpleImportTest ------------------------" << std::endl;
-int32 err = 0;
-MXADataModelPtr model = createSimpleModel();
-ImportSimpleData(model, DATAIMPORT_TEST_SIMPLE_IMPORT);
-
-return err;
+  std::cout << "  Running SimpleImportTest ------------------------" << std::endl;
+  int32 err = 0;
+  MXADataModelPtr model = createSimpleModel();
+  ImportSimpleData(model, DATAIMPORT_TEST_SIMPLE_IMPORT);
+  std::cout << "  Ending SimpleImportTest" << std::endl;
+  return err;
 }
 
 // -----------------------------------------------------------------------------
@@ -207,6 +207,7 @@ void CreateTiffImages()
   IDataSources dataSources = importer.getDataSources();
 
   TiffMaker tiffMaker;
+  std::cout << "  -Creating Tiff Images to import" << std::endl;
   for (IDataSources::iterator iter = dataSources.begin(); iter != dataSources.end(); ++iter ) {
     std::string tiffPath = (*iter).get()->getSourcePath();
    // std::cout << "Making Tiff at " << tiffPath << std::endl;
@@ -219,7 +220,7 @@ void CreateTiffImages()
 // -----------------------------------------------------------------------------
 int XMLImportTest()
 {
-  std::cout << "-------- Starting With XML Based H5 Tiff import Test -----------------" << std::endl;
+  std::cout << "  Starting XMLImportTest -----------------" << std::endl;
   // Instantiate the Instance Manager for import delegates
   ImportDelegateManagerPtr idManager = ImportDelegateManager::instance();
 
@@ -241,7 +242,7 @@ int XMLImportTest()
     std::cout << "Error Importing Data Files. Check any output for possible error logs." << std::endl;
   }
   BOOST_REQUIRE (err >= 0);
-  std::cout << "-------- Done With XML Based H5 Tiff import Test -----------------" << std::endl;
+  std::cout << "  Done With XML Based H5 Tiff import Test -----------------" << std::endl;
   return err;
 }
 
