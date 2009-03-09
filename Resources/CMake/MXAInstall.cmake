@@ -33,6 +33,7 @@ IF (NOT MSVC)
         LIBRARY DESTINATION lib 
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
+        FRAMEWORK DESTINATION lib
         COMPONENT Libraries
     )
 ENDIF (NOT MSVC)  
