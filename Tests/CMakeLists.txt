@@ -201,10 +201,13 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
 # ----- MXAFileSystemPath Test
     set(MXAFileSystemPathTest_SRCS 
         ${MXATests_SOURCE_DIR}/MXAFileSystemPathTest.cpp
-        ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileSystemPath.cpp
     )
     add_executable(MXAFileSystemPathTest ${MXAFileSystemPathTest_SRCS})
-    target_link_libraries(MXAFileSystemPathTest ${Boost_TEST_EXEC_MONITOR_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+    target_link_libraries(MXAFileSystemPathTest 
+                          ${MXADATAMODEL_LIB_NAME}
+                          ${DEP_LIBS}
+                          ${Boost_TEST_EXEC_MONITOR_LIBRARY} 
+                          ${Boost_SYSTEM_LIBRARY})
     add_test(MXAFileSystemPathTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXAFileSystemPathTest)
     
 # ------- Vtk to HDF5 Bridge test

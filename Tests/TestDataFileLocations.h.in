@@ -32,7 +32,7 @@
 namespace MXAUnitTest {
   const std::string MXATempDir(MXA_TEMP_DIR);
 
-#if __WIN32
+#if defined (WIN32)
     static const char DirSeparator = '\\';
 #else
     static const char DirSeparator = '/';

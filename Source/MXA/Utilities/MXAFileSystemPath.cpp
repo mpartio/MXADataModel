@@ -13,10 +13,16 @@
 
 #include "MXAFileSystemPath.h"
 
-#include <MXA/MXAConfiguration.h>
+//#include <MXA/MXAConfiguration.h>
 
 #include <iostream>
 #include <vector>
+
+#include <stdlib.h>
+#include <ctype.h>
+#if defined (WIN32)
+#include <direct.h>
+#endif
 
 // -----------------------------------------------------------------------------
 //
@@ -39,6 +45,10 @@ MXAFileSystemPath::~MXAFileSystemPath()
 // -----------------------------------------------------------------------------
 bool MXAFileSystemPath::isDirectory(const std::string &path)
 {
+#if _WIN32
+  bool existed = false;
+  return MXAFileSystemPath::isDirPath(path, &existed);
+#else
   int error;
   MXA_STATBUF st;
   error = MXA_STAT(path.c_str(), &st);
@@ -47,6 +57,7 @@ bool MXAFileSystemPath::isDirectory(const std::string &path)
     return true;
   }
   return false;
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -70,9 +81,15 @@ bool MXAFileSystemPath::isFile(const std::string &path)
 bool MXAFileSystemPath::exists(const std::string &path)
 {
   int error;
-    MXA_STATBUF st;
-    error = MXA_STAT(path.c_str(), &st);
-    return (error == 0);
+  std::string dirName(path);
+  // Both windows and OS X both don't like trailing slashes so just get rid of them
+  // for all Operating Systems.
+  if (dirName[dirName.length() - 1] == MXAFileSystemPath::Separator) {
+        dirName = dirName.substr(0, dirName.length() - 1);
+  }
+  MXA_STATBUF st;
+  error = MXA_STAT(dirName.c_str(), &st);
+  return (error == 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -114,6 +131,46 @@ std::string MXAFileSystemPath::filename(const std::string &path)
 // -----------------------------------------------------------------------------
 bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirectories)
 {
+#if _WIN32
+  std::string dirName = name;
+    if (createParentDirectories) {
+        dirName = MXAFileSystemPath::toNativeSeparators(MXAFileSystemPath::cleanPath(dirName));
+        // We spefically search for / so \ would break it..
+        int oldslash = -1;
+        if (dirName[0] == '\\' && dirName[1] == '\\') {
+            // Don't try to create the root path of a UNC path;
+            // CreateDirectory() will just return ERROR_INVALID_NAME.
+            for (unsigned int i = 0; i < dirName.size(); ++i) {
+                if (dirName[i] != MXAFileSystemPath::Separator) {
+                    oldslash = i;
+                    break;
+                }
+            }
+            if (oldslash != -1)
+                oldslash = dirName.find(MXAFileSystemPath::Separator, oldslash);
+        }
+        for (int slash=0; slash != -1; oldslash = slash) {
+            slash = dirName.find(MXAFileSystemPath::Separator, oldslash+1);
+            if (slash == -1) {
+                if(oldslash == (int)(dirName.length()))
+                    break;
+                slash = dirName.length();
+            }
+            if (slash) {
+              std::string chunk = dirName.substr(0, slash);
+                bool existed = false;
+                if (!isDirPath(chunk, &existed) && !existed) {
+                   // if (!_mkdir(chunk.c_str() ))
+                      if (!::CreateDirectoryA(chunk.c_str(), 0) )
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+    return (!::CreateDirectoryA(dirName.c_str(), 0)  == 0);
+#else
+
   std::string dirName = name;
     if (createParentDirectories) {
         dirName = MXAFileSystemPath::cleanPath(dirName);
@@ -128,10 +185,15 @@ bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirector
                 //QByteArray chunk = QFile::encodeName(dirName.left(slash));
                 std::string chunk = dirName.substr(0, slash);
                 MXA_STATBUF st;
-                if (MXA_STAT(chunk.c_str(), &st) != -1) {
-                    if ((st.st_mode & S_IFMT) != S_IFDIR)
+                if (MXA_STAT(chunk.c_str(), &st) != -1) 
+                {
+                  if ((st.st_mode & S_IFMT) != S_IFDIR) 
+                  {
                         return false;
-                } else if (::mkdir(chunk.c_str(), 0777) != 0) {
+                  }
+                }
+                else if (::mkdir(chunk.c_str(), 0777) != 0) 
+                {
                         return false;
                 }
             }
@@ -143,6 +205,7 @@ bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirector
         dirName = dirName.substr(0, dirName.length() - 1);
 #endif
     return (::mkdir(dirName.c_str(), 0777) == 0);
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -150,7 +213,7 @@ bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirector
 // -----------------------------------------------------------------------------
 bool MXAFileSystemPath::remove(const std::string &path)
 {
-  return unlink(MXAFileSystemPath::toNativeSeparators(path).c_str()) == 0;
+  return _unlink(MXAFileSystemPath::toNativeSeparators(path).c_str()) == 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -158,11 +221,28 @@ bool MXAFileSystemPath::remove(const std::string &path)
 // -----------------------------------------------------------------------------
 bool MXAFileSystemPath::rmdir(const std::string &name, bool recurseParentDirectories)
 {
+#if _WIN32
+  std::string dirName = name;
+    if (recurseParentDirectories) {
+        dirName = MXAFileSystemPath::toNativeSeparators(MXAFileSystemPath::cleanPath(dirName));
+        for (int oldslash = 0, slash=dirName.length(); slash > 0; oldslash = slash) {
+            std::string chunk = dirName.substr(0, slash);
+            if (chunk.length() == 2 && isalpha(chunk[0]) && chunk[1] == ':')
+                break;
+            if (!isDirPath(chunk, 0))
+                return false;
+            if (!_rmdir(chunk.c_str()))
+                return oldslash != 0;
+            slash = dirName.find_last_of(MXAFileSystemPath::Separator, oldslash-1);
+        }
+        return true;
+    }
+    return (bool)(_rmdir(name.c_str()) == 0 );
+#else
   std::string dirName = name;
     if (recurseParentDirectories) {
         dirName = MXAFileSystemPath::cleanPath(dirName);
         for(int oldslash = 0, slash=dirName.length(); slash > 0; oldslash = slash) {
-           // QByteArray chunk = QFile::encodeName(dirName.left(slash));
             std::string chunk = dirName.substr(0, slash);
             MXA_STATBUF st;
             if (MXA_STAT(chunk.c_str(), &st) != -1) {
@@ -178,6 +258,32 @@ bool MXAFileSystemPath::rmdir(const std::string &name, bool recurseParentDirecto
         return true;
     }
     return ::rmdir(dirName.c_str()) == 0;
+#endif
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+bool MXAFileSystemPath::isDirPath(const std::string &dirPath, bool *existed)
+{
+#if _WIN32
+    std::string path = dirPath;
+    if (path.length() == 2 &&path.at(1) == ':')
+        path += '\\';
+
+    DWORD fileAttrib = INVALID_FILE_ATTRIBUTES;
+    fileAttrib = ::GetFileAttributesA(path.c_str() );
+
+    if (existed)
+        *existed = fileAttrib != INVALID_FILE_ATTRIBUTES;
+
+    if (fileAttrib == INVALID_FILE_ATTRIBUTES)
+        return false;
+
+    return (bool)(fileAttrib & FILE_ATTRIBUTE_DIRECTORY);
+#else
+#error This has NOT been implemented for your Operating System/compiler
+#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -186,7 +292,7 @@ bool MXAFileSystemPath::rmdir(const std::string &name, bool recurseParentDirecto
 std::string MXAFileSystemPath::fromNativeSeparators(const std::string  &pathName)
 {
     std::string n(pathName);
-#if __WIN32
+#if _WIN32
     for (int i=0; i<(int)n.length(); i++) {
         if (n[i] == '\\') { n[i] = '/'; }
     }
@@ -200,7 +306,7 @@ std::string MXAFileSystemPath::fromNativeSeparators(const std::string  &pathName
 std::string MXAFileSystemPath::toNativeSeparators(const std::string &pathName)
 {
     std::string n(pathName);
-#if defined(__WIN32)
+#if defined(_WIN32)
     for (int i=0; i<(int)n.length(); i++) {
         if (n[i] ==  '/' )
             n[i] =  '\\';
@@ -230,7 +336,7 @@ std::string MXAFileSystemPath::cleanPath(const std::string &path)
     for(int i = 0, last = -1, iwrite = 0; i < len; i++) {
         if(p[i] == '/') {
             while(i < len-1 && p[i+1] == '/') {
-#if defined(__WIN32) //allow unc paths
+#if defined(_WIN32) //allow unc paths
                 if(!i)
                     break;
 #endif
@@ -290,7 +396,7 @@ std::string MXAFileSystemPath::cleanPath(const std::string &path)
                     levels++;
                 }
             } else if(last != -1 && iwrite - last == 1) {
-#ifdef __WIN32
+#ifdef _WIN32
                 eaten = (iwrite > 2);
 #else
                 eaten = true;
@@ -325,10 +431,10 @@ std::string MXAFileSystemPath::cleanPath(const std::string &path)
     if(used == len)
         ret = name;
     else
-  ret = std::string(&(out.front()), used);
+        ret = std::string(&(out.front()), used);
 
     // Strip away last slash except for root directories
-    if ( (*(ret.end()) == '/') && !(ret.size() == 1 || (ret.size() == 3 && ret.at(1) == ':')))
+    if ( (ret[ret.size()-1] == '/') && !(ret.size() == 1 || (ret.size() == 3 && ret.at(1) == ':')))
     {
       ret = ret.substr(0, ret.length() - 1);
     }

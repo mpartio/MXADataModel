@@ -161,6 +161,9 @@
 * 64 bit file systems */
 #include <sys/stat.h>
 #if defined (WIN32)
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <windows.h>
 #define MXA_STATBUF    struct _stati64   // non-ANSI defs
 #define MXA_STATBUF4TSTAT  struct _stati64   // non-ANSI defs
