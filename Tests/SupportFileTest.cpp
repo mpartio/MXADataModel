@@ -32,8 +32,8 @@ void RemoveTestFiles()
 {
   std::cout << "   Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
-  boost::filesystem::remove(MXATest::SupportFile_OutputFile);
-  boost::filesystem::remove(MXATest::SupportFile_BinaryInputFile);
+  boost::filesystem::remove(MXAUnitTest::SupportFileTest::OutputFile);
+  boost::filesystem::remove(MXAUnitTest::SupportFileTest::BinaryInputFile);
 #endif
 }
 
@@ -87,7 +87,7 @@ void CreateInputFiles()
 {
   // Create a Simple Tiff file to use as a binary file.
   TiffMaker tiffMaker;
-  tiffMaker.createTiffFile(MXATest::SupportFile_BinaryInputFile);
+  tiffMaker.createTiffFile(MXAUnitTest::SupportFileTest::BinaryInputFile);
 }
 
 // -----------------------------------------------------------------------------
@@ -98,7 +98,7 @@ void TestMXASupportFile()
 {
   std::cout << "|--TestMXASupportFile" << std::endl;
   ISupportFilePtr file =
-      MXASupportFile::NewFromFileSystem(MXATest::SupportFile_BinaryInputFile, SupportFile::FileType::Binary, false);
+      MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::BinaryInputFile, SupportFile::FileType::Binary, false);
   uint8* contents = NULL;
   // Get the contents which should be NULL because the file has NOT been read yet
   contents = file->getFilePointer(0);
@@ -119,7 +119,7 @@ void TestMXASupportFile()
 
   // Read the file again
   BOOST_REQUIRE (file->readFromFileSystem() >= 0); // Read the file into the object
-  file->setFileSystemPath(MXATest::SupportFile_TextInputFile);
+  file->setFileSystemPath(MXAUnitTest::SupportFileTest::TextInputFile);
   BOOST_REQUIRE (file->getFilePointer(0) == NULL);
   BOOST_REQUIRE (file->getFileSize() > 0);
   BOOST_REQUIRE (file->isFileCached() == false);
@@ -134,7 +134,7 @@ void TestMXASupportFile()
 void TestMXARead()
 {
   std::cout << "|--MXARead Test" << std::endl;
-  IDataFilePtr datafile = H5MXADataFile::OpenFile(MXATest::SupportFile_OutputFile, true);
+  IDataFilePtr datafile = H5MXADataFile::OpenFile(MXAUnitTest::SupportFileTest::OutputFile, true);
   BOOST_REQUIRE( datafile.get() != NULL);
 
   ISupportFiles files = datafile->getDataModel()->getSupportFiles();
@@ -167,12 +167,12 @@ void TestMXAWrite()
   std::cout << "|--MXAWrite Test" << std::endl;
   int32 err = 0;
   MXADataModelPtr model = createSimpleModel();
-  ISupportFilePtr binaryFile = MXASupportFile::NewFromFileSystem(MXATest::SupportFile_BinaryInputFile, SupportFile::FileType::Binary);
-  ISupportFilePtr textFile = MXASupportFile::NewFromFileSystem(MXATest::SupportFile_TextInputFile, SupportFile::FileType::Text);
+  ISupportFilePtr binaryFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::BinaryInputFile, SupportFile::FileType::Binary);
+  ISupportFilePtr textFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text);
   model->addSupportFile(binaryFile, true);
   model->addSupportFile(textFile, true);
 
-  IDataFilePtr mxaDataFile = H5MXADataFile::CreateFileWithModel(MXATest::SupportFile_OutputFile, model);
+  IDataFilePtr mxaDataFile = H5MXADataFile::CreateFileWithModel(MXAUnitTest::SupportFileTest::OutputFile, model);
   if ( NULL == mxaDataFile.get()) { err = -1; } else { err = 0; };
   BOOST_REQUIRE(err >= 0);
 }

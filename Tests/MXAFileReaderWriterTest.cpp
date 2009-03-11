@@ -76,7 +76,7 @@ void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
   std::cout << "   Removing Test files" << std::endl;
-  boost::filesystem::remove(Testing::MXAFileReaderWriterTest::OutputFile);
+  boost::filesystem::remove(MXAUnitTest::MXAFileReaderWriterTest::OutputFile);
 #else
   std::cout << "   Test files NOT removed." << std::endl;
   #endif
@@ -92,7 +92,7 @@ int TestMXAFileWriter()
   int err = 0;
   bool ok = false;
   //char newLine = '\n';
-  FileWriter64 writer(Testing::MXAFileReaderWriterTest::OutputFile);
+  FileWriter64 writer(MXAUnitTest::MXAFileReaderWriterTest::OutputFile);
   if (writer.initWriter() == false)
   {
     BOOST_ASSERT("Could not initialize the file writer");
@@ -213,7 +213,7 @@ int TestMXAFileReader()
   float f = fd.f;
   double d = ed.d;
 
-  FileReader64 reader(Testing::MXAFileReaderWriterTest::OutputFile);
+  FileReader64 reader(MXAUnitTest::MXAFileReaderWriterTest::OutputFile);
   if (reader.initReader() == false)
   {
     BOOST_ASSERT("Could not initialize the file reader");

@@ -36,7 +36,6 @@ SET (ImportGenerator_SRCS
 )
 ADD_EXECUTABLE(ImportGenerator ${ImportGenerator_SRCS} )
 TARGET_LINK_LIBRARIES(ImportGenerator ${MXADATAMODEL_LIB_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY} )
-
 # - Installation Code for the binary
 INSTALL(TARGETS ImportGenerator RUNTIME DESTINATION bin/)
         

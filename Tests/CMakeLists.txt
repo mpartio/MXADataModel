@@ -188,17 +188,26 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     ADD_TEST(IImportPropertyTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/IImportPropertyTest) 
   
 # --------- SupportFile Test
-    SET (SUPPORT_FILE_TEST_SRCS
-        ${MXATests_SOURCE_DIR}/SupportFileTest.cpp
-        ${MXATests_SOURCE_DIR}/TiffMaker.cpp
-    )
-    IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
+   IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
+        SET (SUPPORT_FILE_TEST_SRCS
+            ${MXATests_SOURCE_DIR}/SupportFileTest.cpp
+            ${MXATests_SOURCE_DIR}/TiffMaker.cpp
+        )
         ADD_EXECUTABLE(SupportFileTest ${SUPPORT_FILE_TEST_SRCS})
         TARGET_LINK_LIBRARIES (SupportFileTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
         ADD_TEST(SupportFileTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/SupportFileTest) 
     ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF ) 
     
-    # ------- Vtk to HDF5 Bridge test
+# ----- MXAFileSystemPath Test
+    set(MXAFileSystemPathTest_SRCS 
+        ${MXATests_SOURCE_DIR}/MXAFileSystemPathTest.cpp
+        ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileSystemPath.cpp
+    )
+    add_executable(MXAFileSystemPathTest ${MXAFileSystemPathTest_SRCS})
+    target_link_libraries(MXAFileSystemPathTest ${Boost_TEST_EXEC_MONITOR_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+    add_test(MXAFileSystemPathTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXAFileSystemPathTest)
+    
+# ------- Vtk to HDF5 Bridge test
     IF(MXA_BUILD_VTK_HDF5)
         SET (VTK_HDF5_SRCS
           ${MXATests_SOURCE_DIR}/VtkHDF5Test.cpp

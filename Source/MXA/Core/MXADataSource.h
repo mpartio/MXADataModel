@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ class MXADataRecord;
 
 /**
   * @class MXADataSource MXADataSource.h src/Core/MXADataSource.h
-  * 
+  *
   * @brief This class holds the information needed to read data from a source and store
   * that data into the underlying data storage for the MXA Data Model (HDF5 or XML)
   * @version $Revision: 1.2 $
@@ -57,7 +57,7 @@ public:
    * @return std::string
    */
   std::string generateInternalPath ( );
-  
+
   /**
    * @brief Generates the internal path that is used by the underlying data storage
    * mechanism to place the data into the hierarchy
@@ -65,7 +65,7 @@ public:
    * @return The generated internal path. Empty if there was an error.
    */
   std::string generateInternalPath ( std::vector<int32> &indices);
-  
+
   /**
    * @brief Set the value of _dataRecord
    * @param dataRecord the new value of _dataRecord
@@ -91,6 +91,11 @@ public:
    */
   std::string getSourcePath ( );
 
+  /**
+   * @brief Does the datasource exist on the filesystem
+   * @return true if it does exist.
+   */
+  bool dataSourceExists();
 
   /**
    * @brief Set the value of _importDelegate
@@ -129,7 +134,7 @@ public:
    * @return the value of m_dimensionValues
    */
   std::vector<int32> getDimensionValues ( );
-  
+
 private:
 
   IDataRecordPtr                _dataRecord;

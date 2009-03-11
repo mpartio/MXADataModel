@@ -47,7 +47,7 @@ public:
   bool initWriter();
 
   /**
- * @brief Reads a number of bytes from the underlying stream
+ * @brief Writes a number of bytes from the underlying stream
  * @param data The char pointer to read the data into
  * @param numBytes The number of bytes to read
  */

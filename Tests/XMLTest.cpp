@@ -203,7 +203,7 @@ MXADataModelPtr createModel()
     // Create User Defined MetaData
     CreateAttributes( model );
 
-    ISupportFilePtr spFile = MXASupportFile::NewFromFileSystem(MXATest::SupportFile_TextInputFile, SupportFile::FileType::Text, false);
+    ISupportFilePtr spFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text, false);
     model->addSupportFile(spFile);
     return modelPtr;
 }

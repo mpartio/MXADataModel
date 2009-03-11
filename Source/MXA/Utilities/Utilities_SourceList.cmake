@@ -2,6 +2,7 @@ SET (MXA_UTILITIES_SRCS
   ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathIndexSection.cpp
   ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathTextSection.cpp
   ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathBuilder.cpp
+  ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileSystemPath.cpp
 )
 
 SET (MXA_UTILITIES_HEADERS
@@ -10,6 +11,7 @@ SET (MXA_UTILITIES_HEADERS
   ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathIndexSection.h
   ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathTextSection.h
   ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathBuilder.h
+  ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileSystemPath.h
 )
 
 

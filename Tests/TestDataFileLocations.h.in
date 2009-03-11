@@ -26,12 +26,48 @@
 #define REMOVE_TEST_FILES 1
 
 // -----------------------------------------------------------------------------
+//  Define the temp directory for this system
+// -----------------------------------------------------------------------------
+#define MXA_TEMP_DIR "@MXA_TEMP_DIR@"
+namespace MXAUnitTest {
+  const std::string MXATempDir(MXA_TEMP_DIR);
+
+#if __WIN32
+    static const char DirSeparator = '\\';
+#else
+    static const char DirSeparator = '/';
+#endif
+
+namespace SupportFileTest
+{
+  const std::string OutputFile("@MXA_TEMP_DIR@SupportFileTest.h5");
+  const std::string BinaryInputFile("@MXA_TEMP_DIR@SupportFileTest_Input.bin");
+  const std::string TextInputFile("@DATAIMPORT_TEST_IMPORT_XML_FILE@");
+}
+
+namespace MXAFileReaderWriterTest
+{
+  const std::string OutputFile("@MXA_TEMP_DIR@MXAFileReaderWriter.bin");
+}
+
+
+namespace MXAFileSystemPathTest
+{
+  const std::string OutputFile("@MXA_TEMP_DIR@MXAFileSystemPath.bin");
+  const std::string OutputFileName("MXAFileSystemPath.bin");
+  const std::string TestDirName1("Directory1");
+  const std::string TestDirName2("Directory2");
+  const std::string TestDir("MXAFileSystemPathTest");
+  const std::string Extension("bin");
+}
+
+
+}
+
+// -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the DataImport test
 // -----------------------------------------------------------------------------
-//#define DATAIMPORT_TEST_OUTPUT_FILE "@MXA_TEMP_DIR@XML_Based_Data_Import_Test.h5"
 #define DATAIMPORT_TEST_H5TIFF_OUTPUT_FILE "@DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE@"
-//#define DATAIMPORT_TEST_H5_FILE_BEFORE "@MXA_TEMP_DIR@DataImportTest-Before.h5"
-//#define DATAIMPORT_TEST_H5_FILE_AFTER "@MXA_TEMP_DIR@DataImportTest-After.h5"
 #define DATAIMPORT_TEST_IMPORT_XML_FILE "@DATAIMPORT_TEST_IMPORT_XML_FILE@"
 #define DATAIMPORT_TEST_SIMPLE_IMPORT "@MXA_TEMP_DIR@DataImportTestSimpleFile.h5"
 
@@ -77,25 +113,6 @@
 //  Define where to put our temporary files
 // -----------------------------------------------------------------------------
 #define H5ARRAY_TEMPLATE_TEST_FILE "@MXA_TEMP_DIR@H5ArrayTemplateTest.h5"
-
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-namespace MXATest {
-  const std::string SupportFile_OutputFile("@MXA_TEMP_DIR@SupportFileTest.h5");
-  const std::string SupportFile_BinaryInputFile("@MXA_TEMP_DIR@SupportFileTest_Input.bin");
-  const std::string SupportFile_TextInputFile("@DATAIMPORT_TEST_IMPORT_XML_FILE@");
-}
-
-namespace Testing {
-
-namespace MXAFileReaderWriterTest {
-
-  const std::string OutputFile("@MXA_TEMP_DIR@MXAFileReaderWriter.bin");
-
-}
-
-}
 
 
 #endif /*SOURCEFILELOCATIONS_H_*/

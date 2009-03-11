@@ -17,7 +17,7 @@ class MXA_EXPORT IDataSource
 public:
   IDataSource() {}
   virtual ~IDataSource() {}
-  
+
   /**
     * @brief Generates the internal path that is used by the underlying data storage
     * mechanism to place the data into the hierarchy
@@ -32,7 +32,7 @@ public:
     * @return The generated internal path. Empty if there was an error.
     */
    virtual std::string generateInternalPath ( std::vector<int32> &indices) = 0;
-   
+
    /**
     * Set the value of m_dataRecord
     * @param dataRecord the new value of m_dataRecord
@@ -58,6 +58,11 @@ public:
     */
    virtual std::string getSourcePath ( ) = 0;
 
+   /**
+    * @brief Does the datasource exist on the filesystem
+    * @return true if it does exist.
+    */
+   virtual bool dataSourceExists() = 0;
 
    /**
     * Set the value of m_importDelegate
@@ -98,7 +103,7 @@ public:
    virtual std::vector<int32> getDimensionValues ( ) = 0;
 
 private:
-  
+
 };
 
 
