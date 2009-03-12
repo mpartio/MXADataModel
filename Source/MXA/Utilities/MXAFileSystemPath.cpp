@@ -6,23 +6,30 @@
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
-/* Note that much of this implementation was inspired by the Qt source code.
- * www.trolltech.com
+/* Note that some of this implementation was inspired by the Qt source code,
+ * in particular the QDir and QFileEngine source codes. The idea is to keep the
+ * API the same between my implementation and the Qt Implementation so that
+ * switching between then is easy.
+ *
  */
 
 
 #include "MXAFileSystemPath.h"
-
-//#include <MXA/MXAConfiguration.h>
 
 #include <iostream>
 #include <vector>
 
 #include <stdlib.h>
 #include <ctype.h>
+
 #if defined (WIN32)
 #include <direct.h>
+#define UNLINK _unlink
+#else
+#define UNLINK ::unlink
 #endif
+
+
 
 // -----------------------------------------------------------------------------
 //
@@ -43,15 +50,15 @@ MXAFileSystemPath::~MXAFileSystemPath()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool MXAFileSystemPath::isDirectory(const std::string &path)
+bool MXAFileSystemPath::isDirectory(const std::string &fsPath)
 {
-#if _WIN32
+#if defined (WIN32)
   bool existed = false;
-  return MXAFileSystemPath::isDirPath(path, &existed);
+  return MXAFileSystemPath::isDirPath(fsPath, &existed);
 #else
   int error;
   MXA_STATBUF st;
-  error = MXA_STAT(path.c_str(), &st);
+  error = MXA_STAT(fsPath.c_str(), &st);
   if (!error && (st.st_mode & S_IFMT) == S_IFDIR)
   {
     return true;
@@ -63,11 +70,11 @@ bool MXAFileSystemPath::isDirectory(const std::string &path)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool MXAFileSystemPath::isFile(const std::string &path)
+bool MXAFileSystemPath::isFile(const std::string &fsPath)
 {
   int error;
   MXA_STATBUF st;
-  error = MXA_STAT(path.c_str(), &st);
+  error = MXA_STAT(fsPath.c_str(), &st);
   if (!error && (st.st_mode & S_IFMT) == S_IFREG)
   {
     return true;
@@ -78,10 +85,10 @@ bool MXAFileSystemPath::isFile(const std::string &path)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool MXAFileSystemPath::exists(const std::string &path)
+bool MXAFileSystemPath::exists(const std::string &fsPath)
 {
   int error;
-  std::string dirName(path);
+  std::string dirName(fsPath);
   // Both windows and OS X both don't like trailing slashes so just get rid of them
   // for all Operating Systems.
   if (dirName[dirName.length() - 1] == MXAFileSystemPath::Separator) {
@@ -95,17 +102,16 @@ bool MXAFileSystemPath::exists(const std::string &path)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-std::string MXAFileSystemPath::extension(const std::string &path)
+std::string MXAFileSystemPath::extension(const std::string &fsPath)
 {
-  std::string::size_type pos = path.find_last_of('.');
-  std::string::size_type slashPos = path.find_last_of(MXAFileSystemPath::Separator);
+  std::string::size_type pos = fsPath.find_last_of('.');
+  std::string::size_type slashPos = fsPath.find_last_of(MXAFileSystemPath::Separator);
   if (pos > 0
       && pos != std::string::npos
-      && path[pos-1] != '/'
-      && path[pos-1] != '\\'
+      && fsPath[pos-1] != MXAFileSystemPath::Separator
       && pos > slashPos)
   {
-    return path.substr(pos + 1);
+    return fsPath.substr(pos + 1);
   }
   return std::string();
 }
@@ -113,16 +119,16 @@ std::string MXAFileSystemPath::extension(const std::string &path)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-std::string MXAFileSystemPath::filename(const std::string &path)
+std::string MXAFileSystemPath::filename(const std::string &fsPath)
 {
 
-  std::string::size_type slashPos = path.find_last_of(MXAFileSystemPath::Separator);
-  if (slashPos == path.size() - 1)
+  std::string::size_type slashPos = fsPath.find_last_of(MXAFileSystemPath::Separator);
+  if (slashPos == fsPath.size() - 1)
   {
-    return MXAFileSystemPath::filename(path.substr(0, path.size() - 1) );
+    return MXAFileSystemPath::filename(fsPath.substr(0, fsPath.size() - 1) );
   }
 
-  std::string fn = path.substr(slashPos + 1, path.size() - slashPos);
+  std::string fn = fsPath.substr(slashPos + 1, fsPath.size() - slashPos);
   return fn;
 }
 
@@ -131,14 +137,14 @@ std::string MXAFileSystemPath::filename(const std::string &path)
 // -----------------------------------------------------------------------------
 bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirectories)
 {
-#if _WIN32
+#if defined (WIN32)
   std::string dirName = name;
     if (createParentDirectories) {
         dirName = MXAFileSystemPath::toNativeSeparators(MXAFileSystemPath::cleanPath(dirName));
         // We spefically search for / so \ would break it..
         int oldslash = -1;
         if (dirName[0] == '\\' && dirName[1] == '\\') {
-            // Don't try to create the root path of a UNC path;
+            // Don't try to create the root fsPath of a UNC fsPath;
             // CreateDirectory() will just return ERROR_INVALID_NAME.
             for (unsigned int i = 0; i < dirName.size(); ++i) {
                 if (dirName[i] != MXAFileSystemPath::Separator) {
@@ -185,14 +191,14 @@ bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirector
                 //QByteArray chunk = QFile::encodeName(dirName.left(slash));
                 std::string chunk = dirName.substr(0, slash);
                 MXA_STATBUF st;
-                if (MXA_STAT(chunk.c_str(), &st) != -1) 
+                if (MXA_STAT(chunk.c_str(), &st) != -1)
                 {
-                  if ((st.st_mode & S_IFMT) != S_IFDIR) 
+                  if ((st.st_mode & S_IFMT) != S_IFDIR)
                   {
                         return false;
                   }
                 }
-                else if (::mkdir(chunk.c_str(), 0777) != 0) 
+                else if (::mkdir(chunk.c_str(), 0777) != 0)
                 {
                         return false;
                 }
@@ -211,9 +217,9 @@ bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirector
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool MXAFileSystemPath::remove(const std::string &path)
+bool MXAFileSystemPath::remove(const std::string &fsPath)
 {
-  return _unlink(MXAFileSystemPath::toNativeSeparators(path).c_str()) == 0;
+  return UNLINK(MXAFileSystemPath::toNativeSeparators(fsPath).c_str()) == 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -221,7 +227,7 @@ bool MXAFileSystemPath::remove(const std::string &path)
 // -----------------------------------------------------------------------------
 bool MXAFileSystemPath::rmdir(const std::string &name, bool recurseParentDirectories)
 {
-#if _WIN32
+#if defined (WIN32)
   std::string dirName = name;
     if (recurseParentDirectories) {
         dirName = MXAFileSystemPath::toNativeSeparators(MXAFileSystemPath::cleanPath(dirName));
@@ -261,18 +267,18 @@ bool MXAFileSystemPath::rmdir(const std::string &name, bool recurseParentDirecto
 #endif
 }
 
+#if defined (WIN32)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool MXAFileSystemPath::isDirPath(const std::string &dirPath, bool *existed)
+bool MXAFileSystemPath::isDirPath(const std::string &folderPath, bool *existed)
 {
-#if _WIN32
-    std::string path = dirPath;
-    if (path.length() == 2 &&path.at(1) == ':')
-        path += '\\';
+    std::string fsPath = folderPath;
+    if (fsPath.length() == 2 &&fsPath.at(1) == ':')
+        fsPath += MXAFileSystemPath::Separator;
 
     DWORD fileAttrib = INVALID_FILE_ATTRIBUTES;
-    fileAttrib = ::GetFileAttributesA(path.c_str() );
+    fileAttrib = ::GetFileAttributesA(fsPath.c_str() );
 
     if (existed)
         *existed = fileAttrib != INVALID_FILE_ATTRIBUTES;
@@ -281,163 +287,116 @@ bool MXAFileSystemPath::isDirPath(const std::string &dirPath, bool *existed)
         return false;
 
     return (bool)(fileAttrib & FILE_ATTRIBUTE_DIRECTORY);
-#else
-#error This has NOT been implemented for your Operating System/compiler
-#endif
 }
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-std::string MXAFileSystemPath::fromNativeSeparators(const std::string  &pathName)
-{
-    std::string n(pathName);
-#if _WIN32
-    for (int i=0; i<(int)n.length(); i++) {
-        if (n[i] == '\\') { n[i] = '/'; }
-    }
 #endif
-    return n;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-std::string MXAFileSystemPath::toNativeSeparators(const std::string &pathName)
-{
-    std::string n(pathName);
-#if defined(_WIN32)
-    for (int i=0; i<(int)n.length(); i++) {
-        if (n[i] ==  '/' )
-            n[i] =  '\\';
-    }
-#endif
-    return n;
-}
 
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-std::string MXAFileSystemPath::cleanPath(const std::string &path)
+std::string MXAFileSystemPath::fromNativeSeparators(const std::string  &fsPath)
 {
-    if (path.length() == 0)
-        return path;
-    std::string name = path;
-    char dir_separator = MXAFileSystemPath::Separator;
-    if(dir_separator != '/') {
-      name = MXAFileSystemPath::fromNativeSeparators(name);
-    }
-
-    int used = 0, levels = 0;
-    const int len = name.length();
-    std::vector<char> out(len);
-    const char *p = name.data();
-    for(int i = 0, last = -1, iwrite = 0; i < len; i++) {
-        if(p[i] == '/') {
-            while(i < len-1 && p[i+1] == '/') {
-#if defined(_WIN32) //allow unc paths
-                if(!i)
-                    break;
+  std::string path(fsPath);
+#if defined (WIN32)
+  for (int i=0; i<(int)path.length(); i++) {
+      if (path[i] ==  MXAFileSystemPath::Separator )
+        path[i] =  MXAFileSystemPath::UnixSeparator;
+  }
 #endif
-                i++;
-            }
-            bool eaten = false;
-            if(i < len - 1 && p[i+1] == '.') {
-                int dotcount = 1;
-                if(i < len - 2 && p[i+2] == '.')
-                    dotcount++;
-                if(i == len - dotcount - 1) {
-                    if(dotcount == 1) {
-                        break;
-                    } else if(levels) {
-                        if(last == -1) {
-                            for(int i2 = iwrite-1; i2 >= 0; i2--) {
-                                if(out[i2] == '/') {
-                                    last = i2;
-                                    break;
-                                }
-                            }
-                        }
-                        used -= iwrite - last - 1;
-                        break;
-                    }
-                } else if(p[i+dotcount+1] == '/') {
-                    if(dotcount == 2 && levels) {
-                        if(last == -1 || iwrite - last == 1) {
-                            for(int i2 = (last == -1) ? (iwrite-1) : (last-1); i2 >= 0; i2--) {
-                                if(out[i2] == '/') {
-                                    eaten = true;
-                                    last = i2;
-                                    break;
-                                }
-                            }
-                        } else {
-                            eaten = true;
-                        }
-                        if(eaten) {
-                            levels--;
-                            used -= iwrite - last;
-                            iwrite = last;
-                            last = -1;
-                        }
-                    } else if (dotcount == 2 && i > 0 && p[i - 1] != '.' ) {
-                        eaten = true;
-                        used -= iwrite - std::max(0, last);
-                        iwrite = std::max(0, last);
-                        last = -1;
-                        ++i;
-                    } else if(dotcount == 1) {
-                        eaten = true;
-                    }
-                    if(eaten)
-                        i += dotcount;
-                } else {
-                    levels++;
-                }
-            } else if(last != -1 && iwrite - last == 1) {
-#ifdef _WIN32
-                eaten = (iwrite > 2);
-#else
-                eaten = true;
+  return path;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string MXAFileSystemPath::toNativeSeparators(const std::string &fsPath)
+{
+    std::string path(fsPath);
+#if defined (WIN32)
+    for (int i=0; i<(int)path.length(); i++) {
+        if (path[i] ==  MXAFileSystemPath::UnixSeparator )
+          path[i] =  MXAFileSystemPath::Separator;
+    }
 #endif
-                last = -1;
-            } else if(last != -1 && i == len-1) {
-                eaten = true;
-            } else {
-                levels++;
-            }
-            if(!eaten)
-                last = i - (i - iwrite);
-            else
-                continue;
-        } else if(!i && p[i] == '.') {
-            int dotcount = 1;
-            if(len >= 1 && p[1] == '.')
-                dotcount++;
-            if(len >= dotcount && p[dotcount] == '/') {
-                if(dotcount == 1) {
-                    i++;
-                    while(i+1 < len-1 && p[i+1] == '/')
-                        i++;
-                    continue;
-                }
-            }
-        }
-        out[iwrite++] = p[i];
-        used++;
-    }
-    std::string ret;
-    if(used == len)
-        ret = name;
-    else
-        ret = std::string(&(out.front()), used);
+    return path;
+}
 
-    // Strip away last slash except for root directories
-    if ( (ret[ret.size()-1] == '/') && !(ret.size() == 1 || (ret.size() == 3 && ret.at(1) == ':')))
-    {
-      ret = ret.substr(0, ret.length() - 1);
-    }
 
-    return ret;
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string MXAFileSystemPath::cleanPath(const std::string &fsPath)
+{
+    if (fsPath.length() == 0)
+        return fsPath;
+      std::string path(fsPath);
+     char slash = '/';
+     char dot = '.';
+     if (MXAFileSystemPath::Separator != MXAFileSystemPath::UnixSeparator)
+     {
+       path = fromNativeSeparators(path);
+     }
+
+     // Peel off any trailing slash
+     if (path[path.length() -1 ] == slash)
+     {
+       path = path.substr(0, path.length() -1);
+     }
+
+     std::vector<std::string> stk;
+     std::string::size_type pos = 0;
+     std::string::size_type pos1 = 0;
+
+     // Check for UNC style paths first
+
+     pos = path.find_first_of(slash, pos);
+     pos1 = path.find_first_of(slash, pos + 1);
+   #if defined (WIN32)
+     if (pos == 0 && pos1 == 1)
+     {
+       pos1 = path.find_first_of(slash, pos1 + 1);
+     } else
+   #endif
+     if (pos != 0)
+     {
+       stk.push_back(path.substr(0, pos));
+     }
+
+
+     while (pos1 != std::string::npos)
+     {
+       if (pos1 - pos == 3 && path[pos+1] == dot && path[pos+2] == dot)
+       {
+       //  std::cout << "Popping back element" << std::endl;
+         if (stk.size() > 0) {
+           stk.pop_back();
+         }
+       }
+       else if (pos1 - pos == 2 && path[pos+1] == dot )
+       {
+
+       }
+       else if (pos + 1 == pos1) {
+
+       }
+       else {
+         stk.push_back(path.substr(pos, pos1-pos));
+       }
+       pos = pos1;
+       pos1 = path.find_first_of(slash, pos + 1);
+       if (pos1 == std::string::npos)
+       {
+         stk.push_back(path.substr(pos, path.length() - pos));
+       }
+     }
+     std::string ret;
+   //  std::cout << "|--2nd Pass: ";
+     for (std::vector<std::string>::iterator iter = stk.begin(); iter != stk.end(); ++iter ) {
+     // std::cout << *iter;
+       ret.append(*iter);
+     }
+
+     ret = toNativeSeparators(ret);
+     //std::cout << ret << std::endl;
+     return ret;
 }
