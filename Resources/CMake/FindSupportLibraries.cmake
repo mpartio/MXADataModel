@@ -19,7 +19,7 @@ set(Boost_FIND_QUIETLY FALSE)
 #-- We build static boost libraries on windows. Just easier that way.
 set(Boost_USE_STATIC_LIBS TRUE)
 
-FIND_PACKAGE(Boost 1.36 COMPONENTS program_options system filesystem unit_test_framework test_exec_monitor thread)
+FIND_PACKAGE(Boost 1.36 COMPONENTS  system program_options unit_test_framework test_exec_monitor thread)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
 SET(DEP_LIBS ${DEP_LIBS} ${Boost_LIBRARIES})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})

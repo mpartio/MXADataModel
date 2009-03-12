@@ -26,7 +26,7 @@ void RemoveTestFiles()
 {
   std::cout << "|--Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
-  //boost::filesystem::remove(MXATesting::MXAFileSystemPathTest::OuptutFile);
+  MXAFileSystemPath::remove(MXAUnitTest::MXAFileSystemPathTest::OutputFile);
 #endif
 }
 

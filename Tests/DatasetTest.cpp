@@ -27,7 +27,7 @@
 
 #include <MXA/DataWrappers/MXA2DArray.hpp>
 #include <MXA/DataWrappers/MXARGBImage.h>
-
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
 // C++ Includes
 #include <iostream>
@@ -36,9 +36,7 @@
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
+
 
 // -----------------------------------------------------------------------------
 //
@@ -68,7 +66,7 @@ int recLuid = 0;
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  boost::filesystem::remove(DATASET_TEST_FILE) ;
+  MXAFileSystemPath::remove(DATASET_TEST_FILE) ;
 #endif
 }
 

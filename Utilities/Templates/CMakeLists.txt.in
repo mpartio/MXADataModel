@@ -17,9 +17,6 @@ SET (EXECUTABLE_OUTPUT_PATH
   "Single Directory for all Executables."
   )
 
-IF (NOT DEFINED @PROJECT_NAME@_SOURCE_DIR)
-    SET (@PROJECT_NAME@_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-ENDIF(NOT DEFINED @PROJECT_NAME@_SOURCE_DIR)
 
 #-------------------------------------------------------------------------------
 #  Define the location of the Resources Directory
@@ -42,10 +39,23 @@ SET (@PROJECT_NAME@_HEADERS
   ${@PROJECT_NAME@_SOURCE_DIR}/src/@PROJECT_NAME@DelegateFactory.h
 )
 
-# - Need to find the MXADataModel Installation
-INCLUDE (FindMXADataModel.cmake)
-INCLUDE_DIRECTORIES(${MXADATAMODEL_INCLUDE_DIRS})
-INCLUDE(${MXADATAMODEL_RESOURCES_DIR}/CMake/UseMXADataModel.cmake)
+# --------------------------------------------------------------------
+# Find MXADataModel as that is needed
+# --------------------------------------------------------------------
+set (CMAKE_MODULE_PATH ${@PROJECT_NAME@_SOURCE_DIR})
+set (MXADATAMODEL_DEBUG 0)
+find_package(MXADataModel)
+
+if(NOT MXADATAMODEL_FOUND)
+  message(FATAL_ERROR "MXADataModel is required for this project.")
+endif(NOT MXADATAMODEL_FOUND)
+include_directories(${MXADATAMODEL_INCLUDE_DIRS})
+set(MXA_CMAKE_DIR ${MXADATAMODEL_RESOURCES_DIR}/CMake)
+# --------------------------------------------------------------------
+# Find all the support libraries for MXADataModel
+#-- Make sure to find the Boost Threads library
+SET (Boost_USE_THREAD TRUE)
+INCLUDE(${MXADATAMODEL_USE_FILE})
 
 
 # - Create the Executable and Link to the MXA Library

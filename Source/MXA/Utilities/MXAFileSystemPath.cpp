@@ -85,6 +85,21 @@ bool MXAFileSystemPath::isFile(const std::string &fsPath)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+uint64 MXAFileSystemPath::fileSize(const std::string &path)
+{
+  int error;
+  MXA_STATBUF st;
+  error = MXA_STAT(path.c_str(), &st);
+  if (!error && (st.st_mode & S_IFMT) == S_IFREG)
+  {
+    return (uint64)(st.st_size);
+  }
+  return 0;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 bool MXAFileSystemPath::exists(const std::string &fsPath)
 {
   int error;

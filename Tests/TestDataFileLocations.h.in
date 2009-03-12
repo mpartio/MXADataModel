@@ -61,6 +61,13 @@ namespace MXAFileSystemPathTest
   const std::string Extension("bin");
 }
 
+namespace DataImportTest
+{
+  const std::string TestDir("DataImportTest");
+  const std::string H5TiffOutputFile( "@DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE@");
+  const std::string ImportXMLFile( "@DATAIMPORT_TEST_IMPORT_XML_FILE@");
+  const std::string SimpleImport ("@MXA_TEMP_DIR@DataImportTestSimpleFile.h5");
+}
 
 }
 

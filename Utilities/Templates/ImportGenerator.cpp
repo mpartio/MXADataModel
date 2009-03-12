@@ -15,18 +15,15 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
 #include <boost/algorithm/string.hpp>
 
 #include <boost/iostreams/device/file.hpp>
 
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-namespace FileSystem = boost::filesystem;
+
 
 // Boost program options
 #include <boost/program_options.hpp>

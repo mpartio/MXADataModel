@@ -26,6 +26,7 @@
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include "MXAUnitTestDataFileLocations.h"
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
 // C++ Includes
 #include <iostream>
@@ -35,9 +36,7 @@
 //Boost Includes
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
+
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
 
@@ -50,9 +49,9 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  boost::filesystem::remove(DATAMODEL_TEST_BEFORE_H5_FILE);
-  boost::filesystem::remove(DATAMODEL_TEST_AFTER_H5_FILE);
-  boost::filesystem::remove(DATAMODEL_TEST_OVERWRITE_H5_FILE);
+  MXAFileSystemPath::remove(DATAMODEL_TEST_BEFORE_H5_FILE);
+  MXAFileSystemPath::remove(DATAMODEL_TEST_AFTER_H5_FILE);
+  MXAFileSystemPath::remove(DATAMODEL_TEST_OVERWRITE_H5_FILE);
 #endif
 }
 

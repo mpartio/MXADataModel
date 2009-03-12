@@ -7,8 +7,8 @@
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IImportDelegate.h>
-#include <DataImport/AbstractImportDelegateFactory.h>
-#include <HDF5/H5Utilities.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/HDF5/H5Utilities.h>
 
 // C++ STL headers
 #include <string>
@@ -24,7 +24,7 @@ namespace @PROJECT_NAME@
 
   // YOU REALLY want to change this to something more useful for your situation/
 //#warning Change the below line to something more useful then delete this line.
-  const std::string FileExt("dat");
+  const std::string FileExtension("dat");
 }
 
 /**

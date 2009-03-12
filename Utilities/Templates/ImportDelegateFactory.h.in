@@ -3,7 +3,7 @@
 #define _@PROJECT_NAME@_IMPORT_DELEGATEFACTORY_H_
 
 //-- MXA Includes
-#include <DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 //-- C++ includes
 #include <string>

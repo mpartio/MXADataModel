@@ -25,17 +25,10 @@
 #include <iostream>
 
 
-// Include Boost Headers
-#include <boost/filesystem/path.hpp>
-
-
 //-- Forward Declare the MXADataModel Class
 class MXADataModel;
 
-//Alias the namespace to cut down on line width and typing
-namespace FileSystem = boost::filesystem;
-
-namespace H5TiffImport
+namespace H5BmpImport
 {
 MXA_PROPERTY_CONSTANT(FileNotFoundIsError);
 MXA_PROPERTY_CONSTANT(ImportAsGrayScale);
@@ -85,13 +78,13 @@ public:
 
   virtual int32 getProperty(const std::string &key, std::string &value)
   {
-    if (key.compare(H5TiffImport::FileNotFoundIsError) == 0)
+    if (key.compare(H5BmpImport::FileNotFoundIsError) == 0)
     {
       if (this->_fileNotFoundIsError == true) {  value = "1"; }
       else {  value = "0"; }
       return 0;
     }
-    if (key.compare(H5TiffImport::ImportAsGrayScale) == 0)
+    if (key.compare(H5BmpImport::ImportAsGrayScale) == 0)
     {
       if (this->_importAsGrayScale == true) {  value = "1"; }
       else {  value = "0"; }
@@ -106,8 +99,8 @@ public:
   template<typename T>
   int32 getProperty(const std::string &key, T &value)
   {
-    GET_PROPERTY_BODY(H5TiffImport, T, FileNotFoundIsError, _fileNotFoundIsError, key, value);
-    GET_PROPERTY_BODY(H5TiffImport, T, ImportAsGrayScale, _importAsGrayScale, key, value);
+    GET_PROPERTY_BODY(H5BmpImport, T, FileNotFoundIsError, _fileNotFoundIsError, key, value);
+    GET_PROPERTY_BODY(H5BmpImport, T, ImportAsGrayScale, _importAsGrayScale, key, value);
     return 0;
   }
 

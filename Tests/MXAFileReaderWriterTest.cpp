@@ -12,6 +12,7 @@
 #include <MXA/Common/IO/MXAFileReader64.h>
 #include <MXA/Common/IO/MXAFileWriter64.h>
 #include <MXAUnitTestDataFileLocations.h>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
 typedef MXAFILEWRITER_CLASS_NAME FileWriter64;
 typedef MXAFILEREADER_CLASS_NAME FileReader64;
@@ -24,9 +25,6 @@ typedef MXAFILEREADER_CLASS_NAME FileReader64;
 #include <boost/test/test_tools.hpp>
 
 
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
 
 typedef union
 {
@@ -76,7 +74,7 @@ void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
   std::cout << "   Removing Test files" << std::endl;
-  boost::filesystem::remove(MXAUnitTest::MXAFileReaderWriterTest::OutputFile);
+  MXAFileSystemPath::remove(MXAUnitTest::MXAFileReaderWriterTest::OutputFile);
 #else
   std::cout << "   Test files NOT removed." << std::endl;
   #endif

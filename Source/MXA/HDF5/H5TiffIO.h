@@ -30,8 +30,8 @@ namespace MXA
 {
   namespace Tiff
   {
-    const std::string FileExtension(".tif");
-    const std::string TiffExtension(".tiff");
+    const std::string FileExtension("tif");
+    const std::string TiffExtension("tiff");
   }
 }
 

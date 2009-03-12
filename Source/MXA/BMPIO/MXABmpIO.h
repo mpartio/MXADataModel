@@ -17,10 +17,20 @@
 #include <MXA/BMPIO/MXABmpHeaders.h>
 
 //STL includes
+#include <string>
 #include <vector>
 
 //--Boost Includes
 #include <boost/shared_ptr.hpp>
+
+
+namespace MXA
+{
+  namespace Bmp
+  {
+    const std::string FileExtension("bmp");
+  }
+}
 
 class MXAFILEREADER_CLASS_NAME;
 typedef boost::shared_ptr<MXAFILEREADER_CLASS_NAME>    Reader64Ptr;

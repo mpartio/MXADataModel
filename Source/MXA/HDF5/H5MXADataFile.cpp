@@ -2,15 +2,12 @@
 #include "H5MXADataFile.h"
 #include <MXA/Base/IFileWriter.h>
 #include <MXA/Base/IFileReader.h>
+#include <MXA/Base/IDataset.h>
 #include <MXA/Core/MXAConstants.h>
 #include <MXA/HDF5/H5DataModelWriter.h>
 #include <MXA/HDF5/H5DataModelReader.h>
 #include <MXA/HDF5/H5Utilities.h>
-#include <MXA/Base/IDataset.h>
-
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
 // -----------------------------------------------------------------------------
 //
@@ -160,10 +157,10 @@ int32 H5MXADataFile::createFile()
 #if 1
   //bool didDeleteFile = 1;
   // Now delete the file if it really exists
-  if (true == boost::filesystem::exists(this->_filename) )
+  if (true == MXAFileSystemPath::exists(this->_filename) )
   {
-    static_cast<void>(boost::filesystem::remove(this->_filename) );
-    if (true == boost::filesystem::exists(this->_filename) )
+    static_cast<void>(MXAFileSystemPath::remove(this->_filename) );
+    if (true == MXAFileSystemPath::exists(this->_filename) )
     {
       std::cout << "H5IODelegate::writeModelToFile: The file could not be deleted\n  " << this->_filename << std::endl;
       return -20;

@@ -13,6 +13,7 @@
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXASupportFile.h>
 #include <MXA/HDF5/H5MXADataFile.h>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
 //-- MXA Unit Test Headers
 #include "MXAUnitTestDataFileLocations.h"
@@ -21,9 +22,7 @@
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
+
 
 // -----------------------------------------------------------------------------
 //
@@ -32,8 +31,8 @@ void RemoveTestFiles()
 {
   std::cout << "   Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
-  boost::filesystem::remove(MXAUnitTest::SupportFileTest::OutputFile);
-  boost::filesystem::remove(MXAUnitTest::SupportFileTest::BinaryInputFile);
+  MXAFileSystemPath::remove(MXAUnitTest::SupportFileTest::OutputFile);
+  MXAFileSystemPath::remove(MXAUnitTest::SupportFileTest::BinaryInputFile);
 #endif
 }
 

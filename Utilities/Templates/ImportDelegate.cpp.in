@@ -8,20 +8,13 @@
 #include <MXA/Base/IDataFile.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXADataSource.h>
-
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
 //-- STL Includes
 #include <iostream>
 
 //-- HDF5 Includes
 #include <hdf5.h>
-
-
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
-namespace FileSystem = boost::filesystem;
-
 
 
 // -----------------------------------------------------------------------------
@@ -55,21 +48,23 @@ int32 @PROJECT_NAME@Delegate::importDataSource(IDataSourcePtr dataSource, IDataF
   // Set this to 1 if your import succeeded, otherwise set it to -1
   herr_t err = -1;
   // Make sure the file Exists first before we go much further
-  FileSystem::path sourcePath ( dataSource->getSourcePath() ); //create a boost::filesystem::path object
-  if ( !FileSystem::exists(sourcePath) )
+  std::string sourcePath ( dataSource->getSourcePath() ); //create a boost::filesystem::path object
+  if ( !MXAFileSystemPath::exists(sourcePath) )
   {
-    std::cout << logTime() << "Error: data file not found: " << sourcePath.native_file_string() << std::endl;
+    std::cout << logTime() << "Error: data file not found: " << MXAFileSystemPath::toNativeSeparators(sourcePath) << std::endl;
     return -1;
   }
 
 
   //Possibly Check for valid file extension - This code would check for a tiff file extension
   // You may want to change this to what your data files are using.
-  std::string fileExt( boost::filesystem::extension(sourcePath) );
+  std::string fileExt( MXAFileSystemPath::extension(sourcePath) );
   std::transform ( fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower );
-  if ( fileExt != @PROJECT_NAME@::FileExt )
+  if ( fileExt != @PROJECT_NAME@::FileExtension
+ )
   {
-      std::cout << logTime() << "Only import of files with extensions of '" << @PROJECT_NAME@::FileExt << "' are supported." << std::endl;
+      std::cout << logTime() << "Only import of files with extensions of '" << @PROJECT_NAME@::FileExtension
+ << "' are supported." << std::endl;
       return MXA_ERROR_IMAGE_FORMAT_NOT_SUPPORTED;
   }
 

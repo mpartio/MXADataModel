@@ -12,15 +12,14 @@
 #include <MXA/HDF5/H5MXADataFile.h>
 #endif
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
+//-- Boost Headers
 #include <boost/iostreams/device/file.hpp>
-#include <boost/filesystem/operations.hpp>
 
+//-- C++ Includes
 #include <iostream>
 
-//--- Convenience code -----------------
-typedef boost::filesystem::path FilePath;
-namespace FileSystem = boost::filesystem;
 
 
 // -----------------------------------------------------------------------------
@@ -260,10 +259,11 @@ uint64 MXASupportFile::getFileSize()
 #endif
   }
 
-  FileSystem::path p( this->_filesystemPath, FileSystem::native );
+  std::string p = MXAFileSystemPath::toNativeSeparators(this->_filesystemPath);
+  //FileSystem::path p( this->_filesystemPath, FileSystem::native );
 
   // Make sure the file exists
-  if ( !FileSystem::exists( p ) )
+  if ( !MXAFileSystemPath::exists( p ) )
     {
       std::cout << "Error at " << __FILE__ << "(" << __LINE__ << ")  ";
       std::cout << "File '" << this->_filesystemPath << "' not found." << std::endl;
@@ -271,14 +271,14 @@ uint64 MXASupportFile::getFileSize()
     }
 
   // Check to make sure the file is regular
-  if ( !FileSystem::is_regular( p ) )
+  if ( !MXAFileSystemPath::isFile( p ) )
     {
       std::cout << "Error at " << __FILE__ << "(" << __LINE__ << ")  ";
       std::cout << "File '" << this->_filesystemPath << "' not a regular file." << std::endl;
       return 0;
     }
 
-    return FileSystem::file_size(p);
+    return MXAFileSystemPath::fileSize(p);
 }
 
 // -----------------------------------------------------------------------------
@@ -306,26 +306,26 @@ int32 MXASupportFile::readFromFileSystem()
 {
   int32 err = 0;
 
-  FileSystem::path p( this->_filesystemPath, FileSystem::native );
+  std::string p = MXAFileSystemPath::toNativeSeparators(this->_filesystemPath);
 
   // Make sure the file exists
-  if ( !FileSystem::exists( p ) )
+  if ( !MXAFileSystemPath::exists( p ) )
     {
       std::cout << this->_filesystemPath << " not found." << std::endl;
       return -1;
     }
 
   // Check to make sure the file is regular
-  if ( !FileSystem::is_regular( p ) )
+  if ( !MXAFileSystemPath::isFile( p ) )
     {
       std::cout << this->_filesystemPath << "not a regular file." << std::endl;
       return -1;
     }
 
    // std::cout << "size of " << argv[1] << " is " << fs::file_size( p )  << std::endl;
-    boost::intmax_t fileSize = FileSystem::file_size(p);
+    uint64 fileSize = MXAFileSystemPath::fileSize(p);
 
-    boost::iostreams::file_source sourceFile (this->_filesystemPath, BOOST_IOS::in);
+    boost::iostreams::file_source sourceFile (p, BOOST_IOS::in);
     if (sourceFile.is_open() == true )
     {
       _fileContents = MXAArrayTemplate<char>::CreateArray(fileSize);
@@ -336,32 +336,3 @@ int32 MXASupportFile::readFromFileSystem()
 
   return err;
 }
-
-#if 0
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-int32 MXASupportFile::writeToFileSystem()
-{
-  return -1;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-int32 MXASupportFile::readFromMXAFile()
-{
-
- // this->_fileContents = MXAArrayTemplate<uint8>::CreateArray(989800);
-  return -1;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-int32 MXASupportFile::writeToMXAFile()
-{
-  return -1;
-}
-
-#endif

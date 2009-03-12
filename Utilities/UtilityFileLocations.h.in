@@ -31,12 +31,12 @@ namespace ImportGenerator
 #else
 namespace ImportGenerator
 {
-  const std::string ImportDelegateInputHeader("@UTILITIES_DIR@/Templates/ImportDelegate.h.in");
-  const std::string ImportDelegateInputSource("@UTILITIES_DIR@/Templates/ImportDelegate.cpp.in");
-  const std::string ImportDelegateFactoryInputHeader("@UTILITIES_DIR@/Templates/ImportDelegateFactory.h.in");
-  const std::string ImportDelegateFactoryInputSource("@UTILITIES_DIR@/Templates/ImportDelegateFactory.cpp.in");
-  const std::string MainInputSource("@UTILITIES_DIR@/Templates/main.cpp.in");
-  const std::string CMakeListsInput("@UTILITIES_DIR@/Templates/CMakeLists.txt.in");
+  const std::string ImportDelegateInputHeader("@MXAUtilities_SOURCE_DIR@/Templates/ImportDelegate.h.in");
+  const std::string ImportDelegateInputSource("@MXAUtilities_SOURCE_DIR@/Templates/ImportDelegate.cpp.in");
+  const std::string ImportDelegateFactoryInputHeader("@MXAUtilities_SOURCE_DIR@/Templates/ImportDelegateFactory.h.in");
+  const std::string ImportDelegateFactoryInputSource("@MXAUtilities_SOURCE_DIR@/Templates/ImportDelegateFactory.cpp.in");
+  const std::string MainInputSource("@MXAUtilities_SOURCE_DIR@/Templates/main.cpp.in");
+  const std::string CMakeListsInput("@MXAUtilities_SOURCE_DIR@/Templates/CMakeLists.txt.in");
   const std::string FindMXADataModelInput("@MXA_CMAKE_DIR@/FindMXADataModel.cmake");
 
 }

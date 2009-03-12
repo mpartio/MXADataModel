@@ -3,8 +3,8 @@
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
-#include <DataImport/DataImportXmlParser.h>
-#include <DataImport/ImportDelegateManager.h>
+#include <MXA/DataImport/DataImportXmlParser.h>
+#include <MXA/DataImport/ImportDelegateManager.h>
 #include <@PROJECT_NAME@DelegateFactory.h>
 #include <@PROJECT_NAME@Delegate.h>
 

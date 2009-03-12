@@ -23,14 +23,9 @@
 #include <string>
 #include <iostream>
 
-// Include Boost Headers
-#include <boost/filesystem/path.hpp>
 
 //-- Forward Declare the MXADataModel Class
 class MXADataModel;
-
-//Alias the namespace to cut down on line width and typing
-namespace FileSystem = boost::filesystem;
 
 namespace H5TiffImport
 {

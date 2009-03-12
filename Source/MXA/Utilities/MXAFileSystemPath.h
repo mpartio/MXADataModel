@@ -47,6 +47,11 @@ class MXAFileSystemPath
     static MXA_EXPORT bool isFile(const std::string &path);
 
     /**
+     * @brief Get the size of the file in bytes
+     */
+    static MXA_EXPORT uint64 fileSize(const std::string &path);
+
+    /**
      * @brief Does the path actually exist on the file system
      * @param path Path to examine
      */

@@ -26,6 +26,7 @@
 #include <MXA/HDF5/H5MXADataFile.h>
 #include <MXA/DataImport/DataImportXmlParser.h>
 #include <MXA/DataImport/ImportDelegateManager.h>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 #include "Tests/MXAUnitTestDataFileLocations.h"
 #include "H5ImportTest.h"
 #include "TiffMaker.h"
@@ -34,20 +35,29 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
 
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
-
+static std::vector<std::string> createdPaths;
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
-  std::cout << "Removing Test files" << std::endl;
+  std::cout << logTime() << "Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
-  boost::filesystem::remove(DATAIMPORT_TEST_SIMPLE_IMPORT);
-  boost::filesystem::remove(DATAIMPORT_TEST_H5TIFF_OUTPUT_FILE);
+  bool success;
+  MXAFileSystemPath::remove(MXAUnitTest::DataImportTest::SimpleImport);
+  MXAFileSystemPath::remove(MXAUnitTest::DataImportTest::H5TiffOutputFile);
+  for (std::vector<std::string>::iterator iter = createdPaths.begin(); iter != createdPaths.end(); ++iter ) {
+    success = MXAFileSystemPath::remove(*iter);
+    BOOST_REQUIRE_EQUAL(success, true);
+  }
+  success = MXAFileSystemPath::rmdir(MXAUnitTest::MXATempDir +
+                                     MXAUnitTest::DataImportTest::TestDir +
+                                     MXAFileSystemPath::Separator + "test_data", false);
+  BOOST_REQUIRE_EQUAL(success, true);
+  success = MXAFileSystemPath::rmdir(MXAUnitTest::MXATempDir +
+                                     MXAUnitTest::DataImportTest::TestDir, false);
+  BOOST_REQUIRE_EQUAL(success, true);
 #endif
 }
 
@@ -184,11 +194,11 @@ MXADataModelPtr createSimpleModel()
 // -----------------------------------------------------------------------------
 int SimpleTest()
 {
-  std::cout << "  Running SimpleImportTest ------------------------" << std::endl;
+  std::cout << logTime() << "Running SimpleImportTest ------------------------" << std::endl;
   int32 err = 0;
   MXADataModelPtr model = createSimpleModel();
   ImportSimpleData(model, DATAIMPORT_TEST_SIMPLE_IMPORT);
-  std::cout << "  Ending SimpleImportTest" << std::endl;
+  std::cout << logTime() << "Ending SimpleImportTest" << std::endl;
   return err;
 }
 
@@ -207,11 +217,12 @@ void CreateTiffImages()
   IDataSources dataSources = importer.getDataSources();
 
   TiffMaker tiffMaker;
-  std::cout << "  -Creating Tiff Images to import" << std::endl;
+  std::cout << logTime() << "Creating Tiff Images to import" << std::endl;
   for (IDataSources::iterator iter = dataSources.begin(); iter != dataSources.end(); ++iter ) {
     std::string tiffPath = (*iter).get()->getSourcePath();
    // std::cout << "Making Tiff at " << tiffPath << std::endl;
     tiffMaker.createTiffFile(tiffPath);
+    createdPaths.push_back(tiffPath);
   }
 }
 
@@ -220,7 +231,12 @@ void CreateTiffImages()
 // -----------------------------------------------------------------------------
 int XMLImportTest()
 {
-  std::cout << "  Starting XMLImportTest -----------------" << std::endl;
+  bool success = MXAFileSystemPath::mkdir(MXAUnitTest::MXATempDir +
+                                          MXAUnitTest::DataImportTest::TestDir +
+                                          MXAFileSystemPath::Separator + "test_data", true);
+  BOOST_REQUIRE_EQUAL(success, true);
+
+  std::cout << logTime() << "Starting XMLImportTest -----------------" << std::endl;
   // Instantiate the Instance Manager for import delegates
   ImportDelegateManagerPtr idManager = ImportDelegateManager::instance();
 
@@ -239,10 +255,10 @@ int XMLImportTest()
   int32 err = importer.import(); // Run the Import
   if (err < 0)
   {
-    std::cout << "Error Importing Data Files. Check any output for possible error logs." << std::endl;
+    std::cout << logTime()  << "Error Importing Data Files. Check any output for possible error logs." << std::endl;
   }
   BOOST_REQUIRE (err >= 0);
-  std::cout << "  Done With XML Based H5 Tiff import Test -----------------" << std::endl;
+  std::cout << logTime() << "Done With XML Based H5 Tiff import Test -----------------" << std::endl;
   return err;
 }
 

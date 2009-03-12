@@ -17,6 +17,7 @@
 #include <MXA/XML/XMLDataModelWriter.h>
 #include "MXAUnitTestDataFileLocations.h"
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
 //-- C++ includes
 #include <string>
@@ -28,9 +29,7 @@
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
+
 
 
 //typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
@@ -41,10 +40,10 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  boost::filesystem::remove(XML_TEST_FILE) ;
-  boost::filesystem::remove(MASTER_XML_FILE);
-  boost::filesystem::remove(XML_TEMPLATE_TEST_FILE) ;
-  boost::filesystem::remove(XML_TEMPLATE_COMPLETE_FILE);
+  MXAFileSystemPath::remove(XML_TEST_FILE) ;
+  MXAFileSystemPath::remove(MASTER_XML_FILE);
+  MXAFileSystemPath::remove(XML_TEMPLATE_TEST_FILE) ;
+  MXAFileSystemPath::remove(XML_TEMPLATE_COMPLETE_FILE);
 #endif
 }
 

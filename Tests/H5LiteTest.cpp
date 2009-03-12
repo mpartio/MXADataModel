@@ -17,15 +17,13 @@
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXA2DArray.hpp>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 #include "MXAUnitTestDataFileLocations.h"
 
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
 
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
 
 
 
@@ -101,8 +99,8 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
- boost::filesystem::remove(H5LITE_TEST_FILE_NAME);
- // boost::filesystem::remove(H5LITE_TEST_LARGE_FILE));
+  MXAFileSystemPath::remove(H5LITE_TEST_FILE_NAME);
+ // MXAFileSystemPath::remove(H5LITE_TEST_LARGE_FILE));
 #endif
 }
 

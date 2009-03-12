@@ -9,13 +9,8 @@
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/HDF5/H5AttributeWriter.h>
 #include <MXA/Utilities/StringUtils.h>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
-#include <boost/filesystem/operations.hpp>
-//--- Convenience code -----------------
-typedef boost::filesystem::path FilePath;
-namespace FileSystem = boost::filesystem;
-
-// #include <MXA/Core/MXAAbstractAttribute.h>
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -83,8 +78,8 @@ int32 H5DataModelWriter::writeSupportFiles(hid_t fileId)
           err = H5Lite::writePointerDataset<uint8>(fileId, dsetName, rank, fileSize, fileContents);
           err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILESYSTEM_PATH_TAG, file->getFileSystemPath() );
           err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILETYPE_TAG, file->getFileType() );
-          FilePath path( file->getFileSystemPath(), FileSystem::native );
-          err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILENAME_TAG, path.filename() );
+          std::string path = MXAFileSystemPath::filename( file->getFileSystemPath() );
+          err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILENAME_TAG, path);
 
         }
         else

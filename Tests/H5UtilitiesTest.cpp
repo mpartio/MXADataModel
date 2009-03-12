@@ -16,7 +16,7 @@
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include "MXAUnitTestDataFileLocations.h"
-
+#include <MXA/Utilities/MXAFileSystemPath.h>
 //-- C++ includes
 #include <list>
 #include <string>
@@ -26,9 +26,6 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
 
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
 
 #define DIM 6
 #define DIM0 4
@@ -48,7 +45,7 @@ using namespace MXATypes;
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  boost::filesystem::remove(H5UTIL_TEST_FILE_NAME);
+  MXAFileSystemPath::remove(H5UTIL_TEST_FILE_NAME);
 #endif
 }
 

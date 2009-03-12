@@ -5,13 +5,13 @@
 //-- MXA Includes
 #include <MXA/Common/MXAErrorDefinitions.h>
 #include <MXA/Common/LogTime.h>
-// #include <MXA/Base/IFileIODelegate.h>
 #include <MXA/Base/IDataFile.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXADataSource.h>
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/HDF5/H5TiffIO.h>
+#include <MXA/Utilities/MXAFileSystemPath.h>
 
 //-- STL Includes
 #include <iostream>
@@ -19,9 +19,6 @@
 //-- HDF5 Includes
 #include <hdf5.h>
 
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
 
 // -----------------------------------------------------------------------------
 //  Convenience macros
@@ -68,10 +65,10 @@ int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFil
   // std::cout << "H5TiffImportDelegate::importDataSource:  Importing as grayscale->" << this->_importAsGrayScale << std::endl;
   herr_t err = -1;
   // Make sure the file Exists first before we go much further
-  FileSystem::path sourcePath ( dataSource->getSourcePath() ); //create a boost::filesystem::path object
-  if ( !FileSystem::exists(sourcePath) )
+  std::string sourcePath ( dataSource->getSourcePath() );
+  if ( !MXAFileSystemPath::exists(sourcePath) )
   {
-    std::cout << logTime() << "Error: Tiff image not found: " << sourcePath.native_file_string() << std::endl;
+    std::cout << logTime() << "Error: Tiff image not found: " << MXAFileSystemPath::toNativeSeparators(sourcePath) << std::endl;
     if (_fileNotFoundIsError)
     {
       return MXA_ERROR_FILE_NOT_FOUND;
@@ -85,7 +82,7 @@ int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFil
   std::cout << "H5TiffImportDelegate::importDataSource '" << dataSource->getSourcePath() << "'" << std::endl;
 #endif
   //Check for valid TIFF file extension - tif or tiff.
-  std::string fileExt( boost::filesystem::extension(sourcePath) );
+  std::string fileExt( MXAFileSystemPath::extension(sourcePath) );
   std::transform ( fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower );
   if ( fileExt != MXA::Tiff::TiffExtension )
   {
