@@ -15,6 +15,7 @@
 
 
 #include "MXAFileSystemPath.h"
+#include <MXA/Common/LogTime.h>
 
 #include <iostream>
 #include <vector>
@@ -100,6 +101,82 @@ uint64 MXAFileSystemPath::fileSize(const std::string &path)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+bool MXAFileSystemPath::isRelativePath(const std::string &path)
+{
+#if defined (WIN32)
+  if (path.length() > 2 && isalpha(path[0]) == false && path[1] != ':' && path[2] != '\\') {return true;}
+#else
+  if (path.length() > 0 && path[0] != '/') { return true; }
+#endif
+  return false;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+bool MXAFileSystemPath::isAbsolutePath(const std::string &path)
+{
+#if defined (WIN32)
+  if (path.length() > 2 && isalpha(path[0]) == true && path[1] == ':' && path[2] == '\\') {return true;}
+  if (path.length() > 1 && path[0] == '\\' && path[1] == '\\') { return true;}
+#else
+  if (path.length() > 0 && path[0] == '/') { return true; }
+#endif
+  return false;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string MXAFileSystemPath::currentPath()
+{
+  std::string currentPath;
+  MXA_STATBUF st;
+  if (0 == MXA_STAT(".", &st) )
+  {
+    char currentName[PATH_MAX+1];
+    char* result = NULL;
+    ::memset(&currentName[0], 0, PATH_MAX + 1); // Clear everything to zeros.
+    result = ::getcwd(currentName, PATH_MAX);
+    if (NULL == result)
+    {
+      std::cout << logTime() << "Error: MXAFileSystemPath::currentPath result was NULL." << std::endl;
+    }
+    else
+    {
+      currentPath = std::string(currentName);
+    }
+
+  }
+  else
+  {
+    std::cout << logTime() << "Error: MXAFileSystemPath::currentPath stat function failed." << std::endl;
+  }
+  return currentPath;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string MXAFileSystemPath::absolutePath(const std::string &path)
+{
+  std::string abspath;
+  if ( true == MXAFileSystemPath::isAbsolutePath(path))
+  { return path; }
+
+  abspath = MXAFileSystemPath::currentPath();
+  if(abspath[abspath.length()-1] != MXAFileSystemPath::Separator)
+  {
+    abspath = abspath + MXAFileSystemPath::Separator;
+  }
+  abspath.append(path);
+  abspath = MXAFileSystemPath::cleanPath(abspath);
+  return abspath;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 bool MXAFileSystemPath::exists(const std::string &fsPath)
 {
   int error;
@@ -120,14 +197,30 @@ bool MXAFileSystemPath::exists(const std::string &fsPath)
 std::string MXAFileSystemPath::extension(const std::string &fsPath)
 {
   std::string::size_type pos = fsPath.find_last_of('.');
-  std::string::size_type slashPos = fsPath.find_last_of(MXAFileSystemPath::Separator);
-  if (pos > 0
-      && pos != std::string::npos
-      && fsPath[pos-1] != MXAFileSystemPath::Separator
-      && pos > slashPos)
+  // No '.' characters appeared in the path at all
+  if(std::string::npos == pos)
+  {
+    return std::string();
+  }
+  // Look for a "Hidden" file  .som ./.some ../.something.something
+  if (pos == 0
+      || fsPath[pos-1] == MXAFileSystemPath::Separator)
+  {
+    return std::string();  // Return empty string, there is no extension
+  }
+
+  std::string::size_type slashpos = fsPath.find_last_of(MXAFileSystemPath::Separator);
+  // Check for just a plain filename, ie a path with NO directory delimiters in the string
+  if (std::string::npos == slashpos && std::string::npos != pos)
   {
     return fsPath.substr(pos + 1);
   }
+
+  if (pos > slashpos)
+  {
+    return fsPath.substr(pos + 1);
+  }
+
   return std::string();
 }
 

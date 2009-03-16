@@ -10,8 +10,10 @@
 #define _MXAFileSystemPath_h_
 
 #include <MXA/Common/MXATypes.h>
-#include <string>
 
+
+//-- STL includes
+#include <string>
 
 
 /**
@@ -33,6 +35,8 @@ class MXAFileSystemPath
     static MXA_EXPORT const char Separator = '/';
 #endif
     static MXA_EXPORT const char UnixSeparator = '/';
+    static MXA_EXPORT const char Dot = '.';
+
 
     /**
      * @brief Is the path specified a directory on the filesystem
@@ -45,6 +49,38 @@ class MXAFileSystemPath
      * @param path Path to examine
      */
     static MXA_EXPORT bool isFile(const std::string &path);
+
+    /**
+     * @brief Returns true if the path is a relative path but does not determine
+     * if the file actually exists or not
+     * @@param path The path to check
+     * @return True if the path is relative
+     */
+    static MXA_EXPORT bool isRelativePath(const std::string &path);
+
+    /**
+     * @brief Returns true if the path is an absolute path. On Unix this means the
+     * first character is '/' and on windows the path starts with 'Drive:\' or '\\'
+     * @@param path The path to check
+     * @return True if the path is absolute
+     */
+    static MXA_EXPORT bool isAbsolutePath(const std::string &path);
+
+    /**
+     * @brief Returns the current path
+     * @return The current working directory as reported by the operating system
+     */
+    static MXA_EXPORT std::string currentPath();
+
+    /**
+     * @brief Either calculates an absolute path or returns the same string if
+     * it already indicates an absolute path. No Attempt is made to actually
+     * determine if the file exists or not. The path will be free of any extra
+     * './' or '..' in the path but symbolic links will possibly be in the path
+     * @param path The path to check/convert
+     * @return The absolute path.
+     */
+    static MXA_EXPORT std::string absolutePath(const std::string &path);
 
     /**
      * @brief Get the size of the file in bytes

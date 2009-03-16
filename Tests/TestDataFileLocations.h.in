@@ -31,6 +31,8 @@
 #define MXA_TEMP_DIR "@MXA_TEMP_DIR@"
 namespace MXAUnitTest {
   const std::string MXATempDir(MXA_TEMP_DIR);
+  const std::string MXATestBinaryDirectory("@MXATests_BINARY_DIR@");
+  const std::string MXABuildDir("@MXADataModel_BINARY_DIR@");
 
 #if defined (WIN32)
     static const char DirSeparator = '\\';

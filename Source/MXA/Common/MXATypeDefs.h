@@ -26,6 +26,13 @@
  * @brief This file contains many common typdefs used through out the MXA Source code
  */
 
+#if defined (MXA_USE_SHARED_STRINGS)
+typedef boost::shared_ptr<std::string>    MXAString;
+#else
+typedef std::string MXAString;
+#endif
+
+
 class IDataFile;
 class IFileReader;
 class IFileWriter;

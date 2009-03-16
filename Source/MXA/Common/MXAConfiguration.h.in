@@ -52,6 +52,9 @@
 /* What is the name of our File Writer Class */
 #define MXAFILEWRITER_CLASS_NAME MXAFileWriter64
 
+/* Should we use Boost Shared_Pointer Wrapped strings*/
+#cmakedefine MXA_USE_SHARED_STRINGS @MXA_USE_SHARED_STRINGS@
+
 /* The Following include MUST appear AFTER MXA_BUILT_AS_DYNAMIC_LIB has been defined */
 #include <MXA/Common/DLLExport.h>
 
@@ -156,7 +159,7 @@
 /* Whether mxaIdType is a 64-bit integer type (or a 32-bit integer type).  */
 #cmakedefine MXA_USE_64BIT_IDS
 
-/* This section is for methods that need information about files and 
+/* This section is for methods that need information about files and
 * directories from the files system. Note that we only should be supporting
 * 64 bit file systems */
 #include <sys/stat.h>
