@@ -20,12 +20,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/iostreams/device/file.hpp>
 
-////-- Boost Filesystem Headers
-//#include <boost/filesystem/operations.hpp>
-//#include <boost/filesystem/convenience.hpp>
-//#include <boost/filesystem/path.hpp>
-//#include <boost/filesystem/fstream.hpp>
-
 
 // Boost program options
 #include <boost/program_options.hpp>

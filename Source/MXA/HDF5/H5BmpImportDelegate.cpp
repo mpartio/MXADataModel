@@ -7,6 +7,7 @@
 #include <MXA/Base/IDataFile.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXADataSource.h>
+#include <MXA/BMPIO/MXABmpIO.h>
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/HDF5/H5BmpIO.h>
@@ -16,10 +17,6 @@
 
 //-- HDF5 Includes
 #include <hdf5.h>
-
-//-- Boost Filesystem Headers
-//#include <boost/filesystem/operations.hpp>
-//#include <boost/filesystem/convenience.hpp>
 
 // -----------------------------------------------------------------------------
 //  Convenience macros
@@ -84,7 +81,7 @@ int32 H5BmpImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFile
   //Check for valid BMP file extension - BMP or BMP.
   std::string fileExt = MXAFileSystemPath::extension(sourcePath);
   std::transform ( fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower );
-  if (fileExt != MXA::BMP::FileExtension )
+  if (fileExt != MXA::Bmp::FileExtension )
   {
     std::cout << logTime() << "Only import of BMP images with extensions of 'bmp' are supported." << std::endl;
     return MXA_ERROR_IMAGE_FORMAT_NOT_SUPPORTED;

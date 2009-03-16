@@ -38,6 +38,13 @@ class MXAFileSystemPath
     static MXA_EXPORT const char Dot = '.';
 
 
+    static MXA_EXPORT std::string getSeparator() {
+#if defined (WIN32)
+      return "\\";
+#else
+      return "/";
+#endif
+      }
     /**
      * @brief Is the path specified a directory on the filesystem
      * @param path Path to examine
@@ -73,6 +80,14 @@ class MXAFileSystemPath
     static MXA_EXPORT std::string currentPath();
 
     /**
+     * @brief Returns the path to the parent directory
+     * @param path The path to return the parent path
+     * @return The Parent path
+     */
+    static MXA_EXPORT std::string parentPath(const std::string &path);
+
+
+    /**
      * @brief Either calculates an absolute path or returns the same string if
      * it already indicates an absolute path. No Attempt is made to actually
      * determine if the file exists or not. The path will be free of any extra
@@ -81,6 +96,13 @@ class MXAFileSystemPath
      * @return The absolute path.
      */
     static MXA_EXPORT std::string absolutePath(const std::string &path);
+
+    /**
+     * @brief Returns a list of the contents of a directory. No filtering is attempted.
+     * @param path The path to the directory
+     * @return List of contents
+     */
+    static MXA_EXPORT std::vector<std::string> entryList(const std::string &path);
 
     /**
      * @brief Get the size of the file in bytes

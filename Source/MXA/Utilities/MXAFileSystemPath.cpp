@@ -25,9 +25,11 @@
 
 #if defined (WIN32)
 #include <direct.h>
+#include "MXADirent.h"
 #define UNLINK _unlink
 #else
 #define UNLINK ::unlink
+#include <dirent.h>
 #endif
 
 
@@ -172,6 +174,67 @@ std::string MXAFileSystemPath::absolutePath(const std::string &path)
   abspath.append(path);
   abspath = MXAFileSystemPath::cleanPath(abspath);
   return abspath;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::vector<std::string> MXAFileSystemPath::entryList(const std::string &path)
+{
+  DIR* dir = NULL;
+  struct dirent* de = NULL;
+  std::vector<std::string> list;
+  dir = opendir( path.c_str() );
+
+  if (NULL != dir)
+  {
+
+    while ( NULL != (de = readdir(dir) ) )
+    {
+      if (de->d_name[0] != '.' && de->d_name[1] != '.')
+      list.push_back(de->d_name);
+    }
+    closedir( dir );
+  }
+  return list;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string MXAFileSystemPath::parentPath(const std::string &path)
+{
+  std::string curAbsPath = MXAFileSystemPath::absolutePath(path);
+  curAbsPath = MXAFileSystemPath::fromNativeSeparators(curAbsPath);
+  std::string::size_type nextToLastSlashPos = 0;
+  std::string::size_type lastSlashPos = curAbsPath.find_last_of(MXAFileSystemPath::Separator);
+// Remove trailing '/' if found
+  if (lastSlashPos == curAbsPath.length() - 1)
+  {
+    curAbsPath = curAbsPath.substr(0, curAbsPath.length()-2);
+    lastSlashPos = curAbsPath.find_last_of(MXAFileSystemPath::Separator);
+  }
+
+  if (lastSlashPos > 0)
+  {
+    nextToLastSlashPos = curAbsPath.find_last_of(MXAFileSystemPath::Separator, lastSlashPos - 1);
+  }
+
+  if (nextToLastSlashPos == std::string::npos) // Only 1 slash found, return the root directory
+  {
+#if defined (WIN32)
+    curAbsPath = curAbsPath.substr(0, 3);
+    return MXAFileSystemPath::toNativeSeparators(curAbsPath);
+#else
+    return curAbsPath.substr(0, 1);
+#endif
+  }
+
+  curAbsPath = curAbsPath.substr(0, lastSlashPos);
+#if defined (WIN32)
+  curAbsPath = MXAFileSystemPath::toNativeSeparators(curAbsPath);
+#endif
+  return curAbsPath;
 }
 
 // -----------------------------------------------------------------------------

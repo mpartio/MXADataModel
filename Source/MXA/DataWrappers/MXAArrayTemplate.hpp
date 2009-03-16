@@ -25,16 +25,10 @@
 
 // STL Includes
 #include <sstream>
+#include <fstream>
 
 // -- Boost algorithms
-#include <boost/iostreams/device/file.hpp>
-
-//-- Boost Filesystem Headers
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/fstream.hpp>
-//namespace FileSystem = boost::filesystem;
+// #include <boost/iostreams/device/file.hpp>
 
 
 #define mxa_bswap(s,d,t)\
@@ -382,8 +376,8 @@ class MXAArrayTemplate : public IMXAArray
 
       std::string filepath = expProps->getExportFile();
       // Create our output file
-      boost::filesystem::ofstream out;
-      out.open(filepath, BOOST_IOS::out | BOOST_IOS::trunc);
+      std::ofstream out;
+      out.open(filepath.c_str(), std::ios::out | std::ios::binary | std::ios::trunc);
       if (out.is_open()==false)
       {
         std::cout << "Output file could not be opened.'" << filepath << "'" << std::endl;
@@ -413,8 +407,8 @@ class MXAArrayTemplate : public IMXAArray
       std::string delimiter = expProps->getAsciiDelimiter();
 
       // Create our output file
-      boost::filesystem::ofstream out;
-      out.open(expProps->getExportFile(), BOOST_IOS::out | BOOST_IOS::trunc);
+      std::ofstream out;
+      out.open(expProps->getExportFile().c_str(), std::ios::out | std::ios::trunc);
       if (out.is_open()==false)
       {
         std::cout << "Output file could not be opened.'" << expProps->getExportFile() << "'" << std::endl;

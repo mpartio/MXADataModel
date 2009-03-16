@@ -260,8 +260,6 @@ uint64 MXASupportFile::getFileSize()
   }
 
   std::string p = MXAFileSystemPath::toNativeSeparators(this->_filesystemPath);
-  //FileSystem::path p( this->_filesystemPath, FileSystem::native );
-
   // Make sure the file exists
   if ( !MXAFileSystemPath::exists( p ) )
     {

@@ -45,7 +45,6 @@ void CheckFile(const std::string &filepath,
   bool isDir;
   bool isFile;
   bool ok;
-  bool doWrite = true;
  // std::string filepath(MXAUnitTest::MXAFileSystemPathTest::OutputFile );
   //std::cout << "|--Creating File '" << filepath << "'" << std::endl;
     {
@@ -344,6 +343,29 @@ int RemoveDirectoriesTest()
 }
 
 // -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int DirListTest()
+{
+  std::cout  << "|- DirListTest -----------------" << std::endl;
+
+  int err = 0;
+  std::vector<std::string> list = MXAFileSystemPath::entryList(MXAUnitTest::MXABuildDir);
+
+  for (std::vector<std::string>::iterator iter = list.begin(); iter != list.end(); ++iter ) {
+    std::cout << "|--- DIR_LIST_ENTRY--> " << *iter << std::endl;
+  }
+
+  std::string ppath = MXAFileSystemPath::parentPath(MXAUnitTest::MXATestBinaryDirectory);
+  std::cout << "Child Path: " << MXAUnitTest::MXATestBinaryDirectory << std::endl;
+  std::cout << "ParentPath: " << ppath << std::endl;
+  std::cout << "Ref Path:   " << MXAUnitTest::MXABuildDir << std::endl;
+  int equal  = ppath.compare(MXAUnitTest::MXABuildDir);
+  BOOST_REQUIRE_EQUAL(equal, 0);
+  return err;
+}
+
+// -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
@@ -353,6 +375,7 @@ boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*
   test->add( BOOST_TEST_CASE( &FilesTest), 0);
   test->add( BOOST_TEST_CASE( &FileNameTest), 0);
   test->add( BOOST_TEST_CASE( &AbsolutePathTest), 0);
+  test->add( BOOST_TEST_CASE( &DirListTest), 0);
   test->add( BOOST_TEST_CASE( &RemoveDirectoriesTest), 0);
   test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test;

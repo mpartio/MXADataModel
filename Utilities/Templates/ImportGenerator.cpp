@@ -21,9 +21,6 @@
 
 #include <boost/iostreams/device/file.hpp>
 
-#include <boost/filesystem/fstream.hpp>
-
-
 
 // Boost program options
 #include <boost/program_options.hpp>
@@ -86,8 +83,9 @@ int parseTemplate(const std::string &inputFile,
     return -1;
   }
 
-  boost::filesystem::path _configFile(inputFile);
-  boost::filesystem::ifstream configFile;
+  std::string _configFile = inputFile;
+
+  std::ifstream configFile;
   configFile.open(_configFile);
   if (configFile.is_open() == false)
   {
