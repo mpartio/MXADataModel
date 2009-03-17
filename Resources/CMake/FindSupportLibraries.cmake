@@ -7,19 +7,15 @@ ENDIF ( NOT DEFINED  MXA_RESOURCES_DIR)
 # ---------- Find Boost Headers/Libraries -----------------------
 SET (Boost_FIND_REQUIRED TRUE)
 SET (Boost_FIND_QUIETLY TRUE)
-SET (Boost_USE_FILESYSTEM TRUE)
-SET (Boost_USE_SYSTEM TRUE)
-SET (Boost_USE_UNIT_TEST_FRAMEWORK TRUE)
-SET (Boost_USE_TEST_EXEC_MONITOR TRUE)
-SET (Boost_USE_PROGRAM_OPTIONS TRUE)
+#SET (Boost_USE_FILESYSTEM TRUE)
+#SET (Boost_USE_SYSTEM TRUE)
+#SET (Boost_USE_UNIT_TEST_FRAMEWORK TRUE)
+#SET (Boost_USE_TEST_EXEC_MONITOR TRUE)
+#SET (Boost_USE_PROGRAM_OPTIONS TRUE)
 set (Boost_USE_MULTITHREADED TRUE)
+set (Boost_USE_STATIC_LIBS TRUE)
 
-#INCLUDE (${MXA_CMAKE_DIR}/MXAFindBoost.cmake)
-set(Boost_FIND_QUIETLY FALSE)
-#-- We build static boost libraries on windows. Just easier that way.
-set(Boost_USE_STATIC_LIBS TRUE)
-
-FIND_PACKAGE(Boost 1.36 COMPONENTS  system program_options unit_test_framework test_exec_monitor thread)
+FIND_PACKAGE(Boost 1.36 COMPONENTS  system unit_test_framework test_exec_monitor)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
 SET(DEP_LIBS ${DEP_LIBS} ${Boost_LIBRARIES})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
