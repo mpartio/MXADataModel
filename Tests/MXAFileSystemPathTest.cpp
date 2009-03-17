@@ -21,6 +21,9 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
 
+#define PRINT_LINE_NUMBER() \
+  std::cout << "|--MXAFileSystemPathTest.cpp(" << __LINE__ << ")" << std::endl;
+
 #define FileWriter MXAFILEWRITER_CLASS_NAME
 // -----------------------------------------------------------------------------
 //
@@ -49,7 +52,7 @@ void CheckFile(const std::string &filepath,
   //std::cout << "|--Creating File '" << filepath << "'" << std::endl;
     {
       // Write a file so we can try and delete it
-      std::cout << "|--  Creating file to delete: '" << filepath << "'" << std::endl;
+      std::cout << "|--  Create: '" << filepath << "'" << std::endl;
       std::ofstream outStream(filepath.c_str(), std::ios::out | std::ios::binary);
       BOOST_REQUIRE_EQUAL(false, outStream.fail() );
       char* data = "MXAFileSystemPath_Test Contents";
@@ -69,13 +72,13 @@ void CheckFile(const std::string &filepath,
     BOOST_REQUIRE_EQUAL(ext, extension);
 
     // Now try to delete the file
-    std::cout << "|--  Deleting File: '" << filepath << "'" << std::endl;
+    std::cout << "|--  Delete: '" << filepath << "'" << std::endl;
     ok = MXAFileSystemPath::remove(filepath);
     BOOST_REQUIRE_EQUAL(ok, true);
     exists = MXAFileSystemPath::exists(filepath);
     BOOST_REQUIRE_EQUAL(exists, false);
 
-    std::cout << "|--  Trying to delete the same file again." << std::endl;
+    std::cout << "|--  Delete Again:" << std::endl;
     ok = MXAFileSystemPath::remove(filepath);
     BOOST_REQUIRE_EQUAL(ok, false);
 }
@@ -175,34 +178,34 @@ int FilesTest()
                  MXAUnitTest::MXAFileSystemPathTest::Extension);
 
   std::string testFileName = ".hidden_file";
-  std::string testFile = testdir + MXAUnitTest::DirSeparator + testFileName;
+  std::string testFilePath = testdir + MXAUnitTest::DirSeparator + testFileName;
   std::string ext; // No Extension
-  CheckFile(testFile, testFileName, ext);
+  CheckFile(testFilePath, testFileName, ext);
 
   testFileName = "Normal.txt";
   ok = MXAFileSystemPath::mkdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, true);
   BOOST_REQUIRE_EQUAL(ok, true);
-  testFile = testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator + testFileName;
+  testFilePath = testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator + testFileName;
   ext = "txt";
-  CheckFile(testFile, testFileName, ext);
+  CheckFile(testFilePath, testFileName, ext);
   ok = MXAFileSystemPath::rmdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, false);
   BOOST_REQUIRE_EQUAL(ok, true);
 
   testFileName = "No_Extension";
   ok = MXAFileSystemPath::mkdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, true);
   BOOST_REQUIRE_EQUAL(ok, true);
-  testFile = testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator + testFileName;
+  testFilePath = testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator + testFileName;
   ext = "";
-  CheckFile(testFile, testFileName, ext);
+  CheckFile(testFilePath, testFileName, ext);
   ok = MXAFileSystemPath::rmdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, false);
   BOOST_REQUIRE_EQUAL(ok, true);
 
   testFileName = "EndsWithDot.";
   ok = MXAFileSystemPath::mkdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, true);
   BOOST_REQUIRE_EQUAL(ok, true);
-  testFile = testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator + testFileName;
+  testFilePath = testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator + testFileName;
   ext = "";
-  CheckFile(testFile, testFileName, ext);
+  CheckFile(testFilePath, testFileName, ext);
   ok = MXAFileSystemPath::rmdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, false);
   BOOST_REQUIRE_EQUAL(ok, true);
 
@@ -217,43 +220,49 @@ int AbsolutePathTest()
 {
   std::cout  << "|- AbsolutePathTest -----------------" << std::endl;
   int err = 0;
-  bool success = 0;
+  int success = 0;
 
   std::string testdir = MXAUnitTest::MXATempDir + MXAUnitTest::MXAFileSystemPathTest::TestDir;
 
   std::string currentPath = MXAFileSystemPath::currentPath();
-//  std::cout << "currentPath: " << currentPath << std::endl;
-//  std::cout << "MXATestBinaryDirectory:" << MXAUnitTest::MXATestBinaryDirectory << std::endl;
+  //std::cout << "currentPath: " << currentPath << std::endl;
+  //std::cout << "MXATestBinaryDirectory:" << MXAUnitTest::MXATestBinaryDirectory << std::endl;
   success = currentPath.compare(MXAUnitTest::MXATestBinaryDirectory);
   BOOST_REQUIRE_EQUAL(success, 0);
 
   std::string file = MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
-  CheckFile(file, MXAUnitTest::MXAFileSystemPathTest::OutputFileName, "bin");
+  PRINT_LINE_NUMBER();
+  CheckFile(MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
   file = MXAFileSystemPath::absolutePath(file);
   std::string refPath = MXAUnitTest::MXATestBinaryDirectory + MXAFileSystemPath::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   std::cout << "|-- file: " << file << std::endl;
   success = file.compare(refPath);
   BOOST_REQUIRE_EQUAL(success, 0);
-  CheckFile(file, MXAUnitTest::MXAFileSystemPathTest::OutputFileName, "bin");
+  PRINT_LINE_NUMBER();
+  CheckFile(  file, MXAUnitTest::MXAFileSystemPathTest::OutputFileName, "bin");
 
-  // Check with a ./ prefixed to the file anem
-  file = "./" + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
-  CheckFile(file, MXAUnitTest::MXAFileSystemPathTest::OutputFileName, "bin");
+  // Check with a ./ prefixed to the file path
+  file = MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
+  PRINT_LINE_NUMBER();
+  CheckFile("." + MXAFileSystemPath::getSeparator() + MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
   file = MXAFileSystemPath::absolutePath(file);
   refPath = MXAUnitTest::MXATestBinaryDirectory + MXAFileSystemPath::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   std::cout << "|-- file: " << file << std::endl;
   success = file.compare(refPath);
   BOOST_REQUIRE_EQUAL(success, 0);
+  PRINT_LINE_NUMBER();
   CheckFile(file, MXAUnitTest::MXAFileSystemPathTest::OutputFileName, "bin");
 
   // Check with a ../ prefixed to the file anem
-  file = "../" + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
-  CheckFile(file, MXAUnitTest::MXAFileSystemPathTest::OutputFileName, "bin");
-  file = MXAFileSystemPath::absolutePath(file);
+  file = MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
+  PRINT_LINE_NUMBER();
+  CheckFile( ".." + MXAFileSystemPath::getSeparator() + MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
+  file = MXAFileSystemPath::absolutePath(".." + MXAFileSystemPath::getSeparator() + file);
   refPath = MXAUnitTest::MXABuildDir + MXAFileSystemPath::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   std::cout << "|-- file: " << file << std::endl;
   success = file.compare(refPath);
   BOOST_REQUIRE_EQUAL(success, 0);
+  PRINT_LINE_NUMBER();
   CheckFile(file, MXAUnitTest::MXAFileSystemPathTest::OutputFileName, "bin");
 
 
@@ -357,9 +366,9 @@ int DirListTest()
   }
 
   std::string ppath = MXAFileSystemPath::parentPath(MXAUnitTest::MXATestBinaryDirectory);
-  std::cout << "Child Path: " << MXAUnitTest::MXATestBinaryDirectory << std::endl;
-  std::cout << "ParentPath: " << ppath << std::endl;
-  std::cout << "Ref Path:   " << MXAUnitTest::MXABuildDir << std::endl;
+  //std::cout << "Child Path: " << MXAUnitTest::MXATestBinaryDirectory << std::endl;
+  //std::cout << "ppath: " << ppath << std::endl;
+  //std::cout << "Ref Path:   " << MXAUnitTest::MXABuildDir << std::endl;
   int equal  = ppath.compare(MXAUnitTest::MXABuildDir);
   BOOST_REQUIRE_EQUAL(equal, 0);
   return err;

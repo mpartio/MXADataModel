@@ -197,7 +197,7 @@ int SimpleTest()
   std::cout << logTime() << "Running SimpleImportTest ------------------------" << std::endl;
   int32 err = 0;
   MXADataModelPtr model = createSimpleModel();
-  ImportSimpleData(model, DATAIMPORT_TEST_SIMPLE_IMPORT);
+  ImportSimpleData(model, MXAUnitTest::DataImportTest::SimpleImport);
   std::cout << logTime() << "Ending SimpleImportTest" << std::endl;
   return err;
 }
@@ -209,7 +209,7 @@ void CreateTiffImages()
 {
   // Create the XMLParser/Importer Object
   DataImportXmlParser importer;
-  importer.setXMLInputFile(DATAIMPORT_TEST_IMPORT_XML_FILE);
+  importer.setXMLInputFile(MXAUnitTest::DataImportTest::ImportXMLFile);
   // The xmlfile will define the output file so we do NOT need to set it here.
   int32 err = importer.parseXMLFile();
   BOOST_REQUIRE(err >= 0);
@@ -250,7 +250,7 @@ int XMLImportTest()
   CreateTiffImages();
 
   DataImportXmlParser importer;
-  importer.setXMLInputFile(DATAIMPORT_TEST_IMPORT_XML_FILE);
+  importer.setXMLInputFile(MXAUnitTest::DataImportTest::ImportXMLFile);
   // The xmlfile will define the output file so we do NOT need to set it here.
   int32 err = importer.import(); // Run the Import
   if (err < 0)

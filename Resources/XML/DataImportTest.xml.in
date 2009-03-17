@@ -26,7 +26,7 @@
 	  <Import_Property Key="FileNotFoundIsError" Value="1" />
 	  <Import_Property Key="ImportAsGrayScale" Value="1" />
 		<File_Path>
-			<Text_Part Text="@MXA_TEMP_DIR@DataImportTest/test_data/" />
+			<Text_Part Text="@DATAIMPORT_TEST_IMPORT_DIR@" />
 			<Index_Part
 			  Padding_Char="0" 
         Max_Char_Length="4"

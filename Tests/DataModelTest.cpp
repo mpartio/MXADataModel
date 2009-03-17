@@ -17,7 +17,6 @@
 #include <MXA/Base/IDataFile.h>
 #include <MXA/Base/IRequiredMetaData.h>
 #include <MXA/Core/MXAConstants.h>
-//#include <MXA/Core/MXAAttribute.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXADataDimension.h>
 #include <MXA/Core/MXADataRecord.h>
@@ -25,7 +24,7 @@
 #include <MXA/HDF5/H5MXARequiredMetaData.h>
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
-#include "MXAUnitTestDataFileLocations.h"
+#include <Tests/MXAUnitTestDataFileLocations.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
 
 // C++ Includes
@@ -49,9 +48,9 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(DATAMODEL_TEST_BEFORE_H5_FILE);
-  MXAFileSystemPath::remove(DATAMODEL_TEST_AFTER_H5_FILE);
-  MXAFileSystemPath::remove(DATAMODEL_TEST_OVERWRITE_H5_FILE);
+  MXAFileSystemPath::remove(MXAUnitTest::DataModelTest::BeforeH5File);
+  MXAFileSystemPath::remove(MXAUnitTest::DataModelTest::AfterH5File);
+  MXAFileSystemPath::remove(MXAUnitTest::DataModelTest::OverwriteH5File);
 #endif
 }
 
@@ -434,14 +433,14 @@ void WriteTestModel()
   {
     std::cout << "WriteTestModel Running....";
     MXADataModelPtr modelPtr = createModel();
-    IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(DATAMODEL_TEST_BEFORE_H5_FILE, modelPtr);
+    IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(MXAUnitTest::DataModelTest::BeforeH5File, modelPtr);
     BOOST_REQUIRE(dataFile.get() != 0x0);
     std::cout << "......Passed" << std::endl;
   }
 
   {
     std::cout << "Read DataModel Running...." ;
-    IDataFilePtr dataFile = H5MXADataFile::OpenFile(DATAMODEL_TEST_BEFORE_H5_FILE, false);
+    IDataFilePtr dataFile = H5MXADataFile::OpenFile(MXAUnitTest::DataModelTest::BeforeH5File, false);
     BOOST_REQUIRE(dataFile.get() != 0x0);
     IDataModelPtr modelPtr = dataFile->getDataModel();
     BOOST_REQUIRE(modelPtr.get() != 0x0);
@@ -460,8 +459,8 @@ void ReWriteModelTest()
 {
   std::cout << "ReWriteModelTest Running.....";
 
-  std::string inFilename(DATAMODEL_TEST_BEFORE_H5_FILE);
-  std::string outFilename(DATAMODEL_TEST_AFTER_H5_FILE);
+  std::string inFilename(MXAUnitTest::DataModelTest::BeforeH5File);
+  std::string outFilename(MXAUnitTest::DataModelTest::AfterH5File);
 
   {
     IDataFilePtr dataFile = H5MXADataFile::OpenFile(inFilename, false);
@@ -577,7 +576,7 @@ void TestDataRecordRemoval()
 void TestDataModelOverWrite()
 {
   std::cout << "TestDataModelOverWrite Running...." ;
-  std::string outFilename (DATAMODEL_TEST_OVERWRITE_H5_FILE);
+  std::string outFilename (MXAUnitTest::DataModelTest::OverwriteH5File);
   {
 
 

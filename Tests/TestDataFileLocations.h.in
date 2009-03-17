@@ -28,11 +28,11 @@
 // -----------------------------------------------------------------------------
 //  Define the temp directory for this system
 // -----------------------------------------------------------------------------
-#define MXA_TEMP_DIR "@MXA_TEMP_DIR@"
+//#define MXA_TEMP_DIR "@MXA_TEMP_DIR@"
 namespace MXAUnitTest {
-  const std::string MXATempDir(MXA_TEMP_DIR);
-  const std::string MXATestBinaryDirectory("@MXATests_BINARY_DIR@");
-  const std::string MXABuildDir("@MXADataModel_BINARY_DIR@");
+  const std::string MXATempDir("@MXA_TEMP_DIR@");
+  const std::string MXATestBinaryDirectory("@MXATests_BINARY_DIR_NATIVE@");
+  const std::string MXABuildDir("@MXADataModel_BINARY_DIR_NATIVE@");
 
 #if defined (WIN32)
     static const char DirSeparator = '\\';
@@ -71,57 +71,67 @@ namespace DataImportTest
   const std::string SimpleImport ("@MXA_TEMP_DIR@DataImportTestSimpleFile.h5");
 }
 
-}
-
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files for the DataImport test
-// -----------------------------------------------------------------------------
-#define DATAIMPORT_TEST_H5TIFF_OUTPUT_FILE "@DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE@"
-#define DATAIMPORT_TEST_IMPORT_XML_FILE "@DATAIMPORT_TEST_IMPORT_XML_FILE@"
-#define DATAIMPORT_TEST_SIMPLE_IMPORT "@MXA_TEMP_DIR@DataImportTestSimpleFile.h5"
-
-
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the DataModel Test
 // -----------------------------------------------------------------------------
-#define DATAMODEL_TEST_BEFORE_H5_FILE "@MXA_TEMP_DIR@DataModelTest-Before.h5"
-#define DATAMODEL_TEST_AFTER_H5_FILE "@MXA_TEMP_DIR@DataModelTest-After.h5"
-#define DATAMODEL_TEST_OVERWRITE_H5_FILE "@MXA_TEMP_DIR@DataModelOverWrite_Test.h5"
+namespace DataModelTest
+{
+  const std::string TestDir("DataModelTest");
+  const std::string BeforeH5File("@MXA_TEMP_DIR@DataModelTest-Before.h5");
+  const std::string AfterH5File("@MXA_TEMP_DIR@DataModelTest-After.h5");
+  const std::string OverwriteH5File("@MXA_TEMP_DIR@DataModelOverWrite_Test.h5");
+}
 
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the H5Lite Test
 // -----------------------------------------------------------------------------
-#define H5LITE_TEST_FILE_NAME "@MXA_TEMP_DIR@H5Lite_Test.h5"
-#define H5LITE_TEST_LARGE_FILE "@MXA_TEMP_DIR@H5Lite_LargeFile_Test.h5"
+namespace H5LiteTest
+{
+  const std::string TestDir("H5LiteTest");
+  const std::string FileName("@MXA_TEMP_DIR@H5Lite_Test.h5");
+  const std::string LargeFile("@MXA_TEMP_DIR@H5Lite_LargeFile_Test.h5");
+}
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the H5Utilities Test
 // -----------------------------------------------------------------------------
-#define H5UTIL_TEST_FILE_NAME "@MXA_TEMP_DIR@H5Utilities_Test.h5"
+namespace H5UtilTest
+{
+  const std::string TestDir("H5UtilTest");
+  const std::string FileName("@MXA_TEMP_DIR@H5Utilities_Test.h5");
+}
 
 // -----------------------------------------------------------------------------
 //  Define where to put our temporary files for the vtk tests
 // -----------------------------------------------------------------------------
-#define VTK_MXA_TEST_FILE "@MXA_TEMP_DIR@vtkhdf5test.h5"
+namespace VtkMxaTest
+{
+  const std::string TestDir("VtkMxaTest");
+  const std::string FileName("@MXA_TEMP_DIR@vtkhdf5test.h5");
+}
 
 // -----------------------------------------------------------------------------
-//  Define where to put our temporary files
+//  Define where to put our temporary files for the XMLTest
 // -----------------------------------------------------------------------------
-#define XML_TEST_FILE "@MXA_TEMP_DIR@XML_Test.xml"
-#define MASTER_XML_FILE "@MXA_TEMP_DIR@XMLMaster.xml"
-#define XML_TEMPLATE_TEST_FILE "@MXA_TEMP_DIR@XML_Template_Test_File.xml"
-#define XML_TEMPLATE_COMPLETE_FILE "@MXA_TEMP_DIR@XML_Template_Complete_File.xml"
+namespace XMLTest
+{
+  const std::string TestDir("XMLTest");
+  const std::string TestFile("@MXA_TEMP_DIR@XML_Test.xml");
+  const std::string MasterFile("@MXA_TEMP_DIR@XMLMaster.xml");
+  const std::string TemplateTestFile("@MXA_TEMP_DIR@XML_Template_Test_File.xml");
+  const std::string TemplateCompleteFile("@MXA_TEMP_DIR@XML_Template_Complete_File.xml");
+}
 
 // -----------------------------------------------------------------------------
-//  Define where to put our temporary files
+//  Define where to put our temporary files for the DatasetTest
 // -----------------------------------------------------------------------------
-#define DATASET_TEST_FILE "@MXA_TEMP_DIR@Dataset_Test.h5"
+namespace DatasetTest
+{
+  const std::string TestDir("DatasetTest");
+  const std::string TestFile("@MXA_TEMP_DIR@Dataset_Test.h5");
+}
 
-// -----------------------------------------------------------------------------
-//  Define where to put our temporary files
-// -----------------------------------------------------------------------------
-#define H5ARRAY_TEMPLATE_TEST_FILE "@MXA_TEMP_DIR@H5ArrayTemplateTest.h5"
-
+} // End MXAUnitTest namespace
 
 #endif /*SOURCEFILELOCATIONS_H_*/

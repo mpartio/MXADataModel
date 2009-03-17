@@ -23,13 +23,17 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#if defined (WIN32)
+#if defined (_MSC_VER)
 #include <direct.h>
 #include "MXADirent.h"
 #define UNLINK _unlink
+#define MXA_PATH_MAX MAX_PATH
+#define MXA_GET_CWD _getcwd
 #else
 #define UNLINK ::unlink
 #include <dirent.h>
+#define MXA_PATH_MAX PATH_MAX
+#define MXA_GET_CWD ::getcwd
 #endif
 
 
@@ -49,6 +53,19 @@ MXAFileSystemPath::~MXAFileSystemPath()
 {
 
 }
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+std::string MXAFileSystemPath::getSeparator()
+{
+#if defined (WIN32)
+      return "\\";
+#else
+      return "/";
+#endif
+}
+
 
 // -----------------------------------------------------------------------------
 //
@@ -119,7 +136,7 @@ bool MXAFileSystemPath::isRelativePath(const std::string &path)
 bool MXAFileSystemPath::isAbsolutePath(const std::string &path)
 {
 #if defined (WIN32)
-  if (path.length() > 2 && isalpha(path[0]) == true && path[1] == ':' && path[2] == '\\') {return true;}
+  if (path.length() > 2 && isalpha(path[0]) != 0 && path[1] == ':' && path[2] == '\\') {return true;}
   if (path.length() > 1 && path[0] == '\\' && path[1] == '\\') { return true;}
 #else
   if (path.length() > 0 && path[0] == '/') { return true; }
@@ -136,10 +153,10 @@ std::string MXAFileSystemPath::currentPath()
   MXA_STATBUF st;
   if (0 == MXA_STAT(".", &st) )
   {
-    char currentName[PATH_MAX+1];
+    char currentName[MXA_PATH_MAX+1];
     char* result = NULL;
-    ::memset(&currentName[0], 0, PATH_MAX + 1); // Clear everything to zeros.
-    result = ::getcwd(currentName, PATH_MAX);
+    ::memset(&currentName[0], 0, MXA_PATH_MAX + 1); // Clear everything to zeros.
+    result = MXA_GET_CWD(currentName, MXA_PATH_MAX);
     if (NULL == result)
     {
       std::cout << logTime() << "Error: MXAFileSystemPath::currentPath result was NULL." << std::endl;
@@ -154,6 +171,10 @@ std::string MXAFileSystemPath::currentPath()
   {
     std::cout << logTime() << "Error: MXAFileSystemPath::currentPath stat function failed." << std::endl;
   }
+#if defined(WIN32)
+  currentPath = MXAFileSystemPath::cleanPath(currentPath);
+#endif
+
   return currentPath;
 }
 
@@ -207,7 +228,7 @@ std::string MXAFileSystemPath::parentPath(const std::string &path)
   std::string curAbsPath = MXAFileSystemPath::absolutePath(path);
   curAbsPath = MXAFileSystemPath::fromNativeSeparators(curAbsPath);
   std::string::size_type nextToLastSlashPos = 0;
-  std::string::size_type lastSlashPos = curAbsPath.find_last_of(MXAFileSystemPath::Separator);
+  std::string::size_type lastSlashPos = curAbsPath.find_last_of(MXAFileSystemPath::UnixSeparator);
 // Remove trailing '/' if found
   if (lastSlashPos == curAbsPath.length() - 1)
   {
@@ -217,7 +238,7 @@ std::string MXAFileSystemPath::parentPath(const std::string &path)
 
   if (lastSlashPos > 0)
   {
-    nextToLastSlashPos = curAbsPath.find_last_of(MXAFileSystemPath::Separator, lastSlashPos - 1);
+    nextToLastSlashPos = curAbsPath.find_last_of(MXAFileSystemPath::UnixSeparator, lastSlashPos - 1);
   }
 
   if (nextToLastSlashPos == std::string::npos) // Only 1 slash found, return the root directory
@@ -561,13 +582,19 @@ std::string MXAFileSystemPath::cleanPath(const std::string &fsPath)
        }
      }
      std::string ret;
-   //  std::cout << "|--2nd Pass: ";
      for (std::vector<std::string>::iterator iter = stk.begin(); iter != stk.end(); ++iter ) {
-     // std::cout << *iter;
        ret.append(*iter);
      }
-
      ret = toNativeSeparators(ret);
-     //std::cout << ret << std::endl;
+     #if defined (WIN32)
+     if (ret.length() > 2
+       && isalpha(ret[0]) != 0
+       && islower(ret[0]) != 0
+        && ret[1] == ':' && ret[2] == '\\')
+      {
+        //we have a lower case drive letter which needs to be changed to upper case.
+        ret[0] = toupper(ret[0]);
+      }
+#endif
      return ret;
 }

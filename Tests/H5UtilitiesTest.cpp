@@ -45,7 +45,7 @@ using namespace MXATypes;
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(H5UTIL_TEST_FILE_NAME);
+  MXAFileSystemPath::remove(MXAUnitTest::H5UtilTest::FileName);
 #endif
 }
 
@@ -274,7 +274,7 @@ void H5UtilitiesTest()
   // herr_t err = -1;
    hid_t   file_id;
    /* Create a new file using default properties. */
-   file_id = H5Fcreate( H5UTIL_TEST_FILE_NAME, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
+   file_id = H5Fcreate( MXAUnitTest::H5UtilTest::FileName.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
    BOOST_REQUIRE(file_id > 0);
 
    // std::cout << logTime() << "----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl;

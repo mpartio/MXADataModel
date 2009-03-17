@@ -11,7 +11,7 @@
 
 //-- MXA Includes
 #include <MXA/MXAConfiguration.h>
-#include "MXAUnitTestDataFileLocations.h"
+#include <Tests/MXAUnitTestDataFileLocations.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IDataFile.h>
 #include <MXA/Base/IDataModel.h>
@@ -66,7 +66,7 @@ int recLuid = 0;
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(DATASET_TEST_FILE) ;
+  MXAFileSystemPath::remove(MXAUnitTest::DatasetTest::TestFile) ;
 #endif
 }
 
@@ -459,7 +459,7 @@ void WriteDatasetTest()
 {
   std::cout << "Running _WriteDatasetTest<T> Test ....";
   // Create our Test File to output our test data into
-  std::string testFile(DATASET_TEST_FILE);
+  std::string testFile(MXAUnitTest::DatasetTest::TestFile);
   IDataModelPtr model = createModel();
   IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(testFile, model);
 
@@ -571,7 +571,7 @@ void ReadDatasetTest( )
 {
   std::cout << "Running ReadDatasetTest Test ....";
   // Create our Test File to output our test data into
-  std::string testFile(DATASET_TEST_FILE);
+  std::string testFile(MXAUnitTest::DatasetTest::TestFile);
   IDataFilePtr dataFile = H5MXADataFile::OpenFile(testFile, true);
   BOOST_REQUIRE(dataFile.get() != NULL);
   _readDatasetTest( "Dataset Int 8", dataFile );
@@ -636,7 +636,7 @@ void TestDataWrapper()
 // -----------------------------------------------------------------------------
 void ATest()
 {
-  std::string testFile(DATASET_TEST_FILE);
+  std::string testFile(MXAUnitTest::DatasetTest::TestFile);
   IDataFilePtr dataFile = H5MXADataFile::OpenFile(testFile, true);
   BOOST_REQUIRE(dataFile.get() != NULL);
   hid_t fileId = dataFile->getFileId();

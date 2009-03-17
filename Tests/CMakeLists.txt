@@ -33,25 +33,40 @@ macro (DataImportTestSetup name alt_name start count end  increment index)
     
 endmacro (DataImportTestSetup name alt_name start count end increment index)
 # --------------------------------------------------------------------------
+macro (ConvertPathToXMLCompatible INPUT)
+    IF (WIN32)
+      STRING(REPLACE "\\\\" "\\" ${INPUT} ${${INPUT}} )
+      STRING(REPLACE "/" "\\" ${INPUT} ${${INPUT}}  )
+    endif()
+endmacro()
+# --------------------------------------------------------------------------
+macro (ConvertPathToHeaderCompatible INPUT)
+    IF (WIN32)
+      STRING(REPLACE "\\" "\\\\" ${INPUT} ${${INPUT}} )
+      STRING(REPLACE "/" "\\\\" ${INPUT} ${${INPUT}}  )
+    endif()
+endmacro()
+# --------------------------------------------------------------------------
     
 SET (TEST_Boost_LIBS ${Boost_TEST_EXEC_MONITOR_LIBRARY} )
         
 OPTION(MXA_BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
 
 IF (BUILD_TESTING)
+    set(MXA_TEMP_DIR ${MXATests_BINARY_DIR}/temp/)
 
-    IF (WIN32)
-        SET (MXA_TEMP_DIR "C:\\\\WINDOWS\\\\Temp\\\\")
-    ELSE (WIN32)
-        SET (MXA_TEMP_DIR "/tmp/")
-    ENDIF(WIN32)
     GET_FILENAME_COMPONENT(MXA_TEST_SRC_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
+    FILE(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/DataImportTest.xml" DATAIMPORT_TEST_IMPORT_XML_FILE)
+    file(TO_NATIVE_PATH "${MXATests_BINARY_DIR}" MXATests_BINARY_DIR_NATIVE)
+    file(TO_NATIVE_PATH "${MXADataModel_BINARY_DIR}" MXADataModel_BINARY_DIR_NATIVE)
+    #-- Convert all '\' to '\\' so that they are properly escaped in the header file
     SET (DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE "${MXA_TEMP_DIR}DataImportTest_XMLH5Tiff.h5")
-    FILE (TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/DataImportTest.xml" DATAIMPORT_TEST_IMPORT_XML_FILE)
-    IF (WIN32)
-     STRING(REPLACE "\\" "\\\\" DATAIMPORT_TEST_IMPORT_XML_FILE ${DATAIMPORT_TEST_IMPORT_XML_FILE} )
-    ENDIF(WIN32)
-    
+    ConvertPathToHeaderCompatible(MXA_TEMP_DIR)
+    ConvertPathToHeaderCompatible(DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE)
+    ConvertPathToHeaderCompatible(DATAIMPORT_TEST_IMPORT_XML_FILE)
+    ConvertPathToHeaderCompatible(MXATests_BINARY_DIR_NATIVE)
+    ConvertPathToHeaderCompatible(MXADataModel_BINARY_DIR_NATIVE)
+
     CONFIGURE_FILE(${MXA_TEST_SRC_DIR}/TestDataFileLocations.h.in
                ${PROJECT_BINARY_DIR}/MXAUnitTestDataFileLocations.h @ONLY IMMEDIATE)
   
@@ -117,7 +132,15 @@ IF (MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     ADD_TEST(DataImportTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DataImportTest)
 
     #-- Configure the XML file to correctly find the XML Model file
-    SET (DATA_MODEL_XML_FILE ${MXADataModel_SOURCE_DIR}/Resources/XML/ModelTemplate.xml)
+    SET(DATA_MODEL_XML_FILE ${MXADataModel_SOURCE_DIR}/Resources/XML/ModelTemplate.xml)
+    SET(DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE "${MXA_TEMP_DIR}DataImportTest_XMLH5Tiff.h5")
+    set(DATAIMPORT_TEST_IMPORT_DIR "${MXA_TEMP_DIR}DataImportTest/test_data/")
+    set(DATAIMPORT_TEST_IMPORT_XML_FILE "${CMAKE_BINARY_DIR}/DataImportTest.xml")
+    ConvertPathToXMLCompatible(MXA_TEMP_DIR)
+    ConvertPathToXMLCompatible(DATA_MODEL_XML_FILE)
+    ConvertPathToXMLCompatible(DATAIMPORT_TEST_IMPORT_XML_FILE)
+    ConvertPathToXMLCompatible(DATAIMPORT_TEST_XMLH5TIFF_OUTPUT_FILE)
+    ConvertPathToXMLCompatible(DATAIMPORT_TEST_IMPORT_DIR)
     CONFIGURE_FILE(${MXADataModel_SOURCE_DIR}/Resources/XML/DataImportTest.xml.in
                     ${CMAKE_BINARY_DIR}/DataImportTest.xml @ONLY IMMEDIATE)
 ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
@@ -225,6 +248,30 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
         )
         ADD_TEST(vtkHDF5Test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vtkHDF5Test)
     ENDIF(MXA_BUILD_VTK_HDF5)
-                   
+
+#-- Copy all the dependent DLLs into the current build directory so that the test
+#-- can run.
+if (WIN32)
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(TYPE "DEBUG")
+    else()
+        set(TYPE "RELEASE")
+    endif()
+
+    SET (mxa_lib_list tiff expat hdf5)
+    FOREACH(lib ${mxa_lib_list})
+      STRING(TOUPPER ${lib} upperlib)
+      if (HAVE_${upperlib}_DLL)
+        GET_FILENAME_COMPONENT(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
+        get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
+        ADD_CUSTOM_COMMAND(TARGET DataModelTest POST_BUILD
+                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${${upperlib}_BIN_DIR}/${lib_name}.dll
+                      ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/ 
+                      COMMENT "Copying ${lib_name}.dll to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/")
+      endif()
+    ENDFOREACH()
+endif()
+    
+
 ENDIF (BUILD_TESTING)
 

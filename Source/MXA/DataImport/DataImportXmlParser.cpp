@@ -92,7 +92,6 @@ int32 DataImportXmlParser::import()
     }
   }
 
-
   std::cout << logTime() << "Input XML: " << this->_xmlFilename << std::endl;
   std::cout << logTime() << "Output File: " << this->_outputFilePath << std::endl;
   //std::cout << "Starting Import loop.... " << std::endl;

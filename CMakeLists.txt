@@ -251,6 +251,9 @@ IF (APPLE)
 ENDIF (APPLE)
 
 #----- Use MSVC Naming conventions for Shared Libraries for MinGW --------------
+IF (MINGW)
+    SET (CMAKE_COLOR_MAKEFILE 0)
+endif()
 IF (MINGW AND BUILD_SHARED_LIBS)
     SET_TARGET_PROPERTIES( ${MXADATAMODEL_LIB_NAME}
         PROPERTIES

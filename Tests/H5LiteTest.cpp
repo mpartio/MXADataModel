@@ -18,7 +18,7 @@
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXA2DArray.hpp>
 #include <MXA/Utilities/MXAFileSystemPath.h>
-#include "MXAUnitTestDataFileLocations.h"
+#include <Tests/MXAUnitTestDataFileLocations.h>
 
 //-- Boost Test Headers
 #include <boost/test/unit_test.hpp>
@@ -99,8 +99,8 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(H5LITE_TEST_FILE_NAME);
- // MXAFileSystemPath::remove(H5LITE_TEST_LARGE_FILE));
+  MXAFileSystemPath::remove(MXAUnitTest::H5LiteTest::FileName);
+  MXAFileSystemPath::remove(MXAUnitTest::H5LiteTest::LargeFile);
 #endif
 }
 
@@ -889,7 +889,7 @@ void H5LiteTest()
  // herr_t err = -1;
   hid_t   file_id;
   /* Create a new file using default properties. */
-  file_id = H5Fcreate( H5LITE_TEST_FILE_NAME, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
+  file_id = H5Fcreate( MXAUnitTest::H5LiteTest::FileName.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
   BOOST_REQUIRE(file_id > 0);
   //Create the Extra Groups
   hid_t sintGid = H5Gcreate(file_id, "Signed Int", 0);
@@ -1012,7 +1012,7 @@ void TestLargeFileSupport()
  // herr_t err = -1;
   hid_t   file_id;
   /* Create a new file using default properties. */
-  file_id = H5Fcreate( H5LITE_TEST_LARGE_FILE, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
+  file_id = H5Fcreate( MXAUnitTest::H5LiteTest::LargeFile.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
   BOOST_REQUIRE(file_id > 0);
   std::vector<int> buffer(1000000); // Create a 4 MegaByte Buffer
 	int32 rank = 1;

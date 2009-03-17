@@ -15,7 +15,7 @@
 #include <MXA/Core/MXASupportFile.h>
 #include <MXA/XML/XMLDataModelReader.h>
 #include <MXA/XML/XMLDataModelWriter.h>
-#include "MXAUnitTestDataFileLocations.h"
+#include <Tests/MXAUnitTestDataFileLocations.h>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
 
@@ -40,10 +40,10 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(XML_TEST_FILE) ;
-  MXAFileSystemPath::remove(MASTER_XML_FILE);
-  MXAFileSystemPath::remove(XML_TEMPLATE_TEST_FILE) ;
-  MXAFileSystemPath::remove(XML_TEMPLATE_COMPLETE_FILE);
+  MXAFileSystemPath::remove(MXAUnitTest::XMLTest::TestFile) ;
+  MXAFileSystemPath::remove(MXAUnitTest::XMLTest::MasterFile);
+  MXAFileSystemPath::remove(MXAUnitTest::XMLTest::TemplateTestFile) ;
+  MXAFileSystemPath::remove(MXAUnitTest::XMLTest::TemplateCompleteFile);
 #endif
 }
 
@@ -277,7 +277,7 @@ MXADataModelPtr createModelTemplate()
 void GenerateMasterXMLFile()
 {
   std::cout << "Running GenerateMasterXMLFile........";
-  std::string xmlFile(MASTER_XML_FILE);
+  std::string xmlFile(MXAUnitTest::XMLTest::MasterFile);
   {
     MXADataModelPtr model = createModel();
     XMLDataModelWriter writer(model, xmlFile);
@@ -309,8 +309,8 @@ void GenerateMasterXMLFile()
 void XMLModelTest()
 {
   std::cout << "XMLModelTest Running...";
-  std::string masterXmlFile(MASTER_XML_FILE);
-  std::string outFile (XML_TEST_FILE);
+  std::string masterXmlFile(MXAUnitTest::XMLTest::MasterFile);
+  std::string outFile (MXAUnitTest::XMLTest::TestFile);
   std::string errorMessage;
   MXADataModelPtr model = MXADataModel::New();
   {
@@ -362,7 +362,7 @@ void XMLTemplateTest()
 {
   std::cout << "XMLTemplateTest Running..." ;
   std::string errorMessage;
-  std::string templateFile (XML_TEMPLATE_TEST_FILE);
+  std::string templateFile (MXAUnitTest::XMLTest::TemplateTestFile);
   {
     MXADataModelPtr model = createModelTemplate();
     XMLDataModelWriter writer(model, templateFile);
@@ -407,7 +407,7 @@ void XMLTemplateTest()
   BOOST_REQUIRE ( readModel->isValid(errorMessage) == true); //Model should now validate since we have reasonable values for each dimension
   //We can write the model back out to XML without any errors
   {
-    XMLDataModelWriter writer(readModel, XML_TEMPLATE_COMPLETE_FILE);
+    XMLDataModelWriter writer(readModel, MXAUnitTest::XMLTest::TemplateCompleteFile);
     int32 err = writer.writeModelToFile(-1);
     BOOST_REQUIRE ( err >= 0);
   }

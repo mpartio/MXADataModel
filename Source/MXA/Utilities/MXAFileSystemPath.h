@@ -38,13 +38,7 @@ class MXAFileSystemPath
     static MXA_EXPORT const char Dot = '.';
 
 
-    static MXA_EXPORT std::string getSeparator() {
-#if defined (WIN32)
-      return "\\";
-#else
-      return "/";
-#endif
-      }
+    static MXA_EXPORT std::string getSeparator();
     /**
      * @brief Is the path specified a directory on the filesystem
      * @param path Path to examine
