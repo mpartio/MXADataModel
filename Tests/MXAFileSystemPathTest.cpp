@@ -55,8 +55,8 @@ void CheckFile(const std::string &filepath,
       std::cout << "|--  Create: '" << filepath << "'" << std::endl;
       std::ofstream outStream(filepath.c_str(), std::ios::out | std::ios::binary);
       BOOST_REQUIRE_EQUAL(false, outStream.fail() );
-      char* data = "MXAFileSystemPath_Test Contents";
-      outStream.write(data, 31);
+      std::string data ( "MXAFileSystemPath_Test Contents");
+      outStream.write(data.c_str(), data.length());
       BOOST_REQUIRE_EQUAL (outStream.bad(), false);
       outStream.close();
     }

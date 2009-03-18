@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h> // Needed for memset
 
 #if defined (_MSC_VER)
 #include <direct.h>
