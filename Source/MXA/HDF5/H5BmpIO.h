@@ -14,6 +14,7 @@
 //-- MXA Headers
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/BMPIO/MXABmpIO.h>
 
 //-- HDF Headers

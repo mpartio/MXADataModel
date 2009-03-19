@@ -19,6 +19,7 @@
 //-- Boost Includes
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <boost/shared_array.hpp>
 
 #include <MXA/Common/MXATypes.h>
 
@@ -133,7 +134,19 @@ typedef boost::shared_ptr<H5TiffImportDelegateFactory>  H5TiffImportDelegateFact
 typedef boost::shared_ptr<IStringSection>          IStringSectionPtr;
 typedef std::vector<IStringSectionPtr>             IStringSections;
 
+//-- Define some Shared Arrays to use
+typedef boost::shared_array<uint8>                 UCharArray;
+typedef boost::shared_array<int8>                  CharArray;
+typedef boost::shared_array<uint16>                UShortArray;
+typedef boost::shared_array<int16>                 ShortArray;
+typedef boost::shared_array<uint32>                UIntArray;
+typedef boost::shared_array<int32>                 IntArray;
+typedef boost::shared_array<uint64>                ULongLongArray;
+typedef boost::shared_array<int64>                 LongLongArray;
 
+
+#define NEW_UCHAR_ARRAY(VarName, Size)\
+  UCharArray VarName(new uint8[Size]);
 
 /* If we are compiling WITHOUT HDF5 support then we need some enumerated types */
 #if  MXA_HDF5_SUPPORT == 0

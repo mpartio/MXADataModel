@@ -13,6 +13,7 @@
 
 //MXA Includes
 #include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/DLLExport.h>
 #include <MXA/BMPIO/MXABmpHeaders.h>
 
@@ -22,6 +23,7 @@
 
 //--Boost Includes
 #include <boost/shared_ptr.hpp>
+#include <boost/shared_array.hpp>
 
 
 namespace MXA
@@ -88,6 +90,7 @@ public:
    * @return Error code.
    */
   LOAD_TEXTUREBMP_RESULT loadBMPData(const char* fName, bool readAsGrayScale = false);
+
   /**
    * @brief Converts the image to grayscale
    */
@@ -99,16 +102,16 @@ public:
   bool isGrayscaleImage();
 
   /**
-   * @brief Copies the BMP data into a supplied buffer. The supplied buffer
-   * will be resized to fit all the data
-   * @param buffer A buffer to copy the bmp data into
+   * @brief Either makes a new copy of the image data or returns a reference to
+   * the actual memory.
+   * @param copy If true, make a copy of the data instead of returning a reference.
    */
-  void copyDataArray(std::vector<uint8> &buffer);
+  UCharArray getImageData(bool copy=true);
 
 protected:
 
 private:
-  std::vector<uint8> bitmapDataVec;
+  UCharArray bitmapDataVec;
   int32 width;
   int32 height;
   int32 numChannels;

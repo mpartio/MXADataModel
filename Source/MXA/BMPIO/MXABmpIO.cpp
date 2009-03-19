@@ -97,7 +97,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData()
 {
 
   // Make sure we have a large enough buffer
-  this->bitmapDataVec.resize( width*height*3 );
+  this->bitmapDataVec = UCharArray(new uint8[width*height*3]);
   // Pad until byteoffset. Most images will need no padding
   // since they already are made to use as little space as
   // possible.
@@ -124,7 +124,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData()
 // Load a 24-bit image. Cannot be encoded.
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
 {
-  uint8* bitmapData = &(this->bitmapDataVec.front());
+
   int32 temp = 0;
   int32 index = 0;
   uint8 red, green, blue = 0;
@@ -137,25 +137,24 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
 
 
   if (true == this->_convertToGrayScale) {
-    this->bitmapDataVec.reserve(width * height);
-    this->bitmapDataVec.resize(width * height);
+    this->bitmapDataVec = UCharArray(new uint8[width*height]);
     componentNumBytes = 1;
   }
+  uint8* bitmapData = this->bitmapDataVec.get();
   int32 widthByComponentNumBytes = componentNumBytes * width;
 
-   std::vector<uint8> buffer(numBytes, 0); // Create a buffer large enough to hold a row of rgb
-
+  UCharArray buffer = UCharArray(new uint8[numBytes]);// Create a buffer large enough to hold a row of rgb
   // For each scan line
   int targetRow = 0;
-  char* buffPtr = (char*)(&(buffer.front() ) );
+  char* buffPtr = (char*)(buffer.get());
   float fTmp;
   for (int i = 0; i < height; i++)
   {
     //read a row of bytes
-    _reader64Ptr->rawRead( (char*)(&(buffer.front())), numBytes);
+    _reader64Ptr->rawRead( (char*)(buffer.get()), numBytes);
     bytesRead += numBytes;
     offset = 0;  //Reset the offset to start of the buffer
-    buffPtr = (char*)(&(buffer.front() ) );
+    buffPtr = (char*)(buffer.get());
 
     targetRow = height - i - 1;
     index = targetRow * widthByComponentNumBytes;
@@ -204,7 +203,8 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
 // Read 8-bit image. Can be uncompressed or RLE-8 compressed.
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
 {
-  uint8* bitmapData = &(this->bitmapDataVec.front());
+
+
   int32 temp = 0;
   int32 index = 0;
   uint8 color = 0;
@@ -221,22 +221,23 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
   // We are going to convert to grayscale on the fly if needed
   if (this->dibHeader.compressionMethod == BMP_BI_RGB)
   {
-    std::vector<uint8> buffer(numBytes, 0); // Create a buffer large enough to hold the colors
-    char* buffPtr = (char*)(&(buffer.front() ) );
+    UCharArray buffer = UCharArray(new uint8[numBytes]);// Create a buffer large enough to hold a row of rgb
+    char* buffPtr = (char*)(buffer.get());
     if (true == this->_convertToGrayScale) {
-      this->bitmapDataVec.resize(width * height);
+      this->bitmapDataVec = UCharArray(new uint8[width*height]);
       componentNumBytes = 1;
     }
+    uint8* bitmapData = this->bitmapDataVec.get();
     int32 widthByComponentNumBytes = componentNumBytes * width;
 
     // For each scan line
     int targetRow = 0;
     for (int i = 0;i < height; ++i)
     {
-      _reader64Ptr->rawRead( (char*)(&(buffer.front())), numBytes);
+      _reader64Ptr->rawRead( (char*)(buffer.get()), numBytes);
       bytesRead += numBytes;
       offset = 0;  //Reset the offset to start of the buffer
-      buffPtr = (char*)(&(buffer.front() ) );
+      buffPtr = (char*)(buffer.get());
       targetRow = height - i - 1;
       index = targetRow * widthByComponentNumBytes;
       for (int j=0;j<width;j++)
@@ -285,6 +286,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
 
     // Clear bitmap data since it is legal not to
     // fill it all out.
+    uint8* bitmapData = this->bitmapDataVec.get();
     memset(bitmapData,0,sizeof(unsigned char)*width*height*3);
 
     while(true)
@@ -464,7 +466,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readPalette()
 // -----------------------------------------------------------------------------
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData1Bit()
 {
-  uint8* bitmapData = &(this->bitmapDataVec.front());
+  uint8* bitmapData = this->bitmapDataVec.get();
   // 1-bit format cannot be compressed
   if (this->dibHeader.compressionMethod != BMP_BI_RGB)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
@@ -538,7 +540,7 @@ bool MXABmpIO::handleEscapeCode(int secondByte, int* x, int* y,
 // Draw a 4-bit image. Can be uncompressed or RLE-4 compressed.
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit()
 {
-  uint8* bitmapData = &(this->bitmapDataVec.front());
+  uint8* bitmapData = this->bitmapDataVec.get();
   if (this->dibHeader.compressionMethod != BMP_BI_RGB &&
       this->dibHeader.compressionMethod != BMP_BI_RLE4)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
@@ -695,8 +697,8 @@ int32 MXABmpIO::getNumberOfChannels()
 // -----------------------------------------------------------------------------
 void MXABmpIO::flipBitmap()
 {
-  uint8* bitmapData = &(this->bitmapDataVec.front() );
-  std::vector<uint8> flippedVec;
+  uint8* bitmapData = this->bitmapDataVec.get();
+  UCharArray flippedVec;
   uint8* flippedImage = 0x0;
 //  uint8* temp;
   int32 element1, element2, width3, el1, el2;
@@ -705,8 +707,8 @@ void MXABmpIO::flipBitmap()
 
   if ( !isGrayscale )
   {
-  	flippedVec.resize(height * width3);
-  	flippedImage = &(flippedVec.front());
+  	flippedVec = UCharArray(new uint8[height*width3]);
+  	flippedImage = flippedVec.get();
   	for ( int32 row1 = 0, row2 = (height - 1); row1 < height || row2 > 0; row1++, row2-- )
   	{
 		el1 = (row1 * width3); // Beginning of scan line in source
@@ -724,8 +726,8 @@ void MXABmpIO::flipBitmap()
   }
   else
   {
-    flippedVec.resize(width * height);
-    flippedImage = &(flippedVec.front());
+    flippedVec = UCharArray(new uint8[height*width]);
+    flippedImage = flippedVec.get();
   	for ( int32 row1 = 0, row2 = (height - 1); row1 < height || row2 > 0; row1++, row2-- )
   	{
   	  for ( int32 col = 0; col < width; col++ )
@@ -740,21 +742,22 @@ void MXABmpIO::flipBitmap()
   this->bitmapDataVec = flippedVec;
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void MXABmpIO::convertToGrayscale()
 {
-  uint8* bitmapData = &(this->bitmapDataVec.front() );
+  uint8* bitmapData = this->bitmapDataVec.get();
   //Uses the function Y = 0.3R + 0.59G + 0.11B
   if ( this->isGrayscale )
   {
     return;
   }
-  std::vector<uint8> grayscaleVec;
+
   uint8* grayscaleImage;
-  //uint8* temp;
   int32 element1, element2;
-//  grayscaleImage = new uint8[this->width * this->height];
-  grayscaleVec.resize(this->width * this->height);
-  grayscaleImage = &(grayscaleVec.front());
+  UCharArray grayscaleVec = UCharArray(new uint8[this->height * this->width]);
+  grayscaleImage = grayscaleVec.get();
   for ( int32 row = 0; row < height; row++ )
   {
     for ( int32 col = 0; col < width; col++ )
@@ -781,25 +784,20 @@ bool MXABmpIO::isGrayscaleImage()
 }
 
 // -----------------------------------------------------------------------------
-//  This function copies the bitmap data array to the vector passed into it.
-//  It is the responsibility of the calling code to make sure the clean up the
-//	memory used by the array when they are done with it.
+//
 // -----------------------------------------------------------------------------
-void MXABmpIO::copyDataArray(std::vector<uint8> &buffer)
+UCharArray MXABmpIO::getImageData(bool copy)
 {
-  std::vector<uint8>::size_type numElements;
-  if ( isGrayscale )
-    numElements = width * height;
-  else
-    numElements = width * height * 3;
-  buffer.reserve(numElements);
-  buffer.resize(numElements);
-  if (buffer.size() == 0 )
+  if (copy)
   {
-	  std::cout << "buffer size was 0" << std::endl;
+    size_t m_length = this->width * this->height * this->numChannels;
+    UCharArray copy(new uint8[m_length]);
+    std::memcpy(copy.get(), this->bitmapDataVec.get(), m_length);
+    return copy;
   }
-  ::memcpy( &(buffer.front()), &(this->bitmapDataVec.front()), numElements);
+  return this->bitmapDataVec;
 }
+
 
 // -----------------------------------------------------------------------------
 // Reads and returns a 32-bit value from the file.
