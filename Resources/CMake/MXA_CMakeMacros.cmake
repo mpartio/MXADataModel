@@ -2,7 +2,7 @@
 MACRO (MXA_SOURCE_PROPERTIES NAME HEADERS SOURCES)
 
   INSTALL (FILES ${HEADERS}
-              DESTINATION include/MXA/${NAME}
+              DESTINATION include/R3D/${NAME}
               COMPONENT Headers           
   )
 

@@ -143,7 +143,37 @@ inline std::string tifDateTime() {
   return ss.str();
 }
 
+/**
+ * @brief Generates a String suitable for using as a version string for
+ * applications.
+ * @return
+ */
+inline std::string MXAVersionString()
+{
+  TimeType long_time = 0;
+  TimeFunc(&long_time);
+  tm *t = 0x0;
 
+#ifdef _MSC_VER
+#if _MSC_VER < 1400
+  t = _localtime64(&long_time);
+#else
+  tm time;
+  t = &time;
+  errno_t tError = _localtime64_s(&time, &long_time);
+#endif
+#else  // Non windows platforms
+  t = localtime(&long_time);
+#endif
+
+  std::stringstream ss;
+  ss.setf(std::ios::fixed);
+  ss.fill('0');
+  ss << std::setw(4) << t->tm_year + 1900 << "."
+    << std::setw(2) << t->tm_mon + 1 << "."
+    << std::setw(2) << t->tm_mday << " ";;
+  return ss.str();
+}
 
 namespace MXA {
 

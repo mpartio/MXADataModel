@@ -69,7 +69,13 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGray
   // Only clean up bitmapData if there was an error.
   if (res == LOAD_TEXTUREBMP_SUCCESS)
   {
-    numChannels = 3;
+    if (this->_imageConvertedToGrayScale == true)
+    {
+      numChannels = 1;
+    }
+    else {
+      numChannels = 3;
+    }
   }
   // Reset the Shared Pointer forces the wrapped pointer to be deleted
   //  and the underlying file closed
@@ -786,9 +792,9 @@ bool MXABmpIO::isGrayscaleImage()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-UCharArray MXABmpIO::getImageData(bool copy)
+UCharArray MXABmpIO::getImageData(bool makeCopy)
 {
-  if (copy)
+  if (makeCopy)
   {
     size_t m_length = this->width * this->height * this->numChannels;
     UCharArray copy(new uint8[m_length]);
