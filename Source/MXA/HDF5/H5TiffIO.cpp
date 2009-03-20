@@ -2,10 +2,11 @@
 
 
 //-- MXA Headers
+#include <MXA/MXAVersion.h>
+#include <MXA/Common/LogTime.h>
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Image.h>
 #include <MXA/HDF5/H5TiffIO.h>
-#include <MXA/Common/LogTime.h>
 #include <MXA/Utilities/StringUtils.h>
 
 //-- STL Headers
@@ -561,7 +562,7 @@ herr_t H5TiffIO::_exportGrayScaleTiff(TIFF *image,
   // Insert Resolution Units here if possible
 
   std::string software ("MXADataModel Version ");
-  software.append(MXADATAMODEL_LIBRARY_VERSION).append(" using ").append(PACKAGE_STRING);
+  software.append(MXA::Version::MXAVersion).append(" using ").append(PACKAGE_STRING);
   err = TIFFSetField(image, TIFFTAG_SOFTWARE, software.c_str());
 
   err = TIFFSetField(image, TIFFTAG_HOSTCOMPUTER, MXADATAMODEL_SYSTEM);

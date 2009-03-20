@@ -40,9 +40,6 @@
 /* Define to 1 when MXADataModel is built as a dynamic library (All platforms)*/
 #cmakedefine MXA_BUILT_AS_DYNAMIC_LIB @MXA_BUILT_AS_DYNAMIC_LIB@
 
-/* Definition of version number for MXADataModel */
-#cmakedefine MXADATAMODEL_LIBRARY_VERSION "@MXADATAMODEL_LIBRARY_VERSION@"
-
 /* What system is the library running */
 #define MXADATAMODEL_SYSTEM "@CMAKE_SYSTEM@"
 

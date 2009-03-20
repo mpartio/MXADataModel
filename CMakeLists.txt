@@ -22,12 +22,6 @@ IF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
   SET (MXA_USE_DEBUG_LIBRARY_NAME TRUE)
 ENDIF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
 
-# - Set our Library Version
-SET (MXADATAMODEL_VER_MAJOR "1")
-SET (MXADATAMODEL_VER_MINOR "3")
-SET (MXADATAMODEL_VER_PATCH "0")
-SET (MXADATAMODEL_LIBRARY_VERSION ${MXADATAMODEL_VER_MAJOR}.${MXADATAMODEL_VER_MINOR}.${MXADATAMODEL_VER_PATCH})
-
 
 # ---------- Setup output Directories -------------------------
 SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
@@ -64,6 +58,13 @@ SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
 SET (MXAExamples_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Examples)
 SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
 SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
+
+# - Set our Library Version to some default values. This should be changed later
+# - in the process by using the try_run command to get a better version string
+SET (MXADATAMODEL_VER_MAJOR "1970")
+SET (MXADATAMODEL_VER_MINOR "01")
+SET (MXADATAMODEL_VER_PATCH "01")
+SET (MXADATAMODEL_VERSION ${MXADATAMODEL_VER_MAJOR}.${MXADATAMODEL_VER_MINOR}.${MXADATAMODEL_VER_PATCH})
 
 #-------------------------------------------------------------------------------
 INCLUDE (${MXA_CMAKE_DIR}/vtkTestTypes.cmake )
@@ -175,7 +176,12 @@ ENDIF(WIN32)
 #-- Configure the Header file and then add the Binary Directory to the Includes list
 CONFIGURE_FILE(${MXA_SOURCE_DIR}/MXA/Common/MXAConfiguration.h.in
                ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h @ONLY IMMEDIATE)
-                 
+
+# Generate the version string
+GenerateVersionString(${PROJECT_NAME})
+configure_file(${MXADataModel_SOURCE_DIR}/Source/MXA/Common/MXAVersion.h.in
+               ${PROJECT_BINARY_DIR}/MXA/MXAVersion.h @ONLY IMMEDIATE)
+                               
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
  # ADD_DEFINITIONS(-DDEBUG)
@@ -243,7 +249,7 @@ IF (APPLE)
   IF(MXA_BUILD_WITH_INSTALL_NAME)
       SET_TARGET_PROPERTIES(${MXADATAMODEL_LIB_NAME}
          PROPERTIES
-         LINK_FLAGS "-current_version ${MXADATAMODEL_LIBRARY_VERSION} -compatibility_version ${MXADATAMODEL_LIBRARY_VERSION}"
+         LINK_FLAGS "-current_version ${${PROJECT_NAME}_VERSION} -compatibility_version ${${PROJECT_NAME}_VERSION}"
          INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
          BUILD_WITH_INSTALL_RPATH ${MXA_BUILD_WITH_INSTALL_NAME}
       )

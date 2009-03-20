@@ -75,7 +75,7 @@ IF (BUILD_TESTING)
         ${MXATests_SOURCE_DIR}/MXAFileReaderWriterTest.cpp
     )
     ADD_EXECUTABLE(MXAFileReaderWriterTest ${FILEREADERWRITER_TEST_SRCS})
-    TARGET_LINK_LIBRARIES (MXAFileReaderWriterTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
+    TARGET_LINK_LIBRARIES (MXAFileReaderWriterTest  ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
     ADD_TEST(MXAFileReaderWriterTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXAFileReaderWriterTest) 
 
 # -------- Dataset Test
@@ -93,7 +93,7 @@ IF (BUILD_TESTING)
    # source_group(src\\Testing FILES ${MXADataset_TEST_SRCS} ${MXADataset_TEST_HEADERS})
    IF ( MXA_USE_HDF5 AND MXA_USE_TIFF )
     ADD_EXECUTABLE(DatasetTest ${MXADataset_TEST_SRCS} ${MXADataset_TEST_HEADERS})
-    TARGET_LINK_LIBRARIES( DatasetTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} )
+    TARGET_LINK_LIBRARIES( DatasetTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
     ADD_TEST(DatasetTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DatasetTest)
    ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
     
@@ -128,7 +128,7 @@ IF (MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
 
     include_directories(${MXATests_BINARY_DIR})
     ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} ${MXADATAIMPORT_TEST_HEADERS})
-    TARGET_LINK_LIBRARIES ( DataImportTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
+    TARGET_LINK_LIBRARIES ( DataImportTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
     ADD_TEST(DataImportTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DataImportTest)
 
     #-- Configure the XML file to correctly find the XML Model file
@@ -171,7 +171,7 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
       ${MXATests_SOURCE_DIR}/DataSourcePathIndexSectionTest.cpp
     )
     ADD_EXECUTABLE ( DataSourcePathIndexSectionTest ${DATASOURCEPATHINDEXSECTION_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (DataSourcePathIndexSectionTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
+    TARGET_LINK_LIBRARIES (DataSourcePathIndexSectionTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
     ADD_TEST(DataSourcePathIndexSectionTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DataSourcePathIndexSectionTest)
            
 # --------- BMP IO Test

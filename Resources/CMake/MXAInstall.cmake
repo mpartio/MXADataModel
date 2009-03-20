@@ -38,7 +38,7 @@ IF (NOT MSVC)
     )
 ENDIF (NOT MSVC)  
     
-INSTALL (FILES ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h 
+INSTALL (FILES ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h ${PROJECT_BINARY_DIR}/MXA/MXAVersion.h 
          DESTINATION include/MXA 
          COMPONENT Headers           
 )
@@ -60,7 +60,8 @@ SET (MXA_INSTALLED_RESOURCES
         ${MXA_CMAKE_DIR}/MXAFindSZip.cmake
         ${MXA_CMAKE_DIR}/MXAFindTiff.cmake
         ${MXA_CMAKE_DIR}/GetTimeOfDayTest.cpp
-        ${MXA_CMAKE_DIR}/FindSupportLibraries.cmake   
+        ${MXA_CMAKE_DIR}/FindSupportLibraries.cmake
+        ${MXA_CMAKE_DIR}/GenerateVersionString.cpp
 )
 
 INSTALL (FILES ${MXA_INSTALLED_RESOURCES} 
