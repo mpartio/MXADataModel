@@ -22,7 +22,10 @@ IDataFilePtr H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
     H5MXADataFile* nullDataFile = 0x0;
     filePtr.reset(nullDataFile);
   }
-  dataFile->_setWeakPointer(filePtr);
+  else
+  {
+    dataFile->_setWeakPointer(filePtr);
+  }
   return filePtr;
 }
 
@@ -36,7 +39,7 @@ IDataFilePtr H5MXADataFile::CreateFileWithModel(const std::string &filename, IDa
   int32 err = filePtr->createFile();
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
-    std::cout << logTime() << "H5MXADataFile::CreateFileWithModel - Error Creating file.\n\t[" << filePtr->getFilename() << "]" << std::endl;
+    std::cout << logTime() << "H5MXADataFile::CreateFileWithModel - Error Creating file.\t[" << filePtr->getFilename() << "]" << std::endl;
     H5MXADataFile* nullDataFile = 0x0;
     filePtr.reset(nullDataFile);
     return filePtr;
@@ -46,7 +49,7 @@ IDataFilePtr H5MXADataFile::CreateFileWithModel(const std::string &filename, IDa
   err = filePtr->saveDataModel();
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
-    std::cout << logTime() << "H5MXADataFile::CreateFileWithModel - Error Writing Data Model to file.\n\t[" << filePtr->getFilename() << "]" << std::endl;
+    std::cout << logTime() << "H5MXADataFile::CreateFileWithModel - Error Writing Data Model to file.\t[" << filePtr->getFilename() << "]" << std::endl;
     H5MXADataFile* nullDataFile = 0x0;
     filePtr.reset(nullDataFile);
   }
@@ -116,7 +119,7 @@ IDataFilePtr H5MXADataFile::CreateEmptyFile(const std::string &filename)
   int32 err = filePtr->createFile();
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
-    std::cout << logTime() << "H5MXADataFile::CreateFileWithModel - Error Creating file.\n\t[" << filePtr->getFilename() << "]" << std::endl;
+    std::cout << logTime() << "H5MXADataFile::CreateFileWithModel - Error Creating file.\t[" << filePtr->getFilename() << "]" << std::endl;
     H5MXADataFile* nullDataFile = 0x0;
     filePtr.reset(nullDataFile);
   }
@@ -205,7 +208,7 @@ int32 H5MXADataFile::openFile(bool readOnly)
 
   if (this->_fileId < 0)
   {
-    std::cout << logTime() << "The mxa file could not be opened.\n\t[" << this->_filename << "]" << std::endl;
+    std::cout << logTime() << "The mxa file could not be opened.\t[" << this->_filename << "]" << std::endl;
     HDF_ERROR_HANDLER_ON
     return this->_fileId;
   }
@@ -214,7 +217,7 @@ int32 H5MXADataFile::openFile(bool readOnly)
   int32 err = this->_readDataModel();
   if (err < 0)
   {
-    std::cout << logTime() << "The data model could NOT be loaded from the file.\n\t[" << this->_filename << "]" << std::endl;
+    std::cout << logTime() << "The data model could NOT be loaded from the file.\t[" << this->_filename << "]" << std::endl;
     HDF_ERROR_HANDLER_ON
     return err;
   }
@@ -242,7 +245,7 @@ int32 H5MXADataFile::closeFile(bool saveModel)
     err = this->saveDataModel();
     if (err < 0)
     {
-      std::cout << logTime() << "Error saving model to file.\n\t[" << this->_filename << "]" << std::endl;
+      std::cout << logTime() << "Error saving model to file.\t[" << this->_filename << "]" << std::endl;
       return err;
     }
   }
