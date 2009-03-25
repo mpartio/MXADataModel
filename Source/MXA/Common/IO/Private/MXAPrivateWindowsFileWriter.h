@@ -17,22 +17,11 @@
 
 // Conditional Includes/Defines for Large File Support on Windows
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
-/*
-"It's a known, long-standing bug in the compiler system's headers.  For
-some reason the manufacturer, in its infinite wisdom, chose to #define
-macros min() and max() in violation of the upper-case convention and so
-break any legitimate functions with those names, including those in the
-standard C++ library."
-*/
-#define NOMINMAX
 #include <io.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <windows.h>
 #define WRITER64_OUTPUT_STREAM HANDLE
-
 #else  // Non Windows Platform
 #include <fstream>
 #define WRITER64_OUTPUT_STREAM std::ofstream

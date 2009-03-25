@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,18 @@
   #include <string>
   #include <stdio.h>
   #include <MXA/Common/MXATypes.h>
+/*
+"It's a known, long-standing bug in the compiler system's headers.  For
+some reason the manufacturer, in its infinite wisdom, chose to #define
+macros min() and max() in violation of the upper-case convention and so
+break any legitimate functions with those names, including those in the
+standard C++ library."
+*/
+
+#ifndef NOMINMAX
   #define NOMINMAX
+#endif
+
   #define WINDOWS_LARGE_FILE_SUPPORT
 	#if _MSC_VER < 1400
 		#define snprintf _snprintf
