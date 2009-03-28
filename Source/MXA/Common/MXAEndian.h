@@ -55,22 +55,23 @@
 // __BYTE_ORDER
 
 #if defined (__GLIBC__)
-# include <endian.h>
-# if (__BYTE_ORDER == __LITTLE_ENDIAN)
+ #include <endian.h>
+ #if (__BYTE_ORDER == __LITTLE_ENDIAN)
     #define MXA_LITTLE_ENDIAN
-# elif (__BYTE_ORDER == __BIG_ENDIAN)
+ #elif (__BYTE_ORDER == __BIG_ENDIAN)
     #define MXA_BIG_ENDIAN
-# else
-#  error Unknown machine endianness detected.
-# endif
+ #else
+  #error Unknown machine endianness detected.
+ #endif /* Not GCC */
 #elif defined ( __sparc     ) || \
       defined ( __sparc__   ) || \
       defined ( __powerpc__ ) || \
       defined ( __ppc__     ) || \
       defined ( __hppa      ) || \
       defined ( _MIPSEB     ) || \
-      defined ( _POWER      )
-#define MXA_BIG_ENDIAN
+      defined ( _POWER      ) || \
+      defined ( __BIG_ENDIAN__)
+ #define MXA_BIG_ENDIAN
 #elif defined ( __i386__    ) || \
       defined ( __alpha__   ) || \
       defined ( __ia64      ) || \
@@ -79,10 +80,11 @@
       defined ( __i386__    ) || \
       defined ( _M_IX86     ) || \
       defined ( vax         ) || \
-      defined ( __alpha     )
-#define MXA_LITTLE_ENDIAN
+      defined ( __alpha     ) || \
+      defined ( __LITTLE_ENDIAN__ )
+ #define MXA_LITTLE_ENDIAN
 #else
-#error Unknown endian type in MXA/Endian.h
+ #error Unknown endian type in MXA/Endian.h
 #endif
 
 
