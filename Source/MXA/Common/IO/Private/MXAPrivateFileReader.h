@@ -23,7 +23,7 @@
 #define READER64_INPUT_STREAM std::ifstream
 
 /**
-* @class MXAFILEREADER_CLASS_NAME MXAFILEREADER_CLASS_NAME.h PathToHeader/MXAFILEREADER_CLASS_NAME.h
+* @class
 * @brief
 * @author mjackson
 * @date Feb 26, 2009

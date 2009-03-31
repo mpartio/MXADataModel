@@ -7,6 +7,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include "MXAPrivateWindowsFileWriter.h"
+#include <MXA/Common/LogTime.h>
 
 
 
@@ -29,7 +30,7 @@ MXAFILEWRITER_CLASS_NAME::~MXAFILEWRITER_CLASS_NAME()
   int error = CloseHandle(_outStream); //Close the file
   if (0 == error)
   {
-    std::cout << "MXAFILEWRITER_CLASS_NAME:: Error Closing File " << _filename << std::endl;
+    std::cout << logTime() << "MXAFILEWRITER_CLASS_NAME:: Error Closing File " << _filename << std::endl;
   }
 #endif
 }
@@ -50,14 +51,14 @@ bool MXAFILEWRITER_CLASS_NAME::initWriter()
                    NULL);                 // no attr. template
   if (_outStream == INVALID_HANDLE_VALUE)
   {
-    std::cout << "Error: Failed to open file: " + std::string(this->_filename) << " Error code:(" << GetLastError() << ")" << std::endl;
-    return false;
+    std::cout << logTime() << "Output File '" << this->_filename << "' could not be opened for writing. Please" <<
+        " check the path is correct and permissions are set correctly on the parent folder." << std::endl;
+        return false;
   }
 #else
-
   _outStream.open(this->_filename.c_str(), std::ios::out | std::ios::binary);
   if ( _outStream.fail() ) {
-    std::cout << "Output File " << this->_filename << "\n  could not be opened for writing. Please" <<
+    std::cout << logTime() << "Output File '" << this->_filename << "' could not be opened for writing. Please" <<
      " check the path is correct and permissions are set correctly on the parent folder." << std::endl;
      return false;
   }
