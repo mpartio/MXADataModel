@@ -798,7 +798,7 @@ UCharArray MXABmpIO::getImageData(bool makeCopy)
   {
     size_t m_length = this->width * this->height * this->numChannels;
     UCharArray copy(new uint8[m_length]);
-    std::memcpy(copy.get(), this->bitmapDataVec.get(), m_length);
+    ::memcpy(copy.get(), this->bitmapDataVec.get(), m_length);
     return copy;
   }
   return this->bitmapDataVec;
