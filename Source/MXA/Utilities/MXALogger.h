@@ -69,7 +69,7 @@ class MXA_EXPORT MXALogger
 
     bool is_open() { return _out.is_open(); }
 
-    MXALogger* logDateTime() { CHECK_PRECONDITION(logTime()) }
+    MXALogger* dateTime() { CHECK_PRECONDITION(logTime()) }
     MXALogger* warn() { CHECK_PRECONDITION("[Warning] ")}
     MXALogger* error() { CHECK_PRECONDITION("[Error] ")}
     MXALogger* log(uint8 v) { CHECK_PRECONDITION(v) }

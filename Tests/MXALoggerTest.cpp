@@ -54,8 +54,8 @@ int MXALoggerTest_EntryPoint()
 
   MXALogger::Pointer logger = MXALogger::New();
   logger->open(MXAUnitTest::MXALoggerTest::TestFile);
-	logger->logDateTime()->log(ui8)->log(i8)->log(ui16)->log(i16)->log(ui32)->log(i32)->log(ui64)->log(i64)->log(f)->log(d)->endl();
-	logger->logDateTime()->log(str)->endl();
+	logger->dateTime()->log(ui8)->log(i8)->log(ui16)->log(i16)->log(ui32)->log(i32)->log(ui64)->log(i64)->log(f)->log(d)->endl();
+	logger->dateTime()->log(str)->endl();
 
 	logger->close();
 	BOOST_REQUIRE(logger->is_open() == false);
@@ -64,7 +64,7 @@ int MXALoggerTest_EntryPoint()
   BOOST_REQUIRE(logger->is_open() == true);
 	std::stringstream ss;
 	ss << "This is a test of the stringstream";
-	logger->logDateTime()->log(ss)->endl();
+	logger->dateTime()->log(ss)->endl();
 	logger->close();
 	BOOST_REQUIRE(logger->is_open() == false);
 
@@ -72,8 +72,8 @@ int MXALoggerTest_EntryPoint()
 	std::cout << logTime() << "Logging to std::cout" << std::endl;
 	logger = MXALogger::New();
 	BOOST_REQUIRE(logger.get() != NULL);
-  logger->logDateTime()->log(ui8)->log(i8)->log(ui16)->log(i16)->log(ui32)->log(i32)->log(ui64)->log(i64)->log(f)->log(d)->endl();
-  logger->logDateTime()->log(str)->endl();
+  logger->dateTime()->log(ui8)->log(i8)->log(ui16)->log(i16)->log(ui32)->log(i32)->log(ui64)->log(i64)->log(f)->log(d)->endl();
+  logger->dateTime()->log(str)->endl();
 
   logger->close();
   BOOST_REQUIRE(logger->is_open() == false);
@@ -82,10 +82,13 @@ int MXALoggerTest_EntryPoint()
   BOOST_REQUIRE(logger->is_open() == true);
   ss.str();
   ss << "This is a test of the stringstream";
-  logger->logDateTime()->log(ss)->endl();
+  logger->dateTime()->log(ss)->endl();
   logger->close();
   BOOST_REQUIRE(logger->is_open() == false);
 
+  std::string empty;
+  logger = MXALogger::New(empty);
+  BOOST_REQUIRE(logger.get() == NULL);
 
 	return err;
 }
