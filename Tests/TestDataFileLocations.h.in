@@ -132,6 +132,14 @@ namespace DatasetTest
   const std::string TestFile("@MXA_TEMP_DIR@Dataset_Test.h5");
 }
 
+// -----------------------------------------------------------------------------
+//  Define where to put our temporary files for the MXALoggerTest
+// -----------------------------------------------------------------------------
+namespace MXALoggerTest
+{
+  const std::string TestFile ("@MXA_TEMP_DIR@MXALoggerTest_OutputFile.log");
+}
+
 } // End MXAUnitTest namespace
 
 #endif /*SOURCEFILELOCATIONS_H_*/

@@ -232,7 +232,20 @@ ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
                           ${Boost_TEST_EXEC_MONITOR_LIBRARY} 
                           ${Boost_SYSTEM_LIBRARY})
     add_test(MXAFileSystemPathTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXAFileSystemPathTest)
-    
+
+# ----- MXALogger Test
+    set(MXALoggerTest_SRCS 
+        ${MXATests_SOURCE_DIR}/MXALoggerTest.cpp
+    )
+    add_executable(MXALoggerTest ${MXALoggerTest_SRCS})
+    target_link_libraries(MXALoggerTest 
+                          ${MXADATAMODEL_LIB_NAME}
+                          ${Boost_TEST_EXEC_MONITOR_LIBRARY} 
+                          ${Boost_SYSTEM_LIBRARY})
+    add_test(MXALoggerTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXALoggerTest)
+
+
+
 # ------- Vtk to HDF5 Bridge test
     IF(MXA_BUILD_VTK_HDF5)
         SET (VTK_HDF5_SRCS
