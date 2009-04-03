@@ -35,28 +35,6 @@ typedef std::string MXAString;
 #endif
 
 
-#define MXA_SHARED_POINTERS(thisClass)\
-  typedef thisClass                      Self;\
-  typedef boost::shared_ptr<Self>        Pointer;\
-  typedef boost::shared_ptr<const Self>  ConstPointer;\
-
-/**
- * @brief Implements a Static 'New' Method for a class
- */
-#define MXA_NEW_MACRO(thisClass) \
-static Pointer New(void) \
-{ \
-  Pointer sharedPtr (new thisClass); \
-  return sharedPtr; \
-}
-
-/** Macro used to add standard methods to all classes, mainly type
- * information. */
-#define MXA_TYPE_MACRO(thisClass) \
-    virtual const char *GetNameOfClass() const \
-        {return #thisClass;}
-
-
 
 
 class IDataFile;

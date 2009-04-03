@@ -16,6 +16,43 @@
 #include <boost/any.hpp>
 #include <boost/lexical_cast.hpp>
 
+//-- Boost Includes
+#include <boost/shared_ptr.hpp>
+
+/**
+ * @brief Creates a static method that returns a NULL pointer wrapped in a
+ * boost::shared_ptr<>
+ * @param thisClass The name of the class.
+ */
+#define MXA_NULL_SHARED_POINTER(thisClass)\
+  static Pointer NullPointer(void)\
+  { \
+    return Pointer(static_cast<thisClass*>(NULL));\
+  }
+
+
+#define MXA_SHARED_POINTERS(thisClass)\
+  typedef thisClass                      Self;\
+  typedef boost::shared_ptr<Self>        Pointer;\
+  typedef boost::shared_ptr<const Self>  ConstPointer;\
+  MXA_NULL_SHARED_POINTER(thisClass);
+
+/**
+ * @brief Implements a Static 'New' Method for a class
+ */
+#define MXA_NEW_MACRO(thisClass) \
+static Pointer New(void) \
+{ \
+  Pointer sharedPtr (new thisClass); \
+  return sharedPtr; \
+}
+
+/** Macro used to add standard methods to all classes, mainly type
+ * information. */
+#define MXA_TYPE_MACRO(thisClass) \
+    virtual const char *GetNameOfClass() const \
+        {return #thisClass;}
+
 //------------------------------------------------------------------------------
 // Macros for Properties
 /**

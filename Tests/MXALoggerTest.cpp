@@ -26,7 +26,7 @@ void RemoveTestFiles()
 {
   std::cout << "   Removing Test files" << std::endl;
 #ifdef REMOVE_TEST_FILES
-  //MXAFileSystemPath::remove(MXAUnitTest::MXALoggerTest::TestFile);
+  MXAFileSystemPath::remove(MXAUnitTest::MXALoggerTest::TestFile);
 #endif
 }
 
