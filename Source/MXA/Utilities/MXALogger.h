@@ -81,7 +81,7 @@ class MXA_EXPORT MXALogger
     MXALogger* log(int64 v) { CHECK_PRECONDITION(v) }
     MXALogger* log(double v)  { CHECK_PRECONDITION(v) }
     MXALogger* log(const std::string &v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(char* v) { CHECK_PRECONDITION(v) }
+    MXALogger* log(const char* v) { CHECK_PRECONDITION(v) }
     MXALogger* log(std::stringstream &v) { CHECK_PRECONDITION(v.str()) }
     MXALogger* endl() { CHECK_PRECONDITION(std::endl)}
 
