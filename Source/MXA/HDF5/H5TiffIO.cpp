@@ -180,7 +180,7 @@ herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::s
   }
 
   // Store byte array to HDF5 File
-  err = H5Image::makeGrayScaleImage(groupId, datasetName, width, height, (unsigned char *)raster );
+  err = H5Image::H5IMmake_image_8bit(groupId, datasetName, width, height, MXA::H5Image::UpperLeft, (unsigned char *)raster );
   if (err<0) {
     std::cout << "Error storing Image data with H5IM API:  datasetName: "
 	      << datasetName << std::endl;

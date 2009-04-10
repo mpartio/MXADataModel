@@ -89,10 +89,11 @@ static herr_t find_palette( hid_t loc_id, const char *name, void  *op_data )
  *
  *-------------------------------------------------------------------------
  */
-herr_t H5Image::makeGrayScaleImage( hid_t loc_id,
+herr_t H5Image::H5IMmake_image_8bit( hid_t loc_id,
                             std::string datasetName,
                             hsize_t width,
                             hsize_t height,
+                            const std::string &displayOrigin,
                             const unsigned char *buffer )
 {
  int32    rank = 2;
@@ -109,16 +110,32 @@ herr_t H5Image::makeGrayScaleImage( hid_t loc_id,
   return -1;
 
  /* Attach the CLASS attribute */
- if ( H5Lite::writeStringAttribute( loc_id, datasetName, const_cast<std::string&>(MXA::H5Image::ImageClass), const_cast<std::string&>(MXA::H5Image::Image) ) < 0 )
+ if ( H5Lite::writeStringAttribute( loc_id, datasetName,
+                                    const_cast<std::string&>(MXA::H5Image::ImageClass),
+                                    const_cast<std::string&>(MXA::H5Image::Image) ) < 0 )
   return -1;
 
  /* Attach the VERSION attribute */
- if ( H5Lite::writeScalarAttribute( loc_id, datasetName, const_cast<std::string&>(MXA::H5Image::ImageWhiteIsZero), 0 ) < 0 )
+ if ( H5Lite::writeScalarAttribute( loc_id, datasetName,
+                                    const_cast<std::string&>(MXA::H5Image::ImageWhiteIsZero), 0 ) < 0 )
   return -1;
 
  /* Attach the IMAGE_SUBCLASS attribute */
- if ( H5Lite::writeStringAttribute( loc_id, datasetName, const_cast<std::string&>(MXA::H5Image::ImageSubclass), const_cast<std::string&>(MXA::H5Image::ImageGrayScale) ) < 0 )
+ if ( H5Lite::writeStringAttribute( loc_id, datasetName,
+                                    const_cast<std::string&>(MXA::H5Image::ImageSubclass),
+                                    const_cast<std::string&>(MXA::H5Image::ImageGrayScale) ) < 0 )
   return -1;
+
+ // set the display origin
+ //    "UL": (0,0) is at the upper left.
+ //    "LL": (0,0) is at the lower left.
+ //    "UR": (0,0) is at the upper right.
+ //    "LR": (0,0) is at the lower right.
+ if ( H5Lite::writeStringAttribute(loc_id,
+                                   datasetName,
+                                   const_cast<std::string&>(MXA::H5Image::DisplayOrigin),
+                                   displayOrigin) < 0 )
+   return -1;
 
  return 0;
 }

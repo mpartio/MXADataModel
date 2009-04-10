@@ -254,7 +254,7 @@ herr_t H5Utilities::getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<st
 // -----------------------------------------------------------------------------
 hid_t H5Utilities::createGroup(hid_t loc_id, const std::string &group)
 {
-  hid_t grp_id;
+  hid_t grp_id = -1;
   herr_t err = -1;
 
   // Suspend the HDF Error Handlers
@@ -272,7 +272,8 @@ hid_t H5Utilities::createGroup(hid_t loc_id, const std::string &group)
   if (err == 0)
   {
     grp_id = H5Gopen(loc_id, group.c_str());
-  } else
+  }
+  else
   {
     grp_id = H5Gcreate(loc_id, group.c_str(), 0);
   }

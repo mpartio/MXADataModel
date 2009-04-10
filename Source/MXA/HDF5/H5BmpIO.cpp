@@ -71,7 +71,7 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(hid_t fileId,
   int32 err = -1;
 
   // Store byte array to HDF5 File
-  err = H5Image::makeGrayScaleImage(fileId, datasetName, width, height, imageData.get() );
+  err = H5Image::H5IMmake_image_8bit(fileId, datasetName, width, height, MXA::H5Image::UpperLeft, imageData.get() );
   if (err<0) {
     std::cout << "Error storing Image data with H5IM API:  datasetName: "
         << datasetName << std::endl;
