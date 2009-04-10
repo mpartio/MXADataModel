@@ -144,7 +144,6 @@ static bool hasRightSlash(const std::string &path)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-//TODO: Fix this to be more efficient
 /* Returns a copy of the list. Not memory efficient at all */
 static std::list<std::string> splitString(std::string sep, std::string str)
 {

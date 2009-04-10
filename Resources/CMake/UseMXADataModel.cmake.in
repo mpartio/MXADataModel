@@ -12,6 +12,8 @@ SET(MXADATAMODEL_LIBRARY_RELEASE_NAME @MXADATAMODEL_LIB_NAME@)
 SET (Boost_FIND_REQUIRED TRUE)
 SET (Boost_FIND_QUIETLY TRUE)
 set (Boost_USE_STATIC_LIBS @Boost_USE_STATIC_LIBS@)
+SET (Boost_USE_THREADS TRUE)
+set (Boost_USE_PROGRAM_OPTIONS TRUE)
 #SET (Boost_USE_FILESYSTEM TRUE)
 #SET (Boost_USE_SYSTEM TRUE)
 #SET (Boost_USE_UNIT_TEST_FRAMEWORK TRUE)
@@ -23,6 +25,18 @@ FIND_PACKAGE(Boost 1.36 COMPONENTS program_options thread)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
 SET(MXA_SUPPORT_LIBRARIES ${MXA_SUPPORT_LIBRARIES} ${Boost_LIBRARIES})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+
+# --------------------------------------------------------------------
+# Find the pthread library on Linux if we are using threads
+# --------------------------------------------------------------------
+if (Boost_USE_THREAD)
+  IF (CMAKE_SYSTEM MATCHES "Linux")
+      find_package(Threads)
+      if (NOT  Threads_FOUND)
+          message(FATAL_ERROR "Threads Library is needed on Linux.")
+      endif()
+  endif()
+endif()
 
 #-------------------------------------------------------------------------------
 #- Find Expat Library -------------

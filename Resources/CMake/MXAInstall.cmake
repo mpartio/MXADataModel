@@ -102,10 +102,6 @@ if (${MXA_BUILD_API_DOCS})
             COMPONENT Documentation)
 endif()
 
-
-INSTALL(FILES ${MXADataModel_SOURCE_DIR}/Resources/ReadMe.txt
-        DESTINATION .
-        COMPONENT Documentation)
         
 INSTALL(FILES ${MXADataModel_SOURCE_DIR}/License.txt
         DESTINATION .
