@@ -33,7 +33,7 @@ class MXA_EXPORT MXALogger
   public:
 
     MXA_SHARED_POINTERS(MXALogger);
-    MXA_NEW_MACRO(MXALogger);
+    MXA_STATIC_NEW_MACRO(MXALogger);
     MXA_TYPE_MACRO(MXALogger);
     virtual ~MXALogger();
 

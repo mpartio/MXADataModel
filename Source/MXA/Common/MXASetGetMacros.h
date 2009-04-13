@@ -30,7 +30,10 @@
     return Pointer(static_cast<thisClass*>(NULL));\
   }
 
-
+/**
+ * @brief Creates some basic typedefs that can be used throughout the code to
+ * reference the class.
+ */
 #define MXA_SHARED_POINTERS(thisClass)\
   typedef thisClass                      Self;\
   typedef boost::shared_ptr<Self>        Pointer;\
@@ -40,7 +43,7 @@
 /**
  * @brief Implements a Static 'New' Method for a class
  */
-#define MXA_NEW_MACRO(thisClass) \
+#define MXA_STATIC_NEW_MACRO(thisClass) \
 static Pointer New(void) \
 { \
   Pointer sharedPtr (new thisClass); \
@@ -81,6 +84,18 @@ static Pointer New(void) \
   MXA_SET_PROPERTY(type, prpty, varname)\
   MXA_GET_PROPERTY(type, prpty, varname)
 
+/**
+* @brief Convenience macro to create both the setter and getter methods in addition
+* to the instance variable.
+*/
+#define MXA_INSTANCE_PROPERTY(type, prpty, varname)\
+  private:\
+      type   varname;\
+  public:\
+    MXA_SET_PROPERTY(type, prpty, varname)\
+    MXA_GET_PROPERTY(type, prpty, varname)
+
+
 
 /**
 * @brief Creates a "setter" method to set the property.
@@ -98,6 +113,13 @@ static Pointer New(void) \
  * @brief Creates setters and getters in the form of 'setXXX()' and 'getXXX()' methods
  */
 #define MXA_STRING_PROPERTY(prpty, varname)\
+  MXA_SET_STRING_PROPERTY(prpty, varname)\
+  MXA_GET_STRING_PROPERTY(prpty, varname)
+
+#define MXA_INSTANCE_STRING_PROPERTY(prpty, varname)\
+  private:\
+  std::string      varname;\
+  public:\
   MXA_SET_STRING_PROPERTY(prpty, varname)\
   MXA_GET_STRING_PROPERTY(prpty, varname)
 
