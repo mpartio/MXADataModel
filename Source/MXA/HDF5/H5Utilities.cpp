@@ -257,15 +257,7 @@ hid_t H5Utilities::createGroup(hid_t loc_id, const std::string &group)
   hid_t grp_id = -1;
   herr_t err = -1;
 
-  // Suspend the HDF Error Handlers
-  herr_t (*_oldHDF_error_func)(void *);
-  void *_oldHDF_error_client_data;
-
-  // Store the current HDF error handlers
-  H5Eget_auto(&_oldHDF_error_func, &_oldHDF_error_client_data);
-
-  // Turn off error handling
-  H5Eset_auto(NULL, NULL);
+  HDF_ERROR_HANDLER_OFF
 
   err = H5Gget_objinfo(loc_id, group.c_str(), 0, NULL);
 //  std::cout << "H5Gget_objinfo = " << err << " for " << group << std::endl;
@@ -278,7 +270,8 @@ hid_t H5Utilities::createGroup(hid_t loc_id, const std::string &group)
     grp_id = H5Gcreate(loc_id, group.c_str(), 0);
   }
   // Turn the HDF Error handlers back on
-  H5Eset_auto(_oldHDF_error_func, _oldHDF_error_client_data);
+  HDF_ERROR_HANDLER_ON
+
   return grp_id;
 }
 

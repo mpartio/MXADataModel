@@ -196,6 +196,11 @@ int32 H5MXADataFile::createFile()
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::openFile(bool readOnly)
 {
+  if (this->_filename.empty() == true)
+  {
+    std::cout << logTime() << "Error: H5MXADataFile::openFile() - variable _filename is empty but is required to be set." << std::endl;
+    return -1;
+  }
   this->_isReadOnly = readOnly;
 
   HDF_ERROR_HANDLER_OFF

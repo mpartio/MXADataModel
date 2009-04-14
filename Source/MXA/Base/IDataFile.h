@@ -13,6 +13,7 @@
 
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 
 #include <string>
 
@@ -30,6 +31,7 @@ class MXA_EXPORT IDataFile
     explicit IDataFile(const std::string &filename) {};
     virtual ~IDataFile() {};
 
+    MXA_SHARED_POINTERS(IDataFile);
 
     /**
      * @brief returns the name of the file that is actively being read from or

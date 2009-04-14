@@ -325,7 +325,6 @@ void H5UtilitiesTest()
    err = H5Gclose(grpId);
    BOOST_REQUIRE(err >= 0);
 
-
    hid_t gid = H5Utilities::createGroup(file_id, "test group");
    BOOST_REQUIRE(gid >= 0);
    err = H5Utilities::closeHDF5Object(gid);
@@ -370,11 +369,63 @@ void H5UtilitiesTest()
 }
 
 // -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void StressTestCreateGroups()
+{
+  std::cout << logTime() << " Starting StressTestCreateGroups()" << std::endl;
+  char path[64];
+  ::memset(path, 0, 64);
+  int err = 0;
+  hid_t   file_id;
+  hid_t   grpId;
+
+  /* Create a new file using default properties. */
+  file_id = H5Fcreate( MXAUnitTest::H5UtilTest::GroupTest.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
+  BOOST_REQUIRE(file_id > 0);
+
+
+  for (int i = 0; i < 10; ++i) {
+//    err = H5Fclose(file_id);
+//    BOOST_REQUIRE(err >= 0);
+//    file_id = H5Fopen(MXAUnitTest::H5UtilTest::GroupTest.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
+    ::memset(path, 0, 64);
+    snprintf(path, 64, "/%03d", i);
+    grpId = H5Utilities::createGroup(file_id, path);
+    BOOST_REQUIRE(grpId > 0);
+    err = H5Gclose(grpId);
+    BOOST_REQUIRE(err >= 0);
+    for (int j = 0; j < 10; ++j) {
+
+      snprintf(path, 64, "/%03d/%03d", i, j);
+      grpId = H5Utilities::createGroup(file_id, path);
+      BOOST_REQUIRE(grpId > 0);
+      BOOST_REQUIRE(grpId > 0);
+      err = H5Gclose(grpId);
+      BOOST_REQUIRE(err >= 0);
+      for (int k = 0; k < 1000; ++k) {
+
+        snprintf(path, 64, "/%03d/%03d/%03d", i, j, k);
+        grpId = H5Utilities::createGroup(file_id, path);
+        BOOST_REQUIRE(grpId >= 0);
+        BOOST_REQUIRE(grpId > 0);
+        err = H5Gclose(grpId);
+        BOOST_REQUIRE(err >= 0);
+      }
+    }
+  }
+  err = H5Fclose(file_id);
+  BOOST_REQUIRE(err >= 0);
+}
+
+
+// -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
   boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "H5Utilities Tests" );
   test->add( BOOST_TEST_CASE( &H5UtilitiesTest), 0);
+ // test->add( BOOST_TEST_CASE( &StressTestCreateGroups), 0);
   test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test;
 }

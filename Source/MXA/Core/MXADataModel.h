@@ -19,6 +19,7 @@
 
 //-- MXA Headers
 #include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataModel.h>
 #include <MXA/Core/MXAConstants.h>
 #include <MXA/Core/MXADataDimension.h>
@@ -46,6 +47,8 @@ class MXA_EXPORT MXADataModel : public IDataModel
  public:
    MXADataModel();
    virtual ~MXADataModel();
+
+   MXA_SHARED_POINTERS(MXADataModel);
 
   /**
    * @brief Static method to create a new blank model.
