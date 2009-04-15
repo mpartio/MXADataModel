@@ -297,7 +297,7 @@ int32 RequiredMetaData::writeToFile(IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 int32 RequiredMetaData::readFromFile(IDataFilePtr dataFile)
 {
-  //TODO:: This is not implemented yet.
+  //TODO: This is not implemented yet.
   return -1;
 }
 
