@@ -22,7 +22,7 @@ IF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
   SET (MXA_USE_DEBUG_LIBRARY_NAME TRUE)
 ENDIF (NOT DEFINED MXA_USE_DEBUG_LIBRARY_NAME)
 
-
+if ( NOT MXA_OUTPUT_DIRS_DEFINED )
 # ---------- Setup output Directories -------------------------
 SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
@@ -43,6 +43,7 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
   CACHE PATH
   "Single Directory for all static libraries."
   )
+endif()
 
 #-------------------------------------------------------------------------------
 #  Define the location of the Build Directory
