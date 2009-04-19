@@ -37,7 +37,7 @@ SimpleImportExample::~SimpleImportExample()
 void SimpleImportExample::runImport(const std::string &outputFilePath)
 {
   // Create a DataModel
-  MXADataModelPtr model = this->createSimpleModel();
+  MXADataModel::Pointer model = this->createSimpleModel();
 
   // Create some external files that our import delegate will read
   this->createTestFiles(model);
@@ -107,7 +107,7 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void SimpleImportExample::createTestFiles(MXADataModelPtr model)
+void SimpleImportExample::createTestFiles(MXADataModel::Pointer model)
 {
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
     IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension
@@ -155,9 +155,9 @@ void SimpleImportExample::createTestFiles(MXADataModelPtr model)
 // -----------------------------------------------------------------------------
 //  Creates a Data Model programmitically to use with our data import
 // -----------------------------------------------------------------------------
-MXADataModelPtr SimpleImportExample::createSimpleModel()
+MXADataModel::Pointer SimpleImportExample::createSimpleModel()
 {
-  MXADataModelPtr modelPtr = MXADataModel::New();
+  MXADataModel::Pointer modelPtr = MXADataModel::New();
   MXADataModel* model = modelPtr.get();
   model->setDataRoot(std::string("DataImport Example Data"));
   model->setModelType(MXA::MXACurrentFileType);

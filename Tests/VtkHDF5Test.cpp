@@ -37,7 +37,7 @@ herr_t test()
 {
   herr_t err = -1;
   //First load the Data file
-  MXADataModelPtr modelPtr = MXADataModel::New();
+  MXADataModel::Pointer modelPtr = MXADataModel::New();
   modelPtr->readModel(VTK_MXA_TEST_FILE, false); // We pass 'false' so the file will stay open
   hid_t fileId = modelPtr->getIODelegate()->getOpenFileId();
   if (fileId < 0)

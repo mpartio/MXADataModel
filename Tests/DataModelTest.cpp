@@ -147,10 +147,10 @@ void CreateAttributes(MXADataModel* model)
 // -----------------------------------------------------------------------------
 //  Creates a Data Model to use
 // -----------------------------------------------------------------------------
-MXADataModelPtr createModel()
+MXADataModel::Pointer createModel()
 {
 	  std::string errorMessage;
-    MXADataModelPtr modelPtr = MXADataModel::New();
+    MXADataModel::Pointer modelPtr = MXADataModel::New();
 
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 	  MXADataModel* model = modelPtr.get();
@@ -228,7 +228,7 @@ void TestRequiredMetaData()
   int32 err = -1;
   std::string errorMessage;
   std::cout << "TestRequiredMetaData Running...." ;
-  MXADataModelPtr model = createModel();
+  MXADataModel::Pointer model = createModel();
 
   // Test setting the Required MetaData by individual strings
   std::string researcherName("");
@@ -308,7 +308,7 @@ void TestRequiredMetaData()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool recordExists(MXADataModelPtr model, std::string recName)
+bool recordExists(MXADataModel::Pointer model, std::string recName)
 {
   IDataRecordPtr rec = model->getDataRecordByNamedPath(recName);
   return (rec.get() != NULL) ? true : false;
@@ -317,7 +317,7 @@ bool recordExists(MXADataModelPtr model, std::string recName)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool recordInternalPathExists(MXADataModelPtr model, std::string recName)
+bool recordInternalPathExists(MXADataModel::Pointer model, std::string recName)
 {
   IDataRecordPtr rec = model->getDataRecordByInternalPath(recName);
   return (rec.get() != NULL) ? true : false;
@@ -329,7 +329,7 @@ bool recordInternalPathExists(MXADataModelPtr model, std::string recName)
 void TestLookupTableGeneration()
 {
   std::cout << "TestLookupTableGeneration Running...." << std::endl;
-  MXADataModelPtr modelPtr = createModel();
+  MXADataModel::Pointer modelPtr = createModel();
   IDataRecords records = modelPtr->getDataRecords();
   IDataRecordLookupTable lut;
   MXADataRecord::generateLUT(lut, records);
@@ -346,7 +346,7 @@ void TestLookupTableGeneration()
 void TestRetrieveDataRecords()
 {
   std::cout << "TestRetrieveDataRecords Running....";
-  MXADataModelPtr model = createModel();
+  MXADataModel::Pointer model = createModel();
   BOOST_REQUIRE( recordExists(model, "/Order Parameters/Eta1/") == true);
   BOOST_REQUIRE( recordExists(model, "Order Parameters/Eta1") == true);
   BOOST_REQUIRE( recordExists(model, "/Order Parameters/Eta1") == true);
@@ -388,7 +388,7 @@ void TestRetrieveDataRecords()
 void TestDataDimensionMethods()
 {
   std::cout << "Test DataDimensionMethods Running....";
-  MXADataModelPtr model = createModel(); // Created on the stack
+  MXADataModel::Pointer model = createModel(); // Created on the stack
   int32 error = 0;
 
   IDataDimensionPtr dim0 = model->getDataDimension(0);
@@ -432,7 +432,7 @@ void WriteTestModel()
 {
   {
     std::cout << "WriteTestModel Running....";
-    MXADataModelPtr modelPtr = createModel();
+    MXADataModel::Pointer modelPtr = createModel();
     IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(MXAUnitTest::DataModelTest::BeforeH5File, modelPtr);
     BOOST_REQUIRE(dataFile.get() != 0x0);
     std::cout << "......Passed" << std::endl;
@@ -553,7 +553,7 @@ void TestEndianSwap()
 void TestDataRecordRemoval()
 {
   std::cout << "TestDataRecordRemoval Running....";
-  MXADataModelPtr modelPtr = createModel();
+  MXADataModel::Pointer modelPtr = createModel();
   MXADataModel* model = modelPtr.get();
   IDataRecordPtr nullRec;
   IDataRecordPtr r0;
@@ -580,7 +580,7 @@ void TestDataModelOverWrite()
   {
 
 
-    MXADataModelPtr modelPtr = createModel();
+    MXADataModel::Pointer modelPtr = createModel();
     IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outFilename, modelPtr);
     // Make sure nothing went wrong in the file creation
     BOOST_REQUIRE(dataFile.get() != 0x0);
@@ -637,6 +637,19 @@ void TestDataModelOverWrite()
   std::cout << "......Passed" << std::endl;
 }
 
+// -----------------------------------------------------------------------------
+//  Shared Pointer Test
+// -----------------------------------------------------------------------------
+void SharedPointerTest()
+{
+  MXADataModel::Pointer model = createModel();
+  IDataDimension::Pointer dim = model->getDataDimension(0);
+
+  IDataDimension::Pointer nDim = MXADataDimension::New("Name", "Name", 0, 10, 0, 9, 1, 1);
+  IDataModelPtr nModel = MXADataModel::New(MXA::MXACurrentFileVersion, MXA::ModelType, "Data");
+  nModel->addDataDimension(nDim);
+  nModel->printModel(std::cout, 2);
+}
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
@@ -646,7 +659,7 @@ boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv
 
   boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "Data Model Tests" );
   //test->add( new DataModelTest () );
-
+  test->add( BOOST_TEST_CASE( &SharedPointerTest), 0);
   test->add( BOOST_TEST_CASE( &WriteTestModel), 0);
   test->add( BOOST_TEST_CASE( &ReWriteModelTest), 0);
   test->add( BOOST_TEST_CASE( &TestRetrieveDataRecords), 0 );

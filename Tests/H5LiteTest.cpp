@@ -87,7 +87,7 @@ using namespace MXATypes;
 herr_t testMakeStringDataset(hid_t file_id);
 herr_t testMakeStringAttribute(hid_t file_id);
 void H5LiteTest();
-MXADataModelPtr createModelTemplate();
+//MXADataModel::Pointer createModelTemplate();
 template<typename T>
 herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetName);
 

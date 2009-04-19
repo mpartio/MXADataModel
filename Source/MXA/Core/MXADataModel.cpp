@@ -37,9 +37,9 @@ _dataRoot("/")
 // -----------------------------------------------------------------------------
 //  Static New Method to construct a Model
 // -----------------------------------------------------------------------------
-MXADataModelPtr MXADataModel::New(float modelVersion, const std::string &type, const std::string &dataRoot)
+MXADataModel::Pointer MXADataModel::New(float modelVersion, const std::string &type, const std::string &dataRoot)
 {
-  MXADataModelPtr model(new MXADataModel());
+  MXADataModel::Pointer model(new MXADataModel());
   model->setModelVersion(modelVersion);
   model->setModelType(type);
   model->setDataRoot(dataRoot);
@@ -773,7 +773,9 @@ void MXADataModel::printDataDimensions(std::ostream& os, int32 indent)
 // -----------------------------------------------------------------------------
 void MXADataModel::printRequiredMetaData(std::ostream& os, int32 indent)
 {
-  _requiredMetaData->printSelf(os, indent);
+  if (_requiredMetaData.get() != NULL) {
+    _requiredMetaData->printSelf(os, indent);
+  }
 }
 
 // -----------------------------------------------------------------------------

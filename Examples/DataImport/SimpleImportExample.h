@@ -10,6 +10,7 @@
 #define _SIMPLE_IMPORT_EXAMPLE_H_
 
 #include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Core/MXADataModel.h>
 
 #include <string>
 
@@ -41,13 +42,13 @@ protected:
    * @brief Creates a simple MXA model to use for this example.
    * @return A valid MXA model object
    */
-  MXADataModelPtr createSimpleModel();
+  MXADataModel::Pointer createSimpleModel();
 
   /**
    * @brief Creates some files with binary data that are used as input for this example program.
    * @param model The mxa data model
    */
-  void createTestFiles(MXADataModelPtr model);
+  void createTestFiles(MXADataModel::Pointer model);
 
 
   private:

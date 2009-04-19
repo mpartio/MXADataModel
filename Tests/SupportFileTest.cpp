@@ -40,9 +40,9 @@ void RemoveTestFiles()
 // -----------------------------------------------------------------------------
 //  Creates a Data Model programmitically to use with our data import
 // -----------------------------------------------------------------------------
-MXADataModelPtr createSimpleModel()
+MXADataModel::Pointer createSimpleModel()
 {
-    MXADataModelPtr modelPtr = MXADataModel::New();
+    MXADataModel::Pointer modelPtr = MXADataModel::New();
     MXADataModel* model = modelPtr.get();
     model->setDataRoot(std::string("Our Experiment/Laboratory Data"));
     model->setModelType(MXA::MXACurrentFileType);
@@ -165,7 +165,7 @@ void TestMXAWrite()
 {
   std::cout << "|--MXAWrite Test" << std::endl;
   int32 err = 0;
-  MXADataModelPtr model = createSimpleModel();
+  MXADataModel::Pointer model = createSimpleModel();
   ISupportFilePtr binaryFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::BinaryInputFile, SupportFile::FileType::Binary);
   ISupportFilePtr textFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text);
   model->addSupportFile(binaryFile, true);

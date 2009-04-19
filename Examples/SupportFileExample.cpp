@@ -19,10 +19,10 @@
 // -----------------------------------------------------------------------------
 // Create our data model
 // -----------------------------------------------------------------------------
-MXADataModelPtr createDataModel()
+MXADataModel::Pointer createDataModel()
 {
   //Instatiate a new model using the predefined boost shared pointer type
-  MXADataModelPtr modelPtr = MXADataModel::New();
+  MXADataModel::Pointer modelPtr = MXADataModel::New();
   MXADataModel* model = modelPtr.get();
 
   //Define at what path in the HDF5 file the data will be stored
@@ -83,7 +83,7 @@ MXADataModelPtr createDataModel()
   if ( !valid )
   {
     std::cout << "Model was NOT valid. Exiting with Failure. Error message given was: \n" << message << std::endl;
-    MXADataModelPtr nullPtr;
+    MXADataModel::Pointer nullPtr;
     return nullPtr;
   }
   return modelPtr;
@@ -105,7 +105,7 @@ void createTiffImage(const std::string &file)
 int main(int argc, char **argv) {
 
   // Create a data model to use for this example
-  MXADataModelPtr model = createDataModel();
+  MXADataModel::Pointer model = createDataModel();
   if (NULL == model.get())
   {
     return EXIT_FAILURE;

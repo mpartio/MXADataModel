@@ -92,7 +92,7 @@ typedef boost::shared_ptr<IRequiredMetaData>        IRequiredMetaDataPtr;
 typedef boost::shared_ptr<H5MXARequiredMetaData>    H5MXARequiredMetaDataPtr;
 typedef boost::shared_ptr<RequiredMetaData>         RequiredMetaDataPtr;
 
-typedef boost::shared_ptr<MXADataModel>           MXADataModelPtr;
+//typedef boost::shared_ptr<MXADataModel>           MXADataModelPtr;
 typedef boost::shared_ptr<IDataModel>             IDataModelPtr;
 
 typedef boost::shared_ptr<IDataFile>                IDataFilePtr;

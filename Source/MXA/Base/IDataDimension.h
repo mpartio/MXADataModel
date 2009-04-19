@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -13,6 +13,7 @@
 
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataDimensionWriter.h>
 
 
@@ -21,16 +22,18 @@
  * @author Mike Jackson
  * @date March 2007
  * @version $Revision: 1.2 $
- *  
+ *
  */
-class MXA_EXPORT IDataDimension 
+class MXA_EXPORT IDataDimension
 {
   public:
     IDataDimension() {};
     virtual ~IDataDimension() {};
-    
+
+    MXA_SHARED_POINTERS(IDataDimension);
+
     typedef int32 size_type;
-    
+
     /**
      * @brief Setter for property Index
      * @param aValue The new value to set for property Index
@@ -42,7 +45,7 @@ class MXA_EXPORT IDataDimension
      * @return The value of Index
      */
      virtual int32 getIndex() = 0;
-     
+
      /**
      * @brief Setter for property Count
      * @param aValue The new value to set for property Count
@@ -126,7 +129,7 @@ class MXA_EXPORT IDataDimension
      * @return The value of uniform
      */
      virtual int32 getUniform() = 0;
-     
+
      /**
       * @brief This method uses the given IDataDimensionWriter to serialize itself
       * to the underlying data storage system.
@@ -134,26 +137,26 @@ class MXA_EXPORT IDataDimension
       * @return Error condition.
       */
      virtual int32 writeDimension(IDataDimensionWriter* writer) = 0;
-     
+
      /**
       * @brief Returns the maximum value that the Start Value can have */
      virtual IDataDimension::size_type  maxStartValue() = 0;
-     
+
      /** @brief Returns the maximum value that the End Value can have  */
      virtual IDataDimension::size_type  maxEndValue() = 0;
-     
+
      /** @brief Returns the Maximun Increment value */
      virtual IDataDimension::size_type  maxIncrement() = 0;
-     
+
      /** @brief returns the maximum value that the Count can be */
      virtual IDataDimension::size_type  maxCount() = 0;
-     
+
      /**
       * @brief Returns is a property, like count, increment.. is equal to either the
       * maximum or minimum value for its type, indicating that the value is uninitialized.
       */
      virtual bool isPropertyInitialized(int32 value) = 0;
-     
+
      /**
       * @brief Checks some basic properties of the model to make sure they are
       * set correctly.
@@ -162,14 +165,14 @@ class MXA_EXPORT IDataDimension
       * @return True if the model passes the basic checks
       */
      virtual bool isValid(std::string &message) = 0;
-     
+
      /**
-      * @brief This will force the count value to be calculated based on the 
+      * @brief This will force the count value to be calculated based on the
       * current start, end and increment values
       */
      virtual int32 calculateCount() = 0;
-     
- 
+
+
   private:
     IDataDimension(const IDataDimension&);    //Not Implemented
     void operator=(const IDataDimension&); //Not Implemented

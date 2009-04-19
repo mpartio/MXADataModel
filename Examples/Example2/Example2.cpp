@@ -166,7 +166,7 @@ int32 generateData()
 
 
   //Instatiate a new model using the predefined boost shared pointer type
-  MXADataModelPtr modelPtr = MXADataModel::New();
+  MXADataModel::Pointer modelPtr = MXADataModel::New();
   MXADataModel* model = modelPtr.get();
 
   //Define at what path in the HDF5 file the data will be stored

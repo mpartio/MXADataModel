@@ -54,7 +54,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Static method to create a new blank model.
    * @return A boost shard_ptr to the newly created model
    */
-  static MXADataModelPtr New(float modelVersion = 0.4f, const std::string &type = MXA::MXACurrentFileType, const std::string &dataRoot= "Data");
+  static MXADataModel::Pointer New(float modelVersion = 0.4f, const std::string &type = MXA::MXACurrentFileType, const std::string &dataRoot= "Data");
 
   /**
    * @brief Validates that all the required Meta data is not empty

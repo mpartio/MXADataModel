@@ -147,9 +147,9 @@ void CreateAttributes(MXADataModel* model)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXADataModelPtr createModel()
+MXADataModel::Pointer createModel()
 {
-    MXADataModelPtr modelPtr = MXADataModel::New();
+    MXADataModel::Pointer modelPtr = MXADataModel::New();
     MXADataModel* model = modelPtr.get();
     model->setDataRoot(std::string("DataModelTest/Data/Root/Is/Here"));
     model->setModelType(MXA::MXACurrentFileType);
@@ -210,9 +210,9 @@ MXADataModelPtr createModel()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXADataModelPtr createModelTemplate()
+MXADataModel::Pointer createModelTemplate()
 {
-    MXADataModelPtr modelPtr = MXADataModel::New();
+    MXADataModel::Pointer modelPtr = MXADataModel::New();
     MXADataModel* model = modelPtr.get();
     model->setDataRoot(std::string("DataModelTest/Data/Root/Is/Here"));
     model->setModelType(MXA::MXACurrentFileType);
@@ -279,7 +279,7 @@ void GenerateMasterXMLFile()
   std::cout << "Running GenerateMasterXMLFile........";
   std::string xmlFile(MXAUnitTest::XMLTest::MasterFile);
   {
-    MXADataModelPtr model = createModel();
+    MXADataModel::Pointer model = createModel();
     XMLDataModelWriter writer(model, xmlFile);
     int32 err = writer.writeModelToFile(-1);
     BOOST_REQUIRE ( err >= 0);
@@ -312,7 +312,7 @@ void XMLModelTest()
   std::string masterXmlFile(MXAUnitTest::XMLTest::MasterFile);
   std::string outFile (MXAUnitTest::XMLTest::TestFile);
   std::string errorMessage;
-  MXADataModelPtr model = MXADataModel::New();
+  MXADataModel::Pointer model = MXADataModel::New();
   {
     XMLDataModelReader reader (model, masterXmlFile);
     int32 err = reader.readDataModel(-1);
@@ -364,12 +364,12 @@ void XMLTemplateTest()
   std::string errorMessage;
   std::string templateFile (MXAUnitTest::XMLTest::TemplateTestFile);
   {
-    MXADataModelPtr model = createModelTemplate();
+    MXADataModel::Pointer model = createModelTemplate();
     XMLDataModelWriter writer(model, templateFile);
     int32 err = writer.writeModelToFile(-1);
     BOOST_REQUIRE ( err >= 0);
   }
-  MXADataModelPtr readModel = MXADataModel::New();
+  MXADataModel::Pointer readModel = MXADataModel::New();
   XMLDataModelReader reader (readModel, templateFile);
   int32 err = reader.readDataModel(-1);
   BOOST_REQUIRE ( err < 0); // This SHOULD fail because we read in a partial model

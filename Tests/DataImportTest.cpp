@@ -67,7 +67,7 @@ void RemoveTestFiles()
 //  Creates a DataImport class and some DataSources that then delegate out to
 //  an instance of an IDataImportDelegate to do the actual import of data.
 // -----------------------------------------------------------------------------
-void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
+void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
 {
   IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outputFilePath, model);
   BOOST_REQUIRE (NULL != dataFile.get() );
@@ -150,9 +150,9 @@ void ImportSimpleData(MXADataModelPtr model, std::string outputFilePath)
 // -----------------------------------------------------------------------------
 //  Creates a Data Model programmitically to use with our data import
 // -----------------------------------------------------------------------------
-MXADataModelPtr createSimpleModel()
+MXADataModel::Pointer createSimpleModel()
 {
-	  MXADataModelPtr modelPtr = MXADataModel::New();
+	  MXADataModel::Pointer modelPtr = MXADataModel::New();
 	  MXADataModel* model = modelPtr.get();
 	  model->setDataRoot(std::string("Our Experiment/Laboratory Data"));
 	  model->setModelType(MXA::MXACurrentFileType);
@@ -196,7 +196,7 @@ int SimpleTest()
 {
   std::cout << logTime() << "Running SimpleImportTest ------------------------" << std::endl;
   int32 err = 0;
-  MXADataModelPtr model = createSimpleModel();
+  MXADataModel::Pointer model = createSimpleModel();
   ImportSimpleData(model, MXAUnitTest::DataImportTest::SimpleImport);
   std::cout << logTime() << "Ending SimpleImportTest" << std::endl;
   return err;

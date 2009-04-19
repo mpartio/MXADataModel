@@ -41,7 +41,7 @@ herr_t DataFileGenerator::generate()
 {
   herr_t err = 1;
 
-    MXADataModelPtr modelPtr = MXADataModel::New();
+    MXADataModel::Pointer modelPtr = MXADataModel::New();
     MXADataModel* model = modelPtr.get();
     model->setDataRoot( DataGen::DataRoot );
     model->setModelType(MXA::MXACurrentFileType);
@@ -115,7 +115,7 @@ herr_t DataFileGenerator::generate()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t DataFileGenerator::makeRecords(MXADataModelPtr modelPtr, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims)
+herr_t DataFileGenerator::makeRecords(MXADataModel::Pointer modelPtr, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims)
 {
 #if 0
   // Add all the Data for this record
