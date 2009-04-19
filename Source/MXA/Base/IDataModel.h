@@ -15,6 +15,7 @@
 //-- MXA Includes
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 
 //-- STL Includes
 #include <string>
@@ -34,6 +35,8 @@ class MXA_EXPORT IDataModel
   public:
     IDataModel() {}
     virtual ~IDataModel() {}
+
+    MXA_SHARED_POINTERS(IDataModel);
 
     /**
      * @brief Returns the MXA File version that the model adheres to.

@@ -30,8 +30,6 @@ class MXA_EXPORT IDataDimension
     IDataDimension() {};
     virtual ~IDataDimension() {};
 
-    MXA_SHARED_POINTERS(IDataDimension);
-
     typedef int32 size_type;
 
     /**
