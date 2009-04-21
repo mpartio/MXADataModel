@@ -13,6 +13,7 @@
 #include <MXA/MXAConfiguration.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Common/MXATypes.h>
+#include <MXA/Common/Win32Defines.h>
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include "MXAUnitTestDataFileLocations.h"
