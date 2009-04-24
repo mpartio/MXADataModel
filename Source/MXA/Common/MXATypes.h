@@ -17,76 +17,8 @@
 
 #include <MXA/Common/DLLExport.h>
 
-/*--------------------------------------------------------------------------*/
-/* Define a unique integer identifier for each native scalar type.  */
-
-/* These types are returned by GetDataType to indicate pixel type.  */
-#define MXA_VOID            0
-#define MXA_BIT             1
-#define MXA_CHAR            2
-#define MXA_SIGNED_CHAR    15
-#define MXA_UNSIGNED_CHAR   3
-#define MXA_SHORT           4
-#define MXA_UNSIGNED_SHORT  5
-#define MXA_INT             6
-#define MXA_UNSIGNED_INT    7
-#define MXA_LONG            8
-#define MXA_UNSIGNED_LONG   9
-#define MXA_FLOAT          10
-#define MXA_DOUBLE         11
-#define MXA_ID_TYPE        12
-
-/* These types are not currently supported by GetDataType, but are for
-   completeness.  */
-#define MXA_STRING         13
-#define MXA_OPAQUE         14
-
-/* These types are enabled if MXA_TYPE_USE_LONG_LONG is defined.  */
-#define MXA_LONG_LONG          16
-#define MXA_UNSIGNED_LONG_LONG 17
-
-/* This type is enabled if MXA_TYPE_USE___INT64 is defined.  */
-#define MXA___INT64            18
-
-/* This type is enabled if MXA_TYPE_USE___INT64 and
-   MXA_TYPE_CONVERT_UI64_TO_DOUBLE are both defined.  */
-#define MXA_UNSIGNED___INT64   19
-
-/* These types are required by vtkVariant and vtkVariantArray */
-#define MXA_VARIANT 20
-#define MXA_OBJECT 21
-
-/*--------------------------------------------------------------------------*/
-/* Define a unique integer identifier for each vtkDataObject type.          */
-/* When adding a new data type here, make sure to update                    */
-/* vtkDataObjectTypes as well.                                              */
-#define MXA_POLY_DATA                       0
-#define MXA_STRUCTURED_POINTS               1
-#define MXA_STRUCTURED_GRID                 2
-#define MXA_RECTILINEAR_GRID                3
-#define MXA_UNSTRUCTURED_GRID               4
-#define MXA_PIECEWISE_FUNCTION              5
-#define MXA_IMAGE_DATA                      6
-#define MXA_DATA_OBJECT                     7
-#define MXA_DATA_SET                        8
-#define MXA_POINT_SET                       9
-#define MXA_UNIFORM_GRID                   10
-#define MXA_COMPOSITE_DATA_SET             11
-#define MXA_MULTIGROUP_DATA_SET            12
-#define MXA_MULTIBLOCK_DATA_SET            13
-#define MXA_HIERARCHICAL_DATA_SET          14
-#define MXA_HIERARCHICAL_BOX_DATA_SET      15
-#define MXA_GENERIC_DATA_SET               16
-#define MXA_HYPER_OCTREE                   17
-#define MXA_TEMPORAL_DATA_SET              18
-#define MXA_TABLE                          19
-#define MXA_GRAPH                          20
-#define MXA_TREE                           21
-#define MXA_SELECTION                      22
-#define MXA_DIRECTED_GRAPH                 23
-#define MXA_UNDIRECTED_GRAPH               24
-#define MXA_MULTIPIECE_DATA_SET            25
-#define MXA_DIRECTED_ACYCLIC_GRAPH         26
+#define MXA_READ_WRITE false
+#define MXA_READ_ONLY  true
 
 /*--------------------------------------------------------------------------*/
 /* Define a casting macro for use by the constants below.  */
