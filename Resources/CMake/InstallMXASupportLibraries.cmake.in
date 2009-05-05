@@ -1,5 +1,8 @@
 # ------------------------------------------------------------------------------ 
-# This CMake code installs the needed support libraries on NON OSX platforms
+# This CMake code installs the needed support libraries on NON OSX platforms.
+# For OS X platforms build and install MXADataModel using the RPATH. Then when
+# you build your final executable you should be able to adjust the install_name
+# of the MXADataModel library using "install_name_tool" to be what you need.
 # ------------------------------------------------------------------------------
 
 #------- Macro to find and install the proper dynamic libraries ----------------
