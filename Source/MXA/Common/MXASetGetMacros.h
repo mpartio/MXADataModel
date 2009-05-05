@@ -18,6 +18,7 @@
 
 //-- Boost Includes
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 /**
  * @brief Creates a static method that returns a NULL pointer wrapped in a
@@ -38,6 +39,7 @@
   typedef thisClass                      Self;\
   typedef boost::shared_ptr<Self>        Pointer;\
   typedef boost::shared_ptr<const Self>  ConstPointer;\
+  typedef boost::weak_ptr<const thisClass> WeakPointer;\
   MXA_NULL_SHARED_POINTER(thisClass);
 
 /**

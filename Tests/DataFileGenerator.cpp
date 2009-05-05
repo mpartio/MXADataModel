@@ -69,21 +69,21 @@ herr_t DataFileGenerator::generate()
     MXADataImportPtr dataImport( new MXADataImport() );
 
     // Create some Scalar Data
-    MXADataRecordPtr scalarRec = MXADataRecord::New(1, DataGen::ScalarRec, DataGen::ScalarRec);
+    MXADataRecord::Pointer scalarRec = MXADataRecord::New(1, DataGen::ScalarRec, DataGen::ScalarRec);
     modelPtr->addDataRecord(scalarRec);
     std::vector<hsize_t> scalarDims;
     scalarDims.push_back(1);
     err = this->makeRecords(modelPtr, dataImport, scalarRec, scalarDims);
 
     // ---------- Create top level Data Record to hold the vector data
-    MXADataRecordPtr tableRec = MXADataRecord::New(0, DataGen::TableRec, DataGen::TableRec );
+    MXADataRecord::Pointer tableRec = MXADataRecord::New(0, DataGen::TableRec, DataGen::TableRec );
     modelPtr->addDataRecord(tableRec); // Add a top level Record
     std::vector<hsize_t> tableDims;
     tableDims.push_back(10); tableDims.push_back(10);
     err = this->makeRecords(modelPtr, dataImport, tableRec, tableDims);
 
     // Create some Scalar Data
-    MXADataRecordPtr volumeRec = MXADataRecord::New(2, DataGen::VolumeRec, DataGen::VolumeRec);
+    MXADataRecord::Pointer volumeRec = MXADataRecord::New(2, DataGen::VolumeRec, DataGen::VolumeRec);
     modelPtr->addDataRecord(volumeRec);
     std::vector<hsize_t> volumeDims;
     volumeDims.push_back(10); volumeDims.push_back(10); volumeDims.push_back(10);
@@ -115,48 +115,48 @@ herr_t DataFileGenerator::generate()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t DataFileGenerator::makeRecords(MXADataModel::Pointer modelPtr, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims)
+herr_t DataFileGenerator::makeRecords(MXADataModel::Pointer modelPtr, MXADataImportPtr dataImport, MXADataRecord::Pointer parentRec, std::vector<hsize_t> dims)
 {
 #if 0
   // Add all the Data for this record
-  MXADataRecordPtr int8Rec = MXADataRecord::New(0, DataGen::Int8Rec, DataGen::Int8Rec );
+  MXADataRecord::Pointer int8Rec = MXADataRecord::New(0, DataGen::Int8Rec, DataGen::Int8Rec );
   modelPtr->addDataRecord(int8Rec, parentRec);
   this->createAndStore(modelPtr, int8Rec, dataImport, MXATypes::Int8Type, dims);
 
-  MXADataRecordPtr int16Rec = MXADataRecord::New(1, DataGen::Int16Rec, DataGen::Int16Rec );
+  MXADataRecord::Pointer int16Rec = MXADataRecord::New(1, DataGen::Int16Rec, DataGen::Int16Rec );
   modelPtr->addDataRecord(int16Rec, parentRec);
   this->createAndStore(modelPtr, int16Rec, dataImport, MXATypes::Int16Type, dims);
 
-  MXADataRecordPtr int32Rec = MXADataRecord::New(2, DataGen::Int32Rec, DataGen::Int32Rec );
+  MXADataRecord::Pointer int32Rec = MXADataRecord::New(2, DataGen::Int32Rec, DataGen::Int32Rec );
   modelPtr->addDataRecord(int32Rec, parentRec);
   this->createAndStore(modelPtr, int32Rec, dataImport, MXATypes::Int32Type, dims);
 
-  MXADataRecordPtr int64Rec = MXADataRecord::New(3, DataGen::Int64Rec, DataGen::Int64Rec );
+  MXADataRecord::Pointer int64Rec = MXADataRecord::New(3, DataGen::Int64Rec, DataGen::Int64Rec );
   modelPtr->addDataRecord(int64Rec, parentRec);
   this->createAndStore(modelPtr, int64Rec, dataImport, MXATypes::Int64Type, dims);
 
   // Add all the Data for this record
-  MXADataRecordPtr uint8Rec = MXADataRecord::New(4, DataGen::Uint8Rec, DataGen::Uint8Rec );
+  MXADataRecord::Pointer uint8Rec = MXADataRecord::New(4, DataGen::Uint8Rec, DataGen::Uint8Rec );
   modelPtr->addDataRecord(uint8Rec, parentRec);
   this->createAndStore(modelPtr, uint8Rec, dataImport, MXATypes::Uint8Type, dims);
 
-  MXADataRecordPtr uint16Rec = MXADataRecord::New(5, DataGen::Uint16Rec, DataGen::Uint16Rec );
+  MXADataRecord::Pointer uint16Rec = MXADataRecord::New(5, DataGen::Uint16Rec, DataGen::Uint16Rec );
   modelPtr->addDataRecord(uint16Rec, parentRec);
   this->createAndStore(modelPtr, uint16Rec, dataImport, MXATypes::Uint16Type, dims);
 
-  MXADataRecordPtr uint32Rec = MXADataRecord::New(6, DataGen::Uint32Rec, DataGen::Uint32Rec );
+  MXADataRecord::Pointer uint32Rec = MXADataRecord::New(6, DataGen::Uint32Rec, DataGen::Uint32Rec );
   modelPtr->addDataRecord(uint32Rec, parentRec);
   this->createAndStore(modelPtr, uint32Rec, dataImport, MXATypes::Uint32Type, dims);
 
-  MXADataRecordPtr uint64Rec = MXADataRecord::New(7, DataGen::Uint64Rec, DataGen::Uint64Rec );
+  MXADataRecord::Pointer uint64Rec = MXADataRecord::New(7, DataGen::Uint64Rec, DataGen::Uint64Rec );
   modelPtr->addDataRecord(uint64Rec, parentRec);
   this->createAndStore(modelPtr, uint64Rec, dataImport, MXATypes::Uint64Type, dims);
 
-  MXADataRecordPtr float32Rec = MXADataRecord::New(8, DataGen::Float32Rec, DataGen::Float32Rec );
+  MXADataRecord::Pointer float32Rec = MXADataRecord::New(8, DataGen::Float32Rec, DataGen::Float32Rec );
   modelPtr->addDataRecord(float32Rec, parentRec);
   this->createAndStore(modelPtr, float32Rec, dataImport, MXATypes::Float32Type, dims);
 
-  MXADataRecordPtr float64Rec = MXADataRecord::New(9, DataGen::Float64Rec, DataGen::Float64Rec );
+  MXADataRecord::Pointer float64Rec = MXADataRecord::New(9, DataGen::Float64Rec, DataGen::Float64Rec );
   modelPtr->addDataRecord(float64Rec, parentRec);
   this->createAndStore(modelPtr, float64Rec, dataImport, MXATypes::Float64Type, dims);
   #endif

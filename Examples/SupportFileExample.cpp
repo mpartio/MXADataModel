@@ -58,8 +58,8 @@ MXADataModel::Pointer createDataModel()
   // Next we need to create a data record to hold one of the dependent variables for our experiment.
   // In our sample experiment we are going to measure the temperature and record an image of the sample.
   // The important argument is the 'luid' argument. These need to be unique within each group of Data Records.
-  MXADataRecordPtr temp = MXADataRecord::New(0, "Temperature" , "Temp (K)");
-  MXADataRecordPtr cameraImage = MXADataRecord::New(1, "Camera", "Camera Image");
+  MXADataRecord::Pointer temp = MXADataRecord::New(0, "Temperature" , "Temp (K)");
+  MXADataRecord::Pointer cameraImage = MXADataRecord::New(1, "Camera", "Camera Image");
 
   // Next, add these Records to the Data Model
   model->addDataRecord(temp);

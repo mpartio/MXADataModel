@@ -76,7 +76,7 @@ void RemoveTestFiles()
 
 void MakeDataRecord( const std::string &key, IDataModelPtr model)
 {
-  MXADataRecordPtr rec = MXADataRecord::New(recLuid++, key, key );
+  MXADataRecord::Pointer rec = MXADataRecord::New(recLuid++, key, key );
   model->addDataRecord(rec);
 }
 

@@ -162,28 +162,28 @@ MXADataModel::Pointer createModel()
     IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 256, 0, 255, 1, 1);
 
     //Create Data Records
-    MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
+    MXADataRecord::Pointer rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
     model->addDataRecord(rec0);
 
-    MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
+    MXADataRecord::Pointer rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
     model->addDataRecord(rec1);
     //Create Data Records with Parents
-    MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
+    MXADataRecord::Pointer rec2 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
     model->addDataRecord(rec2, rec1);
-    MXADataRecordPtr rec3 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
+    MXADataRecord::Pointer rec3 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
     model->addDataRecord(rec3, rec1);
-    MXADataRecordPtr rec4 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
+    MXADataRecord::Pointer rec4 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
     model->addDataRecord(rec4, rec1);
 
     // Make this a child of the 'Order Parameters' Group
-     MXADataRecordPtr rec5 = MXADataRecord::New(3, std::string("Order Parameters 2"), std::string("OP 2") );
+     MXADataRecord::Pointer rec5 = MXADataRecord::New(3, std::string("Order Parameters 2"), std::string("OP 2") );
      model->addDataRecord(rec5, rec1);
       //Create Data Records with Parents
-      MXADataRecordPtr rec6 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
+      MXADataRecord::Pointer rec6 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
       model->addDataRecord(rec6, rec5);
-      MXADataRecordPtr rec7 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
+      MXADataRecord::Pointer rec7 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
       model->addDataRecord(rec7, rec5);
-      MXADataRecordPtr rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
+      MXADataRecord::Pointer rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
       model->addDataRecord(rec8, rec5);
 
 
@@ -230,28 +230,28 @@ MXADataModel::Pointer createModelTemplate()
     model->addDataDimension(dim3);
 
     //Create Data Records
-    MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
+    MXADataRecord::Pointer rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
     model->addDataRecord(rec0);
 
-    MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
+    MXADataRecord::Pointer rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
     model->addDataRecord(rec1);
     //Create Data Records with Parents
-    MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
+    MXADataRecord::Pointer rec2 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
     model->addDataRecord(rec2, rec1);
 
-    MXADataRecordPtr rec5 = MXADataRecord::New(1, std::string("Order Parameters 2"), std::string("OP 2") );
+    MXADataRecord::Pointer rec5 = MXADataRecord::New(1, std::string("Order Parameters 2"), std::string("OP 2") );
      model->addDataRecord(rec5, rec1);
      //Create Data Records with Parents
-     MXADataRecordPtr rec6 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
+     MXADataRecord::Pointer rec6 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
      model->addDataRecord(rec6, rec5);
-     MXADataRecordPtr rec7 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
+     MXADataRecord::Pointer rec7 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
      model->addDataRecord(rec7, rec5);
-     MXADataRecordPtr rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
+     MXADataRecord::Pointer rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
      model->addDataRecord(rec8, rec5);
 
-    MXADataRecordPtr rec3 = MXADataRecord::New(2, std::string("Eta2"), std::string("Alt Eta2") );
+    MXADataRecord::Pointer rec3 = MXADataRecord::New(2, std::string("Eta2"), std::string("Alt Eta2") );
     model->addDataRecord(rec3, rec1);
-    MXADataRecordPtr rec4 = MXADataRecord::New(3, std::string("Eta3"), std::string("Alt Eta3") );
+    MXADataRecord::Pointer rec4 = MXADataRecord::New(3, std::string("Eta3"), std::string("Alt Eta3") );
     model->addDataRecord(rec4, rec1);
 
     //Create the Required MetaData

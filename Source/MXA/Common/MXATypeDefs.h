@@ -42,7 +42,7 @@ class IFileReader;
 class IFileWriter;
 class MXADataModel;
 class MXANode;
-class MXADataRecord;
+//class MXADataRecord;
 class MXADataDimension;
 class MXADataSource;
 class MXADataImport;
@@ -123,11 +123,11 @@ typedef std::vector<IDataDimensionPtr>            IDataDimensions;
 
 // Data Record Typedefs
 typedef boost::shared_ptr<IDataRecord>            IDataRecordPtr;
-typedef boost::shared_ptr<MXADataRecord>          MXADataRecordPtr;
-typedef boost::weak_ptr<MXADataRecord>            MXADataRecordWeakPtr;
+//typedef boost::shared_ptr<MXADataRecord>          MXADataRecord::Pointer;
+//typedef boost::weak_ptr<MXADataRecord>            MXADataRecordWeakPtr;
 typedef boost::weak_ptr<IDataRecord>              IDataRecordWeakPtr;
 typedef std::vector<IDataRecordPtr>               IDataRecords;
-typedef std::vector<MXADataRecordPtr>             MXADataRecords;
+//typedef std::vector<MXADataRecord::Pointer>       MXADataRecords;
 typedef std::map<int32, IDataRecordPtr>           IDataRecordLookupTable;
 
 // HDF Typedefs

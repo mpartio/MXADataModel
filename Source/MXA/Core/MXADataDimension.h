@@ -34,10 +34,10 @@ class  MXA_EXPORT MXADataDimension : public IDataDimension
 {
 
 public:
+  MXA_SHARED_POINTERS(MXADataDimension);
+  MXA_TYPE_MACRO(MXADataDimension)
   
-  
-  
-  /**
+    /**
   * @brief Used to create a new MXANode
    * @param name The name for the Data Dimensions
    * @param altName An Alternate Name for the Data Dimension
@@ -49,7 +49,7 @@ public:
    * @param uniform Are the values uniform across the start to end values
   * @return A Boost SharedPointer to the MXANode Object
   */
-  static MXADataDimensionPtr New(std::string name, std::string altName, 
+  static MXADataDimension::Pointer New(std::string name, std::string altName, 
         int32 index = std::numeric_limits<int32>::min(), 
         int32 count = std::numeric_limits<int32>::min(),
         int32 startValue  = std::numeric_limits<int32>::max(),
@@ -58,9 +58,22 @@ public:
         int32 uniform = std::numeric_limits<int32>::min()
   );
 
+  /**
+  * @brief Performs a Deep copy of passed in MXADataDimension object
+  * @param dim The MXADataDimension object to copy
+  */
+  static IDataDimension::Pointer New(IDataDimension::Pointer dim)
+  {
+    return MXADataDimension::New( dim->getDimensionName(), dim->getAltName(), dim->getIndex(),
+                          dim->getCount(), dim->getStartValue(), dim->getEndValue(),
+                          dim->getIncrement(), dim->getUniform() );
+  }
+
 //  #warning Add another static constructor that takes no args.
   
   virtual ~MXADataDimension();
+
+
 
   /**
   * @brief Setter for property Index

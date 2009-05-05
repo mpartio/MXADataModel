@@ -16,6 +16,7 @@
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataImport.h>
 
 //-- STL Headers
@@ -39,7 +40,8 @@
 class MXA_EXPORT MXADataImport : public IDataImport
 {
 public:
-
+  MXA_SHARED_POINTERS(MXADataImport);
+  MXA_TYPE_MACRO(MXADataImport);
 
   /**
    * Empty Constructor
@@ -59,19 +61,6 @@ public:
   {
     return IDataImportPtr( new MXADataImport );
   }
-#if 0
-  /**
-   * Set the value of m_outputFilePath
-   * @param outputFilePath the new value of m_outputFilePath
-   */
-  void setOutputFilePath ( std::string outputFilePath );
-
-  /**
-   * Get the value of m_outputFilePath
-   * @return the value of m_outputFilePath
-   */
-  std::string getOutputFilePath ( );
-#endif
 
   /**
    * Set the value of m_dataModel

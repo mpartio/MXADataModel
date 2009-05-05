@@ -255,7 +255,7 @@ herr_t H5DataModelReader::readDataRecords(hid_t fileId)
     std::cout << "Error Opening '/Data Model/Data Records' HDF Group:" << recId << std::endl;
     return recId;
   }
-  MXADataRecordPtr parent;
+  MXADataRecord::Pointer parent;
   err = _traverseDataRecords(recId, parent); //Kick off the recursive algorithm
   if (err < 0) {
     std::cout << "Error Traversing the Data Record tree" << std::endl;
@@ -267,7 +267,7 @@ herr_t H5DataModelReader::readDataRecords(hid_t fileId)
 // -----------------------------------------------------------------------------
 // Performs a Depth first traversal and parsing of thd Data Records Group
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::_traverseDataRecords( hid_t gid, MXADataRecordPtr parent) {
+herr_t H5DataModelReader::_traverseDataRecords( hid_t gid, MXADataRecord::Pointer parent) {
   if (gid < 0 )
   {
     std::cout << "Invalid HDF Object Id: " << gid << std::endl;
@@ -290,7 +290,7 @@ herr_t H5DataModelReader::_traverseDataRecords( hid_t gid, MXADataRecordPtr pare
       std::cout << "Error getting object Name for index." << std::endl;
       return -1;
     }
-    MXADataRecordPtr rec = _loadDataRecord(gid, objName);
+    MXADataRecord::Pointer rec = _loadDataRecord(gid, objName);
     //Check to make sure we got a good DataRecordNode, if not return an error
     if (NULL == rec.get() ) {
       return -1;
@@ -325,13 +325,13 @@ herr_t H5DataModelReader::_traverseDataRecords( hid_t gid, MXADataRecordPtr pare
 // -----------------------------------------------------------------------------
 //  Loads a DataRecord given its name and its parent hid_t value
 // -----------------------------------------------------------------------------
-MXADataRecordPtr H5DataModelReader::_loadDataRecord(hid_t loc_id, std::string name)
+MXADataRecord::Pointer H5DataModelReader::_loadDataRecord(hid_t loc_id, std::string name)
 {
   herr_t err=0;
   //MXANode *node=NULL;
   std::string recName, altName;
   int32 guid=-1, luid =-1;
-  MXADataRecordPtr record; // This will contain a NULL Pointer to the DataRecordNode
+  MXADataRecord::Pointer record; // This will contain a NULL Pointer to the DataRecordNode
   // Read the Data Record Values
   // Name
   err = H5Lite::readStringAttribute(loc_id, name, MXA::MXA_NAME_TAG, recName);

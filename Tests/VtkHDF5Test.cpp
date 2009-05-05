@@ -51,7 +51,7 @@ herr_t test()
   indices.push_back(1); // Time step 1
   indices.push_back(1); // Slice number
   // We also know the exact path to the Data Record, so lets use it to retrieve the Data Record from the Model
-  MXADataRecordPtr record = modelPtr->getDataRecordByPath(DataGen::TableRec + "/" + DataGen::Uint8Rec);
+  MXADataRecord::Pointer record = modelPtr->getDataRecordByPath(DataGen::TableRec + "/" + DataGen::Uint8Rec);
   if (NULL == record.get())
   {
     std::cout << logTime() << "Error getting '2D Array' Data Record"

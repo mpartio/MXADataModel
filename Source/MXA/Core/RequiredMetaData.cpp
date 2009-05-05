@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IRequiredMetaDataPtr RequiredMetaData::New( std::string researcherName,
+IRequiredMetaData::Pointer RequiredMetaData::New( std::string researcherName,
                                                         std::string dateCreated,
                                                         std::string datasetName,
                                                         std::string description,
@@ -28,14 +28,32 @@ IRequiredMetaDataPtr RequiredMetaData::New( std::string researcherName,
                                                          releaseNumber,
                                                          pedigree,
                                                          derivedSrcFile);
-  IRequiredMetaDataPtr ptr(md);
+  IRequiredMetaData::Pointer ptr(md);
   return ptr;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IRequiredMetaDataPtr RequiredMetaData::DefaultMetaData()
+IRequiredMetaData::Pointer RequiredMetaData::New(IRequiredMetaData::Pointer md)
+{
+ IRequiredMetaData::Pointer ptr = RequiredMetaData::New(md->getResearcherName(),
+                                                         md->getDateTimeCreated(),
+                                                         md->getDatasetName(),
+                                                         md->getDescription(),
+                                                         md->getDistributionRights(),
+                                                         md->getReleaseNumber(), 
+                                                         md->getPedigree(),
+                                                         md->getDerivedSourceFile());
+  
+  return ptr;
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+IRequiredMetaData::Pointer RequiredMetaData::DefaultMetaData()
 {
   RequiredMetaData* md = new RequiredMetaData( "researcherName",
                                                          "2007/12/23 16:00:00",
@@ -45,7 +63,7 @@ IRequiredMetaDataPtr RequiredMetaData::DefaultMetaData()
                                                          "releaseNumber",
                                                          "Derived",
                                                          "derivedSrcFile");
-  IRequiredMetaDataPtr ptr(md);
+  IRequiredMetaData::Pointer ptr(md);
   return ptr;
 }
 

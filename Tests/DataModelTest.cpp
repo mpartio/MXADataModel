@@ -174,28 +174,28 @@ MXADataModel::Pointer createModel()
 
 
 
-	  MXADataRecordPtr rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
+	  MXADataRecord::Pointer rec1 = MXADataRecord::New(1, std::string("Order Parameters"), std::string("OP") );
 	  model->addDataRecord(rec1);
 	  //Create Data Records with Parents
-	  MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
+	  MXADataRecord::Pointer rec2 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
 	  model->addDataRecord(rec2, rec1);
-	  MXADataRecordPtr rec3 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
+	  MXADataRecord::Pointer rec3 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
 	  model->addDataRecord(rec3, rec1);
-	  MXADataRecordPtr rec4 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
+	  MXADataRecord::Pointer rec4 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
 	  model->addDataRecord(rec4, rec1);
 
-	   MXADataRecordPtr rec5 = MXADataRecord::New(3, std::string("Order Parameters 2"), std::string("OP 2") );
+	   MXADataRecord::Pointer rec5 = MXADataRecord::New(3, std::string("Order Parameters 2"), std::string("OP 2") );
 	    model->addDataRecord(rec5, rec1);
 	    //Create Data Records with Parents
-	    MXADataRecordPtr rec6 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
+	    MXADataRecord::Pointer rec6 = MXADataRecord::New(0, std::string("Eta1"), std::string("Alt Eta1") );
 	    model->addDataRecord(rec6, rec5);
-	    MXADataRecordPtr rec7 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
+	    MXADataRecord::Pointer rec7 = MXADataRecord::New(1, std::string("Eta2"), std::string("Alt Eta2") );
 	    model->addDataRecord(rec7, rec5);
-	    MXADataRecordPtr rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
+	    MXADataRecord::Pointer rec8 = MXADataRecord::New(2, std::string("Eta3"), std::string("Alt Eta3") );
 	    model->addDataRecord(rec8, rec5);
 
     //Create Data Records
-    MXADataRecordPtr rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
+    MXADataRecord::Pointer rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
     model->addDataRecord(rec0);
     errorMessage.clear();
     BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
@@ -642,13 +642,36 @@ void TestDataModelOverWrite()
 // -----------------------------------------------------------------------------
 void SharedPointerTest()
 {
+  std::cout << "SharedPointerTest Running...." ;
+  
   MXADataModel::Pointer model = createModel();
   IDataDimension::Pointer dim = model->getDataDimension(0);
 
   IDataDimension::Pointer nDim = MXADataDimension::New("Name", "Name", 0, 10, 0, 9, 1, 1);
   IDataModelPtr nModel = MXADataModel::New(MXA::MXACurrentFileVersion, MXA::ModelType, "Data");
   nModel->addDataDimension(nDim);
-  nModel->printModel(std::cout, 2);
+  //nModel->printModel(std::cout, 2);
+  std::cout << "......Passed" << std::endl;
+  
+}
+
+// -----------------------------------------------------------------------------
+//  Test the copy constructors
+// -----------------------------------------------------------------------------
+void CopyConstructorTest()
+{
+  std::cout << "CopyConstructorTest Running...." ;
+  
+  IDataDimension::Pointer nDim = MXADataDimension::New("Name", "Name", 0, 10, 0, 9, 1, 1);
+  IDataDimension::Pointer copy = MXADataDimension::New(nDim);
+  BOOST_REQUIRE(nDim.get() != copy.get());
+  
+  IDataRecord::Pointer rec = MXADataRecord::New(0, "Name", "Name");
+  IDataRecord::Pointer rCopy = MXADataRecord::New(rec);
+  BOOST_REQUIRE(rec.get() != rCopy.get());
+  
+  std::cout << "......Passed" << std::endl;
+  
 }
 
 // -----------------------------------------------------------------------------
@@ -669,6 +692,8 @@ boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv
   test->add (BOOST_TEST_CASE( &TestEndianSwap), 0);
   test->add (BOOST_TEST_CASE( &TestDataRecordRemoval), 0);
   test->add (BOOST_TEST_CASE( &TestDataModelOverWrite), 0);
+  test->add (BOOST_TEST_CASE( &SharedPointerTest), 0);
+  test->add (BOOST_TEST_CASE( &CopyConstructorTest), 0);
   test->add (BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test;
 }

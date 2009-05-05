@@ -334,7 +334,7 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
 //    }
 //    else
 //    {
-//      std::cout << "XMLDataModelReader::onDimensionStartTag: Dim " << attrMap[MXA::MXA_NAME_TAG] << " wasÊNOT valid" << std::endl;
+//      std::cout << "XMLDataModelReader::onDimensionStartTag: Dim " << attrMap[MXA::MXA_NAME_TAG] << " wasÃŠNOT valid" << std::endl;
 //    }
       this->_dataModel->insertDataDimension(dim, index);
     }
@@ -374,7 +374,7 @@ void XMLDataModelReader::onSignal_GroupStartTag(const XML_Char* name, const XML_
   {
     luid = _currentParentRecord->getNumChildren();
   }
-  MXADataRecordPtr record = MXADataRecord::New( luid, attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG] );
+  MXADataRecord::Pointer record = MXADataRecord::New( luid, attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG] );
 
   if (_currentParentRecord.get() != NULL)
   {
@@ -411,7 +411,7 @@ void XMLDataModelReader::onSignalStartTag(const XML_Char* name, const XML_Char**
     luid = _currentParentRecord->getNumChildren();
   }
 
-  MXADataRecordPtr record = MXADataRecord::New( luid, attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG] );
+  MXADataRecord::Pointer record = MXADataRecord::New( luid, attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG] );
   if (_currentParentRecord.get() != NULL)
   {
     _dataModel->addDataRecord(record, _currentParentRecord);

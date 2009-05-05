@@ -18,10 +18,10 @@ _altName("")
 // -----------------------------------------------------------------------------
 //  Static New Method that is used to construct a new DataRecord Node
 // -----------------------------------------------------------------------------
-MXADataRecordPtr MXADataRecord::New(int luid, std::string name, std::string altName)
+MXADataRecord::Pointer MXADataRecord::New(int luid, std::string name, std::string altName)
 {
   MXADataRecord* rec = new MXADataRecord();
-  MXADataRecordPtr record(rec);
+  MXADataRecord::Pointer record(rec);
   record->_setWeakPtr(boost::weak_ptr<IDataRecord>(record)); // Set the Weak Pointer
   rec->setLuid(luid);
   rec->setGuid( MXADataRecord::nextGUIDValue() );
@@ -290,7 +290,7 @@ IDataRecordPtr MXADataRecord::getChildAt(int32 index)
     else {
       //std::cout << "MXADataRecord(GUID): " << this->getUniqueId() << " Num Children: " << this->_children.size() << "  Index:" << index << std::endl;
     }
-   MXADataRecordPtr ptr;
+   MXADataRecord::Pointer ptr;
    return ptr;
 }
 

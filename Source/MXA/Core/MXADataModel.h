@@ -38,23 +38,33 @@
  * @brief Main class used to work with the DataModel paradigm.
  * @author Mike Jackson
  * @date March 2007
- * @version $Revision: 1.3 $
+ * @version 1.36
  * @class MXADataModel Core/MXADataModel.h Core/MXADataModel.h
  */
 class MXA_EXPORT MXADataModel : public IDataModel
 {
 
  public:
-   MXADataModel();
+//   MXADataModel();
    virtual ~MXADataModel();
 
    MXA_SHARED_POINTERS(MXADataModel);
+   MXA_TYPE_MACRO(MXADataModel);
 
   /**
    * @brief Static method to create a new blank model.
    * @return A boost shard_ptr to the newly created model
    */
-  static MXADataModel::Pointer New(float modelVersion = 0.4f, const std::string &type = MXA::MXACurrentFileType, const std::string &dataRoot= "Data");
+  static MXADataModel::Pointer New(float modelVersion = 0.4f, 
+                                  const std::string &type = MXA::MXACurrentFileType, 
+                                  const std::string &dataRoot= "Data");
+
+  /**
+   * @brief Static method to create a new by creating a deep copy of
+   * another model.
+   * @return A boost shard_ptr to the newly created model
+   */
+   static MXADataModel::Pointer New(IDataModel::Pointer model);
 
   /**
    * @brief Validates that all the required Meta data is not empty
@@ -386,7 +396,9 @@ class MXA_EXPORT MXADataModel : public IDataModel
     */
    bool isValid(std::string &message);
 
-
+  protected:
+    MXADataModel();
+    
   private:
    MXADataModel(const MXADataModel&);   //Copy Constructor Not Implemented
    void operator=(const MXADataModel&); //Copy Assignment Not Implemented

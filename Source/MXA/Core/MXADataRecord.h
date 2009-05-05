@@ -22,16 +22,16 @@
 // #include <MXA/Core/MXAAttribute.h>
 
 //Include Boost Headers
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+// #include <boost/shared_ptr.hpp>
+// #include <boost/weak_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
-
+#include <vector>
 /**
  * @brief This class holds the required and any extended information about a
  * data record. Data records can have any number of children but only one parent.
  * @author  Mike Jackson
  * @date March 2007
- * @version $Revision: 1.2 $
+ * @version 1.2
  *  
  */
 class MXA_EXPORT MXADataRecord :  public IDataRecord
@@ -39,7 +39,12 @@ class MXA_EXPORT MXADataRecord :  public IDataRecord
 
   static int32 _uniqueGUIDValue;
   
-public:  
+public:
+
+  MXA_SHARED_POINTERS(MXADataRecord);
+  MXA_TYPE_MACRO(MXADataRecord);
+  typedef std::vector<MXADataRecord::Pointer>       MXADataRecords;
+  
   /**
   * @brief Creates a flat look up table using the GUID of the data record as the
    * key and the boost::Shared_ptr as the value
@@ -56,8 +61,21 @@ public:
   * @param altName The Alternate name for the Data Record.
   * @return A Boost SharedPointer to the MXANode Object
   */
-  static MXADataRecordPtr New(int luid, std::string name, std::string altName);
+  static Pointer New(int luid, std::string name, std::string altName);
 
+  /**
+  * @brief Creates a copy of the IDataRecord object which will NOT share 
+  * any data with the original object.
+  * @param rec IDataRecord to copy
+  */
+  static Pointer New(IDataRecord::Pointer rec)
+  {
+    return MXADataRecord::New(rec->getLuid(), rec->getRecordName(), rec->getAltName() );
+  }
+  
+/**
+* @brief Destructor
+*/
   virtual ~MXADataRecord();
   
   /**
@@ -174,20 +192,6 @@ public:
 
   IDataRecordPtr getChildAt(int32 index);
   IDataRecords& getChildren();
-
-#if 0
-  // Template Method for native types
-  template<typename T>
-    void setAttribute(std::string key, T value)
-  {
-      boost::any v(value);
-      MXAAttributePtr attr = MXAAttribute::createAttribute(key, v);
-      _nodeAttributes[key] = attr;
-  }
-  
-  // Removes the Attribute
-  void removeAttribute(std::string);
-#endif
   
   // Utilities
   void printDataRecordTree(int32 depth=0);

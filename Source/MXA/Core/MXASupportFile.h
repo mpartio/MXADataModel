@@ -10,6 +10,7 @@
 #define MXASUPPORTFILE_H_
 
 #include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/ISupportFile.h>
 
 #include <string>
@@ -28,8 +29,10 @@
 */
 class MXA_EXPORT MXASupportFile: public ISupportFile
 {
-  public:
-
+  public: 
+    MXA_SHARED_POINTERS(MXASupportFile);
+    MXA_TYPE_MACRO(MXASupportFile);
+    
     virtual ~MXASupportFile();
 
     /**

@@ -94,7 +94,7 @@ public:
 	 * @param dims Valus for the Data Dimensions
 	 * @return Error condition
 	 */
-	herr_t makeRecords(MXADataModel::Pointer model, MXADataImportPtr dataImport, MXADataRecordPtr parentRec, std::vector<hsize_t> dims);
+	herr_t makeRecords(MXADataModel::Pointer model, MXADataImportPtr dataImport, MXADataRecord::Pointer parentRec, std::vector<hsize_t> dims);
 
 /**
  * @brief Creates Data and stores the data in the HDF5 file
@@ -106,7 +106,7 @@ public:
  * @return
  */
 	template<typename T>
-	herr_t createAndStore(MXADataModel::Pointer model, MXADataRecordPtr rec,
+	herr_t createAndStore(MXADataModel::Pointer model, MXADataRecord::Pointer rec,
 	    MXADataImportPtr dataImport, T type, std::vector<hsize_t> tableDims)
 	{
 

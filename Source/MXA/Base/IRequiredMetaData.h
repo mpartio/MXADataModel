@@ -12,6 +12,7 @@
 #define _IRequiredMetaData_h_
 
 //-- MXA includes
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataFileIO.h>
 
 
@@ -26,6 +27,9 @@
 class MXA_EXPORT IRequiredMetaData : public IDataFileIO
 {
   public:
+    
+    MXA_SHARED_POINTERS(IRequiredMetaData)
+    
     IRequiredMetaData() {}
     virtual ~IRequiredMetaData() {}
 

@@ -55,13 +55,13 @@ MXADataModel::Pointer createSimpleModel()
     model->addDataDimension(dim1);
 
     // ---------- Create Data Records
-    MXADataRecordPtr rec1 = MXADataRecord::New(0, std::string("DataRecordContainer"), std::string("DRC1") );
+    MXADataRecord::Pointer rec1 = MXADataRecord::New(0, std::string("DataRecordContainer"), std::string("DRC1") );
     model->addDataRecord(rec1);
 
     // ---------- Create Data Records with Parents
-    MXADataRecordPtr rec2 = MXADataRecord::New(0, std::string("Test Data"), std::string("Test Data") );
+    MXADataRecord::Pointer rec2 = MXADataRecord::New(0, std::string("Test Data"), std::string("Test Data") );
     model->addDataRecord(rec2, rec1);
-    MXADataRecordPtr rec3 = MXADataRecord::New(0, std::string("Deep Nested Data"), std::string("Nested Data") );
+    MXADataRecord::Pointer rec3 = MXADataRecord::New(0, std::string("Deep Nested Data"), std::string("Nested Data") );
     model->addDataRecord(rec3, rec2);
 
     // ---------- Create the Required MetaData

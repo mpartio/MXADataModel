@@ -129,7 +129,7 @@ protected:
   * @param parent The Parent Data Record
   * @return Standard HDF5 Error Condition
   */
-  herr_t _traverseDataRecords( hid_t gid, MXADataRecordPtr parent);
+  herr_t _traverseDataRecords( hid_t gid, MXADataRecord::Pointer parent);
 
   /**
   * @brief Reads a Data Record from the HDF5 data file
@@ -137,7 +137,7 @@ protected:
   * @param name The Name of the data record
   * @return IDataRecord shared pointer
   */
-  MXADataRecordPtr _loadDataRecord(hid_t gid, std::string name);
+  MXADataRecord::Pointer _loadDataRecord(hid_t gid, std::string name);
 
 
 private:

@@ -429,8 +429,8 @@ void StressTestCreateGroups()
 // -----------------------------------------------------------------------------
 boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
   boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "H5Utilities Tests" );
- // test->add( BOOST_TEST_CASE( &H5UtilitiesTest), 0);
-  test->add( BOOST_TEST_CASE( &StressTestCreateGroups), 0);
+  test->add( BOOST_TEST_CASE( &H5UtilitiesTest), 0);
+ // test->add( BOOST_TEST_CASE( &StressTestCreateGroups), 0);
   test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test;
 }

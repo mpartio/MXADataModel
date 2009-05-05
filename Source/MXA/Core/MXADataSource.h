@@ -16,6 +16,7 @@
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataSource.h>
 
 //-- STL Headers
@@ -40,6 +41,10 @@ class MXADataRecord;
 class MXA_EXPORT MXADataSource : public IDataSource
 {
 public:
+  
+  MXA_SHARED_POINTERS(MXADataSource);
+  MXA_TYPE_MACRO(MXADataSource);
+  
   /**
    * @brief Empty Constructor
    */

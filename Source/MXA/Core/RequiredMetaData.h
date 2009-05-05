@@ -10,7 +10,7 @@
 #define _REQUIREDMETADATA_H_
 
 
-
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IRequiredMetaData.h>
 
 
@@ -26,6 +26,10 @@
 */
 class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
 {
+  
+  MXA_SHARED_POINTERS(RequiredMetaData);
+  MXA_TYPE_MACRO(RequiredMetaData);
+  
   public:
     /**
      * @brief Static method to create a new IRequiredMetaData object that is
@@ -44,7 +48,7 @@ class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
      * const std::string MXA_RIGHTS_LIMITED_VALUE("Limited");
      * const std::string MXA_RELEASE_LIMITATION_TAG("Release_Limitation");
      */
-    static IRequiredMetaDataPtr New( std::string researcherName,
+    static IRequiredMetaData::Pointer New( std::string researcherName,
                                      std::string dateCreated,
                                      std::string datasetName,
                                      std::string description,
@@ -52,13 +56,20 @@ class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
                                      std::string releaseNumber,
                                      std::string pedigree,
                                      std::string derivedSrcFile);
+    
+    /**
+    * @brief Creates a copy of the object from another object
+    * @param md The object to make a copy from
+    * @return The newly copied object
+    */
+    static IRequiredMetaData::Pointer New(IRequiredMetaDataPtr md);                                 
 
     /**
      * @brief Creates a new IRequiredMetaDataPtr object that has all empty values.
      * Note that this will make it INVALID. You are required to fill in the appropriate values
      * to make it valid. This is provided as a convenience.
      */
-    static IRequiredMetaDataPtr DefaultMetaData();
+    static IRequiredMetaData::Pointer DefaultMetaData();
 
     virtual ~RequiredMetaData();
 
@@ -151,10 +162,4 @@ class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
 };
 
 #endif //_RequiredMetaData_h_
-
-
-
-
-
-
 

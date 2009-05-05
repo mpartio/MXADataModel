@@ -5,9 +5,9 @@
 #include <MXA/Base/IRequiredMetaData.h>
 #include <MXA/Base/ISupportFile.h>
 #include <MXA/Core/MXADataModel.h>
+#include <MXA/Core/RequiredMetaData.h>
 #include <MXA/Utilities/StringUtils.h>
 #include <MXA/XML/XMLDataModelWriter.h>
-#include <MXA/Core/RequiredMetaData.h>
 
 //#include <MXA/Core/MXAAbstractAttribute.h>
 //-- Standard Library Headers
@@ -46,7 +46,38 @@ MXADataModel::Pointer MXADataModel::New(float modelVersion, const std::string &t
   return model;
 }
 
-
+// -----------------------------------------------------------------------------
+//  Static New Method to construct a deep copy from another model
+// -----------------------------------------------------------------------------
+MXADataModel::Pointer New(IDataModel::Pointer model)
+{
+  MXADataModel::Pointer cpModel = MXADataModel::New(model->getModelVersion(), 
+                                              model->getModelType(), 
+                                              model->getDataRoot() );
+                                              
+  //Copy the Data Dimensions
+  int nDims = model->getNumberOfDataDimensions();
+  IDataDimension::Pointer dim;
+  for(int i = 0; i < nDims; ++i)
+  {
+    dim = model->getDataDimension(i);
+    IDataDimension::Pointer copy = MXADataDimension::New(dim);
+    cpModel->addDataDimension(copy);
+  }
+  // Copy the Required Meta Data
+  IRequiredMetaData::Pointer rm = model->getRequiredMetaData();
+  IRequiredMetaData::Pointer cpReqMD = RequiredMetaData::New(rm);
+  cpModel->setRequiredMetaData(cpReqMD);
+  
+  //Copy the User Defined Meta Data
+  
+  //Copy any support files
+  
+  //Recursively copy the Data Records
+  
+  
+  return cpModel; 
+}
 
 // -----------------------------------------------------------------------------
 //

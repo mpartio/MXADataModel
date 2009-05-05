@@ -16,6 +16,7 @@
 //MXA Includes
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/INode.h>
 #include <MXAAttribute.h>
 
@@ -42,6 +43,9 @@
 class MXA_EXPORT MXANode : public INode
 {
  public:
+   
+   MXA_SHARED_POINTERS(MXANode);
+   MXA_TYPE_MACRO(MXANode);
    
    static int32 _uniqueGUIDValue;
    
