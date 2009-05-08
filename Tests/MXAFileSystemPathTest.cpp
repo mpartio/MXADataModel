@@ -375,6 +375,35 @@ int DirListTest()
 }
 
 // -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int FileNameExtensionTest()
+{
+  std::cout  << "|- FileNameExtensionTest -----------------" << std::endl;
+  int err = 0;
+  std::string file("SomeFile.txt");
+  std::string base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  BOOST_REQUIRE_EQUAL(base, "SomeFile");
+
+  file ="SomeFile";
+  base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  BOOST_REQUIRE_EQUAL(base, "SomeFile");
+
+
+  file ="SomeFile.";
+  base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  BOOST_REQUIRE_EQUAL(base, "SomeFile.");
+
+
+  file ="SomeFile.txt.bin";
+  base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  BOOST_REQUIRE_EQUAL(base, "SomeFile.txt");
+
+
+  return err;
+}
+
+// -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
 boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
@@ -387,6 +416,7 @@ boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*
   test->add( BOOST_TEST_CASE( &DirListTest), 0);
   test->add( BOOST_TEST_CASE( &RemoveDirectoriesTest), 0);
   test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
+  test->add( BOOST_TEST_CASE( &FileNameExtensionTest), 0);
   return test;
 }
 

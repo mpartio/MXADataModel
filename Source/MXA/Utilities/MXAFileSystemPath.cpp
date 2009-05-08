@@ -328,6 +328,21 @@ std::string MXAFileSystemPath::filename(const std::string &fsPath)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+std::string MXAFileSystemPath::fileNameWithOutExtension(const std::string &fsPath)
+{
+  std::string fname = MXAFileSystemPath::filename(fsPath);
+  std::string ext = MXAFileSystemPath::extension(fsPath);
+  std::string::size_type pos = fname.find_last_of(ext);
+  if (pos != std::string::npos)
+  {
+    fname = fname.substr(0, fname.size() - ext.size() - 1);
+  }
+  return fname;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirectories)
 {
 #if defined (WIN32)

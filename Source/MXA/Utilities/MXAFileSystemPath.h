@@ -122,6 +122,12 @@ class MXAFileSystemPath
     static MXA_EXPORT std::string filename(const std::string &path);
 
     /**
+     * @brief Returns the filename without the extension
+     * @param path Path to examine
+     */
+    static MXA_EXPORT std::string fileNameWithOutExtension(const std::string &path);
+
+    /**
      * @brief Create a directory or structure of directories
      * @param path The path to create
      * @param createParentDirectories If true then any directories missing from

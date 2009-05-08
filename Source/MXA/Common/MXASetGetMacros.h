@@ -20,6 +20,11 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
+
+#define SHARED_IS_NULL(ptr)\
+  (  (ptr).get() == NULL )
+
+
 /**
  * @brief Creates a static method that returns a NULL pointer wrapped in a
  * boost::shared_ptr<>
