@@ -337,7 +337,16 @@ std::string MXAFileSystemPath::fileNameWithOutExtension(const std::string &fsPat
   {
     fname = fname.substr(0, fname.size() - ext.size() - 1);
   }
-  return fname;
+
+//  std::string parentPath = MXAFileSystemPath::parentPath(fsPath);
+//  if (parentPath.size() > 0)
+//  {
+//    return parentPath + MXAFileSystemPath::getSeparator() + fname;
+//  }
+//  else
+//  {
+    return fname;
+//  }
 }
 
 // -----------------------------------------------------------------------------

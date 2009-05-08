@@ -399,6 +399,9 @@ int FileNameExtensionTest()
   base = MXAFileSystemPath::fileNameWithOutExtension(file);
   BOOST_REQUIRE_EQUAL(base, "SomeFile.txt");
 
+  file ="/SomePath/To/SomeFile.txt.bin";
+  base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  BOOST_REQUIRE_EQUAL(base, "SomeFile.txt");
 
   return err;
 }
