@@ -27,6 +27,7 @@
 DataImportXmlParser::DataImportXmlParser()
 {
 _xmlParseError=0;
+_verbose = 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -100,7 +101,7 @@ int32 DataImportXmlParser::import()
  // int i = 1;
   for (IDataSources::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
   {
-    // std::cout << "Import Iteration: " << i++ << std::endl;
+    if (this->_verbose) { std::cout << "Importing data source: " << (*(iter))->getSourcePath()   << std::endl; }
     err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataFile );
     if ( err < 0 )
     {

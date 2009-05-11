@@ -176,6 +176,7 @@ public:
   */
   int32 import();
 
+  MXA_INSTANCE_PROPERTY(bool, Verbose, _verbose);
 
 private:
   std::string        _xmlFilename;
