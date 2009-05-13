@@ -1,21 +1,29 @@
 # set project's name
 PROJECT( @PROJECT_NAME@ )
-cmake_minimum_required(VERSION 2.4)
+cmake_minimum_required(VERSION 2.6)
 
 
 # ---------- Setup output Directories -------------------------
-SET (LIBRARY_OUTPUT_PATH
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
   CACHE PATH
   "Single Directory for all Libraries"
   )
 
 # --------- Setup the Executable output Directory -------------
-SET (EXECUTABLE_OUTPUT_PATH
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
   CACHE PATH
   "Single Directory for all Executables."
   )
+
+# --------- Setup the Executable output Directory -------------
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+  ${PROJECT_BINARY_DIR}/Bin
+  CACHE PATH
+  "Single Directory for all static libraries."
+  )
+
 
 
 #-------------------------------------------------------------------------------
@@ -53,11 +61,13 @@ include_directories(${MXADATAMODEL_INCLUDE_DIRS})
 set(MXA_CMAKE_DIR ${MXADATAMODEL_RESOURCES_DIR}/CMake)
 # --------------------------------------------------------------------
 # Find all the support libraries for MXADataModel
-#-- Make sure to find the Boost Threads library
-SET (Boost_USE_THREAD TRUE)
 INCLUDE(${MXADATAMODEL_USE_FILE})
 
 
 # - Create the Executable and Link to the MXA Library
 ADD_EXECUTABLE(@PROJECT_NAME@ ${@PROJECT_NAME@_SRCS} ${@PROJECT_NAME@_HEADERS})
-TARGET_LINK_LIBRARIES(@PROJECT_NAME@ ${MXADATAMODEL_LIBRARIES} ${MXA_SUPPORT_LIBRARIES} )
+TARGET_LINK_LIBRARIES(@PROJECT_NAME@  
+                       ${MXADATAMODEL_LIBRARIES}
+                       ${EXPAT_LIBRARIES}
+                       ${HDF5_LIBRARIES}
+                       ${TIFF_LIBRARIES} )
