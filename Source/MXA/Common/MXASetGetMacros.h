@@ -48,6 +48,24 @@
   MXA_NULL_SHARED_POINTER(thisClass);
 
 /**
+ * @brief Creates a typedef that points to the superclass of this class
+ */
+#define MXA_SUPERCLASS_POINTER(SuperClass)\
+  typedef SuperClass::Pointer SuperClass;
+
+
+/**
+ * @brief Creates a static "New" method that creates an instance of thisClass
+ */
+#define MXA_NEW_SUPERCLASS(thisClass, SuperClass)\
+  typedef SuperClass::Pointer SuperClass;\
+  static SuperClass New##SuperClass(void) \
+{ \
+  SuperClass sharedPtr (new thisClass); \
+  return sharedPtr; \
+}
+
+/**
  * @brief Implements a Static 'New' Method for a class
  */
 #define MXA_STATIC_NEW_MACRO(thisClass) \
