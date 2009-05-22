@@ -6,24 +6,17 @@
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
+
 #include "MXALogger.h"
-#include <MXA/Common/LogTime.h>
+
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXALogger::MXALogger()
+MXALogger::MXALogger() :
+  _isFileBased(false),
+  _fileName("NO FILE SET")
 {
-
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-MXALogger::MXALogger(const std::string &logfile, std::ios::openmode mode)
-{
-  this->_logFile = logfile;
-  _out.open(_logFile.c_str(),  std::ios::out | mode);
 }
 
 // -----------------------------------------------------------------------------
@@ -31,53 +24,35 @@ MXALogger::MXALogger(const std::string &logfile, std::ios::openmode mode)
 // -----------------------------------------------------------------------------
 MXALogger::~MXALogger()
 {
-   if (_out.is_open() == true)
-   {
-     _out.close();
-   }
+  this->_out.flush();
+}
+
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+bool MXALogger::open(const std::string &fn, std::ios::openmode mode)
+{
+  this->_fileName = fn;
+  _out.open(_fileName.c_str(),  std::ios::out | mode);
+  if (_out.is_open() )
+  {
+    this->_isFileBased = true;
+  }
+  else
+  {
+    this->_fileName = "";
+    this->_isFileBased = false;
+  }
+  return _isFileBased;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 MXALogger::open(const std::string &logFile, std::ios::openmode mode)
+bool MXALogger::close()
 {
-   this->setLogFile(logFile);
-   // Close any existing log file now
-   if (_out.is_open() == true)
-   {
-     _out.close();
-   }
-
-   // Open a new file
-   _out.open(_logFile.c_str(), std::ios::out | mode);
-  if (_out.is_open() == false)
-  {
-    std::cerr << logTime() << "Error - Could not open output file" << std::endl;
-    return -1;
-  }
-  return 0;
+  _out.close();
+  _isFileBased = false;
+  return !_out.is_open();
 }
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void MXALogger::close()
-{
-  if (_out.is_open() == true)
-  {
-    _out.close();
-  }
-}
-
-#if 0
-std::ofstream csvFile(csvFileName.c_str(), std::ios::out);
-if (csvFile.is_open() == false)
-{
-  std::cout << logTime() << "Error - Could not open output file" << std::endl;
-  return -1;
-}
-this->printTable(csvFile, ',');
-csvFile.close();
-
-#endif

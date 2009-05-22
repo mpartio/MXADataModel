@@ -284,7 +284,11 @@ if (WIN32)
       endif()
     ENDFOREACH()
 endif()
-    
+
+
+add_executable(LogTest LogTest.cpp)
+target_link_libraries(LogTest ${MXADATAMODEL_LIB_NAME} 
+                ${DEP_LIBS}  )
 
 ENDIF (BUILD_TESTING)
 

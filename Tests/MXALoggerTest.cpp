@@ -51,45 +51,49 @@ int MXALoggerTest_EntryPoint()
 	std::string str("String");
 
 	std::cout << logTime() << "Logging To File: " << MXAUnitTest::MXALoggerTest::TestFile << std::endl;
+	{
+    MXALogger logger;
+    std::stringstream ss;
+    ss << "This is a test of the stringstream";
+    logger.open(MXAUnitTest::MXALoggerTest::TestFile);
+    BOOST_REQUIRE(logger.getIsFileBased() == true);
+    logger << logTime() << (ui8) << (i8) << (ui16) << (i16) << (ui32) << (i32) << (ui64) << (i64) << (f) << (d) << std::endl;
+    logger << logTime() << (str) << std::endl;
+    logger << logTime() << ss.str() << std::endl;
+    logger.close();
+    BOOST_REQUIRE(logger.getIsFileBased() == false);
 
-  MXALogger::Pointer logger = MXALogger::New();
-  logger->open(MXAUnitTest::MXALoggerTest::TestFile);
-	logger->dateTime()->log(ui8)->log(i8)->log(ui16)->log(i16)->log(ui32)->log(i32)->log(ui64)->log(i64)->log(f)->log(d)->endl();
-	logger->dateTime()->log(str)->endl();
+    logger << logTime() << ss.str() << std::endl;
+    logger << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 
-	logger->close();
-	BOOST_REQUIRE(logger->is_open() == false);
+    logger.open(MXAUnitTest::MXALoggerTest::TestFile, std::ios::app);
+    BOOST_REQUIRE(logger.getIsFileBased() == true);
 
-  logger->open(MXAUnitTest::MXALoggerTest::TestFile, std::ios::app);
-  BOOST_REQUIRE(logger->is_open() == true);
-	std::stringstream ss;
-	ss << "This is a test of the stringstream";
-	logger->dateTime()->log(ss)->endl();
-	logger->close();
-	BOOST_REQUIRE(logger->is_open() == false);
-
+    logger << logTime() << (ss.str()) << std::endl;
+    logger.close();;
+    BOOST_REQUIRE(logger.getIsFileBased() == false);
+	}
 
 	std::cout << logTime() << "Logging to std::cout" << std::endl;
-	logger = MXALogger::New();
-	BOOST_REQUIRE(logger.get() != NULL);
-  logger->dateTime()->log(ui8)->log(i8)->log(ui16)->log(i16)->log(ui32)->log(i32)->log(ui64)->log(i64)->log(f)->log(d)->endl();
-  logger->dateTime()->log(str)->endl();
+	{
+    MXALogger logger;
+    logger << logTime() << (ui8) << (i8) << (ui16) << (i16) << (ui32) << (i32) << (ui64) << (i64) << (f) << (d) << std::endl;
+    logger << logTime() << (str) << std::endl;
 
-  logger->close();
-  BOOST_REQUIRE(logger->is_open() == false);
+    logger.close();;
+    BOOST_REQUIRE(logger.getIsFileBased() == false);
 
-  logger->open(MXAUnitTest::MXALoggerTest::TestFile, std::ios::app);
-  BOOST_REQUIRE(logger->is_open() == true);
-  ss.str();
-  ss << "This is a test of the stringstream";
-  logger->dateTime()->log(ss)->endl();
-  logger->close();
-  BOOST_REQUIRE(logger->is_open() == false);
+    logger.open(MXAUnitTest::MXALoggerTest::TestFile, std::ios::app);
+    BOOST_REQUIRE(logger.getIsFileBased() == true);
+    std::stringstream ss;
+    ss.str();
+    ss << "This is a test of the stringstream";
+    logger << logTime() << (ss.str()) << std::endl;
+    logger.close();;
+    BOOST_REQUIRE(logger.getIsFileBased() == false);
 
-  std::string empty;
-  logger = MXALogger::New(empty);
-  BOOST_REQUIRE(logger.get() == NULL);
 
+	}
 	return err;
 }
 

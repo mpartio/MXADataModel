@@ -7,97 +7,63 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef MXALOGGER_H_
-#define MXALOGGER_H_
-
-
-#include <MXA/Common/MXATypeDefs.h>
-#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Common/MXATypes.h>
 #include <MXA/Common/LogTime.h>
+#include <MXA/Common/MXASetGetMacros.h>
 
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
-#include <boost/shared_ptr.hpp>
 
 #define CHECK_PRECONDITION( stuff )\
-  if(_out.is_open() == false){\
-    std::cout << stuff; }\
+  if(_isFileBased == false){\
+    std::cout << stuff; return std::cout;}\
     else {\
-      _out << stuff; } return this;
+      _out << (stuff);  return _out; }
 
 
+/**
+* @class MXALogger MXALogger.h MXA/Utilities/MXALogger.h
+* @brief
+* @author Michael A. Jackson for BlueQuartz Software
+* @date May 22, 2009
+* @version $Revision$
+*/
 class MXA_EXPORT MXALogger
 {
-  public:
 
-    MXA_SHARED_POINTERS(MXALogger);
-    MXA_STATIC_NEW_MACRO(MXALogger);
-    MXA_TYPE_MACRO(MXALogger);
+  public:
+    MXALogger();
     virtual ~MXALogger();
 
-    /**
-     * @brief Creates a new log file and opens the file for logging. If there was
-     * an error creating or opening the file then a NULL shared_pointer is returned.
-     *
-     */
-    static Pointer New(const std::string &logfile, std::ios::openmode mode = std::ios::app)
-    {
-      Pointer sharedPtr (new MXALogger(logfile));
-      if (sharedPtr->is_open()== false)
-      {
-        sharedPtr.reset(static_cast<MXALogger*>(NULL));
-      }
-      return sharedPtr;
-    }
+    MXA_INSTANCE_PROPERTY(bool, IsFileBased, _isFileBased)
+    MXA_INSTANCE_STRING_PROPERTY(FileName, _fileName)
 
-    MXA_STRING_PROPERTY(LogFile, _logFile);
+    bool open(const std::string &fn, std::ios::openmode mode = std::ios::trunc);
+    bool close();
 
-    /**
-     * @brief Opens the given log file deleting any existing file
-     * @param logFile The name of the log file to open
-     * @param mode The mode to open the file. Default is to truncate any existing file
-     * @return 0 On success;
-     */
-    int32 open(const std::string &logFile, std::ios::openmode mode = std::ios::trunc);
-
-    /**
-     * @brief Closes the log file to any more logging.
-     */
-    void close();
-
-    bool is_open() { return _out.is_open(); }
-
-    MXALogger* dateTime() { CHECK_PRECONDITION(logTime()) }
-    MXALogger* warn() { CHECK_PRECONDITION("[Warning] ")}
-    MXALogger* error() { CHECK_PRECONDITION("[Error] ")}
-    MXALogger* log(uint8 v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(int8 v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(uint16 v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(uint32 v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(int32 v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(uint64 v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(int64 v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(double v)  { CHECK_PRECONDITION(v) }
-    MXALogger* log(const std::string &v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(const char* v) { CHECK_PRECONDITION(v) }
-    MXALogger* log(std::stringstream &v) { CHECK_PRECONDITION(v.str()) }
-    MXALogger* endl() { CHECK_PRECONDITION(std::endl)}
-
-  protected:
-    MXALogger();
-    explicit MXALogger(const std::string &logfile, std::ios::openmode mode = std::ios::app);
-
-
+    std::ostream& dateTime() { CHECK_PRECONDITION(logTime()) }
+    std::ostream& warn() { CHECK_PRECONDITION("[Warning] ")}
+    std::ostream& error() { CHECK_PRECONDITION("[Error] ")}
+    std::ostream& operator<<(uint8 v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(int8 v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(uint16 v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(uint32 v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(int32 v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(uint64 v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(int64 v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(double v)  { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(const std::string &v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(const char* v) { CHECK_PRECONDITION(v) }
 
   private:
     std::ofstream _out;
-    std::string _logFile;
-
 
     MXALogger(const MXALogger&);    // Copy Constructor Not Implemented
     void operator=(const MXALogger&);  // Operator '=' Not Implemented
+
 };
 
-#endif /* MXALOGGER_H_ */
+
