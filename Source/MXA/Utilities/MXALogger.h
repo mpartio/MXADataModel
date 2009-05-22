@@ -75,9 +75,82 @@ class MXA_EXPORT MXALogger
 
 
 #ifdef LOGGER_NAMESPACE
-namespace LOGGER_NAMESPACE { static MXALogger log; }
+namespace LOGGER_NAMESPACE {
+  static MXALogger log;
+  MXALogger& logger()
+  {
+    return log;
+  }
+}
 #endif
 
 
 #endif /* _MXALogger_H_  */
 
+#if 0
+
+// Singleton.hpp
+#ifndef FILE_Singleton_hpp_INCLUDED
+#define FILE_Singleton_hpp_INCLUDED
+#include <boost/noncopyable.hpp>
+class Singleton : private boost::noncopyable
+{
+  public:
+    static Singleton* instance();
+    void print(char const* str);
+  private:
+    Singleton();
+    ~Singleton();
+    static bool g_initialised;
+    // static  initialisation
+    static Singleton g_instance;
+    // dynamic initialisation
+    char m_prefix[32]; // to crash the program     };
+#endif // FILE_Singleton_hpp_INCLUDED
+
+// Singleton.cpp
+#include "Singleton.hpp"
+#include <ostream>
+#include <iostream>
+#include <cstring>
+bool Singleton::g_initialised;
+   // static  initialisation
+Singleton Singleton::g_instance;
+   // dynamic initialisation
+
+Singleton::Singleton()
+{
+    g_initialised = true;
+    std::strcpy(m_prefix, ">>> ");
+}
+
+Singleton::~Singleton()
+{
+    g_initialised = false;
+}
+
+Singleton* Singleton::instance()
+{
+    return g_initialised ? &g_instance : 0;
+}
+
+void Singleton::print(char const* str)
+{
+    std::cout << m_prefix << str;
+}
+
+// main.cpp
+#include "Singleton.hpp"
+struct X
+{
+    X() { Singleton::instance()->print("X\n"); }
+    ~X() { Singleton::instance()->print("~X\n"); }
+} x;
+
+int main()
+{
+    Singleton* p = Singleton::instance();
+    p->print("Hello, World!\n");
+}
+
+#endif
