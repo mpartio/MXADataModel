@@ -6,6 +6,9 @@
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef _MXALogger_H_
+#define _MXALogger_H_
+
 
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/LogTime.h>
@@ -66,4 +69,15 @@ class MXA_EXPORT MXALogger
 
 };
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+
+
+#ifdef LOGGER_NAMESPACE
+namespace LOGGER_NAMESPACE { static MXALogger log; }
+#endif
+
+
+#endif /* _MXALogger_H_  */
 
