@@ -9,6 +9,9 @@
 #ifndef _MXALogger_H_
 #define _MXALogger_H_
 
+#ifdef LOGGER_NAMESPACE
+#error REMOVE THE DEFINITION YOU DONT NEED IT ANYMORE
+#endif
 
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/LogTime.h>
@@ -18,6 +21,22 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
+#include <boost/noncopyable.hpp>
+
+#define DECLARE_MXA_LOGGER(var)\
+	MXALogger::Pointer var;
+
+#define MXA_LOGGER_INSTANCE(var)\
+	var = MXALogger::instance();
+
+
+#define LOGGER_INSTANCE()\
+	MXALogger::Pointer MXA_Global_Logger = MXALogger::instance();
+
+#define DECLARE_MXA_DEFAULT_LOGGER MXALogger::Pointer MXA_Global_Logger;
+#define MXA_DEFAULT_INSTANCE       MXA_Global_Logger = MXALogger::instance();
+#define mxa_log                    MXA_Global_Logger->mxaLogger
 
 
 #define CHECK_PRECONDITION( stuff )\
@@ -34,12 +53,12 @@
 * @date May 22, 2009
 * @version $Revision$
 */
-class MXA_EXPORT MXALogger
+class MXA_EXPORT MXALogger_Implementation : private boost::noncopyable
 {
 
   public:
-    MXALogger();
-    virtual ~MXALogger();
+	  MXALogger_Implementation();
+    virtual ~MXALogger_Implementation();
 
     MXA_INSTANCE_PROPERTY(bool, IsFileBased, _isFileBased)
     MXA_INSTANCE_STRING_PROPERTY(FileName, _fileName)
@@ -64,93 +83,24 @@ class MXA_EXPORT MXALogger
   private:
     std::ofstream _out;
 
-    MXALogger(const MXALogger&);    // Copy Constructor Not Implemented
-    void operator=(const MXALogger&);  // Operator '=' Not Implemented
+   // MXALogger_Implementation(const MXALogger_Implementation&);    // Copy Constructor Not Implemented
+    void operator=(const MXALogger_Implementation&);  // Operator '=' Not Implemented
 
 };
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-
-
-#ifdef LOGGER_NAMESPACE
-namespace LOGGER_NAMESPACE {
-  static MXALogger log;
-  MXALogger& logger()
-  {
-    return log;
-  }
-}
-#endif
-
-
-#endif /* _MXALogger_H_  */
-
-#if 0
-
-// Singleton.hpp
-#ifndef FILE_Singleton_hpp_INCLUDED
-#define FILE_Singleton_hpp_INCLUDED
-#include <boost/noncopyable.hpp>
-class Singleton : private boost::noncopyable
+class MXA_EXPORT MXALogger
 {
   public:
-    static Singleton* instance();
-    void print(char const* str);
+	MXA_SHARED_POINTERS(MXALogger);
+	virtual ~MXALogger();
+
+    static MXALogger::Pointer instance();
+
+    MXALogger_Implementation mxaLogger;
+
   private:
-    Singleton();
-    ~Singleton();
-    static bool g_initialised;
-    // static  initialisation
-    static Singleton g_instance;
-    // dynamic initialisation
-    char m_prefix[32]; // to crash the program     };
-#endif // FILE_Singleton_hpp_INCLUDED
+    MXALogger();
 
-// Singleton.cpp
-#include "Singleton.hpp"
-#include <ostream>
-#include <iostream>
-#include <cstring>
-bool Singleton::g_initialised;
-   // static  initialisation
-Singleton Singleton::g_instance;
-   // dynamic initialisation
-
-Singleton::Singleton()
-{
-    g_initialised = true;
-    std::strcpy(m_prefix, ">>> ");
-}
-
-Singleton::~Singleton()
-{
-    g_initialised = false;
-}
-
-Singleton* Singleton::instance()
-{
-    return g_initialised ? &g_instance : 0;
-}
-
-void Singleton::print(char const* str)
-{
-    std::cout << m_prefix << str;
-}
-
-// main.cpp
-#include "Singleton.hpp"
-struct X
-{
-    X() { Singleton::instance()->print("X\n"); }
-    ~X() { Singleton::instance()->print("~X\n"); }
-} x;
-
-int main()
-{
-    Singleton* p = Singleton::instance();
-    p->print("Hello, World!\n");
-}
+};
 
 #endif

@@ -18,6 +18,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
 
+#define logger               MXA_Global_Logger->mxaLogger
 
 // -----------------------------------------------------------------------------
 //
@@ -51,12 +52,13 @@ int MXALoggerTest_EntryPoint()
 	std::string str("String");
 
 	std::cout << logTime() << "Logging To File: " << MXAUnitTest::MXALoggerTest::TestFile << std::endl;
+
 	{
-    MXALogger logger;
+		LOGGER_INSTANCE()
     std::stringstream ss;
     ss << "This is a test of the stringstream";
     logger.open(MXAUnitTest::MXALoggerTest::TestFile);
-    BOOST_REQUIRE(logger.getIsFileBased() == true);
+    BOOST_REQUIRE((logger.getIsFileBased()) == true);
     logger << logTime() << (ui8) << (i8) << (ui16) << (i16) << (ui32) << (i32) << (ui64) << (i64) << (f) << (d) << std::endl;
     logger << logTime() << (str) << std::endl;
     logger << logTime() << ss.str() << std::endl;
@@ -76,7 +78,7 @@ int MXALoggerTest_EntryPoint()
 
 	std::cout << logTime() << "Logging to std::cout" << std::endl;
 	{
-    MXALogger logger;
+		LOGGER_INSTANCE()
     logger << logTime() << (ui8) << (i8) << (ui16) << (i16) << (ui32) << (i32) << (ui64) << (i64) << (f) << (d) << std::endl;
     logger << logTime() << (str) << std::endl;
 
