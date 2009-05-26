@@ -23,11 +23,11 @@
 #define READER64_INPUT_STREAM std::ifstream
 
 /**
-* @class
-* @brief
+* @class MXAFileReader64
+* @brief 64 Bit capable file reader.
 * @author mjackson
 * @date Feb 26, 2009
-* @version $Revision$
+* @version 1.0
 */
 class MXA_EXPORT MXAFILEREADER_CLASS_NAME
 {

@@ -146,7 +146,7 @@ class MXAFileSystemPath
 
     /**
      * @brief Remove a file from the filesystem
-     * @param The path to the file to remove
+     * @param path The path to the file to remove
      * @return True on successful removal
      */
     static MXA_EXPORT bool remove(const std::string &path);
@@ -160,14 +160,14 @@ class MXAFileSystemPath
 
     /**
      * @brief Converts from native directory separators to unix separators
-     * @param The path to conver
+     * @param path The path to conver
      * @return Newly converted path
      */
     static MXA_EXPORT std::string fromNativeSeparators(const std::string  &path);
 
     /**
      * @brief Converts a path to use native directory separators
-     * @param The path to convert
+     * @param path The path to convert
      * @return The newly converted path
      */
     static MXA_EXPORT std::string toNativeSeparators(const std::string &path);

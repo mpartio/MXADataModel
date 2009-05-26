@@ -34,7 +34,7 @@
 #endif
 
 /**
- * @class MXAFILEREADER_CLASS_NAME MXAFILEREADER_CLASS_NAME.h PVDislocation/MXAFILEREADER_CLASS_NAME.h
+ * @class MXAFileReader64 MXAFileReader64.h MXA/Common/IO/MXAFileReader64.h
  * @brief This class is a wrapper around platform specific native streams to make
  * sure that we can read files larger than 2GB
  * @author Mike Jackson @ IMTS.us

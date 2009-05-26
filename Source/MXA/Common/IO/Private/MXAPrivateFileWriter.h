@@ -24,12 +24,12 @@
 #include <stdexcept>
 
 /**
- * @class MXAFILEWRITER_CLASS_NAME MXAFILEWRITER_CLASS_NAME.h Common/IO/MXAFILEWRITER_CLASS_NAME.h
+ * @class MXAFileWriter64 MXAFileWriter64.h Common/IO/MXAFileWriter64.h
  * @brief This class is a private implementation class around platform specific
  * native streams to make sure that we can write files larger than 2GB
  * @author Mike Jackson @ IMTS.us
  * @date August 2007
- * @version $Revision: 1.2 $
+ * @version 1.2
  */
 class MXA_EXPORT MXAFILEWRITER_CLASS_NAME
 {
@@ -74,7 +74,7 @@ public:
   /**
    * @brief Writes a "C" array into the file
    * @param front pointer to the location in the array to start writing
-   * @param number of elements of the array to write
+   * @param numElements number of elements of the array to write
    */
   template<typename T>
   bool writeArray(T* front, int64 numElements)

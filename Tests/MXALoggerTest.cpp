@@ -54,7 +54,7 @@ int MXALoggerTest_EntryPoint()
 	std::cout << logTime() << "Logging To File: " << MXAUnitTest::MXALoggerTest::TestFile << std::endl;
 
 	{
-		LOGGER_INSTANCE()
+	  MXALOGGER_METHOD_VARIABLE_INSTANCE;
     std::stringstream ss;
     ss << "This is a test of the stringstream";
     logger.open(MXAUnitTest::MXALoggerTest::TestFile);
@@ -78,7 +78,7 @@ int MXALoggerTest_EntryPoint()
 
 	std::cout << logTime() << "Logging to std::cout" << std::endl;
 	{
-		LOGGER_INSTANCE()
+	  MXALOGGER_METHOD_VARIABLE_INSTANCE;
     logger << logTime() << (ui8) << (i8) << (ui16) << (i16) << (ui32) << (i32) << (ui64) << (i64) << (f) << (d) << std::endl;
     logger << logTime() << (str) << std::endl;
 

@@ -24,18 +24,53 @@
 
 #include <boost/noncopyable.hpp>
 
+/**
+ * @def DECLARE_MXA_LOGGER(var)
+ * @param var The name of the variable that holds the Global MXALogger instance.
+
 #define DECLARE_MXA_LOGGER(var)\
 	MXALogger::Pointer var;
+*/
+
+
+/**
+ * @def MXA_LOGGER_INSTANCE(var)
+ * @param var The name of the variable that holds the Global MXALogger instance
 
 #define MXA_LOGGER_INSTANCE(var)\
 	var = MXALogger::instance();
+*/
 
-
-#define LOGGER_INSTANCE()\
+/**
+ * @def LOGGER_INSTANCE
+ * Use this to get an instance of the Global MXALogger variable
+ #define LOGGER_INSTANCE()\
 	MXALogger::Pointer MXA_Global_Logger = MXALogger::instance();
+*/
 
-#define DECLARE_MXA_DEFAULT_LOGGER MXALogger::Pointer MXA_Global_Logger;
-#define MXA_DEFAULT_INSTANCE       MXA_Global_Logger = MXALogger::instance();
+/**
+ * @def MXALOGGER_METHOD_VARIABLE_INSTANCE
+ * Use this to get an instance of the Global MXALogger variable
+ */
+#define MXALOGGER_METHOD_VARIABLE_INSTANCE MXALogger::Pointer MXA_Global_Logger = MXALogger::instance();
+
+
+/**
+ * @def MXALOGGER_CLASS_VARIABLE_DECLARATION
+ * Use this macro to declare an instance variable for your class or method.
+ */
+#define MXALOGGER_CLASS_VARIABLE_DECLARATION MXALogger::Pointer MXA_Global_Logger;
+
+/**
+ * @def MXALOGGER_CLASS_VARIABLE_INSTANCE
+ * Uses the default naming scheme for the Global instance of the MXALogger class.
+ */
+#define MXALOGGER_CLASS_VARIABLE_INSTANCE       MXA_Global_Logger = MXALogger::instance();
+
+/**
+ * @def mxa_log
+ * Use this macro in order to create a syntax similar to std::cout << style.
+ */
 #define mxa_log                    MXA_Global_Logger->mxaLogger
 
 
@@ -47,8 +82,9 @@
 
 
 /**
-* @class MXALogger MXALogger.h MXA/Utilities/MXALogger.h
-* @brief
+* @class MXALogger_Implementation MXALogger.h MXA/Utilities/MXALogger.h
+* @brief The actual implementation of the logging class. This class should NEVER
+* be instantiated by a program. Use 'MXALogger' instead.
 * @author Michael A. Jackson for BlueQuartz Software
 * @date May 22, 2009
 * @version $Revision$
@@ -83,11 +119,34 @@ class MXA_EXPORT MXALogger_Implementation : private boost::noncopyable
   private:
     std::ofstream _out;
 
-   // MXALogger_Implementation(const MXALogger_Implementation&);    // Copy Constructor Not Implemented
     void operator=(const MXALogger_Implementation&);  // Operator '=' Not Implemented
 
 };
 
+
+/**
+* @class MXALogger MXALogger.h Source/Utilities/MXALogger.h
+* @brief MXALogger is a wrapper class around the actual implementation class. MXALogger should be
+* used to log debug information into a log file or to std::cout.
+*
+* @details To use this class you should use the macros provided in this class header.
+*   To get an instance of the global logger use the folling in your code:
+*    <code> MXALOGGER_METHOD_VARIABLE_INSTANCE</code>
+*    Then to use to the logger it can be syntactically the same as 'std::cout <<'
+*    style by using the 'mxa_log' macro definition.
+*    <code>mxa_log << "My debugging statement " << errorCode << std::endl;</code>
+*
+*    If you want your class to have an class wide instance variable to the global logger
+*    then you can use the following macros:
+*     In your class declaration use 'MXALOGGER_CLASS_VARIABLE_DECLARATION' macro.
+*     In the code within the class method definitions use the 'mxa_log' macro.
+*     Do NOT forget to 'mxa_log.open(filename)' using the path/name to a log file otherwise
+*     the logging output will simply be sent to 'std::cout'.
+*
+* @author Michael A. Jackson for BlueQuartz Software
+* @date May 26, 2009
+* @version 1.0
+*/
 class MXA_EXPORT MXALogger
 {
   public:
