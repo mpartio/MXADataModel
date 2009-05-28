@@ -18,6 +18,7 @@
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXA2DArray.hpp>
 #include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/HDF5/H5Attribute.h>
 #include <Tests/MXAUnitTestDataFileLocations.h>
 
 //-- Boost Test Headers
@@ -44,6 +45,12 @@
 #define RANK_1D 1
 #define RANK_2D 2
 #define RANK_3D 3
+
+
+#define H5ATTRIBUTE_INSTANCE(type, Suffix, key)\
+  Suffix##H5Attribute::Pointer type##_attr = Suffix##H5Attribute::New();\
+  type##_attr->setKey(key);
+
 
 
 //TODO: Test the Read/Write IMXAArray methods
@@ -169,8 +176,8 @@ herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetNam
   std::vector<T> data(numElements, 0);
   err = H5Lite::readPointerAttribute<T>(file_id, dsetName, attributeKey, &(data.front() ) );
   BOOST_REQUIRE(err >= 0);
-
   BOOST_REQUIRE (data == referenceData);
+
   return err;
 }
 
@@ -623,6 +630,14 @@ herr_t testMXAAttribute(hid_t file_id, const std::string &dsetName)
 //    std::cout << "p=" << p[var] << "  r=" << (r[var]) << std::endl;
 //  }
   BOOST_REQUIRE( ::memcmp(r, p, sizeof(T) * 10) == 0);
+
+
+
+  AbstractH5Attribute::Pointer ptr = H5Attribute::ReadH5Attribute(file_id, dsetName, attributeKey);
+  BOOST_REQUIRE(ptr.get() != NULL);
+  r = static_cast<T*>(ptr->getAttributeValue()->getVoidPointer(0));
+  BOOST_REQUIRE( ::memcmp(r, p, sizeof(T) * 10) == 0);
+
   return err;
 }
 
@@ -864,6 +879,11 @@ herr_t testReadStringDatasetAndAttributes(hid_t file_id)
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE( refAttrData.compare(attrData) == 0);
 
+  AbstractH5Attribute::Pointer ptr = H5Attribute::ReadH5Attribute(file_id, dsetName, attributeKey);
+  BOOST_REQUIRE(ptr.get() != NULL);
+  BOOST_REQUIRE( ::memcmp(ptr->getAttributeValue()->getVoidPointer(0), refAttrData.c_str(), refAttrData.size() ) == 0 );
+
+
   std::vector<uint8> attrDataPtr (refAttrData.size() + 1, 0);
   attributeKey = "c_string";
   err = H5Lite::readStringAttribute(file_id, dsetName, attributeKey, &(attrDataPtr.front() ) );
@@ -876,6 +896,7 @@ herr_t testReadStringDatasetAndAttributes(hid_t file_id)
   err = H5Lite::readStringDataset(file_id, dsetName, &(strDataPtr.front() ) );
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE( ::memcmp(&(strDataPtr.front()), refData.c_str(), refData.size() + 1) == 0 );
+
 
   std::cout << " Passed" << std::endl;
   return err;

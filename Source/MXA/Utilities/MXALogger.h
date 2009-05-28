@@ -24,29 +24,6 @@
 
 #include <boost/noncopyable.hpp>
 
-/**
- * @def DECLARE_MXA_LOGGER(var)
- * @param var The name of the variable that holds the Global MXALogger instance.
-
-#define DECLARE_MXA_LOGGER(var)\
-	MXALogger::Pointer var;
-*/
-
-
-/**
- * @def MXA_LOGGER_INSTANCE(var)
- * @param var The name of the variable that holds the Global MXALogger instance
-
-#define MXA_LOGGER_INSTANCE(var)\
-	var = MXALogger::instance();
-*/
-
-/**
- * @def LOGGER_INSTANCE
- * Use this to get an instance of the Global MXALogger variable
- #define LOGGER_INSTANCE()\
-	MXALogger::Pointer MXA_Global_Logger = MXALogger::instance();
-*/
 
 /**
  * @def MXALOGGER_METHOD_VARIABLE_INSTANCE

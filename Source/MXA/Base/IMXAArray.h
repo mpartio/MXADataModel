@@ -13,6 +13,7 @@
 
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <iostream>
 
 /**
@@ -29,6 +30,8 @@
 class MXA_EXPORT IMXAArray
 {
   public:
+    MXA_SHARED_POINTERS(IMXAArray);
+
     IMXAArray() {}
     virtual ~IMXAArray() {}
 

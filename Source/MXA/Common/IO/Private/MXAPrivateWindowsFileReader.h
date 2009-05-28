@@ -137,7 +137,7 @@ public:
    * @brief This method will read an array of values and swap each value
    * @param t Pointer to the front of the array where the values will be stored.
    * The array MUST already be preallocated.
-   * @param size The number of elements in the array
+   * @param numElements The number of elements in the array
    */
   template <typename T>
   bool readArray(T* t, int64 numElements)
