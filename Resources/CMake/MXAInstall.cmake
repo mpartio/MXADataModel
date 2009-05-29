@@ -68,42 +68,24 @@ INSTALL (FILES ${MXA_INSTALLED_RESOURCES}
         DESTINATION share/MXADataModel/Resources/CMake
         COMPONENT Resources)
 
-SET (DOCS
-  ${MXA_DOCUMENTATION_DIR}/Background.html
-  ${MXA_DOCUMENTATION_DIR}/CompileNotesUnix.html
-  ${MXA_DOCUMENTATION_DIR}/CompileNotesXP.html
-  ${MXA_DOCUMENTATION_DIR}/default.css
-  ${MXA_DOCUMENTATION_DIR}/Examples.html
-  ${MXA_DOCUMENTATION_DIR}/HowToWriteDataImportDelegate.html
-  ${MXA_DOCUMENTATION_DIR}/ImportingData.html
-  ${MXA_DOCUMENTATION_DIR}/index.html
-  ${MXA_DOCUMENTATION_DIR}/MXAUtilities.html
-  ${MXA_DOCUMENTATION_DIR}/MXASpecification.html
-  ${MXA_DOCUMENTATION_DIR}/Navigation.js
-  ${MXA_DOCUMENTATION_DIR}/site.css
-  ${MXA_DOCUMENTATION_DIR}/SystemRequirements.html
-  ${MXA_DOCUMENTATION_DIR}/Todo.html
-  ${MXA_DOCUMENTATION_DIR}/UsingMXAInOtherProjects.html
-  ${MXA_DOCUMENTATION_DIR}/XML_Usage.html
-  ${MXA_DOCUMENTATION_DIR}/img/li.gif
-  ${MXA_DOCUMENTATION_DIR}/img/quote.gif
+SET (MISC_DOCS
+  ${MXADataModel_SOURCE_DIR}/License.txt
 )
+
+INSTALL (FILES ${MISC_DOCS} 
+        DESTINATION doc/MXADataModel
+        COMPONENT Documentation)
 
 #-- Install the HTML based documentation
 INSTALL (DIRECTORY ${MXA_DOCUMENTATION_DIR}
             DESTINATION doc/MXADataModel
-            COMPONENT Documentation
-            PATTERN "CVS" EXCLUDE)
+            COMPONENT Documentation )
 
 #-- Install the generated Doxygen documentation
-if (${MXA_BUILD_API_DOCS})
+if (MXA_BUILD_API_DOCS)
     INSTALL(DIRECTORY ${MXADataModel_BINARY_DIR}/API-Docs
             DESTINATION doc/MXADataModel
-            COMPONENT Documentation)
+            COMPONENT Documentation )
 endif()
 
-        
-INSTALL(FILES ${MXADataModel_SOURCE_DIR}/License.txt
-        DESTINATION .
-        COMPONENT Documentation)
-        
+
