@@ -15,8 +15,11 @@
 
 //-- C includes
 #include <string.h>
+#define USE_LZW_COMPRESSION 1
 
-
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 H5TiffIO::H5TiffIO(hid_t fileId) :
   _fileId(fileId)
 {
@@ -544,7 +547,7 @@ herr_t H5TiffIO::_exportGrayScaleTiff(TIFF *image,
   err = TIFFSetField(image, TIFFTAG_SAMPLESPERPIXEL, 1);
   err = TIFFSetField(image, TIFFTAG_ROWSPERSTRIP, (int) height); // 1 strip
 
-  err = TIFFSetField(image, TIFFTAG_COMPRESSION, 1);
+
   std::string datetime = tifDateTime();
   err = TIFFSetField(image, TIFFTAG_DATETIME, datetime.c_str());
   // String based tags
@@ -558,6 +561,12 @@ herr_t H5TiffIO::_exportGrayScaleTiff(TIFF *image,
   err = TIFFSetField(image, TIFFTAG_ORIENTATION, 1);
   err = TIFFSetField(image, TIFFTAG_PHOTOMETRIC, 1);
 
+#if USE_LZW_COMPRESSION
+  err = TIFFSetField(image, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+  err = TIFFSetField(image, TIFFTAG_PREDICTOR, PREDICTOR_HORIZONTAL);
+#else
+  err = TIFFSetField(image, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+#endif
 
   // Insert Resolution Units here if possible
 
@@ -572,75 +581,4 @@ herr_t H5TiffIO::_exportGrayScaleTiff(TIFF *image,
   err = TIFFWriteEncodedStrip(image, 0, data, area);
   return err;
 }
-
-#if 0
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-herr_t H5TiffIO::_export8BitTiff(TIFF *image,
-                                hid_t fileId,
-                                std::string img_dataset_name,
-                                unsigned char *data,
-                                hsize_t width,
-                                hsize_t height,
-                                hssize_t numpalettes)
-{
-  herr_t err = 0;
-
-  // Get the color palette dimensions
-  hsize_t pal_dims[2];
-  err = H5Image::H5IMget_palette_info(fileId, img_dataset_name, 0, pal_dims);
-  if (err < 0) {
-    std::cout << "Error getting palette dimenssions" << std::endl;
-    return err;
-  }
-
-  // Read the color map
-  hsize_t numRows = pal_dims[0];
-  std::vector<uint8>::size_type palRank = static_cast<std::vector<uint8>::size_type> (numRows * pal_dims[1]);
-  //unsigned char colorMap[palRank];
-  std::vector<uint8> colorMap(palRank);
-  err = H5Image::H5IMget_palette(fileId, img_dataset_name, 0, &(colorMap.front() ) );
-  if (err < 0) {
-    std::cout << "Error getting color palette" << std::endl;
-    return err;
-  }
-  int32 cRank = (int) palRank / 3;
-  //uint16 dRed[cRank], dGreen[cRank], dBlue[cRank];
-  std::vector<uint16> dRed(cRank);
-  std::vector<uint16> dGreen(cRank);
-  std::vector<uint16> dBlue(cRank);
-
-  int32 index;
-  for (uint32 i=0; i<palRank; i=i+3) {
-    index = (uint32)( i/3 );
-    dRed[index] = (uint16) colorMap[i] * 256;
-    dGreen[index] = (uint16) colorMap[i+1] * 256;
-    dBlue[index] = (uint16) colorMap[i+2] * 256;
-  }
-
-  std::cout << "Computed Color map - setting values" << std::endl;
-
-  // set the basic values
-  TIFFSetField(image, TIFFTAG_IMAGEWIDTH, (int) width);
-  TIFFSetField(image, TIFFTAG_IMAGELENGTH, (int) height);
-  TIFFSetField(image, TIFFTAG_BITSPERSAMPLE, 8);
-  TIFFSetField(image, TIFFTAG_SAMPLESPERPIXEL, 1);
-  TIFFSetField(image, TIFFTAG_ROWSPERSTRIP, (int) height); // 1 strip
-
-  TIFFSetField(image, TIFFTAG_COMPRESSION, 1);
-  TIFFSetField(image, TIFFTAG_PHOTOMETRIC, 3);
-  TIFFSetField(image, TIFFTAG_COLORMAP, &(dRed.front()), &(dGreen.front() ), &(dBlue.front() ) );
-  TIFFSetField(image, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-
-  // Write the information to the file
-  err = TIFFWriteEncodedStrip(image, 0, data, static_cast<tsize_t>(width * height) );
-
-  return err;
-
-}
-
-#endif
-
-
 

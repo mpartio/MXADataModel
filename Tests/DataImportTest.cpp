@@ -271,7 +271,7 @@ boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*
   boost::unit_test::test_suite* test= BOOST_TEST_SUITE ( "Data Import Test");
   test->add( BOOST_TEST_CASE( &XMLImportTest), 0);
   test->add( BOOST_TEST_CASE( &SimpleTest), 0);
-  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
+ // test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
   return test;
 }
 

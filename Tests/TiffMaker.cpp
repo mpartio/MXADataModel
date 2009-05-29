@@ -1,9 +1,11 @@
-/*
- * TiffMaker.cpp
- *
- *  Created on: Sep 22, 2008
- *      Author: mjackson
- */
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
 
 #include "TiffMaker.h"
 
@@ -13,6 +15,8 @@
 
 //-- std C++ headers
 #include <iostream>
+
+#define USE_LZW_COMPRESSION 1
 
 // -----------------------------------------------------------------------------
 //
@@ -76,12 +80,16 @@ void TiffMaker::createTiffFile(const std::string &filename)
   // Write the tiff tags to the file
   TIFFSetField(output, TIFFTAG_IMAGEWIDTH, width);
   TIFFSetField(output, TIFFTAG_IMAGELENGTH, height);
-  TIFFSetField(output, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
   TIFFSetField(output, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
   TIFFSetField(output, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
   TIFFSetField(output, TIFFTAG_BITSPERSAMPLE, 8);
   TIFFSetField(output, TIFFTAG_SAMPLESPERPIXEL, 3);
+#if USE_LZW_COMPRESSION
+  TIFFSetField(output, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+  TIFFSetField(output, TIFFTAG_PREDICTOR, PREDICTOR_HORIZONTAL);
+#else
   TIFFSetField(output, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+#endif
   // Actually write the image
   if (TIFFWriteEncodedStrip(output, 0, raster, width * height * 3) == 0)
   {
