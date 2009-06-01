@@ -63,12 +63,16 @@ class IMXAArray;
 
 #define HDF_ERROR_HANDLER_ON  H5Eset_auto(_oldHDF_error_func, _oldHDF_error_client_data);
 
+
+#define UNUSED(x) ((void)(x));
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-  herr_t find_attr( hid_t loc_id, const char *name, void *op_data);
+  herr_t MXA_EXPORT find_attr( hid_t loc_id, const char *name, void *op_data);
 
-  herr_t find_dataset( hid_t loc_id, const char *name, void *op_data);
+  herr_t MXA_EXPORT find_dataset( hid_t loc_id, const char *name, void *op_data);
+
 #ifdef __cplusplus
 }
 #endif
@@ -1483,6 +1487,14 @@ static MXA_EXPORT IMXAArray* readMXAAttribute(hid_t loc_id,
 protected:
   H5Lite();
   ~H5Lite();
+
+
+private:
+   void NEVER_USED() {
+     herr_t ret = H5Aiterate( 0, NULL, find_attr, (void *)(NULL) );
+     ret = H5Giterate( 0, NULL, 0, find_dataset, (void *)(NULL) );
+     ret =0;
+   }
 };
 
 #endif
