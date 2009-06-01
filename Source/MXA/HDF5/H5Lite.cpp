@@ -21,7 +21,7 @@
  *
  *-------------------------------------------------------------------------
  */
-static herr_t find_dataset( hid_t loc_id, const char *name, void *op_data)
+herr_t find_dataset( hid_t loc_id, const char *name, void *op_data)
 {
 
  /* Define a default zero value for return. This will cause the iterator to continue if
@@ -50,7 +50,7 @@ static herr_t find_dataset( hid_t loc_id, const char *name, void *op_data)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-static herr_t find_attr( hid_t loc_id, const char *name, void *op_data)
+herr_t find_attr( hid_t loc_id, const char *name, void *op_data)
 {
 
  /* Define a default zero value for return. This will cause the iterator to continue if
@@ -1025,7 +1025,7 @@ herr_t H5Lite::writeMXAArray(hid_t loc_id,
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 herr_t H5Lite::writeMXAAttribute(hid_t loc_id,
                             const std::string &objName,
@@ -1247,10 +1247,10 @@ IMXAArray* H5Lite::readMXAArray(hid_t loc_id,
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-IMXAArray* H5Lite::readMXAAttribute(hid_t loc_id, 
-                                   const std::string &dsetName, 
+IMXAArray* H5Lite::readMXAAttribute(hid_t loc_id,
+                                   const std::string &dsetName,
                                    const std::string &attributeKey)
  {
 
@@ -1329,7 +1329,7 @@ IMXAArray* H5Lite::readMXAAttribute(hid_t loc_id,
           break;
         default:
           std::cout << "Error:" << __FILE__ << "(" << __LINE__ << ")"  << std::endl;
-        
+
       }
       //  CloseH5T(typeId, err, retErr);
       // hid_t dataType = data->getDataType();

@@ -322,6 +322,10 @@ std::string MXAFileSystemPath::filename(const std::string &fsPath)
   }
 
   std::string fn = fsPath.substr(slashPos + 1, fsPath.size() - slashPos);
+  if (fn.at(fn.size()-1) == '.')
+  {
+    return fn.substr(0, fn.size() - 1);
+  }
   return fn;
 }
 

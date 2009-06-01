@@ -63,6 +63,16 @@ class IMXAArray;
 
 #define HDF_ERROR_HANDLER_ON  H5Eset_auto(_oldHDF_error_func, _oldHDF_error_client_data);
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+  herr_t find_attr( hid_t loc_id, const char *name, void *op_data);
+
+  herr_t find_dataset( hid_t loc_id, const char *name, void *op_data);
+#ifdef __cplusplus
+}
+#endif
+
 /**
  * @brief Class to bring together some high level methods to read/write data to HDF5 files.
  * @class H5Lite
