@@ -233,6 +233,16 @@ static MXA_EXPORT herr_t H5IMis_image( hid_t loc_id,
 static MXA_EXPORT herr_t H5IMis_palette( hid_t loc_id,
                      std::string datasetName );
 
+/**
+ * @brief Retrieves the image dimensions from the mxa file
+ * @param fileId The hdf5 fileid of the mxa file
+ * @param datasetPath The complete path to the image data set.
+ * @param imageDims The dimensions (width, height) of the image
+ * @return Error code. Less than Zero (0) is an error.
+ */
+static MXA_EXPORT herr_t H5IMget_image_dimensions(hid_t fileId,
+                             const std::string datasetPath,
+                             int imageDims[2]);
 };
 
 

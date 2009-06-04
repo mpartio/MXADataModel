@@ -122,6 +122,29 @@ static Pointer New(void) \
 
 
 
+
+
+
+#define MXA_SET_2DVECTOR_PROPERTY(type, prpty, varname)\
+  void set##prpty(type value[2]) {\
+      varname[0] = value[0]; varname[1] = value[1]; }\
+  void set##prpty(type value_0, type value_1) {\
+      varname[0] = value_0; varname[1] = value_1; }
+
+#define MXA_GET_2DVECTOR_PROPERTY(type, prpty, varname)\
+  void get##prpty(type value[2]) {\
+      value[0] = varname[0]; value[1] = varname[1]; }\
+  void get##prpty(type &value_0, type &value_1) {\
+      value_0 = varname[0]; value_1 = varname[1]; }
+
+#define MXA_INSTANCE_2DVECTOR_PROPERTY(type, prpty, varname)\
+  private:\
+    type   varname[2];\
+  public:\
+    MXA_SET_2DVECTOR_PROPERTY(type, prpty, varname)\
+    MXA_GET_2DVECTOR_PROPERTY(type, prpty, varname)
+
+
 /**
 * @brief Creates a "setter" method to set the property.
 */

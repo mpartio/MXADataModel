@@ -1270,3 +1270,37 @@ out:
  return -1;
 
 }
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int H5Image::H5IMget_image_dimensions(hid_t loc_id,
+                                      const std::string datasetName,
+                                      int iDims[2])
+{
+  hid_t did, sid;
+  hsize_t dims[3];
+  herr_t err = 0;
+
+  /* Open the dataset. */
+  did = H5Dopen(loc_id, datasetName.c_str());
+  if (did < 0)
+  {
+    return did;
+  }
+
+  /* Get the dataspace handle */
+  sid = H5Dget_space(did);
+  if (sid >= 0)
+  {
+    /* Get dimensions */
+    err = H5Sget_simple_extent_dims(sid, dims, NULL);
+    if (err >= 0)
+    {
+      iDims[1] = dims[0];
+      iDims[0] = dims[1];
+    }
+    err = H5Sclose(sid);
+  }
+  err = H5Dclose(did);
+  return err;
+}
