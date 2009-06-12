@@ -554,10 +554,10 @@ class MXAArrayTemplate : public IMXAArray
    * @param takeOwnership Will the class clean up the memory. Default=true
      */
       MXAArrayTemplate(int32 numElements,
-                               bool takeOwnership = true) :
+                               bool ownsData = true) :
         _data(NULL),
         _nElements(numElements),
-        _ownsData(takeOwnership)
+        _ownsData(ownsData)
       {
         _dims.resize(1);
         _dims[0] = numElements;
@@ -571,9 +571,9 @@ class MXAArrayTemplate : public IMXAArray
    */
       MXAArrayTemplate(int32 numDims,
                        const uint64* dims,
-                       bool takeOwnership = true) :
+                       bool ownsData = true) :
         _data(NULL),
-        _ownsData(takeOwnership)
+        _ownsData(ownsData)
       {
         _dims.resize(numDims);
         ::memcpy( &(_dims.front()), dims, numDims * sizeof(uint64));

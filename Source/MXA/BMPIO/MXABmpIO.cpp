@@ -337,10 +337,10 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
         {
           if (x>=width)
             return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
-          int32 index = y*width*3+x*3;
-          bitmapData[index] = palette[0][secondByte];
-          bitmapData[index+1] = palette[1][secondByte];
-          bitmapData[index+2] = palette[2][secondByte];
+          int32 idx = y*width*3+x*3;
+          bitmapData[idx] = palette[0][secondByte];
+          bitmapData[idx+1] = palette[1][secondByte];
+          bitmapData[idx+2] = palette[2][secondByte];
           x++;
         }        // end for (int i=0;i<firstByte;i++)
       }

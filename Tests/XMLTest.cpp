@@ -408,7 +408,7 @@ void XMLTemplateTest()
   //We can write the model back out to XML without any errors
   {
     XMLDataModelWriter writer(readModel, MXAUnitTest::XMLTest::TemplateCompleteFile);
-    int32 err = writer.writeModelToFile(-1);
+    err = writer.writeModelToFile(-1);
     BOOST_REQUIRE ( err >= 0);
   }
   std::cout << "....... Passed" << std::endl;
