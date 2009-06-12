@@ -71,10 +71,12 @@ INCLUDE (${MXA_CMAKE_DIR}/vtkTestTypes.cmake )
 INCLUDE (${MXA_CMAKE_DIR}/ConfigureChecks.cmake)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
-OPTION(BUILD_TESTING "Build MXADataModel Unit Testing" ON)
-IF(BUILD_TESTING)
+if (NOT DEFINED MXA_BUILD_TESTING)
+    OPTION(MXA_BUILD_TESTING "Build MXADataModel Unit Testing" ON)
+endif()
+IF(MXA_BUILD_TESTING)
   ENABLE_TESTING()
-ENDIF(BUILD_TESTING)
+ENDIF(MXA_BUILD_TESTING)
 
 # Extend the include path to include the MXADataModel source directory
 INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}" )
@@ -270,9 +272,9 @@ IF (MINGW AND BUILD_SHARED_LIBS)
 ENDIF (MINGW AND BUILD_SHARED_LIBS)
 
 #-- Include the MXADataModel Testing Sources
-IF ( BUILD_TESTING )
+IF ( MXA_BUILD_TESTING )
   ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Tests ${PROJECT_BINARY_DIR}/Tests)
-ENDIF ( BUILD_TESTING )
+ENDIF ( MXA_BUILD_TESTING )
 
 #-- Include the Examples Directory
 OPTION(MXA_BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)

@@ -10,7 +10,11 @@ SET (Boost_FIND_QUIETLY TRUE)
 set (Boost_USE_MULTITHREADED TRUE)
 set (Boost_USE_STATIC_LIBS TRUE)
 
-FIND_PACKAGE(Boost 1.36 COMPONENTS  program_options unit_test_framework test_exec_monitor)
+if ( NOT MXA_BOOST_HEADERS_ONLY)
+ set (MXA_BOOST_COMPONENTS program_options unit_test_framework test_exec_monitor)
+endif()
+
+FIND_PACKAGE(Boost 1.36 COMPONENTS  ${MXA_BOOST_COMPONENTS} )
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
 #SET(DEP_LIBS ${DEP_LIBS} ${Boost_LIBRARIES})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
