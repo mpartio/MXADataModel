@@ -51,7 +51,6 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 #-------------------------------------------------------------------------------
 #  Define the location of the Resources Directory
-#-------------------------------------------------------------------------------
 SET (MXA_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
 SET (MXA_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Source)
 SET (MXA_CMAKE_DIR ${MXA_RESOURCES_DIR}/CMake)
