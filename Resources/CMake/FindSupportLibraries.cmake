@@ -15,8 +15,7 @@ if ( NOT MXA_BOOST_HEADERS_ONLY)
 endif()
 
 FIND_PACKAGE(Boost 1.36 COMPONENTS  ${MXA_BOOST_COMPONENTS} )
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
-#SET(DEP_LIBS ${DEP_LIBS} ${Boost_LIBRARIES})
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
 #-------------------------------------------------------------------------------
