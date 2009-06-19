@@ -20,7 +20,7 @@
 * @class IRequiredMetaData IRequiredMetaData.h Base/IRequiredMetaData.h
 * @brief This class holds all the required meta data that is used by the
 * MXADataModel and is included in each data file.
-* @author Mike Jackson for IMTS.us
+* @author Mike Jackson for BlueQuartz Software.us
 * @date Jan 15, 2008
 * @version $Revision: 1.2 $
 */

@@ -12,7 +12,7 @@
  * access to either file, you may request a copy from hdfhelp@ncsa.uiuc.edu. *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-* This code has been modified by Mike Jackson at IMTS to allow for better    *
+* This code has been modified by Mike Jackson at BlueQuartz Software to allow for better    *
 *  integration into C++ environments.                                        *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include <MXA/HDF5/H5Image.h>

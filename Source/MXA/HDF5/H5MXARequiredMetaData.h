@@ -21,7 +21,7 @@
 /**
 * @class H5MXARequiredMetaData H5MXARequiredMetaData.h HDF5/H5MXARequiredMetaData.h
 * @brief Concrete implmentation of the IRequiredMetaData virtual class.
-* @author Mike Jackson  for IMTS.us
+* @author Mike Jackson  for BlueQuartz Software.us
 * @date Jan 15, 2008
 * @version $Revision: 1.2 $
 */

@@ -40,7 +40,7 @@
  * @class MXAFileWriter64 MXAFileWriter64.h MXA/Common/IO/MXAFileWriter64.h
  * @brief This class is a wrapper around platform specific native streams to make
  * sure that we can write files larger than 2GB
- * @author Mike Jackson @ IMTS.us
+ * @author Mike Jackson @ BlueQuartz Software.us
  * @date August 2007
  * @version $Revision: 1.2 $
  */

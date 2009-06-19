@@ -25,7 +25,7 @@
 /**
  * @brief A concrete implementation of the IDataDimension Abstract Class.
  * 
- * @author Mike Jackson @ IMTS.us 
+ * @author Mike Jackson @ BlueQuartz Software.us 
  * @date March 2007
  * @version $Revision: 1.2 $
  *  
