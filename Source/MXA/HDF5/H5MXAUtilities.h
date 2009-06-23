@@ -11,8 +11,8 @@
 #ifndef H5MXAUTILITIES_H_
 #define H5MXAUTILITIES_H_
 
-// #include <MXA/Common/MXATypes.h>
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IDataModel.h>
+#include <MXA/Base/IDataFile.h>
 
 /**
 * @class H5MXAUtilities H5MXAUtilities.h HDF5/H5MXAUtilities.h
@@ -36,9 +36,9 @@ class H5MXAUtilities
      * @param record The MXADataRecord to generate the path to
      * @return The hdf5 path
      */
-    static MXA_EXPORT std::string generateH5PathToDataset (  IDataModelPtr model,
+    static MXA_EXPORT std::string generateH5PathToDataset (  IDataModel::Pointer model,
                                                   std::vector<int32> &indices,
-                                                  IDataRecordPtr record);
+                                                  IDataRecord::Pointer record);
 
    /**
    * @brief Reads a dataset from an HDF5 data file into a newly allocated MXAAbstractData
@@ -47,7 +47,7 @@ class H5MXAUtilities
    * @param datasetPath The internal HDF5 path to the data, relative to the root of the data file
    * @return
    */
-    static MXA_EXPORT IMXAArrayPtr readData(IDataFilePtr dataFile, const std::string &datasetPath);
+    static MXA_EXPORT IMXAArray::Pointer readData(IDataFile::Pointer dataFile, const std::string &datasetPath);
 
     /**
     * @brief Reads an attribute from an HDF5 data file into a newly allocated MXAAbstractAttribute
@@ -57,7 +57,7 @@ class H5MXAUtilities
     * @param attributeKey The name of the attribute to read
     * @return
     */
-    static MXA_EXPORT IMXAArrayPtr readAttribute(IDataFilePtr dataFile, const std::string &datasetPath, const std::string &attributeKey);
+    static MXA_EXPORT IMXAArray::Pointer readAttribute(IDataFile::Pointer dataFile, const std::string &datasetPath, const std::string &attributeKey);
 
 
 

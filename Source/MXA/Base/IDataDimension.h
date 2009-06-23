@@ -16,6 +16,7 @@
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataDimensionWriter.h>
 
+#include <vector>
 
 /**
  * @brief The formal interface description for a DataDimension
@@ -31,6 +32,8 @@ class MXA_EXPORT IDataDimension
     virtual ~IDataDimension() {};
 
     MXA_SHARED_POINTERS(IDataDimension);
+    typedef std::vector<Pointer>            Container;
+
     typedef int32 size_type;
 
     /**

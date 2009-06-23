@@ -60,7 +60,7 @@ void RemoveTestFiles()
 template<typename T>
 void MakeScalarAttribute(T value, std::string key, MXADataModel* model)
 {
-  IMXAArrayPtr umd = MXAArrayTemplate<T>::CreateSingleValueArray( value);
+  IMXAArray::Pointer umd = MXAArrayTemplate<T>::CreateSingleValueArray( value);
   model->addUserMetaData(key, umd);
 }
 
@@ -77,7 +77,7 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
       numelements *= *(iter);
     }
 
-    IMXAArrayPtr vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()) );
+    IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()) );
     // Copy data into the attribute container
     T* data = static_cast<T*>( vecPtr->getVoidPointer(0) );
     for (uint32 i = 0; i < numelements; ++i)
@@ -139,7 +139,7 @@ void CreateAttributes(MXADataModel* model)
     MakeScalarAttribute( f64, "Scalar Float 64", model);
 
     // String attributes
-    IMXAArrayPtr s1 = MXAAsciiStringData::Create("DaddyO");
+    IMXAArray::Pointer s1 = MXAAsciiStringData::Create("DaddyO");
     model->addUserMetaData("Password", s1);
 
 }
@@ -165,12 +165,12 @@ MXADataModel::Pointer createModel()
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
 	  // ---------- Test creation/addition of Data Dimensions
-	  IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
+	  IDataDimension::Pointer dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
 	  errorMessage.clear();
 	  BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
-	  IDataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed",  10, 1000, 5000, 500, 1);
-	  IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS",  100, 0, 99, 1, 1);
-	  IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice",  256, 0, 255, 1, 1);
+	  IDataDimension::Pointer dim1 = model->addDataDimension("Random Seed", "Rnd Seed",  10, 1000, 5000, 500, 1);
+	  IDataDimension::Pointer dim2 = model->addDataDimension("Timestep", "TS",  100, 0, 99, 1, 1);
+	  IDataDimension::Pointer dim3 = model->addDataDimension("Slice", "slice",  256, 0, 255, 1, 1);
 
 
 
@@ -240,7 +240,7 @@ void TestRequiredMetaData()
   std::string pedigree("");
   std::string derivedSrcFile("");
 
-  IRequiredMetaDataPtr metaData = H5MXARequiredMetaData::New(researcherName, dateCreated,
+  IRequiredMetaData::Pointer metaData = H5MXARequiredMetaData::New(researcherName, dateCreated,
                                    datasetName, description, distributionRights,
                                    releaseNumber, pedigree, derivedSrcFile);
   BOOST_REQUIRE(metaData->isValid(errorMessage) == false);
@@ -310,7 +310,7 @@ void TestRequiredMetaData()
 // -----------------------------------------------------------------------------
 bool recordExists(MXADataModel::Pointer model, std::string recName)
 {
-  IDataRecordPtr rec = model->getDataRecordByNamedPath(recName);
+  IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName);
   return (rec.get() != NULL) ? true : false;
 }
 
@@ -319,7 +319,7 @@ bool recordExists(MXADataModel::Pointer model, std::string recName)
 // -----------------------------------------------------------------------------
 bool recordInternalPathExists(MXADataModel::Pointer model, std::string recName)
 {
-  IDataRecordPtr rec = model->getDataRecordByInternalPath(recName);
+  IDataRecord::Pointer rec = model->getDataRecordByInternalPath(recName);
   return (rec.get() != NULL) ? true : false;
 }
 
@@ -330,10 +330,10 @@ void TestLookupTableGeneration()
 {
   std::cout << "TestLookupTableGeneration Running...." << std::endl;
   MXADataModel::Pointer modelPtr = createModel();
-  IDataRecords records = modelPtr->getDataRecords();
-  IDataRecordLookupTable lut;
+  IDataRecord::Container records = modelPtr->getDataRecords();
+  IDataRecord::LookupTable lut;
   MXADataRecord::generateLUT(lut, records);
-  for (IDataRecordLookupTable::iterator iter = lut.begin(); iter != lut.end(); ++iter )
+  for (IDataRecord::LookupTable::iterator iter = lut.begin(); iter != lut.end(); ++iter )
   {
     MXADataRecord* rec = dynamic_cast<MXADataRecord*>( (*(iter)).second.get() );
     std::cout << (*(iter)).first << "  " << rec->getRecordName() << std::endl;
@@ -391,11 +391,11 @@ void TestDataDimensionMethods()
   MXADataModel::Pointer model = createModel(); // Created on the stack
   int32 error = 0;
 
-  IDataDimensionPtr dim0 = model->getDataDimension(0);
-  IDataDimensionPtr dim1 = model->getDataDimension(1);
-  IDataDimensionPtr dim2 = model->getDataDimension(2);
-  IDataDimensionPtr dim3 = model->getDataDimension(3);
-  IDataDimensionPtr dimNull = model->getDataDimension(4);
+  IDataDimension::Pointer dim0 = model->getDataDimension(0);
+  IDataDimension::Pointer dim1 = model->getDataDimension(1);
+  IDataDimension::Pointer dim2 = model->getDataDimension(2);
+  IDataDimension::Pointer dim3 = model->getDataDimension(3);
+  IDataDimension::Pointer dimNull = model->getDataDimension(4);
   BOOST_REQUIRE(dim0.get() != NULL);
   BOOST_REQUIRE(dim1.get() != NULL);
   BOOST_REQUIRE(dim2.get() != NULL);
@@ -405,7 +405,7 @@ void TestDataDimensionMethods()
   //Test removing by index
   error = model->removeDataDimension(3); // Remove the last Dimension
   BOOST_REQUIRE( error > 0);
-  IDataDimensionPtr test = model->getDataDimension(2);
+  IDataDimension::Pointer test = model->getDataDimension(2);
   BOOST_REQUIRE(test != dim3);
   BOOST_REQUIRE(model->getDataDimensions().size() == 3);
 
@@ -433,16 +433,16 @@ void WriteTestModel()
   {
     std::cout << "WriteTestModel Running....";
     MXADataModel::Pointer modelPtr = createModel();
-    IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(MXAUnitTest::DataModelTest::BeforeH5File, modelPtr);
+    IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(MXAUnitTest::DataModelTest::BeforeH5File, modelPtr);
     BOOST_REQUIRE(dataFile.get() != 0x0);
     std::cout << "......Passed" << std::endl;
   }
 
   {
     std::cout << "Read DataModel Running...." ;
-    IDataFilePtr dataFile = H5MXADataFile::OpenFile(MXAUnitTest::DataModelTest::BeforeH5File, false);
+    IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(MXAUnitTest::DataModelTest::BeforeH5File, false);
     BOOST_REQUIRE(dataFile.get() != 0x0);
-    IDataModelPtr modelPtr = dataFile->getDataModel();
+    IDataModel::Pointer modelPtr = dataFile->getDataModel();
     BOOST_REQUIRE(modelPtr.get() != 0x0);
     // Resave the model. This should work with out any problems.
     BOOST_REQUIRE (dataFile->saveDataModel() >= 0);
@@ -463,13 +463,13 @@ void ReWriteModelTest()
   std::string outFilename(MXAUnitTest::DataModelTest::AfterH5File);
 
   {
-    IDataFilePtr dataFile = H5MXADataFile::OpenFile(inFilename, false);
+    IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(inFilename, false);
     BOOST_REQUIRE(dataFile.get() != 0x0);
 
-    IDataModelPtr modelPtr  = dataFile->getDataModel();
+    IDataModel::Pointer modelPtr  = dataFile->getDataModel();
     BOOST_REQUIRE(modelPtr.get() != 0x0);
 
-    IDataFilePtr outFile = H5MXADataFile::CreateFileWithModel(outFilename, modelPtr);
+    IDataFile::Pointer outFile = H5MXADataFile::CreateFileWithModel(outFilename, modelPtr);
     BOOST_REQUIRE(outFile.get() != 0x0);
   }
 
@@ -482,7 +482,7 @@ void ReWriteModelTest()
 void TestDimensionCount()
 {
   std::cout << "Testing Dimension Count Running...." ;
-  IDataDimensionPtr dim = MXADataDimension::New("Test", "Test", 0, 10, 0, 9, 1, 1);
+  IDataDimension::Pointer dim = MXADataDimension::New("Test", "Test", 0, 10, 0, 9, 1, 1);
   int32 count = dim->calculateCount();
   BOOST_REQUIRE(count == 10);
 
@@ -555,10 +555,10 @@ void TestDataRecordRemoval()
   std::cout << "TestDataRecordRemoval Running....";
   MXADataModel::Pointer modelPtr = createModel();
   MXADataModel* model = modelPtr.get();
-  IDataRecordPtr nullRec;
-  IDataRecordPtr r0;
+  IDataRecord::Pointer nullRec;
+  IDataRecord::Pointer r0;
   {
-    IDataRecords records = model->getDataRecords();
+    IDataRecord::Container records = model->getDataRecords();
     r0 = records[0];
     BOOST_REQUIRE( r0.use_count() == 3);
     model->removeDataRecord(r0);
@@ -581,7 +581,7 @@ void TestDataModelOverWrite()
 
 
     MXADataModel::Pointer modelPtr = createModel();
-    IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outFilename, modelPtr);
+    IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(outFilename, modelPtr);
     // Make sure nothing went wrong in the file creation
     BOOST_REQUIRE(dataFile.get() != 0x0);
     //Make sure the model pointers are the same. They SHOULD be.
@@ -589,8 +589,8 @@ void TestDataModelOverWrite()
 
     MXADataModel* model = modelPtr.get();
     // Update one of the dimensions
-    IDataDimensionPtr dim0 = model->getDataDimension(0);
-    //IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
+    IDataDimension::Pointer dim0 = model->getDataDimension(0);
+    //IDataDimension::Pointer dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
     dim0->setStartValue(0);
     dim0->setEndValue(9);
     dim0->setIncrement(1);
@@ -623,10 +623,10 @@ void TestDataModelOverWrite()
   }
   //Reread the model from the file and compare values
   {
-    IDataFilePtr dataFile = H5MXADataFile::OpenFile(outFilename, true);
+    IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(outFilename, true);
     BOOST_REQUIRE(dataFile.get() != 0x0);
-    IDataModelPtr modelPtr = dataFile->getDataModel();
-    IDataDimensionPtr dim0 = modelPtr->getDataDimension(0);
+    IDataModel::Pointer modelPtr = dataFile->getDataModel();
+    IDataDimension::Pointer dim0 = modelPtr->getDataDimension(0);
     BOOST_REQUIRE ( dim0->getCount() == 10);
     BOOST_REQUIRE ( dim0->getStartValue() == 0);
     BOOST_REQUIRE ( dim0->getEndValue() == 9);
@@ -648,7 +648,7 @@ void SharedPointerTest()
   IDataDimension::Pointer dim = model->getDataDimension(0);
 
   IDataDimension::Pointer nDim = MXADataDimension::New("Name", "Name", 0, 10, 0, 9, 1, 1);
-  IDataModelPtr nModel = MXADataModel::New(MXA::MXACurrentFileVersion, MXA::ModelType, "Data");
+  IDataModel::Pointer nModel = MXADataModel::New(MXA::MXACurrentFileVersion, MXA::ModelType, "Data");
   nModel->addDataDimension(nDim);
   //nModel->printModel(std::cout, 2);
   std::cout << "......Passed" << std::endl;

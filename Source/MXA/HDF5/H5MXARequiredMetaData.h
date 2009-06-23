@@ -45,7 +45,7 @@ class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
      * const std::string MXA_RIGHTS_LIMITED_VALUE("Limited");
      * const std::string MXA_RELEASE_LIMITATION_TAG("Release_Limitation");
      */
-    static IRequiredMetaDataPtr New( std::string researcherName,
+    static IRequiredMetaData::Pointer New( std::string researcherName,
                                      std::string dateCreated,
                                      std::string datasetName,
                                      std::string description,
@@ -55,11 +55,11 @@ class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
                                      std::string derivedSrcFile);
 
     /**
-     * @brief Creates a new IRequiredMetaDataPtr object that has all empty values.
+     * @brief Creates a new IRequiredMetaData::Pointer object that has all empty values.
      * Note that this will make it INVALID. You are required to fill in the appropriate values
      * to make it valid. This is provided as a convenience.
      */
-    static IRequiredMetaDataPtr DefaultMetaData();
+    static IRequiredMetaData::Pointer DefaultMetaData();
 
     virtual ~H5MXARequiredMetaData();
 
@@ -116,8 +116,8 @@ class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
     int32 setValueForKey(const std::string &key, const std::string &value);
     std::string getValueForKey (const std::string &key);
 
-    int32 writeToFile (IDataFilePtr dataFile);
-    int32 readFromFile (IDataFilePtr dataFile);
+    int32 writeToFile (IDataFile::Pointer dataFile);
+    int32 readFromFile (IDataFile::Pointer dataFile);
 
     bool isValid(std::string message);
 

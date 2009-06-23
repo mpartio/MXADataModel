@@ -11,7 +11,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-XMLDataModelWriter::XMLDataModelWriter( IDataModelPtr dataModel, const std::string &fileName) :
+XMLDataModelWriter::XMLDataModelWriter( IDataModel::Pointer dataModel, const std::string &fileName) :
   _dataModel(dataModel),
   _fileName(fileName),
   _dataRecordIndentation(2)
@@ -205,9 +205,9 @@ void XMLDataModelWriter::_writeDataRoot(int32 depth)
 int32 XMLDataModelWriter::writeDataDimensions(int32 depth)
 {
   _openTag(MXA_XML::Data_Dimensions, depth);
-  IDataDimensions dimensions = _dataModel->getDataDimensions();
+  IDataDimension::Container dimensions = _dataModel->getDataDimensions();
   MXADataDimension* dim;
-  for (IDataDimensions::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
+  for (IDataDimension::Container::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
   {
     dim = static_cast<MXADataDimension*> ( (*(iter)).get() );
     dim->writeDimension(this);
@@ -223,10 +223,10 @@ int32 XMLDataModelWriter::writeDataRecords(int32 depth)
 {
 
   _openTag(MXA_XML::Data_Records, this->_dataRecordIndentation);
-  IDataRecords records =  _dataModel->getDataRecords();
+  IDataRecord::Container records =  _dataModel->getDataRecords();
   MXADataRecord* rec;
   int32 err = 0;
-  for ( IDataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
+  for ( IDataRecord::Container::iterator iter = records.begin(); iter < records.end(); ++iter )
   {
     rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
     err = rec->writeRecord(this);
@@ -243,7 +243,7 @@ int32 XMLDataModelWriter::writeRequiredMetaData(int32 depth)
 {
   std::map<std::string, std::string> meta;
   _dataModel->getRequiredMetaData();
-  IRequiredMetaDataPtr metaData = _dataModel->getRequiredMetaData();
+  IRequiredMetaData::Pointer metaData = _dataModel->getRequiredMetaData();
   metaData->generateKeyValueMap(meta);
   _openTag(MXA_XML::Required_MD, depth, false, meta);
   return 1;
@@ -263,7 +263,7 @@ int32 XMLDataModelWriter::writeUserMetaData(int32 depth)
 
   MXAAbstractAttributes metadata = _dataModel->getUserMetaData();
   for (MXAAbstractAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
-    IMXAArrayPtr attr = (*iter).second;
+    IMXAArray::Pointer attr = (*iter).second;
     std::string attributeKey = (*iter).first;
     XMLMXAAttributeWriter writer(_ofstreamPtr);
     if (NULL != attr.get() )
@@ -330,8 +330,8 @@ int32 XMLDataModelWriter::writeDataRecord(IDataRecord* record)
   if ( dynamic_cast<IDataRecord*>(record)->hasChildren() ) {
     _openTag(MXA_XML::Signal_Group, this->_dataRecordIndentation, true, attrs);
     MXADataRecord* rec;
-    IDataRecords records = dynamic_cast<IDataRecord*>(record)->getChildren();
-    for ( IDataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
+    IDataRecord::Container records = dynamic_cast<IDataRecord*>(record)->getChildren();
+    for ( IDataRecord::Container::iterator iter = records.begin(); iter < records.end(); ++iter )
     {
       rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
       err = rec->writeRecord(this);
@@ -351,9 +351,9 @@ int32 XMLDataModelWriter::writeSupportFiles(int32 indentDepth)
 {
   int32 err = 0;
   std::map<std::string, std::string> attrs;
-  ISupportFiles files = this->_dataModel->getSupportFiles();
+  ISupportFile::Container files = this->_dataModel->getSupportFiles();
   ISupportFile* file;
-  for (ISupportFiles::iterator iter = files.begin(); iter != files.end(); ++iter ) {
+  for (ISupportFile::Container::iterator iter = files.begin(); iter != files.end(); ++iter ) {
     file = (*iter).get();
     if (NULL != file)
     {

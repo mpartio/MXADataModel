@@ -39,12 +39,12 @@
 // Declare methods
 void listDataDimensions(MXADataModel* model);
 void listDataRecords(MXADataModel* model);
-IMXAArrayPtr captureSampleImage();
-IMXAArrayPtr captureSampleSignal();
+IMXAArray::Pointer captureSampleImage();
+IMXAArray::Pointer captureSampleSignal();
 int32 generateData();
 int32 readData();
 void miscTest();
-IMXAArrayPtr readRGBImageFromFile(IDataFilePtr dataFile, const std::string &datasetPath);
+IMXAArray::Pointer readRGBImageFromFile(IDataFile::Pointer dataFile, const std::string &datasetPath);
 
 // -----------------------------------------------------------------------------
 //
@@ -72,7 +72,7 @@ std::cout << logTime() << "Example 2 Starting" << std::endl;
 // -----------------------------------------------------------------------------
 void miscTest()
 {
-  IDataFilePtr dataFile = H5MXADataFile::OpenFile("/Users/mjackson/Desktop/OimFib_Test_Data.mxa", true);
+  IDataFile::Pointer dataFile = H5MXADataFile::OpenFile("/Users/mjackson/Desktop/OimFib_Test_Data.mxa", true);
   hid_t fileId = dataFile->getFileId();
 
   //H5G_stat_t statbuf;
@@ -93,23 +93,23 @@ void miscTest()
 int32 readData()
 {
   // Open the data file in read-only mode
-  IDataFilePtr dataFile = H5MXADataFile::OpenFile(Examples::Example2File, true);
+  IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(Examples::Example2File, true);
   if (dataFile.get() == NULL)
   { // CHeck for a good open operation. If something failed during the open operation
     //  then the pointer will be NULL;
     return EXIT_FAILURE;
   }
 
-  IDataModelPtr modelPtr = dataFile->getDataModel();
+  IDataModel::Pointer modelPtr = dataFile->getDataModel();
   //Now we need to get each MXADataDimension from the Model so we know what
   // values to use in our loop.
 
-  IDataDimensionPtr timeDim = modelPtr->getDataDimension(0);
+  IDataDimension::Pointer timeDim = modelPtr->getDataDimension(0);
   if (timeDim.get() == NULL)
   {
     return EXIT_FAILURE;
   }
-  IDataDimensionPtr pressureDim = modelPtr->getDataDimension(1);
+  IDataDimension::Pointer pressureDim = modelPtr->getDataDimension(1);
   if (pressureDim.get() == NULL)
   {
     return EXIT_FAILURE;
@@ -120,8 +120,8 @@ int32 readData()
   //  pressure indexes. These indexes allow for the construction of the internal HDF5
   // path to the actual data.
   std::vector<int32> indices (2,0);
-  IDataRecordPtr cameraRec = modelPtr->getDataRecordByNamedPath("Camera");
-  IDataRecordPtr tempRec = modelPtr->getDataRecordByNamedPath("Temperature");
+  IDataRecord::Pointer cameraRec = modelPtr->getDataRecordByNamedPath("Camera");
+  IDataRecord::Pointer tempRec = modelPtr->getDataRecordByNamedPath("Temperature");
   if (cameraRec.get() == NULL || tempRec.get() == NULL)
   {
     return EXIT_FAILURE;
@@ -136,7 +136,7 @@ int32 readData()
       std::string tempPath = H5MXAUtilities::generateH5PathToDataset(modelPtr, indices, tempRec);
 
       // We know the "Camera" signal was an RGBArray, so we create an MXARGBImage to hold the data;
-      IMXAArrayPtr image = readRGBImageFromFile(dataFile, cameraPath);
+      IMXAArray::Pointer image = readRGBImageFromFile(dataFile, cameraPath);
       if (err < 0) {
         std::cout << DEBUG_OUT(logTime) << "cameraPath: " << cameraPath << std::endl;
         return EXIT_FAILURE;
@@ -181,7 +181,7 @@ int32 generateData()
   int32 end = 9;
   int32 increment = 1;
   int32 uniform = 1;
-  MXADataDimensionPtr dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
+  MXADataDimension::Pointer dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
 
   // The second dimension will have 4 elements ranging from 2 to 8 with an increment of 2;
   index = 1;
@@ -190,7 +190,7 @@ int32 generateData()
   end = 800;
   increment = 200;
   uniform = 1;
-  MXADataDimensionPtr dim2 = MXADataDimension::New("Pressure", "Press (kPa)", index, count, start, end, increment, uniform);
+  MXADataDimension::Pointer dim2 = MXADataDimension::New("Pressure", "Press (kPa)", index, count, start, end, increment, uniform);
 
   //Next we need to add these dimensions to the model. Since we are using Boost shared pointers
   // the dimension objects are refcounted thus relieving us from having to worry about cleaning up
@@ -232,7 +232,7 @@ int32 generateData()
 
   //Write the model to a new HDF5 file, deleting any existing file and
   // allowing the Hdf5 file to remain open for further processing
-  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(Examples::Example2File, modelPtr);
+  IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(Examples::Example2File, modelPtr);
 
   if (NULL == dataFile.get() )
   {
@@ -252,7 +252,7 @@ int32 generateData()
 
 
   MXAArrayTemplate<float32>* temperatureArray = MXAArrayTemplate<float32>::New(1);
-  IMXAArrayPtr temperaturePtr(temperatureArray); // Let boost clean up the memory when we are finished with it
+  IMXAArray::Pointer temperaturePtr(temperatureArray); // Let boost clean up the memory when we are finished with it
   int32 err = 0;
   // Define the height/width of our camera "image"
   std::vector<hsize_t> dims (2,0);
@@ -270,7 +270,7 @@ int32 generateData()
 
       temperatureArray->setValue(0, temperature);
 
-      IDatasetPtr tempDataset = H5Dataset::CreateDatasetPtr(temperaturePath, temperaturePtr);
+      IDataset::Pointer tempDataset = H5Dataset::CreateDatasetPtr(temperaturePath, temperaturePtr);
        // Write the temperature value to the HDF5 File
       err = tempDataset->writeToFile(dataFile);
       if (err < 0)
@@ -279,7 +279,7 @@ int32 generateData()
         break;
       }
 
-      IMXAArrayPtr imagePtr = captureSampleImage();
+      IMXAArray::Pointer imagePtr = captureSampleImage();
       MXARGBImage* image = dynamic_cast<MXARGBImage*>(imagePtr.get() );
       err = H5Image::H5IMmake_image_24bit(dataFile->getFileId(), cameraImagePath, image->getWidth(), image->getHeight(), MXA::H5Image::InterlacePixel, image->getPointer(0) );
       if (err < 0)
@@ -295,9 +295,9 @@ int32 generateData()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IMXAArrayPtr captureSampleImage()
+IMXAArray::Pointer captureSampleImage()
 {
-  IMXAArrayPtr imagePtr;
+  IMXAArray::Pointer imagePtr;
   MXARGBImage* image = MXARGBImage::New( 256, 256);
   if (NULL == image)
   {
@@ -321,9 +321,9 @@ IMXAArrayPtr captureSampleImage()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IMXAArrayPtr captureSampleSignal()
+IMXAArray::Pointer captureSampleSignal()
 {
-  IMXAArrayPtr imagePtr;
+  IMXAArray::Pointer imagePtr;
   MXA2DArray<uint8>* image = MXA2DArray<uint8>::New(256, 256);
   if (NULL == image)
   {
@@ -347,10 +347,10 @@ IMXAArrayPtr captureSampleSignal()
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-IMXAArrayPtr readRGBImageFromFile(IDataFilePtr dataFile, const std::string &datasetPath)
+IMXAArray::Pointer readRGBImageFromFile(IDataFile::Pointer dataFile, const std::string &datasetPath)
 {
   MXARGBImage* nullImage = NULL;
-  IMXAArrayPtr imagePtr (nullImage);
+  IMXAArray::Pointer imagePtr (nullImage);
 
   hid_t fileId = dataFile->getFileId();
   if (fileId < 0)

@@ -36,7 +36,7 @@ class MXA_EXPORT XMLDataModelReader  : public IDataModelReader,
                                        public ExpatEvtHandler
 {
 public:
-	XMLDataModelReader(IDataModelPtr dataModel, const std::string &fileName);
+	XMLDataModelReader(IDataModel::Pointer dataModel, const std::string &fileName);
 	virtual ~XMLDataModelReader();
 
 // -----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ public:
       {
         if ( (istream >> tmp).good() )
         {
-          IMXAArrayPtr attr = MXAArrayTemplate<T>::CreateSingleValueArray( static_cast<T>(tmp) );
+          IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateSingleValueArray( static_cast<T>(tmp) );
           this->_dataModel->addUserMetaData(this->_userMDKey, attr);
         }
       }
@@ -99,7 +99,7 @@ public:
       {
         if ( (istream >> temp).good() )
         {
-          IMXAArrayPtr attr = MXAArrayTemplate<T>::CreateSingleValueArray( static_cast<T>(temp) );
+          IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateSingleValueArray( static_cast<T>(temp) );
           this->_dataModel->addUserMetaData(this->_userMDKey, attr);
         }
       }
@@ -128,7 +128,7 @@ public:
 
       if (data.size() == size)
       {
-        IMXAArrayPtr attr =
+        IMXAArray::Pointer attr =
           MXAArrayTemplate<T>::CreateMultiDimensionalArray(  dims.size(), &(dims.front()) );
         T* dest = static_cast<T*>(attr->getVoidPointer(0));
         ::memcpy(dest, &(data.front()), data.size() * sizeof(T) );
@@ -144,10 +144,10 @@ public:
 
 private:
   //XMLIODelegate*    _ioDelegate;
-  IDataModelPtr     _dataModel;
+  IDataModel::Pointer     _dataModel;
   const std::string _fileName;
   int32             _xmlParseError;
-  IDataRecordPtr    _currentParentRecord;
+  IDataRecord::Pointer    _currentParentRecord;
   std::string       _userAttributeData;
   bool              _parseData;
   std::string       _userMDKey;

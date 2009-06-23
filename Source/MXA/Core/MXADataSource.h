@@ -41,10 +41,11 @@ class MXADataRecord;
 class MXA_EXPORT MXADataSource : public IDataSource
 {
 public:
-  
+
   MXA_SHARED_POINTERS(MXADataSource);
   MXA_TYPE_MACRO(MXADataSource);
-  
+  typedef std::vector<Pointer>                      MXADataSource::Container;
+
   /**
    * @brief Empty Constructor
    */
@@ -75,13 +76,13 @@ public:
    * @brief Set the value of _dataRecord
    * @param dataRecord the new value of _dataRecord
    */
-  void setDataRecord ( IDataRecordPtr dataRecord );
+  void setDataRecord ( IDataRecord::Pointer dataRecord );
 
   /**
    * @brief Get the value of _dataRecord
    * @return the value of _dataRecord
    */
-  IDataRecordPtr getDataRecord ( );
+  IDataRecord::Pointer getDataRecord ( );
 
 
   /**
@@ -119,13 +120,13 @@ public:
    * @brief Set the value of mdataModel
    * @param dataModel the new value of _dataModel
    */
-  void setDataModel ( IDataModelPtr dataModel );
+  void setDataModel ( IDataModel::Pointer dataModel );
 
   /**
    * @brief Get the value of _dataModel
    * @return the value of _dataModel
    */
-  IDataModelPtr getDataModel ( );
+  IDataModel::Pointer getDataModel ( );
 
 
   /**
@@ -142,10 +143,10 @@ public:
 
 private:
 
-  IDataRecordPtr                _dataRecord;
+  IDataRecord::Pointer                _dataRecord;
   std::string                   _sourcePath;
   IImportDelegatePtr            _dataImportDelegate;
-  IDataModelPtr                 _dataModel;
+  IDataModel::Pointer                 _dataModel;
   std::vector<int32>            _dimensionValues;
 
   MXADataSource(const MXADataSource&);   //Copy Constructor Not Implemented

@@ -34,7 +34,7 @@ public:
    * @param dataFile The IDataFile object
    * @return
    */
-	int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile);
+	int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile);
 
   /**
   * @brief Sets a property of this class with the given value.

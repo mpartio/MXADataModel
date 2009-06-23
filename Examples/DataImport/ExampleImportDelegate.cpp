@@ -31,7 +31,7 @@ ExampleImportDelegate::~ExampleImportDelegate()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 ExampleImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFilePtr mxaFile)
+int32 ExampleImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer mxaFile)
 {
   std::cout << "Importing data file '" << dataSource->getSourcePath() << "'" << std::endl;
   herr_t err = 0;
@@ -47,7 +47,7 @@ int32 ExampleImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFi
   }
 
   // Get the MXADataModel
-  IDataModelPtr model = mxaFile->getDataModel();
+  IDataModel::Pointer model = mxaFile->getDataModel();
   // Create the path where we are to store the data from the input data file
   std::string path(dataSource->generateInternalPath());
   uint32 pos = path.find_last_of("/");
@@ -65,7 +65,7 @@ int32 ExampleImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFi
   int32 NX  =  5; /* dataset dimensions */
   int32 NY   =  3;
   uint64 dims[2] = {NX, NY};
-  IMXAArrayPtr array = MXAArrayTemplate<int32>::CreateMultiDimensionalArray(nDims, dims);
+  IMXAArray::Pointer array = MXAArrayTemplate<int32>::CreateMultiDimensionalArray(nDims, dims);
   int32* data = static_cast<int32*>(array->getVoidPointer(0) );
 
   //Open the input file as a binary file

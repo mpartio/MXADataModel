@@ -66,13 +66,13 @@ public:
    * Set the value of m_dataModel
    * @param dataModel the new value of m_dataModel
    */
-  void setDataFile ( IDataFilePtr dataModel );
+  void setDataFile ( IDataFile::Pointer dataModel );
 
   /**
    * Get the value of m_dataModel
    * @return the value of m_dataModel
    */
-  IDataFilePtr getDataFile ( );
+  IDataFile::Pointer getDataFile ( );
 
 
   /**
@@ -99,7 +99,7 @@ public:
 
 private:
   std::string                 _outputFilePath;
-  IDataFilePtr                _dataFile;
+  IDataFile::Pointer                _dataFile;
   IDataSources                _dataSources;
 
   MXADataImport(const MXADataImport&);   //Copy Constructor Not Implemented

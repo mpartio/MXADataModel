@@ -7,9 +7,9 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IMXAArrayPtr MXARGBImage::CreateRGBImageArray( int32 width, int32 height)
+IMXAArray::Pointer MXARGBImage::CreateRGBImageArray( int32 width, int32 height)
 {
-  IMXAArrayPtr ptr;
+  IMXAArray::Pointer ptr;
   int32 err = 1;
   MXARGBImage* d = new MXARGBImage(width, height);
   err = d->_allocate();

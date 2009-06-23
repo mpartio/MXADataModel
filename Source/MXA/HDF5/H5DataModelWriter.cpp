@@ -14,7 +14,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-H5DataModelWriter::H5DataModelWriter(IDataModelPtr dataModel, IDataFilePtr dataFile) :
+H5DataModelWriter::H5DataModelWriter(IDataModel::Pointer dataModel, IDataFile::Pointer dataFile) :
   _dataModel(dataModel),
   _dataFile(dataFile)
 {
@@ -61,9 +61,9 @@ int32 H5DataModelWriter::writeSupportFiles(hid_t fileId)
   uint8* fileContents = NULL;
   int32 rank = 1;
   ISupportFile* file = NULL;
-  ISupportFiles files = this->_dataModel->getSupportFiles();
+  ISupportFile::Container files = this->_dataModel->getSupportFiles();
 
-  for (ISupportFiles::iterator iter = files.begin(); iter != files.end(); ++iter)
+  for (ISupportFile::Container::iterator iter = files.begin(); iter != files.end(); ++iter)
   {
     file = (*iter).get();
     if (NULL != file)
@@ -186,9 +186,9 @@ int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
 
   std::string dsetName;
 
-  IDataDimensions dimensions = _dataModel->getDataDimensions();
+  IDataDimension::Container dimensions = _dataModel->getDataDimensions();
   MXADataDimension* dim;
-  for (IDataDimensions::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
+  for (IDataDimension::Container::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
   {
     dim = static_cast<MXADataDimension*> ( (*(iter)).get() ); //Get a reference to the raw pointer
     //std::cout << "Writing DataDimension: " << dim->getDimensionName() << std::endl;
@@ -247,7 +247,7 @@ int32 H5DataModelWriter::writeDataRecords(hid_t fileId)
     return gid;
   }
 
-  IDataRecords cc =  _dataModel->getDataRecords();
+  IDataRecord::Container cc =  _dataModel->getDataRecords();
   err = _traverseDataRecords(gid, cc );
   if (err < 0) { retErr = err; }
   err = H5Utilities::closeHDF5Object(gid);
@@ -258,7 +258,7 @@ int32 H5DataModelWriter::writeDataRecords(hid_t fileId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, IDataRecords &records)
+int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, IDataRecord::Container &records)
 {
 //#error Start here and test the writing of the file so far.....
   MXADataRecord* rec;
@@ -267,7 +267,7 @@ int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, IDataRecords &records)
   herr_t err = 0;
   int32 i = 0;
   //std::cout << "Traversing Data Record" << std::endl;
-  for ( IDataRecords::iterator iter = records.begin(); iter < records.end(); ++iter )
+  for ( IDataRecord::Container::iterator iter = records.begin(); iter < records.end(); ++iter )
   {
     rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
     //std::cout << "Writing '" << rec->getRecordName()  << "'" << std::endl;
@@ -282,7 +282,7 @@ int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, IDataRecords &records)
         err = recGrpId;
         break;
       }
-      IDataRecords children = rec->getChildren();
+      IDataRecord::Container children = rec->getChildren();
 
       err = _traverseDataRecords( recGrpId, children );
       H5Utilities::closeHDF5Object(recGrpId);
@@ -341,7 +341,7 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
     return err;
   }
   std::map<std::string, std::string> meta;
-  IRequiredMetaDataPtr metaData = _dataModel->getRequiredMetaData();
+  IRequiredMetaData::Pointer metaData = _dataModel->getRequiredMetaData();
   metaData->generateKeyValueMap(meta);
 
   for (std::map<std::string, std::string>::iterator iter=meta.begin(); iter!=meta.end(); iter++) {
@@ -361,7 +361,7 @@ int32 H5DataModelWriter::writeUserMetaData(hid_t fileId)
   herr_t err = 0;
   this->_writeScalarDataset(fileId, const_cast<std::string&>(MXA::UserMetaDataPath), data);
   MXAAbstractAttributes metadata = _dataModel->getUserMetaData();
-  IMXAArrayPtr attr;
+  IMXAArray::Pointer attr;
   //H5AttributeWriter writer;
   for (MXAAbstractAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
     std::string key = (*iter).first;

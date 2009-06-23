@@ -38,8 +38,8 @@ int main(int argc, char **argv)
 
 
   //First load the Data file
-  IDataFilePtr dataFile = H5MXADataFile::OpenFile(Examples::GetDataExampleFile, true);
-  IDataModelPtr modelPtr = dataFile->getDataModel();
+  IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(Examples::GetDataExampleFile, true);
+  IDataModel::Pointer modelPtr = dataFile->getDataModel();
   hid_t fileId = dataFile.get()->getFileId();
   if (fileId < 0)
   {
@@ -47,10 +47,10 @@ int main(int argc, char **argv)
     return -1;
   }
   // Now we can interrogate the model to get some information
-  IDataDimensions dims = modelPtr->getDataDimensions();
+  IDataDimension::Container dims = modelPtr->getDataDimensions();
   MXADataDimension* dim = NULL;
   //Loop over the Data Dimensions and print each one to std::cout
-  for (IDataDimensions::iterator iter = dims.begin(); iter != dims.end(); ++iter )
+  for (IDataDimension::Container::iterator iter = dims.begin(); iter != dims.end(); ++iter )
   {
     dim = static_cast<MXADataDimension*>((*(iter)).get() );
     if (NULL == dim)
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
   std::vector<int32> indices;
   indices.push_back(1); indices.push_back(1);
   // We also know the exact path to the Data Record, so lets use it to retrieve the Data Record from the Model
-  IDataRecordPtr record = modelPtr->getDataRecordByNamedPath(DataGen::TableRec + "/" + DataGen::Float32Rec);
+  IDataRecord::Pointer record = modelPtr->getDataRecordByNamedPath(DataGen::TableRec + "/" + DataGen::Float32Rec);
   if (NULL == record.get() )
   {
     std::cout << logTime() << "Error getting '2D Array' Data Record" << std::endl;

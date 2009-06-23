@@ -60,7 +60,7 @@ int32 H5TiffImportDelegate::setProperty(const std::string &key, const std::strin
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
+int32 H5TiffImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile)
 {
   // std::cout << "H5TiffImportDelegate::importDataSource:  Importing as grayscale->" << this->_importAsGrayScale << std::endl;
   herr_t err = -1;

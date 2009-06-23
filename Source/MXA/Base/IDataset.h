@@ -1,8 +1,17 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
 #ifndef _IDataset_h_
 #define _IDataset_h_
 
+#include <MXA/Common/MXATypes.h>
 #include <MXA/Base/IDataFileIO.h>
-
+#include <MXA/Base/IMXAArray.h>
 
 /**
 * @class IDataset IDataset.h PathToHeader/IDataset.h
@@ -12,9 +21,12 @@
 * @date Jan 3, 2008
 * @version $Revision: 1.2 $
 */
-class MXA_EXPORT IDataset : public IDataFileIO
+class MXA_EXPORT IDataset //: public IDataFileIO
 {
   public:
+    MXA_SHARED_POINTERS(IDataset);
+
+
     IDataset(){}
     virtual ~IDataset(){}
 
@@ -33,19 +45,19 @@ class MXA_EXPORT IDataset : public IDataFileIO
      * @brief Sets the data for the dataset
      * @param data Instance of IMXAArray
      */
-    virtual void setData(IMXAArrayPtr data) = 0;
+    virtual void setData(IMXAArray::Pointer data) = 0;
 
     /**
      * @brief Returns the data for this class
      */
-    virtual IMXAArrayPtr getData() = 0;
+    virtual IMXAArray::Pointer getData() = 0;
 
   /**
    * @brief Adds an attribute to this dataset
    * @param attributeKey The name of the attribute
    * @param data The data for the attribute
    */
-    virtual void addAttribute (const std::string &attributeKey, IMXAArrayPtr data) = 0;
+    virtual void addAttribute (const std::string &attributeKey, IMXAArray::Pointer data) = 0;
 
     /**
      * @brief Removes an attribute from the data set
@@ -58,7 +70,7 @@ class MXA_EXPORT IDataset : public IDataFileIO
      * @param attributeKey The name of the attribute to retrieve
      * @return
      */
-    virtual IMXAArrayPtr getAttribute(const std::string &attributeKey) = 0;
+    virtual IMXAArray::Pointer getAttribute(const std::string &attributeKey) = 0;
 
   protected:
 

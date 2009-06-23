@@ -28,11 +28,11 @@ class MXA_EXPORT H5MXADataFile : public IDataFile
 {
   public:
 
-    static IDataFilePtr OpenFile(const std::string &filename, bool readOnly);
+    static IDataFile::Pointer OpenFile(const std::string &filename, bool readOnly);
 
-    static IDataFilePtr CreateFileWithModel(const std::string &filename, IDataModelPtr model);
+    static IDataFile::Pointer CreateFileWithModel(const std::string &filename, IDataModel::Pointer model);
 
-    static IDataFilePtr CreateEmptyFile(const std::string &filename);
+    static IDataFile::Pointer CreateEmptyFile(const std::string &filename);
 
     virtual ~H5MXADataFile();
 
@@ -42,7 +42,7 @@ class MXA_EXPORT H5MXADataFile : public IDataFile
      */
     std::string getFilename();
 
-    IDataModelPtr getDataModel();
+    IDataModel::Pointer getDataModel();
 
     // -----------------------------------------------------------------------------
     //  Basic File Operations
@@ -97,15 +97,15 @@ class MXA_EXPORT H5MXADataFile : public IDataFile
     // -----------------------------------------------------------------------------
     //  Writing data related methods
 
-    int32 writeData ( const IDatasetPtr dataset);
+    int32 writeData ( const IDataset::Pointer dataset);
 
-    int32 readData (const IDatasetPtr dataset);
+    int32 readData (const IDataset::Pointer dataset);
 
     int32 getFileId();
 
   protected:
     H5MXADataFile(const std::string &filename);
-    H5MXADataFile(const std::string &filename, IDataModelPtr model);
+    H5MXADataFile(const std::string &filename, IDataModel::Pointer model);
 
     /**
      * @brief Writes the data model to the data file. Any existing model is over-written
@@ -129,7 +129,7 @@ class MXA_EXPORT H5MXADataFile : public IDataFile
     hid_t                         _fileId;
     bool                          _isFileOpen;
     bool                          _isReadOnly;
-    IDataModelPtr                 _dataModel;
+    IDataModel::Pointer                 _dataModel;
     boost::weak_ptr<IDataFile>    _weakPtr;
 
 

@@ -25,19 +25,19 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ISupportFilePtr MXASupportFile::NewFromFileSystem(const std::string &filesystempath,
+ISupportFile::Pointer MXASupportFile::NewFromFileSystem(const std::string &filesystempath,
                                                   const std::string &filetype,
                                                   bool cacheFile)
 {
   ISupportFile* sp = new MXASupportFile();
-  ISupportFilePtr spPtr(sp);
+  ISupportFile::Pointer spPtr(sp);
   sp->setFileSystemPath(filesystempath);
   sp->setFileType(filetype);
   if (cacheFile)
   {
     if (sp->readFromFileSystem() < 0 )  // the read failed
     {
-      ISupportFilePtr nullPtr;
+      ISupportFile::Pointer nullPtr;
       spPtr.swap(nullPtr);
     }
   }
@@ -49,20 +49,20 @@ ISupportFilePtr MXASupportFile::NewFromFileSystem(const std::string &filesystemp
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ISupportFilePtr MXASupportFile::NewFromMXAFile(hid_t dataFile,
+ISupportFile::Pointer MXASupportFile::NewFromMXAFile(hid_t dataFile,
                                                const std::string &index,
                                                bool cacheFile)
 {
   int i = 0;
   StringUtils::stringToNum<int>(i, index);
   ISupportFile* sp = new MXASupportFile(dataFile, i);
-  ISupportFilePtr spPtr(sp);
+  ISupportFile::Pointer spPtr(sp);
   sp->setIndex(i);
   if (cacheFile)
   {
     if (sp->readFromMXAFile() < 0)
     {
-      ISupportFilePtr nullPtr;
+      ISupportFile::Pointer nullPtr;
       spPtr.swap(nullPtr);
     }
   }
@@ -78,12 +78,12 @@ ISupportFilePtr MXASupportFile::NewFromMXAFile(hid_t dataFile,
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ISupportFilePtr MXASupportFile::NewFromXMLModel(const std::string &filesystempath,
+ISupportFile::Pointer MXASupportFile::NewFromXMLModel(const std::string &filesystempath,
                                        const std::string &filetype,
                                        int index)
 {
 
-    ISupportFilePtr spPtr(new MXASupportFile());
+    ISupportFile::Pointer spPtr(new MXASupportFile());
     spPtr->setFileSystemPath(filesystempath);
     spPtr->setFileType(filetype);
     spPtr->setIndex(index);
@@ -94,9 +94,9 @@ ISupportFilePtr MXASupportFile::NewFromXMLModel(const std::string &filesystempat
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ISupportFilePtr MXASupportFile::New()
+ISupportFile::Pointer MXASupportFile::New()
 {
-  ISupportFilePtr spPtr(new MXASupportFile());
+  ISupportFile::Pointer spPtr(new MXASupportFile());
   return spPtr;
 }
 
@@ -283,7 +283,7 @@ uint64 MXASupportFile::getFileSize()
 // -----------------------------------------------------------------------------
 void MXASupportFile::flushCachedFile()
 {
-  IMXAArrayPtr nullPtr;
+  IMXAArray::Pointer nullPtr;
   this->_fileContents.swap(nullPtr);
 }
 

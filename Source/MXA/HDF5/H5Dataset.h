@@ -36,21 +36,21 @@ public:
    * @param datasetPath The path to the dataset
    * @return Boost::shared_ptr wrapped H5Dataset instance
    */
-  static IDatasetPtr LoadFromFile(IDataFilePtr dataFile, const std::string &datasetPath);
+  static IDataset::Pointer LoadFromFile(IDataFile::Pointer dataFile, const std::string &datasetPath);
 
   /**
    * @brief Creates an H5Dataset object with the given dataset path and data
    * @param datasetPath The path to the data set
    * @param data The data that will be stored in hdf5 file
    */
-  static IDatasetPtr CreateDatasetPtr(const std::string &datasetPath, IMXAArrayPtr data);
+  static IDataset::Pointer CreateDatasetPtr(const std::string &datasetPath, IMXAArray::Pointer data);
 
   /**
    * @brief Creates an H5Dataset object with the given dataset path and data
    * @param datasetPath The path to the data set
    * @param data The data that will be stored in hdf5 file
    */
-  H5Dataset(const std::string &datasetPath, IMXAArrayPtr data);
+  H5Dataset(const std::string &datasetPath, IMXAArray::Pointer data);
 
 
   virtual ~H5Dataset();
@@ -74,18 +74,18 @@ public:
    * @brief Sets the data for the dataset
    * @param data Instance of IMXAArray
    */
-  void setData(IMXAArrayPtr data);
+  void setData(IMXAArray::Pointer data);
 
   /**
    * @brief Returns the data for this class
    */
-  IMXAArrayPtr getData();
+  IMXAArray::Pointer getData();
   /**
    * @brief Adds an attribute to this dataset
    * @param attributeKey The name of the attribute
    * @param attribute The data for the attribute
    */
-  void addAttribute (const std::string &attributeKey, IMXAArrayPtr attribute);
+  void addAttribute (const std::string &attributeKey, IMXAArray::Pointer attribute);
   /**
    * @brief Removes an attribute from the data set
    * @param attributeKey The name of the attribute to remove
@@ -96,19 +96,19 @@ public:
    * @param attributeKey The name of the attribute to retrieve
    * @return
    */
-  IMXAArrayPtr getAttribute(const std::string &attributeKey);
+  IMXAArray::Pointer getAttribute(const std::string &attributeKey);
 
   // -----------------------------------------------------------------------------
   // IDataFileIO Methods
   // -----------------------------------------------------------------------------
-  virtual int32 writeToFile (IDataFilePtr dataFile);
-  virtual int32 readFromFile (IDataFilePtr dataFile);
+  virtual int32 writeToFile (IDataFile::Pointer dataFile);
+  virtual int32 readFromFile (IDataFile::Pointer dataFile);
 
 protected:
   H5Dataset() {}  // Protected constructor
 
 private:
-  IMXAArrayPtr _data;
+  IMXAArray::Pointer _data;
   MXAAbstractAttributes _attributes;
   std::string _datasetPath;
 

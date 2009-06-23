@@ -11,9 +11,14 @@
 #ifndef IMXAFILE_H_
 #define IMXAFILE_H_
 
-#include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypeDefs.h>
+//#include <MXA/Common/DLLExport.h>
+//#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IDataset.h>
+#include <MXA/Base/IDataModel.h>
+
+class IDataModel;
 
 #include <string>
 
@@ -43,7 +48,7 @@ class MXA_EXPORT IDataFile
      * @brief returns the DataModel as read from the data file
      * @return A DataModelPtr oject. A NULL wrapped pointer is perfectly valid
      */
-    virtual IDataModelPtr getDataModel() = 0;
+    virtual IDataModel::Pointer getDataModel() = 0;
 
 // -----------------------------------------------------------------------------
 //  Basic File Operations
@@ -105,9 +110,9 @@ class MXA_EXPORT IDataFile
 // -----------------------------------------------------------------------------
 //  Writing data related methods
 
-    virtual int32 writeData ( const IDatasetPtr dataset) = 0;
+    virtual int32 writeData ( const IDataset::Pointer dataset) = 0;
 
-    virtual int32 readData (const IDatasetPtr dataset) = 0;
+    virtual int32 readData (const IDataset::Pointer dataset) = 0;
 
 
   protected:

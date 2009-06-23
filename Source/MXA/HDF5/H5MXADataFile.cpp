@@ -12,10 +12,10 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataFilePtr H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
+IDataFile::Pointer H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
 {
   H5MXADataFile* dataFile = new H5MXADataFile(filename);
-  IDataFilePtr filePtr (dynamic_cast<IDataFile*>(dataFile) );
+  IDataFile::Pointer filePtr (dynamic_cast<IDataFile*>(dataFile) );
   int32 err = filePtr->openFile(readOnly);
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
@@ -32,10 +32,10 @@ IDataFilePtr H5MXADataFile::OpenFile(const std::string &filename, bool readOnly)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataFilePtr H5MXADataFile::CreateFileWithModel(const std::string &filename, IDataModelPtr model)
+IDataFile::Pointer H5MXADataFile::CreateFileWithModel(const std::string &filename, IDataModel::Pointer model)
 {
   H5MXADataFile* dataFile = new H5MXADataFile(filename, model);
-  IDataFilePtr filePtr (dynamic_cast<IDataFile*>(dataFile) );
+  IDataFile::Pointer filePtr (dynamic_cast<IDataFile*>(dataFile) );
   int32 err = filePtr->createFile();
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
@@ -74,7 +74,7 @@ H5MXADataFile::H5MXADataFile(const std::string &filename) :
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-H5MXADataFile::H5MXADataFile(const std::string &filename, IDataModelPtr model) :
+H5MXADataFile::H5MXADataFile(const std::string &filename, IDataModel::Pointer model) :
   IDataFile(filename),
   _filename(filename),
   _fileId(-1),
@@ -83,7 +83,7 @@ H5MXADataFile::H5MXADataFile(const std::string &filename, IDataModelPtr model) :
 {
   if (NULL == model.get()) // Model is NUll, so create a new one.
   {
-    IDataModelPtr modelPtr = MXADataModel::New();
+    IDataModel::Pointer modelPtr = MXADataModel::New();
     model.swap(modelPtr);
   }
   this->_dataModel = model;
@@ -112,10 +112,10 @@ void H5MXADataFile::_setWeakPointer(boost::weak_ptr<IDataFile> weakPtr)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataFilePtr H5MXADataFile::CreateEmptyFile(const std::string &filename)
+IDataFile::Pointer H5MXADataFile::CreateEmptyFile(const std::string &filename)
 {
-  IDataModelPtr modelPtr = MXADataModel::New();
-  IDataFilePtr filePtr (new H5MXADataFile(filename, modelPtr));
+  IDataModel::Pointer modelPtr = MXADataModel::New();
+  IDataFile::Pointer filePtr (new H5MXADataFile(filename, modelPtr));
   int32 err = filePtr->createFile();
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
@@ -137,7 +137,7 @@ std::string H5MXADataFile::getFilename()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataModelPtr H5MXADataFile::getDataModel()
+IDataModel::Pointer H5MXADataFile::getDataModel()
 {
   return this->_dataModel;
 }
@@ -335,7 +335,7 @@ int32 H5MXADataFile::_readDataModel()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::writeData(const IDatasetPtr dataset)
+int32 H5MXADataFile::writeData(const IDataset::Pointer dataset)
 {
   return dataset->writeToFile(this->_weakPtr.lock() );
 }
@@ -343,7 +343,7 @@ int32 H5MXADataFile::writeData(const IDatasetPtr dataset)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::readData(const IDatasetPtr dataset)
+int32 H5MXADataFile::readData(const IDataset::Pointer dataset)
 {
   return dataset->writeToFile(this->_weakPtr.lock() );
 }

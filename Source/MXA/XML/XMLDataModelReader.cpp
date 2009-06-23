@@ -16,7 +16,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-XMLDataModelReader::XMLDataModelReader( IDataModelPtr dataModel, const std::string &fileName) :
+XMLDataModelReader::XMLDataModelReader( IDataModel::Pointer dataModel, const std::string &fileName) :
 _dataModel(dataModel),
 _fileName(fileName),
 _xmlParseError(0),
@@ -319,7 +319,7 @@ void XMLDataModelReader::onDimensionStartTag(const XML_Char* name, const XML_Cha
       // std::cout << "uniform value is NOT valid for Dimension " << attrMap[MXA::MXA_NAME_TAG] << std::endl;
       uniform = 1;
     }
-    MXADataDimensionPtr dim = MXADataDimension::New( attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG], index, count, start, end, increment, uniform);
+    MXADataDimension::Pointer dim = MXADataDimension::New( attrMap[MXA::MXA_NAME_TAG], attrMap[MXA::MXA_ALT_NAME_TAG], index, count, start, end, increment, uniform);
     if (dim.get() == NULL)
     {
       std::cout << logTime() << "Attempting to add a NULL MXA Data Dimension to the Model." << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
@@ -516,7 +516,7 @@ void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
   }
   if ( this->_userMDType.compare("H5T_STRING") == 0 )
   {
-    IMXAArrayPtr attr = MXAAsciiStringData::Create(this->_userAttributeData);
+    IMXAArray::Pointer attr = MXAAsciiStringData::Create(this->_userAttributeData);
     this->_dataModel->addUserMetaData(this->_userMDKey, attr);
   }
   else
@@ -688,7 +688,7 @@ void XMLDataModelReader::onSupportFilesEndTag(const XML_Char* name)
 void XMLDataModelReader::onSupportFileStartTag(const XML_Char* name, const XML_Char** attrs)
 {
 
-  ISupportFilePtr sfile = MXASupportFile::New();
+  ISupportFile::Pointer sfile = MXASupportFile::New();
   for (int i = 0; attrs[i]; i += 2)
   {
     if (MXA::MXA_FILESYSTEM_PATH_TAG.compare(attrs[i]) == 0)

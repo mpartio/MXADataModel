@@ -53,24 +53,24 @@ class MXAArrayTemplate : public IMXAArray
  * @param numElements The number of elements in the internal array.
  * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
  */
-    static IMXAArrayPtr CreateArray( uint64 numElements)
+    static IMXAArray::Pointer CreateArray( uint64 numElements)
     {
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( numElements, true);
       if ( d->_allocate() < 0)
       {  // Could not allocate enough memory, reset the pointer to null and return
         d = NULL;
       }
-      IMXAArrayPtr ptr ( static_cast<IMXAArray*>(d) );
+      IMXAArray::Pointer ptr ( static_cast<IMXAArray*>(d) );
       return ptr;
     }
 
 /**
- * @brief Creates an IMXAArrayPtr object for the supplied arguments.
+ * @brief Creates an IMXAArray::Pointer object for the supplied arguments.
  * @param nDims Number of dimensions
  * @param dims Size of each dimension
  * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
  */
-    static IMXAArrayPtr CreateMultiDimensionalArray(int32 nDims, const uint64* dims)
+    static IMXAArray::Pointer CreateMultiDimensionalArray(int32 nDims, const uint64* dims)
     {
 
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( nDims, dims, true);
@@ -78,7 +78,7 @@ class MXAArrayTemplate : public IMXAArray
       {  // Could not allocate enough memory, reset the pointer to null and return
         d = NULL;
       }
-      IMXAArrayPtr ptr ( static_cast<IMXAArray*>(d) );
+      IMXAArray::Pointer ptr ( static_cast<IMXAArray*>(d) );
       return ptr;
     }
 
@@ -88,7 +88,7 @@ class MXAArrayTemplate : public IMXAArray
  * @param value The value to store in the attribute
  * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
  */
-    static IMXAArrayPtr CreateSingleValueArray( T value)
+    static IMXAArray::Pointer CreateSingleValueArray( T value)
     {
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>(1, true);
       if ( d->_allocate() < 0)
@@ -96,7 +96,7 @@ class MXAArrayTemplate : public IMXAArray
         d = NULL;
       }
       d->setValue(0, value);
-      IMXAArrayPtr ptr ( static_cast<IMXAArray*>(d) );
+      IMXAArray::Pointer ptr ( static_cast<IMXAArray*>(d) );
       return ptr;
     }
 
@@ -339,7 +339,7 @@ class MXAArrayTemplate : public IMXAArray
      * @param expProps The properties to use when saving the array
      * @return Error code.
      */
-    virtual int32 exportToFile(DataExportPropertiesPtr expProps)
+    virtual int32 exportToFile(DataExportProperties::Pointer expProps)
     {
       int32 err = -1;
       if (expProps->getFileType() == MXA::Export::Binary)
@@ -357,7 +357,7 @@ class MXAArrayTemplate : public IMXAArray
     // -----------------------------------------------------------------------------
     //
     // -----------------------------------------------------------------------------
-    int32 _binaryExport(DataExportPropertiesPtr expProps)
+    int32 _binaryExport(DataExportProperties::Pointer expProps)
     {
       int32 err = -1;
     #ifdef MXA_LITTLE_ENDIAN
@@ -401,7 +401,7 @@ class MXAArrayTemplate : public IMXAArray
     // -----------------------------------------------------------------------------
     //
     // -----------------------------------------------------------------------------
-    int32 _asciiExport(DataExportPropertiesPtr expProps)
+    int32 _asciiExport(DataExportProperties::Pointer expProps)
     {
       int32 err = -1;
       std::string delimiter = expProps->getAsciiDelimiter();
@@ -443,7 +443,7 @@ class MXAArrayTemplate : public IMXAArray
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation
 // -----------------------------------------------------------------------------
-    virtual int32 writeToFile(IDataFilePtr dataFile)
+    virtual int32 writeToFile(IDataFile::Pointer dataFile)
     {
       if (dataFile->getFileId() < 0)
       {
@@ -456,7 +456,7 @@ class MXAArrayTemplate : public IMXAArray
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-    virtual int32 readFromFile(IDataFilePtr dataFile)
+    virtual int32 readFromFile(IDataFile::Pointer dataFile)
     {
       if (dataFile->getFileId() < 0)
       {

@@ -13,7 +13,7 @@
 
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypes.h>
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IFileIODelegate.h>
 
 
 /**
@@ -28,7 +28,7 @@ class MXA_EXPORT IDataModelWriter
 {
 
 public:
-  IDataModelWriter(IFileIODelegatePtr ioDelegate, IDataModelPtr dataModel){};
+  IDataModelWriter(IFileIODelegate::Pointer ioDelegate, IDataModel::Pointer dataModel){};
   virtual ~IDataModelWriter() {};
 
   /**

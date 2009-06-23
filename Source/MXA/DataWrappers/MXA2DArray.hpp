@@ -40,9 +40,9 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @param height The height of the array.
      * @return Boost::shared_pointer wrapped MXA2DArray pointer
      */
-    static IMXAArrayPtr CreateAbstractDataArray( int32 width, int32 height)
+    static IMXAArray::Pointer CreateAbstractDataArray( int32 width, int32 height)
     {
-      IMXAArrayPtr ptr;
+      IMXAArray::Pointer ptr;
       int32 err = 1;
       MXA2DArray<T>* d = new MXA2DArray<T>( width, height);
       err = d->_allocate();
@@ -181,7 +181,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
-    virtual int32 writeToFile (IDataFilePtr dataFile)
+    virtual int32 writeToFile (IDataFile::Pointer dataFile)
     {
       int32 err = -1;
       std::vector<uint64> dims (2, 0 );
@@ -200,7 +200,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-    virtual int32 readFromFile(IDataFilePtr dataFile)
+    virtual int32 readFromFile(IDataFile::Pointer dataFile)
     {
       hid_t fileId = dataFile->getFileId();
       if (fileId < 0)

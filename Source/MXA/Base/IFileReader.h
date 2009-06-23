@@ -12,6 +12,7 @@
 #define _IFileReader_h_
 
 #include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IDataFile.h>
 
 /**
 * @class IFileReader IFileReader.h Testing/IFileReader.h
@@ -31,7 +32,7 @@ class MXA_EXPORT IFileReader
    * @param dataFile The file to read the data from
    * @return Error condition. 0 or positive is success. Negative is failure
    */
-    virtual int32 readFromFile(IDataFilePtr dataFile) = 0;
+    virtual int32 readFromFile(IDataFile::Pointer dataFile) = 0;
 
   protected:
 

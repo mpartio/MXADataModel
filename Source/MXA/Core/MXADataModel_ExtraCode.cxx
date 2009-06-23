@@ -172,7 +172,7 @@ MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName,
   dim.name = name;
   dim.alt_name = altName;
 
-  string dimPath = MXA::MXADataDimensionsPath + "/" + StringUtils::numToString(order);
+  string dimPath = MXA::MXADataDimension::ContainerPath + "/" + StringUtils::numToString(order);
   dim.obj_path = dimPath;
 
   dim.order = order;
@@ -245,7 +245,7 @@ MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName,
   dim.name = name;
   dim.alt_name = altName;
 
-  string dimPath = MXADataDimensionsPath + "/" + StringUtils::numToString(order);
+  string dimPath = MXADataDimension::ContainerPath + "/" + StringUtils::numToString(order);
   dim.obj_path = dimPath;
 
   dim.order = order;

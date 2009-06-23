@@ -132,7 +132,7 @@ int32 DataImportXmlParser::_mergeModelToDisk()
     return err;
   }
 
-  IDataModelPtr fModelPtr = _dataFile->getDataModel();
+  IDataModel::Pointer fModelPtr = _dataFile->getDataModel();
   IDataModel* fModel = fModelPtr.get();
   IDataModel* mModel = this->_dataModel.get();
   //Sanity check the number of dims first
@@ -143,8 +143,8 @@ int32 DataImportXmlParser::_mergeModelToDisk()
   }
 
   int32 dimSize = mModel->getNumberOfDataDimensions();
-  IDataDimensionPtr mDim;
-  IDataDimensionPtr fDim;
+  IDataDimension::Pointer mDim;
+  IDataDimension::Pointer fDim;
   // Iterate over the Dimensions
   for (int32 i = 0; i < dimSize; ++i) {
     mDim = mModel->getDataDimension(i);
@@ -209,7 +209,7 @@ std::string DataImportXmlParser::getDeleteExistingDataFile()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void DataImportXmlParser::setDataFile ( IDataFilePtr dataFile )
+void DataImportXmlParser::setDataFile ( IDataFile::Pointer dataFile )
 {
   _dataFile = dataFile;
 }
@@ -217,7 +217,7 @@ void DataImportXmlParser::setDataFile ( IDataFilePtr dataFile )
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataFilePtr DataImportXmlParser::getDataFile ( )
+IDataFile::Pointer DataImportXmlParser::getDataFile ( )
 {
   return _dataFile;
 }
@@ -263,7 +263,7 @@ int DataImportXmlParser::_loadDataModelFromTemplateFile(const std::string &model
       || StringUtils::endsWith(modelFile, std::string(".hdf5") ) )
     {
        err = 1;
-       IDataFilePtr file = H5MXADataFile::OpenFile(modelFile, true);
+       IDataFile::Pointer file = H5MXADataFile::OpenFile(modelFile, true);
        if (NULL == file.get())
        {
          std::cout << logTime() << "DataImportXmlParser::_loadDataModelFromTemplateFile - Error Reading DataModel from File: " << modelFile << std::endl;
@@ -514,7 +514,7 @@ void DataImportXmlParser::start_Dimension_Tag(const XML_Char* name, const XML_Ch
     if ( attrMap.find(MXA::MXA_UNIFORM_TAG) != attrMap.end() ) { StringUtils::stringToNum(uniform, attrMap[MXA::MXA_UNIFORM_TAG], std::dec); }
 
     // Over ride what is currently set in the data model with the values from the 'Dimension' tag
-    IDataDimensionPtr dim = this->_dataModel->getDataDimension(attrMap[MXA::MXA_NAME_TAG]);
+    IDataDimension::Pointer dim = this->_dataModel->getDataDimension(attrMap[MXA::MXA_NAME_TAG]);
     if ( NULL != dim.get() )
     {
       dim->setIndex(index);
@@ -611,7 +611,7 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
 
   //Convenience Pointer
   IDataModel* model = static_cast<MXADataModel*>(this->_dataModel.get() );
-  IDataRecordPtr recordPtr = model->getDataRecordByNamedPath(dataRecordPath, NULL);
+  IDataRecord::Pointer recordPtr = model->getDataRecordByNamedPath(dataRecordPath, NULL);
   if ( NULL == recordPtr.get() )
   {
     std::cout << "Error Retrieving Data Record from model. Path given from XML file was '"
@@ -667,7 +667,7 @@ void DataImportXmlParser::start_Implicit_Data_Source_Tag(const XML_Char* name, c
      _implSourceType = attrMap[MXA_DataImport::Attr_Source_Type];
 
      IDataModel* model = static_cast<MXADataModel*>(this->_dataModel.get() );
-     IDataRecordPtr recordPtr = model->getDataRecordByNamedPath(dataRecordPath, NULL);
+     IDataRecord::Pointer recordPtr = model->getDataRecordByNamedPath(dataRecordPath, NULL);
      if ( NULL == recordPtr.get() )
      {
        std::cout << "Error Retrieving Data Record from model. Path given from XML file was '"
@@ -700,7 +700,7 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
                                             std::vector<int> &dimValues)
 {
   // std::cout << "  DataImportXmlParser::_createDataSource" << std::endl;
-  IDataDimensionPtr dim = _implDataDimensions[index];
+  IDataDimension::Pointer dim = _implDataDimensions[index];
   int32 start = dim->getStartValue();
   int32 end = dim->getEndValue();
   int32 incr = dim->getIncrement();
@@ -839,7 +839,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
 
   std::string dimName = attrMap[MXA_DataImport::Attr_Data_Dimension];
   IDataModel* model = static_cast<MXADataModel*>(this->_dataModel.get() );
-  IDataDimensionPtr dim = model->getDataDimension(dimName);
+  IDataDimension::Pointer dim = model->getDataDimension(dimName);
   //std::cout << "Dim Pointer: " << dim << std::endl;
 
 
@@ -909,7 +909,7 @@ void DataImportXmlParser::onSupportFilesEndTag(const XML_Char* name)
 void DataImportXmlParser::onSupportFileStartTag(const XML_Char* name, const XML_Char** attrs)
 {
 
-  ISupportFilePtr sfile = MXASupportFile::New();
+  ISupportFile::Pointer sfile = MXASupportFile::New();
   for (int i = 0; attrs[i]; i += 2)
   {
     if (MXA::MXA_FILESYSTEM_PATH_TAG.compare(attrs[i]) == 0)

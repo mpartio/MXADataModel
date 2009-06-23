@@ -48,7 +48,7 @@ class MXA_EXPORT XMLMXAAttributeWriter
  * @param attribute The attribute to write
  * @return Error condition - Negative is error
  */
-    int32 writeAttribute(const std::string &attributeKey, IMXAArrayPtr attribute)
+    int32 writeAttribute(const std::string &attributeKey, IMXAArray::Pointer attribute)
     {
       int32 typeId = attribute->getDataType();
       int32 err = -1;
@@ -115,7 +115,7 @@ class MXA_EXPORT XMLMXAAttributeWriter
  * @return Error Condition - Negative is Error.
  */
     template<typename T>
-    int32 writeAttributeData(const std::string &attributeKey, IMXAArrayPtr attribute)
+    int32 writeAttributeData(const std::string &attributeKey, IMXAArray::Pointer attribute)
     {
       std::ofstream &stream = *(_ofstreamPtr.get());
       T* value = static_cast<T*> (attribute->getVoidPointer(0) );
@@ -166,7 +166,7 @@ class MXA_EXPORT XMLMXAAttributeWriter
  * @param attribute The attribute to write
  * @return Error Condition - Negative is error
  */
-    int32 writeStringAttributeData(const std::string &attributeKey, IMXAArrayPtr attribute)
+    int32 writeStringAttributeData(const std::string &attributeKey, IMXAArray::Pointer attribute)
     {
       std::ofstream &stream = *(_ofstreamPtr.get());
       stream << indent(5) << "<UserMetaData key=\"" << attributeKey << "\" dims=\"1\" type=\"H5T_STRING\">";

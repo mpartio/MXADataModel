@@ -21,7 +21,7 @@
 // -----------------------------------------------------------------------------
 //  Constructor
 // -----------------------------------------------------------------------------
-H5DataModelReader::H5DataModelReader(IDataModelPtr dataModel)
+H5DataModelReader::H5DataModelReader(IDataModel::Pointer dataModel)
 {
   _dataModel = dataModel;
 }
@@ -130,7 +130,7 @@ herr_t H5DataModelReader::readDataDimensions(hid_t locId)
     //std::cout << "Found " << dimNames.size() << " Dimensions:" << std::endl;
     for (std::list<std::string>::iterator iter = dimNames.begin(); iter != dimNames.end(); ++iter)
     {
-      MXADataDimensionPtr dim = _loadDataDimension(dataDimId, *(iter) );
+      MXADataDimension::Pointer dim = _loadDataDimension(dataDimId, *(iter) );
       if ( NULL != dim.get() ) {
         _dataModel->addDataDimension(dim);
       }
@@ -153,7 +153,7 @@ herr_t H5DataModelReader::readDataDimensions(hid_t locId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXADataDimensionPtr H5DataModelReader::_loadDataDimension(hid_t loc_id, std::string dimensionName)
+MXADataDimension::Pointer H5DataModelReader::_loadDataDimension(hid_t loc_id, std::string dimensionName)
 {
  // MXADataDimension* node = NULL;
   std::string dimName, altName;
@@ -216,7 +216,7 @@ MXADataDimensionPtr H5DataModelReader::_loadDataDimension(hid_t loc_id, std::str
 //TODO: Read any extra attributes from the data dimension entry
  // std::map<std::string, std::string> attributes = H5Utilities::getAttributesMap(loc_id, name);
 
-  MXADataDimensionPtr dimension;
+  MXADataDimension::Pointer dimension;
   if (uniform == 1) {
    // std::cout << "Adding uniform dimension" << std::endl;
     dimension = MXADataDimension::New(dimName, altName, dim_order, count, start_val, end_val,increment, uniform);
@@ -460,7 +460,7 @@ herr_t H5DataModelReader::readSupportFiles(hid_t locId)
 
   for (std::list<std::string>::iterator iter = indices.begin(); iter != indices.end(); ++iter)
   {
-    ISupportFilePtr file = MXASupportFile::NewFromMXAFile(locId, *iter, false);
+    ISupportFile::Pointer file = MXASupportFile::NewFromMXAFile(locId, *iter, false);
     this->_dataModel->addSupportFile(file, false);
   }
   err = H5Gclose(gid);

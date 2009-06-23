@@ -54,7 +54,7 @@ void RemoveTestFiles()
 template<typename T>
 void MakeScalarAttribute(T value, std::string key, MXADataModel* model)
 {
-  IMXAArrayPtr umd = MXAArrayTemplate<T>::CreateSingleValueArray(value);
+  IMXAArray::Pointer umd = MXAArrayTemplate<T>::CreateSingleValueArray(value);
   model->addUserMetaData(key, umd);
 }
 
@@ -74,7 +74,7 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
   BOOST_REQUIRE(dims.size() == 2);
   BOOST_REQUIRE(dims[0] == 5);
   BOOST_REQUIRE(dims[1] == 2);
-  IMXAArrayPtr vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()) );
+  IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()) );
   BOOST_REQUIRE ( vecPtr->getNumberOfElements() == numelements);
   BOOST_REQUIRE (vecPtr->getNumberOfDimensions() == 2);
    std::vector<uint64> mydims(dims.size(), 0);
@@ -140,7 +140,7 @@ void CreateAttributes(MXADataModel* model)
     MakeScalarAttribute( f64, "Scalar Float 64", model);
 
     // String attributes
-    IMXAArrayPtr s1 = MXAAsciiStringData::Create( "DaddyO");
+    IMXAArray::Pointer s1 = MXAAsciiStringData::Create( "DaddyO");
     model->addUserMetaData("Password", s1);
 }
 
@@ -156,10 +156,10 @@ MXADataModel::Pointer createModel()
     model->setModelVersion(MXA::MXACurrentFileVersion);
 
     // ---------- Test creation/addition of Data Dimensions
-    IDataDimensionPtr dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 15, 20, 50, 2, 1);
-    IDataDimensionPtr dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 10, 1000, 5000, 500, 1);
-    IDataDimensionPtr dim2 = model->addDataDimension("Timestep", "TS",100, 0, 99, 1, 1);
-    IDataDimensionPtr dim3 = model->addDataDimension("Slice", "slice", 256, 0, 255, 1, 1);
+    IDataDimension::Pointer dim0 = model->addDataDimension("Volume Fraction", "Vol Frac", 15, 20, 50, 2, 1);
+    IDataDimension::Pointer dim1 = model->addDataDimension("Random Seed", "Rnd Seed", 10, 1000, 5000, 500, 1);
+    IDataDimension::Pointer dim2 = model->addDataDimension("Timestep", "TS",100, 0, 99, 1, 1);
+    IDataDimension::Pointer dim3 = model->addDataDimension("Slice", "slice", 256, 0, 255, 1, 1);
 
     //Create Data Records
     MXADataRecord::Pointer rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
@@ -202,7 +202,7 @@ MXADataModel::Pointer createModel()
     // Create User Defined MetaData
     CreateAttributes( model );
 
-    ISupportFilePtr spFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text, false);
+    ISupportFile::Pointer spFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text, false);
     model->addSupportFile(spFile);
     return modelPtr;
 }
@@ -219,10 +219,10 @@ MXADataModel::Pointer createModelTemplate()
     model->setModelVersion(MXA::MXACurrentFileVersion);
 
     // ---------- Test creation/addition of Data Dimensions
-    MXADataDimensionPtr dim0 = MXADataDimension::New("Volume Fraction", "Vol Frac");
-    MXADataDimensionPtr dim1 = MXADataDimension::New("Random Seed", "Rnd Seed");
-    MXADataDimensionPtr dim2 = MXADataDimension::New("Timestep", "TS");
-    MXADataDimensionPtr dim3 = MXADataDimension::New("Slice", "slice");
+    MXADataDimension::Pointer dim0 = MXADataDimension::New("Volume Fraction", "Vol Frac");
+    MXADataDimension::Pointer dim1 = MXADataDimension::New("Random Seed", "Rnd Seed");
+    MXADataDimension::Pointer dim2 = MXADataDimension::New("Timestep", "TS");
+    MXADataDimension::Pointer dim3 = MXADataDimension::New("Slice", "slice");
 
     model->addDataDimension(dim0);
     model->addDataDimension(dim1);
@@ -288,7 +288,7 @@ void GenerateMasterXMLFile()
   }
 
   {
-    IDataModelPtr model = MXADataModel::New();
+    IDataModel::Pointer model = MXADataModel::New();
     // Read the File back from xml
     XMLDataModelReader reader (model, xmlFile);
     int32 err = reader.readDataModel(-1);
@@ -376,28 +376,28 @@ void XMLTemplateTest()
   BOOST_REQUIRE ( readModel->isValid(errorMessage) == false);
   BOOST_REQUIRE ( readModel->getDataRecords().size() == 2);
 
-  IDataDimensionPtr dim0 = readModel->getDataDimension(0);
+  IDataDimension::Pointer dim0 = readModel->getDataDimension(0);
   dim0->setCount(15);
   dim0->setStartValue(20);
   dim0->setEndValue(50);
   dim0->setIncrement(2);
   dim0->setUniform(1);
 
-  IDataDimensionPtr dim1 = readModel->getDataDimension(1);
+  IDataDimension::Pointer dim1 = readModel->getDataDimension(1);
   dim1->setCount(10);
   dim1->setStartValue(1000);
   dim1->setEndValue(5000);
   dim1->setIncrement(500);
   dim1->setUniform(1);
 
-  IDataDimensionPtr dim2 = readModel->getDataDimension(2);
+  IDataDimension::Pointer dim2 = readModel->getDataDimension(2);
   dim2->setCount(100);
   dim2->setStartValue(0);
   dim2->setEndValue(99);
   dim2->setIncrement(1);
   dim2->setUniform(1);
 
-  IDataDimensionPtr dim3 = readModel->getDataDimension(3);
+  IDataDimension::Pointer dim3 = readModel->getDataDimension(3);
   dim3->setCount(256);
   dim3->setStartValue(0);
   dim3->setEndValue(255);

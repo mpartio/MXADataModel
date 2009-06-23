@@ -44,9 +44,9 @@ public:
    * @param dataFile The IDataFile object
    * @return
    */
-  int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
+  int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile)
   {
-    IDataModelPtr model = dataFile->getDataModel();
+    IDataModel::Pointer model = dataFile->getDataModel();
     std::string path ( dataSource->generateInternalPath() );
     uint32 pos = path.find_last_of("/");
     std::string parentPath ( path.substr(0, pos)  );

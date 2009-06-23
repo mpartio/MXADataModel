@@ -37,7 +37,7 @@ MXADataModel::Pointer createDataModel()
   int32 end = 9;
   int32 increment = 1;
   int32 uniform = 1;
-  MXADataDimensionPtr dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
+  MXADataDimension::Pointer dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
 
   // The second dimension will have 4 elements ranging from 2 to 8 with an increment of 2;
   index = 1;
@@ -46,7 +46,7 @@ MXADataModel::Pointer createDataModel()
   end = 800;
   increment = 200;
   uniform = 1;
-  MXADataDimensionPtr dim2 = MXADataDimension::New("Pressure", "Press (kPa)", index, count, start, end, increment, uniform);
+  MXADataDimension::Pointer dim2 = MXADataDimension::New("Pressure", "Press (kPa)", index, count, start, end, increment, uniform);
 
   //Next we need to add these dimensions to the model. Since we are using Boost shared pointers
   // the dimension objects are refcounted thus relieving us from having to worry about cleaning up
@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
   // as the last argument because we don't want the file to be read immediately,
   // but rather the file imported into the datamodel output file 'on demand' during
   // the saving of the DataModel to the HDF5 file
-  ISupportFilePtr supFile = MXASupportFile::NewFromFileSystem(Examples::SupportFileInput, SupportFile::FileType::Binary, false);
+  ISupportFile::Pointer supFile = MXASupportFile::NewFromFileSystem(Examples::SupportFileInput, SupportFile::FileType::Binary, false);
 
   // We use 'true' as the last argument because we want the data model to keep the
   // internal indexing for us. Most of the time that is what you want to do.
@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
 
   // Create the hdf5 datafile using the datamodel we created for its model. This will
   // attempt to write the model (and support files) to the data file immediately.
-  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(Examples::SupportFileLocation, model);
+  IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(Examples::SupportFileLocation, model);
 
 
   // Since we used boost::shared_ptrs to manage our memory for us we don't have to

@@ -14,6 +14,9 @@
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXASetGetMacros.h>
 
+#include <vector>
+#include <map>
+
 class IDataRecordWriter;
 
 /**
@@ -30,6 +33,10 @@ class MXA_EXPORT IDataRecord
     virtual ~IDataRecord() {};
 
     MXA_SHARED_POINTERS(IDataRecord);
+    MXA_TYPE_MACRO(IDataRecord);
+    typedef std::vector<Pointer>          Container;
+    typedef std::map<int32, Pointer>      LookupTable;
+  //  typedef boost::weak_ptr<IDataRecord>              WeakPointer;
 
     /**
      * @brief Setter for property name
@@ -103,13 +110,13 @@ class MXA_EXPORT IDataRecord
     * @brief Sets the Parent node
     * @param parent The Parent node for this node
     */
-    virtual void setParent(IDataRecordWeakPtr parent) = 0;
+    virtual void setParent(IDataRecord::WeakPointer parent) = 0;
 
 
     /**
     * @brief Returns the Parent Node
     */
-    virtual IDataRecordWeakPtr getParent() = 0;
+    virtual IDataRecord::WeakPointer getParent() = 0;
 
     /**
     * @brief Setter for property guid
@@ -144,7 +151,7 @@ class MXA_EXPORT IDataRecord
     * @brief Adds a child to this node
     * @param child The child to add to this node
     */
-    virtual void addChild(IDataRecordPtr child) = 0;
+    virtual void addChild(IDataRecord::Pointer child) = 0;
 
     /**
     * @brief Removes a child from this node
@@ -174,12 +181,12 @@ class MXA_EXPORT IDataRecord
     * @param index The index of the child to return
     * @return The index of the child
     */
-    virtual IDataRecordPtr getChildAt(int32 index) = 0;
+    virtual IDataRecord::Pointer getChildAt(int32 index) = 0;
 
     /**
     * @brief Returns a reference to the children of this node
     */
-    virtual IDataRecords& getChildren() = 0;
+    virtual IDataRecord::Container& getChildren() = 0;
 
 #if 0
     /**

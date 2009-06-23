@@ -49,9 +49,9 @@ public:
   * @brief Creates a flat look up table using the GUID of the data record as the
    * key and the boost::Shared_ptr as the value
    * @param lut The look up table to be populated.
-   * @param nodes The IDataRecords to use as the tree
+   * @param nodes The IDataRecord::Container to use as the tree
    */
-   static void generateLUT(IDataRecordLookupTable &lut, IDataRecords &nodes);
+   static void generateLUT(IDataRecord::LookupTable &lut, IDataRecord::Container &nodes);
   
   
   /**
@@ -178,20 +178,20 @@ public:
   static int32 nextGUIDValue();
   
   /// Accessor for Parent iVar
-  void setParent(IDataRecordWeakPtr parent);
-  IDataRecordWeakPtr getParent();
+  void setParent(IDataRecord::WeakPointer parent);
+  IDataRecord::WeakPointer getParent();
   
   // Children Methods
   int32 getNumChildren() const;
   bool hasChildren() const;
-  void addChild(IDataRecordPtr child);
+  void addChild(IDataRecord::Pointer child);
   void removeChild(int index);
   void removeChild(IDataRecord* child);
   void removeAllChildren();
   int32 indexOfChild(IDataRecord* child);
 
-  IDataRecordPtr getChildAt(int32 index);
-  IDataRecords& getChildren();
+  IDataRecord::Pointer getChildAt(int32 index);
+  IDataRecord::Container& getChildren();
   
   // Utilities
   void printDataRecordTree(int32 depth=0);
@@ -199,7 +199,7 @@ public:
   
   
   // -------- Needed for Parent Child relationship ------------
-  void _setWeakPtr(IDataRecordWeakPtr weakPtr);
+  void _setWeakPtr(IDataRecord::WeakPointer weakPtr);
   
 protected:
   MXADataRecord();
@@ -212,9 +212,9 @@ protected:
   // Node Name
   std::string _nodeName;
   int32 _uniqueId;
-  IDataRecordWeakPtr _selfPtr;
-  IDataRecordWeakPtr _parent;
-  IDataRecords _children;
+  IDataRecord::WeakPointer _selfPtr;
+  IDataRecord::WeakPointer _parent;
+  IDataRecord::Container _children;
  // MXAAttributeMap _nodeAttributes;
   
 private:

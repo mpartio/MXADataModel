@@ -44,7 +44,8 @@
   typedef thisClass                      Self;\
   typedef boost::shared_ptr<Self>        Pointer;\
   typedef boost::shared_ptr<const Self>  ConstPointer;\
-  typedef boost::weak_ptr<const thisClass> WeakPointer;\
+  typedef boost::weak_ptr<thisClass> WeakPointer;\
+  typedef boost::weak_ptr<thisClass> ConstWeakPointer;\
   MXA_NULL_SHARED_POINTER(thisClass);
 
 /**
@@ -78,7 +79,7 @@ static Pointer New(void) \
 /** Macro used to add standard methods to all classes, mainly type
  * information. */
 #define MXA_TYPE_MACRO(thisClass) \
-    virtual const char *GetNameOfClass() const \
+    virtual const char* getNameOfClass() const \
         {return #thisClass;}
 
 //------------------------------------------------------------------------------

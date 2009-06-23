@@ -22,12 +22,12 @@ _nodeType("Dimension")
 // -----------------------------------------------------------------------------
 //  Static New Method that is used to construct a new DataDimension Node
 // -----------------------------------------------------------------------------
-MXADataDimensionPtr MXADataDimension::New(std::string name, std::string altName,
+MXADataDimension::Pointer MXADataDimension::New(std::string name, std::string altName,
     int32 index, int32 count, int32 startValue, 
     int32 endValue, int32 increment, int32 uniform)
 {
   MXADataDimension* dim = new MXADataDimension();
-  MXADataDimensionPtr dimension(dim);
+  MXADataDimension::Pointer dimension(dim);
 
   dim->setIndex(index);
   dim->setCount(count);

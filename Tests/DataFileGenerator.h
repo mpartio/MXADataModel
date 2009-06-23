@@ -94,7 +94,7 @@ public:
 	 * @param dims Valus for the Data Dimensions
 	 * @return Error condition
 	 */
-	herr_t makeRecords(MXADataModel::Pointer model, MXADataImportPtr dataImport, MXADataRecord::Pointer parentRec, std::vector<hsize_t> dims);
+	herr_t makeRecords(MXADataModel::Pointer model, MXADataImport::Pointer dataImport, MXADataRecord::Pointer parentRec, std::vector<hsize_t> dims);
 
 /**
  * @brief Creates Data and stores the data in the HDF5 file
@@ -107,7 +107,7 @@ public:
  */
 	template<typename T>
 	herr_t createAndStore(MXADataModel::Pointer model, MXADataRecord::Pointer rec,
-	    MXADataImportPtr dataImport, T type, std::vector<hsize_t> tableDims)
+	    MXADataImport::Pointer dataImport, T type, std::vector<hsize_t> tableDims)
 	{
 
 	  // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
@@ -146,7 +146,7 @@ public:
 	       for (int j = dim1Start; j <= dim1End; j = j+ dim1Increment)
 	       {
 	         //Create a Scalar Data Source
-	         MXADataSourcePtr ds( new MXADataSource() );
+	         MXADataSource::Pointer ds( new MXADataSource() );
 	         std::vector<int32> dimValues;
 	         dimValues.push_back(i);
 	         dimValues.push_back(j);

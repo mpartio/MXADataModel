@@ -169,7 +169,7 @@ int main(int argc, char **argv) {
    */
   {
     numValues = 10;
-    IMXAArrayPtr bPtr32 = MXAArrayTemplate<int32>::CreateArray(numValues);
+    IMXAArray::Pointer bPtr32 = MXAArrayTemplate<int32>::CreateArray(numValues);
     MXAArrayTemplate<int32>* wrappedPointer = dynamic_cast< MXAArrayTemplate<int32>* > (bPtr32.get() );
 
     // bPtr32 is a boost::shared_ptr object that wraps the actual pointer to the MXAArrayTemplate

@@ -27,9 +27,9 @@
 // -----------------------------------------------------------------------------
  //  Use a new set of indices to generate a path
  // -----------------------------------------------------------------------------
- std::string H5MXAUtilities::generateH5PathToDataset ( IDataModelPtr model,
+ std::string H5MXAUtilities::generateH5PathToDataset ( IDataModel::Pointer model,
                                                    std::vector<int32> &indices,
-                                                   IDataRecordPtr record)
+                                                   IDataRecord::Pointer record)
  {
    std::string path;
    //Put the data root on first
@@ -49,9 +49,9 @@
  // -----------------------------------------------------------------------------
  //
  // -----------------------------------------------------------------------------
- IMXAArrayPtr H5MXAUtilities::readData(IDataFilePtr dataFile, const std::string &datasetPath)
+ IMXAArray::Pointer H5MXAUtilities::readData(IDataFile::Pointer dataFile, const std::string &datasetPath)
  {
-   IMXAArrayPtr ptr;
+   IMXAArray::Pointer ptr;
    hid_t fileId = dataFile->getFileId();
    if (fileId < 0)
    {
@@ -135,11 +135,11 @@
  // -----------------------------------------------------------------------------
  //
  // -----------------------------------------------------------------------------
- IMXAArrayPtr H5MXAUtilities::readAttribute(IDataFilePtr dataFile,
+ IMXAArray::Pointer H5MXAUtilities::readAttribute(IDataFile::Pointer dataFile,
                                                          const std::string &datasetPath,
                                                          const std::string &attributeKey)
  {
-   IMXAArrayPtr ptr;
+   IMXAArray::Pointer ptr;
    hid_t fileId = dataFile->getFileId();
    if (fileId < 0)
    {

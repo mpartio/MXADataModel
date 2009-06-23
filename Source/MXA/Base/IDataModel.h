@@ -14,12 +14,19 @@
 
 //-- MXA Includes
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypeDefs.h>
+//#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IDataDimension.h>
+#include <MXA/Base/IDataRecord.h>
+#include <MXA/Base/IRequiredMetaData.h>
+#include <MXA/Base/IMXAArray.h>
+#include <MXA/Base/ISupportFile.h>
 
 //-- STL Includes
 #include <string>
 #include <map>
+
+typedef std::map<std::string, IMXAArray::Pointer>         MXAAbstractAttributes;
 
 /**
  * @brief Formally defines the methods that subclasses will need to implement when
@@ -33,10 +40,12 @@
 class MXA_EXPORT IDataModel
 {
   public:
+    MXA_SHARED_POINTERS(IDataModel);
+
     IDataModel() {}
     virtual ~IDataModel() {}
 
-    MXA_SHARED_POINTERS(IDataModel);
+
 
     /**
      * @brief Returns the MXA File version that the model adheres to.
@@ -82,7 +91,7 @@ class MXA_EXPORT IDataModel
     * @brief Adds a Data Dimension to the data model.
     * @param dimension The IDataDimension to add to the model
     */
-    virtual void addDataDimension(IDataDimensionPtr dimension ) = 0;
+    virtual void addDataDimension(IDataDimension::Pointer dimension ) = 0;
 
     /**
     * @brief Adds a Data Dimension by declaring all the values of the data dimension.
@@ -95,7 +104,7 @@ class MXA_EXPORT IDataModel
     * @param uniform Are the indices uniform
     * @return A boost::shared_ptr to the newly created DataDimension Object
     */
-    virtual IDataDimensionPtr addDataDimension(std::string name, std::string altName,
+    virtual IDataDimension::Pointer addDataDimension(std::string name, std::string altName,
                                     int32 count, int32 startValue,
                                     int32 endValue, int32 increment, int32 uniform) = 0;
 
@@ -107,7 +116,7 @@ class MXA_EXPORT IDataModel
      * @param index The index to insert the Data Dimension at
      * @return Error condition
      */
-    virtual int32 insertDataDimension(IDataDimensionPtr dimension, int32 index) = 0;
+    virtual int32 insertDataDimension(IDataDimension::Pointer dimension, int32 index) = 0;
 
 
     /**
@@ -144,13 +153,13 @@ class MXA_EXPORT IDataModel
     * @brief Returns the data dimensions of the Model in a std::vector.
     * @return
     */
-    virtual IDataDimensions& getDataDimensions() = 0;
+    virtual IDataDimension::Container& getDataDimensions() = 0;
     /**
     * @brief Returns a specific Data Dimension from the model.
     * @param index The index to return
     * @return A Pointer to the data dimension or NULL if there is an error
     */
-    virtual IDataDimensionPtr getDataDimension(int32 index) = 0;
+    virtual IDataDimension::Pointer getDataDimension(int32 index) = 0;
     /**
     * @brief Returns a specific Data Dimension from the model. Technically Data
     * dimensions could have the same names as Data Dimensions are only differentiated
@@ -161,7 +170,7 @@ class MXA_EXPORT IDataModel
     */
     //virtual IDataDimension* getDataDimension(std::string dimName) = 0;
 
-    virtual IDataDimensionPtr getDataDimension(std::string dimName) = 0;
+    virtual IDataDimension::Pointer getDataDimension(std::string dimName) = 0;
 
     /**
      * @brief Returns the number of data dimensions in the model.
@@ -173,7 +182,7 @@ class MXA_EXPORT IDataModel
     * @brief Adds a data Record to the model.
     * @param record The record to add to the model
     */
-    virtual void addDataRecord(IDataRecordPtr record) = 0;
+    virtual void addDataRecord(IDataRecord::Pointer record) = 0;
     /**
     * @brief Adds a Data record to the model using the given parent argument as
     * the record's parent object.
@@ -182,20 +191,20 @@ class MXA_EXPORT IDataModel
     * Note that this is equivelent to just setting the parnet of the record manually.
     * this is provided for convenience and consistancy.
     */
-    virtual void addDataRecord(IDataRecordPtr record, IDataRecordPtr parent) = 0;
+    virtual void addDataRecord(IDataRecord::Pointer record, IDataRecord::Pointer parent) = 0;
 
     /**
      * @brief Removes the Data Record from the Model.
      * @param record The record to remove from the Data model
      * @return Error Condition
      */
-    virtual int32 removeDataRecord(IDataRecordPtr record) = 0;
+    virtual int32 removeDataRecord(IDataRecord::Pointer record) = 0;
 
     /**
     * @brief Returns the Data Records from the model. The natural form of the
     * records is in a Tree structure.
     */
-    virtual IDataRecords& getDataRecords() = 0;
+    virtual IDataRecord::Container& getDataRecords() = 0;
 
     /**
     * @brief Returns a Data Record that is found by giving the full path using the "RecordName" of the data record(s).
@@ -205,7 +214,7 @@ class MXA_EXPORT IDataModel
     * method in the following way will retrieve the child DataRecord:
     * <br><code><br>
     * std::string path ("TopLevel/ChildRecord");<br>
-    * IDataRecordPtr datarecord = myDataModel.getDataRecordByNamedPath(path);<br>
+    * IDataRecord::Pointer datarecord = myDataModel.getDataRecordByNamedPath(path);<br>
     * </code><br>
     * You can also look at the Unit Testing Code for more examples.
     *
@@ -214,7 +223,7 @@ class MXA_EXPORT IDataModel
     * search will start at the top level of the data records.
     * @return Boost::shared_ptr to the data record object
     */
-    virtual IDataRecordPtr getDataRecordByNamedPath(const std::string &path, IDataRecord* parent=NULL) = 0;
+    virtual IDataRecord::Pointer getDataRecordByNamedPath(const std::string &path, IDataRecord* parent=NULL) = 0;
 
     /**
     * @brief Returns a Data Record that is found by giving the full path using the
@@ -225,7 +234,7 @@ class MXA_EXPORT IDataModel
     * search will start at the top level of the data records.
     * @return Boost::shared_ptr to the data record object
     */
-    virtual IDataRecordPtr getDataRecordByInternalPath(const std::string &path, IDataRecord* parent=NULL) = 0;
+    virtual IDataRecord::Pointer getDataRecordByInternalPath(const std::string &path, IDataRecord* parent=NULL) = 0;
 
     //------------- Required Meta Data Methods -----------------------------------
     /**
@@ -256,15 +265,15 @@ class MXA_EXPORT IDataModel
 
     /**
      * @brief Sets the required meta data
-     * @param metaData IRequiredMetaDataPtr object
+     * @param metaData IRequiredMetaData::Pointer object
      */
-    virtual int32 setRequiredMetaData(IRequiredMetaDataPtr metaData) = 0;
+    virtual int32 setRequiredMetaData(IRequiredMetaData::Pointer metaData) = 0;
 
     /**
     * @brief Returns the meta data for the data model
-    * @return IRequiredMetaDataPtr object
+    * @return IRequiredMetaData::Pointer object
     */
-    virtual IRequiredMetaDataPtr getRequiredMetaData() = 0;
+    virtual IRequiredMetaData::Pointer getRequiredMetaData() = 0;
 
     /**
      * @brief Sets all the user defined meta data for this model. Any previously
@@ -281,7 +290,7 @@ class MXA_EXPORT IDataModel
     * @param key The attribute key name
     * @param umd The Key/Value pair to append to the model
     */
-    virtual void addUserMetaData( const std::string &key, IMXAArrayPtr umd) = 0;
+    virtual void addUserMetaData( const std::string &key, IMXAArray::Pointer umd) = 0;
 
   /**
    * @brief Removes specific user meta-data entry
@@ -293,7 +302,7 @@ class MXA_EXPORT IDataModel
      * @brief Returns a specific User meta data item
      * @param key The value of the attribute key
      */
-    virtual IMXAArrayPtr getUserMetaData(const std::string &key) = 0;
+    virtual IMXAArray::Pointer getUserMetaData(const std::string &key) = 0;
 
     /**
     * @brief Prints the user meta data from the model
@@ -308,13 +317,13 @@ class MXA_EXPORT IDataModel
      * @param supportFile An ISupportFile object or subclass
      * @param updateIndex Should the "index" property of the supportFile object be updated
      */
-    virtual void addSupportFile(ISupportFilePtr supportFile, bool updateIndex = false) = 0;
+    virtual void addSupportFile(ISupportFile::Pointer supportFile, bool updateIndex = false) = 0;
 
     /**
      * @brief Returns the list of SupportFile objects from the model.
      * @return The list of Support files for this model.
      */
-    virtual ISupportFiles getSupportFiles() = 0;
+    virtual ISupportFile::Container getSupportFiles() = 0;
 
     /**
      * @brief Returns a specific ISupportFile instance from the model or a NULL
@@ -323,7 +332,7 @@ class MXA_EXPORT IDataModel
      * @return Boost Shared Pointer wrapping an ISupportFile subclass instance or NULL
      * if nothing was found.
      */
-    virtual ISupportFilePtr getSupportFile(int index) = 0;
+    virtual ISupportFile::Pointer getSupportFile(int index) = 0;
 
     //-------------- Methods to Print the DataModel to an outputstream ----------
     /**

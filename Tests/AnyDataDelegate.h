@@ -45,7 +45,7 @@ class AnyDataDelegate: public IImportDelegate
      * @param dataFile The IDataFile object
      * @return error condition. Negative is error.
      */
-    int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
+    int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile)
     {
       std::string path ( dataSource->generateInternalPath() );
     //  std::cout << logTime() << "VectorDataDelegate::importDataSource() " << path << std::endl;

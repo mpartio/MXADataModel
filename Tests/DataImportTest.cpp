@@ -69,11 +69,11 @@ void RemoveTestFiles()
 // -----------------------------------------------------------------------------
 void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
 {
-  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outputFilePath, model);
+  IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(outputFilePath, model);
   BOOST_REQUIRE (NULL != dataFile.get() );
 
   //Create the DataImport Class
-  MXADataImportPtr dataImport( new MXADataImport() );
+  MXADataImport::Pointer dataImport( new MXADataImport() );
   dataImport->setDataFile(dataFile);
 
   // Register the known ImportDelegates, which will also instantiate the ImportDelegateManager instance.
@@ -99,14 +99,14 @@ void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
   h5ImportDelegate->setValue(55);
 
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
-  IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension, since there is only one this works
+  IDataDimension::Pointer dim0 = model->getDataDimension(0); // Get the first Dimension, since there is only one this works
   BOOST_REQUIRE(dim0 != NULL); // Used for Boost Unit Test Framework
 
-  IDataDimensionPtr dim1 = model->getDataDimension(1);
+  IDataDimension::Pointer dim1 = model->getDataDimension(1);
   BOOST_REQUIRE(dim1 != NULL); // Used for Boost Unit Test Framework
 
   // Create a DataRecord entry for the Data Model
-  IDataRecordPtr record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
+  IDataRecord::Pointer record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
   BOOST_REQUIRE(NULL != record.get()); // Used for Boost Unit Test Framework
 
   // Set the start/end/increment values for each Data Dimension
@@ -126,7 +126,7 @@ void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
     for (int j = dim1Start; j <= dim1End; j = j+ dim1Increment)
     {
       //Create some Data Sources
-      MXADataSourcePtr ds( new MXADataSource() );
+      MXADataSource::Pointer ds( new MXADataSource() );
       std::vector<int32> dimValues;
       dimValues.push_back(i);
       dimValues.push_back(j);
@@ -159,9 +159,9 @@ MXADataModel::Pointer createSimpleModel()
 	  model->setModelVersion(MXA::MXACurrentFileVersion);
 
 	  // ---------- Create 2 Data Dimensions
-	  MXADataDimensionPtr dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
+	  MXADataDimension::Pointer dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
 	  model->addDataDimension(dim0);
-    MXADataDimensionPtr dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
+    MXADataDimension::Pointer dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
     model->addDataDimension(dim1);
 
 	  // ---------- Create Data Records

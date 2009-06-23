@@ -555,35 +555,35 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
         res.clear(); //Clear the string out first
         err = H5Lite::readStringAttribute(fileId, datasetPath, (*iter), res );
         if (err >= 0) {
-          IMXAArrayPtr attr = MXAAsciiStringData::Create( res );
+          IMXAArray::Pointer attr = MXAAsciiStringData::Create( res );
           attributes[*iter] = attr;
         }
         break;
       case H5T_INTEGER:
         //std::cout << "User Meta Data Type is Integer" << std::endl;
         if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<uint8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<uint16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<uint32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<uint64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<int8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<int16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<int32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<int64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else {
           std::cout << "Unknown Type: " << typeId << " at " <<  datasetPath << std::endl;
@@ -593,10 +593,10 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
         break;
       case H5T_FLOAT:
         if (attr_size == 4) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<float32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<float32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if (attr_size == 8 ) {
-          IMXAArrayPtr ptr = H5Utilities::readH5Attribute<float64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<float64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else {
           std::cout << "Unknown Floating point type" << std::endl;

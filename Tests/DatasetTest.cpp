@@ -54,9 +54,9 @@
 boost::shared_ptr<PointerType> BoostVariable (Pointer);
 
 // Declare all the methods
-IDataModelPtr createModel();
+IDataModel::Pointer createModel();
 void DatasetTest();
-void MakeDataRecord( const std::string &key, IDataModelPtr model);
+void MakeDataRecord( const std::string &key, IDataModel::Pointer model);
 
 int recLuid = 0;
 
@@ -74,7 +74,7 @@ void RemoveTestFiles()
 //
 // -----------------------------------------------------------------------------
 
-void MakeDataRecord( const std::string &key, IDataModelPtr model)
+void MakeDataRecord( const std::string &key, IDataModel::Pointer model)
 {
   MXADataRecord::Pointer rec = MXADataRecord::New(recLuid++, key, key );
   model->addDataRecord(rec);
@@ -84,7 +84,7 @@ void MakeDataRecord( const std::string &key, IDataModelPtr model)
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-void MakeAttribute(const std::string &dsPath, IDatasetPtr dataset)
+void MakeAttribute(const std::string &dsPath, IDataset::Pointer dataset)
 {
   int32 numElements = 1;
   T value = 0xFF;
@@ -92,7 +92,7 @@ void MakeAttribute(const std::string &dsPath, IDatasetPtr dataset)
   attributeKey = "H5Attribute<" + attributeKey + ">";
 
   MXAArrayTemplate<T>* attribute = MXAArrayTemplate<T>::New( numElements);
-  IMXAArrayPtr attr (static_cast<IMXAArray*>(attribute));
+  IMXAArray::Pointer attr (static_cast<IMXAArray*>(attribute));
   for (mxaIdType i = 0; i < numElements; ++i)
   {
     attribute->setValue (i, i*4) ;
@@ -103,22 +103,22 @@ void MakeAttribute(const std::string &dsPath, IDatasetPtr dataset)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MakeStringAttribute(const std::string &dsPath, IDatasetPtr dataset)
+void MakeStringAttribute(const std::string &dsPath, IDataset::Pointer dataset)
 {
   std::string value ("attribute value");
   std::string attributeKey ("H5AsciiStringAttribute");
 
-  IMXAArrayPtr strAttr = MXAAsciiStringData::Create( value);
+  IMXAArray::Pointer strAttr = MXAAsciiStringData::Create( value);
   dataset->addAttribute(attributeKey, strAttr);
 }
 
 // -----------------------------------------------------------------------------
 //  Creates a Data Model to use
 // -----------------------------------------------------------------------------
-IDataModelPtr createModel()
+IDataModel::Pointer createModel()
 {
     std::string errorMessage;
-    IDataModelPtr model = MXADataModel::New();
+    IDataModel::Pointer model = MXADataModel::New();
 
     BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
 
@@ -133,7 +133,7 @@ IDataModelPtr createModel()
     BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
 
     // ---------- Test creation/addition of Data Dimensions
-    IDataDimensionPtr dim0 = model->addDataDimension("Data Container", "Data Container",  10, 0, 9, 1, 1);
+    IDataDimension::Pointer dim0 = model->addDataDimension("Data Container", "Data Container",  10, 0, 9, 1, 1);
     errorMessage.clear();
     BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
 
@@ -193,12 +193,12 @@ IDataModelPtr createModel()
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 _WriteDatasetTest( const std::string &recName, IDataFilePtr dataFile)
+int32 _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFile)
 {
 //  T t;
 //   std::cout << "Running _WriteDatasetTest<" << H5Lite::HDFTypeForPrimitiveAsStr(t) << ">" << std::endl;
-  IDataModelPtr model = dataFile->getDataModel();
-  IDataRecordPtr rec = model->getDataRecordByNamedPath(recName, NULL);
+  IDataModel::Pointer model = dataFile->getDataModel();
+  IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   BOOST_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
@@ -212,7 +212,7 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFilePtr dataFile)
 
   uint64 numElements = 5;
   MXAArrayTemplate<T>* data = MXAArrayTemplate<T>::New( numElements);
-  IMXAArrayPtr dataPtr (static_cast<IMXAArray*>(data));
+  IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data));
   BOOST_REQUIRE(data != 0x0);
   BOOST_REQUIRE(data->getNumberOfElements() == numElements);
   data->getDimensions( &(dims.front() )  );
@@ -241,7 +241,7 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFilePtr dataFile)
   }
 
   // Create the dataset that will hold the data and associated attributes
-  IDatasetPtr ds = H5Dataset::CreateDatasetPtr(dsPath, dataPtr);
+  IDataset::Pointer ds = H5Dataset::CreateDatasetPtr(dsPath, dataPtr);
 
   //Create Attributes for each primitive type
   MakeAttribute<int8>(dsPath, ds );
@@ -266,10 +266,10 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void _WriteStringDataTest ( const std::string &recName, IDataFilePtr dataFile)
+void _WriteStringDataTest ( const std::string &recName, IDataFile::Pointer dataFile)
 {
-  IDataModelPtr model = dataFile->getDataModel();
-  IDataRecordPtr rec = model->getDataRecordByNamedPath(recName, NULL);
+  IDataModel::Pointer model = dataFile->getDataModel();
+  IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   BOOST_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
@@ -278,10 +278,10 @@ void _WriteStringDataTest ( const std::string &recName, IDataFilePtr dataFile)
   int32 err = 1;
 
   std::string stringData ("This is some string data");
-  IMXAArrayPtr strData = MXAAsciiStringData::Create(stringData);
+  IMXAArray::Pointer strData = MXAAsciiStringData::Create(stringData);
 
   // Create the dataset that will hold the data and associated attributes
-  IDatasetPtr ds = H5Dataset::CreateDatasetPtr(dsPath, strData);
+  IDataset::Pointer ds = H5Dataset::CreateDatasetPtr(dsPath, strData);
 
 
   //Create Attributes for each primitive type
@@ -307,12 +307,12 @@ void _WriteStringDataTest ( const std::string &recName, IDataFilePtr dataFile)
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 _Write2DArrayTest( const std::string &recName, IDataFilePtr dataFile)
+int32 _Write2DArrayTest( const std::string &recName, IDataFile::Pointer dataFile)
 {
 //  T t;
 //  std::cout << "Running _Write2DArrayTest<" << H5Lite::HDFTypeForPrimitiveAsStr(t) << ">" << std::endl;
-  IDataModelPtr model = dataFile->getDataModel();
-  IDataRecordPtr rec = model->getDataRecordByNamedPath(recName, NULL);
+  IDataModel::Pointer model = dataFile->getDataModel();
+  IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   BOOST_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
@@ -325,7 +325,7 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFilePtr dataFile)
   int rank = 2;
   std::vector<uint64> dims(rank, 0);
   MXA2DArray<T>* data = MXA2DArray<T>::New( 256, 100);
-  IMXAArrayPtr dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
+  IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
 
   BOOST_REQUIRE(data != 0x0);
   BOOST_REQUIRE(data->getNumberOfElements() == numElements);
@@ -380,7 +380,7 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFilePtr dataFile)
   }
 
   // Create the dataset that will hold the data and associated attributes
-  IDatasetPtr ds = H5Dataset::CreateDatasetPtr(dsPath, dataPtr);
+  IDataset::Pointer ds = H5Dataset::CreateDatasetPtr(dsPath, dataPtr);
   BOOST_REQUIRE (ds.get() != NULL);
 
   // Write the data to the file
@@ -393,10 +393,10 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void _WriteRGBImageTest( const std::string &recName, IDataFilePtr dataFile)
+void _WriteRGBImageTest( const std::string &recName, IDataFile::Pointer dataFile)
 {
-  IDataModelPtr model = dataFile->getDataModel();
-  IDataRecordPtr rec = model->getDataRecordByNamedPath(recName, NULL);
+  IDataModel::Pointer model = dataFile->getDataModel();
+  IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   BOOST_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
@@ -409,7 +409,7 @@ void _WriteRGBImageTest( const std::string &recName, IDataFilePtr dataFile)
   int rank = 2;
   std::vector<uint64> dims(rank, 0);
   MXARGBImage* data = MXARGBImage::New( 256, 100);
-  IMXAArrayPtr dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
+  IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
   BOOST_REQUIRE(data != 0x0);
   BOOST_REQUIRE(data->getNumberOfElements() == numElements);
   BOOST_REQUIRE(data->getWidth() == 256);
@@ -443,7 +443,7 @@ void _WriteRGBImageTest( const std::string &recName, IDataFilePtr dataFile)
   }
 
   // Create the dataset that will hold the data and associated attributes
-  IDatasetPtr ds = H5Dataset::CreateDatasetPtr(dsPath, dataPtr);
+  IDataset::Pointer ds = H5Dataset::CreateDatasetPtr(dsPath, dataPtr);
   BOOST_REQUIRE (ds.get() != NULL);
 
   // Write the data to the file
@@ -460,8 +460,8 @@ void WriteDatasetTest()
   std::cout << "Running _WriteDatasetTest<T> Test ....";
   // Create our Test File to output our test data into
   std::string testFile(MXAUnitTest::DatasetTest::TestFile);
-  IDataModelPtr model = createModel();
-  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(testFile, model);
+  IDataModel::Pointer model = createModel();
+  IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(testFile, model);
 
   // These will test WRITING Data to the data file
   _WriteDatasetTest<int8>( "Dataset Int 8", dataFile );
@@ -503,10 +503,10 @@ void WriteDatasetTest()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 _readDatasetTest(const std::string &recName, IDataFilePtr dataFile)
+int32 _readDatasetTest(const std::string &recName, IDataFile::Pointer dataFile)
 {
-  IDataModelPtr model = dataFile->getDataModel();
-  IDataRecordPtr rec = model->getDataRecordByNamedPath(recName, NULL);
+  IDataModel::Pointer model = dataFile->getDataModel();
+  IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   BOOST_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
@@ -514,7 +514,7 @@ int32 _readDatasetTest(const std::string &recName, IDataFilePtr dataFile)
   std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
 
   // This will also indirectly test H5Utilities.readDataArray and H5Utilities::readAttributeArray
-  IDatasetPtr ds = H5Dataset::LoadFromFile(dataFile, dsPath);
+  IDataset::Pointer ds = H5Dataset::LoadFromFile(dataFile, dsPath);
   BOOST_REQUIRE(ds.get() != NULL);
   return 1;
 }
@@ -522,10 +522,10 @@ int32 _readDatasetTest(const std::string &recName, IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 _readRGBImageTest(const std::string &recName, IDataFilePtr dataFile)
+int32 _readRGBImageTest(const std::string &recName, IDataFile::Pointer dataFile)
 {
-  IDataModelPtr model = dataFile->getDataModel();
-  IDataRecordPtr rec = model->getDataRecordByNamedPath(recName, NULL);
+  IDataModel::Pointer model = dataFile->getDataModel();
+  IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   BOOST_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
@@ -533,8 +533,8 @@ int32 _readRGBImageTest(const std::string &recName, IDataFilePtr dataFile)
   std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
 
   //MXARGBImage* data = MXARGBImage::New( 150, 101);
- // IMXAArrayPtr dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
-  IMXAArrayPtr dataPtr = H5MXAUtilities::readData(dataFile, dsPath);
+ // IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
+  IMXAArray::Pointer dataPtr = H5MXAUtilities::readData(dataFile, dsPath);
   uint64 numElements = 150 * 101 * 3;
   int rank = 2;
   std::vector<uint64> dims(rank, 0);
@@ -572,7 +572,7 @@ void ReadDatasetTest( )
   std::cout << "Running ReadDatasetTest Test ....";
   // Create our Test File to output our test data into
   std::string testFile(MXAUnitTest::DatasetTest::TestFile);
-  IDataFilePtr dataFile = H5MXADataFile::OpenFile(testFile, true);
+  IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(testFile, true);
   BOOST_REQUIRE(dataFile.get() != NULL);
   _readDatasetTest( "Dataset Int 8", dataFile );
   _readDatasetTest( "Dataset UInt 8", dataFile );
@@ -602,7 +602,7 @@ void TestDataWrapper()
                               0x06000000,0x07000000,0x08000000,0x09000000,0x0A000000};
 
   MXAArrayTemplate<uint32>* ui32;
-  IMXAArrayPtr ptr32 = MXAArrayTemplate<uint32>::CreateArray(10);
+  IMXAArray::Pointer ptr32 = MXAArrayTemplate<uint32>::CreateArray(10);
   ui32 = dynamic_cast<MXAArrayTemplate<uint32>*>(ptr32.get());
   for (uint32 i = 0; i < 10; ++i) {
     ui32->setValue(i, i32Array[i]);
@@ -619,7 +619,7 @@ void TestDataWrapper()
   uint64 i64ArraySwap[10] = { 0x0100000000000000ull,0x0200000000000000ull,0x0300000000000000ull,0x0400000000000000ull,0x0500000000000000ull,
                               0x0600000000000000ull,0x0700000000000000ull,0x0800000000000000ull,0x0900000000000000ull,0x0A00000000000000ull};
   MXAArrayTemplate<uint64>* ui64;
-  IMXAArrayPtr ptr64 = MXAArrayTemplate<uint64>::CreateArray(10);
+  IMXAArray::Pointer ptr64 = MXAArrayTemplate<uint64>::CreateArray(10);
   ui64 = dynamic_cast<MXAArrayTemplate<uint64>*>(ptr64.get());
   for (uint64 i = 0; i < 10; ++i) {
     ui64->setValue(i, i64Array[i]);
@@ -637,7 +637,7 @@ void TestDataWrapper()
 void ATest()
 {
   std::string testFile(MXAUnitTest::DatasetTest::TestFile);
-  IDataFilePtr dataFile = H5MXADataFile::OpenFile(testFile, true);
+  IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(testFile, true);
   BOOST_REQUIRE(dataFile.get() != NULL);
   hid_t fileId = dataFile->getFileId();
   double d = 1111111.111111;

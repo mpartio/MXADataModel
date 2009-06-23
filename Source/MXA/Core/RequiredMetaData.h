@@ -62,10 +62,10 @@ class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
     * @param md The object to make a copy from
     * @return The newly copied object
     */
-    static IRequiredMetaData::Pointer New(IRequiredMetaDataPtr md);                                 
+    static IRequiredMetaData::Pointer New(IRequiredMetaData::Pointer md);                                 
 
     /**
-     * @brief Creates a new IRequiredMetaDataPtr object that has all empty values.
+     * @brief Creates a new IRequiredMetaData::Pointer object that has all empty values.
      * Note that this will make it INVALID. You are required to fill in the appropriate values
      * to make it valid. This is provided as a convenience.
      */
@@ -126,8 +126,8 @@ class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
     int32 setValueForKey(const std::string &key, const std::string &value);
     std::string getValueForKey (const std::string &key);
 
-    int32 writeToFile (IDataFilePtr dataFile);
-    int32 readFromFile (IDataFilePtr dataFile);
+    int32 writeToFile (IDataFile::Pointer dataFile);
+    int32 readFromFile (IDataFile::Pointer dataFile);
 
     bool isValid(std::string message);
 

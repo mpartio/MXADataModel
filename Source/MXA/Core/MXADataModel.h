@@ -18,8 +18,7 @@
 
 
 //-- MXA Headers
-#include <MXA/Common/MXATypeDefs.h>
-#include <MXA/Common/MXASetGetMacros.h>
+//#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataModel.h>
 #include <MXA/Core/MXAConstants.h>
 #include <MXA/Core/MXADataDimension.h>
@@ -29,10 +28,6 @@
 //-- STL Headers
 #include <list>
 #include <map>
-
-//-- Boost Headers
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 
 /**
  * @brief Main class used to work with the DataModel paradigm.
@@ -55,8 +50,8 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Static method to create a new blank model.
    * @return A boost shard_ptr to the newly created model
    */
-  static MXADataModel::Pointer New(float modelVersion = 0.4f, 
-                                  const std::string &type = MXA::MXACurrentFileType, 
+  static MXADataModel::Pointer New(float modelVersion = 0.4f,
+                                  const std::string &type = MXA::MXACurrentFileType,
                                   const std::string &dataRoot= "Data");
 
   /**
@@ -115,7 +110,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * thus making the index of the added dimension the largest of all the dimensions.
    * @param dimension The IDataDimension to be added to the list of dimensions.
    */
-  void addDataDimension(IDataDimensionPtr dimension);
+  void addDataDimension(IDataDimension::Pointer dimension);
 
   /**
    * @brief Creates and adds a new Data Dimension to the Model
@@ -128,7 +123,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param uniform Are the values uniform across the start to end values
    * @return A boost::shared_ptr to the newly created Data Dimension
    */
-  IDataDimensionPtr addDataDimension(std::string name, std::string altName,
+  IDataDimension::Pointer addDataDimension(std::string name, std::string altName,
       int32 count, int32 startValue,
       int32 endValue, int32 increment, int32 uniform);
 
@@ -140,7 +135,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param index The index to insert the Data Dimension at
    * @return Error condition
    */
-  int32 insertDataDimension(IDataDimensionPtr dimension, int32 index);
+  int32 insertDataDimension(IDataDimension::Pointer dimension, int32 index);
 
   /**
    * @brief This method will remove any NULL Data Dimensions from the internal
@@ -183,14 +178,14 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Returns the vector of Data Dimenions
    * @return
    */
-  IDataDimensions& getDataDimensions();
+  IDataDimension::Container& getDataDimensions();
 
   /**
    * @brief Returns a Data dimension object given an index
    * @param index
    * @return
    */
-  IDataDimensionPtr getDataDimension(int32 index);
+  IDataDimension::Pointer getDataDimension(int32 index);
 
   /**
    * @brief Returns a Data Dimension object given the name of the data dimension
@@ -198,7 +193,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return
    */
   // IDataDimension* getDataDimension(std::string dimName);
-  IDataDimensionPtr getDataDimension(std::string dimName);
+  IDataDimension::Pointer getDataDimension(std::string dimName);
 
   /**
    * @brief
@@ -210,7 +205,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Adds a Data Record given a DataRecord shared pointer
    * @param record
    */
-  void addDataRecord(IDataRecordPtr record);
+  void addDataRecord(IDataRecord::Pointer record);
 
   /**
    * @brief Adds a Data Record to the model with the given parent record as the data
@@ -219,20 +214,20 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param parent The parent of the data record
    * @return
    */
-  void addDataRecord(IDataRecordPtr record, IDataRecordPtr parent);
+  void addDataRecord(IDataRecord::Pointer record, IDataRecord::Pointer parent);
 
   /**
    * @brief Removes the Data Record from the Model
    * @param record The record to remove from the Data model
    * @return Error Condition
    */
-  int32 removeDataRecord(IDataRecordPtr record);
+  int32 removeDataRecord(IDataRecord::Pointer record);
 
   /**
    * @brief Returns the Hierarchy of Data Records
    * @return
    */
-  IDataRecords& getDataRecords();
+  IDataRecord::Container& getDataRecords();
 
   /**
    * @brief Returns a Data Record object from the given path
@@ -240,7 +235,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param parent The parent data record
    * @return
    */
-  IDataRecordPtr getDataRecordByNamedPath(const std::string &path, IDataRecord* parent=NULL);
+  IDataRecord::Pointer getDataRecordByNamedPath(const std::string &path, IDataRecord* parent=NULL);
 
   /**
    * @brief Returns a Data Record based on an internal path representation
@@ -248,7 +243,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param parent
    * @return
    */
-  IDataRecordPtr getDataRecordByInternalPath(const std::string &path, IDataRecord* parent=NULL);
+  IDataRecord::Pointer getDataRecordByInternalPath(const std::string &path, IDataRecord* parent=NULL);
 
 
   /**
@@ -281,22 +276,22 @@ class MXA_EXPORT MXADataModel : public IDataModel
 
   /**
    * @brief Sets the required meta data
-   * @param metaData IRequiredMetaDataPtr object
+   * @param metaData IRequiredMetaData::Pointer object
    */
-  int32 setRequiredMetaData(IRequiredMetaDataPtr metaData);
+  int32 setRequiredMetaData(IRequiredMetaData::Pointer metaData);
 
   /**
    * @brief Returns the RequiredMeta Data in the provided std::map
-   * @return IRequiredMetaDataPtr
+   * @return IRequiredMetaData::Pointer
    */
-  IRequiredMetaDataPtr getRequiredMetaData();
+  IRequiredMetaData::Pointer getRequiredMetaData();
 
   /**
     * @brief Adds User defined Meta data to the model
     * @param attributeKey The attribute key name
     * @param umd The Key/Value pair to append to the model
    */
-  void addUserMetaData (const std::string &attributeKey, IMXAArrayPtr umd);
+  void addUserMetaData (const std::string &attributeKey, IMXAArray::Pointer umd);
 
   /**
    * @brief Removes specific user meta-data entry
@@ -308,7 +303,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Returns a specific User meta data item
    * @param attributeKey The value of the attribute key
    */
-  IMXAArrayPtr getUserMetaData(const std::string &attributeKey);
+  IMXAArray::Pointer getUserMetaData(const std::string &attributeKey);
 
   /**
    * @brief Sets all the user defined meta data for this model.Any previously
@@ -330,13 +325,13 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param updateIndex Update the internal index of the supportFile Object after
    * it is added to the model
    */
-  void addSupportFile(ISupportFilePtr supportFile, bool updateIndex = false);
+  void addSupportFile(ISupportFile::Pointer supportFile, bool updateIndex = false);
 
   /**
    * @brief Returns the list of SupportFile objects from the model.
    * @return The list of Support files for this model.
    */
-  ISupportFiles getSupportFiles();
+  ISupportFile::Container getSupportFiles();
 
   /**
    * @brief Returns a specific ISupportFile instance from the model or a NULL
@@ -345,7 +340,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return Boost Shared Pointer wrapping an ISupportFile subclass instance or NULL
    * if nothing was found.
    */
-  ISupportFilePtr getSupportFile(int index);
+  ISupportFile::Pointer getSupportFile(int index);
 
 // ------------------------------------------------------------------------------
 // Printing the model methods
@@ -398,7 +393,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
 
   protected:
     MXADataModel();
-    
+
   private:
    MXADataModel(const MXADataModel&);   //Copy Constructor Not Implemented
    void operator=(const MXADataModel&); //Copy Assignment Not Implemented
@@ -409,15 +404,15 @@ class MXA_EXPORT MXADataModel : public IDataModel
    //Holds the 'path' to the root of the actual data in the data portion of the file
    std::string    _dataRoot;
    // Holds a vector of data dimensions
-   IDataDimensions _dataDimensions;
+   IDataDimension::Container _dataDimensions;
    //Holds a vector of hierarchacally ordered Data Records
-   IDataRecords    _dataRecords;
+   IDataRecord::Container    _dataRecords;
    //Fields to hold the Required Meta Data Fields
-   IRequiredMetaDataPtr _requiredMetaData;
+   IRequiredMetaData::Pointer _requiredMetaData;
    // Holds the arbitrary User Meta Data
    MXAAbstractAttributes _userMetaData;
    // Holds the SUpport files references
-   ISupportFiles         _supportFiles;
+   ISupportFile::Container         _supportFiles;
 };
 
 

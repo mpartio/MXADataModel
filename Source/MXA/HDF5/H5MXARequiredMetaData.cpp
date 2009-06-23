@@ -13,7 +13,7 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IRequiredMetaDataPtr H5MXARequiredMetaData::New( std::string researcherName,
+IRequiredMetaData::Pointer H5MXARequiredMetaData::New( std::string researcherName,
                                                         std::string dateCreated,
                                                         std::string datasetName,
                                                         std::string description,
@@ -30,14 +30,14 @@ IRequiredMetaDataPtr H5MXARequiredMetaData::New( std::string researcherName,
                                                          releaseNumber,
                                                          pedigree,
                                                          derivedSrcFile);
-  IRequiredMetaDataPtr ptr(md);
+  IRequiredMetaData::Pointer ptr(md);
   return ptr;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IRequiredMetaDataPtr H5MXARequiredMetaData::DefaultMetaData()
+IRequiredMetaData::Pointer H5MXARequiredMetaData::DefaultMetaData()
 {
   H5MXARequiredMetaData* md = new H5MXARequiredMetaData( "researcherName",
                                                          "2007/12/23 16:00:00",
@@ -47,7 +47,7 @@ IRequiredMetaDataPtr H5MXARequiredMetaData::DefaultMetaData()
                                                          "releaseNumber",
                                                          "Derived",
                                                          "derivedSrcFile");
-  IRequiredMetaDataPtr ptr(md);
+  IRequiredMetaData::Pointer ptr(md);
   return ptr;
 }
 
@@ -287,7 +287,7 @@ std::string H5MXARequiredMetaData::getValueForKey(const std::string &key)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXARequiredMetaData::writeToFile(IDataFilePtr dataFile)
+int32 H5MXARequiredMetaData::writeToFile(IDataFile::Pointer dataFile)
 {
   herr_t err = -1;
   int32 data = 0;
@@ -313,7 +313,7 @@ int32 H5MXARequiredMetaData::writeToFile(IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXARequiredMetaData::readFromFile(IDataFilePtr dataFile)
+int32 H5MXARequiredMetaData::readFromFile(IDataFile::Pointer dataFile)
 {
 
   hid_t fileId = dataFile->getFileId();

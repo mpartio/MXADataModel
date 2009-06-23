@@ -57,23 +57,24 @@ namespace Export
 class MXA_EXPORT DataExportProperties
 {
   public:
+    MXA_SHARED_POINTERS(DataExportProperties);
 
     /**
      * @brief
      */
-    static DataExportPropertiesPtr New()
+    static DataExportProperties::Pointer New()
     {
-      DataExportPropertiesPtr ptr(new DataExportProperties);
+      DataExportProperties::Pointer ptr(new DataExportProperties);
       return ptr;
     }
 
     /**
      * @brief
      */
-    static DataExportPropertiesPtr New(hid_t fileId, const std::string &exportFile, const std::string &datasetPath,
+    static DataExportProperties::Pointer New(hid_t fileId, const std::string &exportFile, const std::string &datasetPath,
                          int fileType, const std::string &asciiDelimiter, int endian)
     {
-      DataExportPropertiesPtr ptr(new DataExportProperties);
+      DataExportProperties::Pointer ptr(new DataExportProperties);
       ptr->setHDFFileId(fileId);
       ptr->setExportFile(exportFile);
       ptr->setHDFDatasetPath(datasetPath);

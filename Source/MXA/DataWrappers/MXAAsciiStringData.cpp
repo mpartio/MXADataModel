@@ -14,9 +14,9 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IMXAArrayPtr MXAAsciiStringData::Create(const std::string &value)
+IMXAArray::Pointer MXAAsciiStringData::Create(const std::string &value)
 {
-  IMXAArrayPtr ptr;
+  IMXAArray::Pointer ptr;
   int32 err = 1;
   MXAAsciiStringData* d = new MXAAsciiStringData( 0);
   std::string::size_type size = value.size();
@@ -118,7 +118,7 @@ int32 MXAAsciiStringData::getDataType()
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
-int32 MXAAsciiStringData::writeToFile(IDataFilePtr dataFile)
+int32 MXAAsciiStringData::writeToFile(IDataFile::Pointer dataFile)
 {
   int32 err = -1;
   std::vector<hsize_t> dims(1, this->getNumberOfElements() );
@@ -134,7 +134,7 @@ int32 MXAAsciiStringData::writeToFile(IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-int32 MXAAsciiStringData::readFromFile(IDataFilePtr dataFile)
+int32 MXAAsciiStringData::readFromFile(IDataFile::Pointer dataFile)
 {
   hid_t fileId = dataFile->getFileId();
   if (fileId < 0)

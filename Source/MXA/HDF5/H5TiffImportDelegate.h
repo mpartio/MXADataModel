@@ -49,13 +49,13 @@ public:
   /**
   * @brief Implementation from the IDataImportDelegate class
   */
-  int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile);
+  int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile);
 
   /**
    * @brief Sets the pointer to the DataModel
    * @param model A Pointer to the DataModel
    */
-  void setDataModel(IDataModelPtr model);
+  void setDataModel(IDataModel::Pointer model);
 
   /*
   * @brief Sets the 'FileNotFoundIsError' flag.
@@ -105,7 +105,7 @@ public:
   }
 
 private:
-  //IDataFilePtr      _dataFilePtr;
+  //IDataFile::Pointer      _dataFilePtr;
   bool              _fileNotFoundIsError;
   bool              _importAsGrayScale;
 

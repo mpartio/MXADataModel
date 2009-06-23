@@ -12,9 +12,14 @@
 #define _IAbstractDataArray_h_
 
 #include <MXA/Common/MXATypes.h>
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/DataWrappers/DataExportProperties.h>
 #include <MXA/Common/MXASetGetMacros.h>
+
+//-- C++
 #include <iostream>
+#include <map>
+
+
 
 /**
 * @class IMXAArray IMXAArray.h PathToHeader/IMXAArray.h
@@ -119,7 +124,7 @@ class MXA_EXPORT IMXAArray
      * @param expProps The properties to use when saving the array
      * @return Error code.
      */
-    virtual int32 exportToFile(DataExportPropertiesPtr expProps) = 0;
+    virtual int32 exportToFile(DataExportProperties::Pointer expProps) = 0;
 
   protected:
 

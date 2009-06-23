@@ -26,7 +26,7 @@ class MXA_EXPORT MXAAsciiStringData : public MXAArrayTemplate<uint8>
 {
   public:
 
-    static IMXAArrayPtr Create( const std::string &value);
+    static IMXAArray::Pointer Create( const std::string &value);
 
     static MXAAsciiStringData* New( const std::string &value);
 
@@ -40,12 +40,12 @@ class MXA_EXPORT MXAAsciiStringData : public MXAArrayTemplate<uint8>
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
-    virtual int32 writeToFile (IDataFilePtr dataFile);
+    virtual int32 writeToFile (IDataFile::Pointer dataFile);
 
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-    virtual int32 readFromFile(IDataFilePtr dataFile);
+    virtual int32 readFromFile(IDataFile::Pointer dataFile);
 #endif
 
     virtual std::string valueToString(char delimiter = ' ');

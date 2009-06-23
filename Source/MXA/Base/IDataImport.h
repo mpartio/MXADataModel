@@ -12,6 +12,7 @@
 #define IDATAIMPORT_H_
 
 #include <MXA/Common/DLLExport.h>
+#include <MXA/Base/IDataFile.h>
 
 /**
  * @brief Abstract class that formally declares the methods used when implementing
@@ -44,13 +45,13 @@ class MXA_EXPORT IDataImport
      * @brief Set the value of datafile
      * @param datafile the new value of datafile
      */
-    virtual void setDataFile ( IDataFilePtr datafile ) = 0;
+    virtual void setDataFile ( IDataFile::Pointer datafile ) = 0;
 
     /**
      * Get the value of datafile
      * @return the value of datafile
      */
-    virtual IDataFilePtr getDataFile ( ) = 0;
+    virtual IDataFile::Pointer getDataFile ( ) = 0;
 
 
     /**

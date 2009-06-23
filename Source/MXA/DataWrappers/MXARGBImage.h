@@ -28,7 +28,7 @@
 class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8>
 {
   public:
-    static IMXAArrayPtr CreateRGBImageArray(int32 width, int32 height);
+    static IMXAArray::Pointer CreateRGBImageArray(int32 width, int32 height);
 
     static MXARGBImage* New( int32 width, int32 height);
 
@@ -68,12 +68,12 @@ class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8>
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
-    virtual int32 writeToFile (IDataFilePtr dataFile);
+    virtual int32 writeToFile (IDataFile::Pointer dataFile);
 
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-    virtual int32 readFromFile(IDataFilePtr dataFile);
+    virtual int32 readFromFile(IDataFile::Pointer dataFile);
 #endif
 
     virtual std::string valueToString(char delimiter = ' ');

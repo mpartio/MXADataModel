@@ -208,19 +208,19 @@ public:
 
 
 /**
-  * @brief Reads data  into an IMXAArrayPtr
+  * @brief Reads data  into an IMXAArray::Pointer
   * @param locId The hdf5 object id of the parent
   * @param datasetPath The path to the data set containing the attributes you want
   * @param dims The dimensions of the attribute
   * @return Boost shared pointer to the data
   */
   template<typename T>
-  static IMXAArrayPtr readH5Data( hid_t locId,
+  static IMXAArray::Pointer readH5Data( hid_t locId,
                                          const std::string &datasetPath,
                                          const std::vector<uint64> &dims)
   {
     herr_t err = -1;
-    IMXAArrayPtr ptr;
+    IMXAArray::Pointer ptr;
 
     ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()));
     if (ptr.get() == NULL)
@@ -249,19 +249,19 @@ public:
   * @return Boost shared pointer to the attribute
   */
   template<typename T>
-  static IMXAArrayPtr readH5Attribute(  hid_t locId,
+  static IMXAArray::Pointer readH5Attribute(  hid_t locId,
                                                const std::string &datasetPath,
                                                const std::string &key,
                                                const std::vector<uint64> &dims)
   {
     herr_t err = -1;
-    IMXAArrayPtr ptr;
+    IMXAArray::Pointer ptr;
     if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
     {
       T data;
       err = H5Lite::readScalarAttribute(locId, datasetPath, key, data);
       if (err >= 0) {
-        IMXAArrayPtr attr = MXAArrayTemplate<T>::CreateSingleValueArray( data);
+        IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateSingleValueArray( data);
         if (attr.get() != NULL)
         {
           ptr = attr;
@@ -270,7 +270,7 @@ public:
     }
     else // Multi-Dimensional Data
     {
-      IMXAArrayPtr attr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()));
+      IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()));
       if (attr.get() == NULL)
       {
         return ptr; // empty attribute

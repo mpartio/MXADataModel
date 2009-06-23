@@ -75,14 +75,14 @@ std::string MXADataImport::getOutputFilePath ( ) {
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MXADataImport::setDataFile ( IDataFilePtr new_var ) {
+void MXADataImport::setDataFile ( IDataFile::Pointer new_var ) {
   _dataFile = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataFilePtr MXADataImport::getDataFile ( ) {
+IDataFile::Pointer MXADataImport::getDataFile ( ) {
   return _dataFile;
 }
 

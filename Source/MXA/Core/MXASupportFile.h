@@ -47,7 +47,7 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
      * goes wrong during the initialization then it is possible to get a NULL pointer
      * returned.
      */
-    static ISupportFilePtr NewFromFileSystem( const std::string &filesystempath,
+    static ISupportFile::Pointer NewFromFileSystem( const std::string &filesystempath,
                                               const std::string &filetype,
                                               bool cacheFile = false);
 
@@ -63,14 +63,14 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
      * returned.
      */
 #if MXA_HDF5_SUPPORT
-    static ISupportFilePtr NewFromMXAFile(int32 dataFile,
+    static ISupportFile::Pointer NewFromMXAFile(int32 dataFile,
                                                const std::string &index,
                                                bool cacheFile);
 #endif
     /**
      * @brief Creates a new MXASupportFile object with default values.
      */
-    static ISupportFilePtr New();
+    static ISupportFile::Pointer New();
 
 
     /**
@@ -154,7 +154,7 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
   private:
     std::string  _filesystemPath;
     std::string  _fileType;
-    IMXAArrayPtr _fileContents;
+    IMXAArray::Pointer _fileContents;
     int          _index;
     int32        _fileId;
     int          _source;

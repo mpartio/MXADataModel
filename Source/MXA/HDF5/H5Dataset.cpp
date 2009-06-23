@@ -12,16 +12,16 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDatasetPtr H5Dataset::LoadFromFile(IDataFilePtr dataFile, const std::string &datasetPath)
+IDataset::Pointer H5Dataset::LoadFromFile(IDataFile::Pointer dataFile, const std::string &datasetPath)
 {
-  IMXAArrayPtr data = H5MXAUtilities::readData(dataFile, datasetPath);
+  IMXAArray::Pointer data = H5MXAUtilities::readData(dataFile, datasetPath);
 
   if (NULL == data.get() )
   {
-    IDatasetPtr ptr;
+    IDataset::Pointer ptr;
     return ptr;
   }
-  IDatasetPtr ptr (new H5Dataset(datasetPath, data));
+  IDataset::Pointer ptr (new H5Dataset(datasetPath, data));
   //Load all the Attributes
   std::list<std::string> attributeNames;
   int32 err = H5Utilities::getAllAttributeNames(dataFile->getFileId(), datasetPath, attributeNames );
@@ -31,7 +31,7 @@ IDatasetPtr H5Dataset::LoadFromFile(IDataFilePtr dataFile, const std::string &da
   }
   for (std::list<std::string>::iterator iter = attributeNames.begin(); iter != attributeNames.end(); ++iter )
   {
-    IMXAArrayPtr attr = H5MXAUtilities::readAttribute(dataFile, datasetPath, *iter);
+    IMXAArray::Pointer attr = H5MXAUtilities::readAttribute(dataFile, datasetPath, *iter);
     if (attr.get() != NULL)
     {
       ptr->addAttribute(*iter, attr);
@@ -49,16 +49,16 @@ IDatasetPtr H5Dataset::LoadFromFile(IDataFilePtr dataFile, const std::string &da
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDatasetPtr H5Dataset::CreateDatasetPtr(const std::string &datasetPath, IMXAArrayPtr data)
+IDataset::Pointer H5Dataset::CreateDatasetPtr(const std::string &datasetPath, IMXAArray::Pointer data)
 {
-  IDatasetPtr ptr (new H5Dataset(datasetPath, data));
+  IDataset::Pointer ptr (new H5Dataset(datasetPath, data));
   return ptr;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-H5Dataset::H5Dataset(const std::string &datasetPath, IMXAArrayPtr data) :
+H5Dataset::H5Dataset(const std::string &datasetPath, IMXAArray::Pointer data) :
 _data(data),
 _datasetPath(datasetPath)
 {
@@ -91,7 +91,7 @@ std::string H5Dataset::getDatasetPath()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void H5Dataset::setData(IMXAArrayPtr data)
+void H5Dataset::setData(IMXAArray::Pointer data)
 {
   this->_data = data;
 }
@@ -99,7 +99,7 @@ void H5Dataset::setData(IMXAArrayPtr data)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IMXAArrayPtr H5Dataset::getData()
+IMXAArray::Pointer H5Dataset::getData()
 {
   return this->_data;
 }
@@ -107,14 +107,14 @@ IMXAArrayPtr H5Dataset::getData()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void H5Dataset::addAttribute (const std::string &attributeKey, IMXAArrayPtr attribute)
+void H5Dataset::addAttribute (const std::string &attributeKey, IMXAArray::Pointer attribute)
 {
 
   MXAAbstractAttributes::iterator iter = _attributes.find(attributeKey);
   if ( iter != _attributes.end() )
   {
     //Key was already in the map of attributes
-    IMXAArrayPtr ptr = (*iter).second;
+    IMXAArray::Pointer ptr = (*iter).second;
     if (ptr.get() != attribute.get()  && (NULL != attribute.get() ))
     {
       //Attribute was NOT the same one
@@ -142,23 +142,23 @@ void H5Dataset::removeAttribute (const std::string &attributeKey)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IMXAArrayPtr H5Dataset::getAttribute(const std::string &attributeKey)
+IMXAArray::Pointer H5Dataset::getAttribute(const std::string &attributeKey)
 {
   MXAAbstractAttributes::iterator iter = _attributes.find(attributeKey);
   if ( iter != _attributes.end() )
   {
     //Key was already in the map of attributes
-    IMXAArrayPtr ptr = (*iter).second;
+    IMXAArray::Pointer ptr = (*iter).second;
     return ptr;
   }
-  IMXAArrayPtr ptr;
+  IMXAArray::Pointer ptr;
   return ptr;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5Dataset::writeToFile (IDataFilePtr dataFile)
+int32 H5Dataset::writeToFile (IDataFile::Pointer dataFile)
 {
   herr_t err = -1;
   err = H5Utilities::createGroupsForDataset( this->_datasetPath, dataFile->getFileId());
@@ -190,14 +190,14 @@ int32 H5Dataset::writeToFile (IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5Dataset::readFromFile (IDataFilePtr dataFile)
+int32 H5Dataset::readFromFile (IDataFile::Pointer dataFile)
 {
   std::string datasetPath = this->getDatasetPath();
   if (datasetPath.empty() == true)
   {
     return -1;
   }
-  IMXAArrayPtr data = H5MXAUtilities::readData(dataFile, datasetPath );
+  IMXAArray::Pointer data = H5MXAUtilities::readData(dataFile, datasetPath );
   if (data.get() == NULL)
   {
     return -1;
@@ -212,7 +212,7 @@ int32 H5Dataset::readFromFile (IDataFilePtr dataFile)
   }
   this->_attributes.clear(); // Clear any attributes first
   for (std::list<std::string>::iterator iter = attributeNames.begin(); iter != attributeNames.end(); ++iter ) {
-    IMXAArrayPtr attr = H5MXAUtilities::readAttribute(dataFile, datasetPath, *iter);
+    IMXAArray::Pointer attr = H5MXAUtilities::readAttribute(dataFile, datasetPath, *iter);
     if (attr.get() != NULL)
     {
       this->addAttribute(*iter, attr);

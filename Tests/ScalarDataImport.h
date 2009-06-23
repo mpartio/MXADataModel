@@ -40,7 +40,7 @@ public:
    * @param dataFile The IDataFile object
    * @return
    */
-  int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile)
+  int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile)
   {
 
     std::string path ( dataSource->generateInternalPath() );
@@ -105,7 +105,7 @@ class ScalarDataDelegateFactory : public AbstractImportDelegateFactory
    * @return A new boost shared pointer to ScalarDataDelegate
    */
   IImportDelegatePtr newDataImportDelegate (const std::string &className,
-                                                IDataModelPtr dataModel,
+                                                IDataModel::Pointer dataModel,
                                                 IDataSourcePtr dataSource)
   {
     IImportDelegatePtr delegate; // Creates a Null Shared Pointer

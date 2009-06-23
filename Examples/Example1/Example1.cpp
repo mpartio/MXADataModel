@@ -41,7 +41,7 @@
 void listDataDimensions(MXADataModel* model);
 void listDataRecords(MXADataModel* model);
 void captureSampleImage(std::vector<uint8> &imageBuffer);
-void listUserMetaData(IDataFilePtr dataFile);
+void listUserMetaData(IDataFile::Pointer dataFile);
 
 // -----------------------------------------------------------------------------
 //
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
   int32 end = 9;
   int32 increment = 1;
   int32 uniform = 1;
-  MXADataDimensionPtr dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
+  MXADataDimension::Pointer dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
 
   // The second dimension will have 4 elements ranging from 2 to 8 with an increment of 2;
   index = 1;
@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
   end = 800;
   increment = 200;
   uniform = 1;
-  MXADataDimensionPtr dim2 = MXADataDimension::New("Pressure", "Press (kPa)", index, count, start, end, increment, uniform);
+  MXADataDimension::Pointer dim2 = MXADataDimension::New("Pressure", "Press (kPa)", index, count, start, end, increment, uniform);
 
   //Next we need to add these dimensions to the model. Since we are using Boost shared pointers
   // the dimension objects are refcounted thus relieving us from having to worry about cleaning up
@@ -116,11 +116,11 @@ int main(int argc, char **argv) {
 
   // Add some user defined Meta Data to the model
   float32 value = 12.234234f;
-  IMXAArrayPtr umd = MXAArrayTemplate<float32>::CreateSingleValueArray(value);
+  IMXAArray::Pointer umd = MXAArrayTemplate<float32>::CreateSingleValueArray(value);
   model->addUserMetaData("Float32 User Meta Data", umd);
 
   int32 iMDValue = 34212;
-  IMXAArrayPtr iUmd = MXAArrayTemplate<int32>::CreateSingleValueArray(iMDValue);
+  IMXAArray::Pointer iUmd = MXAArrayTemplate<int32>::CreateSingleValueArray(iMDValue);
   model->addUserMetaData("Int32 User Meta Data", iUmd);
 
   // Export the Model to an XML File
@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
 
   //Write the model to a new HDF5 file, deleting any existing file and
   // allowing the Hdf5 file to remain open for further processing
-  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(Examples::Example1File, modelPtr);
+  IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(Examples::Example1File, modelPtr);
 
   if (NULL == dataFile.get() )
   {
@@ -218,13 +218,13 @@ void captureSampleImage(std::vector<uint8> &imageBuffer)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void listUserMetaData(IDataFilePtr dataFile)
+void listUserMetaData(IDataFile::Pointer dataFile)
 {
-  IDataModelPtr modelPtr = dataFile->getDataModel();
+  IDataModel::Pointer modelPtr = dataFile->getDataModel();
   MXAAbstractAttributes userMetaData = modelPtr->getUserMetaData();
 
   float32* fAttr = NULL;
-  IMXAArrayPtr attr;
+  IMXAArray::Pointer attr;
   std::string key;
   //std::string value;
   for (MXAAbstractAttributes::iterator iter = userMetaData.begin(); iter != userMetaData.end(); ++iter ) {
@@ -253,9 +253,9 @@ void listUserMetaData(IDataFilePtr dataFile)
 void listDataDimensions(MXADataModel* model)
 {
   //We can now get a list of the Data Dimensions and print out various properties for each
-   IDataDimensions dims = model->getDataDimensions();
+   IDataDimension::Container dims = model->getDataDimensions();
    MXADataDimension* dim = NULL; // Use a Pointer to make the code a bit easier to read
-   for (IDataDimensions::iterator iter = dims.begin(); iter != dims.end(); ++iter )
+   for (IDataDimension::Container::iterator iter = dims.begin(); iter != dims.end(); ++iter )
    {
      dim = static_cast<MXADataDimension*>((*(iter)).get() );
      if (NULL == dim)
@@ -275,9 +275,9 @@ void listDataRecords(MXADataModel* model)
   // We can get a list of Data Records and print out the top level records.
   // Note that Data Records are stored in a tree structure, so without any type of
   // tree traversal, this code will only print the top level records.
-  IDataRecords records = model->getDataRecords();
+  IDataRecord::Container records = model->getDataRecords();
   MXADataRecord* rec = NULL; //Create a convenience pointer
-  for (IDataRecords::iterator iter = records.begin(); iter != records.end(); ++iter ) {
+  for (IDataRecord::Container::iterator iter = records.begin(); iter != records.end(); ++iter ) {
     rec = static_cast<MXADataRecord*>( (*(iter)).get() );
     std::cout << "Data Record: " << rec->getRecordName() << std::endl;
   }

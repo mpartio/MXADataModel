@@ -13,6 +13,7 @@
 
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IImportProperty.h>
+#include <MXA/Base/IDataFile.h>
 #include <string>
 
 
@@ -38,7 +39,7 @@ public:
   * @param dataFile The IDataFile object
   * @return Zero or Positive on Success
   */
-  virtual int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile) = 0;
+  virtual int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile) = 0;
   #if 0
   virtual int32 setProperty(const std::string &key, const std::string &value)
     { return 0; }

@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -14,6 +14,7 @@
 //MXA Includes
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypes.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Core/MXADataModel.h>
 
 //-- STL Includes
@@ -34,8 +35,12 @@ class MXA_EXPORT IFileIODelegate
 
 public:
 
+  MXA_SHARED_POINTERS(IFileIODelegate);
+  MXA_TYPE_MACRO(IFileIODelegate);
+
+
   virtual ~IFileIODelegate(){};
-  
+
   /** @brief Writes the Model to a data file. If the file does NOT exist, a new
    * file will be created. If the data file does exist and does NOT have a model
    * in the file, then the model will be written. If the data file DOES exist and
@@ -47,9 +52,9 @@ public:
   * @param deleteExisting Delete existing file of the same name and create a new file
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
-  virtual int32 writeModelToFile(const std::string &fileName, 
-        IDataModelPtr model, bool closeWhenFinished, bool deleteExisting) = 0;
-  
+  virtual int32 writeModelToFile(const std::string &fileName,
+        IDataModel::Pointer model, bool closeWhenFinished, bool deleteExisting) = 0;
+
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
   * @param model The model to read the information into
@@ -59,11 +64,11 @@ public:
   * release the Object. If an Error occurs during the reading, then a NULL pointer
   * is returned.
   */
-  virtual int32 readModelFromFile(const std::string &fileName, 
-                                  IDataModelPtr model, 
+  virtual int32 readModelFromFile(const std::string &fileName,
+                                  IDataModel::Pointer model,
                                   bool closeWhenFinished,
                                   bool openReadOnly) = 0;
-  
+
   /**
    * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model
    * @param version The version to check.
@@ -85,30 +90,30 @@ public:
    * @return HDF5 file id
    */
   virtual int32 openMXAFile(std::string filename, bool readOnly=false) = 0;
-  
+
   /**
    * @brief Closes the currently open file
    */
   virtual void  closeMXAFile() = 0;
-  
+
   /**
    * @brief Returns the HDF file id of the currently open file
    */
   virtual int32 getOpenFileId() = 0;
-  
+
   /**
    * @brief Returns the currently open filename as an absolute path
    */
   virtual std::string getOpenFileName() = 0;
-  
-  
+
+
 protected:
   IFileIODelegate(){}; // Need this protected
-  
+
 private:
   IFileIODelegate(const IFileIODelegate&);   //Copy Constructor Not Implemented
     void operator=(const IFileIODelegate&); //Copy Assignment Not Implemented
-    
+
 };
 
 

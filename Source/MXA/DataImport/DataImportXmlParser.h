@@ -137,13 +137,13 @@ public:
    * Set the value of m_dataModel
    * @param dataModel the new value of m_dataModel
    */
-  void setDataFile ( IDataFilePtr dataModel );
+  void setDataFile ( IDataFile::Pointer dataModel );
 
   /**
    * Get the value of m_dataModel
    * @return the value of m_dataModel
    */
-  IDataFilePtr getDataFile ( );
+  IDataFile::Pointer getDataFile ( );
 
 
   /**
@@ -182,8 +182,8 @@ private:
   std::string        _xmlFilename;
   std::string        _outputFilePath;
   std::string        _deleteExistingDataFile;
-  IDataFilePtr       _dataFile;
-  IDataModelPtr      _dataModel;
+  IDataFile::Pointer       _dataFile;
+  IDataModel::Pointer      _dataModel;
   IDataSources       _dataSources;
   int32              _xmlParseError;
   bool               _parseData;
@@ -191,9 +191,9 @@ private:
   ExpatParser*       _parser;
 
   // - Implicit Data Source Variables
-  std::vector<IDataDimensionPtr>                  _implDataDimensions;
-  std::map<IDataDimensionPtr, IStringSectionPtr>  _implPathMap;
-  IDataRecordPtr                                _implDataRecord;
+  std::vector<IDataDimension::Pointer>                  _implDataDimensions;
+  std::map<IDataDimension::Pointer, IStringSectionPtr>  _implPathMap;
+  IDataRecord::Pointer                                _implDataRecord;
   std::string                                   _implSourceType;
   std::string                                   _implPreTextSection;
   XMLAttributeMapPtr                            _curImportPropertyMap;

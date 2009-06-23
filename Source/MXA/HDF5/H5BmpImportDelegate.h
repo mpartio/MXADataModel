@@ -50,7 +50,7 @@ public:
   /**
   * @brief Implementation from the IDataImportDelegate class
   */
-  int32 importDataSource(IDataSourcePtr dataSource, IDataFilePtr dataFile);
+  int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile);
 
 
   /*
@@ -105,7 +105,7 @@ public:
   }
 
 private:
-  IDataModelPtr      _modelPtr;
+  IDataModel::Pointer      _modelPtr;
   bool _fileNotFoundIsError;
   bool _importAsGrayScale;
 

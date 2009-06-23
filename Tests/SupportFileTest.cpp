@@ -49,9 +49,9 @@ MXADataModel::Pointer createSimpleModel()
     model->setModelVersion(MXA::MXACurrentFileVersion);
 
     // ---------- Create 2 Data Dimensions
-    MXADataDimensionPtr dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
+    MXADataDimension::Pointer dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
     model->addDataDimension(dim0);
-    MXADataDimensionPtr dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
+    MXADataDimension::Pointer dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
     model->addDataDimension(dim1);
 
     // ---------- Create Data Records
@@ -96,7 +96,7 @@ void CreateInputFiles()
 void TestMXASupportFile()
 {
   std::cout << "|--TestMXASupportFile" << std::endl;
-  ISupportFilePtr file =
+  ISupportFile::Pointer file =
       MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::BinaryInputFile, SupportFile::FileType::Binary, false);
   uint8* contents = NULL;
   // Get the contents which should be NULL because the file has NOT been read yet
@@ -133,12 +133,12 @@ void TestMXASupportFile()
 void TestMXARead()
 {
   std::cout << "|--MXARead Test" << std::endl;
-  IDataFilePtr datafile = H5MXADataFile::OpenFile(MXAUnitTest::SupportFileTest::OutputFile, true);
+  IDataFile::Pointer datafile = H5MXADataFile::OpenFile(MXAUnitTest::SupportFileTest::OutputFile, true);
   BOOST_REQUIRE( datafile.get() != NULL);
 
-  ISupportFiles files = datafile->getDataModel()->getSupportFiles();
-  ISupportFilePtr file;
-  for (ISupportFiles::iterator iter = files.begin(); iter != files.end(); ++iter)
+  ISupportFile::Container files = datafile->getDataModel()->getSupportFiles();
+  ISupportFile::Pointer file;
+  for (ISupportFile::Container::iterator iter = files.begin(); iter != files.end(); ++iter)
   {
     file = *iter;
     BOOST_REQUIRE (file->getFilePointer(0) == NULL);
@@ -166,12 +166,12 @@ void TestMXAWrite()
   std::cout << "|--MXAWrite Test" << std::endl;
   int32 err = 0;
   MXADataModel::Pointer model = createSimpleModel();
-  ISupportFilePtr binaryFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::BinaryInputFile, SupportFile::FileType::Binary);
-  ISupportFilePtr textFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text);
+  ISupportFile::Pointer binaryFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::BinaryInputFile, SupportFile::FileType::Binary);
+  ISupportFile::Pointer textFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text);
   model->addSupportFile(binaryFile, true);
   model->addSupportFile(textFile, true);
 
-  IDataFilePtr mxaDataFile = H5MXADataFile::CreateFileWithModel(MXAUnitTest::SupportFileTest::OutputFile, model);
+  IDataFile::Pointer mxaDataFile = H5MXADataFile::CreateFileWithModel(MXAUnitTest::SupportFileTest::OutputFile, model);
   if ( NULL == mxaDataFile.get()) { err = -1; } else { err = 0; };
   BOOST_REQUIRE(err >= 0);
 }

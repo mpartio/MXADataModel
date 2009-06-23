@@ -303,7 +303,7 @@ std::string RequiredMetaData::getValueForKey(const std::string &key)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 RequiredMetaData::writeToFile(IDataFilePtr dataFile)
+int32 RequiredMetaData::writeToFile(IDataFile::Pointer dataFile)
 {
   int32 err = -1;
   //TODO: This is NOT implemented yet.
@@ -313,7 +313,7 @@ int32 RequiredMetaData::writeToFile(IDataFilePtr dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 RequiredMetaData::readFromFile(IDataFilePtr dataFile)
+int32 RequiredMetaData::readFromFile(IDataFile::Pointer dataFile)
 {
   //TODO: This is not implemented yet.
   return -1;

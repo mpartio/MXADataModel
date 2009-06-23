@@ -42,16 +42,16 @@ MXADataRecord::~MXADataRecord()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataRecord::generateLUT(IDataRecordLookupTable &lut, IDataRecords &nodes)
+void MXADataRecord::generateLUT(IDataRecord::LookupTable &lut, IDataRecord::Container &nodes)
 {
-  for ( IDataRecords::iterator iter = nodes.begin(); iter < nodes.end(); ++iter )
+  for ( IDataRecord::Container::iterator iter = nodes.begin(); iter < nodes.end(); ++iter )
   {
     //  rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
-    IDataRecordPtr node =  ( *(iter) );
+    IDataRecord::Pointer node =  ( *(iter) );
     lut[node->getUniqueId()] = node;
     if (node->hasChildren() ) {
       // std::cout << "Creating Group for " << rec->getRecordName() << std::endl;
-      IDataRecords children = node->getChildren();
+      IDataRecord::Container children = node->getChildren();
       MXADataRecord::generateLUT( lut, children );
     } 
   }
@@ -75,7 +75,7 @@ void MXADataRecord::printDataRecord(std::ostream& os, int32 indent)
   }
 #endif
   if (this->hasChildren() ) { indent++;}
-  for (IDataRecords::iterator iter = _children.begin(); iter != _children.end(); ++iter)
+  for (IDataRecord::Container::iterator iter = _children.begin(); iter != _children.end(); ++iter)
   {
     (*(iter))->printDataRecord(os, indent);
   }
@@ -87,7 +87,7 @@ void MXADataRecord::printDataRecord(std::ostream& os, int32 indent)
 void MXADataRecord::printDataRecordTree(int32 depth)
 {
   if ( this->hasChildren() ) {
-    IDataRecords::const_iterator iter;
+    IDataRecord::Container::const_iterator iter;
     for (iter=this->_children.begin(); iter!=this->_children.end(); iter++) {
       (*iter)->printDataRecordTree(depth+1);
     }
@@ -157,7 +157,7 @@ bool MXADataRecord::isValid(std::string &message)
 //  ptr and used a shared ptr then we would end up with a cyclic reference and the
 //  object would never get deleted because the ref count would never hit zero
 // -----------------------------------------------------------------------------
-void MXADataRecord::_setWeakPtr(IDataRecordWeakPtr weakPtr)
+void MXADataRecord::_setWeakPtr(IDataRecord::WeakPointer weakPtr)
 {
   this->_selfPtr = weakPtr; 
 }
@@ -182,7 +182,7 @@ int32 MXADataRecord::nextGUIDValue()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataRecord::setParent(IDataRecordWeakPtr parent)
+void MXADataRecord::setParent(IDataRecord::WeakPointer parent)
 {
   this->_parent = parent;
 }
@@ -190,7 +190,7 @@ void MXADataRecord::setParent(IDataRecordWeakPtr parent)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IDataRecordWeakPtr MXADataRecord::getParent()
+IDataRecord::WeakPointer MXADataRecord::getParent()
 {
   return this->_parent;
 }
@@ -214,11 +214,11 @@ bool MXADataRecord::hasChildren() const
 // -----------------------------------------------------------------------------
 //  Adds a child ONLY if it is NOT already inserted into the children vector
 // -----------------------------------------------------------------------------
-void MXADataRecord::addChild(IDataRecordPtr child)
+void MXADataRecord::addChild(IDataRecord::Pointer child)
 {
   child->setParent(this->_selfPtr);
   bool alreadyInserted = false;
-  for (IDataRecords::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
+  for (IDataRecord::Container::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
   {
     if ( (*(iter)).get() == child.get() ) //Compare the raw pointers
     {
@@ -236,7 +236,7 @@ void MXADataRecord::addChild(IDataRecordPtr child)
 // -----------------------------------------------------------------------------
 void MXADataRecord::removeChild(int index)
 {
-  IDataRecords::iterator iter = this->_children.begin() + index;
+  IDataRecord::Container::iterator iter = this->_children.begin() + index;
   this->_children.erase(iter);
 }
 
@@ -245,7 +245,7 @@ void MXADataRecord::removeChild(int index)
 // -----------------------------------------------------------------------------
 void MXADataRecord::removeChild(IDataRecord* child)
 {
-  for (IDataRecords::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
+  for (IDataRecord::Container::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
   {
     if ( (*(iter)).get() == child )
     {
@@ -269,7 +269,7 @@ void MXADataRecord::removeAllChildren()
 int32 MXADataRecord::indexOfChild(IDataRecord* child)
 {
   int32 retVal = -1;
-  for (IDataRecords::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
+  for (IDataRecord::Container::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
   {
     if ( (*(iter)).get() == child )
     {
@@ -283,7 +283,7 @@ int32 MXADataRecord::indexOfChild(IDataRecord* child)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IDataRecordPtr MXADataRecord::getChildAt(int32 index)
+IDataRecord::Pointer MXADataRecord::getChildAt(int32 index)
 {
   if (static_cast<uint32>(index) < this->_children.size())
     return this->_children[index];
@@ -297,7 +297,7 @@ IDataRecordPtr MXADataRecord::getChildAt(int32 index)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IDataRecords& MXADataRecord::getChildren()
+IDataRecord::Container& MXADataRecord::getChildren()
 {
   return this->_children;
 }

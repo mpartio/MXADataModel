@@ -13,7 +13,9 @@
 
 // MXA Includes
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypeDefs.h>
+//#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IDataModel.h>
+#include <MXA/Base/IDataFile.h>
 #include <MXA/Base/IDataModelWriter.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/HDF5/H5Lite.h>
@@ -41,7 +43,7 @@ class MXA_EXPORT H5DataModelWriter : public IDataModelWriter
 {
 
 public:
-  H5DataModelWriter(IDataModelPtr dataModel, IDataFilePtr dataFile);
+  H5DataModelWriter(IDataModel::Pointer dataModel, IDataFile::Pointer dataFile);
   virtual ~H5DataModelWriter();
 
   /**
@@ -101,7 +103,7 @@ protected:
 * @param records
 * @return
 */
-  int32 _traverseDataRecords(hid_t gid,  IDataRecords &records);
+  int32 _traverseDataRecords(hid_t gid,  IDataRecord::Container &records);
 
   /**
    * @brief Writes a std::string as a HDF Dataset.
@@ -181,8 +183,8 @@ protected:
   }
 
 private:
-  IDataModelPtr _dataModel;
-  IDataFilePtr  _dataFile;
+  IDataModel::Pointer _dataModel;
+  IDataFile::Pointer  _dataFile;
 
   H5DataModelWriter(const H5DataModelWriter&);   //Copy Constructor Not Implemented
   void operator=(const H5DataModelWriter&); //Copy Assignment Not Implemented

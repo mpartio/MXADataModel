@@ -10,7 +10,8 @@
 
 #include <string>
 
-#include <MXA/Common/MXATypeDefs.h>
+//#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Core/MXAConstants.h>
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 
@@ -36,6 +37,10 @@ namespace SupportFile
 class MXA_EXPORT ISupportFile
 {
 public:
+
+  MXA_SHARED_POINTERS(ISupportFile);
+  typedef std::vector<ISupportFile::Pointer> Container;
+
   ISupportFile(){};
   virtual ~ISupportFile(){};
 

@@ -60,13 +60,13 @@ herr_t DataFileGenerator::generate()
     model->setRequiredMetaData(md);
 
     // ---------- Create 2 Data Dimensions
-    MXADataDimensionPtr dim0 = MXADataDimension::New( DataGen::Dimension1, DataGen::Dimension1, 0, 2, 1, 2, 1, 1);
+    MXADataDimension::Pointer dim0 = MXADataDimension::New( DataGen::Dimension1, DataGen::Dimension1, 0, 2, 1, 2, 1, 1);
     model->addDataDimension(dim0);
-    MXADataDimensionPtr dim1 = MXADataDimension::New(DataGen::Dimension2, DataGen::Dimension2, 1, 3, 1, 3, 1, 1);
+    MXADataDimension::Pointer dim1 = MXADataDimension::New(DataGen::Dimension2, DataGen::Dimension2, 1, 3, 1, 3, 1, 1);
     model->addDataDimension(dim1);
 
     //Create the DataImport Class
-    MXADataImportPtr dataImport( new MXADataImport() );
+    MXADataImport::Pointer dataImport( new MXADataImport() );
 
     // Create some Scalar Data
     MXADataRecord::Pointer scalarRec = MXADataRecord::New(1, DataGen::ScalarRec, DataGen::ScalarRec);
@@ -90,7 +90,7 @@ herr_t DataFileGenerator::generate()
     err = this->makeRecords(modelPtr, dataImport, volumeRec, volumeDims);
 
     // Write the model to the HDF5 File
-    IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(_filePath, modelPtr);
+    IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(_filePath, modelPtr);
     if (NULL == dataFile.get() )
     {
       std::cout << logTime() << "Error writing Data Model" << std::endl;
@@ -115,7 +115,7 @@ herr_t DataFileGenerator::generate()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t DataFileGenerator::makeRecords(MXADataModel::Pointer modelPtr, MXADataImportPtr dataImport, MXADataRecord::Pointer parentRec, std::vector<hsize_t> dims)
+herr_t DataFileGenerator::makeRecords(MXADataModel::Pointer modelPtr, MXADataImport::Pointer dataImport, MXADataRecord::Pointer parentRec, std::vector<hsize_t> dims)
 {
 #if 0
   // Add all the Data for this record

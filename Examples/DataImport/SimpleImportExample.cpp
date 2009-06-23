@@ -43,10 +43,10 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
   this->createTestFiles(model);
 
   // Create a DataFile object which will create the actual file on disk.
-  IDataFilePtr dataFile = H5MXADataFile::CreateFileWithModel(outputFilePath, model);
+  IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(outputFilePath, model);
 
   //Create the DataImport Class
-  MXADataImportPtr dataImport(new MXADataImport());
+  MXADataImport::Pointer dataImport(new MXADataImport());
   dataImport->setDataFile(dataFile);
 
   // Get an instance to the ImportDelegateManager
@@ -55,11 +55,11 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
   IImportDelegatePtr delegatePtr = ImportDelegateManager::createNewImportDelegate(ExampleImport::Detail::ClassName);
 
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
-  IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension
-  IDataDimensionPtr dim1 = model->getDataDimension(1); // Get the second Dimension
+  IDataDimension::Pointer dim0 = model->getDataDimension(0); // Get the first Dimension
+  IDataDimension::Pointer dim1 = model->getDataDimension(1); // Get the second Dimension
 
   // Create a DataRecord entry for the Data Model
-  IDataRecordPtr record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
+  IDataRecord::Pointer record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
 
   // Set the start/end/increment values for each Data Dimension
   int32 dim0Start = dim0->getStartValue();
@@ -81,7 +81,7 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
       filename.append("_").append(StringUtils::numToString<int32>(j)).append(".data");
 
       //Create some Data Sources
-      MXADataSourcePtr ds(new MXADataSource());
+      MXADataSource::Pointer ds(new MXADataSource());
       std::vector<int32> dimValues;
       dimValues.push_back(i);
       dimValues.push_back(j);
@@ -110,11 +110,11 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
 void SimpleImportExample::createTestFiles(MXADataModel::Pointer model)
 {
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
-    IDataDimensionPtr dim0 = model->getDataDimension(0); // Get the first Dimension
-    IDataDimensionPtr dim1 = model->getDataDimension(1); // Get the second Dimension
+    IDataDimension::Pointer dim0 = model->getDataDimension(0); // Get the first Dimension
+    IDataDimension::Pointer dim1 = model->getDataDimension(1); // Get the second Dimension
 
     // Create a DataRecord entry for the Data Model
-    IDataRecordPtr record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
+    IDataRecord::Pointer record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
 
     // Set the start/end/increment values for each Data Dimension
     int32 dim0Start = dim0->getStartValue();
@@ -164,9 +164,9 @@ MXADataModel::Pointer SimpleImportExample::createSimpleModel()
   model->setModelVersion(MXA::MXACurrentFileVersion);
 
   // ---------- Create 2 Data Dimensions
-  MXADataDimensionPtr dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
+  MXADataDimension::Pointer dim0 = MXADataDimension::New("Dimension 1", "Dim1", 0, 2, 1, 2, 1, 1);
   model->addDataDimension(dim0);
-  MXADataDimensionPtr dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
+  MXADataDimension::Pointer dim1 = MXADataDimension::New("Dimension 2", "Dim2", 1, 3, 1, 3, 1, 1);
   model->addDataDimension(dim1);
 
   // ---------- Create Data Records

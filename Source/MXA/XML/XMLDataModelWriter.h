@@ -48,7 +48,7 @@ public:
    * @param dataModel The DataModel Object to write
    * @param fileName The name of the file to write the data model
    */
-  XMLDataModelWriter( IDataModelPtr dataModel, const std::string &fileName);
+  XMLDataModelWriter( IDataModel::Pointer dataModel, const std::string &fileName);
   virtual ~XMLDataModelWriter();
 
   /**
@@ -148,7 +148,7 @@ protected:
 
 
 private:
-  IDataModelPtr           _dataModel;
+  IDataModel::Pointer           _dataModel;
   //IFileIODelegatePtr      _ioDelegate;
   const std::string       _fileName;
   int32                   _dataRecordIndentation;

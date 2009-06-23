@@ -37,23 +37,23 @@ typedef std::string MXAString;
 
 
 
-class IDataFile;
-class IFileReader;
-class IFileWriter;
-class MXADataModel;
-class MXANode;
+//class IDataFile;
+//class IFileReader;
+//class IFileWriter;
+//class MXADataModel;
+//class MXANode;
 //class MXADataRecord;
-class MXADataDimension;
-class MXADataSource;
-class MXADataImport;
-class RequiredMetaData;
+//class MXADataDimension;
+//class MXADataSource;
+//class MXADataImport;
+//class RequiredMetaData;
 class IDataImport;
 class IImportDelegate;
 class IFileIODelegate;
 class IDataSource;
-class IDataModel;
-class IDataDimension;
-class IDataRecord;
+//class IDataModel;
+//class IDataDimension;
+//class IDataRecord;
 class IAttribute;
 class AbstractImportDelegateFactory;
 class ImportDelegateManager;
@@ -61,46 +61,46 @@ class H5TiffImportDelegateFactory;
 class IStringSection;
 
 class IDataArray;
-class ISupportFile;
+//class ISupportFile;
 //class ISupportFileContents;
 
 // Data Encapsulation
-class IDataset;
-class IMXAArray;
-class MXASupportFileContents;
+//class IDataset;
+//class IMXAArray;
+//class MXASupportFileContents;
 
 // MXA Meta Data
-class IRequiredMetaData;
-class H5MXARequiredMetaData;
+//class IRequiredMetaData;
+//class H5MXARequiredMetaData;
 
-class DataExportProperties;
+//class DataExportProperties;
 
-typedef boost::shared_ptr<DataExportProperties>     DataExportPropertiesPtr;
+//typedef boost::shared_ptr<DataExportProperties>     DataExportProperties::Pointer;
 
-typedef boost::shared_ptr<ISupportFile>             ISupportFilePtr;
-typedef std::vector<ISupportFilePtr>                ISupportFiles;
+//typedef boost::shared_ptr<ISupportFile>             ISupportFile::Pointer;
+//typedef std::vector<ISupportFile::Pointer>                ISupportFile::Container;
 //typedef boost::shared_ptr<ISupportFileContents>   ISupportFileContentsPtr;
-typedef boost::shared_ptr<IMXAArray>                MXASupportFileContentsPtr;
+//typedef boost::shared_ptr<IMXAArray>                MXASupportFileContentsPtr;
 
-typedef boost::shared_ptr<IDataset>                 IDatasetPtr;
-typedef boost::shared_ptr<IMXAArray>                IMXAArrayPtr;
+//typedef boost::shared_ptr<IDataset>                 IDataset::Pointer;
+//typedef boost::shared_ptr<IMXAArray>                IMXAArray::Pointer;
 //typedef boost::shared_ptr<MXAAbstractData>          MXAAbstractDataPtr;
 //typedef boost::shared_ptr<MXAAbstractAttribute>     MXAAbstractAttributePtr;
-typedef std::map<std::string, IMXAArrayPtr>         MXAAbstractAttributes;
+//typedef std::map<std::string, IMXAArray::Pointer>         MXAAbstractAttributes;
 
-typedef boost::shared_ptr<IRequiredMetaData>        IRequiredMetaDataPtr;
-typedef boost::shared_ptr<H5MXARequiredMetaData>    H5MXARequiredMetaDataPtr;
-typedef boost::shared_ptr<RequiredMetaData>         RequiredMetaDataPtr;
+//typedef boost::shared_ptr<IRequiredMetaData>        IRequiredMetaData::Pointer;
+//typedef boost::shared_ptr<H5MXARequiredMetaData>    H5MXARequiredMetaData::Pointer;
+//typedef boost::shared_ptr<RequiredMetaData>         RequiredMetaDataPtr;
 
 //typedef boost::shared_ptr<MXADataModel>           MXADataModelPtr;
-typedef boost::shared_ptr<IDataModel>             IDataModelPtr;
-
-typedef boost::shared_ptr<IDataFile>                IDataFilePtr;
-typedef boost::shared_ptr<IFileReader>              IFileReaderPtr;
-typedef boost::shared_ptr<IFileWriter>              IFileWriterPtr;
+//typedef boost::shared_ptr<IDataModel>             IDataModel::Pointer;
+//
+//typedef boost::shared_ptr<IDataFile>                IDataFile::Pointer;
+//typedef boost::shared_ptr<IFileReader>              IFileReaderPtr;
+//typedef boost::shared_ptr<IFileWriter>              IFileWriterPtr;
 
 typedef std::map<std::string, std::string>        MXARequiredMetaData;
-typedef boost::shared_ptr<IFileIODelegate>        IFileIODelegatePtr;
+//typedef boost::shared_ptr<IFileIODelegate>        IFileIODelegatePtr;
 
 // Importing of Data related
 typedef boost::shared_ptr<IDataSource>                     IDataSourcePtr;
@@ -110,25 +110,10 @@ typedef boost::shared_ptr<IImportDelegate>                 IImportDelegatePtr;
 typedef boost::shared_ptr<AbstractImportDelegateFactory>   AbstractImportDelegateFactoryPtr;
 typedef std::vector<AbstractImportDelegateFactoryPtr>      AbstractImportDelegateFactories;
 typedef boost::shared_ptr<ImportDelegateManager>           ImportDelegateManagerPtr;
-typedef boost::shared_ptr<MXADataSource>                   MXADataSourcePtr;
-typedef std::vector<MXADataSourcePtr>                      MXADataSources;
-typedef boost::shared_ptr<MXADataImport>                   MXADataImportPtr;
+//typedef boost::shared_ptr<MXADataSource>                   MXADataSource::Pointer;
+//typedef std::vector<MXADataSource::Pointer>                      MXADataSource::Container;
+//typedef boost::shared_ptr<MXADataImport>                   MXADataImport::Pointer;
 
-
-// Data Dimension typedefs
-typedef boost::shared_ptr<MXADataDimension>       MXADataDimensionPtr;
-typedef boost::shared_ptr<IDataDimension>         IDataDimensionPtr;
-typedef std::vector<MXADataDimensionPtr>          MXADataDimensions;
-typedef std::vector<IDataDimensionPtr>            IDataDimensions;
-
-// Data Record Typedefs
-typedef boost::shared_ptr<IDataRecord>            IDataRecordPtr;
-//typedef boost::shared_ptr<MXADataRecord>          MXADataRecord::Pointer;
-//typedef boost::weak_ptr<MXADataRecord>            MXADataRecordWeakPtr;
-typedef boost::weak_ptr<IDataRecord>              IDataRecordWeakPtr;
-typedef std::vector<IDataRecordPtr>               IDataRecords;
-//typedef std::vector<MXADataRecord::Pointer>       MXADataRecords;
-typedef std::map<int32, IDataRecordPtr>           IDataRecordLookupTable;
 
 // HDF Typedefs
 typedef boost::shared_ptr<H5TiffImportDelegateFactory>  H5TiffImportDelegateFactoryPtr;

@@ -612,7 +612,7 @@ herr_t testMXAAttribute(hid_t file_id, const std::string &dsetName)
   BOOST_REQUIRE(attributeKey.empty() == false);
   attributeKey = "MXAAttribute<" + attributeKey + ">";
   IMXAArray* array = MXAArrayTemplate<T>::New(10);
-  IMXAArrayPtr arrayPtr (array);
+  IMXAArray::Pointer arrayPtr (array);
   T* p = static_cast<T*>(array->getVoidPointer(0));
   for (int var = 0; var < 10; ++var) {
     p[var] = static_cast<T>(var+65);
@@ -624,7 +624,7 @@ herr_t testMXAAttribute(hid_t file_id, const std::string &dsetName)
   IMXAArray* rArray = H5Lite::readMXAAttribute(file_id, dsetName, attributeKey);
   BOOST_REQUIRE (rArray != NULL);
   //hid_t t = rArray->getDataType();
-  IMXAArrayPtr rArrayPtr(rArray); // Let boost clean up the pointer
+  IMXAArray::Pointer rArrayPtr(rArray); // Let boost clean up the pointer
   T* r = static_cast<T*>(rArrayPtr->getVoidPointer(0));
 //  for (int var = 0; var < 10; ++var) {
 //    std::cout << "p=" << p[var] << "  r=" << (r[var]) << std::endl;
@@ -656,7 +656,7 @@ herr_t testWriteMXAArray(hid_t file_id)
   std::cout << "Running " << dsetName << " ... ";
 
   IMXAArray* array = MXAArrayTemplate<T>::New(10);
-  IMXAArrayPtr arrayPtr (array);
+  IMXAArray::Pointer arrayPtr (array);
   T* p = static_cast<T*>(array->getVoidPointer(0));
   for (int var = 0; var < 10; ++var) {
     p[var] = static_cast<T>(var);
@@ -678,7 +678,7 @@ herr_t testWriteMXAArray(hid_t file_id)
    // Now Read the Attribute back into an MXAArray object and test against the previous for equality
    IMXAArray* rArray = H5Lite::readMXAArray(file_id, dsetName);
    BOOST_REQUIRE (rArray != NULL);
-   IMXAArrayPtr rArrayPtr(rArray); // Let boost clean up the pointer
+   IMXAArray::Pointer rArrayPtr(rArray); // Let boost clean up the pointer
    T* r = static_cast<T*>(rArrayPtr->getVoidPointer(0));
  //  for (int var = 0; var < 10; ++var) {
  //    std::cout << "p=" << p[var] << "  r=" << (r[var]) << std::endl;

@@ -12,7 +12,7 @@
 #define _IDataFileIO_h_
 
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypeDefs.h>
+//#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IFileWriter.h>
 #include <MXA/Base/IFileReader.h>
 
@@ -35,14 +35,14 @@ class MXA_EXPORT IDataFileIO  : public IFileWriter, public IFileReader
      * @param dataFile The file to write the data into
      * @return Error condition. 0 or positive is success. Negative is failure
      */
-    virtual int32 writeToFile (IDataFilePtr dataFile) = 0;
+    virtual int32 writeToFile (IDataFile::Pointer dataFile) = 0;
 
     /**
      * @brief Method to read data into the implementing class from an IDataFile object
      * @param dataFile The file to read the data from
      * @return Error condition. 0 or positive is success. Negative is failure
      */
-    virtual int32 readFromFile (IDataFilePtr dataFile) = 0;
+    virtual int32 readFromFile (IDataFile::Pointer dataFile) = 0;
 
 
   protected:

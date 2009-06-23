@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,23 +12,23 @@
 #define _MXADATAMODELNODE_H_
 
 #include <MXA/Common/MXATypes.h>
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataDimension.h>
 #include <MXA/Core/MXAConstants.h>
 #include <MXA/Utilities/StringUtils.h>
 
-#include <boost/shared_ptr.hpp>
+//#include <boost/shared_ptr.hpp>
 
 #include <limits>
 
 
 /**
  * @brief A concrete implementation of the IDataDimension Abstract Class.
- * 
- * @author Mike Jackson @ BlueQuartz Software.us 
+ *
+ * @author Mike Jackson @ BlueQuartz Software.us
  * @date March 2007
  * @version $Revision: 1.2 $
- *  
+ *
  */
 class  MXA_EXPORT MXADataDimension : public IDataDimension
 {
@@ -36,21 +36,22 @@ class  MXA_EXPORT MXADataDimension : public IDataDimension
 public:
   MXA_SHARED_POINTERS(MXADataDimension);
   MXA_TYPE_MACRO(MXADataDimension)
-  
+  typedef std::vector<Pointer>            Container;
+
     /**
   * @brief Used to create a new MXANode
    * @param name The name for the Data Dimensions
    * @param altName An Alternate Name for the Data Dimension
    * @param index The index of this dimension
-   * @param count The total number of 
+   * @param count The total number of
    * @param startValue The value this dimension starts at
    * @param endValue The ending value (inclusive) this dimension ends at
    * @param increment The value to increment the dimension when iterating
    * @param uniform Are the values uniform across the start to end values
   * @return A Boost SharedPointer to the MXANode Object
   */
-  static MXADataDimension::Pointer New(std::string name, std::string altName, 
-        int32 index = std::numeric_limits<int32>::min(), 
+  static MXADataDimension::Pointer New(std::string name, std::string altName,
+        int32 index = std::numeric_limits<int32>::min(),
         int32 count = std::numeric_limits<int32>::min(),
         int32 startValue  = std::numeric_limits<int32>::max(),
         int32 endValue = std::numeric_limits<int32>::max(),
@@ -70,7 +71,7 @@ public:
   }
 
 //  #warning Add another static constructor that takes no args.
-  
+
   virtual ~MXADataDimension();
 
 
@@ -86,7 +87,7 @@ public:
   * @return The value of Index
   */
   int32 getIndex();
-  
+
   /**
   * @brief Setter for property Count
   * @param aValue The new value to set for property Count
@@ -172,40 +173,40 @@ public:
   int32 getUniform() { return _uniform; }
 
   int32 writeDimension(IDataDimensionWriter* writer);
- 
- // Over ride from Superclass 
+
+ // Over ride from Superclass
   void setNodeName(std::string nodeName);
   // Print out the node information to the console
   void printNode(std::ostream& os, int32 indent);
-  
+
   /**
    * @brief Returns the maximum value that the Start Value can have */
   IDataDimension::size_type maxStartValue() { return std::numeric_limits<int32>::max(); }
-  
+
   /** @brief Returns the maximum value that the End Value can have  */
   IDataDimension::size_type  maxEndValue() { return std::numeric_limits<int32>::max(); }
-  
+
   /** @brief Returns the Maximun Increment value */
   IDataDimension::size_type  maxIncrement() { return std::numeric_limits<int32>::max(); }
-  
+
   /** @brief returns the maximum value that the Count can be */
   IDataDimension::size_type  maxCount() { return std::numeric_limits<int32>::max(); }
-  
+
   /** @brief   */
   bool isPropertyInitialized(int32 value)
   {
     if (value == std::numeric_limits<int32>::max() ||
         value == std::numeric_limits<int32>::min() )
       { return false; }
-    
+
     return true;
   }
-  
+
   bool isValid(std::string &message);
-  
+
   int32 calculateCount();
 
-  
+
 protected:
   MXADataDimension();
 
@@ -219,7 +220,7 @@ protected:
   std::string _altName;
   std::string _nodeName;
   std::string _nodeType;
-  
+
 private:
     MXADataDimension(const MXADataDimension&);   //Copy Constructor Not Implemented
     void operator=(const MXADataDimension&); //Copy Assignment Not Implemented

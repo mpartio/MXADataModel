@@ -42,7 +42,7 @@ public:
   * @param dataModel The DataModel to use. Note that settings in the datamodel will
   * be over written with those from the file.
   */
-  H5DataModelReader(IDataModelPtr dataModel);
+  H5DataModelReader(IDataModel::Pointer dataModel);
 
   virtual ~H5DataModelReader();
 
@@ -121,7 +121,7 @@ protected:
   * @param name The name of the dimension to read
   * @return IDataDimension Shared Pointer
   */
-  MXADataDimensionPtr _loadDataDimension(hid_t locId, std::string name);
+  MXADataDimension::Pointer _loadDataDimension(hid_t locId, std::string name);
 
   /**
   * @brief Recursive method that traverses the tree of Data Records
@@ -142,7 +142,7 @@ protected:
 
 private:
 
-    IDataModelPtr _dataModel;
+    IDataModel::Pointer _dataModel;
 
     H5DataModelReader(const H5DataModelReader&);   //Copy Constructor Not Implemented
     void operator=(const H5DataModelReader&); //Copy Assignment Not Implemented

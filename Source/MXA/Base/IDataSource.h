@@ -3,7 +3,7 @@
 
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypeDefs.h>
-
+#include <MXA/Base/IDataModel.h>
 
 /**
  * @brief Interface that defines the methods of a "Data Source" Object
@@ -37,13 +37,13 @@ public:
     * Set the value of m_dataRecord
     * @param dataRecord the new value of m_dataRecord
     */
-   virtual void setDataRecord ( IDataRecordPtr dataRecord ) = 0;
+   virtual void setDataRecord ( IDataRecord::Pointer dataRecord ) = 0;
 
    /**
     * Get the value of m_dataRecord
     * @return the value of m_dataRecord
     */
-   virtual IDataRecordPtr getDataRecord ( ) = 0;
+   virtual IDataRecord::Pointer getDataRecord ( ) = 0;
 
 
    /**
@@ -81,13 +81,13 @@ public:
     * Set the value of m_dataModel
     * @param dataModel the new value of m_dataModel
     */
-   virtual void setDataModel ( IDataModelPtr dataModel ) = 0;
+   virtual void setDataModel ( IDataModel::Pointer dataModel ) = 0;
 
    /**
     * Get the value of m_dataModel
     * @return the value of m_dataModel
     */
-   virtual IDataModelPtr getDataModel ( ) = 0;
+   virtual IDataModel::Pointer getDataModel ( ) = 0;
 
 
    /**

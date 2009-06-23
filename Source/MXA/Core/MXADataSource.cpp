@@ -23,14 +23,14 @@ MXADataSource::~MXADataSource ( ) { }
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MXADataSource::setDataRecord ( IDataRecordPtr new_var ) {
+void MXADataSource::setDataRecord ( IDataRecord::Pointer new_var ) {
   _dataRecord = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataRecordPtr MXADataSource::getDataRecord ( ) {
+IDataRecord::Pointer MXADataSource::getDataRecord ( ) {
   return _dataRecord;
 }
 
@@ -75,14 +75,14 @@ IImportDelegatePtr MXADataSource::getImportDelegate ( ) {
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MXADataSource::setDataModel ( IDataModelPtr dataModel ) {
+void MXADataSource::setDataModel ( IDataModel::Pointer dataModel ) {
   _dataModel = dataModel;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataModelPtr MXADataSource::getDataModel ( ) {
+IDataModel::Pointer MXADataSource::getDataModel ( ) {
   return _dataModel;
 }
 
