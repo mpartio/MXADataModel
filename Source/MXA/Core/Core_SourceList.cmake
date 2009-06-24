@@ -1,7 +1,7 @@
 SET (MXA_CORE_SRCS
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataModel.cpp
   ${MXA_SOURCE_DIR}/MXA/Core/MXADataDimension.cpp
   ${MXA_SOURCE_DIR}/MXA/Core/MXADataRecord.cpp
-  ${MXA_SOURCE_DIR}/MXA/Core/MXADataModel.cpp
   ${MXA_SOURCE_DIR}/MXA/Core/MXADataSource.cpp
   ${MXA_SOURCE_DIR}/MXA/Core/MXADataImport.cpp
   ${MXA_SOURCE_DIR}/MXA/Core/MXASupportFile.cpp

@@ -10,7 +10,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <MXA/MXAConfiguration.h>
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXASupportFile.h>
 #include <MXA/XML/XMLDataModelReader.h>

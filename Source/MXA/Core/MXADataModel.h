@@ -18,16 +18,24 @@
 
 
 //-- MXA Headers
+
 //#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IDataFileIO.h>
 #include <MXA/Base/IDataModel.h>
-#include <MXA/Core/MXAConstants.h>
-#include <MXA/Core/MXADataDimension.h>
-#include <MXA/Core/MXADataRecord.h>
+//#include <MXA/Base/IMXAArray.h>
+#include <MXA/Base/IRequiredMetaData.h>
+//#include <MXA/Base/ISupportFile.h>
+//#include <MXA/Core/MXAConstants.h>
+#include <MXA/Base/IDataDimension.h>
+#include <MXA/Base/IDataRecord.h>
+
 
 
 //-- STL Headers
-#include <list>
+#include <string>
 #include <map>
+
+typedef std::map<std::string, std::string>        MXARequiredMetaData;
 
 /**
  * @brief Main class used to work with the DataModel paradigm.

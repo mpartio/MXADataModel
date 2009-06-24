@@ -4,6 +4,9 @@
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IDataModel.h>
+#include <MXA/Base/IImportDelegate.h>
+
+#include <vector>
 
 /**
  * @brief Interface that defines the methods of a "Data Source" Object
@@ -18,6 +21,9 @@ public:
   IDataSource() {}
   virtual ~IDataSource() {}
 
+    MXA_SHARED_POINTERS(IDataSource)
+    typedef std::vector<Pointer> Collection;
+    
   /**
     * @brief Generates the internal path that is used by the underlying data storage
     * mechanism to place the data into the hierarchy
@@ -68,13 +74,13 @@ public:
     * Set the value of m_importDelegate
     * @param dataParser the new value of m_importDelegate
     */
-   virtual void setImportDelegate ( IImportDelegatePtr dataParser ) = 0;
+   virtual void setImportDelegate ( IImportDelegate::Pointer dataParser ) = 0;
 
    /**
     * Get the value of m_importDelegate
     * @return the value of m_importDelegate
     */
-   virtual IImportDelegatePtr getImportDelegate ( ) = 0;
+   virtual IImportDelegate::Pointer getImportDelegate ( ) = 0;
 
 
    /**

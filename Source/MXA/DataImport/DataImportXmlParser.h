@@ -150,18 +150,18 @@ public:
    * Set the value of m_dataSources
    * @param datasources the new value of m_dataSources
    */
-  void setDataSources ( IDataSources &datasources );
+  void setDataSources ( IDataSource::Collection &datasources );
 
   /**
    * Get the value of m_dataSources
    * @return the value of m_dataSources
    */
-  IDataSources getDataSources ( );
+  IDataSource::Collection getDataSources ( );
 
   /**
    * @param  dataSource The datasource to add to the list
    */
-  void addDataSource (IDataSourcePtr dataSource );
+  void addDataSource (IDataSource::Pointer dataSource );
 
   /**
    * @brief Does the actual work of parsing the xml file and creating all the
@@ -184,7 +184,7 @@ private:
   std::string        _deleteExistingDataFile;
   IDataFile::Pointer       _dataFile;
   IDataModel::Pointer      _dataModel;
-  IDataSources       _dataSources;
+  IDataSource::Collection       _dataSources;
   int32              _xmlParseError;
   bool               _parseData;
   std::string        _errorMessage;
@@ -192,7 +192,7 @@ private:
 
   // - Implicit Data Source Variables
   std::vector<IDataDimension::Pointer>                  _implDataDimensions;
-  std::map<IDataDimension::Pointer, IStringSectionPtr>  _implPathMap;
+  std::map<IDataDimension::Pointer, IStringSection::Pointer>  _implPathMap;
   IDataRecord::Pointer                                _implDataRecord;
   std::string                                   _implSourceType;
   std::string                                   _implPreTextSection;
@@ -203,7 +203,7 @@ private:
 
   void _createDataSource(std::string pathTemplate, std::vector<IDataDimension*>::size_type index, std::vector<int> &dimVals);
   void _createDataSource2();
-  void getCurrentImportDelegateProperties(IImportDelegatePtr importDelegatePtr);
+  void getCurrentImportDelegateProperties(IImportDelegate::Pointer importDelegatePtr);
 
   //---------- Methods that are called for each starting and ending tag --------
   /** @brief Method that will be called when the 'Data_Dimensions' tag is found.  */

@@ -15,9 +15,10 @@
 //-- MXA Includes
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypes.h>
-#include <MXA/Common/MXATypeDefs.h>
+//#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IImportDelegate.h>
+#include <MXA/Base/IDataSource.h>
 #include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 // C++ STL headers
@@ -50,7 +51,7 @@ public:
   /**
   * @brief Implementation from the IDataImportDelegate class
   */
-  int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile);
+  int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile);
 
 
   /*

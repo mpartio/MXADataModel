@@ -8,12 +8,12 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _IMXADATAMODEL_H
-#define _IMXADATAMODEL_H
+#ifndef _IDATAMODEL_H_
+#define _IDATAMODEL_H_
 
 
 //-- MXA Includes
-#include <MXA/Common/DLLExport.h>
+//#include <MXA/Common/DLLExport.h>
 //#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataDimension.h>
@@ -372,4 +372,4 @@ class MXA_EXPORT IDataModel
     void operator=(const IDataModel&); //Not Implemented
 };
 
-#endif /*_IMXADATAMODEL_H*/
+#endif /*_IDATAMODEL_H_*/

@@ -9,6 +9,8 @@
 
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Core/MXASupportFile.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/HDF5/H5MXADataFile.h>
 #include <Examples/ExampleFileLocations.h>

@@ -17,7 +17,7 @@ DataSourcePathBuilder::~DataSourcePathBuilder()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void DataSourcePathBuilder::addSection(IStringSectionPtr part)
+void DataSourcePathBuilder::addSection(IStringSection::Pointer part)
 {
   _parts.push_back(part);
 }

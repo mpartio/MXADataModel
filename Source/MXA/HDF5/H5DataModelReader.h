@@ -13,6 +13,8 @@
 
 //MXA Includes
 #include <MXA/Common/DLLExport.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Base/IDataModelReader.h>
 //#include <MXA/HDF5/H5IODelegate.h>

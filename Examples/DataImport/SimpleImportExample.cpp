@@ -2,6 +2,8 @@
 
 //-- MXA Headers
 #include <MXA/Base/IImportDelegate.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXADataSource.h>
 #include <MXA/Core/MXADataImport.h>
@@ -50,9 +52,9 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
   dataImport->setDataFile(dataFile);
 
   // Get an instance to the ImportDelegateManager
-  ImportDelegateManagerPtr idManagerPtr = ImportDelegateManager::instance();
+  ImportDelegateManager::Pointer idManagerPtr = ImportDelegateManager::instance();
   // Get a reference to an Import Delegate given the name of the class
-  IImportDelegatePtr delegatePtr = ImportDelegateManager::createNewImportDelegate(ExampleImport::Detail::ClassName);
+  IImportDelegate::Pointer delegatePtr = ImportDelegateManager::createNewImportDelegate(ExampleImport::Detail::ClassName);
 
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
   IDataDimension::Pointer dim0 = model->getDataDimension(0); // Get the first Dimension

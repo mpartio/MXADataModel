@@ -99,7 +99,7 @@ int32 DataImportXmlParser::import()
 
   // Finally try to run the import loop
  // int i = 1;
-  for (IDataSources::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
+  for (IDataSource::Collection::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
   {
     if (this->_verbose) { std::cout << "Importing data source: " << (*(iter))->getSourcePath()   << std::endl; }
     err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataFile );
@@ -170,7 +170,7 @@ int32 DataImportXmlParser::_mergeModelToDisk()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void DataImportXmlParser::addDataSource (IDataSourcePtr dataSource ) {
+void DataImportXmlParser::addDataSource (IDataSource::Pointer dataSource ) {
   this->_dataSources.push_back(dataSource);
 }
 
@@ -225,14 +225,14 @@ IDataFile::Pointer DataImportXmlParser::getDataFile ( )
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void DataImportXmlParser::setDataSources ( IDataSources &new_var ) {
+void DataImportXmlParser::setDataSources ( IDataSource::Collection &new_var ) {
   _dataSources = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataSources DataImportXmlParser::getDataSources ( ) {
+IDataSource::Collection DataImportXmlParser::getDataSources ( ) {
   return _dataSources;
 }
 
@@ -620,13 +620,13 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
     return;
   }
 
-  IDataSourcePtr ds( new MXADataSource() ); //Create a new MXADataSource
+  IDataSource::Pointer ds( new MXADataSource() ); //Create a new MXADataSource
   ds->setDimensionValues(dimValues);
   ds->setDataRecord(recordPtr);
   ds->setSourcePath(sourceFilePath);
 
 
-  IImportDelegatePtr importDelegatePtr = ImportDelegateManager::createNewImportDelegate(sourceType);
+  IImportDelegate::Pointer importDelegatePtr = ImportDelegateManager::createNewImportDelegate(sourceType);
   if (importDelegatePtr.get() != NULL )
   {
     ds->setImportDelegate(importDelegatePtr);
@@ -713,7 +713,7 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
   {
   //  std::cout << dim->getDimensionName() << " i:" << i << std::endl;
     // Create a new Path
-    IStringSectionPtr strSection = _implPathMap[dim];
+    IStringSection::Pointer strSection = _implPathMap[dim];
     std::string newPath = strSection->toString(i, ok);
     std::string completePath = currentTemplate + newPath;
     dimValues[index] = i; // Set the correct dimension Value for this increment
@@ -725,12 +725,12 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
     {
       // Create the data source
       completePath.append( _implPreTextSection ); // This should be dangling since we never had another index part
-      IDataSourcePtr ds( new MXADataSource() ); //Create a new MXADataSource
+      IDataSource::Pointer ds( new MXADataSource() ); //Create a new MXADataSource
       ds->setDimensionValues(dimValues);
       ds->setDataRecord(_implDataRecord);
       ds->setSourcePath(completePath);
 
-      IImportDelegatePtr importDelegatePtr = ImportDelegateManager::createNewImportDelegate(_implSourceType);
+      IImportDelegate::Pointer importDelegatePtr = ImportDelegateManager::createNewImportDelegate(_implSourceType);
       if (importDelegatePtr.get() != NULL )
       {
         getCurrentImportDelegateProperties(importDelegatePtr);
@@ -748,7 +748,7 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void DataImportXmlParser::getCurrentImportDelegateProperties(IImportDelegatePtr importDelegatePtr)
+void DataImportXmlParser::getCurrentImportDelegateProperties(IImportDelegate::Pointer importDelegatePtr)
 {
   XMLAttributeMap* map = this->_curImportPropertyMap.get();
   for (XMLAttributeMap::iterator iter = map->begin(); iter != map->end(); ++iter)
@@ -834,7 +834,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
   // Get the Numeric type (int or float)
   std::string numericType ( attrMap[MXA_DataImport::Attr_Numeric_Type] );
 
-  IStringSectionPtr section (new DataSourcePathIndexSection(index, paddingChar, width, numericType) );
+  IStringSection::Pointer section (new DataSourcePathIndexSection(index, paddingChar, width, numericType) );
   section->setPreText(_implPreTextSection);
 
   std::string dimName = attrMap[MXA_DataImport::Attr_Data_Dimension];

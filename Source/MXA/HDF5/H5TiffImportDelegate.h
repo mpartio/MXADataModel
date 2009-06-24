@@ -14,10 +14,12 @@
 
 //-- MXA Includes
 #include <MXA/Common/MXATypes.h>
-#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IDataSource.h>
+#include <MXA/Base/IDataFile.h>
+#include <MXA/Base/IDataModel.h>
 #include <MXA/Base/IImportDelegate.h>
-#include <MXA/DataImport/AbstractImportDelegateFactory.h>
+//#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 // C++ STL headers
 #include <string>
@@ -29,8 +31,8 @@ class MXADataModel;
 
 namespace H5TiffImport
 {
-MXA_PROPERTY_CONSTANT(FileNotFoundIsError);
-MXA_PROPERTY_CONSTANT(ImportAsGrayScale);
+    MXA_PROPERTY_CONSTANT(FileNotFoundIsError);
+    MXA_PROPERTY_CONSTANT(ImportAsGrayScale);
 }
 
 /**
@@ -49,7 +51,7 @@ public:
   /**
   * @brief Implementation from the IDataImportDelegate class
   */
-  int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile);
+  int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile);
 
   /**
    * @brief Sets the pointer to the DataModel

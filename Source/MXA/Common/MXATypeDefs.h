@@ -13,8 +13,8 @@
 
 
 #include <string>
-#include <vector>
-#include <map>
+//#include <vector>
+//#include <map>
 
 //-- Boost Includes
 #include <boost/shared_ptr.hpp>
@@ -47,20 +47,20 @@ typedef std::string MXAString;
 //class MXADataSource;
 //class MXADataImport;
 //class RequiredMetaData;
-class IDataImport;
-class IImportDelegate;
-class IFileIODelegate;
-class IDataSource;
+//class IDataImport;
+//class IImportDelegate;
+//class IFileIODelegate;
+//class IDataSource;
 //class IDataModel;
 //class IDataDimension;
 //class IDataRecord;
-class IAttribute;
-class AbstractImportDelegateFactory;
-class ImportDelegateManager;
-class H5TiffImportDelegateFactory;
-class IStringSection;
-
-class IDataArray;
+//class IAttribute;
+//class AbstractImportDelegateFactory;
+//class ImportDelegateManager;
+//class H5TiffImportDelegateFactory;
+//class IStringSection;
+//
+//class IDataArray;
 //class ISupportFile;
 //class ISupportFileContents;
 
@@ -99,28 +99,28 @@ class IDataArray;
 //typedef boost::shared_ptr<IFileReader>              IFileReaderPtr;
 //typedef boost::shared_ptr<IFileWriter>              IFileWriterPtr;
 
-typedef std::map<std::string, std::string>        MXARequiredMetaData;
+//typedef std::map<std::string, std::string>        MXARequiredMetaData;
 //typedef boost::shared_ptr<IFileIODelegate>        IFileIODelegatePtr;
 
 // Importing of Data related
-typedef boost::shared_ptr<IDataSource>                     IDataSourcePtr;
-typedef std::vector<IDataSourcePtr>                        IDataSources;
-typedef boost::shared_ptr<IDataImport>                     IDataImportPtr;
-typedef boost::shared_ptr<IImportDelegate>                 IImportDelegatePtr;
-typedef boost::shared_ptr<AbstractImportDelegateFactory>   AbstractImportDelegateFactoryPtr;
-typedef std::vector<AbstractImportDelegateFactoryPtr>      AbstractImportDelegateFactories;
-typedef boost::shared_ptr<ImportDelegateManager>           ImportDelegateManagerPtr;
+//typedef boost::shared_ptr<IDataSource>                     IDataSourcePtr;
+//typedef std::vector<IDataSourcePtr>                        IDataSources;
+//typedef boost::shared_ptr<IDataImport>                     IDataImportPtr;
+//typedef boost::shared_ptr<IImportDelegate>                 IImportDelegatePtr;
+//typedef boost::shared_ptr<AbstractImportDelegateFactory>   AbstractImportDelegateFactoryPtr;
+//typedef std::vector<AbstractImportDelegateFactoryPtr>      AbstractImportDelegateFactories;
+//typedef boost::shared_ptr<ImportDelegateManager>           ImportDelegateManagerPtr;
 //typedef boost::shared_ptr<MXADataSource>                   MXADataSource::Pointer;
-//typedef std::vector<MXADataSource::Pointer>                      MXADataSource::Container;
+//typedef std::vector<MXADataSource::Pointer>                MXADataSource::Container;
 //typedef boost::shared_ptr<MXADataImport>                   MXADataImport::Pointer;
 
 
 // HDF Typedefs
-typedef boost::shared_ptr<H5TiffImportDelegateFactory>  H5TiffImportDelegateFactoryPtr;
+//typedef boost::shared_ptr<H5TiffImportDelegateFactory>  H5TiffImportDelegateFactoryPtr;
 
-
-typedef boost::shared_ptr<IStringSection>          IStringSectionPtr;
-typedef std::vector<IStringSectionPtr>             IStringSections;
+//
+//typedef boost::shared_ptr<IStringSection>          IStringSectionPtr;
+//typedef std::vector<IStringSectionPtr>             IStringSections;
 
 //-- Define some Shared Arrays to use
 typedef boost::shared_array<uint8>                 UCharArray;

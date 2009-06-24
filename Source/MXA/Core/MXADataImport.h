@@ -57,9 +57,9 @@ public:
    * @brief Static method to create a new MXADataImport Object
    * @return boost shared pointer wrapping an MXADataImport Object pointer
    */
-  static IDataImportPtr New()
+  static IDataImport::Pointer New()
   {
-    return IDataImportPtr( new MXADataImport );
+    return IDataImport::Pointer( new MXADataImport );
   }
 
   /**
@@ -79,18 +79,18 @@ public:
    * Set the value of m_dataSources
    * @param datasources the new value of m_dataSources
    */
-  void setDataSources ( IDataSources &datasources );
+  void setDataSources ( IDataSource::Collection &datasources );
 
   /**
    * Get the value of m_dataSources
    * @return the value of m_dataSources
    */
-  IDataSources getDataSources ( );
+  IDataSource::Collection getDataSources ( );
 
   /**
    * @param  dataSource The datasource to add to the list
    */
-  void addDataSource (IDataSourcePtr dataSource );
+  void addDataSource (IDataSource::Pointer dataSource );
 
   /** @brief Imports the data into the data file
   * @return Error Condition. Zero or Positive is Success
@@ -100,7 +100,7 @@ public:
 private:
   std::string                 _outputFilePath;
   IDataFile::Pointer                _dataFile;
-  IDataSources                _dataSources;
+  IDataSource::Collection                _dataSources;
 
   MXADataImport(const MXADataImport&);   //Copy Constructor Not Implemented
   void operator=(const MXADataImport&); //Copy Assignment Not Implemented

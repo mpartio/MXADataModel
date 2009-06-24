@@ -2,11 +2,11 @@
 
 
 #include <MXA/Core/MXADataSource.h>
-#include <MXA/Core/MXADataModel.h>
-#include <MXA/Utilities/StringUtils.h>
+//#include <MXA/Core/MXADataModel.h>
+//#include <MXA/Utilities/StringUtils.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
-
-#include <iostream>
+//
+//#include <iostream>
 
 // -----------------------------------------------------------------------------
 //
@@ -61,14 +61,14 @@ bool MXADataSource::dataSourceExists()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MXADataSource::setImportDelegate ( IImportDelegatePtr dataParser ) {
+void MXADataSource::setImportDelegate ( IImportDelegate::Pointer dataParser ) {
   _dataImportDelegate = dataParser;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IImportDelegatePtr MXADataSource::getImportDelegate ( ) {
+IImportDelegate::Pointer MXADataSource::getImportDelegate ( ) {
   return _dataImportDelegate;
 }
 

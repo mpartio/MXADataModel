@@ -1,24 +1,37 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
 //-- MXA Headers
 #include <MXA/Core/MXADataModel.h>
-#include <MXA/Common/LogTime.h>
-#include <MXA/Base/IFileIODelegate.h>
-#include <MXA/Base/IMXAArray.h>
-#include <MXA/Base/IRequiredMetaData.h>
-#include <MXA/Base/ISupportFile.h>
+//#include <MXA/Common/LogTime.h>
+
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
+#include <MXA/HDF5/H5MXARequiredMetaData.h>
+
+//#include <MXA/Base/IFileIODelegate.h>
+//#include <MXA/Base/IMXAArray.h>
+//#include <MXA/Base/IRequiredMetaData.h>
+//#include <MXA/Base/ISupportFile.h>
 
 #include <MXA/Core/RequiredMetaData.h>
-#include <MXA/Utilities/StringUtils.h>
-#include <MXA/XML/XMLDataModelWriter.h>
+//#include <MXA/Utilities/StringUtils.h>
+//#include <MXA/XML/XMLDataModelWriter.h>
 
 //#include <MXA/Core/MXAAbstractAttribute.h>
 //-- Standard Library Headers
-#include <iostream>
+//#include <iostream>
 
 #if MXA_HDF5_SUPPORT
-#include <MXA/HDF5/H5MXARequiredMetaData.h>
+//#include <MXA/HDF5/H5MXARequiredMetaData.h>
 #endif
 
-using namespace MXA;
+//using namespace MXA;
 
 //-------------------------------------------------
 // Constructor

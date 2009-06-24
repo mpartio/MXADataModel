@@ -45,7 +45,7 @@ class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFacto
    * @param className The name of the Delegate class that will be returned
    * @return A new boost shared pointer to H5BmpImportDelegate
    */
-  IImportDelegatePtr newDataImportDelegate (const std::string &className );
+  IImportDelegate::Pointer newDataImportDelegate (const std::string &className );
 
   /**
    * @brief Returns the Classname of the delegate that this factory can create.

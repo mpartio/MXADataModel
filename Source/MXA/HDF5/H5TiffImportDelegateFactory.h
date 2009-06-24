@@ -12,6 +12,7 @@
 #define H5TIFFIMPORTDELEGATEFACTORY_H_
 
 //-- MXA Includes
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 //-- C++ includes
@@ -33,6 +34,7 @@ DEFINE_IMPORT_DELEGATE_NAMESPACE(H5TiffImport);
 class MXA_EXPORT H5TiffImportDelegateFactory : public AbstractImportDelegateFactory
 {
   public:
+    MXA_SHARED_POINTERS(H5TiffImportDelegateFactory)
     H5TiffImportDelegateFactory();
 
     virtual ~H5TiffImportDelegateFactory();
@@ -44,7 +46,7 @@ class MXA_EXPORT H5TiffImportDelegateFactory : public AbstractImportDelegateFact
    * @param className The name of the Delegate class that will be returned
    * @return A new boost shared pointer to H5TiffImportDelegate
    */
-  IImportDelegatePtr newDataImportDelegate (const std::string &className );
+	IImportDelegate::Pointer newDataImportDelegate (const std::string &className );
 
   /**
    * @brief Returns the Classname of the delegate that this factory can create.

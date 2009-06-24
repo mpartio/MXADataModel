@@ -13,8 +13,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/Common/DLLExport.h>
-
+//#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXATypes.h>
 
 /**
  * @brief

@@ -20,9 +20,9 @@ ExampleImportDelegateFactory::~ExampleImportDelegateFactory()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IImportDelegatePtr ExampleImportDelegateFactory::newDataImportDelegate(const std::string &className )
+IImportDelegate::Pointer ExampleImportDelegateFactory::newDataImportDelegate(const std::string &className )
 {
-  IImportDelegatePtr delegate; // Creates a Null Shared Pointer
+  IImportDelegate::Pointer delegate; // Creates a Null Shared Pointer
   if (className.compare(ExampleImport::Detail::ClassName) == 0)
   {
     delegate.reset(new ExampleImportDelegate());

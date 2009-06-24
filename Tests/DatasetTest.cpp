@@ -16,6 +16,7 @@
 #include <MXA/Base/IDataFile.h>
 #include <MXA/Base/IDataModel.h>
 #include <MXA/Base/IFileWriter.h>
+#include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/HDF5/H5MXADataFile.h>
 #include <MXA/HDF5/H5Utilities.h>

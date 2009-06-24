@@ -23,9 +23,9 @@ H5TiffImportDelegateFactory::~H5TiffImportDelegateFactory()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IImportDelegatePtr H5TiffImportDelegateFactory::newDataImportDelegate (const std::string &className )
+IImportDelegate::Pointer H5TiffImportDelegateFactory::newDataImportDelegate (const std::string &className )
 {
-  IImportDelegatePtr delegate; // Creates a Null Shared Pointer
+  IImportDelegate::Pointer delegate; // Creates a Null Shared Pointer
   if ( className.compare( H5TiffImport::Detail::ClassName ) == 0)
   {
     H5TiffImportDelegate* d = new H5TiffImportDelegate();

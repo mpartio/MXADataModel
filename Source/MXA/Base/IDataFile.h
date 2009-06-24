@@ -8,19 +8,18 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef IMXAFILE_H_
-#define IMXAFILE_H_
+#ifndef IDATAFILE_H_
+#define IDATAFILE_H_
 
-//#include <MXA/Common/DLLExport.h>
-//#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
-#include <MXA/Base/IDataset.h>
-#include <MXA/Base/IDataModel.h>
-
-class IDataModel;
+//#include <MXA/Base/IDataModel.h>
+//#include <MXA/Base/IDataset.h>
 
 #include <string>
+
+class IDataModel;
+class IDataset;
 
 /**
 * @class IDataFile IDataFile.h Base/IDataFile.h
@@ -33,10 +32,13 @@ class IDataModel;
 class MXA_EXPORT IDataFile
 {
   public:
+    MXA_SHARED_POINTERS(IDataFile);
+    typedef boost::shared_ptr<IDataModel> DataModelType;
+    typedef boost::shared_ptr<IDataset>   DatasetType;
+    
     explicit IDataFile(const std::string &filename) {};
     virtual ~IDataFile() {};
 
-    MXA_SHARED_POINTERS(IDataFile);
 
     /**
      * @brief returns the name of the file that is actively being read from or
@@ -48,7 +50,7 @@ class MXA_EXPORT IDataFile
      * @brief returns the DataModel as read from the data file
      * @return A DataModelPtr oject. A NULL wrapped pointer is perfectly valid
      */
-    virtual IDataModel::Pointer getDataModel() = 0;
+    virtual DataModelType getDataModel() = 0;
 
 // -----------------------------------------------------------------------------
 //  Basic File Operations
@@ -110,9 +112,9 @@ class MXA_EXPORT IDataFile
 // -----------------------------------------------------------------------------
 //  Writing data related methods
 
-    virtual int32 writeData ( const IDataset::Pointer dataset) = 0;
+    virtual int32 writeData ( const DatasetType dataset) = 0;
 
-    virtual int32 readData (const IDataset::Pointer dataset) = 0;
+    virtual int32 readData (const DatasetType dataset) = 0;
 
 
   protected:
@@ -124,4 +126,4 @@ class MXA_EXPORT IDataFile
 };
 
 
-#endif /*IMXAFILE_H_*/
+#endif /*IDATAFILE_H_*/

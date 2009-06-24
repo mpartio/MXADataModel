@@ -13,19 +13,16 @@
 #define MXADATASOURCE_H
 
 //-- MXA Headers
-#include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypeDefs.h>
+//#include <MXA/Common/DLLExport.h>
+//#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataSource.h>
+#include <MXA/Base/IImportDelegate.h>
 
 //-- STL Headers
 #include <string>
 #include <vector>
-
-//Include Boost Headers
-#include <boost/shared_ptr.hpp>
-
 
 // Forward declare classes
 class MXADataRecord;
@@ -44,7 +41,7 @@ public:
 
   MXA_SHARED_POINTERS(MXADataSource);
   MXA_TYPE_MACRO(MXADataSource);
-  typedef std::vector<Pointer>                      MXADataSource::Container;
+  typedef std::vector<Pointer>               Container;
 
   /**
    * @brief Empty Constructor
@@ -107,13 +104,13 @@ public:
    * @brief Set the value of _importDelegate
    * @param dataParser the new value of _importDelegate
    */
-  void setImportDelegate ( IImportDelegatePtr dataParser );
+  void setImportDelegate ( IImportDelegate::Pointer dataParser );
 
   /**
    * @brief Get the value of _importDelegate
    * @return the value of _importDelegate
    */
-  IImportDelegatePtr getImportDelegate ( );
+  IImportDelegate::Pointer getImportDelegate ( );
 
 
   /**
@@ -145,7 +142,7 @@ private:
 
   IDataRecord::Pointer                _dataRecord;
   std::string                   _sourcePath;
-  IImportDelegatePtr            _dataImportDelegate;
+  IImportDelegate::Pointer            _dataImportDelegate;
   IDataModel::Pointer                 _dataModel;
   std::vector<int32>            _dimensionValues;
 

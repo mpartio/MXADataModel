@@ -59,7 +59,7 @@ int32 H5BmpImportDelegate::setProperty(const std::string &key, const std::string
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5BmpImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile)
+int32 H5BmpImportDelegate::importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
 {
   //std::cout << "H5BmpImportDelegate::importDataSource:  Importing as grayscale->" << this->_importAsGrayScale << std::endl;
   herr_t err = -1;

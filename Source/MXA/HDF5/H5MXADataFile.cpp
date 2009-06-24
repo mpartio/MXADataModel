@@ -1,13 +1,14 @@
 
 #include "H5MXADataFile.h"
-#include <MXA/Base/IFileWriter.h>
-#include <MXA/Base/IFileReader.h>
-#include <MXA/Base/IDataset.h>
-#include <MXA/Core/MXAConstants.h>
+#include <MXA/Core/MXADataModel.h>
 #include <MXA/HDF5/H5DataModelWriter.h>
 #include <MXA/HDF5/H5DataModelReader.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
+
+
+#include <hdf5.h>
+
 
 // -----------------------------------------------------------------------------
 //

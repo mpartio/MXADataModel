@@ -11,9 +11,9 @@
 #ifndef _H5MXADataFile_h_
 #define _H5MXADataFile_h_
 
+#include <MXA/Base/IDataset.h>
+#include <MXA/Base/IDataModel.h>
 #include <MXA/Base/IDataFile.h>
-
-#include <hdf5.h>
 
 
 
@@ -27,6 +27,7 @@
 class MXA_EXPORT H5MXADataFile : public IDataFile
 {
   public:
+    MXA_SHARED_POINTERS(H5MXADataFile)
 
     static IDataFile::Pointer OpenFile(const std::string &filename, bool readOnly);
 
@@ -34,6 +35,8 @@ class MXA_EXPORT H5MXADataFile : public IDataFile
 
     static IDataFile::Pointer CreateEmptyFile(const std::string &filename);
 
+    
+    
     virtual ~H5MXADataFile();
 
     /**

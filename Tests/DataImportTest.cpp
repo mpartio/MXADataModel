@@ -81,18 +81,18 @@ void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
   ImportDelegateManager::registerKnownImportDeletegateFactories();
 
   // Register our Import Delegate by using the static methods from ImportDelegateManager
-  AbstractImportDelegateFactoryPtr h5ImportTestDelegateFactory ( new H5ImportTestDelegateFactory() );
+  AbstractImportDelegateFactory::Pointer h5ImportTestDelegateFactory ( new H5ImportTestDelegateFactory() );
   ImportDelegateManager::registerImportDelegateFactory(h5ImportTestDelegateFactory);
 
   // Get an Instance to the ImportDelegateManager
-  ImportDelegateManagerPtr importManager = ImportDelegateManager::instance();
+  ImportDelegateManager::Pointer importManager = ImportDelegateManager::instance();
 
   // Run a comparison of 2 AbstractImportDelegateFactoryPtrs to make sure they are the same.
-  AbstractImportDelegateFactoryPtr factoryPtr2 = importManager->getImportDelegateFactory(H5ImportTest::Detail::ClassName);
+  AbstractImportDelegateFactory::Pointer factoryPtr2 = importManager->getImportDelegateFactory(H5ImportTest::Detail::ClassName);
   BOOST_REQUIRE (h5ImportTestDelegateFactory.get() == factoryPtr2.get() );
 
   // Create an Import Delegate to use for the DataSources
-  IImportDelegatePtr delegatePtr = ImportDelegateManager::createNewImportDelegate(H5ImportTest::Detail::ClassName);
+  IImportDelegate::Pointer delegatePtr = ImportDelegateManager::createNewImportDelegate(H5ImportTest::Detail::ClassName);
   // We are now going to get a reference to the ImportDelegate so we can set the default value that it writes.
   H5ImportTestDelegate* h5ImportDelegate = dynamic_cast<H5ImportTestDelegate*>(delegatePtr.get() );
 
@@ -214,11 +214,11 @@ void CreateTiffImages()
   int32 err = importer.parseXMLFile();
   BOOST_REQUIRE(err >= 0);
 
-  IDataSources dataSources = importer.getDataSources();
+  IDataSource::Collection dataSources = importer.getDataSources();
 
   TiffMaker tiffMaker;
   std::cout << logTime() << "Creating Tiff Images to import" << std::endl;
-  for (IDataSources::iterator iter = dataSources.begin(); iter != dataSources.end(); ++iter ) {
+  for (IDataSource::Collection::iterator iter = dataSources.begin(); iter != dataSources.end(); ++iter ) {
     std::string tiffPath = (*iter).get()->getSourcePath();
    // std::cout << "Making Tiff at " << tiffPath << std::endl;
     tiffMaker.createTiffFile(tiffPath);
@@ -238,11 +238,11 @@ int XMLImportTest()
 
   std::cout << logTime() << "Starting XMLImportTest -----------------" << std::endl;
   // Instantiate the Instance Manager for import delegates
-  ImportDelegateManagerPtr idManager = ImportDelegateManager::instance();
+  ImportDelegateManager::Pointer idManager = ImportDelegateManager::instance();
 
   //Register to be able to import Tiff images
   H5TiffImportDelegateFactory* ptr = new H5TiffImportDelegateFactory();
-  AbstractImportDelegateFactoryPtr h5TiffImportDelegateFactory(ptr);
+  AbstractImportDelegateFactory::Pointer h5TiffImportDelegateFactory(ptr);
   ptr->setImportAsGrayScale(true);
   ptr->setFileNotFoundIsError(false);
   ImportDelegateManager::registerImportDelegateFactory(h5TiffImportDelegateFactory);

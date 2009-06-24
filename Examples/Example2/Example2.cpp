@@ -12,6 +12,8 @@
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/XML/XMLDataModelWriter.h>
 #include <MXA/HDF5/H5Lite.h>

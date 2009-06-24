@@ -33,7 +33,7 @@ public:
 // -----------------------------------------------------------------------------
 //  Implemented Method from the IDataImportDelegate interface
 // -----------------------------------------------------------------------------
-  int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile)
+  int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
   {
     std::string path ( dataSource->generateInternalPath() );
   //  std::cout << logTime() << "VectorDataDelegate::importDataSource() " << path << std::endl;
@@ -109,11 +109,11 @@ class VectorDataDelegateFactory : public AbstractImportDelegateFactory
    * @param dataSource The data source to import
    * @return A new boost shared pointer to VectorDataDelegate
    */
-  IImportDelegatePtr newDataImportDelegate (const std::string &className,
+  IImportDelegate::Pointer newDataImportDelegate (const std::string &className,
                                                 IDataModel::Pointer dataModel,
-                                                IDataSourcePtr dataSource)
+                                                IDataSource::Pointer dataSource)
   {
-    IImportDelegatePtr delegate; // Creates a Null Shared Pointer
+    IImportDelegate::Pointer delegate; // Creates a Null Shared Pointer
     if ( className.compare( VectorDataDelegateFactory_Detail::ClassName ) == 0)
     {
       delegate.reset ( new VectorDataDelegate() );

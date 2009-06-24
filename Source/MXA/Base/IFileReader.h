@@ -11,8 +11,11 @@
 #ifndef _IFileReader_h_
 #define _IFileReader_h_
 
-#include <MXA/Common/MXATypeDefs.h>
-#include <MXA/Base/IDataFile.h>
+//#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
+//#include <MXA/Base/IDataFile.h>
+
+class IDataFile;
 
 /**
 * @class IFileReader IFileReader.h Testing/IFileReader.h
@@ -24,6 +27,9 @@
 class MXA_EXPORT IFileReader
 {
   public:
+    MXA_SHARED_POINTERS(IFileReader)
+    typedef boost::shared_ptr<IDataFile>    DataFileType;
+    
     IFileReader(){};
     virtual ~IFileReader(){};
 
@@ -32,7 +38,7 @@ class MXA_EXPORT IFileReader
    * @param dataFile The file to read the data from
    * @return Error condition. 0 or positive is success. Negative is failure
    */
-    virtual int32 readFromFile(IDataFile::Pointer dataFile) = 0;
+    virtual int32 readFromFile(DataFileType dataFile) = 0;
 
   protected:
 

@@ -12,7 +12,8 @@
 #define IMPORTDELEGATEMANAGER_H_
 
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
 //-- C++ Includes
 #include <string>
@@ -31,6 +32,8 @@
 class MXA_EXPORT ImportDelegateManager
 {
   public:
+    MXA_SHARED_POINTERS(ImportDelegateManager)
+    
     /**
      * @brief public destructor
      */
@@ -42,7 +45,7 @@ class MXA_EXPORT ImportDelegateManager
       * @brief Use this method to get the instance of this class
       * @return Boost Shared pointer to the singleton instance
       */
-     static MXA_EXPORT ImportDelegateManagerPtr instance();
+     static MXA_EXPORT Pointer instance();
 
      /**
       * @brief This method ensures the ImportDelegateManager is instantiated and
@@ -57,7 +60,7 @@ class MXA_EXPORT ImportDelegateManager
       * then registers the passed in ImportDelegate
       * @param importer A Valid AbstractImportDelegateFactoryPtr subclass
       */
-     static MXA_EXPORT void registerImportDelegateFactory(AbstractImportDelegateFactoryPtr importer);
+     static MXA_EXPORT void registerImportDelegateFactory(AbstractImportDelegateFactory::Pointer importer);
 
      /**
       * @brief Creates a new ImportDelegate based on a class name
@@ -66,7 +69,7 @@ class MXA_EXPORT ImportDelegateManager
       * a null ImportDelegate so check the return value with the boost::shared_ptr.get()
       * method to check the value of the wrapped pointer.
       */
-     static MXA_EXPORT IImportDelegatePtr createNewImportDelegate (const std::string &className);
+     static MXA_EXPORT IImportDelegate::Pointer createNewImportDelegate (const std::string &className);
 
 
 // -----------------------------------------------------------------------------
@@ -81,7 +84,7 @@ class MXA_EXPORT ImportDelegateManager
       * a null ImportDelegate so check the return value with the boost::shared_ptr.get()
       * method to check the value of the wrapped pointer.
       */
-     virtual IImportDelegatePtr createDataImportDelegate (const std::string &className);
+     virtual IImportDelegate::Pointer createDataImportDelegate (const std::string &className);
 
      /**
       * @brief Registers a Specific DataImportFactory. Usually you would use the
@@ -89,13 +92,13 @@ class MXA_EXPORT ImportDelegateManager
       * it is perfectly legal to use this method.
       * @param factoryPtr The ImportDelegateFactory to register
       */
-     virtual void addImportDelegateFactory(AbstractImportDelegateFactoryPtr factoryPtr);
+     virtual void addImportDelegateFactory(AbstractImportDelegateFactory::Pointer factoryPtr);
 
      /**
       * @brief Attempts to return the ImportDelegateFactory for a given class name.
       * @param classname The name of the class to find the factory for.
       */
-     virtual AbstractImportDelegateFactoryPtr getImportDelegateFactory(const std::string &classname);
+     virtual AbstractImportDelegateFactory::Pointer getImportDelegateFactory(const std::string &classname);
 
 
    protected:
@@ -104,7 +107,7 @@ class MXA_EXPORT ImportDelegateManager
 
    private:
 
-     AbstractImportDelegateFactories  _factories;
+     AbstractImportDelegateFactory::Collection  _factories;
 
 
      ImportDelegateManager(const ImportDelegateManager&);    //Not Implemented

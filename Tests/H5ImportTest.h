@@ -44,7 +44,7 @@ public:
    * @param dataFile The IDataFile object
    * @return
    */
-  int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile)
+  int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
   {
     IDataModel::Pointer model = dataFile->getDataModel();
     std::string path ( dataSource->generateInternalPath() );
@@ -108,9 +108,9 @@ class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
    * @param className The name of the Delegate class that will be returned
    * @return A new boost shared pointer to H5ImportTestDelegate
    */
-  IImportDelegatePtr newDataImportDelegate (const std::string &className)
+  IImportDelegate::Pointer newDataImportDelegate (const std::string &className)
   {
-    IImportDelegatePtr delegate; // Creates a Null Shared Pointer
+    IImportDelegate::Pointer delegate; // Creates a Null Shared Pointer
     if ( className.compare( H5ImportTest::Detail::ClassName ) == 0)
     {
       delegate.reset ( new H5ImportTestDelegate() );

@@ -38,7 +38,7 @@ int32 MXADataImport::import()
     }
   }
 
-  for (IDataSources::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
+  for (IDataSource::Collection::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
   {
     err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataFile );
     if ( err < 0 )
@@ -52,7 +52,7 @@ int32 MXADataImport::import()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MXADataImport::addDataSource (IDataSourcePtr dataSource ) {
+void MXADataImport::addDataSource (IDataSource::Pointer dataSource ) {
   this->_dataSources.push_back(dataSource);
 }
 
@@ -89,14 +89,14 @@ IDataFile::Pointer MXADataImport::getDataFile ( ) {
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MXADataImport::setDataSources ( IDataSources &new_var ) {
+void MXADataImport::setDataSources ( IDataSource::Collection &new_var ) {
   _dataSources = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IDataSources MXADataImport::getDataSources ( ) {
+IDataSource::Collection MXADataImport::getDataSources ( ) {
   return _dataSources;
 }
 

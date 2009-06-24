@@ -64,7 +64,7 @@ int DataSourcePathIndexSectionTest_EntryPoint()
 	int32 width = -1;
 	std::string numericType ("Integer");
 	{
-    IStringSectionPtr section (new DataSourcePathIndexSection(dimIndex, paddingChar, width, numericType) );
+    IStringSection::Pointer section (new DataSourcePathIndexSection(dimIndex, paddingChar, width, numericType) );
     section->setPreText(preText);
     int index = 1;
     std::cout <<  "'" << section->toString(index, ok) << "'" << std::endl;
@@ -85,7 +85,7 @@ int DataSourcePathIndexSectionTest_EntryPoint()
   width = 3;
   preText = "1-Test_";
   {
-    IStringSectionPtr section (new DataSourcePathIndexSection(dimIndex, paddingChar, width, numericType) );
+    IStringSection::Pointer section (new DataSourcePathIndexSection(dimIndex, paddingChar, width, numericType) );
     section->setPreText(preText);
     int index = 1;
     std::cout <<  "'" << section->toString(index, ok) << "'" << std::endl;
@@ -108,7 +108,7 @@ int DataSourcePathIndexSectionTest_EntryPoint()
   width = 3;
   preText = "2-Test_";
   {
-    IStringSectionPtr section (new DataSourcePathIndexSection(dimIndex, paddingChar, width, numericType) );
+    IStringSection::Pointer section (new DataSourcePathIndexSection(dimIndex, paddingChar, width, numericType) );
     section->setPreText(preText);
     int index = 1;
     std::cout <<  "'" << section->toString(index, ok) << "'" << std::endl;
@@ -122,7 +122,7 @@ int DataSourcePathIndexSectionTest_EntryPoint()
   width = -1;
   preText = "2-Test_";
   {
-    IStringSectionPtr section (new DataSourcePathIndexSection(dimIndex, paddingChar, width, numericType) );
+    IStringSection::Pointer section (new DataSourcePathIndexSection(dimIndex, paddingChar, width, numericType) );
     section->setPreText(preText);
     int index = 1;
     std::cout <<  "'" << section->toString(index, ok) << "'" << std::endl;

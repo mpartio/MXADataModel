@@ -12,7 +12,8 @@
 #define _IFileWriter_h_
 
 #include <MXA/Common/MXATypeDefs.h>
-#include <MXA/Base/IDataFile.h>
+
+class IDataFile;
 
 /**
 * @class IFileWriter IFileWriter.h Testing/IFileWriter.h
@@ -24,6 +25,9 @@
 class MXA_EXPORT IFileWriter
 {
   public:
+    MXA_SHARED_POINTERS(IFileWriter)
+    typedef boost::shared_ptr<IDataFile>    DataFileType;
+    
     IFileWriter(){};
     virtual ~IFileWriter(){};
 
@@ -32,7 +36,7 @@ class MXA_EXPORT IFileWriter
      * @param dataFile The file to write the data into
      * @return Error condition. 0 or positive is success. Negative is failure
      */
-    virtual int32 writeToFile(IDataFile::Pointer dataFile) = 0;
+    virtual int32 writeToFile(DataFileType dataFile) = 0;
 
   protected:
 

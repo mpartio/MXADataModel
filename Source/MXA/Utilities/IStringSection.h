@@ -4,7 +4,7 @@
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -13,7 +13,7 @@
 
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypes.h>
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 
 #include <vector>
 
@@ -31,25 +31,27 @@ namespace DataSourcePathSection
 */
 class MXA_EXPORT IStringSection
 {
-  
-  
+
   public:
+    MXA_SHARED_POINTERS(IStringSection)
+    typedef std::vector<Pointer>             Collection;
+
     IStringSection() {};
     virtual ~IStringSection() {};
 
     virtual void setPreText(const std::string &preText) = 0;
     virtual void setPostText(const std::string &postText)= 0;
-    
-    
+
+
   //  virtual std::string toString( std::vector<uint32> &dims, int8 &ok) = 0;
     virtual std::string toString(int value, int8 &ok) = 0;
-    
+
   private:
-    
+
     IStringSection(const IStringSection&);    // Copy Constructor Not Implemented
     void operator=(const IStringSection&);  // Operator '=' Not Implemented
-    
-    
+
+
 };
 
 

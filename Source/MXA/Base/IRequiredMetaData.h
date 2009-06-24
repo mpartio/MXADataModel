@@ -12,8 +12,10 @@
 #define _IRequiredMetaData_h_
 
 //-- MXA includes
-#include <MXA/Common/MXASetGetMacros.h>
+//#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataFileIO.h>
+
+#include <map>
 
 
 /**

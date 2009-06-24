@@ -10,6 +10,7 @@
 #define EXAMPLEIMPORTDELEGATEFACTORY_H_
 
 #include <MXA/DataImport/AbstractImportDelegateFactory.h>
+#include <MXA/Base/IImportDelegate.h>
 #include <Examples/DataImport/ExampleImportDelegate.h>
 
 
@@ -35,7 +36,7 @@ class ExampleImportDelegateFactory : public AbstractImportDelegateFactory
      * @param className The name of the Delegate class that will be returned
      * @return A new boost shared pointer to H5ImportTestDelegate
      */
-    IImportDelegatePtr newDataImportDelegate (const std::string &className );
+    IImportDelegate::Pointer newDataImportDelegate (const std::string &className );
 
     /**
      * @brief Returns the Classname of the delegate that this factory can create.

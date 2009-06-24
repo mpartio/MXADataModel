@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
   ImportDelegateManager::registerKnownImportDeletegateFactories();
 
   // Register our Import Delegate by using the static methods from ImportDelegateManager
-  AbstractImportDelegateFactoryPtr exampleImportDelegateFactory ( new ExampleImportDelegateFactory() );
+  AbstractImportDelegateFactory::Pointer exampleImportDelegateFactory ( new ExampleImportDelegateFactory() );
   ImportDelegateManager::registerImportDelegateFactory(exampleImportDelegateFactory);
 
   // Instantiate the SimpleImportExample class

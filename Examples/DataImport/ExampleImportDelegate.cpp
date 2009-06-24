@@ -31,7 +31,7 @@ ExampleImportDelegate::~ExampleImportDelegate()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 ExampleImportDelegate::importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer mxaFile)
+int32 ExampleImportDelegate::importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer mxaFile)
 {
   std::cout << "Importing data file '" << dataSource->getSourcePath() << "'" << std::endl;
   herr_t err = 0;

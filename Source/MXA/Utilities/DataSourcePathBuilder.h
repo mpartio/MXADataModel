@@ -33,7 +33,7 @@ class MXA_EXPORT DataSourcePathBuilder
      * @brief Adds another section to the path
      * @param part The part to add
      */
-    void addSection(IStringSectionPtr part);
+    void addSection(IStringSection::Pointer part);
 
     /**
      * @brief Clears the sections
@@ -41,7 +41,7 @@ class MXA_EXPORT DataSourcePathBuilder
     void clearSections();
 
   private:
-    IStringSections _parts;
+    IStringSection::Collection _parts;
 
     DataSourcePathBuilder(const DataSourcePathBuilder&);    // Copy Constructor Not Implemented
     void operator=(const DataSourcePathBuilder&);  // Operator '=' Not Implemented

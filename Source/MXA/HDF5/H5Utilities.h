@@ -15,6 +15,7 @@
 //#include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypes.h>
 //#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IDataModel.h>
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>

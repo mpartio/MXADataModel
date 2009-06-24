@@ -12,7 +12,8 @@
 #define ABSTRACTFACTORY_H_
 
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
+#include <MXA/Base/IImportDelegate.h>
 
 #include <string>
 
@@ -38,6 +39,8 @@ namespace name \
 class MXA_EXPORT AbstractImportDelegateFactory
 {
   public:
+    MXA_SHARED_POINTERS(AbstractImportDelegateFactory)
+    typedef std::vector<Pointer>                        Collection;
     virtual ~AbstractImportDelegateFactory() {}
 
     /**
@@ -47,7 +50,7 @@ class MXA_EXPORT AbstractImportDelegateFactory
      * a null ImportDelegate so check the return value with the boost::shared_ptr.get()
      * method to check the value of the wrapped pointer.
      */
-    virtual IImportDelegatePtr newDataImportDelegate (const std::string &className) = 0;
+    virtual IImportDelegate::Pointer newDataImportDelegate (const std::string &className) = 0;
 
     /**
      * @brief Returns the ClassName of the delegate that this factory will create.

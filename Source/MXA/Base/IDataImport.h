@@ -13,6 +13,7 @@
 
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Base/IDataFile.h>
+#include <MXA/Base/IDataSource.h>
 
 /**
  * @brief Abstract class that formally declares the methods used when implementing
@@ -25,8 +26,10 @@
 class MXA_EXPORT IDataImport
 {
   public:
+    MXA_SHARED_POINTERS(IDataImport)
     IDataImport() {};
     virtual ~IDataImport() {};
+    
 #if 0
     /**
      * @brief Set the value of m_outputFilePath
@@ -58,18 +61,18 @@ class MXA_EXPORT IDataImport
      * Set the value of m_dataSources
      * @param datasources the new value of m_dataSources
      */
-    virtual void setDataSources ( IDataSources &datasources ) = 0;
+    virtual void setDataSources ( IDataSource::Collection &datasources ) = 0;
 
     /**
      * Get the value of m_dataSources
      * @return the value of m_dataSources
      */
-    virtual IDataSources getDataSources ( ) = 0;
+    virtual IDataSource::Collection getDataSources ( ) = 0;
 
     /**
      * @param  dataSource The datasource to add to the list
      */
-    virtual void addDataSource (IDataSourcePtr dataSource ) = 0;
+    virtual void addDataSource (IDataSource::Pointer dataSource ) = 0;
 
     /** @brief Imports the data into the data file
     * @return Error Condition. Zero or Positive is Success

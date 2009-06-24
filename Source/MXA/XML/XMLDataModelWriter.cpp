@@ -2,6 +2,8 @@
 
 #include <MXA/Base/IRequiredMetaData.h>
 #include <MXA/Base/ISupportFile.h>
+#include <MXA/Core/MXADataDimension.h>
+#include <MXA/Core/MXADataRecord.h>
 
 
 #include <MXA/XML/XMLUserMetaDataWriter.h>

@@ -8,24 +8,31 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _IDataFileIO_h_
-#define _IDataFileIO_h_
-
-#include <MXA/Common/DLLExport.h>
-//#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IFileWriter.h>
 #include <MXA/Base/IFileReader.h>
+#include <MXA/Base/IDataFile.h>
+
+
+#ifndef __IDATAFILE_IO_H__
+#define __IDATAFILE_IO_H__
+
+//#include <MXA/Common/DLLExport.h>
+//#include <MXA/Common/MXATypes.h>
 
 /**
 * @class IDataFileIO IDataFileIO.h PathToHeader/IDataFileIO.h
 * @brief Pure Virtual class that combines IFileWriter and IFileReader classes
 * @author mjackson
 * @date Jan 3, 2008
-* @version $Revision: 1.2 $
+* @version 1.3
 */
-class MXA_EXPORT IDataFileIO  : public IFileWriter, public IFileReader
+class MXA_EXPORT IDataFileIO : public IFileWriter,
+                               public IFileReader
 {
   public:
+    MXA_SHARED_POINTERS(IDataFileIO);
+
     IDataFileIO() {}
     virtual ~IDataFileIO() {}
 
@@ -35,14 +42,14 @@ class MXA_EXPORT IDataFileIO  : public IFileWriter, public IFileReader
      * @param dataFile The file to write the data into
      * @return Error condition. 0 or positive is success. Negative is failure
      */
-    virtual int32 writeToFile (IDataFile::Pointer dataFile) = 0;
+    virtual int32 writeToFile (IFileWriter::DataFileType dataFile) = 0;
 
     /**
      * @brief Method to read data into the implementing class from an IDataFile object
      * @param dataFile The file to read the data from
      * @return Error condition. 0 or positive is success. Negative is failure
      */
-    virtual int32 readFromFile (IDataFile::Pointer dataFile) = 0;
+    virtual int32 readFromFile (IFileReader::DataFileType dataFile) = 0;
 
 
   protected:
@@ -53,7 +60,7 @@ class MXA_EXPORT IDataFileIO  : public IFileWriter, public IFileReader
 
 };
 
-#endif //_IDataFileIO_h_
+#endif //__IDATAFILE_IO_H__
 
 
 

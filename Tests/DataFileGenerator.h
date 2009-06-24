@@ -136,7 +136,7 @@ public:
 
 	     // These are the actual dimensions of the data
 	     IImportDelegate* delegate = new AnyDataDelegate<T>(tableDims);
-	     IImportDelegatePtr delegatePtr (delegate);
+	     IImportDelegate::Pointer delegatePtr (delegate);
 
 	     // Create a nested loop to create the necessary DataSource objects that will
 	     //  be used to import the data into the HDF5 file

@@ -9,9 +9,10 @@
 #ifndef _IDataset_h_
 #define _IDataset_h_
 
-#include <MXA/Common/MXATypes.h>
+//#include <MXA/Common/MXATypes.h>
 #include <MXA/Base/IDataFileIO.h>
 #include <MXA/Base/IMXAArray.h>
+
 
 /**
 * @class IDataset IDataset.h PathToHeader/IDataset.h
@@ -21,14 +22,15 @@
 * @date Jan 3, 2008
 * @version $Revision: 1.2 $
 */
-class MXA_EXPORT IDataset //: public IDataFileIO
+class MXA_EXPORT IDataset : public IDataFileIO
 {
+
   public:
-    MXA_SHARED_POINTERS(IDataset);
+    MXA_SHARED_POINTERS(IDataset)
 
 
-    IDataset(){}
-    virtual ~IDataset(){}
+    IDataset() {}
+    virtual ~IDataset() {}
 
     /**
      * @brief Sets the dataset path and name

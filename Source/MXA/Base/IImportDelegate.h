@@ -11,11 +11,15 @@
 #ifndef IIMPORTDELEGATE_H_
 #define IIMPORTDELEGATE_H_
 
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IImportProperty.h>
-#include <MXA/Base/IDataFile.h>
+//#include <MXA/Base/IDataFile.h>
+//#include <MXA/Base/IDataSource.h>
+
 #include <string>
 
+class IDataSource;
+class IDataFile;
 
 /**
  * @brief Formally defines the methods that subclasses need to implement to create
@@ -29,6 +33,10 @@ class MXA_EXPORT IImportDelegate : public IImportProperty
 {
 
 public:
+    MXA_SHARED_POINTERS(IImportDelegate)
+    typedef boost::shared_ptr<IDataSource> DataSourceType;
+    typedef boost::shared_ptr<IDataFile>   DataFileType;
+    
   IImportDelegate(){};
   virtual ~IImportDelegate(){};
 
@@ -39,7 +47,8 @@ public:
   * @param dataFile The IDataFile object
   * @return Zero or Positive on Success
   */
-  virtual int32 importDataSource(IDataSourcePtr dataSource, IDataFile::Pointer dataFile) = 0;
+  virtual int32 importDataSource(DataSourceType dataSource, DataFileType dataFile) = 0;
+  
   #if 0
   virtual int32 setProperty(const std::string &key, const std::string &value)
     { return 0; }

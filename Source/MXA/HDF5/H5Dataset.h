@@ -12,7 +12,7 @@
 #define _H5DATASET_H_
 
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypeDefs.h>
+#include <MXA/Base/IDataModel.h>
 #include <MXA/Base/IDataset.h>
 
 
