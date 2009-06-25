@@ -58,14 +58,14 @@ class MXA_EXPORT ImportDelegateManager
      /**
       * @brief This method ensures the ImportDelegateManager is instantiated and
       * then registers the passed in ImportDelegate
-      * @param importer A Valid AbstractImportDelegateFactoryPtr subclass
+      * @param importer A Valid AbstractImportDelegateFactory::Pointer subclass
       */
      static MXA_EXPORT void registerImportDelegateFactory(AbstractImportDelegateFactory::Pointer importer);
 
      /**
       * @brief Creates a new ImportDelegate based on a class name
       * @param className The name of the class to create
-      * @return Returns an instance of IImportDelegatePtr. This method can return
+      * @return Returns an instance of IImportDelegate::Pointer. This method can return
       * a null ImportDelegate so check the return value with the boost::shared_ptr.get()
       * method to check the value of the wrapped pointer.
       */
@@ -80,7 +80,7 @@ class MXA_EXPORT ImportDelegateManager
       * use the static method createNewImportDelegate() instead of this although
       * there should not be a problem if you do use this method.
       * @param className The name of the class to create
-      * @return Returns an instance of IImportDelegatePtr. This method can return
+      * @return Returns an instance of IImportDelegate::Pointer. This method can return
       * a null ImportDelegate so check the return value with the boost::shared_ptr.get()
       * method to check the value of the wrapped pointer.
       */

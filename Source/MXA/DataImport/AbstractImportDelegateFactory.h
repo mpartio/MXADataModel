@@ -46,7 +46,7 @@ class MXA_EXPORT AbstractImportDelegateFactory
     /**
      * @brief Creates a new DataImportDelegate based on a class name
      * @param className The name of the class to create
-     * @return Returns an instance of IImportDelegatePtr. This method can return
+     * @return Returns an instance of IImportDelegate::Pointer. This method can return
      * a null ImportDelegate so check the return value with the boost::shared_ptr.get()
      * method to check the value of the wrapped pointer.
      */

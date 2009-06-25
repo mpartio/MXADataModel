@@ -87,7 +87,7 @@ void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
   // Get an Instance to the ImportDelegateManager
   ImportDelegateManager::Pointer importManager = ImportDelegateManager::instance();
 
-  // Run a comparison of 2 AbstractImportDelegateFactoryPtrs to make sure they are the same.
+  // Run a comparison of 2 AbstractImportDelegateFactory::Pointers to make sure they are the same.
   AbstractImportDelegateFactory::Pointer factoryPtr2 = importManager->getImportDelegateFactory(H5ImportTest::Detail::ClassName);
   BOOST_REQUIRE (h5ImportTestDelegateFactory.get() == factoryPtr2.get() );
 
