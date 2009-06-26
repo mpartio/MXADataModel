@@ -16,7 +16,7 @@
 //-- std C++ headers
 #include <iostream>
 
-#define USE_LZW_COMPRESSION 1
+#define USE_LZW_COMPRESSION 0
 
 // -----------------------------------------------------------------------------
 //

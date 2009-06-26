@@ -15,7 +15,11 @@
 
 //-- C includes
 #include <string.h>
-#define USE_LZW_COMPRESSION 1
+// If you use LZW_COMPRESSION then any source buffer that gets written to a file
+// WILL BE ALTERED by the tiff functions which can have bad side effects if you
+// elect to reuse the buffer. Until a better API is designed to copy the image
+// buffer then leave this set to ZERO.
+#define USE_LZW_COMPRESSION 0
 
 // -----------------------------------------------------------------------------
 //
