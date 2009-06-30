@@ -122,7 +122,25 @@ static Pointer New(void) \
     MXA_GET_PROPERTY(type, prpty, varname)
 
 
+/**
+* @brief Creates a "setter" method to set the property.
+*/
+#define MXA_SET_PROPERTY_m(type, prpty) \
+  void set##prpty(type value) { this->m_##prpty = value; }
 
+/**
+* @brief Creates a "getter" method to retrieve the value of the property.
+*/
+#define MXA_GET_PROPERTY_m(type, prpty) \
+  type get##prpty() { return m_##prpty; }
+
+
+#define MXA_INSTANCE_PROPERTY_m(type, prpty)\
+  private:\
+      type   m_##prpty;\
+  public:\
+    MXA_SET_PROPERTY_m(type, prpty)\
+    MXA_GET_PROPERTY_m(type, prpty)
 
 
 

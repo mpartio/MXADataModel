@@ -121,6 +121,8 @@ static MXA_EXPORT herr_t closeId( hid_t obj_id, int32 obj_type );
  */
 static hid_t HDFTypeFromString(const std::string &value)
 {
+  if (value.compare("H5T_STRING") == 0) return H5T_STRING;
+
   if (value.compare("H5T_NATIVE_INT8") == 0) return H5T_NATIVE_INT8;
   if (value.compare("H5T_NATIVE_UINT8") == 0) return H5T_NATIVE_UINT8;
 
@@ -136,8 +138,6 @@ static hid_t HDFTypeFromString(const std::string &value)
   if (value.compare("H5T_NATIVE_FLOAT") == 0) return H5T_NATIVE_FLOAT;
   if (value.compare("H5T_NATIVE_DOUBLE") == 0) return H5T_NATIVE_DOUBLE;
 
-  if (value.compare("H5T_STRING") == 0) return H5T_STRING;
-
   std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeFromString - Unknown Type: " << value << std::endl;
   return -1;
 }
@@ -150,6 +150,8 @@ static hid_t HDFTypeFromString(const std::string &value)
  */
 static std::string StringForHDFType(hid_t type)
 {
+  if ( type == H5T_STRING) return "H5T_STRING";
+
   if (H5Tequal(type ,H5T_NATIVE_INT8) ) return "H5T_NATIVE_INT8";
   if (H5Tequal(type ,H5T_NATIVE_UINT8) ) return "H5T_NATIVE_UINT8";
 
@@ -164,8 +166,6 @@ static std::string StringForHDFType(hid_t type)
 
   if (H5Tequal(type ,H5T_NATIVE_FLOAT) ) return "H5T_NATIVE_FLOAT";
   if (H5Tequal(type ,H5T_NATIVE_DOUBLE) ) return "H5T_NATIVE_DOUBLE";
-
-  if ( type == H5T_STRING) return "H5T_STRING";
 
   std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitiveAsStr - Unknown Type: " << std::endl;
   return "Unknown";
