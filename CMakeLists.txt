@@ -187,7 +187,7 @@ configure_file(${MXADataModel_SOURCE_DIR}/Source/MXA/Common/MXAVersion.h.in
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
  # ADD_DEFINITIONS(-DDEBUG)
- ADD_DEFINITIONS(-Wall)
+ # ADD_DEFINITIONS(-Wall)
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
 IF(CMAKE_COMPILER_IS_GNUCC)

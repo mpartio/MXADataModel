@@ -8,9 +8,11 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 #ifndef _WIN32DEFINES_H_
 #define _WIN32DEFINES_H_
+
+#define _MSC_VER 1500
+
 
 #ifdef _MSC_VER
   #include <cstdlib>
@@ -25,9 +27,9 @@ break any legitimate functions with those names, including those in the
 standard C++ library."
 */
 
-#ifndef NOMINMAX
-  #define NOMINMAX
-#endif
+  #ifndef NOMINMAX
+    #define NOMINMAX
+  #endif
 
   #define WINDOWS_LARGE_FILE_SUPPORT
 	#if _MSC_VER < 1400
@@ -36,5 +38,7 @@ standard C++ library."
 		#define snprintf sprintf_s
 	#endif
 #endif
+
+
 
 #endif /* _WIN32DEFINES_H_ */

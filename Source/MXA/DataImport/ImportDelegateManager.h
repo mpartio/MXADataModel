@@ -33,7 +33,7 @@ class MXA_EXPORT ImportDelegateManager
 {
   public:
     MXA_SHARED_POINTERS(ImportDelegateManager)
-    
+
     /**
      * @brief public destructor
      */
@@ -45,7 +45,7 @@ class MXA_EXPORT ImportDelegateManager
       * @brief Use this method to get the instance of this class
       * @return Boost Shared pointer to the singleton instance
       */
-     static MXA_EXPORT Pointer instance();
+     static Pointer instance();
 
      /**
       * @brief This method ensures the ImportDelegateManager is instantiated and
@@ -53,14 +53,14 @@ class MXA_EXPORT ImportDelegateManager
       *  H5Tiff importer
       *  H5BMP Importer
       */
-     static MXA_EXPORT void registerKnownImportDeletegateFactories();
+     static void registerKnownImportDeletegateFactories();
 
      /**
       * @brief This method ensures the ImportDelegateManager is instantiated and
       * then registers the passed in ImportDelegate
       * @param importer A Valid AbstractImportDelegateFactory::Pointer subclass
       */
-     static MXA_EXPORT void registerImportDelegateFactory(AbstractImportDelegateFactory::Pointer importer);
+     static void registerImportDelegateFactory(AbstractImportDelegateFactory::Pointer importer);
 
      /**
       * @brief Creates a new ImportDelegate based on a class name
@@ -69,7 +69,7 @@ class MXA_EXPORT ImportDelegateManager
       * a null ImportDelegate so check the return value with the boost::shared_ptr.get()
       * method to check the value of the wrapped pointer.
       */
-     static MXA_EXPORT IImportDelegate::Pointer createNewImportDelegate (const std::string &className);
+     static IImportDelegate::Pointer createNewImportDelegate (const std::string &className);
 
 
 // -----------------------------------------------------------------------------

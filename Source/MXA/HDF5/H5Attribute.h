@@ -108,7 +108,7 @@ public:
  * @param attributeKey The name of the attribute to read.
  * @return An AbstractH5Attribute shared pointer.
  */
-static MXA_EXPORT AbstractH5Attribute::Pointer ReadH5Attribute(hid_t loc_id,
+static AbstractH5Attribute::Pointer ReadH5Attribute(hid_t loc_id,
                                                     const std::string &dsetName,
                                                     const std::string &attributeKey);
 

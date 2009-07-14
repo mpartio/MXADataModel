@@ -22,6 +22,7 @@ building the MXADatModel DLL on windows.
 
 #if defined (WIN32) && defined (MXA_BUILT_AS_DYNAMIC_LIB)
 #if defined (_MSC_VER)
+#pragma warning (push)
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4710)
 #pragma warning(disable: 4820)
@@ -30,6 +31,7 @@ building the MXADatModel DLL on windows.
 #pragma warning(disable: 4189)
 #pragma warning(disable: 4640)
 #pragma warning(disable: 4996)
+#pragma warning(disable: 4548)
 #endif
   #if defined(MXADataModel_EXPORTS)
     #define  MXA_EXPORT __declspec(dllexport)

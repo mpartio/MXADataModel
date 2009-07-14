@@ -9,6 +9,8 @@
 #ifndef WINDOWSFILEWRITER_H_
 #define WINDOWSFILEWRITER_H_
 
+#include <MXA/Common/MXATypes.h>
+
 #if defined (_MSC_VER)
 #include <MXA/Common/Win32Defines.h>
 #endif
@@ -44,7 +46,7 @@
  * @date August 2007
  * @version $Revision: 1.2 $
  */
-class  MXAFILEWRITER_CLASS_NAME
+class MXA_EXPORT  MXAFILEWRITER_CLASS_NAME
 {
 
 

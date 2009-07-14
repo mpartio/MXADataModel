@@ -12,6 +12,7 @@
 #ifndef _MXAFILEREADER_64_H_
 #define _MXAFILEREADER_64_H_
 
+#include <MXA/MXAConfiguration.h>
 
 #if defined (_MSC_VER)
 #include <MXA/Common/IO/Private/MXAPrivateWindowsFileReader.h>
