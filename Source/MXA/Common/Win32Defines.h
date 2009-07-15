@@ -11,9 +11,6 @@
 #ifndef _WIN32DEFINES_H_
 #define _WIN32DEFINES_H_
 
-#define _MSC_VER 1500
-
-
 #ifdef _MSC_VER
   #include <cstdlib>
   #include <string>
