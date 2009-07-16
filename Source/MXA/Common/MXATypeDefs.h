@@ -50,7 +50,6 @@ typedef boost::shared_array<int64>                 LongLongArray;
 /* If we are compiling WITHOUT HDF5 support then we need some enumerated types */
 #if  MXA_HDF5_SUPPORT == 0
 
-#include <MXA/Common/LogTime.h>
 #define H5T_NATIVE_INT8 1
 #define H5T_NATIVE_INT8  1
 #define H5T_NATIVE_UINT8  2

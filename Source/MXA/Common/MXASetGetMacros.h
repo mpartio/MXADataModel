@@ -46,7 +46,7 @@
   typedef boost::shared_ptr<const Self>  ConstPointer;\
   typedef boost::weak_ptr<thisClass> WeakPointer;\
   typedef boost::weak_ptr<thisClass> ConstWeakPointer;\
-  MXA_NULL_SHARED_POINTER(thisClass);
+  MXA_NULL_SHARED_POINTER(thisClass)
 
 /**
  * @brief Creates a typedef that points to the superclass of this class
