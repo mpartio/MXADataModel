@@ -52,7 +52,7 @@ IF (NOT DEFINED MXADATAMODEL_TARGET_ADDED OR NOT MXADATAMODEL_TARGET_ADDED)
     SET (Boost_USE_PROGRAM_OPTIONS FALSE)
     #set (Boost_USE_MULTITHREADED TRUE)
     
-    FIND_PACKAGE(Boost 1.36 )
+    FIND_PACKAGE(Boost 1.39 )
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
     LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
     #- Add the required Libraries for MXA to function
