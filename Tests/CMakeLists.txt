@@ -128,7 +128,7 @@ IF (MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
 
     include_directories(${MXATests_BINARY_DIR})
     ADD_EXECUTABLE ( DataImportTest ${MXADATAIMPORT_TEST_SRCS} ${MXADATAIMPORT_TEST_HEADERS})
-    TARGET_LINK_LIBRARIES ( DataImportTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS})
+    TARGET_LINK_LIBRARIES ( DataImportTest ${MXADATAMODEL_LIB_NAME} ${TEST_Boost_LIBS} ${DEP_LIBS} )
     ADD_TEST(DataImportTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/DataImportTest)
 
     #-- Configure the XML file to correctly find the XML Model file

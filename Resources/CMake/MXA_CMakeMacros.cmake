@@ -17,3 +17,45 @@ MACRO (MXA_SOURCE_PROPERTIES NAME HEADERS SOURCES)
   #)
 
 ENDMACRO (MXA_SOURCE_PROPERTIES NAME HEADERS SOURCES)
+
+
+
+
+
+MACRO (MXA_COPY_DEPENDENT_LIBRARIES TARGET_NAME)
+
+#-- Copy all the dependent DLLs into the current build directory so that the test
+#-- can run.
+if (WIN32)
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(TYPE "DEBUG")
+    else()
+        set(TYPE "RELEASE")
+    endif()
+    set(TYPE "DEBUG")
+    SET (mxa_lib_list tiff expat hdf5)
+    FOREACH(lib ${mxa_lib_list})
+      STRING(TOUPPER ${lib} upperlib)
+      if (HAVE_${upperlib}_DLL)
+            message(STATUS "${upperlib}_BIN_DIR: ${${upperlib}_BIN_DIR}")
+            message(STATUS "CMAKE_CFG_INTDIR: ${variable}")
+            message (STATUS "${upperlib}_LIBRARY_${TYPE}: ${${upperlib}_LIBRARY_${TYPE}} ")
+      
+            get_filename_component(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
+            get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
+            
+            message(STATUS "${${upperlib}_BIN_DIR}/${lib_name}.dll")
+            message(STATUS "MXADATAMODEL_LIB_NAME: ${MXADATAMODEL_LIB_NAME}")
+            message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+            message(STATUS "${TARGET_NAME}")
+            ADD_CUSTOM_COMMAND(TARGET ${TARGET_NAME}  POST_BUILD
+                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${${upperlib}_BIN_DIR}/${lib_name}.dll
+                      ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/ 
+                      COMMENT "Copying ${lib_name}.dll to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/")
+      endif()
+    ENDFOREACH()
+endif()
+    
+    
+endmacro()
+

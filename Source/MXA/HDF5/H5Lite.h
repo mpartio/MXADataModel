@@ -566,7 +566,6 @@ static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id,
  * @param dims The Dimensions of the attribute data
  * @param data The Attribute Data to write as a pointer
  * @return Standard HDF Error Condition
- *
  */
 template <typename T>
 static herr_t writePointerAttribute(hid_t loc_id,

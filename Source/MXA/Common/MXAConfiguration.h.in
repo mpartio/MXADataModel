@@ -160,7 +160,7 @@
 * directories from the files system. Note that we only should be supporting
 * 64 bit file systems */
 #include <sys/stat.h>
-#if defined (WIN32)
+#if defined (_WIN32)
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -191,5 +191,13 @@
 
 #endif
 
-
+/* This next section I put here to help out when using NMake based build system
+ *  with Eclipse CDT. You have to be working in Eclipse CDT for any of these to
+ *  become active AND you need to add ECLIPSE_NMAKE as a symbol into the project
+ *  properties.
+ */
+#cmakedefine NMAKE_GENERATOR @NMAKE_GENERATOR@
+#if defined (NMAKE_GENERATOR) && defined (ECLIPSE_NMAKE)
+#define _MSC_VER @MSVC_VERSION@
+#endif
 #endif /*_MXA_CONFIGURATION_H__*/

@@ -175,6 +175,11 @@ IF(WIN32)
  SET(WINDOWS_LARGE_FILE_SUPPORT "1")
 ENDIF(WIN32)
 
+
+if ( ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" )
+    set (NMAKE_GENERATOR 1)
+endif()
+
 #-- Configure the Header file and then add the Binary Directory to the Includes list
 CONFIGURE_FILE(${MXA_SOURCE_DIR}/MXA/Common/MXAConfiguration.h.in
                ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h @ONLY IMMEDIATE)
@@ -189,6 +194,7 @@ IF ( CMAKE_BUILD_TYPE MATCHES Debug )
  # ADD_DEFINITIONS(-DDEBUG)
  # ADD_DEFINITIONS(-Wall)
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
+
 
 IF(CMAKE_COMPILER_IS_GNUCC)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmessage-length=0")
@@ -270,6 +276,8 @@ IF (MINGW AND BUILD_SHARED_LIBS)
         PREFIX ""
     )
 ENDIF (MINGW AND BUILD_SHARED_LIBS)
+
+  MXA_COPY_DEPENDENT_LIBRARIES (${MXADATAMODEL_LIB_NAME})  
 
 #-- Include the MXADataModel Testing Sources
 IF ( MXA_BUILD_TESTING )
