@@ -16,7 +16,6 @@
 
 //-- HDF includes
 #include <hdf5.h>
-# pragma warning( disable : 4820 )
 
 /**
  * @namespace This is for the Exporting functionality

@@ -35,8 +35,8 @@ class MXA_EXPORT H5MXADataFile : public IDataFile
 
     static IDataFile::Pointer CreateEmptyFile(const std::string &filename);
 
-    
-    
+
+
     virtual ~H5MXADataFile();
 
     /**
