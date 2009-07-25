@@ -17,8 +17,8 @@
 #include <boost/lexical_cast.hpp>
 
 //-- Boost Includes
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/smart_ptr/weak_ptr.hpp>
 
 
 #define SHARED_IS_NULL(ptr)\

@@ -15,7 +15,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <boost/shared_ptr.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
 
 //-- Boost Unit Testing Framework
 #include <boost/test/unit_test.hpp>

@@ -21,10 +21,6 @@
 #include <string>
 #include <vector>
 
-//--Boost Includes
-#include <boost/shared_ptr.hpp>
-#include <boost/shared_array.hpp>
-
 
 namespace MXA
 {

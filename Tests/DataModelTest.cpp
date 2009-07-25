@@ -33,7 +33,7 @@
 #include <map>
 
 //Boost Includes
-#include <boost/shared_ptr.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
 //-- Boost Test Headers

@@ -15,9 +15,9 @@
 #include <string>
 
 //-- Boost Includes
-#include <boost/shared_ptr.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-#include <boost/shared_array.hpp>
+#include <boost/smart_ptr/shared_array.hpp>
 
 #include <MXA/Common/MXATypes.h>
 
