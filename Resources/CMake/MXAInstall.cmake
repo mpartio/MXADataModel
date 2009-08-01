@@ -48,7 +48,7 @@ CONFIGURE_FILE(${MXA_CMAKE_DIR}/UseMXADataModel.cmake.in
 CONFIGURE_FILE(${MXA_CMAKE_DIR}/InstallMXASupportLibraries.cmake.in 
                 ${PROJECT_BINARY_DIR}/InstallMXASupportLibraries.cmake @ONLY IMMEDIATE)
 
-SET (MXA_INSTALLED_RESOURCES
+SET (MXA_CMAKE_INSTALLED_RESOURCES
         ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
         ${PROJECT_BINARY_DIR}/InstallMXASupportLibraries.cmake
         ${MXA_CMAKE_DIR}/ConfigureChecks.cmake
@@ -64,9 +64,20 @@ SET (MXA_INSTALLED_RESOURCES
         ${MXA_CMAKE_DIR}/GenerateVersionString.cpp
 )
 
-INSTALL (FILES ${MXA_INSTALLED_RESOURCES} 
+INSTALL (FILES ${MXA_CMAKE_INSTALLED_RESOURCES} 
         DESTINATION share/MXADataModel/Resources/CMake
         COMPONENT Resources)
+
+
+SET (MXA_XML_INSTALLED_RESOURCES
+        ${MXA_RESOURCES_DIR}/XML/ModelTemplate.xml
+        ${MXA_RESOURCES_DIR}/XML/mxa_0.4.dtd
+        ${MXA_RESOURCES_DIR}/XML/mxa_import.dtd
+)
+
+INSTALL (FILES ${MXA_XML_INSTALLED_RESOURCES} 
+        DESTINATION doc/MXADataModel/xml
+        COMPONENT Documentation)
 
 SET (MISC_DOCS
   ${MXADataModel_SOURCE_DIR}/License.txt
