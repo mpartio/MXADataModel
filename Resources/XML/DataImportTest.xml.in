@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Data_Import SYSTEM "http://echo1.bluequartz.net/viewvc/CTMD/MXADataModel/Resources/XML/mxa_import.dtd">
+<!DOCTYPE Data_Import SYSTEM "http://mxa.web.cmu.edu/mxa_0.4.dtd">
 <Data_Import>
 
 	<!-- Load a Template Model from an XML file -->
