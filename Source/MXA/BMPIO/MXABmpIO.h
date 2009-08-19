@@ -104,6 +104,13 @@ public:
    */
   UCharArray getImageData(bool copy=true);
 
+  /**
+   * @brief Copies the image data. The destination buffer MUST already be preallocated to hold
+   * all the data.
+   * @return error condition if there was an error.
+   */
+  int32_t copyImageData(uint8_t* destinationBuffer);
+
 protected:
 
 private:

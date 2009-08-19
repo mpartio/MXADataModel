@@ -804,6 +804,15 @@ UCharArray MXABmpIO::getImageData(bool makeCopy)
   return this->bitmapDataVec;
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int32_t MXABmpIO::copyImageData(uint8_t* destinationBuffer)
+{
+  size_t m_length = this->width * this->height * this->numChannels;
+  uint8_t* b = static_cast<uint8_t*>(::memcpy(destinationBuffer, this->bitmapDataVec.get(), m_length));
+  return (b == destinationBuffer) ? 1 : -1;
+}
 
 // -----------------------------------------------------------------------------
 // Reads and returns a 32-bit value from the file.
