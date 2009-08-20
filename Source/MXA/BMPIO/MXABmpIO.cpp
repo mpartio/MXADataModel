@@ -807,10 +807,10 @@ UCharArray MXABmpIO::getImageData(bool makeCopy)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32_t MXABmpIO::copyImageData(uint8_t* destinationBuffer)
+int32 MXABmpIO::copyImageData(uint8* destinationBuffer)
 {
   size_t m_length = this->width * this->height * this->numChannels;
-  uint8_t* b = static_cast<uint8_t*>(::memcpy(destinationBuffer, this->bitmapDataVec.get(), m_length));
+  uint8* b = static_cast<uint8*>(::memcpy(destinationBuffer, this->bitmapDataVec.get(), m_length));
   return (b == destinationBuffer) ? 1 : -1;
 }
 

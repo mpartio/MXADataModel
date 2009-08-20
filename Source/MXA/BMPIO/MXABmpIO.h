@@ -109,7 +109,7 @@ public:
    * all the data.
    * @return error condition if there was an error.
    */
-  int32_t copyImageData(uint8_t* destinationBuffer);
+  int32 copyImageData(uint8* destinationBuffer);
 
 protected:
 
