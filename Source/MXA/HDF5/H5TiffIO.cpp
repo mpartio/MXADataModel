@@ -216,6 +216,7 @@ herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::s
                                const_cast<std::string&>(MXA::H5Image::UpperLeft) );
   if (err < 0) {
     std::cout << "Error setting display origin" << std::endl;
+    _TIFFfree( raster );
     return -1;
   }
 
