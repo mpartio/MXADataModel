@@ -158,7 +158,7 @@
    {
      return ptr;
    }
-   mxaIdType numElements = 1;
+   size_t numElements = 1;
    for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
    {
      numElements = numElements * dims[i];

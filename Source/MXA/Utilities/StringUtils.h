@@ -148,7 +148,7 @@ static bool hasRightSlash(const std::string &path)
 static std::list<std::string> splitString(std::string sep, std::string str)
 {
   std::list<std::string> strings;
-  int32 sep_length = sep.length();
+  std::string::size_type sep_length = sep.length();
   std::string::iterator iter = std::search(str.begin(), str.end(), sep.begin(), sep.end());
   strings.push_back(std::string(str.begin(), iter));
   std::string::iterator iter_start;

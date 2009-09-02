@@ -50,7 +50,7 @@ int32 ExampleImportDelegate::importDataSource(IDataSource::Pointer dataSource, I
   IDataModel::Pointer model = mxaFile->getDataModel();
   // Create the path where we are to store the data from the input data file
   std::string path(dataSource->generateInternalPath());
-  uint32 pos = path.find_last_of("/");
+  std::string::size_type pos = path.find_last_of("/");
   std::string parentPath(path.substr(0, pos));
 
   // Get the hdf5 fileId from the data model object

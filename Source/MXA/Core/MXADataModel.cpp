@@ -167,7 +167,7 @@ std::string MXADataModel::getDataRoot()
 void MXADataModel::addDataDimension(IDataDimension::Pointer dimension)
 {
   this->_dataDimensions.push_back(dimension);
-  int32 index = this->_dataDimensions.size() - 1;
+  int32 index = static_cast<int32>(this->_dataDimensions.size()) - 1; 
   if (index < 0) { index = 0;}
   dimension->setIndex(index);
 }
@@ -396,7 +396,7 @@ IDataDimension::Pointer MXADataModel::getDataDimension(std::string dimName)
 // -----------------------------------------------------------------------------
 int32 MXADataModel::getNumberOfDataDimensions()
 {
-  return this->_dataDimensions.size();
+  return static_cast<int32>(this->_dataDimensions.size());
 }
 
 // -----------------------------------------------------------------------------
@@ -977,7 +977,7 @@ void MXADataModel::addSupportFile(ISupportFile::Pointer supportFile, bool update
 {
   this->_supportFiles.push_back(supportFile);
   if (true == updateIndex) {
-    supportFile->setIndex(this->_supportFiles.size() -1);
+    supportFile->setIndex( static_cast<int32>(this->_supportFiles.size()) - 1);
   }
 }
 

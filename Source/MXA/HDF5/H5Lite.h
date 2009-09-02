@@ -303,7 +303,7 @@ static herr_t writeVectorDataset (hid_t loc_id,
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
-  sid = H5Screate_simple( size, &(_dims.front()), NULL );
+  sid = H5Screate_simple( static_cast<int>(size), &(_dims.front()), NULL );
   if (sid < 0)
   {
     return sid;
@@ -347,7 +347,7 @@ template <typename T>
 static herr_t writePointerDataset (hid_t loc_id,
                             const std::string& dsetName,
                             int32   rank,
-                            uint64* dims,
+                            hsize_t* dims,
                             T* data)
 {
 
@@ -369,7 +369,8 @@ static herr_t writePointerDataset (hid_t loc_id,
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
-  sid = H5Screate_simple( size, &(_dims.front()), NULL );
+//  sid = H5Screate_simple( size, &(_dims.front()), NULL );
+  sid = H5Screate_simple( rank, dims, NULL);
   if (sid < 0)
   {
     return sid;
@@ -553,7 +554,7 @@ static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id,
  */
 static MXA_EXPORT herr_t  writeStringDataset (hid_t loc_id,
                                         const std::string& dsetName,
-                                        mxaIdType size,
+                                        size_t size,
                                         const char* data);
 
 
@@ -714,7 +715,7 @@ static herr_t writeVectorAttribute(hid_t loc_id,
   }
   dimsPtr = &(_dims.front() );
 
-  sid = H5Screate_simple( dims.size(), dimsPtr, NULL );
+  sid = H5Screate_simple( static_cast<int>(dims.size()), dimsPtr, NULL );
   if ( sid >= 0 ) {
     /* Verify if the attribute already exists */
     has_attr = H5Lite::findAttribute( obj_id, attrName );
@@ -790,7 +791,7 @@ static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
 static MXA_EXPORT herr_t  writeStringAttribute(hid_t loc_id,
                               const std::string& objName,
                               const std::string& attrName,
-                              mxaIdType size,
+                              hsize_t size,
                               const char* data);
 
 

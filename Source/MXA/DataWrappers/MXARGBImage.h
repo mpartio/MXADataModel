@@ -62,24 +62,17 @@ class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8>
      * @param height The new height of the array
      * @return 1 on success and Zero (0) on failure
      */
-    int32 resizeArray(mxaIdType width, mxaIdType height);
+    int32 resizeArray(int32 width, int32 height);
 
-#if 0
-// -----------------------------------------------------------------------------
-//  IDataFileIO Implementation (IFileWriter)
-// -----------------------------------------------------------------------------
-    virtual int32 writeToFile (IDataFile::Pointer dataFile);
-
-// -----------------------------------------------------------------------------
-//  IDataFileIO Implementation (IFileReader)
-// -----------------------------------------------------------------------------
-    virtual int32 readFromFile(IDataFile::Pointer dataFile);
-#endif
-
+    /**
+    * @brief Serializes the value(s) of the array to a string using the delimiter
+    * @delimiter The character to use to separate the values - Default is a single space
+    */
     virtual std::string valueToString(char delimiter = ' ');
 
   protected:
       MXARGBImage( int32 width, int32 height);
+
   private:
     int32 _width;
     int32 _height;

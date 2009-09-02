@@ -94,7 +94,7 @@ void MakeAttribute(const std::string &dsPath, IDataset::Pointer dataset)
 
   MXAArrayTemplate<T>* attribute = MXAArrayTemplate<T>::New( numElements);
   IMXAArray::Pointer attr (static_cast<IMXAArray*>(attribute));
-  for (mxaIdType i = 0; i < numElements; ++i)
+  for (int32 i = 0; i < numElements; ++i)
   {
     attribute->setValue (i, i*4) ;
   }

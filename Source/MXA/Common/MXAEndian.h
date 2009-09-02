@@ -81,7 +81,10 @@
       defined ( _M_IX86     ) || \
       defined ( vax         ) || \
       defined ( __alpha     ) || \
-      defined ( __LITTLE_ENDIAN__ )
+      defined ( __LITTLE_ENDIAN__ ) || \
+	  defined (_M_X64       ) || \
+	  defined (_M_IA64      ) || \
+	  defined (__x86_64     )
  #define MXA_LITTLE_ENDIAN
 #else
  #error Unknown endian type in MXA/Endian.h

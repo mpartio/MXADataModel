@@ -123,7 +123,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
       {
         return NULL;
       }
-      mxaIdType index = (_width * y ) + x ;
+      uint64 index = (_width * y ) + x ;
       return static_cast<T*>(this->getVoidPointer(index));
     }
 
@@ -153,7 +153,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @param height The new height of the array
      * @return 1 on success and Zero (0) on failure
      */
-    int32 resizeArray(mxaIdType width, mxaIdType height)
+    int32 resizeArray(int32 width, int32 height)
     {
       int32 err =  this->resize(width * height);
       this->_width = width;
@@ -168,7 +168,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
 
 
     /**
-     * @brief Initializes the array to widht and height  = 0
+     * @brief Initializes the array to width and height  = 0
      */
     virtual void initialize()
     {

@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
   std::vector<int32> indices(2, 0); // we keep this for re-use during the loop
   std::string temperaturePath;
   std::string cameraImagePath;
-  uint32 pos = 0;
+  std::string::size_type pos = 0;
   float temperature = 1200.0f;
   std::vector<uint8> image;
   err = 0;

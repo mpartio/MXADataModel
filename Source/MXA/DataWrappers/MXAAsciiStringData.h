@@ -36,22 +36,10 @@ class MXA_EXPORT MXAAsciiStringData : public MXAArrayTemplate<uint8>
 
     virtual int32 getDataType();
 
-#if 0
-// -----------------------------------------------------------------------------
-//  IDataFileIO Implementation (IFileWriter)
-// -----------------------------------------------------------------------------
-    virtual int32 writeToFile (IDataFile::Pointer dataFile);
-
-// -----------------------------------------------------------------------------
-//  IDataFileIO Implementation (IFileReader)
-// -----------------------------------------------------------------------------
-    virtual int32 readFromFile(IDataFile::Pointer dataFile);
-#endif
-
     virtual std::string valueToString(char delimiter = ' ');
 
   protected:
-    MXAAsciiStringData( mxaIdType numElements);
+    MXAAsciiStringData( size_t numElements);
 
   private:
 

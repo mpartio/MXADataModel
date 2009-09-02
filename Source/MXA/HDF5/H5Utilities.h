@@ -223,7 +223,7 @@ public:
     herr_t err = -1;
     IMXAArray::Pointer ptr;
 
-    ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()));
+    ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32>(dims.size()), &(dims.front()));
     if (ptr.get() == NULL)
     {
       return ptr; // empty attribute
@@ -271,7 +271,7 @@ public:
     }
     else // Multi-Dimensional Data
     {
-      IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()));
+      IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32>(dims.size()), &(dims.front()));
       if (attr.get() == NULL)
       {
         return ptr; // empty attribute

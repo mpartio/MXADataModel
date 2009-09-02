@@ -124,7 +124,7 @@ private:
   bool _imageConvertedToGrayScale;
   bool _convertToGrayScale;
 
-  int32 bytesRead;
+  std::streamsize bytesRead;
 
   MXABMPFileHeader fileHeader;
   MXABMPDIBHeader dibHeader;

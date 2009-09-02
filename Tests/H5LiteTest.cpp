@@ -168,7 +168,7 @@ herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetNam
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE(rank == 1);
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
-  mxaIdType numElements = 1;
+  std::vector<T>::size_type numElements = 1;
   for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
   {
     numElements = numElements * dims[i];
@@ -242,7 +242,7 @@ herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetNam
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE(rank == 2);
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
-  mxaIdType numElements = 1;
+  std::vector<T>::size_type numElements = 1;
   for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
   {
     numElements = numElements * dims[i];
@@ -317,7 +317,7 @@ herr_t testReadPointer3DArrayAttribute(hid_t file_id, const std::string &dsetNam
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE(rank == 3);
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
-  mxaIdType numElements = 1;
+  std::vector<T>::size_type numElements = 1;
   for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
   {
     numElements = numElements * dims[i];
@@ -763,7 +763,7 @@ herr_t testReadPointer2DArrayDataset(hid_t file_id)
   err = H5Lite::getDatasetNDims(file_id, dsetName, rank);
   BOOST_REQUIRE(err >= 0);
   BOOST_REQUIRE(rank == 2);
-  mxaIdType numElements = 1;
+  std::vector<T>::size_type numElements = 1;
   for (std::vector<hsize_t>::size_type i = 0; i < dims.size(); ++i)
   {
     numElements = numElements * dims[i];

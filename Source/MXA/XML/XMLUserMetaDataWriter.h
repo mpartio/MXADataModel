@@ -79,7 +79,7 @@ public:
     std::string sType = H5Lite::HDFTypeForPrimitiveAsStr(value.front());
     stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" ;
 
-    int32 size = dims.size();
+	std::vector<uint64>::size_type size = dims.size();
     for (int i = 0; i < size; ++i)
     {
       stream << dims[i];

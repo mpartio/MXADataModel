@@ -96,7 +96,7 @@ int32 XMLDataModelWriter::writeDataModelTemplate(int32 uniqueId)
 void XMLDataModelWriter::_replaceAll(std::string &str, std::string search_str,
 				 std::string replace_str)
 {
-  int32 search_len = search_str.length();
+  std::string::size_type search_len = search_str.length();
   std::string::const_iterator iter;
 
   std::string::size_type start=0;
@@ -157,11 +157,12 @@ void XMLDataModelWriter::_openTag(const std::string &tagName,
                                   bool group,
                                   std::map<std::string, std::string> &attributes )
 {
-  int32 numAttributes = attributes.size();
+  std::map<std::string, std::string>::size_type numAttributes = attributes.size();
   std::ofstream &stream = *(_ofstreamPtr.get());
   stream << StringUtils::indent(depth) << "<" << tagName;
 
-  if (numAttributes > 0) {
+  if (numAttributes > 0) 
+  {
     std::string label, value;
     std::map<std::string, std::string>::iterator iter;
     for (iter=attributes.begin(); iter!=attributes.end(); ++iter) {

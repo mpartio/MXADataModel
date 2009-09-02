@@ -200,7 +200,7 @@ IDataRecord::WeakPointer MXADataRecord::getParent()
 // -----------------------------------------------------------------------------
 int32 MXADataRecord::getNumChildren() const
 {
-  return this->_children.size();
+  return static_cast<int32>(this->_children.size());
 }
 
 // -----------------------------------------------------------------------------
@@ -269,13 +269,14 @@ void MXADataRecord::removeAllChildren()
 int32 MXADataRecord::indexOfChild(IDataRecord* child)
 {
   int32 retVal = -1;
+  int32 index = 0;
   for (IDataRecord::Container::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
   {
     if ( (*(iter)).get() == child )
     {
-      retVal = iter - this->_children.begin();
-      break;
+      return index;
     }
+    index++;
   }
   return retVal;
 }

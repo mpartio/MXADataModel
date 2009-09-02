@@ -75,7 +75,7 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
   BOOST_REQUIRE(dims.size() == 2);
   BOOST_REQUIRE(dims[0] == 5);
   BOOST_REQUIRE(dims[1] == 2);
-  IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()) );
+  IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32>(dims.size()), &(dims.front()) );
   BOOST_REQUIRE ( vecPtr->getNumberOfElements() == numelements);
   BOOST_REQUIRE (vecPtr->getNumberOfDimensions() == 2);
    std::vector<uint64> mydims(dims.size(), 0);

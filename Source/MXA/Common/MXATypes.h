@@ -161,7 +161,8 @@ typedef double float64;
 #endif
 
 /*--------------------------------------------------------------------------*/
-/* Choose an implementation for vtkIdType.  */
+/* Choose an implementation for mxaIdType.  */
+#if 0
 #define MXA_HAS_ID_TYPE
 #ifdef MXA_USE_64BIT_IDS
 # if defined(MXA_SIZEOF_LONG) && MXA_SIZEOF_LONG == 8 && 0
@@ -183,6 +184,7 @@ typedef __int64 mxaIdType;
 typedef int mxaIdType;
 # define MXA_SIZEOF_ID_TYPE MXA_SIZEOF_INT
 # define MXA_LARGE_ID MXA_INT_MAX
+#endif
 #endif
 
 /*=========================================================================

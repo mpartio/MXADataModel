@@ -37,7 +37,7 @@ public:
   {
     std::string path ( dataSource->generateInternalPath() );
   //  std::cout << logTime() << "VectorDataDelegate::importDataSource() " << path << std::endl;
-    uint32 pos = path.find_last_of("/");
+    std::string::size_type pos = path.find_last_of("/");
     std::string parentPath ( path.substr(0, pos)  );
     hid_t fileId = dataFile->getFileId();
     H5Utilities::createGroupsFromPath(parentPath, fileId);

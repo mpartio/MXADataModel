@@ -73,7 +73,7 @@ int32 MXARGBImage::getNumberOfDimensions ()
 // -----------------------------------------------------------------------------
 uint8* MXARGBImage::getPixelPointer(int32 x, int32 y)
 {
-  mxaIdType index = (_width * y ) + x * 3;
+  size_t index = (_width * y ) + x * 3;
   return static_cast<uint8*>(this->getVoidPointer(index));
 }
 
@@ -97,7 +97,7 @@ int32 MXARGBImage::resize(uint64 size)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 MXARGBImage::resizeArray(mxaIdType width, mxaIdType height)
+int32 MXARGBImage::resizeArray(int32 width, int32 height)
 {
   int32 err =  this->resize(width * height * 3);
   this->_width = width * 3;

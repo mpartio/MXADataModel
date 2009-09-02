@@ -48,7 +48,7 @@ public:
   {
     IDataModel::Pointer model = dataFile->getDataModel();
     std::string path ( dataSource->generateInternalPath() );
-    uint32 pos = path.find_last_of("/");
+    std::string::size_type pos = path.find_last_of("/");
     std::string parentPath ( path.substr(0, pos)  );
 
     hid_t fileId = dataFile->getFileId();

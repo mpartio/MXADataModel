@@ -98,7 +98,7 @@ int32 H5BmpImportDelegate::importDataSource(IDataSource::Pointer dataSource, IDa
   }
 
   // Generate the internal HDF dataset path and create all the groups necessary to write the dataset
-  uint32 pos = 0;
+  std::string::size_type pos = 0;
   std::string datasetPath( dataSource->generateInternalPath() );;
   pos = datasetPath.find_last_of("/");
   std::string parentPath ( datasetPath.substr(0, pos)  );

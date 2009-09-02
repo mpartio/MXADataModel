@@ -48,7 +48,7 @@ IMXAArray::Pointer MXAAsciiStringData::Create(const std::string &value)
 MXAAsciiStringData* MXAAsciiStringData::New(const std::string &value)
 {
   int32 err = 1;
-  MXAAsciiStringData* d = new MXAAsciiStringData( 0);
+  MXAAsciiStringData* d = new MXAAsciiStringData(0);
   std::string::size_type size = value.size();
   std::string::size_type nullTermSize = size + 1;
   if (size > 0) // NOT an empty String
@@ -92,8 +92,8 @@ std::string MXAAsciiStringData::valueToString(char delimiter)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXAAsciiStringData::MXAAsciiStringData( mxaIdType numElements) :
- MXAArrayTemplate<uint8>( numElements, true)
+MXAAsciiStringData::MXAAsciiStringData( size_t numElements) :
+ MXAArrayTemplate<uint8>( static_cast<int32>(numElements), true)
 {
 }
 
@@ -113,60 +113,4 @@ int32 MXAAsciiStringData::getDataType()
 {
   return H5T_STRING;
 }
-
-#if 0
-// -----------------------------------------------------------------------------
-//  IDataFileIO Implementation (IFileWriter)
-// -----------------------------------------------------------------------------
-int32 MXAAsciiStringData::writeToFile(IDataFile::Pointer dataFile)
-{
-  int32 err = -1;
-  std::vector<hsize_t> dims(1, this->getNumberOfElements() );
-  err = H5Utilities::createGroupsForDataset(this->getDatasetPath(), dataFile->getFileId() );
-  if (err < 0)
-  {
-    return err;
-  }
-  err = H5Lite::writeStringDataset(dataFile->getFileId(), this->getDatasetPath(), this->getNumberOfElements(), static_cast<const char*>(this->getVoidPointer(0) ) );
-  return err;
-}
-
-// -----------------------------------------------------------------------------
-//  IDataFileIO Implementation (IFileReader)
-// -----------------------------------------------------------------------------
-int32 MXAAsciiStringData::readFromFile(IDataFile::Pointer dataFile)
-{
-  hid_t fileId = dataFile->getFileId();
-  if (fileId < 0)
-  {
-    return fileId;
-  }
-  herr_t err = -1;
-  H5T_class_t attr_type;
-  size_t attr_size;
-  std::string res;
-
-  std::vector<hsize_t> dims;
-  err = H5Lite::getDatasetInfo(fileId, this->getDatasetPath(), dims, attr_type, attr_size);
-  if (err < 0)
-  {
-    return err;
-  }
-  std::string::size_type size = dims[0];
-  if (size > 0) // NOT an empty String
-  {
-    err = this->resize(size);
-    if (err > 0) //copy data into array
-    {
-      uint8* dest = static_cast<uint8*>(this->getVoidPointer(0) );
-      if (NULL != dest) {
-        err = H5Lite::readStringDataset(fileId, this->getDatasetPath(), dest);
-      }
-    }
-  }
-
-  return err;
-}
-
-#endif
 

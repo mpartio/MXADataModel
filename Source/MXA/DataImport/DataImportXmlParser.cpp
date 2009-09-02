@@ -797,7 +797,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
   }
 
   XMLAttributeMap::iterator mapIter = attrMap.end();
-  uint32 index = _implDataDimensions.size();
+  int32 index = static_cast<int32>(_implDataDimensions.size());
   std::string paddingChar;
   mapIter = attrMap.find(MXA_DataImport::Attr_Padding_Char);
   // Check for the Padding_Char attribute

@@ -77,7 +77,7 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
       numelements *= *(iter);
     }
 
-    IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), &(dims.front()) );
+    IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int>(dims.size()), &(dims.front()) );
     // Copy data into the attribute container
     T* data = static_cast<T*>( vecPtr->getVoidPointer(0) );
     for (uint32 i = 0; i < numelements; ++i)

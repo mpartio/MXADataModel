@@ -64,15 +64,14 @@ class MXAArrayTemplate : public IMXAArray
       return ptr;
     }
 
-/**
- * @brief Creates an IMXAArray::Pointer object for the supplied arguments.
- * @param nDims Number of dimensions
- * @param dims Size of each dimension
- * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
- */
-    static IMXAArray::Pointer CreateMultiDimensionalArray(int32 nDims, const uint64* dims)
+    /**
+    * @brief Creates an IMXAArray::Pointer object for the supplied arguments.
+    * @param nDims Number of dimensions
+    * @param dims Size of each dimension
+    * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
+    */
+    static IMXAArray::Pointer CreateMultiDimensionalArray(size_t nDims, const uint64* dims)
     {
-
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( nDims, dims, true);
       if ( d->_allocate() < 0)
       {  // Could not allocate enough memory, reset the pointer to null and return
@@ -81,7 +80,6 @@ class MXAArrayTemplate : public IMXAArray
       IMXAArray::Pointer ptr ( static_cast<IMXAArray*>(d) );
       return ptr;
     }
-
 
 /**
  * @brief Creates an Attribute from a single value
@@ -123,15 +121,17 @@ class MXAArrayTemplate : public IMXAArray
      * @param dims The size of each dimension
      * @return Pointer to Object or NULL if there was an error creating the object.
      */
-    static MXAArrayTemplate<T>* New(int32 nDims, const uint64* dims)
+    static MXAArrayTemplate<T>* New(size_t nDims, const uint64* dims)
     {
-      MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( nDims, dims, true);
+      MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( static_cast<int32>(nDims), dims, true);
       if ( d->_allocate() < 0)
       {  // Could not allocate enough memory, reset the pointer to null and return
         d = NULL;
       }
       return d;
     }
+
+
 
 /**
  * @brief Destructor
@@ -255,7 +255,7 @@ class MXAArrayTemplate : public IMXAArray
      */
     virtual int32 getNumberOfDimensions()
     {
-      return this->_dims.size();
+      return static_cast<int32>(this->_dims.size());
     }
 
 /**
@@ -554,7 +554,7 @@ class MXAArrayTemplate : public IMXAArray
    * @param takeOwnership Will the class clean up the memory. Default=true
      */
       MXAArrayTemplate(int32 numElements,
-                               bool ownsData = true) :
+                       bool ownsData = true) :
         _data(NULL),
         _nElements(numElements),
         _ownsData(ownsData)
@@ -569,7 +569,7 @@ class MXAArrayTemplate : public IMXAArray
    * @param dims The actual values of the dimensions.
    * @param takeOwnership Will the class clean up the memory. Default=true
    */
-      MXAArrayTemplate(int32 numDims,
+      MXAArrayTemplate(size_t numDims,
                        const uint64* dims,
                        bool ownsData = true) :
         _data(NULL),
