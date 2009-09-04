@@ -80,7 +80,7 @@ public:
     stream << indent(5) << "<UserMetaData key=\"" << key << "\" dims=\"" ;
 
 	std::vector<uint64>::size_type size = dims.size();
-    for (int i = 0; i < size; ++i)
+    for (std::vector<uint64>::size_type i = 0; i < size; ++i)
     {
       stream << dims[i];
       if (i < size - 1)
@@ -91,7 +91,7 @@ public:
     stream << "\" type=\"" << sType << "\">";
     // Now Write the data
     size = value.size();
-    for(int i = 0; i < size; ++i)
+    for(std::vector<uint64>::size_type i = 0; i < size; ++i)
     {
      if ( i%dims[0] == 0)
       {
