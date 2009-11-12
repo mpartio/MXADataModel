@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Windows XP Compile Notes</title>
+<link rel="stylesheet" type="text/css" href="default.css" media="screen" />
+<meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
+<meta content="All By Hand" name="generator">
+<meta content="max-age=0, must-revalidate" http-equiv="Cache-Control">
+<script type="text/javascript" src="Navigation.js"></script>  
+<link rel="stylesheet" href="assets/thumbnailviewer.css" type="text/css" />
+
+<script src="assets/thumbnailviewer.js" type="text/javascript">
+
+/***********************************************
+* Image Thumbnail Viewer Script- © Dynamic Drive (www.dynamicdrive.com)
+* This notice must stay intact for legal use.
+* Visit http://www.dynamicdrive.com/ for full source code
+***********************************************/
+
+</script>
+
+</head>
+
+<body>
+<div class="outer-container">
+<div class="inner-container">
+<div class="header">
+<div class="title"><span class="sitename"><a href="index.html">MXADataModel Documentation</a></span>
+<div class="slogan" id="slogan">APIs for the Programmer</div>
+</div>
+</div>
+<div class="path" id="breadcrumb"><a href="index.html">Home</a></div>
+<div class="main">
+<table border="0" cellpadding="5" cellspacing="5">
+  <tr>
+    <td valign="top"><!-- NAVIGATION STARTS HERE -->
+    <div class="navigation"><script type="text/javascript">GenerateNavigation('Compile Notes', 'CompileNotes.html');</script>
+    </div>
+    <div class="clearer">&nbsp;</div>
+    <!-- NAVIGATION ENDS HERE --></td>
+    <!-- CONTENT STARTS HERE -->
+    <td valign="top">
+    <div class="content">
+    <!-- CONTENT STARTS HERE -->
+<h3>Basics</h3>
+    Download and install <a href="http://www.cmake.org">CMake</a> first. Then proceed to build all the third
+    party libraries that are needed. See <a href="SystemRequirements.html">this page</a> for more information
+    regarding the necessary libraries.
+    The easiest way to build the libraries is in the following order:
+    <ol>
+      <li>Tiff</li>
+      <li>Expat</li>
+      <li>Zlib and/or szip (These are optional)</li>
+      <li>HDF5 Version 1.6.9</li>
+      <li>Boost</li>
+      <li>VTK - Only if you need to use VTK from the MXA Data Model</li>
+      <li>Qt - Only if you need to Build the GUI applications</li>
+      <li>MXADataModel</li>
+    </ol>
+
+<h3>Tiff, Expat and HDF5 Support Libraries</h3>
+		Download each of the libraries to your local machine. <ol>
+		  <li><a href="SourceCode/tiff.tar.gz">Tiff</a></li> 
+		  <li><a href="SourceCode/expat.tar.gz">Expat</a></li> 
+		  <li><a href="SourceCode/hdf5-169.tar.gz">HDF5-1.6.9</a></li> 
+		  </ol>
+    Uncompress each archive using whatever utility is appropriate for your system. Launch CMake-Gui.exe(app) and set the "Where is the source code" field to point to the directory where the source code is located. Now set the "Where to build the binaries" field to a different directory. Some folks recommend to create a "Build" directory just inside the actual source directory, as shown in the<a href="img/CMakeInitial.jpg" rel="thumbnail" title="CMake Screen Shot"> Screen Shot.</a> After you have set the build directory click the "Configure" button and wait while cmake interrogates your system for needed information. After a successful configuration step you should end up with something that looks similar to <a href="img/CMakeScreenShot.jpg" rel="thumbnail" title="CMake Screen Shot"> this</a>. Some options that you may want to set for each library are the following:<br>
+    <code> 
+ CMAKE_BUILD_TYPE = Debug or Release
+ CMAKE_INSTALL_PREFIX = Where on your hard drive to install the library and associated files.
+ BUILD_SHARED_LIBS = Do you want to create dylibs/DLL or static libraries?
+       On OS X I recommend Dynamic Libraries. 
+       On Linux and Windows I recommend Static Libraries.
+ CMAKE_OSX_ARCHITECTURES = Any semi-colon separated list of i386, ppc, x86_64, ppc64
+    </code>
+   The defaults for the rest of the values should be correct for each system.<br>
+   Depending on what system you are running will dictate how you will now build the library.
+  <h5>Windows Users with Visual Studio</h5> If you told CMake to generate Visual Studio Projects then inside the build directory you will find a <i>project-name</i>.sln file. Double click on that file to launch Visual Studio and then "Build" the <i>INSTALL</i> project. Also select either a "Debug" or "Release" configuation before building.
+  <h5>Unix Users including OS X</h5>If you told CMake to generate "Makefiles" then open a terminal and navigate to the build directory that was created for you by CMake. Once inside that folder you can issue the "make install" command.<code> [fred@Ferb:Build] $ make install</code> This will compile and install the libraries onto your system.
+   <h5>OS X Users with Xcode</h5>If you told CMake to generate Visual Studio Projects then inside the build directory you will find a <i>project-name</i>.xcodeproj file. Double click on that file to launch <a href="img/xcodeproject.jpg" rel="thumbnail" title="Xcode Project">Xcode </a>and then "Build" the <i>INSTALL</i> project. Also select either a "Debug" or "Release" configuation before building. For each library you will want to set an environment variable that points to the installation location. On a Unix machine using bash this would be something like:<code>
+   export BQ_INSTALL_ROOT="/Users/Shared/Toolkits"
+   export HDF5_INSTALL="$BQ_INSTALL_ROOT/hdf5-169"
+   export EXPAT_INSTALL="$BQ_INSTALL_ROOT/expat"
+   export TIFF_INSTALL="$BQ_INSTALL_ROOT/tiff"
+   export MXADATAMODEL_INSTALL="$BQ_INSTALL_ROOT/MXADataModel"
+   export BOOST_ROOT="$BQ_INSTALL_ROOT/boost-1_39"</code>
+   
+   <h3>Boost Compile and Installation</h3>
+   Boost version 1.39.0 is the earliest version supported by the MXADataModel library. For windows users the easiest way to get these libraryes are to download the precompiled binaries from <a href="http://www.boostpro.com"> BoostPro.com</a>. Using their installer you can select from most of the variations available with the Boost libraries. If you choose or need to compile your own Boost libraries this is the command that I use to create the libraries and install them.
+    <code>
+bjam.exe toolset=msvc --with-test --with-program_options --with-threads --prefix=C:\Developer\VS9\boost_1_39
+ variant=release,debug threading=multi link=static runtime-link=shared install
+</code>
+ For Unix and OS X users, I use the following command to build boost:<code>
+[fred@Ferb:Build] $  bjam toolset=darwin --with-test --with-program_options --with-thread 
+      variant=release,debug threading=multi link=static runtime-link=shared
+      --prefix=/Users/Shared/Toolkits/boost-1_39/ architecture=combined 
+      address-model=32_64 install
+   </code>
+    Let this go for a looong time after which Boost will be installed into C:\Developer\VS9\Boost. If
+    you would like Boost installed somewhere else then add --prefix=C:\Path\To\Install to the above
+    configuration line.
+    It is helpful to set the "Boost_ROOT" environment variable. This will let CMake find 
+    Boost easier. It should be set to the same path as the "install" path from above.
+<br />
+
+    <h3>Compiling MXADataModel and Unit Tests:</h3>
+    
+<!-- CONTENT ENDS HERE -->
+    </div>
+    </td>
+  </tr>
+</table>
+<div class="footer"><script type="text/javascript">generateFooter();</script>
+</div>
+</div>
+</div>
+</div>
+</body>
+
+
+</html>
+

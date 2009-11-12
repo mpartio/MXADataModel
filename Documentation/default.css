@@ -38,12 +38,12 @@ form,input {margin: 0; padding: 0; display: inline;}
 code {
 	background: #FFF;
 	border: 1px solid #EEE;
-	border-left: 6px solid #CCC;
+	border-left: 3px solid #CCC;
 	color: #222;
 	display: block;
 	font: normal 1em monospace;
 /* 	line-height: 1.6em; */
-	margin-bottom: 12px;
+	margin-bottom: 5px;
 	/* padding: 8px 10px; */
 	white-space: pre;
 }
@@ -156,7 +156,7 @@ border-width:1px 1px 1px 0;
 }
 .content li {
 	list-style: url(img/li.gif);
-	margin-left: 18px;
+	margin-left: 8 px;
 }
 .content p {
 	font-family: "Lucida Sans Unicode",sans-serif;

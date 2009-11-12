@@ -36,7 +36,7 @@ Documentation</a></span>
     <ul>
       <li><a href="http://www.cmake.org">CMake</a> - Compile or otherwise
       install on your system.</li>
-      <li><a href="http://hdf.ncsa.uiuc.edu/">HDF5 version 1.6.8</a> - This
+      <li><a href="http://hdf.ncsa.uiuc.edu/">HDF5 version 1.6.9</a> - This
       is the latest stable production version. When the next version is released
       the MXA code base will be updated. You can download version 1.6.8 from our
       git server <a href="http://echo1.bluequartz.net/cgi-bin/gitweb/gitweb.cgi">here.</a>
@@ -56,15 +56,13 @@ Documentation</a></span>
         href="http://echo1.bluequartz.net/cgi-bin/gitweb/gitweb.cgi">here</a>.
       </li>
 
-      <li><a href="http://www.boost.org">Boost 1.36.0</a> - This is the
+      <li><a href="http://www.boost.org">Boost 1.39.0</a> - This is the
       earliest version that has been tested. There were some bug fixes for OS X
       compilation in the 1.36.0 series so this the earliest release that is
       being used at this time. You will need to build the following boost
       libraries<br />
 
       <ol>
-        <li>system</li>
-        <li>filesystem</li>
         <li>test</li>
         <li>thread</li>
         <li>program_options</li>
@@ -76,18 +74,7 @@ Documentation</a></span>
       compiling the GUI based applications.</li>
     </ul>
 
-    I would suggest compiling in the following order:
-    <ol>
-      <li>Boost</li>
-      <li>Tiff</li>
-      <li>Expat</li>
-      <li>Zlib and/or szip (These are optional)</li>
-      <li>HDF5 Version 1.6.8</li>
-      <li>VTK - Only if you need to use VTK from the MXA Data Model</li>
-      <li>Qt - Only if you need to use GUI applications</li>
-      <li>MXADataModel</li>
-      
-    </ol>
+
 
     <!-- Begin OS / Compiler Tested Combinations -->
     <h3>OS and Compiler Combinations Tested</h3>
@@ -102,10 +89,15 @@ Documentation</a></span>
         <td>GCC 4.x (Xcode 3.1 Tooling)</td>
         <td>OS X 10.4.11 should be supported without any issues. Both PPC and i386 are also supported.</td>
       </tr>
-            <tr class="row">
+      <tr class="row">
         <td>Windows XP SP2</td>
         <td>MSVC++ 2009 Express</td>
         <td>Currently using VS2009 Express to compile everything</td>
+      </tr>
+      <tr class="row">
+        <td>Windows 7</td>
+        <td>Visual Studio 2009 Standard</td>
+        <td>Currently using VS2009 Standard to compile everything</td>
       </tr>
             <tr class="row">
         <td>Windows XP SP2</td>

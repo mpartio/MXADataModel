@@ -6,13 +6,13 @@ function GenerateNavigation(name, file)
 	IntroductionNavGroup();
 	CompileNavGroup();
 	HowToNavGroup();
-	DocumentationNavGroup();
+	DocumentationNavGroup(); 
+	DownloadGroup();
 	MiscNavGroup();
 	if (name != 'Home') {
 		document.getElementById('breadcrumb').innerHTML=GenerateBreadCrumb(name, file);
 		document.getElementById('slogan').innerHTML=name;
 	}
-	
 }
 
 //-----------------------------------------------------------------------------
@@ -20,6 +20,21 @@ function GenerateBreadCrumb(name, file)
 {
 	var html = "<a href=\"index.html\">Home</a> &#8250; <a href=\"" + file + "\">" + name + "</a>";	
 	return html;
+}
+
+//-----------------------------------------------------------------------------
+function DownloadGroup()
+{
+	var html = "<h2>Downloads</h2><ul>";
+	var pages = new Array();
+	pages.push("Source Codes", "SourceCodes.html");
+	pages.push("Binaries", "Binaries.html");
+	for(i = 0; i < pages.length; i=i+2)
+	{
+		html = html + "<li><a href=\"" + pages[i+1] + "\">" + pages[i] + "</a></li>";
+	}
+	html += "</ul>";
+	document.write(html);
 }
 
 //-----------------------------------------------------------------------------
@@ -44,8 +59,7 @@ function CompileNavGroup()
 	var html = "<h2>Compiling</h2><ul>";
 	var pages = new Array();
 	pages.push("System Requirements", "SystemRequirements.html");
-	pages.push("Compile Notes (XP)", "CompileNotesXP.html");
-	pages.push("Compile Notes (Unix)", "CompileNotesUnix.html");
+	pages.push("Compile Notes", "CompileNotes.html");
 	for(i = 0; i < pages.length; i=i+2)
 	{
 		html = html + "<li><a href=\"" + pages[i+1] + "\">" + pages[i] + "</a></li>";
