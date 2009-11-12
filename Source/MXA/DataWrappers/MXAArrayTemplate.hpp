@@ -578,7 +578,7 @@ class MXAArrayTemplate : public IMXAArray
         _dims.resize(numDims);
         ::memcpy( &(_dims.front()), dims, numDims * sizeof(uint64));
         _nElements = 1;
-        for(int32 i = 0; i < numDims; ++i)
+        for(size_t i = 0; i < numDims; ++i)
         {
           _nElements = _nElements * dims[i];
         }
