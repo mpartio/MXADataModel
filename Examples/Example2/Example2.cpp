@@ -64,27 +64,8 @@ std::cout << logTime() << "Example 2 Starting" << std::endl;
    return EXIT_FAILURE;
  }
 
- miscTest();
  std::cout << logTime() << "Example 2 Ending"  << std::endl;
  return EXIT_SUCCESS;
-}
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void miscTest()
-{
-  IDataFile::Pointer dataFile = H5MXADataFile::OpenFile("/Users/mjackson/Desktop/OimFib_Test_Data.mxa", true);
-  hid_t fileId = dataFile->getFileId();
-
-  //H5G_stat_t statbuf;
-  int32 err = H5Gget_objinfo(fileId, "OIMFIB/Data/0/1", false, NULL);
-  if (err < 0)
-  {
-    std::cout << logTime() << "Uh oh." << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
-  }
-
-  std::cout << "Done" << std::endl;
 }
 
 

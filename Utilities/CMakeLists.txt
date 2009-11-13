@@ -36,16 +36,16 @@ SET (ImportGenerator_SRCS
 )
 ADD_EXECUTABLE(ImportGenerator ${ImportGenerator_SRCS} )
 TARGET_LINK_LIBRARIES(ImportGenerator ${MXADATAMODEL_LIB_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY} )
-# - Installation Code for the binary
-INSTALL(TARGETS ImportGenerator RUNTIME DESTINATION bin/)
+ToolInstallationSupport (ImportGenerator "_debug" ${MXADataModel_BINARY_DIR} "Utilities")
+
         
 SET (IMPORTGENERATOR_INSTALLED_RESOURCES
-        ${MXAUtilities_SOURCE_DIR}/Templates/CMakeLists.txt.in
-        ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegate.cpp.in
-        ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegate.h.in
-        ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegateFactory.cpp.in
-        ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegateFactory.h.in
-        ${MXAUtilities_SOURCE_DIR}/Templates/main.cpp.in
+    ${MXAUtilities_SOURCE_DIR}/Templates/CMakeLists.txt.in
+    ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegate.cpp.in
+    ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegate.h.in
+    ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegateFactory.cpp.in
+    ${MXAUtilities_SOURCE_DIR}/Templates/ImportDelegateFactory.h.in
+    ${MXAUtilities_SOURCE_DIR}/Templates/main.cpp.in
 )
 
 INSTALL (FILES ${IMPORTGENERATOR_INSTALLED_RESOURCES} 
