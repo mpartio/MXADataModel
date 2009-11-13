@@ -252,12 +252,12 @@ IF ( MXA_BUILD_TESTING )
 ENDIF ( MXA_BUILD_TESTING )
 
 #-- Include the Examples Directory
-OPTION(MXA_BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" OFF)
+OPTION(MXA_BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" ON)
 IF(MXA_BUILD_EXAMPLES)
     ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Examples ${PROJECT_BINARY_DIR}/Examples)
 ENDIF(MXA_BUILD_EXAMPLES)
 
-OPTION(MXA_BUILD_UTILITIES "Build programs that help with extending MXADataModel" OFF)
+OPTION(MXA_BUILD_UTILITIES "Build programs that help with extending MXADataModel" ON)
 IF (MXA_BUILD_UTILITIES)
     ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Utilities ${PROJECT_BINARY_DIR}/Utilities)
 ENDIF (MXA_BUILD_UTILITIES)

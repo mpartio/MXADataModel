@@ -33,6 +33,7 @@ IF(NOT HDF5_FOUND)
 ENDIF(NOT HDF5_FOUND)
 
 OPTION(MXA_BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
+mark_as_advanced(MXA_BUILD_VTK_HDF5)
 IF(MXA_BUILD_VTK_HDF5)
      #-- Find VTK packages -----------------------------------------
     FIND_PACKAGE(VTK REQUIRED)
