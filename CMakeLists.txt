@@ -233,7 +233,7 @@ TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
 LibraryProperties( ${MXADATAMODEL_LIB_NAME} )
 
 set (lib_rt_dest lib)
-if (WIN32)
+if (WIN32 AND BUILD_SHARED_LIBS)
   set (lib_rt_dest bin)
 endif()
 INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME}
