@@ -1,3 +1,8 @@
+#--////////////////////////////////////////////////////////////////////////////
+#--  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+#--  All rights reserved.
+#--  BSD License: http://www.opensource.org/licenses/bsd-license.html
+#--////////////////////////////////////////////////////////////////////////////
 PROJECT (MXAExamples)
 
 # ---------- Setup output Directories -------------------------
@@ -57,7 +62,11 @@ IDE_SOURCE_PROPERTIES("MXA/Examples" "${GETDATA_HDRS}" "${GETDATA_SRCS}")
 
 # ------------------------------------------------------------------------------
 #  Configure the header file
-SET (MXA_TEMP_DIR "${MXA_BUILD_DIR}/Bin/")
+if (NOT WIN32)
+set (MXA_TEMP_DIR "/tmp/")
+else()
+SET (MXA_TEMP_DIR "C:\\Windows\\Temp\\")
+endif()
 
 CONFIGURE_FILE(${MXAExamples_SOURCE_DIR}/ExampleFileLocations.h.in
                ${PROJECT_BINARY_DIR}/ExampleFileLocations.h @ONLY IMMEDIATE)
@@ -76,7 +85,7 @@ ENDIF ( MXA_USE_HDF5 )
 #  Add Executable for Example 1
 # ------------------------------------------------------------------------------
 IF ( MXA_USE_HDF5 )
-    IDE_SOURCE_PROPERTIES("MXA/Examples/Example1" "/Example1.cpp" "")
+    IDE_SOURCE_PROPERTIES("MXA/Examples/Example1" "" "Example1.cpp")
     ADD_EXECUTABLE(Example1 ${MXAExamples_SOURCE_DIR}/Example1/Example1.cpp)
     TARGET_LINK_LIBRARIES(Example1 ${MXADATAMODEL_LIB_NAME} )
     ToolInstallationSupport (Example1 "_debug" ${MXADataModel_BINARY_DIR} "Examples" )
@@ -86,7 +95,7 @@ ENDIF ( MXA_USE_HDF5 )
 #  Add Executable for Example 2
 # ------------------------------------------------------------------------------
 IF ( MXA_USE_HDF5 )
-    IDE_SOURCE_PROPERTIES("MXA/Examples/Example2" "/Example2.cpp" "")
+    IDE_SOURCE_PROPERTIES("MXA/Examples/Example2" "" "Example2.cpp")
     ADD_EXECUTABLE(Example2 ${MXAExamples_SOURCE_DIR}/Example2/Example2.cpp)
     TARGET_LINK_LIBRARIES(Example2 ${MXADATAMODEL_LIB_NAME})
     ToolInstallationSupport (Example2 "_debug" ${MXADataModel_BINARY_DIR} "Examples")

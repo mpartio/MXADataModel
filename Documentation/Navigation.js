@@ -4,10 +4,11 @@
 function GenerateNavigation(name, file)
 {
 	IntroductionNavGroup();
+	DownloadGroup();
 	CompileNavGroup();
 	HowToNavGroup();
 	DocumentationNavGroup(); 
-	DownloadGroup();
+	
 	MiscNavGroup();
 	if (name != 'Home') {
 		document.getElementById('breadcrumb').innerHTML=GenerateBreadCrumb(name, file);

@@ -1,33 +1,8 @@
-#-------- Install the MXADataModel Library
-IF (0)
-
-    SET (MXA_CONFIG_DIR_Debug "")
-    SET (MXA_CONFIG_DIR_Release "")
-    IF (MSVC)
-        SET (MXA_CONFIG_DIR_Debug "Debug/")
-        SET (MXA_CONFIG_DIR_Release "Release/")
-    ENDIF (MSVC)
-    # If we are building Shared Libraries put a copy of the DLL into the bin directory
-    # so that the executables will work
-    if (BUILD_SHARED_LIBS)
-        INSTALL(FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${MXA_CONFIG_DIR_Debug}${MXA_LIBRARY_DEBUG}.dll 
-            DESTINATION lib 
-            CONFIGURATIONS Debug 
-            COMPONENT SDKLibrary)
-        INSTALL(FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${MXA_CONFIG_DIR_Release}${MXA_LIBRARY_RELEASE}.dll 
-            DESTINATION lib 
-            CONFIGURATIONS Release 
-            COMPONENT SDKLibrary)
-    endif(BUILD_SHARED_LIBS)
-    INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
-        LIBRARY DESTINATION bin 
-        ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin
-        COMPONENT SDKLibrary
-    )
-   
-ENDIF (0)
- 
+#--////////////////////////////////////////////////////////////////////////////
+#--  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+#--  All rights reserved.
+#--  BSD License: http://www.opensource.org/licenses/bsd-license.html
+#--////////////////////////////////////////////////////////////////////////////
     
 INSTALL (FILES ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h ${PROJECT_BINARY_DIR}/MXA/MXAVersion.h 
          DESTINATION include/MXA 
@@ -157,13 +132,14 @@ ELSE(WIN32 AND NOT UNIX)
     SET(CPACK_BINARY_DRAGNDROP "OFF")
     SET(CPACK_BINARY_NSIS "OFF")
     SET(CPACK_BINARY_OSXX11 "OFF")
-    SET(CPACK_BINARY_PACKAGEMAKER "OFF")
+    SET(CPACK_BINARY_PACKAGEMAKER "ON")
     SET(CPACK_BINARY_RPM "OFF")
     SET(CPACK_BINARY_STGZ "OFF")
     SET(CPACK_BINARY_TBZ2 "OFF")
     SET(CPACK_BINARY_TGZ "ON")
     SET(CPACK_BINARY_TZ "OFF")
     SET(CPACK_BINARY_ZIP "OFF")
+    set(CPACK_PACKAGE_DEFAULT_LOCATION "/opt/local/MXADataModel")
 ENDIF(WIN32 AND NOT UNIX)
 
 SET(CPACK_SOURCE_GENERATOR "ZIP")

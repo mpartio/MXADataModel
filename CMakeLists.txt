@@ -1,3 +1,8 @@
+#--////////////////////////////////////////////////////////////////////////////
+#--  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+#--  All rights reserved.
+#--  BSD License: http://www.opensource.org/licenses/bsd-license.html
+#--////////////////////////////////////////////////////////////////////////////
 # Set project's name
 PROJECT( MXADataModel )
 cmake_minimum_required(VERSION 2.6)
@@ -58,6 +63,7 @@ SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
 SET (MXAExamples_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Examples)
 SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
 SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
+SET (OSX_TOOLS_DIR ${PROJECT_RESOURCES_DIR}/OSX_Tools)
 
 # - Set our Library Version to some default values. This should be changed later
 # - in the process by using the try_run command to get a better version string
@@ -225,17 +231,22 @@ endif()
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
 LibraryProperties( ${MXADATAMODEL_LIB_NAME} )
+
+set (lib_rt_dest lib)
+if (WIN32)
+  set (lib_rt_dest bin)
+endif()
 INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME}
-        DESTINATION bin
+        DESTINATION ${lib_rt_dest}
         ARCHIVE DESTINATION lib 
         COMPONENT SDKLibrary)
 INSTALL (TARGETS ${MXADATAMODEL_LIB_NAME}
-        DESTINATION bin
-        RUNTIME DESTINATION bin
+        DESTINATION ${lib_rt_dest}
+        RUNTIME DESTINATION ${lib_rt_dest}
         COMPONENT SDKLibrary)
 INSTALL (TARGETS ${MXADATAMODEL_LIB_NAME}
-        DESTINATION bin
-        LIBRARY DESTINATION bin
+        DESTINATION lib
+        LIBRARY DESTINATION lib
         COMPONENT SDKLibrary)
 
 #----- Use MSVC Naming conventions for Shared Libraries for MinGW --------------

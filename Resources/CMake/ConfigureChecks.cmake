@@ -1,3 +1,9 @@
+#--////////////////////////////////////////////////////////////////////////////
+#--  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+#--  All rights reserved.
+#--  BSD License: http://www.opensource.org/licenses/bsd-license.html
+#--////////////////////////////////////////////////////////////////////////////
+
 # In this file we are doing all of our 'configure' checks. Things like checking
 # for headers, functions, libraries, types and size of types.
 INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
