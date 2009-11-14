@@ -65,7 +65,7 @@ IDE_SOURCE_PROPERTIES("MXA/Examples" "${GETDATA_HDRS}" "${GETDATA_SRCS}")
 if (NOT WIN32)
 set (MXA_TEMP_DIR "/tmp/")
 else()
-SET (MXA_TEMP_DIR "C:\\Windows\\Temp\\")
+SET (MXA_TEMP_DIR "C:\\\\Windows\\\\Temp\\\\")
 endif()
 
 CONFIGURE_FILE(${MXAExamples_SOURCE_DIR}/ExampleFileLocations.h.in
