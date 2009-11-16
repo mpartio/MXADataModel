@@ -404,7 +404,7 @@ bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirector
   if (createParentDirectories) {
       dirName = MXAFileSystemPath::cleanPath(dirName);
       std::string::size_type slash = 0;
-      for(std::string::size_type oldslash = std::string::npos; slash != std::string::npos; oldslash = slash)
+      for(std::string::size_type oldslash = 1; slash != std::string::npos; oldslash = slash)
       {
           slash = dirName.find(MXAFileSystemPath::Separator, oldslash+1);
           if (slash == std::string::npos) {

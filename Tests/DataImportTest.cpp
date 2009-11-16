@@ -231,7 +231,12 @@ void CreateTiffImages()
 // -----------------------------------------------------------------------------
 int XMLImportTest()
 {
+
   bool success = MXAFileSystemPath::mkdir(MXAUnitTest::MXATempDir +
+                                          MXAUnitTest::DataImportTest::TestDir, true);
+  BOOST_REQUIRE_EQUAL(success, true);
+
+  success = MXAFileSystemPath::mkdir(MXAUnitTest::MXATempDir +
                                           MXAUnitTest::DataImportTest::TestDir +
                                           MXAFileSystemPath::Separator + "test_data", true);
   BOOST_REQUIRE_EQUAL(success, true);

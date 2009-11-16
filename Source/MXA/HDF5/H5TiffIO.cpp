@@ -21,6 +21,8 @@
 // buffer then leave this set to ZERO.
 #define USE_LZW_COMPRESSION 0
 
+
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -62,6 +64,8 @@ herr_t H5TiffIO::importTiff(const std::string &filename,
 	      << filename << std::endl;
     return (herr_t) -1;
   }
+  TIFFErrorHandler handler = 0;
+  TIFFErrorHandler prevTifErrorHandler = TIFFSetWarningHandler(handler);
 
   if (asGrayscale) {
     err = _importGrayscaleTiffImage(_tiff, groupId, datasetName);
@@ -84,6 +88,9 @@ herr_t H5TiffIO::importTiff(const std::string &filename,
     }
   }
 
+  handler = TIFFSetWarningHandler(prevTifErrorHandler);
+  (void) TIFFClose(_tiff);
+  _tiff = NULL;
   return err;
 }
 

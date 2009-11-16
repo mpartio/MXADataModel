@@ -36,19 +36,25 @@ H5DataModelWriter::~H5DataModelWriter()
 // -----------------------------------------------------------------------------
 int32 H5DataModelWriter::writeModelToFile(hid_t fileId)
 {
-//  std::cout << "Writing File Type/Version, DataRoot, and DataModel Groups..." << std::endl;printf("\n");
+  std::cout << "Writing File Type/Version, DataRoot, and DataModel Groups..." << std::endl;printf("\n");
   if ( writeDataModelTemplate(fileId) < 0 ) return -1;
-//  std::cout << "Writing Data Dimensions..." << std::endl;printf("\n");
+
+  std::cout << "Writing Data Dimensions..." << std::endl;printf("\n");
   if ( writeDataDimensions(fileId) < 0) return -1;
-//  std::cout << "Writing Data Records..." << std::endl;printf("\n");
+
+  std::cout << "Writing Data Records..." << std::endl;printf("\n");
   if ( writeDataRecords(fileId) < 0) return -1;
-//  std::cout << "Writing Required MetaData..." << std::endl;  printf("\n");
+
+  std::cout << "Writing Required MetaData..." << std::endl;  printf("\n");
   if ( writeRequiredMetaData(fileId) < 0) return -1;
-//  std::cout << "Writing User MetaData...." << std::endl;printf("\n");
+
+  std::cout << "Writing User MetaData...." << std::endl;printf("\n");
   if ( writeUserMetaData(fileId) < 0) return -1;
-//  std::cout << "Done Writing Model" << std::endl;printf("\n");
+
+  std::cout << "Done Writing Model" << std::endl;printf("\n");
   if ( writeSupportFiles(fileId) < 0) return -1;
-  // std::cout << "Done writing support files" << std::endl;printf("\n");
+
+  std::cout << "Done writing support files" << std::endl;printf("\n");
 
   return 1;
 }
@@ -143,12 +149,16 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
     err = H5Lite::writeStringAttribute(fileId, MXA::DataModel.c_str(), MXA::ModelType, fType);
     if (err < 0) {
       std::cout << logTime() << "Error Writing Model Type to Data Model Group as Attribute." << std::endl;
+      H5Gclose(modelGroupId);
+      return err;
     }
     float32 version = _dataModel->getModelVersion();
     err = H5Lite::writeScalarAttribute(fileId, MXA::DataModel, MXA::ModelVersion, version);
     if (err < 0)
     {
       std::cout << logTime() << "Error Writing Model Version to Data Model Group as Attribute." << std::endl;
+      H5Gclose(modelGroupId);
+      return err;
     }
   }
   err = H5Gclose(modelGroupId);
