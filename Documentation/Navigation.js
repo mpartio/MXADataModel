@@ -29,8 +29,8 @@ function DownloadGroup()
 	var html = "<h2>Downloads</h2><ul>";
 	var pages = new Array();
 	pages.push("Source Codes", "SourceCodes.html");
-	pages.push("Binaries", "Binaries.html");
-	pages.push("Sample Data", "Data.html");
+	pages.push("Pre-Compiled Binaries", "Binaries.html");
+	pages.push("Sample Data", "SampleData.html");
 	for(i = 0; i < pages.length; i=i+2)
 	{
 		html = html + "<li><a href=\"" + pages[i+1] + "\">" + pages[i] + "</a></li>";
@@ -144,7 +144,7 @@ return innerHTML;
 //-----------------------------------------------------------------------------
 function generateFooter()
 {
-	document.write("<span class=\"left\"> &copy; 2008 &nbsp;");
+	document.write("<span class=\"left\"> &copy; 2009 &nbsp;");
 	document.write("<a href=\"index.html\">MXADataModel </a>. Valid ");
 	document.write("<a href=\"http://jigsaw.w3.org/css-validator/check/referer\">CSS</a> &amp; ");
 	document.write("<a href=\"http://validator.w3.org/check?uri=referer\">XHTML</a> </span> ");

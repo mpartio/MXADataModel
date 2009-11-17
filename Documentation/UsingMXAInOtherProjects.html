@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>MXADataModel as an External Library</title>
 
-<link rel="stylesheet" type="text/css" href="default.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="default.css" media="screen">
 <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
 <meta content="All By Hand" name="generator">
 <meta content="max-age=0, must-revalidate" http-equiv="Cache-Control">
@@ -41,21 +41,17 @@
     otherwise you will get unresolved symbols when the link stage runs. Some how projects that used the MXADataModel 
     cmakelists file were not getting this added to their flags.
    <p> When compiling against the Qt libraries you need to include the following in the cmake file:
-            <br><code>IF (WIN32)<br>
-    SET (QT_USE_QTMAIN TRUE)<br>
+            <br><code>IF (WIN32)
+    SET (QT_USE_QTMAIN TRUE)
 ENDIF (WIN32)</code>
         <br>This will resolve the WinMain16 link error that will occur if you do NOT have it listed
       </p>  
-    <p> If you
-    get errors about multiple defined symbols from the C or C++ runtime librarys then you have a mismatch in your app 
-    and libraries about whether or not to use the multi-threaded or single threaded or use release or Debug symbols. 
+    <p> If you get errors about multiple defined symbols from the C or C++ runtime librarys then you have a mismatch in your app and libraries about whether or not to use the multi-threaded or single threaded or use release or Debug symbols. 
     You will have to look at each project that you built or find out from your vendor how they compiled the library. 
-    These types of error will spit out a suggestion to use the /NODEFAULTLIB:[library] link flag. This is NOT necessary 
-    if all your supporting libraries were compiled
-    with the same C/C++ runtime libs (Threaded and Debug Symbols on or off)
+    These types of error will spit out a suggestion to use the /NODEFAULTLIB:[library] link flag. This is NOT necessary if all your supporting libraries were compiled with the same C/C++ runtime libs (Threaded and Debug Symbols on or off)
     </p>
     <p>
-    I was able to build the QMXADataViewer using shared libraries for the HDF5 and MXADataModel and Qt4 framework.   
+    I was able to build the MXADataViewer using shared libraries for the HDF5 and MXADataModel and Qt4 framework.   
      </p>
    </div>
 <!-- CONTENT ENDS HERE -->

@@ -43,7 +43,8 @@ Documentation</a></span>
 <!-- NAVIGATION ENDS HERE --><br>
       </td>
 <!-- CONTENT STARTS HERE --> <td valign="top">
-      <div class="content"><!-- CONTENT STARTS HERE -->
+      <div class="content">
+      <!-- CONTENT STARTS HERE -->
       <h3>Basics</h3>
 Download and install <a href="http://www.cmake.org">CMake</a> first.
 Then proceed to build all the third party libraries that are needed.
@@ -81,25 +82,17 @@ end up with something that looks similar to <a
  href="img/CMakeScreenShot.jpg" rel="thumbnail"
  title="CMake Screen Shot"> this</a>. Some options that you may want to
 set for each library are the following:<br>
-      <code> <br>
-      <br>
-CMAKE_BUILD_TYPE = Debug or Release<br>
-      <br>
-CMAKE_INSTALL_PREFIX = Where on your hard drive to install the library<br>
-and associated files.<br>
-      <br>
-BUILD_SHARED_LIBS = Do you want to create dylibs/DLL or static<br>
-libraries?<br>
-      <br>
-On OS X I recommend Dynamic Libraries. <br>
-      <br>
-On Linux and Windows I recommend Static Libraries.<br>
-      <br>
-CMAKE_OSX_ARCHITECTURES = Any semi-colon separated list of i386, ppc,<br>
-x86_64, ppc64<br>
-      <br>
-      </code> The defaults for the rest of the values should be correct
-for each system.<br>
+
+<div class="section1">
+<b>CMAKE_BUILD_TYPE</b> = Debug or Release 
+<br><b>CMAKE_INSTALL_PREFIX</b> = Where on your hard drive to install the library and associated files.
+<br><b>BUILD_SHARED_LIBS</b> = ON | OFF 
+<br>On OS X I recommend Dynamic Libraries.  
+<br>On Linux and Windows I recommend Static Libraries. 
+<br><b>CMAKE_OSX_ARCHITECTURES</b> = Any semi-colon separated list of i386, ppc, x86_64, ppc64
+
+<br>The defaults for the rest of the values should be correct
+for each system.</div>
 Depending on what system you are running will dictate how you will now
 build the library.
       <h5>Windows Users with Visual Studio</h5>
@@ -122,13 +115,15 @@ Double click on that file to launch <a href="img/xcodeproject.jpg"
 project. Also select either a "Debug" or "Release" configuation before
 building. For each library you will want to set an environment variable
 that points to the installation location. On a Unix machine using bash
-this would be something like:<code> export<br>
-BQ_INSTALL_ROOT="/Users/Shared/Toolkits" export<br>
-HDF5_INSTALL="$BQ_INSTALL_ROOT/hdf5-169" export<br>
-EXPAT_INSTALL="$BQ_INSTALL_ROOT/expat" export<br>
-TIFF_INSTALL="$BQ_INSTALL_ROOT/tiff" export<br>
-MXADATAMODEL_INSTALL="$BQ_INSTALL_ROOT/MXADataModel" export<br>
-BOOST_ROOT="$BQ_INSTALL_ROOT/boost-1_39"</code>
+this would be something like:
+<code> 
+export BQ_INSTALL_ROOT="/Users/Shared/Toolkits" 
+export HDF5_INSTALL="$BQ_INSTALL_ROOT/hdf5-169" 
+export EXPAT_INSTALL="$BQ_INSTALL_ROOT/expat" 
+export TIFF_INSTALL="$BQ_INSTALL_ROOT/tiff"
+export MXADATAMODEL_INSTALL="$BQ_INSTALL_ROOT/MXADataModel"
+export BOOST_ROOT="$BQ_INSTALL_ROOT/boost-1_39"
+</code>
       <h3>Boost Compile and Installation</h3>
 Boost version 1.39.0 is the earliest version supported by the
 MXADataModel library. For windows users the easiest way to get these

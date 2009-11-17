@@ -3,7 +3,7 @@
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Importing Data into an HDF5 file using the MXA API</title>
-<link rel="stylesheet" type="text/css" href="default.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="default.css" media="screen">
 <meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
 <meta content="All By Hand" name="generator">
 <meta content="max-age=0, must-revalidate" http-equiv="Cache-Control">
@@ -31,11 +31,11 @@
     <td valign="top">
     <div class="content">
     <!-- CONTENT STARTS HERE -->
-    <h2>Introduction</h2>
+    <h5>Introduction</h5>
     Saving data to an MXA formatted file can be straight forward or involve creating new C++ classes and a recompile
     of the project. Basically there are 2 ways to import data into an HDF5 based MXA data file.
    <br>
-    <h3>First Way - Utilize Existing Import Functionality</h3>
+    <h5>First Way - Utilize Existing Import Functionality</h5>
     3 Items are needed in order to take advantage of the include functionality.
     <ol>
         <li>A Data Model (preferably in an XML file, but another HDF5 file will work also).</li>
@@ -45,7 +45,7 @@
         custom code to parse.</li>
     </ol>
 <br/>
-    <h4>Data Import XML File</h4>
+    <h5>Data Import XML File</h5>
     This is a xml file that contains a subset of the Data Model XML, the Output file to write the data 
     into, Data Sources (either Implicit or Explicit) and Support Files.
    <br>
@@ -69,7 +69,7 @@
   into the data file. These files can be anything from a simple text file to a binary image file.</td></tr>
   </table>
    <br>
- <h3>Second Way - Create C++ code and Compile a new program</h3>
+ <h5>Second Way - Create C++ code and Compile a new program</h5>
     Write custom c++ code to complete any or all of the above tasks. This is the 
     course of action to take if your data is in custom data files or 
     in files that the current set of importers do understand. Each of the above tasks 
@@ -85,7 +85,7 @@
      to be written to find the data sources on your hard drive. Instead the locations 
      are describe with some MXA xml tags.
      <p></p>
- <h4>Code Maintainer Notes</h4>
+ <h5>Code Maintainer Notes</h5>
       If you add more xml tags to the list there are a few code places that will need
       to be updated. <i>src/XML/DataImportXMLParser.cpp</i> will need to be updated. Specifically
       you will need to update the following method:
@@ -102,7 +102,7 @@
 
     
     
-  <h3>XML Import Example</h3>Say you have a bunch of images taken from an experiment
+  <h5>XML Import Example</h5>Say you have a bunch of images taken from an experiment
     that has 2 independent variables called "time" and "volume fraction" with units of seconds (for time) and 
     percentage (for Volume fraction). Say you run the experiment for 60 seconds and vary the volume fraction
     from 20% to 60% in 5% increments. Translating this to the MXA Data Model you would end up with 
@@ -118,7 +118,7 @@
         With this setup one can setup an Implicit Data Source in the Import XML file.
          <h5>Example XML Code</h5>
         <code>
-&lt;Implicit_Data_Source Data_Record="Record 0" Source_Type="H5TiffImport"&gt; 
+&lt;Implicit_Data_Source Data_Record="Record 0" Source_Type="h5TiffImport"&gt; 
   &nbsp;&lt;Import_Property Key="FileNotFoundIsError" Value="1" /&gt; 
   &nbsp;&lt;Import_Property Key="ImportAsGrayScale" Value="1" /&gt; 
   &nbsp;&lt;File_Path&gt; 
@@ -139,12 +139,12 @@
 &lt;/Implicit_Data_Source&gt;
  </code>
  
- <h3>Line By Line Explanation of the Example XML Code</h3>
+ <h5>Line By Line Explanation of the Example XML Code</h5>
         <table>
         <tr class="row"><td>
         &lt;Implicit_Data_Source 
             Data_Record="Image" 
-            Source_Type="H5TiffImport"&gt;</td>
+            Source_Type="h5TiffImport"&gt;</td>
         <td>Tells the model to associate the data with the "Image" Data Record and use the
         Tiff image importer to import the data.</td>
         </tr>

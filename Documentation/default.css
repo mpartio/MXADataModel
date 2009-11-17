@@ -21,17 +21,55 @@ a:hover {color: #06C;}
 body {
 	background: #E7E7E2 /* url('img/body.jpg') no-repeat center top */;
 	color: #333;
-	font: normal 62.5% Tahoma,sans-serif;
+	font: normal 0.75em Helvitica, Ariel,sans-serif;
 	padding-top: 14px;
 }
 
-p,code,ul {padding-bottom: 1.2em;}
+p,ul {padding-bottom: 1.2em;}
 
 li {list-style: none;}
 
-h1 {font: normal 1.8em Tahoma,sans-serif;}
-h2 {font: bold 1.4em sans-serif;}
-h3 {font: bold 1em Tahoma,sans-serif;}
+h1 {
+font: normal 2.0em Helvitica, Ariel,sans-serif;
+padding-top: 4px; 
+color: #333; 
+margin: 2px;
+}
+
+h2 {
+font: normal 1.7em Helvitica, Ariel,sans-serif;
+padding-top: 4px; 
+color: #333; 
+margin: 2px;
+}
+
+h3 {
+font: bold italic 1.3em serif;
+padding-top: 4px; 
+color: #333; 
+margin: 2px;
+}
+
+h4 {
+font: normal 1.3em Helvitica, Ariel,sans-serif;
+padding-top: 4px; 
+color: #333; 
+margin: 2px;
+}
+
+h5 {
+font: normal 1.0em Helvitica, Ariel,sans-serif;
+padding-top: 4px; 
+color: #333; 
+margin: 2px;
+}
+
+h6 {
+font: bold italic 1.0em serif;
+padding-top: 4px; 
+color: #333; 
+margin: 2px;
+}
 
 form,input {margin: 0; padding: 0; display: inline;}
 
@@ -41,9 +79,9 @@ code {
 	border-left: 3px solid #CCC;
 	color: #222;
 	display: block;
-	font: normal 1em monospace;
+	font: normal 1.0em monospace;
 /* 	line-height: 1.6em; */
-	margin-bottom: 5px;
+	padding: 4px;
 	/* padding: 8px 10px; */
 	white-space: pre;
 }
@@ -55,7 +93,14 @@ blockquote {
 	padding-left: 28px;
 }
 
-h1,h2,h3 {padding-top: 6px; color: #553; margin-bottom: 4px;}
+/* structure */
+.section1 {
+	border: 1px solid #D7D7D2;
+	background: #FFF;
+	font-size: 1.0em;
+	margin: 2 auto;
+	padding: 4px;
+}
 
 /* misc */
 .clearer {clear: both; font-size: 0;}
@@ -66,9 +111,9 @@ h1,h2,h3 {padding-top: 6px; color: #553; margin-bottom: 4px;}
 .inner-container {
 	border: 2px solid #D7D7D2;
 	background: #FFF;
-	font-size: 1.2em;
+	font-size: 1.0em;
 	margin: 0 auto;
-	padding: 10px;
+	padding: 2px;
 /*	width: 780px; */
 }
 
@@ -145,7 +190,7 @@ border-width:1px 1px 1px 0;
 /* content */
 .content {
 	/* float: right; */
-/* 	width: 538px; */
+ 	/* width: 600px; */
 	background: #F8F8F8;
 	font-size: 1.1em;
 }
@@ -170,7 +215,7 @@ border-width:1px 1px 1px 0;
 }
 .navigation h2 {
 	color: #5A5A43;
-	font: bold 1.1em Tahoma,sans-serif;
+	font: bold 1.1em Helvitica, Ariel,sans-serif;
 	/* line-height: 30px; */
 	margin: 0;
 	padding-left: 6px;
