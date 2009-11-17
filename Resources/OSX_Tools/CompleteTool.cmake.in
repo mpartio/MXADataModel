@@ -33,20 +33,20 @@ function(gp_item_default_embedded_path_override item default_embedded_path_var)
 
   # By default, embed things right next to the main bundle executable:
   #
-  set(path "@executable_path/../")
+  set(path "@executable_path/")
 
   set(overridden 0)
   # Embed .dylibs right next to the main bundle executable:
   #
   if(item MATCHES "\\.dylib$")
-    set(path "@executable_path/../lib")
+    set(path "@executable_path/tool_lib")
     set(overridden 1)
   endif(item MATCHES "\\.dylib$")
 
   # Embed .so right next to the main bundle executable:
   #
   if(item MATCHES "\\.so$")
-    set(path "@executable_path/../Plugins")
+    set(path "@executable_path/Plugins")
     set(overridden 1)
   endif(item MATCHES "\\.so$")
   
@@ -54,7 +54,7 @@ function(gp_item_default_embedded_path_override item default_embedded_path_var)
   #
   if(NOT overridden)
     if(item MATCHES "[^/]+\\.framework/")
-      set(path "@executable_path/../Frameworks")
+      set(path "@executable_path/Frameworks")
       set(overridden 1)
     endif(item MATCHES "[^/]+\\.framework/")
   endif(NOT overridden)
@@ -63,7 +63,7 @@ function(gp_item_default_embedded_path_override item default_embedded_path_var)
 endfunction(gp_item_default_embedded_path_override)
 
 #-- Be sure all the internal directories are created first before calling the 'fixup_bundle'
-file(MAKE_DIRECTORY "@CMAKE_INSTALL_PREFIX@/lib")
+file(MAKE_DIRECTORY "@CMAKE_INSTALL_PREFIX@/bin/tool_lib")
 #file(MAKE_DIRECTORY "@CMAKE_INSTALL_PREFIX@/Plugins")
 #file(MAKE_DIRECTORY "@CMAKE_INSTALL_PREFIX@/Frameworks")
 #file(MAKE_DIRECTORY "@CMAKE_INSTALL_PREFIX@/Support")
