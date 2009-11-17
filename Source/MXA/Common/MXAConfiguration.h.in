@@ -131,7 +131,7 @@
 #if !defined(__APPLE__)
  #cmakedefine MXA_SIZEOF_LONG_LONG @MXA_SIZEOF_LONG_LONG@
 #else
- #cmakedefine MXA_SIZEOF_LONG_LONG 8
+ #define MXA_SIZEOF_LONG_LONG 8
 #endif
 #cmakedefine MXA_SIZEOF___INT64   @MXA_SIZEOF___INT64@
 
