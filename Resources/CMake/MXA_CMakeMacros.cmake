@@ -80,7 +80,7 @@ ENDMACRO (IDE_SOURCE_PROPERTIES NAME HEADERS SOURCES)
 # --------------------------------------------------------------------
 
 macro(LibraryProperties targetName )
-    message(STATUS "Adding Install support for ${targetName}"
+    message(STATUS "Adding Install support for ${targetName}")
     if ( NOT BUILD_SHARED_LIBS AND MSVC)
       SET_TARGET_PROPERTIES( ${targetName} 
         PROPERTIES

@@ -36,25 +36,25 @@ H5DataModelWriter::~H5DataModelWriter()
 // -----------------------------------------------------------------------------
 int32 H5DataModelWriter::writeModelToFile(hid_t fileId)
 {
-  std::cout << "Writing File Type/Version, DataRoot, and DataModel Groups..." << std::endl;printf("\n");
+  //std::cout << "Writing File Type/Version, DataRoot, and DataModel Groups..." << std::endl;printf("\n");
   if ( writeDataModelTemplate(fileId) < 0 ) return -1;
 
-  std::cout << "Writing Data Dimensions..." << std::endl;printf("\n");
+  //std::cout << "Writing Data Dimensions..." << std::endl;printf("\n");
   if ( writeDataDimensions(fileId) < 0) return -1;
 
-  std::cout << "Writing Data Records..." << std::endl;printf("\n");
+  //std::cout << "Writing Data Records..." << std::endl;printf("\n");
   if ( writeDataRecords(fileId) < 0) return -1;
 
-  std::cout << "Writing Required MetaData..." << std::endl;  printf("\n");
+  //std::cout << "Writing Required MetaData..." << std::endl;  printf("\n");
   if ( writeRequiredMetaData(fileId) < 0) return -1;
 
-  std::cout << "Writing User MetaData...." << std::endl;printf("\n");
+  //std::cout << "Writing User MetaData...." << std::endl;printf("\n");
   if ( writeUserMetaData(fileId) < 0) return -1;
 
-  std::cout << "Done Writing Model" << std::endl;printf("\n");
+  //std::cout << "Done Writing Model" << std::endl;printf("\n");
   if ( writeSupportFiles(fileId) < 0) return -1;
 
-  std::cout << "Done writing support files" << std::endl;printf("\n");
+  //std::cout << "Done writing support files" << std::endl;printf("\n");
 
   return 1;
 }
