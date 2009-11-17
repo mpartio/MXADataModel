@@ -80,23 +80,7 @@ ENDMACRO (IDE_SOURCE_PROPERTIES NAME HEADERS SOURCES)
 # --------------------------------------------------------------------
 
 macro(LibraryProperties targetName )
-message(STATUS "Adding Install support for ${targetName}")
-if (0)
-    if (WIN32 AND NOT MINGW)
-        SET (DEBUG_EXTENSION "_d")
-    else()
-        SET (DEBUG_EXTENSION "_debug")
-    endif()
-    
-    IF (WIN32 AND NOT MINGW)
-        SET(LIBRARY_RELEASE_NAME "lib${targetName}" CACHE INTERNAL "" FORCE)
-        SET(LIBRARY_DEBUG_NAME "lib${targetName}${DEBUG_EXTENSION}" CACHE INTERNAL "" FORCE)
-    ELSE (WIN32 AND NOT MINGW)
-        SET(LIBRARY_RELEASE_NAME "${targetName}" CACHE INTERNAL "" FORCE)
-        SET(LIBRARY_DEBUG_NAME "${targetName}${DEBUG_EXTENSION}" CACHE INTERNAL "" FORCE)
-    ENDIF(WIN32 AND NOT MINGW)
- endif()
- 
+    message(STATUS "Adding Install support for ${targetName}"
     if ( NOT BUILD_SHARED_LIBS AND MSVC)
       SET_TARGET_PROPERTIES( ${targetName} 
         PROPERTIES
