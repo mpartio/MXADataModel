@@ -11,18 +11,28 @@
 #ifndef _MHDTIFFIO_H_
 #define _MHDTIFFIO_H_
 
+
+//-- STL Headers
+#include <string>
+
+
 //-- MXA Headers
+#include "MXA/Common/MXATypes.h"
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Base/ITiffTagExtractor.h>
+
 
 //-- HDF Headers
 #include <hdf5.h>
 
 //-- TIFF Headers
+// We define _TIFF_DATA_TYPEDEFS_ here becuase MXATypes.h has the exact type of typedefs
+#define _TIFF_DATA_TYPEDEFS_ 1
 #include <tiffio.h>
 
-//-- STL Headers
-#include <string>
+
+// Need to forward declare ITiffTagExtractor class
+class ITiffTagExtractor;
+
 
 using namespace std;
 

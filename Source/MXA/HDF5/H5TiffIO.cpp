@@ -1,13 +1,21 @@
-#include <tif_config.h>
+
 
 
 //-- MXA Headers
+#include <MXA/HDF5/H5TiffIO.h>
+
 #include <MXA/MXAVersion.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Image.h>
-#include <MXA/HDF5/H5TiffIO.h>
+
 #include <MXA/Utilities/StringUtils.h>
+
+#include <MXA/Base/ITiffTagExtractor.h>
+
+// Must come after the above includes because MXATypes is already defining
+// the base integer types that tiff.h will try to define.
+//#include <tif_config.h>
 
 //-- STL Headers
 #include <iostream>
@@ -583,7 +591,13 @@ herr_t H5TiffIO::_exportGrayScaleTiff(TIFF *image,
   // Insert Resolution Units here if possible
 
   std::string software ("MXADataModel Version ");
-  software.append(MXA::Version::MXAVersion).append(" using ").append(PACKAGE_STRING);
+  software.append(MXA::Version::MXAVersion).append(" using ");
+#ifdef PACKAGE_STRING
+  software.append(PACKAGE_STRING);
+#else
+  software.append("libTif");
+#endif
+
   err = TIFFSetField(image, TIFFTAG_SOFTWARE, software.c_str());
 
   err = TIFFSetField(image, TIFFTAG_HOSTCOMPUTER, MXADATAMODEL_SYSTEM);

@@ -9,12 +9,14 @@
 
 #include "TiffMaker.h"
 
-//-- Tif headers
-#include "tif_config.h"
-#include "tiffio.h"
-
 //-- std C++ headers
 #include <iostream>
+
+//-- Tif headers
+
+#include "tiffio.h"
+//#include "tif_config.h"
+
 
 #define USE_LZW_COMPRESSION 0
 

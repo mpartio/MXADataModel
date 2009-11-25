@@ -14,7 +14,7 @@
 
 //-- STL includes
 #include <string>
-
+#include <vector>
 
 /**
 * @class MXAFileSystemPath MXAFileSystemPath.h PathToHeader/MXAFileSystemPath.h

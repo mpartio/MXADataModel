@@ -1,21 +1,8 @@
-/*=========================================================================
 
-  Program:   Visualization Toolkit
-  Module:    $RCSfile: MXATypes.h,v $
-
-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
-  All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notice for more information.
-
-=========================================================================*/
 #ifndef __MXATypes_h
 #define __MXATypes_h
 
-#include <MXA/Common/DLLExport.h>
+#include <MXA/MXAConfiguration.h>
 
 #define MXA_READ_WRITE false
 #define MXA_READ_ONLY  true
@@ -160,32 +147,12 @@ typedef double float64;
 # error "No native data type can represent a 64-bit floating point value."
 #endif
 
-/*--------------------------------------------------------------------------*/
-/* Choose an implementation for mxaIdType.  */
-#if 0
-#define MXA_HAS_ID_TYPE
-#ifdef MXA_USE_64BIT_IDS
-# if defined(MXA_SIZEOF_LONG) && MXA_SIZEOF_LONG == 8 && 0
-typedef long mxaIdType;
-#  define MXA_SIZEOF_ID_TYPE MXA_SIZEOF_LONG
-#  define MXA_LARGE_ID MXA_LONG_MAX
-# elif defined(MXA_TYPE_USE_LONG_LONG) && MXA_SIZEOF_LONG_LONG == 8
-typedef long long mxaIdType;
-#  define MXA_SIZEOF_ID_TYPE MXA_SIZEOF_LONG_LONG
-#  define MXA_LARGE_ID MXA_LONG_LONG_MAX
-# elif defined(MXA_TYPE_USE___INT64) && MXA_SIZEOF___INT64 == 8
-typedef __int64 mxaIdType;
-#  define MXA_SIZEOF_ID_TYPE MXA_SIZEOF___INT64
-#  define MXA_LARGE_ID MXA___INT64_MAX
-# else
-#  error "MXA_USE_64BIT_IDS is ON but no 64-bit integer type is available."
-# endif
-#else
-typedef int mxaIdType;
-# define MXA_SIZEOF_ID_TYPE MXA_SIZEOF_INT
-# define MXA_LARGE_ID MXA_INT_MAX
-#endif
-#endif
+
+/*  This next code is here to work around some older versions of libTiff
+ * that define the same names of the primitive types that are listed above.
+ */
+#define _TIFF_DATA_TYPEDEFS_ 1
+
 
 /*=========================================================================
 
@@ -193,7 +160,7 @@ typedef int mxaIdType;
   section was NOT originally part of the VTK project.
 
 =========================================================================*/
-#include <vector>
+//#include <vector>
 
 #define MXA_UINT8_TYPE 1
 #define MXA_INT8_TYPE  2
@@ -205,6 +172,7 @@ typedef int mxaIdType;
 #define MXA_INT64_TYPE  128
 #define MXA_FLOAT32_TYPE 256
 #define MXA_FLOAT64_TYPE  512
+
 
 namespace MXATypes {
 
@@ -218,7 +186,7 @@ namespace MXATypes {
   const uint64 Uint64Type = 0x0F0F0F0F0F0F0F0Full;
   const float32 Float32Type = 0.0f;
   const float64 Float64Type = 0.0;
-
+#if 0
   typedef std::vector<int8> Int8Vector;
   typedef std::vector<uint8> Uint8Vector;
   typedef std::vector<int16> Int16Vector;
@@ -231,7 +199,7 @@ namespace MXATypes {
   typedef std::vector<float64> Float64Vector;
 
   typedef std::vector<uint64> H5Dimensions;
-
+#endif
   typedef int32 MXAError;
 
 } // namespace Types

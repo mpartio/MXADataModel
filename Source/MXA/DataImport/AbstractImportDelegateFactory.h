@@ -16,7 +16,7 @@
 #include <MXA/Base/IImportDelegate.h>
 
 #include <string>
-
+#include <vector>
 
 #define DEFINE_IMPORT_DELEGATE_NAMESPACE(name)\
 namespace name \
