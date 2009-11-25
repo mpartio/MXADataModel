@@ -288,6 +288,7 @@ ENDIF ( MXA_BUILD_TESTING )
 #-- Include the Examples Directory
 OPTION(MXA_BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" ON)
 IF(MXA_BUILD_EXAMPLES)
+message(FATAL_ERROR "MXA_BUILD_EXAMPLES IS ON")
     ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Examples ${PROJECT_BINARY_DIR}/Examples)
 ENDIF(MXA_BUILD_EXAMPLES)
 

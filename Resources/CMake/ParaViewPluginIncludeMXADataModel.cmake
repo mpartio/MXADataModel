@@ -1,7 +1,8 @@
 
 
-MESSAGE (STATUS "[${MODULE_NAME}] MXADATAMODEL_TARGET_ADDED: '${MXADATAMODEL_TARGET_ADDED}'")
-#IF (NOT DEFINED MXADATAMODEL_TARGET_ADDED OR NOT MXADATAMODEL_TARGET_ADDED)
+
+#IF("MXADATAMODEL_TARGET_ADDED" MATCHES "^MXADATAMODEL_TARGET_ADDED$")
+   # message(STATUS "===========> Adding MXADataModel <===========")
     # ------ Add support for HDF5
     SET(MXA_USE_HDF5 ON)
     SET(MXA_EXTERNAL_HDF5_LIBRARY ${PARAVIEW_HDF5_LIBRARIES})
@@ -25,8 +26,7 @@ MESSAGE (STATUS "[${MODULE_NAME}] MXADATAMODEL_TARGET_ADDED: '${MXADATAMODEL_TAR
                             ${ParaView_BINARY_DIR}/VTK/Utilities/vtktiff )
     
     
-    SET (MXA_BUILD_EXAMPLES FALSE)
-    message (STATUS "BUILD_TESTING: ${BUILD_TESTING}")
+    SET (MXA_BUILD_EXAMPLES OFF CACHE BOOL "" )
     SET (MXA_BUILD_TESTING TRUE)
     
     SET (MXADATAMODEL_LIB_NAME MXADataModel)
@@ -43,27 +43,29 @@ MESSAGE (STATUS "[${MODULE_NAME}] MXADATAMODEL_TARGET_ADDED: '${MXADATAMODEL_TAR
     SET (MXADATAMODEL_TARGET_ADDED TRUE )
     
     if (false)
-    #-------------------------------------------------------------------------------
-    # ---------- Find Boost Headers/Libraries -----------------------
-    SET (Boost_FIND_REQUIRED TRUE)
-    SET (Boost_FIND_QUIETLY TRUE)
-    SET (Boost_USE_FILESYSTEM FALSE)
-    SET (Boost_USE_SYSTEM FALSE)
-    SET (Boost_USE_UNIT_TEST_FRAMEWORK FALSE)
-    SET (Boost_USE_TEST_EXEC_MONITOR FALSE)
-    SET (Boost_USE_PROGRAM_OPTIONS FALSE)
-    #set (Boost_USE_MULTITHREADED TRUE)
-    
-    FIND_PACKAGE(Boost 1.39 )
-    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
-    LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
-    #- Add the required Libraries for MXA to function
-    SET (PARAVIEW_ADDITIONAL_LIBRARIES 
-        ${PARAVIEW_ADDITIONAL_LIBRARIES} 
-        ${HDF5_LIBRARIES}
-    )
+        #-------------------------------------------------------------------------------
+        # ---------- Find Boost Headers/Libraries -----------------------
+        SET (Boost_FIND_REQUIRED TRUE)
+        SET (Boost_FIND_QUIETLY TRUE)
+        SET (Boost_USE_FILESYSTEM FALSE)
+        SET (Boost_USE_SYSTEM FALSE)
+        SET (Boost_USE_UNIT_TEST_FRAMEWORK FALSE)
+        SET (Boost_USE_TEST_EXEC_MONITOR FALSE)
+        SET (Boost_USE_PROGRAM_OPTIONS FALSE)
+        #set (Boost_USE_MULTITHREADED TRUE)
+        
+        FIND_PACKAGE(Boost 1.39 )
+        INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
+        LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+        #- Add the required Libraries for MXA to function
+        SET (PARAVIEW_ADDITIONAL_LIBRARIES 
+            ${PARAVIEW_ADDITIONAL_LIBRARIES} 
+            ${HDF5_LIBRARIES}
+        )
     endif()
-#ENDIF (NOT DEFINED MXADATAMODEL_TARGET_ADDED OR NOT MXADATAMODEL_TARGET_ADDED)
+    SET (MXADATAMODEL_TARGET_ADDED "1" CACHE INTERNAL "MXADataModel Added to ParaView as a libary")
+    MESSAGE (STATUS "[${MODULE_NAME}] Added the MXADataModel library.")
+#endif()
 
 INCLUDE_DIRECTORIES (${MXADataModel_SOURCE_DIR}/Source)
 INCLUDE_DIRECTORIES (${ParaView_BINARY_DIR}/MXADataModel)
