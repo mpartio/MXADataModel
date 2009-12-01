@@ -1,3 +1,11 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+///////////////////////////////////////////////////////////////////////////////
+
 #include <MXA/XML/XMLDataModelWriter.h>
 
 #include <MXA/Base/IRequiredMetaData.h>
@@ -13,7 +21,8 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-XMLDataModelWriter::XMLDataModelWriter( IDataModel::Pointer dataModel, const std::string &fileName) :
+XMLDataModelWriter::XMLDataModelWriter( IDataModel::Pointer dataModel,
+                                        const std::string &fileName) :
   _dataModel(dataModel),
   _fileName(fileName),
   _dataRecordIndentation(2)
@@ -28,6 +37,15 @@ XMLDataModelWriter::~XMLDataModelWriter()
 {
 
 }
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+int32 XMLDataModelWriter::writeModelToStream(const std::ostream &os)
+{
+
+}
+
 
 // -----------------------------------------------------------------------------
 //
@@ -161,7 +179,7 @@ void XMLDataModelWriter::_openTag(const std::string &tagName,
   std::ofstream &stream = *(_ofstreamPtr.get());
   stream << StringUtils::indent(depth) << "<" << tagName;
 
-  if (numAttributes > 0) 
+  if (numAttributes > 0)
   {
     std::string label, value;
     std::map<std::string, std::string>::iterator iter;

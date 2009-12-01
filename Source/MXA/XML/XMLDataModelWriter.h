@@ -148,8 +148,7 @@ protected:
 
 
 private:
-  IDataModel::Pointer           _dataModel;
-  //IFileIODelegatePtr      _ioDelegate;
+  IDataModel::Pointer     _dataModel;
   const std::string       _fileName;
   int32                   _dataRecordIndentation;
 
