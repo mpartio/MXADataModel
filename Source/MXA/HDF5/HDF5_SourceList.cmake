@@ -3,8 +3,8 @@ SET( MXA_HDF5_SRCS
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5Image.cpp
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5Lite.cpp
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5Utilities.cpp
-    ${MXA_SOURCE_DIR}/MXA/HDF5/H5DataModelReader.cpp
-    ${MXA_SOURCE_DIR}/MXA/HDF5/H5DataModelWriter.cpp
+    ${MXA_SOURCE_DIR}/MXA/HDF5/H5ReaderDelegate.cpp
+    ${MXA_SOURCE_DIR}/MXA/HDF5/H5WriterDelegate.cpp
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5BmpIO.cpp
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5BmpImportDelegate.cpp
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5BmpImportDelegateFactory.cpp
@@ -17,8 +17,8 @@ SET( MXA_HDF5_SRCS
 SET(MXA_HDF5_HEADERS
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5MXADataFile.h
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5AttributeWriter.h
-    ${MXA_SOURCE_DIR}/MXA/HDF5/H5DataModelReader.h
-    ${MXA_SOURCE_DIR}/MXA/HDF5/H5DataModelWriter.h
+    ${MXA_SOURCE_DIR}/MXA/HDF5/H5ReaderDelegate.h
+    ${MXA_SOURCE_DIR}/MXA/HDF5/H5WriterDelegate.h
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5Lite.h
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5Image.h
     ${MXA_SOURCE_DIR}/MXA/HDF5/H5Utilities.h

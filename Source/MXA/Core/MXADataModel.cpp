@@ -8,30 +8,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 //-- MXA Headers
 #include <MXA/Core/MXADataModel.h>
-//#include <MXA/Common/LogTime.h>
-
 #include <MXA/Core/MXADataDimension.h>
 #include <MXA/Core/MXADataRecord.h>
+#include <MXA/Core/RequiredMetaData.h>
 #include <MXA/HDF5/H5MXARequiredMetaData.h>
 
-//#include <MXA/Base/IFileIODelegate.h>
-//#include <MXA/Base/IMXAArray.h>
-//#include <MXA/Base/IRequiredMetaData.h>
-//#include <MXA/Base/ISupportFile.h>
-
-#include <MXA/Core/RequiredMetaData.h>
-//#include <MXA/Utilities/StringUtils.h>
-//#include <MXA/XML/XMLDataModelWriter.h>
-
-//#include <MXA/Core/MXAAbstractAttribute.h>
-//-- Standard Library Headers
-//#include <iostream>
-
-#if MXA_HDF5_SUPPORT
-//#include <MXA/HDF5/H5MXARequiredMetaData.h>
-#endif
-
-//using namespace MXA;
 
 //-------------------------------------------------
 // Constructor
@@ -167,7 +148,7 @@ std::string MXADataModel::getDataRoot()
 void MXADataModel::addDataDimension(IDataDimension::Pointer dimension)
 {
   this->_dataDimensions.push_back(dimension);
-  int32 index = static_cast<int32>(this->_dataDimensions.size()) - 1; 
+  int32 index = static_cast<int32>(this->_dataDimensions.size()) - 1;
   if (index < 0) { index = 0;}
   dimension->setIndex(index);
 }

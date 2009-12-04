@@ -463,6 +463,7 @@ void WriteDatasetTest()
   std::string testFile(MXAUnitTest::DatasetTest::TestFile);
   IDataModel::Pointer model = createModel();
   IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(testFile, model);
+ BOOST_REQUIRE( NULL != dataFile.get() );
 
   // These will test WRITING Data to the data file
   _WriteDatasetTest<int8>( "Dataset Int 8", dataFile );

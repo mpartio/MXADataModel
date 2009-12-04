@@ -38,7 +38,13 @@ ExpatEvtHandler::~ExpatEvtHandler()
 {
 }
 
+
 /*********************************** Event Handler Default Implementation **/
+
+int ExpatEvtHandler::getParseError()
+{
+  return 0;
+}
 
 void ExpatEvtHandler::OnPostCreate(void)
 {

@@ -32,6 +32,7 @@
 #define XMLPARSER_H_INCLUDED
 
 #include <expat.h>
+#include "MXA/Common/MXASetGetMacros.h"
 #include <MXA/XML/ExpatEvtHandler.h>
 
 /**
@@ -45,13 +46,25 @@ class MXA_EXPORT ExpatParser
 private:
 
 	XML_Parser     m_parser;
-	ExpatEvtHandler* m_pHandler;
-
+//	ExpatEvtHandler::Pointer m_pHandler;
 public:
+
+	MXA_SHARED_POINTERS(ExpatParser)
+	MXA_TYPE_MACRO(ExpatParser)
+
+	static Pointer New(ExpatEvtHandler* pHandler)
+	{
+	  Pointer sharedPtr = Pointer(new ExpatParser(pHandler));
+	  return sharedPtr;
+	}
 
 	ExpatParser(ExpatEvtHandler* pHandler);
 
-	~ExpatParser();
+	virtual ~ExpatParser();
+
+
+	MXA_INSTANCE_PROPERTY_m(ExpatEvtHandler*, pHandler)
+
 
 	/**
 	 * Create a new parser.

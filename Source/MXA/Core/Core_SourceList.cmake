@@ -6,6 +6,7 @@ SET (MXA_CORE_SRCS
   ${MXA_SOURCE_DIR}/MXA/Core/MXADataImport.cpp
   ${MXA_SOURCE_DIR}/MXA/Core/MXASupportFile.cpp
   ${MXA_SOURCE_DIR}/MXA/Core/RequiredMetaData.cpp
+
 )
 
 SET (MXA_CORE_HEADERS
@@ -18,6 +19,8 @@ SET (MXA_CORE_HEADERS
   ${MXA_SOURCE_DIR}/MXA/Core/MXADataSource.h
   ${MXA_SOURCE_DIR}/MXA/Core/MXASupportFile.h
   ${MXA_SOURCE_DIR}/MXA/Core/RequiredMetaData.h
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataModelWriter.hpp
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataModelReader.hpp
 )
 
 IDE_SOURCE_PROPERTIES( "MXA/Core" "${MXA_CORE_HEADERS}" "${MXA_CORE_SRCS}")

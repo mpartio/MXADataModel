@@ -158,7 +158,7 @@ bool ExpatParser::Create(const XML_Char* encoding, const XML_Char* sep)
 	m_pHandler->OnPostCreate();
 
 	// Set the user data used in callbacks.
-	XML_SetUserData(m_parser, (void*) m_pHandler);
+	XML_SetUserData(m_parser, (void*)(m_pHandler) );
 	return true;
 }
 
@@ -311,31 +311,31 @@ void ExpatParser::EnableDoctypeDeclHandler(bool enable)
 
 /************************************* Parser error reporting methods **/
 
-enum XML_Error ExpatParser::GetErrorCode(void) 
+enum XML_Error ExpatParser::GetErrorCode(void)
 {
 	assert(m_parser != NULL);
 	return XML_GetErrorCode(m_parser);
 }
 
-long ExpatParser::GetCurrentByteIndex(void) 
+long ExpatParser::GetCurrentByteIndex(void)
 {
 	assert(m_parser != NULL);
 	return XML_GetCurrentByteIndex(m_parser);
 }
 
-int ExpatParser::GetCurrentLineNumber(void) 
+int ExpatParser::GetCurrentLineNumber(void)
 {
 	assert(m_parser != NULL);
 	return XML_GetCurrentLineNumber(m_parser);
 }
 
-int ExpatParser::GetCurrentColumnNumber(void) 
+int ExpatParser::GetCurrentColumnNumber(void)
 {
 	assert(m_parser != NULL);
 	return XML_GetCurrentColumnNumber(m_parser);
 }
 
-int ExpatParser::GetCurrentByteCount(void) 
+int ExpatParser::GetCurrentByteCount(void)
 {
 	assert(m_parser != NULL);
 	return XML_GetCurrentByteCount(m_parser);
@@ -347,7 +347,7 @@ const char* ExpatParser::GetInputContext(int32* pOffset, int32* pSize)
 	return XML_GetInputContext(m_parser, pOffset, pSize);
 }
 
-const XML_LChar* ExpatParser::GetErrorString() 
+const XML_LChar* ExpatParser::GetErrorString()
 {
 	return XML_ErrorString(GetErrorCode());
 }
@@ -359,7 +359,7 @@ const XML_LChar* ExpatParser::GetExpatVersion(void)
 	return XML_ExpatVersion();
 }
 
-const XML_LChar* ExpatParser::GetErrorString(enum XML_Error err) 
+const XML_LChar* ExpatParser::GetErrorString(enum XML_Error err)
 {
 	return XML_ErrorString(err);
 }

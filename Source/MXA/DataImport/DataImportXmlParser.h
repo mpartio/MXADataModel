@@ -74,6 +74,9 @@ class MXA_EXPORT DataImportXmlParser : public ExpatEvtHandler, public IDataImpor
 {
 
 public:
+
+    MXA_SHARED_POINTERS(DataImportXmlParser)
+
   DataImportXmlParser();
   virtual ~DataImportXmlParser();
 
@@ -183,7 +186,7 @@ private:
   std::string        _outputFilePath;
   std::string        _deleteExistingDataFile;
   IDataFile::Pointer       _dataFile;
-  IDataModel::Pointer      _dataModel;
+  IDataModel::Pointer      m_DataModel;
   IDataSource::Collection       _dataSources;
   int32              _xmlParseError;
   bool               _parseData;

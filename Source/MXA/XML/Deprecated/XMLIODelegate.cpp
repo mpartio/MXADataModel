@@ -6,7 +6,7 @@
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 XMLIODelegate::XMLIODelegate() :
   _openFile(""),
@@ -15,7 +15,7 @@ XMLIODelegate::XMLIODelegate() :
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 XMLIODelegate::~XMLIODelegate()
 {
@@ -25,16 +25,16 @@ XMLIODelegate::~XMLIODelegate()
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-MXATypes::MXAError XMLIODelegate::writeModelToFile(const std::string &fileName, 
-                                                    IDataModel::Pointer model, 
+MXATypes::MXAError XMLIODelegate::writeModelToFile(const std::string &fileName,
+                                                    IDataModel::Pointer model,
                                                     bool closeWhenFinished,
                                                     bool deleteExisting)
 {
   int32 success = -1;
   XMLDataModelWriter writer(model, fileName );
-  success = writer.writeModelToFile(_fileId);
+  success = writer.writeModel(_fileId);
   return success;
 }
 
@@ -51,7 +51,7 @@ MXATypes::MXAError XMLIODelegate::readModelFromFile(const std::string &fileName,
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 bool XMLIODelegate::supportedMXAFileVersion(float version)
 {
@@ -72,7 +72,7 @@ bool XMLIODelegate::isMXAFile(int32 fileId)
   MXATypes::MXAError err=0;
   // We can check wellformedness of the XML
   // We could read the model from the file then sanity check the Model for Dimensions/Records/Meta Data
-  
+
   return (err >= 0);
 }
 
@@ -96,20 +96,20 @@ bool XMLIODelegate::isMXAFile(const std::string &filename)
 int32 XMLIODelegate::openMXAFile(std::string filename, bool readOnly)
 {
   int32 err = -1;
-  
+
   return err;
 }
 
 // -----------------------------------------------------------------------------
 //  This is a no-op because we read the XML file and then always close the file
-// ----------------------------------------------------------------------------- 
-void XMLIODelegate::closeMXAFile() 
+// -----------------------------------------------------------------------------
+void XMLIODelegate::closeMXAFile()
 {
- 
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int32 XMLIODelegate::getOpenFileId()
 {
@@ -117,7 +117,7 @@ int32 XMLIODelegate::getOpenFileId()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 std::string XMLIODelegate::getOpenFileName()
 {

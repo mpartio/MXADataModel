@@ -11,6 +11,8 @@
 #ifndef _XML_DATAMODEL_WRITER_H_
 #define _XML_DATAMODEL_WRITER_H_
 
+#error THIS NEEDS TO GO AWAY. Use the XMLStreamWriterDelegate instead
+
 // MXA Includes
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Core/MXADataModel.h>
@@ -19,7 +21,6 @@
 #include <MXA/Base/IDataDimension.h>
 #include <MXA/Base/IDataRecordWriter.h>
 #include <MXA/Base/IDataRecord.h>
-#include <MXA/XML/XMLIODelegate.h>
 
 //-- STL Headers
 #include <iostream>
@@ -37,9 +38,7 @@ class MXANode;
  * @version $Revision: 1.2 $
  *
  */
-class MXA_EXPORT XMLDataModelWriter : public IDataModelWriter,
-                                      public IDataDimensionWriter,
-                                      public IDataRecordWriter
+class MXA_EXPORT XMLDataModelWriter
 {
 
 public:
@@ -56,7 +55,7 @@ public:
    * @param NOT_USED This parameter is not used/needed for xml writing
    * @return Error Code: Negative is Error Condition
    */
-  int32 writeModelToFile(int32 NOT_USED=0);
+  int32 writeModel(int32 NOT_USED=0);
 
   /**
    * @brief Writes template section of data model

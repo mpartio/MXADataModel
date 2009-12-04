@@ -14,8 +14,10 @@
 #include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXASupportFile.h>
-#include <MXA/XML/XMLDataModelReader.h>
-#include <MXA/XML/XMLDataModelWriter.h>
+#include "MXA/Core/MXADataModelWriter.hpp"
+#include "MXA/Core/MXADataModelReader.hpp"
+#include "MXA/XML/XMLStreamReaderDelegate.hpp"
+#include "MXA/XML/XMLStreamWriterDelegate.hpp"
 #include <Tests/MXAUnitTestDataFileLocations.h>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
@@ -281,19 +283,38 @@ void GenerateMasterXMLFile()
   std::string xmlFile(MXAUnitTest::XMLTest::MasterFile);
   {
     MXADataModel::Pointer model = createModel();
-    XMLDataModelWriter writer(model, xmlFile);
-    int32 err = writer.writeModelToFile(-1);
+    typedef XMLStreamWriterDelegate<std::ofstream> FileStreamType;
+    FileStreamType::Pointer delegate = FileStreamType::New();
+    std::ofstream& out = *(delegate->getStreamPointer());
+    out.open(xmlFile.c_str());
+    if (NULL == delegate.get() || false == out.is_open() )
+     {
+      BOOST_ASSERT(1 == 0);
+     }
+
+    MXADataModelWriter<FileStreamType>::Pointer writer =
+                              MXADataModelWriter<FileStreamType>::New(delegate);
+
+    int32 err = writer->writeModel(model);
+
     BOOST_REQUIRE ( err >= 0);
     MXAAbstractAttributes attributes = model->getUserMetaData();
     BOOST_REQUIRE(attributes.size() == 21);
   }
 
   {
-    IDataModel::Pointer model = MXADataModel::New();
     // Read the File back from xml
-    XMLDataModelReader reader (model, xmlFile);
-    int32 err = reader.readDataModel(-1);
-    BOOST_REQUIRE ( err >= 0);
+    typedef XMLStreamReaderDelegate<std::ifstream> FileStreamType;
+    FileStreamType::Pointer delegate = FileStreamType::New();
+    std::ifstream& out = *(delegate->getStreamPointer());
+    out.open(xmlFile.c_str());
+    BOOST_REQUIRE(delegate.get() != NULL);
+    BOOST_REQUIRE(out.is_open() != false);
+    MXADataModelReader<FileStreamType>::Pointer reader = MXADataModelReader<FileStreamType>::New(delegate);
+    IDataModel::Pointer model = reader->readModel();
+
+
+    BOOST_REQUIRE ( NULL != model.get() );
     BOOST_REQUIRE (model->getNumberOfDataDimensions() == 4);
     std::string errorMessage;
     BOOST_REQUIRE (model->isValid(errorMessage) == true);
@@ -313,11 +334,17 @@ void XMLModelTest()
   std::string masterXmlFile(MXAUnitTest::XMLTest::MasterFile);
   std::string outFile (MXAUnitTest::XMLTest::TestFile);
   std::string errorMessage;
-  MXADataModel::Pointer model = MXADataModel::New();
   {
-    XMLDataModelReader reader (model, masterXmlFile);
-    int32 err = reader.readDataModel(-1);
-    BOOST_REQUIRE ( err >= 0);
+    typedef XMLStreamReaderDelegate<std::ifstream> FileStreamType;
+    FileStreamType::Pointer delegate = FileStreamType::New();
+    std::ifstream& out = *(delegate->getStreamPointer());
+    out.open(masterXmlFile.c_str());
+    BOOST_REQUIRE(delegate.get() != NULL);
+    BOOST_REQUIRE(out.is_open() != false);
+    MXADataModelReader<FileStreamType>::Pointer reader = MXADataModelReader<FileStreamType>::New(delegate);
+    IDataModel::Pointer model = reader->readModel();
+
+
     BOOST_REQUIRE (model->getNumberOfDataDimensions() == 4);
     BOOST_REQUIRE (model->isValid(errorMessage) == true);
     MXAAbstractAttributes attributes = model->getUserMetaData();
@@ -325,8 +352,21 @@ void XMLModelTest()
   }
 
   {
-    XMLDataModelWriter writer(model, outFile);
-    int32 err = writer.writeModelToFile(-1);
+    MXADataModel::Pointer model = createModel();
+    typedef XMLStreamWriterDelegate<std::ofstream> FileStreamType;
+    FileStreamType::Pointer delegate = FileStreamType::New();
+    std::ofstream& out = *(delegate->getStreamPointer());
+    out.open(outFile.c_str());
+    if (NULL == delegate.get() || false == out.is_open() )
+     {
+      BOOST_ASSERT(1 == 0);
+     }
+
+    MXADataModelWriter<FileStreamType>::Pointer writer =
+                              MXADataModelWriter<FileStreamType>::New(delegate);
+
+    int32 err = writer->writeModel(model);
+
     BOOST_REQUIRE ( err >= 0);
   }
 
@@ -366,51 +406,82 @@ void XMLTemplateTest()
   std::string templateFile (MXAUnitTest::XMLTest::TemplateTestFile);
   {
     MXADataModel::Pointer model = createModelTemplate();
-    XMLDataModelWriter writer(model, templateFile);
-    int32 err = writer.writeModelToFile(-1);
+    typedef XMLStreamWriterDelegate<std::ofstream> FileStreamType;
+    FileStreamType::Pointer delegate = FileStreamType::New();
+    std::ofstream& out = *(delegate->getStreamPointer());
+    out.open(templateFile.c_str());
+    if (NULL == delegate.get() || false == out.is_open() )
+     {
+      BOOST_ASSERT(1 == 0);
+     }
+    MXADataModelWriter<FileStreamType>::Pointer writer = MXADataModelWriter<FileStreamType>::New(delegate);
+    int32 err = writer->writeModel(model);
     BOOST_REQUIRE ( err >= 0);
+
   }
-  MXADataModel::Pointer readModel = MXADataModel::New();
-  XMLDataModelReader reader (readModel, templateFile);
-  int32 err = reader.readDataModel(-1);
-  BOOST_REQUIRE ( err < 0); // This SHOULD fail because we read in a partial model
-  BOOST_REQUIRE ( readModel->isValid(errorMessage) == false);
-  BOOST_REQUIRE ( readModel->getDataRecords().size() == 2);
-
-  IDataDimension::Pointer dim0 = readModel->getDataDimension(0);
-  dim0->setCount(15);
-  dim0->setStartValue(20);
-  dim0->setEndValue(50);
-  dim0->setIncrement(2);
-  dim0->setUniform(1);
-
-  IDataDimension::Pointer dim1 = readModel->getDataDimension(1);
-  dim1->setCount(10);
-  dim1->setStartValue(1000);
-  dim1->setEndValue(5000);
-  dim1->setIncrement(500);
-  dim1->setUniform(1);
-
-  IDataDimension::Pointer dim2 = readModel->getDataDimension(2);
-  dim2->setCount(100);
-  dim2->setStartValue(0);
-  dim2->setEndValue(99);
-  dim2->setIncrement(1);
-  dim2->setUniform(1);
-
-  IDataDimension::Pointer dim3 = readModel->getDataDimension(3);
-  dim3->setCount(256);
-  dim3->setStartValue(0);
-  dim3->setEndValue(255);
-  dim3->setIncrement(1);
-  dim3->setUniform(1);
-
-  BOOST_REQUIRE ( readModel->isValid(errorMessage) == true); //Model should now validate since we have reasonable values for each dimension
-  //We can write the model back out to XML without any errors
   {
-    XMLDataModelWriter writer(readModel, MXAUnitTest::XMLTest::TemplateCompleteFile);
-    err = writer.writeModelToFile(-1);
-    BOOST_REQUIRE ( err >= 0);
+    typedef XMLStreamReaderDelegate<std::ifstream> FileStreamType;
+    FileStreamType::Pointer delegate = FileStreamType::New();
+    std::ifstream& out = *(delegate->getStreamPointer());
+    out.open(templateFile.c_str());
+    BOOST_REQUIRE(delegate.get() != NULL);
+    BOOST_REQUIRE(out.is_open() != false);
+    MXADataModelReader<FileStreamType>::Pointer reader = MXADataModelReader<FileStreamType>::New(delegate);
+    reader->setReturnValidModels(false);
+    IDataModel::Pointer readModel;
+    readModel = reader->readModel();
+
+    BOOST_REQUIRE ( NULL != readModel.get() ); // This SHOULD fail because we read in a partial model
+    BOOST_REQUIRE ( readModel->isValid(errorMessage) == false);
+    BOOST_REQUIRE ( readModel->getDataRecords().size() == 2);
+
+    IDataDimension::Pointer dim0 = readModel->getDataDimension(0);
+    dim0->setCount(15);
+    dim0->setStartValue(20);
+    dim0->setEndValue(50);
+    dim0->setIncrement(2);
+    dim0->setUniform(1);
+
+    IDataDimension::Pointer dim1 = readModel->getDataDimension(1);
+    dim1->setCount(10);
+    dim1->setStartValue(1000);
+    dim1->setEndValue(5000);
+    dim1->setIncrement(500);
+    dim1->setUniform(1);
+
+    IDataDimension::Pointer dim2 = readModel->getDataDimension(2);
+    dim2->setCount(100);
+    dim2->setStartValue(0);
+    dim2->setEndValue(99);
+    dim2->setIncrement(1);
+    dim2->setUniform(1);
+
+    IDataDimension::Pointer dim3 = readModel->getDataDimension(3);
+    dim3->setCount(256);
+    dim3->setStartValue(0);
+    dim3->setEndValue(255);
+    dim3->setIncrement(1);
+    dim3->setUniform(1);
+
+    BOOST_REQUIRE ( readModel->isValid(errorMessage) == true); //Model should now validate since we have reasonable values for each dimension
+    //We can write the model back out to XML without any errors
+    {
+//      XMLDataModelWriter writer(readModel, MXAUnitTest::XMLTest::TemplateCompleteFile);
+//      err = writer.writeModel(-1);
+//      BOOST_REQUIRE ( err >= 0);
+
+      typedef XMLStreamWriterDelegate<std::ofstream> FileStreamType;
+      FileStreamType::Pointer delegate = FileStreamType::New();
+      std::ofstream& out = *(delegate->getStreamPointer());
+      out.open(MXAUnitTest::XMLTest::TemplateCompleteFile.c_str());
+      if (NULL == delegate.get() || false == out.is_open() )
+       {
+        BOOST_ASSERT(1 == 0);
+       }
+      MXADataModelWriter<FileStreamType>::Pointer writer = MXADataModelWriter<FileStreamType>::New(delegate);
+      int32 err = writer->writeModel(readModel);
+      BOOST_REQUIRE ( err >= 0);
+    }
   }
   std::cout << "....... Passed" << std::endl;
 }

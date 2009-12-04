@@ -12,10 +12,10 @@
 #define _HDFWRITER_H_
 
 // MXA Includes
-#include <MXA/Common/DLLExport.h>
+#include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataModel.h>
 #include <MXA/Base/IDataFile.h>
-#include <MXA/Base/IDataModelWriter.h>
+#include <MXA/Base/IMXADataModelWriterDelegate.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/HDF5/H5Lite.h>
 
@@ -27,7 +27,6 @@
 #include <hdf5.h>
 
 //Forward Declare classes
-class H5IODelegate;
 class MXANode;
 
 
@@ -38,19 +37,33 @@ class MXANode;
  * @version $Revision: 1.2 $
  *
  */
-class MXA_EXPORT H5DataModelWriter : public IDataModelWriter
+class MXA_EXPORT H5WriterDelegate : public IMXADataModelWriterDelegate
 {
 
 public:
-  H5DataModelWriter(IDataModel::Pointer dataModel, IDataFile::Pointer dataFile);
-  virtual ~H5DataModelWriter();
+    MXA_SHARED_POINTERS(H5WriterDelegate);
+    MXA_TYPE_MACRO(H5WriterDelegate)
+
+    static Pointer New(hid_t fileId)
+    {
+      Pointer sharedPtr (new H5WriterDelegate(fileId));
+      return sharedPtr;
+    }
+
+  virtual ~H5WriterDelegate();
 
   /**
    * @brief Writes the Data Model to the HDF5 file
   * @param fileId HDF5 FileId to write to
    * @return true on success
    */
-  int32 writeModelToFile(hid_t fileId);
+  int32 writeModel(IDataModel::Pointer model);
+
+
+protected:
+  H5WriterDelegate() {};
+  H5WriterDelegate(hid_t fileId);
+
 
   /**
    * @brief Writes the Data Model skeleton groups
@@ -94,7 +107,6 @@ public:
   */
   int32 writeSupportFiles(hid_t fileId);
 
-protected:
 
   /**
    * @brief Walks the Data records hierarchy
@@ -182,11 +194,11 @@ protected:
   }
 
 private:
-  IDataModel::Pointer _dataModel;
-  IDataFile::Pointer  _dataFile;
+  hid_t m_FileId;
+  IDataModel::Pointer m_DataModel;
 
-  H5DataModelWriter(const H5DataModelWriter&);   //Copy Constructor Not Implemented
-  void operator=(const H5DataModelWriter&); //Copy Assignment Not Implemented
+  H5WriterDelegate(const H5WriterDelegate&);   //Copy Constructor Not Implemented
+  void operator=(const H5WriterDelegate&); //Copy Assignment Not Implemented
 };
 
 

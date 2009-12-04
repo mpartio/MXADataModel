@@ -7,11 +7,13 @@
 #include <MXA/Core/MXADataSource.h>
 #include <MXA/Core/MXADataImport.h>
 #include <MXA/Core/MXASupportFile.h>
+#include "MXA/Core/MXADataModelReader.hpp"
 #include <MXA/DataImport/ImportDelegateManager.h>
 #include <MXA/Utilities/StringUtils.h>
 #include <MXA/Utilities/DataSourcePathIndexSection.h>
 #include <MXA/Utilities/DataSourcePathTextSection.h>
-#include <MXA/XML/XMLDataModelReader.h>
+#include "MXA/XML/XMLStreamReaderDelegate.hpp"
+
 
 #if MXA_HDF5_SUPPORT
 #include <MXA/HDF5/H5MXADataFile.h>
@@ -20,6 +22,7 @@
 //-- C++ stdlib includes
 #include <iostream>
 #include <sstream>
+
 
 // -----------------------------------------------------------------------------
 //
@@ -56,7 +59,7 @@ int32 DataImportXmlParser::import()
   }
 
   // Create a new Data Model
-  this->_dataModel =  MXADataModel::New();
+  this->m_DataModel =  MXADataModel::New();
 
   // Parse the XML Configuration file
   err = this->parseXMLFile();
@@ -65,7 +68,7 @@ int32 DataImportXmlParser::import()
     return err;
   }
 
-  if (this->_dataModel->getDataDimension(0).get() == NULL)
+  if (this->m_DataModel->getDataDimension(0).get() == NULL)
   {
     std::cout << logTime() << "Data Model has Zero Dimensions." << "\n Error Location->" << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
     return -1010;
@@ -74,7 +77,7 @@ int32 DataImportXmlParser::import()
 //  bool deleteExisting = false;
   if ( this->_deleteExistingDataFile.compare("true") == 0 )
   {
-    _dataFile = H5MXADataFile::CreateFileWithModel(this->_outputFilePath, this->_dataModel);
+    _dataFile = H5MXADataFile::CreateFileWithModel(this->_outputFilePath, this->m_DataModel);
     if (NULL == _dataFile.get())
     {
       std::cout << "DataImportXmlParser::import - Error Creating Output file: " << this->_outputFilePath << std::endl;
@@ -126,7 +129,7 @@ int32 DataImportXmlParser::_mergeModelToDisk()
 
   if ( NULL == _dataFile.get() ) // Ouput file does NOT exist on file system, write the model in memory
   {
-    _dataFile = H5MXADataFile::CreateFileWithModel(this->_outputFilePath, this->_dataModel);
+    _dataFile = H5MXADataFile::CreateFileWithModel(this->_outputFilePath, this->m_DataModel);
     if(_dataFile.get() == NULL) { err = -1; }
     else { err = 1; }
     return err;
@@ -134,7 +137,7 @@ int32 DataImportXmlParser::_mergeModelToDisk()
 
   IDataModel::Pointer fModelPtr = _dataFile->getDataModel();
   IDataModel* fModel = fModelPtr.get();
-  IDataModel* mModel = this->_dataModel.get();
+  IDataModel* mModel = this->m_DataModel.get();
   //Sanity check the number of dims first
   if (mModel->getNumberOfDataDimensions() != fModel->getNumberOfDataDimensions())
   {
@@ -162,7 +165,7 @@ int32 DataImportXmlParser::_mergeModelToDisk()
   }
   //write the model to disk and close the file
   err = _dataFile->saveDataModel();
-  this->_dataModel = fModelPtr;
+  this->m_DataModel = fModelPtr;
   return err;
 }
 
@@ -246,14 +249,27 @@ IDataSource::Collection DataImportXmlParser::getDataSources ( ) {
 int DataImportXmlParser::_loadDataModelFromTemplateFile(const std::string &modelFile)
 {
   //std::cout << logTime() << "---------------- IMPORTING DATA MODEL TEMPLATE ------------------" << std::endl;
-  MXATypes::MXAError err = -1;
+  MXATypes::MXAError err = 0;
   if ( StringUtils::endsWith(modelFile, std::string(".xml") ) )
   {
-    XMLDataModelReader reader(this->_dataModel, modelFile);
-    err = reader.readDataModel(-1);
-    if (err < 0)
+    typedef XMLStreamReaderDelegate<std::ifstream> FileStreamType;
+    FileStreamType::Pointer delegate = FileStreamType::New();
+    std::ifstream& out = *(delegate->getStreamPointer());
+    out.open(modelFile.c_str());
+    if (NULL == delegate.get() || false == out.is_open() )
+    {
+      std::cout << "Error Opening the XML file '" << modelFile << "' to read the model template." << std::endl;
+      err = -1;
+      return err;
+    }
+    MXADataModelReader<FileStreamType>::Pointer reader = MXADataModelReader<FileStreamType>::New(delegate);
+    reader->setReturnValidModels(false); // The model template is just that, a Template, which is NOT valid
+    m_DataModel = reader->readModel();
+
+    if (NULL == m_DataModel.get() )
     {
       std::cout << DEBUG_OUT(logTime) << "\n\t\t Error Reading DataModel from File: " << modelFile << std::endl;
+      err = -1;
     }
     return err;
   }
@@ -270,7 +286,7 @@ int DataImportXmlParser::_loadDataModelFromTemplateFile(const std::string &model
          err = -1;
          return err;
        }
-       this->_dataModel = file->getDataModel();
+       this->m_DataModel = file->getDataModel();
      }
      return err;
 }
@@ -279,21 +295,21 @@ int DataImportXmlParser::_loadDataModelFromTemplateFile(const std::string &model
 int DataImportXmlParser::parseXMLFile()
 {
 
-  if (this->_dataModel.get() == NULL)
+  if (this->m_DataModel.get() == NULL)
   {
     // Create a new Data Model
-    this->_dataModel =  MXADataModel::New();
+    this->m_DataModel =  MXADataModel::New();
   }
   // Clear any error messages that have been hanging around from previous imports
   _errorMessage.clear();
 
   char buf[BUFFER_SIZE];
   // Create and initialise an instance of the parser.
-  ExpatParser parser( static_cast<ExpatEvtHandler*>( this ) );
-  //this->_parser = &parser;
-  parser.Create(NULL, NULL);
-  parser.EnableElementHandler();
-  parser.EnableCharacterDataHandler();
+  ExpatParser::Pointer parser = ExpatParser::New(static_cast<ExpatEvtHandler*>( this ));
+
+  parser->Create(NULL, NULL);
+  parser->EnableElementHandler();
+  parser->EnableCharacterDataHandler();
   // Load the XML file.
   FILE*  fh    = fopen(_xmlFilename.c_str(), "r");
   if (NULL == fh)
@@ -308,7 +324,7 @@ int DataImportXmlParser::parseXMLFile()
     // Read a block from the XML file and pass it to the parser
     nRead = fread(buf, 1, BUFFER_SIZE, fh);
     atEnd = feof(fh);
-    parser.Parse(buf, nRead, atEnd);
+    parser->Parse(buf, nRead, atEnd);
   }
   fclose(fh);
 
@@ -514,7 +530,7 @@ void DataImportXmlParser::start_Dimension_Tag(const XML_Char* name, const XML_Ch
     if ( attrMap.find(MXA::MXA_UNIFORM_TAG) != attrMap.end() ) { StringUtils::stringToNum(uniform, attrMap[MXA::MXA_UNIFORM_TAG], std::dec); }
 
     // Over ride what is currently set in the data model with the values from the 'Dimension' tag
-    IDataDimension::Pointer dim = this->_dataModel->getDataDimension(attrMap[MXA::MXA_NAME_TAG]);
+    IDataDimension::Pointer dim = this->m_DataModel->getDataDimension(attrMap[MXA::MXA_NAME_TAG]);
     if ( NULL != dim.get() )
     {
       dim->setIndex(index);
@@ -610,7 +626,7 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
   }
 
   //Convenience Pointer
-  IDataModel* model = static_cast<MXADataModel*>(this->_dataModel.get() );
+  IDataModel* model = static_cast<MXADataModel*>(this->m_DataModel.get() );
   IDataRecord::Pointer recordPtr = model->getDataRecordByNamedPath(dataRecordPath, NULL);
   if ( NULL == recordPtr.get() )
   {
@@ -630,7 +646,7 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
   if (importDelegatePtr.get() != NULL )
   {
     ds->setImportDelegate(importDelegatePtr);
-    ds->setDataModel(this->_dataModel);
+    ds->setDataModel(this->m_DataModel);
     this->addDataSource(ds);
   } else {
     std::cout << "Could not locate an ImportDelegate for Source_Type '" << sourceType << "'" << std::endl;
@@ -666,7 +682,7 @@ void DataImportXmlParser::start_Implicit_Data_Source_Tag(const XML_Char* name, c
      std::string dataRecordPath (attrMap[MXA_DataImport::Attr_Data_Record] );
      _implSourceType = attrMap[MXA_DataImport::Attr_Source_Type];
 
-     IDataModel* model = static_cast<MXADataModel*>(this->_dataModel.get() );
+     IDataModel* model = static_cast<MXADataModel*>(this->m_DataModel.get() );
      IDataRecord::Pointer recordPtr = model->getDataRecordByNamedPath(dataRecordPath, NULL);
      if ( NULL == recordPtr.get() )
      {
@@ -735,7 +751,7 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
       {
         getCurrentImportDelegateProperties(importDelegatePtr);
         ds->setImportDelegate(importDelegatePtr);
-        ds->setDataModel(this->_dataModel);
+        ds->setDataModel(this->m_DataModel);
         this->addDataSource(ds);
       } else {
         std::cout << "Could not locate an ImportDelegate for Source_Type '" << _implSourceType << "'" << std::endl;
@@ -838,7 +854,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
   section->setPreText(_implPreTextSection);
 
   std::string dimName = attrMap[MXA_DataImport::Attr_Data_Dimension];
-  IDataModel* model = static_cast<MXADataModel*>(this->_dataModel.get() );
+  IDataModel* model = static_cast<MXADataModel*>(this->m_DataModel.get() );
   IDataDimension::Pointer dim = model->getDataDimension(dimName);
   //std::cout << "Dim Pointer: " << dim << std::endl;
 
@@ -922,7 +938,7 @@ void DataImportXmlParser::onSupportFileStartTag(const XML_Char* name, const XML_
     }
   }
   // Adding the support file will set it's index correctly
-  this->_dataModel->addSupportFile(sfile, true);
+  this->m_DataModel->addSupportFile(sfile, true);
 }
 
 

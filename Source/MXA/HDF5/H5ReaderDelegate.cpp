@@ -1,10 +1,19 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+//
+///////////////////////////////////////////////////////////////////////////////
+#include <MXA/HDF5/H5ReaderDelegate.h>
+
 //-- MXA Headers
-#include <MXA/HDF5/H5Lite.h>
-#include <MXA/HDF5/H5Utilities.h>
-#include <MXA/HDF5/H5DataModelReader.h>
-#include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include <MXA/Core/MXAConstants.h>
 #include <MXA/Core/MXASupportFile.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include <MXA/Utilities/StringUtils.h>
 
 //-- STL Headers
@@ -21,15 +30,16 @@
 // -----------------------------------------------------------------------------
 //  Constructor
 // -----------------------------------------------------------------------------
-H5DataModelReader::H5DataModelReader(IDataModel::Pointer dataModel)
+H5ReaderDelegate::H5ReaderDelegate(hid_t fileId) :
+    m_FileId(fileId)
 {
-  _dataModel = dataModel;
+
 }
 
 // -----------------------------------------------------------------------------
 //  Destructor
 // -----------------------------------------------------------------------------
-H5DataModelReader::~H5DataModelReader()
+H5ReaderDelegate::~H5ReaderDelegate()
 {
 
 }
@@ -37,32 +47,33 @@ H5DataModelReader::~H5DataModelReader()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readDataModel(hid_t locId)
+IDataModel::Pointer H5ReaderDelegate::readModel()
 {
-  if ( (readModelType(locId)) < 0)
-    return false;
-  if ( (readModelVersion(locId)) < 0)
-    return false;
-  if ( (readDataRoot(locId)) < 0)
-    return false;
-  if ( (readDataDimensions(locId)) < 0)
-    return false;
-  if ( (readDataRecords(locId)) < 0)
-    return false;
-  if ( (readRequiredMetaData(locId) ) < 0)
-    return false;
-  if ( (readUserMetaData(locId) ) < 0)
-    return false;
-  if ( (readSupportFiles(locId) ) < 0)
-    return false;
+  m_DataModel = MXADataModel::New();
+  if ( (readModelType(m_FileId)) < 0)
+    { m_DataModel = MXADataModel::NullPointer(); return m_DataModel; }
+  if ( (readModelVersion(m_FileId)) < 0)
+  { m_DataModel = MXADataModel::NullPointer(); return m_DataModel; }
+  if ( (readDataRoot(m_FileId)) < 0)
+  { m_DataModel = MXADataModel::NullPointer(); return m_DataModel; }
+  if ( (readDataDimensions(m_FileId)) < 0)
+  { m_DataModel = MXADataModel::NullPointer(); return m_DataModel; }
+  if ( (readDataRecords(m_FileId)) < 0)
+  { m_DataModel = MXADataModel::NullPointer(); return m_DataModel; }
+  if ( (readRequiredMetaData(m_FileId) ) < 0)
+  { m_DataModel = MXADataModel::NullPointer(); return m_DataModel; }
+  if ( (readUserMetaData(m_FileId) ) < 0)
+  { m_DataModel = MXADataModel::NullPointer(); return m_DataModel; }
+  if ( (readSupportFiles(m_FileId) ) < 0)
+  { m_DataModel = MXADataModel::NullPointer(); return m_DataModel; }
 
-  return true;
+  return m_DataModel;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readModelType(hid_t locId)
+herr_t H5ReaderDelegate::readModelType(hid_t locId)
 {
   herr_t err = -1;
   std::string fileType;
@@ -73,7 +84,7 @@ herr_t H5DataModelReader::readModelType(hid_t locId)
   }
   else
   {
-    _dataModel->setModelType(fileType);
+    m_DataModel->setModelType(fileType);
   }
   return err;
 }
@@ -81,7 +92,7 @@ herr_t H5DataModelReader::readModelType(hid_t locId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readModelVersion(hid_t locId)
+herr_t H5ReaderDelegate::readModelVersion(hid_t locId)
 {
   herr_t err = -1;
   float32 modelVersion;
@@ -92,7 +103,7 @@ herr_t H5DataModelReader::readModelVersion(hid_t locId)
   }
   else
   {
-    _dataModel->setModelVersion(modelVersion);
+    m_DataModel->setModelVersion(modelVersion);
   }
   return err;
 }
@@ -100,7 +111,7 @@ herr_t H5DataModelReader::readModelVersion(hid_t locId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readDataRoot(hid_t locId)
+herr_t H5ReaderDelegate::readDataRoot(hid_t locId)
 {
   herr_t err = -1;
   std::string dataRoot;
@@ -111,7 +122,7 @@ herr_t H5DataModelReader::readDataRoot(hid_t locId)
   }
   else
   {
-    _dataModel->setDataRoot(dataRoot);
+    m_DataModel->setDataRoot(dataRoot);
   }
   return err;
 }
@@ -119,7 +130,7 @@ herr_t H5DataModelReader::readDataRoot(hid_t locId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readDataDimensions(hid_t locId)
+herr_t H5ReaderDelegate::readDataDimensions(hid_t locId)
 {
   herr_t err = 0;
   std::list<std::string> dimNames;
@@ -132,7 +143,7 @@ herr_t H5DataModelReader::readDataDimensions(hid_t locId)
     {
       MXADataDimension::Pointer dim = _loadDataDimension(dataDimId, *(iter) );
       if ( NULL != dim.get() ) {
-        _dataModel->addDataDimension(dim);
+        m_DataModel->addDataDimension(dim);
       }
     }
   }
@@ -153,7 +164,7 @@ herr_t H5DataModelReader::readDataDimensions(hid_t locId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXADataDimension::Pointer H5DataModelReader::_loadDataDimension(hid_t loc_id, std::string dimensionName)
+MXADataDimension::Pointer H5ReaderDelegate::_loadDataDimension(hid_t loc_id, std::string dimensionName)
 {
  // MXADataDimension* node = NULL;
   std::string dimName, altName;
@@ -240,7 +251,7 @@ MXADataDimension::Pointer H5DataModelReader::_loadDataDimension(hid_t loc_id, st
 // -----------------------------------------------------------------------------
 // Reads the Data Records from the HDF5 file into XMDataRecord objects
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readDataRecords(hid_t fileId)
+herr_t H5ReaderDelegate::readDataRecords(hid_t fileId)
 {
   if (fileId < 0 )
   {
@@ -267,7 +278,7 @@ herr_t H5DataModelReader::readDataRecords(hid_t fileId)
 // -----------------------------------------------------------------------------
 // Performs a Depth first traversal and parsing of thd Data Records Group
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::_traverseDataRecords( hid_t gid, MXADataRecord::Pointer parent) {
+herr_t H5ReaderDelegate::_traverseDataRecords( hid_t gid, MXADataRecord::Pointer parent) {
   if (gid < 0 )
   {
     std::cout << "Invalid HDF Object Id: " << gid << std::endl;
@@ -298,11 +309,11 @@ herr_t H5DataModelReader::_traverseDataRecords( hid_t gid, MXADataRecord::Pointe
     //Check whether we add this data record as a 'top level' or to another node as a child
     if (parent.get() != NULL)
     {
-      _dataModel->addDataRecord(rec, parent);
+      m_DataModel->addDataRecord(rec, parent);
     }
     else
     {
-      _dataModel->addDataRecord(rec);
+      m_DataModel->addDataRecord(rec);
     }
 
     if ( H5Utilities::isGroup(gid, objName) ) {   //Data Record is a Group
@@ -325,7 +336,7 @@ herr_t H5DataModelReader::_traverseDataRecords( hid_t gid, MXADataRecord::Pointe
 // -----------------------------------------------------------------------------
 //  Loads a DataRecord given its name and its parent hid_t value
 // -----------------------------------------------------------------------------
-MXADataRecord::Pointer H5DataModelReader::_loadDataRecord(hid_t loc_id, std::string name)
+MXADataRecord::Pointer H5ReaderDelegate::_loadDataRecord(hid_t loc_id, std::string name)
 {
   herr_t err=0;
   //MXANode *node=NULL;
@@ -366,7 +377,7 @@ MXADataRecord::Pointer H5DataModelReader::_loadDataRecord(hid_t loc_id, std::str
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readRequiredMetaData(hid_t locId)
+herr_t H5ReaderDelegate::readRequiredMetaData(hid_t locId)
 {
   std::string researcherName;
   std::string dateCreated;
@@ -426,20 +437,20 @@ herr_t H5DataModelReader::readRequiredMetaData(hid_t locId)
     return -1;
   }
   //If we are this far then the raw reads from the HDF file succeeded
-  this->_dataModel->setRequiredMetaData(researcherName, dateCreated, datasetName, description,distributionRights, releaseNumber, pedigree, derivedSrcFile);
+  this->m_DataModel->setRequiredMetaData(researcherName, dateCreated, datasetName, description,distributionRights, releaseNumber, pedigree, derivedSrcFile);
 
   return 1;
 }
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readUserMetaData(hid_t locId)
+herr_t H5ReaderDelegate::readUserMetaData(hid_t locId)
 {
   MXAAbstractAttributes attributes;
   herr_t err = H5Utilities::readAllAttributes(locId, MXA::UserMetaDataPath, attributes);
   if (err >= 0)
   {
-    this->_dataModel->setUserMetaData(attributes);
+    this->m_DataModel->setUserMetaData(attributes);
   }
 
   return err;
@@ -448,7 +459,7 @@ herr_t H5DataModelReader::readUserMetaData(hid_t locId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t H5DataModelReader::readSupportFiles(hid_t locId)
+herr_t H5ReaderDelegate::readSupportFiles(hid_t locId)
 {
   herr_t err = 0;
   hid_t gid = H5Gopen(locId, MXA::SupportFilesPath.c_str() );
@@ -461,7 +472,7 @@ herr_t H5DataModelReader::readSupportFiles(hid_t locId)
   for (std::list<std::string>::iterator iter = indices.begin(); iter != indices.end(); ++iter)
   {
     ISupportFile::Pointer file = MXASupportFile::NewFromMXAFile(locId, *iter, false);
-    this->_dataModel->addSupportFile(file, false);
+    this->m_DataModel->addSupportFile(file, false);
   }
   err = H5Gclose(gid);
   return err;

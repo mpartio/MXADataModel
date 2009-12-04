@@ -28,7 +28,6 @@ _userMDKey(""),
 _userMDDims(""),
 _userMDType("")
 {
- // _ioDelegate  = static_cast<XMLIODelegate*>(ioDelegate);
   _parser = NULL;
 }
 // -----------------------------------------------------------------------------

@@ -16,7 +16,7 @@
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Base/IImportDelegate.h>
-#include <MXA/Base/IFileIODelegate.h>
+
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXADataDimension.h>
 #include <MXA/Core/MXADataRecord.h>

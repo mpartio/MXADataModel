@@ -27,12 +27,13 @@
 #include <MXA/Core/MXADataDimension.h>
 #include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>
-#include <MXA/XML/XMLDataModelWriter.h>
+#include "MXA/Core/MXADataModelWriter.hpp"
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/HDF5/H5MXAUtilities.h>
 #include <MXA/HDF5/H5MXADataFile.h>
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#include "MXA/XML/XMLStreamWriterDelegate.hpp"
 #include <Examples/ExampleFileLocations.h>
 
 // HDF5 Include
@@ -126,13 +127,25 @@ int main(int argc, char **argv) {
   model->addUserMetaData("Int32 User Meta Data", iUmd);
 
   // Export the Model to an XML File
-  XMLDataModelWriter xmlWriter(modelPtr, Examples::Example1_XMLFile);
-  int32 err = xmlWriter.writeModelToFile(-1);
-  if (err < 0)
-  {
-    std::cout << "Error writing model to an xml file" << std::endl;
+  typedef XMLStreamWriterDelegate<std::ofstream> FileStreamType;
+  FileStreamType::Pointer delegate = FileStreamType::New();
+  delegate->getStreamPointer()->open(Examples::Example1_XMLFile.c_str());
+  if (NULL == delegate.get() || false == delegate->getStreamPointer()->is_open() )
+   {
+    std::cout << "Error writing model to an xml file. Could not open file with name '" << Examples::Example1_XMLFile << "'" << std::endl;
     return -1;
-  }
+   }
+
+  MXADataModelWriter<FileStreamType>::Pointer writer =
+                            MXADataModelWriter<FileStreamType>::New(delegate);
+   int32 err = writer->writeModel(modelPtr);
+   if (err < 0)
+   {
+     std::cout << "Error writing model to an xml file" << std::endl;
+     return -1;
+   }
+   delegate->getStreamPointer()->flush();
+   delegate->getStreamPointer()->close();
 
   // List the Data Dimensions of the model
   listDataDimensions(model);

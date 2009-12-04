@@ -34,13 +34,13 @@
 
 //MXA Includes
 #include <MXA/Common/MXATypes.h>
-#include <MXA/Common/DLLExport.h>
+#include "MXA/Common/MXASetGetMacros.h"
 #include <expat.h>
 
 
 /**
 * @class ExpatEvtHandler ExpatEvtHandler.h src/XML/ExpatEvtHandler.h
-* @brief Base class to handle Expat Events 
+* @brief Base class to handle Expat Events
 * @author Keith Gaughan
 * @date 2004
 * @version $Revision: 1.2 $
@@ -48,6 +48,9 @@
 class MXA_EXPORT ExpatEvtHandler
 {
 public:
+
+    MXA_SHARED_POINTERS(ExpatEvtHandler)
+    MXA_TYPE_MACRO(ExpatEvtHandler)
 
   ExpatEvtHandler();
   virtual ~ExpatEvtHandler();
@@ -67,7 +70,8 @@ public:
   virtual void OnXmlDecl(const XML_Char* version, const XML_Char* encoding, bool isStandalone);
   virtual void OnStartDoctypeDecl(const XML_Char* doctype, const XML_Char* sysId, const XML_Char* pubId, bool hasInternalSubset);
   virtual void OnEndDoctypeDecl(void);
-  
+
+  virtual int32 getParseError();
 private:
   ExpatEvtHandler(const ExpatEvtHandler&); //Copy Constructor Not Implemented
   void operator=(const ExpatEvtHandler&); //Copy Assignment Not Implemented

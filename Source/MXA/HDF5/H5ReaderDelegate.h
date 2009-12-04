@@ -16,9 +16,8 @@
 #include <MXA/Core/MXADataDimension.h>
 #include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>
-#include <MXA/Base/IDataModelReader.h>
-//#include <MXA/HDF5/H5IODelegate.h>
-//#include <MXA/HDF5/H5AttributeArrayTemplate.hpp>
+#include <MXA/Base/IMXADataModelReaderDelegate.h>
+
 
 // C++ Headers
 #include <string>
@@ -32,30 +31,38 @@
  * from the HDF5 data file
  * @author Mike Jackson
  * @date Mar 2007
- * @version $Revision: 1.2 $
- *   H5DataModelReader.h
+ * @version Revision: 1.3
+ *   H5ReaderDelegate.h
  */
-class MXA_EXPORT H5DataModelReader : public IDataModelReader
+class MXA_EXPORT H5ReaderDelegate : public IMXADataModelReaderDelegate
 {
 
 public:
-  /**
-  * @brief Constructor for H5DataModelReader
-  * @param dataModel The DataModel to use. Note that settings in the datamodel will
-  * be over written with those from the file.
-  */
-  H5DataModelReader(IDataModel::Pointer dataModel);
 
-  virtual ~H5DataModelReader();
+    MXA_SHARED_POINTERS(H5ReaderDelegate)
+    MXA_TYPE_MACRO(H5ReaderDelegate)
+
+  static Pointer New(hid_t fileId)
+  {
+    Pointer sharedPtr (new H5ReaderDelegate(fileId));
+    return sharedPtr;
+  }
 
 
-  // Loading Methods
+  virtual ~H5ReaderDelegate();
+
   /**
   * @brief Reads the Data model
   * @param locId The HDF5 file or group id
   * @return Standard HDF5 Error Condition
   */
-  herr_t readDataModel(hid_t locId);
+  IDataModel::Pointer readModel();
+
+  protected:
+    /**
+    * @brief Constructor for H5ReaderDelegate
+    */
+    H5ReaderDelegate(hid_t fileId);
 
   /**
   * @brief Reads the model type
@@ -111,11 +118,10 @@ public:
   * actually reading the file data
   * @param locId The HDF5 file or group id
   * @return Standard HDF5 Error Condition
-  */  
+  */
   herr_t readSupportFiles(hid_t locId);
 
 
-protected:
   // ----- Helper methods to read data dimensions or data records --------------
   /**
   * @brief Reads a single Data Dimension from the HDF5 data file
@@ -143,11 +149,11 @@ protected:
 
 
 private:
+    hid_t               m_FileId;
+    IDataModel::Pointer m_DataModel;
 
-    IDataModel::Pointer _dataModel;
-
-    H5DataModelReader(const H5DataModelReader&);   //Copy Constructor Not Implemented
-    void operator=(const H5DataModelReader&); //Copy Assignment Not Implemented
+    H5ReaderDelegate(const H5ReaderDelegate&);   //Copy Constructor Not Implemented
+    void operator=(const H5ReaderDelegate&); //Copy Assignment Not Implemented
 };
 
 

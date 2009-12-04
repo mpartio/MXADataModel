@@ -27,8 +27,8 @@
 class MXA_EXPORT XMLMXAAttributeWriter
 {
   public:
-    XMLMXAAttributeWriter(boost::shared_ptr<std::ofstream> ofstreamPtr) :
-      _ofstreamPtr(ofstreamPtr)
+    XMLMXAAttributeWriter(boost::shared_ptr<std::ostream> ofstreamPtr) :
+      m_OutStream(ofstreamPtr)
       {}
 
     virtual ~XMLMXAAttributeWriter() {}
@@ -117,7 +117,7 @@ class MXA_EXPORT XMLMXAAttributeWriter
     template<typename T>
     int32 writeAttributeData(const std::string &attributeKey, IMXAArray::Pointer attribute)
     {
-      std::ofstream &stream = *(_ofstreamPtr.get());
+      std::ostream &stream = *(m_OutStream.get());
       T* value = static_cast<T*> (attribute->getVoidPointer(0) );
       uint64 nElements = attribute->getNumberOfElements();
       int32 size = attribute->getNumberOfDimensions();
@@ -168,7 +168,7 @@ class MXA_EXPORT XMLMXAAttributeWriter
  */
     int32 writeStringAttributeData(const std::string &attributeKey, IMXAArray::Pointer attribute)
     {
-      std::ofstream &stream = *(_ofstreamPtr.get());
+      std::ostream &stream = *(m_OutStream.get());
       stream << indent(5) << "<UserMetaData key=\"" << attributeKey << "\" dims=\"1\" type=\"H5T_STRING\">";
       char* s = static_cast<char*>(attribute->getVoidPointer(0));
       uint64 nElements = attribute->getNumberOfElements();
@@ -185,7 +185,7 @@ class MXA_EXPORT XMLMXAAttributeWriter
   protected:
 
   private:
-    boost::shared_ptr<std::ofstream> _ofstreamPtr;
+    boost::shared_ptr<std::ostream> m_OutStream;
 
     XMLMXAAttributeWriter(const XMLMXAAttributeWriter&);    //Not Implemented
     void operator=(const XMLMXAAttributeWriter&); //Not Implemented

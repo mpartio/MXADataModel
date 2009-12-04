@@ -19,7 +19,6 @@
 #include <MXA/HDF5/H5Lite.h>
 #endif
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
-#include <MXA/XML/XMLIODelegate.h>
 #include <MXA/XML/ExpatParser.h>
 #include <MXA/XML/XMLConstants.h>
 
@@ -49,101 +48,10 @@ public:
   */
 	int32 readDataModel(int32 NOT_USED) ;
 
-// -----------------------------------------------------------------------------
-//  ExpatEvtHandler Implementation
-// -----------------------------------------------------------------------------
-  // Over ride from ExpatEvtHandler class
-  void OnStartElement(const XML_Char* name, const XML_Char** attrs);
 
-  // Over ride from ExpatEvtHandler class
-  void OnEndElement(const XML_Char* name);
-
-  void OnCharacterData(const XML_Char* data, int32 len);
-
-  /**
-   * @brief Returns the current parser error.
-   */
-  int32 getParseError();
-
-  /**
-  * @brief Parses a string from the XML file that is data encoded as space delimited values
-  * @param dims The dimensions of the data set
-  * @return Error Code. Zero or positive is success.
-  */
-  template<typename T>
-  int32 readPrimitiveAttribute( const std::vector<uint64> &dims)
-  {
-    //std::cout << logTime() << "readPrimitiveAttribute: " << this->_userMDKey << std::endl;
-    int32 err = 1;
-    std::istringstream istream (this->_userAttributeData);
-    uint64 size = 1;
-    for (std::vector<uint64>::const_iterator iter = dims.begin(); iter != dims.end(); ++iter )
-    {
-      size *= *iter;
-    }
-
-    if (dims.size() == 1 && dims.at(0) == 1) // One Dimensional Array with 1 element
-    {
-      //std::cout << logTime() << "  Scalar Value" << std::endl;
-      T temp;
-      int32 tmp;
-      if (sizeof(T) == 1) // If we try to read a 'char' then the stream will only read a single char from the file, not what we want
-      {
-        if ( (istream >> tmp).good() )
-        {
-          IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateSingleValueArray( static_cast<T>(tmp) );
-          this->_dataModel->addUserMetaData(this->_userMDKey, attr);
-        }
-      }
-      else
-      {
-        if ( (istream >> temp).good() )
-        {
-          IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateSingleValueArray( static_cast<T>(temp) );
-          this->_dataModel->addUserMetaData(this->_userMDKey, attr);
-        }
-      }
-
-    }
-    else // Multi-Dimensional Data
-    {
-     // std::cout << logTime() << "  Vector Value" << std::endl;
-      std::vector<T> data;
-      T temp;
-      int32 tmp;
-      if (sizeof(T) == 1) // If we try to read a 'char' then the stream will only read a single char from the file, not what we want
-      {
-        while( (istream >> tmp).good() )
-        {
-          data.push_back( static_cast<T>(tmp) );
-        }
-      }
-      else
-      {
-        while ( (istream >> temp).good() )
-        {
-          data.push_back(temp);
-        }
-      }
-
-      if (data.size() == size)
-      {
-        IMXAArray::Pointer attr =
-          MXAArrayTemplate<T>::CreateMultiDimensionalArray(  dims.size(), &(dims.front()) );
-        T* dest = static_cast<T*>(attr->getVoidPointer(0));
-        ::memcpy(dest, &(data.front()), data.size() * sizeof(T) );
-
-        this->_dataModel->addUserMetaData(this->_userMDKey, attr);
-      } else {
-        err = -1;
-      }
-    }
-    return err;
-  }
 
 
 private:
-  //XMLIODelegate*    _ioDelegate;
   IDataModel::Pointer     _dataModel;
   const std::string _fileName;
   int32             _xmlParseError;

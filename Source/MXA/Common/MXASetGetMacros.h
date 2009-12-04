@@ -42,10 +42,10 @@
  */
 #define MXA_SHARED_POINTERS(thisClass)\
   typedef thisClass                      Self;\
-  typedef boost::shared_ptr<Self>        Pointer;\
-  typedef boost::shared_ptr<const Self>  ConstPointer;\
-  typedef boost::weak_ptr<thisClass> WeakPointer;\
-  typedef boost::weak_ptr<thisClass> ConstWeakPointer;\
+  typedef boost::shared_ptr<Self >        Pointer;\
+  typedef boost::shared_ptr<const Self >  ConstPointer;\
+  typedef boost::weak_ptr<thisClass > WeakPointer;\
+  typedef boost::weak_ptr<thisClass > ConstWeakPointer;\
   MXA_NULL_SHARED_POINTER(thisClass)
 
 /**
@@ -59,10 +59,10 @@
  * @brief Creates a static "New" method that creates an instance of thisClass
  */
 #define MXA_NEW_SUPERCLASS(thisClass, SuperClass)\
-  typedef SuperClass::Pointer SuperClass;\
-  static SuperClass New##SuperClass(void) \
+  typedef SuperClass::Pointer SuperClass##Type;\
+  static SuperClass##Type New##SuperClass(void) \
 { \
-  SuperClass sharedPtr (new thisClass); \
+  SuperClass##Type sharedPtr (new thisClass); \
   return sharedPtr; \
 }
 

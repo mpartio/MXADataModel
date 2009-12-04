@@ -1,8 +1,8 @@
 
 #include "H5MXADataFile.h"
 #include <MXA/Core/MXADataModel.h>
-#include <MXA/HDF5/H5DataModelWriter.h>
-#include <MXA/HDF5/H5DataModelReader.h>
+#include <MXA/HDF5/H5WriterDelegate.h>
+#include <MXA/HDF5/H5ReaderDelegate.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
 
@@ -320,8 +320,8 @@ int32 H5MXADataFile::saveDataModel()
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::_writeDataModel()
 {
-  H5DataModelWriter writer( this->_dataModel, this->_weakPtr.lock() );
-  return writer.writeModelToFile(_fileId);
+  H5WriterDelegate::Pointer writer = H5WriterDelegate::New(_fileId);
+  return writer->writeModel(this->_dataModel);
 }
 
 // -----------------------------------------------------------------------------
@@ -329,8 +329,13 @@ int32 H5MXADataFile::_writeDataModel()
 // -----------------------------------------------------------------------------
 int32 H5MXADataFile::_readDataModel()
 {
-  H5DataModelReader reader(this->_dataModel);
-  return reader.readDataModel(this->_fileId);
+  H5ReaderDelegate::Pointer reader = H5ReaderDelegate::New(_fileId);
+  this->_dataModel = reader->readModel();
+  if (this->_dataModel.get() == NULL)
+  {
+    return -1;
+  }
+  return 1;
 }
 
 // -----------------------------------------------------------------------------

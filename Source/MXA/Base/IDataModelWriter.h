@@ -13,7 +13,7 @@
 
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXATypes.h>
-#include <MXA/Base/IFileIODelegate.h>
+//#include <MXA/Base/IFileIODelegate.h>
 
 
 /**
@@ -28,7 +28,7 @@ class MXA_EXPORT IDataModelWriter
 {
 
 public:
-  IDataModelWriter(IFileIODelegate::Pointer ioDelegate, IDataModel::Pointer dataModel){};
+  //IDataModelWriter(){};
   virtual ~IDataModelWriter() {};
 
   /**
@@ -36,7 +36,7 @@ public:
   * @param fileId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
-  virtual int32 writeModelToFile(int32 fileId) = 0;
+  virtual int32 writeModel(int32 fileId) = 0;
 
   /**
   * @brief

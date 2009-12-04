@@ -1,5 +1,5 @@
 //MXA Includes
-#include <MXA/HDF5/H5DataModelWriter.h>
+#include <MXA/HDF5/H5WriterDelegate.h>
 
 #include <MXA/Common/LogTime.h>
 #include <MXA/Base/IRequiredMetaData.h>
@@ -16,60 +16,64 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-H5DataModelWriter::H5DataModelWriter(IDataModel::Pointer dataModel, IDataFile::Pointer dataFile) :
-  _dataModel(dataModel),
-  _dataFile(dataFile)
+H5WriterDelegate::H5WriterDelegate(hid_t fileId) :
+m_FileId(fileId)
 {
-
+  m_DataModel = IDataModel::NullPointer();
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-H5DataModelWriter::~H5DataModelWriter()
+H5WriterDelegate::~H5WriterDelegate()
 {
-
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::writeModelToFile(hid_t fileId)
+int32 H5WriterDelegate::writeModel(IDataModel::Pointer model)
 {
+  if (NULL == model.get() || m_FileId <= 0)
+  {
+    return -1;
+  }
+  m_DataModel = model;
+
   //std::cout << "Writing File Type/Version, DataRoot, and DataModel Groups..." << std::endl;printf("\n");
-  if ( writeDataModelTemplate(fileId) < 0 ) return -1;
+  if ( writeDataModelTemplate(m_FileId) < 0 ) { m_DataModel = IDataModel::NullPointer(); return -1;}
 
   //std::cout << "Writing Data Dimensions..." << std::endl;printf("\n");
-  if ( writeDataDimensions(fileId) < 0) return -1;
+  if ( writeDataDimensions(m_FileId) < 0) { m_DataModel = IDataModel::NullPointer(); return -1;}
 
   //std::cout << "Writing Data Records..." << std::endl;printf("\n");
-  if ( writeDataRecords(fileId) < 0) return -1;
+  if ( writeDataRecords(m_FileId) < 0) { m_DataModel = IDataModel::NullPointer(); return -1;}
 
   //std::cout << "Writing Required MetaData..." << std::endl;  printf("\n");
-  if ( writeRequiredMetaData(fileId) < 0) return -1;
+  if ( writeRequiredMetaData(m_FileId) < 0) { m_DataModel = IDataModel::NullPointer(); return -1;}
 
   //std::cout << "Writing User MetaData...." << std::endl;printf("\n");
-  if ( writeUserMetaData(fileId) < 0) return -1;
+  if ( writeUserMetaData(m_FileId) < 0) { m_DataModel = IDataModel::NullPointer(); return -1;}
 
   //std::cout << "Done Writing Model" << std::endl;printf("\n");
-  if ( writeSupportFiles(fileId) < 0) return -1;
+  if ( writeSupportFiles(m_FileId) < 0) { m_DataModel = IDataModel::NullPointer(); return -1;}
 
   //std::cout << "Done writing support files" << std::endl;printf("\n");
-
+//  m_DataModel = IDataModel::NullPointer(); return -1;
   return 1;
 }
 
 // -----------------------------------------------------------------------------
 //  Writes the support files to the HDF5 file
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::writeSupportFiles(hid_t fileId)
+int32 H5WriterDelegate::writeSupportFiles(hid_t fileId)
 {
   int32 err = 0;
   uint64 fileSize[1] = { 0 };
   uint8* fileContents = NULL;
   int32 rank = 1;
   ISupportFile* file = NULL;
-  ISupportFile::Container files = this->_dataModel->getSupportFiles();
+  ISupportFile::Container files = this->m_DataModel->getSupportFiles();
 
   for (ISupportFile::Container::iterator iter = files.begin(); iter != files.end(); ++iter)
   {
@@ -106,7 +110,7 @@ int32 H5DataModelWriter::writeSupportFiles(hid_t fileId)
 // -----------------------------------------------------------------------------
 //  Writes the basic groups of the data model and the file type/version
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
+int32 H5WriterDelegate::writeDataModelTemplate(hid_t fileId)
 {
   herr_t err = -1;
   err = H5Utilities::createGroupsFromPath( MXA::DataDimensionsPath, fileId);
@@ -145,14 +149,14 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
   }
   else
   {
-    std::string fType = _dataModel->getModelType();
+    std::string fType = m_DataModel->getModelType();
     err = H5Lite::writeStringAttribute(fileId, MXA::DataModel.c_str(), MXA::ModelType, fType);
     if (err < 0) {
       std::cout << logTime() << "Error Writing Model Type to Data Model Group as Attribute." << std::endl;
       H5Gclose(modelGroupId);
       return err;
     }
-    float32 version = _dataModel->getModelVersion();
+    float32 version = m_DataModel->getModelVersion();
     err = H5Lite::writeScalarAttribute(fileId, MXA::DataModel, MXA::ModelVersion, version);
     if (err < 0)
     {
@@ -165,7 +169,7 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
   if (err < 0) { std::cout << DEBUG_OUT(logTime) << "Error Closing 'Data Model' Group" << std::endl; return err; }
 
   //Write the data root
-  std::string dataRoot = _dataModel->getDataRoot();
+  std::string dataRoot = m_DataModel->getDataRoot();
   err = this->_writeStringDataset(fileId, const_cast<std::string&>(MXA::DataRootPath), dataRoot, true);
   if (err < 0)
   {
@@ -174,7 +178,7 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
   }
 
   // Create the HDF5 Group structure for the actual Data Root
-  err = H5Utilities::createGroupsFromPath(_dataModel->getDataRoot(), fileId);
+  err = H5Utilities::createGroupsFromPath(m_DataModel->getDataRoot(), fileId);
   if (err < 0)
   {
     std::cout << logTime() << "Error Creating Group structure for the Data Root" << std::endl;
@@ -186,7 +190,7 @@ int32 H5DataModelWriter::writeDataModelTemplate(hid_t fileId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
+int32 H5WriterDelegate::writeDataDimensions(hid_t fileId)
 {
 //  std::cout << "Writing Data Dimensions" << std::endl;
   hid_t gid = H5Utilities::openHDF5Object(fileId, MXA::DataDimensionsPath);
@@ -198,7 +202,7 @@ int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
 
   std::string dsetName;
 
-  IDataDimension::Container dimensions = _dataModel->getDataDimensions();
+  IDataDimension::Container dimensions = m_DataModel->getDataDimensions();
   MXADataDimension* dim;
   for (IDataDimension::Container::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
   {
@@ -249,7 +253,7 @@ int32 H5DataModelWriter::writeDataDimensions(hid_t fileId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::writeDataRecords(hid_t fileId)
+int32 H5WriterDelegate::writeDataRecords(hid_t fileId)
 {
   hid_t gid = H5Utilities::openHDF5Object(fileId, MXA::DataRecordsPath);
   int32 retErr = 0;
@@ -259,7 +263,7 @@ int32 H5DataModelWriter::writeDataRecords(hid_t fileId)
     return gid;
   }
 
-  IDataRecord::Container cc =  _dataModel->getDataRecords();
+  IDataRecord::Container cc =  m_DataModel->getDataRecords();
   err = _traverseDataRecords(gid, cc );
   if (err < 0) { retErr = err; }
   err = H5Utilities::closeHDF5Object(gid);
@@ -270,7 +274,7 @@ int32 H5DataModelWriter::writeDataRecords(hid_t fileId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, IDataRecord::Container &records)
+int32 H5WriterDelegate::_traverseDataRecords(hid_t gid, IDataRecord::Container &records)
 {
 //#error Start here and test the writing of the file so far.....
   MXADataRecord* rec;
@@ -342,7 +346,7 @@ int32 H5DataModelWriter::_traverseDataRecords(hid_t gid, IDataRecord::Container 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
+int32 H5WriterDelegate::writeRequiredMetaData(hid_t fileId)
 {
   int32 data = 0;
   herr_t err = 0;
@@ -353,7 +357,7 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
     return err;
   }
   std::map<std::string, std::string> meta;
-  IRequiredMetaData::Pointer metaData = _dataModel->getRequiredMetaData();
+  IRequiredMetaData::Pointer metaData = m_DataModel->getRequiredMetaData();
   metaData->generateKeyValueMap(meta);
 
   for (std::map<std::string, std::string>::iterator iter=meta.begin(); iter!=meta.end(); iter++) {
@@ -367,12 +371,12 @@ int32 H5DataModelWriter::writeRequiredMetaData(hid_t fileId)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5DataModelWriter::writeUserMetaData(hid_t fileId)
+int32 H5WriterDelegate::writeUserMetaData(hid_t fileId)
 {
   int32 data = 0;
   herr_t err = 0;
   this->_writeScalarDataset(fileId, const_cast<std::string&>(MXA::UserMetaDataPath), data);
-  MXAAbstractAttributes metadata = _dataModel->getUserMetaData();
+  MXAAbstractAttributes metadata = m_DataModel->getUserMetaData();
   IMXAArray::Pointer attr;
   //H5AttributeWriter writer;
   for (MXAAbstractAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
@@ -393,7 +397,7 @@ int32 H5DataModelWriter::writeUserMetaData(hid_t fileId)
 // -----------------------------------------------------------------------------
 //  Writes a string to a HDF5 dataset
 // -----------------------------------------------------------------------------
-herr_t H5DataModelWriter::_writeStringDataset (hid_t loc_id,
+herr_t H5WriterDelegate::_writeStringDataset (hid_t loc_id,
                                             const std::string& dsetName,
                                             const std::string &data,
                                             bool overwrite)

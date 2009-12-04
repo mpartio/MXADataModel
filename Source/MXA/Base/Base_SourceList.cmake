@@ -29,6 +29,8 @@ SET (MXA_BASE_HEADERS
   ${MXA_SOURCE_DIR}/MXA/Base/IRequiredMetaData.h
   ${MXA_SOURCE_DIR}/MXA/Base/ISupportFile.h
   ${MXA_SOURCE_DIR}/MXA/Base/ITiffTagExtractor.h
+  ${MXA_SOURCE_DIR}/MXA/Base/IMXADataModelWriterDelegate.h
+  ${MXA_SOURCE_DIR}/MXA/Base/IMXADataModelReaderDelegate.h
 )
 
 IDE_SOURCE_PROPERTIES( "MXA/Base" "${MXA_BASE_HEADERS}" "${MXA_BASE_SRCS}")

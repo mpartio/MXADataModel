@@ -41,16 +41,7 @@ XMLDataModelWriter::~XMLDataModelWriter()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeModelToStream(const std::ostream &os)
-{
-
-}
-
-
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeModelToFile(int32 NOT_USED)
+int32 XMLDataModelWriter::writeModel(int32 NOT_USED)
 {
   // Open the file in the proper mode.
   _ofstreamPtr.reset( new std::ofstream ( _fileName.c_str() ) );
@@ -231,7 +222,8 @@ int32 XMLDataModelWriter::writeDataDimensions(int32 depth)
   for (IDataDimension::Container::iterator iter = dimensions.begin(); iter < dimensions.end(); ++iter )
   {
     dim = static_cast<MXADataDimension*> ( (*(iter)).get() );
-    dim->writeDimension(this);
+   // dim->writeDimension(this);
+    writeDataDimension(dim);
   }
   _closeGroupTag(MXA_XML::Data_Dimensions, depth);
   return 1;
@@ -250,7 +242,8 @@ int32 XMLDataModelWriter::writeDataRecords(int32 depth)
   for ( IDataRecord::Container::iterator iter = records.begin(); iter < records.end(); ++iter )
   {
     rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
-    err = rec->writeRecord(this);
+  //  err = rec->writeRecord(this);
+    writeDataRecord(rec);
   }
   _closeGroupTag(MXA_XML::Data_Records, depth);
   return err;
@@ -355,7 +348,8 @@ int32 XMLDataModelWriter::writeDataRecord(IDataRecord* record)
     for ( IDataRecord::Container::iterator iter = records.begin(); iter < records.end(); ++iter )
     {
       rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
-      err = rec->writeRecord(this);
+//      err = rec->writeRecord(this);
+      err = writeDataRecord(rec);  // <== THIS IS RECURSIVE CODE
     }
     _closeGroupTag(MXA_XML::Signal_Group, this->_dataRecordIndentation);
   } else {
