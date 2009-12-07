@@ -20,10 +20,7 @@
 //-- MXA Unit Test Headers
 #include "MXAUnitTestDataFileLocations.h"
 #include "TiffMaker.h"
-
-//-- Boost Unit Testing Framework
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
+#include "UnitTestSupport.hpp"
 
 
 // -----------------------------------------------------------------------------
@@ -103,27 +100,27 @@ void TestMXASupportFile()
   uint8* contents = NULL;
   // Get the contents which should be NULL because the file has NOT been read yet
   contents = file->getFilePointer(0);
-  BOOST_REQUIRE(contents == NULL);
+  MXA_REQUIRE(contents == NULL);
   // Make sure the file is NOT cached in the object
-  BOOST_REQUIRE (file->isFileCached() == false);
-  BOOST_REQUIRE (file->getFileSize() > 0); // The file size should be Zero
+  MXA_REQUIRE (file->isFileCached() == false);
+  MXA_REQUIRE (file->getFileSize() > 0); // The file size should be Zero
 
-  BOOST_REQUIRE (file->readFromFileSystem() >= 0); // Read the file into the object
-  BOOST_REQUIRE (file->getFilePointer(0) != NULL);
-  BOOST_REQUIRE (file->getFileSize() > 0);
-  BOOST_REQUIRE (file->isFileCached() == true);
+  MXA_REQUIRE (file->readFromFileSystem() >= 0); // Read the file into the object
+  MXA_REQUIRE (file->getFilePointer(0) != NULL);
+  MXA_REQUIRE (file->getFileSize() > 0);
+  MXA_REQUIRE (file->isFileCached() == true);
 
   file->flushCachedFile();
-  BOOST_REQUIRE (file->getFilePointer(0) == NULL);
-  BOOST_REQUIRE (file->getFileSize() > 0);
-  BOOST_REQUIRE (file->isFileCached() == false);
+  MXA_REQUIRE (file->getFilePointer(0) == NULL);
+  MXA_REQUIRE (file->getFileSize() > 0);
+  MXA_REQUIRE (file->isFileCached() == false);
 
   // Read the file again
-  BOOST_REQUIRE (file->readFromFileSystem() >= 0); // Read the file into the object
+  MXA_REQUIRE (file->readFromFileSystem() >= 0); // Read the file into the object
   file->setFileSystemPath(MXAUnitTest::SupportFileTest::TextInputFile);
-  BOOST_REQUIRE (file->getFilePointer(0) == NULL);
-  BOOST_REQUIRE (file->getFileSize() > 0);
-  BOOST_REQUIRE (file->isFileCached() == false);
+  MXA_REQUIRE (file->getFilePointer(0) == NULL);
+  MXA_REQUIRE (file->getFileSize() > 0);
+  MXA_REQUIRE (file->isFileCached() == false);
 
 
 
@@ -136,25 +133,25 @@ void TestMXARead()
 {
   std::cout << "|--MXARead Test" << std::endl;
   IDataFile::Pointer datafile = H5MXADataFile::OpenFile(MXAUnitTest::SupportFileTest::OutputFile, true);
-  BOOST_REQUIRE( datafile.get() != NULL);
+  MXA_REQUIRE( datafile.get() != NULL);
 
   ISupportFile::Container files = datafile->getDataModel()->getSupportFiles();
   ISupportFile::Pointer file;
   for (ISupportFile::Container::iterator iter = files.begin(); iter != files.end(); ++iter)
   {
     file = *iter;
-    BOOST_REQUIRE (file->getFilePointer(0) == NULL);
-    BOOST_REQUIRE (file->getFileSize() > 0);
-    BOOST_REQUIRE (file->isFileCached() == false);
+    MXA_REQUIRE (file->getFilePointer(0) == NULL);
+    MXA_REQUIRE (file->getFileSize() > 0);
+    MXA_REQUIRE (file->isFileCached() == false);
 
-    BOOST_REQUIRE (file->readFromMXAFile() >= 0); // Read the file into the object
-    BOOST_REQUIRE (file->getFilePointer(0) != NULL);
-    BOOST_REQUIRE (file->getFileSize() > 0);
-    BOOST_REQUIRE (file->isFileCached() == true);
+    MXA_REQUIRE (file->readFromMXAFile() >= 0); // Read the file into the object
+    MXA_REQUIRE (file->getFilePointer(0) != NULL);
+    MXA_REQUIRE (file->getFileSize() > 0);
+    MXA_REQUIRE (file->isFileCached() == true);
      file->flushCachedFile();
-    BOOST_REQUIRE (file->getFilePointer(0) == NULL);
-    BOOST_REQUIRE (file->getFileSize() > 0);
-    BOOST_REQUIRE (file->isFileCached() == false);
+    MXA_REQUIRE (file->getFilePointer(0) == NULL);
+    MXA_REQUIRE (file->getFileSize() > 0);
+    MXA_REQUIRE (file->isFileCached() == false);
   }
 
 }
@@ -175,7 +172,7 @@ void TestMXAWrite()
 
   IDataFile::Pointer mxaDataFile = H5MXADataFile::CreateFileWithModel(MXAUnitTest::SupportFileTest::OutputFile, model);
   if ( NULL == mxaDataFile.get()) { err = -1; } else { err = 0; };
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -205,11 +202,11 @@ int SupportFileTest_EntryPoint()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
+int main(int argc, char **argv)
 {
-  boost::unit_test::test_suite* test= BOOST_TEST_SUITE ( "Data Import Test");
-  test->add( BOOST_TEST_CASE( &SupportFileTest_EntryPoint), 0);
-  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-  return test;
-}
+  int err = EXIT_SUCCESS;
+  MXA_REGISTER_TEST( SupportFileTest_EntryPoint() );
+  MXA_REGISTER_TEST( RemoveTestFiles() );
+  PRINT_TEST_SUMMARY();
+  return err;}
 

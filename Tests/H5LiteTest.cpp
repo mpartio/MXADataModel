@@ -22,8 +22,7 @@
 #include <Tests/MXAUnitTestDataFileLocations.h>
 
 //-- Boost Test Headers
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
+#include "UnitTestSupport.hpp"
 
 
 
@@ -121,7 +120,7 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
   T value = 0x0;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "1DArrayAttribute<" + attributeKey + ">";
   int32 rank = 1;
   T data[DIM0];
@@ -133,7 +132,7 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
   dims[0] = DIM0;
 
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -147,7 +146,7 @@ herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetNam
   herr_t err = -1;
   herr_t retErr = err;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "1DArrayAttribute<" + attributeKey + ">";
   std::vector<T> referenceData(DIM0, 0);
   for(int i = 0; i < DIM0; ++i)
@@ -160,13 +159,13 @@ herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetNam
   hid_t typeId = -1;
   std::vector<uint64> dims;  //Reusable for the loop
   err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(dims.size() == 1);
-  BOOST_REQUIRE(attr_size == sizeof(T));
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(dims.size() == 1);
+  MXA_REQUIRE(attr_size == sizeof(T));
   hid_t rank = 0;
   err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(rank == 1);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(rank == 1);
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
   typename std::vector<T>::size_type numElements = 1;
   for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
@@ -175,8 +174,8 @@ herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetNam
   }
   std::vector<T> data(numElements, 0);
   err = H5Lite::readPointerAttribute<T>(file_id, dsetName, attributeKey, &(data.front() ) );
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE (data == referenceData);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE (data == referenceData);
 
   return err;
 }
@@ -191,7 +190,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
   T value = 0x0;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
 
   attributeKey = "2DArrayAttribute<" + attributeKey + ">";
   int32 rank = RANK_2D;
@@ -206,7 +205,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
   dims[0] = DIM0;
   dims[1] = DIM1;
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -220,7 +219,7 @@ herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetNam
   herr_t err = -1;
   herr_t retErr = err;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "2DArrayAttribute<" + attributeKey + ">";
   T referenceData[DIM0][DIM1];
   for(int i = 0; i < DIM0; ++i)
@@ -234,13 +233,13 @@ herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetNam
   hid_t typeId = -1;
   std::vector<uint64> dims;  //Reusable for the loop
   err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(dims.size() == 2);
-  BOOST_REQUIRE(attr_size == sizeof(T));
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(dims.size() == 2);
+  MXA_REQUIRE(attr_size == sizeof(T));
   hid_t rank = 0;
   err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(rank == 2);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(rank == 2);
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
   typename std::vector<T>::size_type numElements = 1;
   for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
@@ -249,9 +248,9 @@ herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetNam
   }
   std::vector<T> data(numElements, 0);
   err = H5Lite::readPointerAttribute<T>(file_id, dsetName, attributeKey, &(data.front() ) );
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
-  BOOST_REQUIRE (::memcmp( &(data.front() ), referenceData, sizeof(T)*numElements) == 0);
+  MXA_REQUIRE (::memcmp( &(data.front() ), referenceData, sizeof(T)*numElements) == 0);
   return err;
 }
 
@@ -264,7 +263,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
   T value = 0x0;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "3DArrayAttribute<" + attributeKey + ">";
   int32 rank = RANK_3D;
   T data[DIM0][DIM1][DIM2];
@@ -280,7 +279,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
   dims[1] = DIM1;
   dims[2] = DIM2;
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -294,7 +293,7 @@ herr_t testReadPointer3DArrayAttribute(hid_t file_id, const std::string &dsetNam
   herr_t err = -1;
   herr_t retErr = err;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "3DArrayAttribute<" + attributeKey + ">";
   T referenceData[DIM0][DIM1][DIM2];
   for(int i = 0; i < DIM0; ++i) {
@@ -309,13 +308,13 @@ herr_t testReadPointer3DArrayAttribute(hid_t file_id, const std::string &dsetNam
   hid_t typeId = -1;
   std::vector<uint64> dims;  //Reusable for the loop
   err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(dims.size() == 3);
-  BOOST_REQUIRE(attr_size == sizeof(T));
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(dims.size() == 3);
+  MXA_REQUIRE(attr_size == sizeof(T));
   hid_t rank = 0;
   err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(rank == 3);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(rank == 3);
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
   typename std::vector<T>::size_type numElements = 1;
   for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
@@ -324,9 +323,9 @@ herr_t testReadPointer3DArrayAttribute(hid_t file_id, const std::string &dsetNam
   }
   std::vector<T> data(numElements, 0);
   err = H5Lite::readPointerAttribute<T>(file_id, dsetName, attributeKey, &(data.front() ) );
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
-  BOOST_REQUIRE (::memcmp( &(data.front() ), referenceData, sizeof(T)*numElements) == 0);
+  MXA_REQUIRE (::memcmp( &(data.front() ), referenceData, sizeof(T)*numElements) == 0);
   return err;
 }
 
@@ -339,7 +338,7 @@ herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName )
   T value = 0x0;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "VectorAttribute<" + attributeKey + ">";
 
   int32 numElements = DIM0;
@@ -352,7 +351,7 @@ herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName )
   }
   //std::cout << "Attribute->Write: " << objName;
   err = H5Lite::writeVectorAttribute( file_id, dsetName, attributeKey, dims, data );
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -365,7 +364,7 @@ herr_t testReadVectorAttribute(hid_t file_id, std::string dsetName )
   T value = 0x0;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "VectorAttribute<" + attributeKey + ">";
 
   int32 numElements = DIM0;
@@ -377,8 +376,8 @@ herr_t testReadVectorAttribute(hid_t file_id, std::string dsetName )
   }
   std::vector<T> rData(numElements, 0); //allocate and zero out the memory
   err = H5Lite::readVectorAttribute(file_id, dsetName, attributeKey, rData);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE( data == rData );
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE( data == rData );
   return err;
 }
 
@@ -391,10 +390,10 @@ herr_t testWriteScalarAttribute(hid_t file_id, const std::string &dsetName)
   T value = 0x0F;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "ScalarAttribute<" + attributeKey + ">";
   err = H5Lite::writeScalarAttribute(file_id, dsetName, attributeKey, value);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -408,12 +407,12 @@ herr_t testReadScalarAttribute(hid_t file_id, const std::string &dsetName)
   T refValue = value;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "ScalarAttribute<" + attributeKey + ">";
 
   err = H5Lite::readScalarAttribute(file_id, dsetName, attributeKey, value);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(refValue == value);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(refValue == value);
   return err;
 }
 
@@ -444,7 +443,7 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   dsetName = "Pointer2DArrayDataset<" + dsetName + ">";
   std::cout << "Running " << dsetName << " ... ";
   err = H5Lite::writePointerDataset( file_id, dsetName, rank, dims, &(data.front()) );
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   err = testWritePointer1DArrayAttribute<int8>(file_id, dsetName);
   err = testWritePointer1DArrayAttribute<uint8>(file_id, dsetName);
   err = testWritePointer1DArrayAttribute<int16>(file_id, dsetName);
@@ -524,7 +523,7 @@ herr_t testWriteVectorDataset(hid_t file_id)
   dsetName = "VectorDataset<" + dsetName + ">";
   std::cout << "Running " << dsetName << " ... ";
   err = H5Lite::writeVectorDataset( file_id, dsetName, dims, data );
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
   std::cout << " Passed" << std::endl;
   return err;
@@ -551,8 +550,8 @@ herr_t testReadVectorDataset(hid_t file_id)
 
   std::vector<T> data;
   err = H5Lite::readVectorDataset( file_id, dsetName, data );
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(data == referenceData);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(data == referenceData);
 
   std::cout << " Passed" << std::endl;
   return err;
@@ -571,7 +570,7 @@ herr_t testWriteScalarDataset(hid_t file_id)
   dsetName = "ScalarDataset<" + dsetName + ">";
   std::cout << "Running " << dsetName << " ... ";
   err = H5Lite::writeScalarDataset(file_id, dsetName, value );
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
   std::cout << " Passed" << std::endl;
   return err;
@@ -593,8 +592,8 @@ herr_t testReadScalarDataset(hid_t file_id)
   dsetName = "ScalarDataset<" + dsetName + ">";
 
   err = H5Lite::readScalarDataset(file_id, dsetName, value );
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(refValue == value );
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(refValue == value );
 
   std::cout << " Passed" << std::endl;
   return err;
@@ -609,7 +608,7 @@ herr_t testMXAAttribute(hid_t file_id, const std::string &dsetName)
   T value = 0x0F;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "MXAAttribute<" + attributeKey + ">";
   IMXAArray* array = MXAArrayTemplate<T>::New(10);
   IMXAArray::Pointer arrayPtr (array);
@@ -618,25 +617,25 @@ herr_t testMXAAttribute(hid_t file_id, const std::string &dsetName)
     p[var] = static_cast<T>(var+65);
   }
   err = H5Lite::writeMXAAttribute(file_id, dsetName, attributeKey, array);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
   // Now Read the Attribute back into an MXAArray object and test against the previous for equality
   IMXAArray* rArray = H5Lite::readMXAAttribute(file_id, dsetName, attributeKey);
-  BOOST_REQUIRE (rArray != NULL);
+  MXA_REQUIRE (rArray != NULL);
   //hid_t t = rArray->getDataType();
   IMXAArray::Pointer rArrayPtr(rArray); // Let boost clean up the pointer
   T* r = static_cast<T*>(rArrayPtr->getVoidPointer(0));
 //  for (int var = 0; var < 10; ++var) {
 //    std::cout << "p=" << p[var] << "  r=" << (r[var]) << std::endl;
 //  }
-  BOOST_REQUIRE( ::memcmp(r, p, sizeof(T) * 10) == 0);
+  MXA_REQUIRE( ::memcmp(r, p, sizeof(T) * 10) == 0);
 
 
 
   AbstractH5Attribute::Pointer ptr = H5Attribute::ReadH5Attribute(file_id, dsetName, attributeKey);
-  BOOST_REQUIRE(ptr.get() != NULL);
+  MXA_REQUIRE(ptr.get() != NULL);
   r = static_cast<T*>(ptr->getAttributeValue()->getVoidPointer(0));
-  BOOST_REQUIRE( ::memcmp(r, p, sizeof(T) * 10) == 0);
+  MXA_REQUIRE( ::memcmp(r, p, sizeof(T) * 10) == 0);
 
   return err;
 }
@@ -662,28 +661,28 @@ herr_t testWriteMXAArray(hid_t file_id)
     p[var] = static_cast<T>(var);
   }
   err = H5Lite::writeMXAArray(file_id, dsetName, array);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
-   BOOST_REQUIRE ( testMXAAttribute<int8>(file_id, dsetName) >= 0 );
-   BOOST_REQUIRE ( testMXAAttribute<uint8>(file_id, dsetName) >= 0 );
-   BOOST_REQUIRE ( testMXAAttribute<int16>(file_id, dsetName) >= 0 );
-   BOOST_REQUIRE ( testMXAAttribute<uint16>(file_id, dsetName) >= 0 );
-   BOOST_REQUIRE ( testMXAAttribute<int32>(file_id, dsetName) >= 0 );
-   BOOST_REQUIRE ( testMXAAttribute<uint32>(file_id, dsetName) >= 0 );
-   BOOST_REQUIRE ( testMXAAttribute<int64>(file_id, dsetName) >= 0 );
-   BOOST_REQUIRE ( testMXAAttribute<uint64>(file_id, dsetName) >= 0 );
-   BOOST_REQUIRE ( testMXAAttribute<float32>(file_id, dsetName) >= 0 );
-   BOOST_REQUIRE ( testMXAAttribute<float64>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<int8>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<uint8>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<int16>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<uint16>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<int32>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<uint32>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<int64>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<uint64>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<float32>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<float64>(file_id, dsetName) >= 0 );
 
    // Now Read the Attribute back into an MXAArray object and test against the previous for equality
    IMXAArray* rArray = H5Lite::readMXAArray(file_id, dsetName);
-   BOOST_REQUIRE (rArray != NULL);
+   MXA_REQUIRE (rArray != NULL);
    IMXAArray::Pointer rArrayPtr(rArray); // Let boost clean up the pointer
    T* r = static_cast<T*>(rArrayPtr->getVoidPointer(0));
  //  for (int var = 0; var < 10; ++var) {
  //    std::cout << "p=" << p[var] << "  r=" << (r[var]) << std::endl;
  //  }
-   BOOST_REQUIRE( ::memcmp(r, p, sizeof(T) * 10) == 0);
+   MXA_REQUIRE( ::memcmp(r, p, sizeof(T) * 10) == 0);
 
   std::cout << " Passed" << std::endl;
   return err;
@@ -700,12 +699,12 @@ herr_t testWriteStringDatasetAndAttributes(hid_t file_id)
   std::string dsetName ("std::string");
   std::string strData ("THIS IS THE DATA");
   err = H5Lite::writeStringDataset(file_id, dsetName, strData);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   // Write the Attributes
   std::string attributeKey ("std::string");
   std::string attrData ("THIS IS THE ATTRIBUTE DATA");
   err = H5Lite::writeStringAttribute(file_id, dsetName, attributeKey, attrData);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
   const char* attrDataPtr = attrData.c_str();
   attributeKey = "c_string";
@@ -720,10 +719,10 @@ herr_t testWriteStringDatasetAndAttributes(hid_t file_id)
   const char* strPtr = strData.c_str();
   dsetName = "c_string";
   err = H5Lite::writeStringDataset(file_id, dsetName, strData.size() + 1, strPtr);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
   err = H5Lite::writeStringAttributes(file_id, dsetName, attrMap);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
   std::cout << " Passed" << std::endl;
   return err;
@@ -756,13 +755,13 @@ herr_t testReadPointer2DArrayDataset(hid_t file_id)
   size_t attr_size;
 
   err = H5Lite::getDatasetInfo(file_id, dsetName, dims, attr_type, attr_size);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(dims.size() == 2);
-  BOOST_REQUIRE(attr_size == sizeof(T));
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(dims.size() == 2);
+  MXA_REQUIRE(attr_size == sizeof(T));
   hid_t rank = 0;
   err = H5Lite::getDatasetNDims(file_id, dsetName, rank);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE(rank == 2);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE(rank == 2);
   typename std::vector<T>::size_type numElements = 1;
   for (std::vector<hsize_t>::size_type i = 0; i < dims.size(); ++i)
   {
@@ -771,9 +770,9 @@ herr_t testReadPointer2DArrayDataset(hid_t file_id)
 
   std::vector<T> data(numElements, 0);
   err = H5Lite::readPointerDataset(file_id, dsetName, &(data.front() ) );
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   // Compare the data...
-  BOOST_REQUIRE(data == referenceData);
+  MXA_REQUIRE(data == referenceData);
 
   //Read all the attributes
   err = testReadPointer1DArrayAttribute<int8>(file_id, dsetName);
@@ -869,33 +868,33 @@ herr_t testReadStringDatasetAndAttributes(hid_t file_id)
   std::string dsetName ("std::string");
   std::string strData ("");
   err = H5Lite::readStringDataset(file_id, dsetName, strData);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE( refData.compare(strData) == 0);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE( refData.compare(strData) == 0);
 
   // Write the Attributes
   std::string attributeKey ("std::string");
   std::string attrData ("");
   err = H5Lite::readStringAttribute(file_id, dsetName, attributeKey, attrData);
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE( refAttrData.compare(attrData) == 0);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE( refAttrData.compare(attrData) == 0);
 
   AbstractH5Attribute::Pointer ptr = H5Attribute::ReadH5Attribute(file_id, dsetName, attributeKey);
-  BOOST_REQUIRE(ptr.get() != NULL);
-  BOOST_REQUIRE( ::memcmp(ptr->getAttributeValue()->getVoidPointer(0), refAttrData.c_str(), refAttrData.size() ) == 0 );
+  MXA_REQUIRE(ptr.get() != NULL);
+  MXA_REQUIRE( ::memcmp(ptr->getAttributeValue()->getVoidPointer(0), refAttrData.c_str(), refAttrData.size() ) == 0 );
 
 
   std::vector<uint8> attrDataPtr (refAttrData.size() + 1, 0);
   attributeKey = "c_string";
   err = H5Lite::readStringAttribute(file_id, dsetName, attributeKey, &(attrDataPtr.front() ) );
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE( refAttrData.compare(attrData) == 0);
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE( refAttrData.compare(attrData) == 0);
 
   // Dataset via pointer (c_str)
   std::vector<uint8> strDataPtr (refData.size() + 1, 0);
   dsetName = "c_string";
   err = H5Lite::readStringDataset(file_id, dsetName, &(strDataPtr.front() ) );
-  BOOST_REQUIRE(err >= 0);
-  BOOST_REQUIRE( ::memcmp(&(strDataPtr.front()), refData.c_str(), refData.size() + 1) == 0 );
+  MXA_REQUIRE(err >= 0);
+  MXA_REQUIRE( ::memcmp(&(strDataPtr.front()), refData.c_str(), refData.size() + 1) == 0 );
 
 
   std::cout << " Passed" << std::endl;
@@ -911,7 +910,7 @@ void H5LiteTest()
   hid_t   file_id;
   /* Create a new file using default properties. */
   file_id = H5Fcreate( MXAUnitTest::H5LiteTest::FileName.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
-  BOOST_REQUIRE(file_id > 0);
+  MXA_REQUIRE(file_id > 0);
   //Create the Extra Groups
   hid_t sintGid = H5Gcreate(file_id, "Signed Int", 0);
   hid_t uintGid = H5Gcreate(file_id, "Unsigned Int", 0);
@@ -936,89 +935,89 @@ void H5LiteTest()
   }
 
   // std::cout << logTime() << "----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl;
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<int8>(file_id) >= 0);
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<uint8>(file_id) >= 0);
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<int16>(file_id) >= 0);
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<uint16>(file_id) >= 0);
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<int32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<uint32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<int64>(file_id) >= 0);
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<uint64>(file_id) >= 0);
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<float32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<float64>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<int8>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint8>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<int16>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint16>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<int32>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint32>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<int64>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<float32>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<float64>(file_id) >= 0);
 
-   BOOST_REQUIRE ( testWriteVectorDataset<int8>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteVectorDataset<uint8>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteVectorDataset<int16>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteVectorDataset<uint16>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteVectorDataset<int32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteVectorDataset<uint32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteVectorDataset<int64>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteVectorDataset<uint64>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteVectorDataset<float32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteVectorDataset<float64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<int8>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<uint8>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<int16>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<uint16>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<int32>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<uint32>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<int64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<float32>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<float64>(file_id) >= 0);
 
-   BOOST_REQUIRE ( testWriteScalarDataset<int8>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteScalarDataset<uint8>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteScalarDataset<int16>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteScalarDataset<uint16>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteScalarDataset<int32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteScalarDataset<uint32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteScalarDataset<int64>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteScalarDataset<uint64>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteScalarDataset<float32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteScalarDataset<float64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<int8>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<uint8>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<int16>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<uint16>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<int32>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<uint32>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<int64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<float32>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<float64>(file_id) >= 0);
 
-   BOOST_REQUIRE ( testWriteStringDatasetAndAttributes(file_id) >= 0);
+   MXA_REQUIRE ( testWriteStringDatasetAndAttributes(file_id) >= 0);
 
-   BOOST_REQUIRE ( testWriteMXAArray<int8>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteMXAArray<uint8>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteMXAArray<int16>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteMXAArray<uint16>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteMXAArray<int32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteMXAArray<uint32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteMXAArray<int64>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteMXAArray<uint64>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteMXAArray<float32>(file_id) >= 0);
-   BOOST_REQUIRE ( testWriteMXAArray<float64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<int8>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<uint8>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<int16>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<uint16>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<int32>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<uint32>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<int64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<float32>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<float64>(file_id) >= 0);
 
 
 //  // ******************* Test Reading Data *************************************
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<int8>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<uint8>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<int16>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<uint16>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<int32>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<uint32>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<int64>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<uint64>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<float32>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadPointer2DArrayDataset<float64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<int8>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint8>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<int16>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint16>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<int32>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint32>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<int64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<float32>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<float64>(file_id) >= 0);
 
 
-   BOOST_REQUIRE ( testReadVectorDataset<int8>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadVectorDataset<uint8>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadVectorDataset<int16>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadVectorDataset<uint16>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadVectorDataset<int32>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadVectorDataset<uint32>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadVectorDataset<int64>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadVectorDataset<uint64>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadVectorDataset<float32>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadVectorDataset<float64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<int8>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<uint8>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<int16>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<uint16>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<int32>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<uint32>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<int64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<float32>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<float64>(file_id) >= 0);
 //
-   BOOST_REQUIRE ( testReadScalarDataset<int8>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadScalarDataset<uint8>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadScalarDataset<int16>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadScalarDataset<uint16>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadScalarDataset<int32>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadScalarDataset<uint32>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadScalarDataset<int64>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadScalarDataset<uint64>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadScalarDataset<float32>(file_id) >= 0);
-   BOOST_REQUIRE ( testReadScalarDataset<float64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<int8>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<uint8>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<int16>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<uint16>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<int32>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<uint32>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<int64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<float32>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<float64>(file_id) >= 0);
 
-   BOOST_REQUIRE ( testReadStringDatasetAndAttributes(file_id) >= 0);
+   MXA_REQUIRE ( testReadStringDatasetAndAttributes(file_id) >= 0);
 
   /* Close the file. */
   H5Fclose( file_id );
@@ -1034,7 +1033,7 @@ void TestLargeFileSupport()
   hid_t   file_id;
   /* Create a new file using default properties. */
   file_id = H5Fcreate( MXAUnitTest::H5LiteTest::LargeFile.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
-  BOOST_REQUIRE(file_id > 0);
+  MXA_REQUIRE(file_id > 0);
   std::vector<int> buffer(1000000); // Create a 4 MegaByte Buffer
 	int32 rank = 1;
 	std::vector<uint64> dims(1,1000000);
@@ -1048,7 +1047,7 @@ void TestLargeFileSupport()
   }
 
 	herr_t err = H5Fclose(file_id);
-BOOST_REQUIRE(err >= 0);
+MXA_REQUIRE(err >= 0);
 
 }
 
@@ -1056,13 +1055,13 @@ BOOST_REQUIRE(err >= 0);
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] )
+int main(int argc, char **argv)
 {
-  boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "H5Lite Tests" );
-  test->add( BOOST_TEST_CASE( &H5LiteTest), 0);
- // test->add( BOOST_TEST_CASE( &TestLargeFileSupport), 0);
-  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
+  int err = EXIT_SUCCESS;
+  MXA_REGISTER_TEST( H5LiteTest() );
+  MXA_REGISTER_TEST( RemoveTestFiles() );
 
-  return test;
+  PRINT_TEST_SUMMARY();
+  return err;
 }
 

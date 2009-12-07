@@ -17,13 +17,9 @@
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include "MXAUnitTestDataFileLocations.h"
+#include "UnitTestSupport.hpp"
 
 #include <iostream>
-
-//-- Boost Unit Testing Framework
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
-
 
 namespace Testing
 {
@@ -132,22 +128,22 @@ MXADataModel::Pointer createModel()
     std::string errorMessage;
     MXADataModel::Pointer modelPtr = MXADataModel::New();
 
-    BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
     MXADataModel* model = modelPtr.get();
     model->setDataRoot(std::string("DataModelTest/Data/Root/Is/Here"));
     errorMessage.clear();
-    BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
     model->setModelType(MXA::MXACurrentFileType);
     errorMessage.clear();
-    BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
     model->setModelVersion(MXA::MXACurrentFileVersion);
     errorMessage.clear();
-    BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
     // ---------- Test creation/addition of Data Dimensions
     IDataDimension::Pointer dim0 = model->addDataDimension("Volume Fraction", "Vol Frac",  15, 20, 50, 2, 1);
     errorMessage.clear();
-    BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
     IDataDimension::Pointer dim1 = model->addDataDimension("Random Seed", "Rnd Seed",  10, 1000, 5000, 500, 1);
     IDataDimension::Pointer dim2 = model->addDataDimension("Timestep", "TS",  100, 0, 99, 1, 1);
     IDataDimension::Pointer dim3 = model->addDataDimension("Slice", "slice",  256, 0, 255, 1, 1);
@@ -178,7 +174,7 @@ MXADataModel::Pointer createModel()
     MXADataRecord::Pointer rec0 = MXADataRecord::New(0,std::string("Composition"), std::string("AltComp"));
     model->addDataRecord(rec0);
     errorMessage.clear();
-    BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (modelPtr->isValid(errorMessage) ) == false );
 
     //Create the Required MetaData
     std::map<std::string, std::string> md;
@@ -194,7 +190,7 @@ MXADataModel::Pointer createModel()
     int32 err = -1;
     err = model->setRequiredMetaData(md);
     errorMessage.clear();
-    BOOST_REQUIRE ( (modelPtr->isValid(errorMessage) ) == true );
+    MXA_REQUIRE ( (modelPtr->isValid(errorMessage) ) == true );
     // Create User Defined MetaData;
     CreateAttributes( model );
     return modelPtr;
@@ -275,12 +271,12 @@ int WriterDelegateTest_EntryPoint()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
+int main(int argc, char **argv)
 {
-  boost::unit_test::test_suite* test= BOOST_TEST_SUITE ( "WriterDelegateTest Test Running");
-  test->add( BOOST_TEST_CASE( &WriterDelegateTest_EntryPoint), 0);
- // test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-  return test;
+  int err = EXIT_SUCCESS;
+  MXA_REGISTER_TEST ( WriterDelegateTest_EntryPoint() );
+  PRINT_TEST_SUMMARY();
+  return err;
 }
 
 

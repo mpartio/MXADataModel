@@ -30,13 +30,12 @@
 #include <MXA/DataWrappers/MXARGBImage.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
 
+#include "UnitTestSupport.hpp"
+
 // C++ Includes
 #include <iostream>
 #include <string>
 
-//-- Boost Test Headers
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
 
 
 // -----------------------------------------------------------------------------
@@ -121,22 +120,22 @@ IDataModel::Pointer createModel()
     std::string errorMessage;
     IDataModel::Pointer model = MXADataModel::New();
 
-    BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (model->isValid(errorMessage) ) == false );
 
     model->setDataRoot(std::string("DatasetTest/"));
     errorMessage.clear();
-    BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (model->isValid(errorMessage) ) == false );
     model->setModelType(MXA::MXACurrentFileType);
     errorMessage.clear();
-    BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (model->isValid(errorMessage) ) == false );
     model->setModelVersion(MXA::MXACurrentFileVersion);
     errorMessage.clear();
-    BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (model->isValid(errorMessage) ) == false );
 
     // ---------- Test creation/addition of Data Dimensions
     IDataDimension::Pointer dim0 = model->addDataDimension("Data Container", "Data Container",  10, 0, 9, 1, 1);
     errorMessage.clear();
-    BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (model->isValid(errorMessage) ) == false );
 
     //Create Data Records for the Pointer Tests
     MakeDataRecord( "Dataset Int 8", model);
@@ -170,7 +169,7 @@ IDataModel::Pointer createModel()
     MakeDataRecord( "RGB Image", model);
 
     errorMessage.clear();
-    BOOST_REQUIRE ( (model->isValid(errorMessage) ) == false );
+    MXA_REQUIRE ( (model->isValid(errorMessage) ) == false );
 
     //Create the Required MetaData
     std::map<std::string, std::string> md;
@@ -186,7 +185,7 @@ IDataModel::Pointer createModel()
     int32 err = -1;
     err = model->setRequiredMetaData(md);
     errorMessage.clear();
-    BOOST_REQUIRE ( (model->isValid(errorMessage) ) == true );
+    MXA_REQUIRE ( (model->isValid(errorMessage) ) == true );
     return model;
 }
 
@@ -200,7 +199,7 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFile
 //   std::cout << "Running _WriteDatasetTest<" << H5Lite::HDFTypeForPrimitiveAsStr(t) << ">" << std::endl;
   IDataModel::Pointer model = dataFile->getDataModel();
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
-  BOOST_REQUIRE(rec.get() != NULL);
+  MXA_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
@@ -214,31 +213,31 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFile
   uint64 numElements = 5;
   MXAArrayTemplate<T>* data = MXAArrayTemplate<T>::New( numElements);
   IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data));
-  BOOST_REQUIRE(data != 0x0);
-  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
+  MXA_REQUIRE(data != 0x0);
+  MXA_REQUIRE(data->getNumberOfElements() == numElements);
   data->getDimensions( &(dims.front() )  );
-  BOOST_REQUIRE(dims[0] == numElements);
+  MXA_REQUIRE(dims[0] == numElements);
 
   numElements = 0; // Resize the array to zero
   err = data->resize(numElements);
-  BOOST_REQUIRE(err == 1);
-  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
+  MXA_REQUIRE(err == 1);
+  MXA_REQUIRE(data->getNumberOfElements() == numElements);
   data->getDimensions( &(dims.front() )  );
-  BOOST_REQUIRE(dims[0] == numElements);
+  MXA_REQUIRE(dims[0] == numElements);
 
   numElements = 10; // Resize the array to 10
   err = data->resize(numElements);
-  BOOST_REQUIRE(err == 1);
-  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
+  MXA_REQUIRE(err == 1);
+  MXA_REQUIRE(data->getNumberOfElements() == numElements);
   data->getDimensions( &(dims.front() )  );
-  BOOST_REQUIRE(dims[0] == numElements);
+  MXA_REQUIRE(dims[0] == numElements);
   for (uint64 i = 0; i < numElements; ++i) {
     data->setValue(i, static_cast<T>(i) );
   }
   // Actually set some meaningful data to the array
   T* value = static_cast<T*>(data->getVoidPointer(0) );
   for (uint64 i = 0; i < numElements; ++i) {
-    BOOST_REQUIRE(value[i] == static_cast<T>(i) );
+    MXA_REQUIRE(value[i] == static_cast<T>(i) );
   }
 
   // Create the dataset that will hold the data and associated attributes
@@ -259,7 +258,7 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFile
 
   // Write the data to the file
   err = ds->writeToFile(dataFile);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
   return err;
 }
@@ -271,7 +270,7 @@ void _WriteStringDataTest ( const std::string &recName, IDataFile::Pointer dataF
 {
   IDataModel::Pointer model = dataFile->getDataModel();
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
-  BOOST_REQUIRE(rec.get() != NULL);
+  MXA_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
@@ -300,7 +299,7 @@ void _WriteStringDataTest ( const std::string &recName, IDataFile::Pointer dataF
 
   // Write the data to the file
   err = ds->writeToFile(dataFile);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
 }
 
@@ -314,7 +313,7 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFile::Pointer dataFile
 //  std::cout << "Running _Write2DArrayTest<" << H5Lite::HDFTypeForPrimitiveAsStr(t) << ">" << std::endl;
   IDataModel::Pointer model = dataFile->getDataModel();
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
-  BOOST_REQUIRE(rec.get() != NULL);
+  MXA_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
@@ -328,65 +327,65 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFile::Pointer dataFile
   MXA2DArray<T>* data = MXA2DArray<T>::New( 256, 100);
   IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
 
-  BOOST_REQUIRE(data != 0x0);
-  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
+  MXA_REQUIRE(data != 0x0);
+  MXA_REQUIRE(data->getNumberOfElements() == numElements);
   data->getDimensions( &(dims.front() ) );
-  BOOST_REQUIRE(dims[0] = 256);
-  BOOST_REQUIRE(dims[1] = 100);
+  MXA_REQUIRE(dims[0] = 256);
+  MXA_REQUIRE(dims[1] = 100);
 
   numElements = 0; // Resize the array to zero
   err = data->resizeArray(0, 0);
-  BOOST_REQUIRE(err == 1);
-  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
-  BOOST_REQUIRE(data->getVoidPointer(0) == NULL); // Check for NULL pointer
+  MXA_REQUIRE(err == 1);
+  MXA_REQUIRE(data->getNumberOfElements() == numElements);
+  MXA_REQUIRE(data->getVoidPointer(0) == NULL); // Check for NULL pointer
   data->getDimensions( &(dims.front() ) );
-  BOOST_REQUIRE(dims[0] == 0);
-  BOOST_REQUIRE(dims[1] == 0);
+  MXA_REQUIRE(dims[0] == 0);
+  MXA_REQUIRE(dims[1] == 0);
 
   numElements = 10; // Resize the array
   err = data->resize(10);
-  BOOST_REQUIRE(err == 1);
-  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
-  BOOST_REQUIRE(data->getVoidPointer(10) == NULL); // Check for NULL pointer
-  BOOST_REQUIRE(data->getVoidPointer(11) == NULL); // Check for NULL pointer
+  MXA_REQUIRE(err == 1);
+  MXA_REQUIRE(data->getNumberOfElements() == numElements);
+  MXA_REQUIRE(data->getVoidPointer(10) == NULL); // Check for NULL pointer
+  MXA_REQUIRE(data->getVoidPointer(11) == NULL); // Check for NULL pointer
 
-  BOOST_REQUIRE(data->getNumberOfDimensions() == 2);
-  BOOST_REQUIRE(data->getPointer(10, 0) == NULL);
-  BOOST_REQUIRE(data->getPointer(0, 1) == NULL);
-  BOOST_REQUIRE(data->getPointer(-1, 0) == NULL);
-  BOOST_REQUIRE(data->getPointer(0, -1) == NULL);
-  BOOST_REQUIRE(data->getPointer(0, 0) != NULL);
-  BOOST_REQUIRE(data->getWidth() == 10);
-  BOOST_REQUIRE(data->getHeight() == 1);
+  MXA_REQUIRE(data->getNumberOfDimensions() == 2);
+  MXA_REQUIRE(data->getPointer(10, 0) == NULL);
+  MXA_REQUIRE(data->getPointer(0, 1) == NULL);
+  MXA_REQUIRE(data->getPointer(-1, 0) == NULL);
+  MXA_REQUIRE(data->getPointer(0, -1) == NULL);
+  MXA_REQUIRE(data->getPointer(0, 0) != NULL);
+  MXA_REQUIRE(data->getWidth() == 10);
+  MXA_REQUIRE(data->getHeight() == 1);
   data->getDimensions( &(dims.front() ) );
-  BOOST_REQUIRE(dims[0] == 10);
-  BOOST_REQUIRE(dims[1] == 1);
+  MXA_REQUIRE(dims[0] == 10);
+  MXA_REQUIRE(dims[1] == 1);
 
   numElements = 212 * 120; // Resize the array
   err = data->resizeArray(212, 120);
-  BOOST_REQUIRE(err == 1);
-  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
-  BOOST_REQUIRE(data->getWidth() == 212);
-  BOOST_REQUIRE(data->getHeight() == 120);
+  MXA_REQUIRE(err == 1);
+  MXA_REQUIRE(data->getNumberOfElements() == numElements);
+  MXA_REQUIRE(data->getWidth() == 212);
+  MXA_REQUIRE(data->getHeight() == 120);
   data->getDimensions( &(dims.front() ) );
-  BOOST_REQUIRE(dims[0] == 212);
-  BOOST_REQUIRE(dims[1] == 120);
+  MXA_REQUIRE(dims[0] == 212);
+  MXA_REQUIRE(dims[1] == 120);
   for (uint64 i = 0; i < numElements; ++i) {
     data->setValue(i, static_cast<T>(i) );
   }
 
   T* value = static_cast<T*>(data->getVoidPointer(0) );
   for (uint64 i = 0; i < numElements; ++i) {
-    BOOST_REQUIRE(value[i] == static_cast<T>(i) );
+    MXA_REQUIRE(value[i] == static_cast<T>(i) );
   }
 
   // Create the dataset that will hold the data and associated attributes
   IDataset::Pointer ds = H5Dataset::CreateDatasetPtr(dsPath, dataPtr);
-  BOOST_REQUIRE (ds.get() != NULL);
+  MXA_REQUIRE (ds.get() != NULL);
 
   // Write the data to the file
   err = ds->writeToFile(dataFile);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
   return err;
 }
@@ -398,7 +397,7 @@ void _WriteRGBImageTest( const std::string &recName, IDataFile::Pointer dataFile
 {
   IDataModel::Pointer model = dataFile->getDataModel();
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
-  BOOST_REQUIRE(rec.get() != NULL);
+  MXA_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
@@ -411,22 +410,22 @@ void _WriteRGBImageTest( const std::string &recName, IDataFile::Pointer dataFile
   std::vector<uint64> dims(rank, 0);
   MXARGBImage* data = MXARGBImage::New( 256, 100);
   IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
-  BOOST_REQUIRE(data != 0x0);
-  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
-  BOOST_REQUIRE(data->getWidth() == 256);
-  BOOST_REQUIRE(data->getHeight() == 100);
+  MXA_REQUIRE(data != 0x0);
+  MXA_REQUIRE(data->getNumberOfElements() == numElements);
+  MXA_REQUIRE(data->getWidth() == 256);
+  MXA_REQUIRE(data->getHeight() == 100);
   data->getDimensions( &(dims.front() ) );
-  BOOST_REQUIRE(dims[1] == 256 * 3);
-  BOOST_REQUIRE(dims[0] == 100);
+  MXA_REQUIRE(dims[1] == 256 * 3);
+  MXA_REQUIRE(dims[0] == 100);
 
   numElements = 150 * 101 * 3;
   data->resizeArray(150, 101);
-  BOOST_REQUIRE(data->getNumberOfElements() == numElements);
-  BOOST_REQUIRE(data->getWidth() == 150);
-  BOOST_REQUIRE(data->getHeight() == 101);
+  MXA_REQUIRE(data->getNumberOfElements() == numElements);
+  MXA_REQUIRE(data->getWidth() == 150);
+  MXA_REQUIRE(data->getHeight() == 101);
   data->getDimensions( &(dims.front() ) );
-  BOOST_REQUIRE(dims[1] == 150 * 3);
-  BOOST_REQUIRE(dims[0] == 101);
+  MXA_REQUIRE(dims[1] == 150 * 3);
+  MXA_REQUIRE(dims[0] == 101);
 
   //put some actual data into the image
   uint8* pixel = data->getPixelPointer(0,0);
@@ -445,11 +444,11 @@ void _WriteRGBImageTest( const std::string &recName, IDataFile::Pointer dataFile
 
   // Create the dataset that will hold the data and associated attributes
   IDataset::Pointer ds = H5Dataset::CreateDatasetPtr(dsPath, dataPtr);
-  BOOST_REQUIRE (ds.get() != NULL);
+  MXA_REQUIRE (ds.get() != NULL);
 
   // Write the data to the file
   err = ds->writeToFile(dataFile);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
 }
 
@@ -463,7 +462,7 @@ void WriteDatasetTest()
   std::string testFile(MXAUnitTest::DatasetTest::TestFile);
   IDataModel::Pointer model = createModel();
   IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(testFile, model);
- BOOST_REQUIRE( NULL != dataFile.get() );
+ MXA_REQUIRE( NULL != dataFile.get() );
 
   // These will test WRITING Data to the data file
   _WriteDatasetTest<int8>( "Dataset Int 8", dataFile );
@@ -509,7 +508,7 @@ int32 _readDatasetTest(const std::string &recName, IDataFile::Pointer dataFile)
 {
   IDataModel::Pointer model = dataFile->getDataModel();
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
-  BOOST_REQUIRE(rec.get() != NULL);
+  MXA_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
@@ -517,7 +516,7 @@ int32 _readDatasetTest(const std::string &recName, IDataFile::Pointer dataFile)
 
   // This will also indirectly test H5Utilities.readDataArray and H5Utilities::readAttributeArray
   IDataset::Pointer ds = H5Dataset::LoadFromFile(dataFile, dsPath);
-  BOOST_REQUIRE(ds.get() != NULL);
+  MXA_REQUIRE(ds.get() != NULL);
   return 1;
 }
 
@@ -528,7 +527,7 @@ int32 _readRGBImageTest(const std::string &recName, IDataFile::Pointer dataFile)
 {
   IDataModel::Pointer model = dataFile->getDataModel();
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
-  BOOST_REQUIRE(rec.get() != NULL);
+  MXA_REQUIRE(rec.get() != NULL);
 
   std::vector<int32> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
@@ -540,12 +539,12 @@ int32 _readRGBImageTest(const std::string &recName, IDataFile::Pointer dataFile)
   uint64 numElements = 150 * 101 * 3;
   int rank = 2;
   std::vector<uint64> dims(rank, 0);
-  //BOOST_REQUIRE(dataPtr->getWidth() == 150);
-  //BOOST_REQUIRE(dataPtr->getHeight() == 101);
-  BOOST_REQUIRE(dataPtr->getNumberOfElements() == numElements);
+  //MXA_REQUIRE(dataPtr->getWidth() == 150);
+  //MXA_REQUIRE(dataPtr->getHeight() == 101);
+  MXA_REQUIRE(dataPtr->getNumberOfElements() == numElements);
   dataPtr->getDimensions( &(dims.front() ) );
-  BOOST_REQUIRE(dims[1] == 150 * 3);
-  BOOST_REQUIRE(dims[0] == 101);
+  MXA_REQUIRE(dims[1] == 150 * 3);
+  MXA_REQUIRE(dims[0] == 101);
 #if 0
 #warning RGBImage class needs to have special file writing code
 
@@ -556,9 +555,9 @@ int32 _readRGBImageTest(const std::string &recName, IDataFile::Pointer dataFile)
     for (int j = 0; j < xDim; ++j) {
       pixel = data->getPixelPointer(j, i);
       std::cout << "x:y " << j << ":" << i << " " << (int)pixel[0] << " " << (int)pixel[1] << " " << (int)pixel[2] << std::endl;
-      BOOST_REQUIRE( pixel[0] == (i + j) ) ;
-      BOOST_REQUIRE( pixel[1] == i ) ;
-      BOOST_REQUIRE( pixel[2] == j ) ;
+      MXA_REQUIRE( pixel[0] == (i + j) ) ;
+      MXA_REQUIRE( pixel[1] == i ) ;
+      MXA_REQUIRE( pixel[2] == j ) ;
     }
   }
 #endif
@@ -575,7 +574,7 @@ void ReadDatasetTest( )
   // Create our Test File to output our test data into
   std::string testFile(MXAUnitTest::DatasetTest::TestFile);
   IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(testFile, true);
-  BOOST_REQUIRE(dataFile.get() != NULL);
+  MXA_REQUIRE(dataFile.get() != NULL);
   _readDatasetTest( "Dataset Int 8", dataFile );
   _readDatasetTest( "Dataset UInt 8", dataFile );
   _readDatasetTest( "Dataset Int 16", dataFile );
@@ -612,7 +611,7 @@ void TestDataWrapper()
   ui32->byteSwapElements();
   for (int i = 0; i < 10; ++i) {
    //  std::cout << ui32->getValue(i) << std::endl;
-     BOOST_REQUIRE(ui32->getValue(i) == i32ArraySwap[i]);
+     MXA_REQUIRE(ui32->getValue(i) == i32ArraySwap[i]);
   }
 
 
@@ -629,7 +628,7 @@ void TestDataWrapper()
   ui64->byteSwapElements();
   for (int i = 0; i < 10; ++i) {
    //  std::cout << ui32->getValue(i) << std::endl;
-     BOOST_REQUIRE(ui64->getValue(i) == i64ArraySwap[i]);
+     MXA_REQUIRE(ui64->getValue(i) == i64ArraySwap[i]);
   }
 }
 
@@ -640,26 +639,27 @@ void ATest()
 {
   std::string testFile(MXAUnitTest::DatasetTest::TestFile);
   IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(testFile, true);
-  BOOST_REQUIRE(dataFile.get() != NULL);
+  MXA_REQUIRE(dataFile.get() != NULL);
   hid_t fileId = dataFile->getFileId();
   double d = 1111111.111111;
   int err = H5Lite::readScalarAttribute(fileId, "/DatasetTest/2/0", "2H5Attribute<H5T_NATIVE_DOUBLE>", d);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 }
 
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] )
-{
-  boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "Dataset Tests" );
+int main(int argc, char **argv) {
 
-  test->add( BOOST_TEST_CASE( &WriteDatasetTest), 0);
-  test->add( BOOST_TEST_CASE( &ReadDatasetTest), 0);
-  test->add( BOOST_TEST_CASE( &TestDataWrapper), 0);
-  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-  return test;
+  int err = EXIT_SUCCESS;
+
+  MXA_REGISTER_TEST( WriteDatasetTest() );
+  MXA_REGISTER_TEST( ReadDatasetTest() );
+  MXA_REGISTER_TEST( TestDataWrapper() );
+  MXA_REGISTER_TEST( RemoveTestFiles() );
+  PRINT_TEST_SUMMARY();
+  return err;
 }
 
 

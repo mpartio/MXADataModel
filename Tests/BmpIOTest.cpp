@@ -11,13 +11,12 @@
 //-- MXA Headers
 #include <MXA/Common/MXATypes.h>
 #include <MXA/BMPIO/MXABmpIO.h>
+#include "UnitTestSupport.hpp"
 
 //-- MXA Unit Test Headers
 #include "MXAUnitTestDataFileLocations.h"
 
-//-- Boost Test Headers
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
+
 
 
 // -----------------------------------------------------------------------------
@@ -87,10 +86,11 @@ void TestBMPIO()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
-  boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "Bitmap IO Testing" );
+int main(int argc, char **argv) {
+  int err = EXIT_SUCCESS;
 
-    test->add( BOOST_TEST_CASE( &TestBMPIO), 0);
-    test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-    return test;
+  MXA_REGISTER_TEST( TestBMPIO() );
+  MXA_REGISTER_TEST( RemoveTestFiles() );
+  PRINT_TEST_SUMMARY();
+  return err;
 }

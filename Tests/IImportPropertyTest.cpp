@@ -12,12 +12,7 @@
 #include <MXA/Common/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IImportProperty.h>
-
-
-//-- Boost Unit Testing Framework
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
-
+#include "UnitTestSupport.hpp"
 
 #define PRINT_RESULTS(prpty, var)\
 std::cout << #prpty << ": " << var << std::endl;
@@ -211,31 +206,31 @@ int32 PropertyTest()
 
   // Get all the properties using their named methods
   _boolProp = pclass.getBoolProperty();
-  BOOST_REQUIRE (_boolProp == true);
+  MXA_REQUIRE (_boolProp == true);
   _int8Prop = pclass.getInt8Property();
-  BOOST_REQUIRE (_int8Prop == 'A');
+  MXA_REQUIRE (_int8Prop == 'A');
 
   _int16Prop = pclass.getInt16Property();
-  BOOST_REQUIRE (_int16Prop == -34);
+  MXA_REQUIRE (_int16Prop == -34);
   _int32Prop = pclass.getInt32Property();
-  BOOST_REQUIRE (_int32Prop == -300);
+  MXA_REQUIRE (_int32Prop == -300);
   _int64Prop = pclass.getInt64Property();
-  BOOST_REQUIRE (_int64Prop == -9832498342ll);
+  MXA_REQUIRE (_int64Prop == -9832498342ll);
   _uint8Prop = pclass.getUInt8Property();
-  BOOST_REQUIRE (_uint8Prop == 'Z');
+  MXA_REQUIRE (_uint8Prop == 'Z');
   _uint16Prop = pclass.getUInt16Property();
-  BOOST_REQUIRE (_uint16Prop == 234);
+  MXA_REQUIRE (_uint16Prop == 234);
   _uint32Prop = pclass.getUInt32Property();
-  BOOST_REQUIRE (_uint32Prop == 2342342);
+  MXA_REQUIRE (_uint32Prop == 2342342);
   _uint64Prop = pclass.getUInt64Property();
-  BOOST_REQUIRE (_uint64Prop == 908324923490324ull);
+  MXA_REQUIRE (_uint64Prop == 908324923490324ull);
   _strProp = pclass.getStrProperty();
 
-  BOOST_REQUIRE (_strProp.compare("The String Property") == 0);
+  MXA_REQUIRE (_strProp.compare("The String Property") == 0);
   _floatProp = pclass.getFloatProperty();
-  BOOST_REQUIRE (_floatProp == 3.1415927f);
+  MXA_REQUIRE (_floatProp == 3.1415927f);
   _doubleProp = pclass.getDoubleProperty();
-  BOOST_REQUIRE (_doubleProp == 234234.234234234);
+  MXA_REQUIRE (_doubleProp == 234234.234234234);
 
 #if 0
   PRINT_RESULTS(BoolProperty, _boolProp)
@@ -285,19 +280,19 @@ int32 PropertyTest()
   std::string emptyString;
   success = pclass.getProperty<std::string>(MyPropertyNamespace::StrProperty, emptyString);
 
-  BOOST_REQUIRE (_boolProp == true);
-  BOOST_REQUIRE (_int8Prop == 'G');
-  BOOST_REQUIRE (_int16Prop == -2342);
-  BOOST_REQUIRE (_int32Prop == -987543);
-  BOOST_REQUIRE (_int64Prop == -65478934);
-  BOOST_REQUIRE (_uint8Prop == 'P');
-  BOOST_REQUIRE (_uint16Prop == 23654);
-  BOOST_REQUIRE (_uint32Prop == 41234342);
-  BOOST_REQUIRE (_uint64Prop == 9897842323ull);
+  MXA_REQUIRE (_boolProp == true);
+  MXA_REQUIRE (_int8Prop == 'G');
+  MXA_REQUIRE (_int16Prop == -2342);
+  MXA_REQUIRE (_int32Prop == -987543);
+  MXA_REQUIRE (_int64Prop == -65478934);
+  MXA_REQUIRE (_uint8Prop == 'P');
+  MXA_REQUIRE (_uint16Prop == 23654);
+  MXA_REQUIRE (_uint32Prop == 41234342);
+  MXA_REQUIRE (_uint64Prop == 9897842323ull);
 
-  BOOST_REQUIRE (emptyString.compare("Other String Property") == 0);
-  BOOST_REQUIRE (_floatProp == 4123.4342f);
-  BOOST_REQUIRE (_doubleProp == 9897.842323);
+  MXA_REQUIRE (emptyString.compare("Other String Property") == 0);
+  MXA_REQUIRE (_floatProp == 4123.4342f);
+  MXA_REQUIRE (_doubleProp == 9897.842323);
 
 
 #if 0
@@ -324,10 +319,10 @@ int32 PropertyTest()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
+int main(int argc, char **argv)
 {
-  boost::unit_test::test_suite* test= BOOST_TEST_SUITE ( "IImportProperty Test");
-  test->add( BOOST_TEST_CASE (&PropertyTest), 0);
-
-  return test;
+  int err = EXIT_SUCCESS;
+  MXA_REGISTER_TEST( PropertyTest() );
+  PRINT_TEST_SUMMARY();
+  return err;
 }

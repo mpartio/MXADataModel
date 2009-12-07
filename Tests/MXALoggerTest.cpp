@@ -13,10 +13,7 @@
 
 //-- C++
 #include <iostream>
-
-//-- Boost Unit Testing Framework
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
+#include "UnitTestSupport.hpp"
 
 #define logger               MXA_Global_Logger->mxaLogger
 
@@ -58,22 +55,22 @@ int MXALoggerTest_EntryPoint()
     std::stringstream ss;
     ss << "This is a test of the stringstream";
     logger.open(MXAUnitTest::MXALoggerTest::TestFile);
-    BOOST_REQUIRE((logger.getIsFileBased()) == true);
+    MXA_REQUIRE((logger.getIsFileBased()) == true);
     logger << logTime() << (ui8) << (i8) << (ui16) << (i16) << (ui32) << (i32) << (ui64) << (i64) << (f) << (d) << std::endl;
     logger << logTime() << (str) << std::endl;
     logger << logTime() << ss.str() << std::endl;
     logger.close();
-    BOOST_REQUIRE(logger.getIsFileBased() == false);
+    MXA_REQUIRE(logger.getIsFileBased() == false);
 
     logger << logTime() << ss.str() << std::endl;
     logger << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
 
     logger.open(MXAUnitTest::MXALoggerTest::TestFile, std::ios::app);
-    BOOST_REQUIRE(logger.getIsFileBased() == true);
+    MXA_REQUIRE(logger.getIsFileBased() == true);
 
     logger << logTime() << (ss.str()) << std::endl;
     logger.close();;
-    BOOST_REQUIRE(logger.getIsFileBased() == false);
+    MXA_REQUIRE(logger.getIsFileBased() == false);
 	}
 
 	std::cout << logTime() << "Logging to std::cout" << std::endl;
@@ -83,16 +80,16 @@ int MXALoggerTest_EntryPoint()
     logger << logTime() << (str) << std::endl;
 
     logger.close();;
-    BOOST_REQUIRE(logger.getIsFileBased() == false);
+    MXA_REQUIRE(logger.getIsFileBased() == false);
 
     logger.open(MXAUnitTest::MXALoggerTest::TestFile, std::ios::app);
-    BOOST_REQUIRE(logger.getIsFileBased() == true);
+    MXA_REQUIRE(logger.getIsFileBased() == true);
     std::stringstream ss;
     ss.str();
     ss << "This is a test of the stringstream";
     logger << logTime() << (ss.str()) << std::endl;
     logger.close();;
-    BOOST_REQUIRE(logger.getIsFileBased() == false);
+    MXA_REQUIRE(logger.getIsFileBased() == false);
 
 
 	}
@@ -104,12 +101,14 @@ int MXALoggerTest_EntryPoint()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
+int main(int argc, char **argv)
 {
-  boost::unit_test::test_suite* test= BOOST_TEST_SUITE ( "MXALoggerTest Test Running");
-  test->add( BOOST_TEST_CASE( &MXALoggerTest_EntryPoint), 0);
-  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-  return test;
+  int err = EXIT_SUCCESS;
+
+  MXA_REGISTER_TEST( MXALoggerTest_EntryPoint() );
+  MXA_REGISTER_TEST( RemoveTestFiles() );
+  PRINT_TEST_SUMMARY();
+  return err;
 }
 
 

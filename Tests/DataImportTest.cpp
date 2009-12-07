@@ -30,10 +30,8 @@
 #include "Tests/MXAUnitTestDataFileLocations.h"
 #include "H5ImportTest.h"
 #include "TiffMaker.h"
+#include "UnitTestSupport.hpp"
 
-//-- Boost Unit Testing Framework
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
 
 static std::vector<std::string> createdPaths;
 
@@ -42,22 +40,22 @@ static std::vector<std::string> createdPaths;
 // -----------------------------------------------------------------------------
 void RemoveTestFiles()
 {
-  std::cout << logTime() << "Removing Test files" << std::endl;
+ // std::cout << logTime() << "Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
   bool success;
   MXAFileSystemPath::remove(MXAUnitTest::DataImportTest::SimpleImport);
   MXAFileSystemPath::remove(MXAUnitTest::DataImportTest::H5TiffOutputFile);
   for (std::vector<std::string>::iterator iter = createdPaths.begin(); iter != createdPaths.end(); ++iter ) {
     success = MXAFileSystemPath::remove(*iter);
-    BOOST_REQUIRE_EQUAL(success, true);
+    MXA_REQUIRE_EQUAL(success, true);
   }
   success = MXAFileSystemPath::rmdir(MXAUnitTest::MXATempDir +
                                      MXAUnitTest::DataImportTest::TestDir +
                                      MXAFileSystemPath::Separator + "test_data", false);
-  BOOST_REQUIRE_EQUAL(success, true);
+  MXA_REQUIRE_EQUAL(success, true);
   success = MXAFileSystemPath::rmdir(MXAUnitTest::MXATempDir +
                                      MXAUnitTest::DataImportTest::TestDir, false);
-  BOOST_REQUIRE_EQUAL(success, true);
+  MXA_REQUIRE_EQUAL(success, true);
 #endif
 }
 
@@ -70,7 +68,9 @@ void RemoveTestFiles()
 void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
 {
   IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(outputFilePath, model);
-  BOOST_REQUIRE (NULL != dataFile.get() );
+
+  MXA_REQUIRE (NULL != dataFile.get() );
+
 
   //Create the DataImport Class
   MXADataImport::Pointer dataImport( new MXADataImport() );
@@ -89,7 +89,7 @@ void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
 
   // Run a comparison of 2 AbstractImportDelegateFactory::Pointers to make sure they are the same.
   AbstractImportDelegateFactory::Pointer factoryPtr2 = importManager->getImportDelegateFactory(H5ImportTest::Detail::ClassName);
-  BOOST_REQUIRE (h5ImportTestDelegateFactory.get() == factoryPtr2.get() );
+  MXA_REQUIRE (h5ImportTestDelegateFactory.get() == factoryPtr2.get() );
 
   // Create an Import Delegate to use for the DataSources
   IImportDelegate::Pointer delegatePtr = ImportDelegateManager::createNewImportDelegate(H5ImportTest::Detail::ClassName);
@@ -100,14 +100,14 @@ void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
 
   // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
   IDataDimension::Pointer dim0 = model->getDataDimension(0); // Get the first Dimension, since there is only one this works
-  BOOST_REQUIRE(dim0 != NULL); // Used for Boost Unit Test Framework
+  MXA_REQUIRE(dim0 != NULL); // Used for Boost Unit Test Framework
 
   IDataDimension::Pointer dim1 = model->getDataDimension(1);
-  BOOST_REQUIRE(dim1 != NULL); // Used for Boost Unit Test Framework
+  MXA_REQUIRE(dim1 != NULL); // Used for Boost Unit Test Framework
 
   // Create a DataRecord entry for the Data Model
   IDataRecord::Pointer record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
-  BOOST_REQUIRE(NULL != record.get()); // Used for Boost Unit Test Framework
+  MXA_REQUIRE(NULL != record.get()); // Used for Boost Unit Test Framework
 
   // Set the start/end/increment values for each Data Dimension
   int32 dim0Start = dim0->getStartValue();
@@ -142,7 +142,7 @@ void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
   // Import the Data into the HDF5 File
   //std::cout << "IMPORTING DATA NOW" << std::endl;
   int32 err = dataImport->import();
-  BOOST_REQUIRE(err >= 0); // Used for Boost Unit Test Framework
+  MXA_REQUIRE(err >= 0); // Used for Boost Unit Test Framework
   dataFile->closeFile(false);
 }
 
@@ -194,11 +194,11 @@ MXADataModel::Pointer createSimpleModel()
 // -----------------------------------------------------------------------------
 int SimpleTest()
 {
-  std::cout << logTime() << "Running SimpleImportTest ------------------------" << std::endl;
+ // std::cout << logTime() << "Running SimpleImportTest ------------------------" << std::endl;
   int32 err = 0;
   MXADataModel::Pointer model = createSimpleModel();
   ImportSimpleData(model, MXAUnitTest::DataImportTest::SimpleImport);
-  std::cout << logTime() << "Ending SimpleImportTest" << std::endl;
+ // std::cout << logTime() << "Ending SimpleImportTest" << std::endl;
   return err;
 }
 
@@ -212,7 +212,7 @@ void CreateTiffImages()
   importer.setXMLInputFile(MXAUnitTest::DataImportTest::ImportXMLFile);
   // The xmlfile will define the output file so we do NOT need to set it here.
   int32 err = importer.parseXMLFile();
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 
   IDataSource::Collection dataSources = importer.getDataSources();
 
@@ -234,14 +234,14 @@ int XMLImportTest()
 
   bool success = MXAFileSystemPath::mkdir(MXAUnitTest::MXATempDir +
                                           MXAUnitTest::DataImportTest::TestDir, true);
-  BOOST_REQUIRE_EQUAL(success, true);
+  MXA_REQUIRE_EQUAL(success, true);
 
   success = MXAFileSystemPath::mkdir(MXAUnitTest::MXATempDir +
                                           MXAUnitTest::DataImportTest::TestDir +
                                           MXAFileSystemPath::Separator + "test_data", true);
-  BOOST_REQUIRE_EQUAL(success, true);
+  MXA_REQUIRE_EQUAL(success, true);
 
-  std::cout << logTime() << "Starting XMLImportTest -----------------" << std::endl;
+  //std::cout << logTime() << "Starting XMLImportTest -----------------" << std::endl;
   // Instantiate the Instance Manager for import delegates
   ImportDelegateManager::Pointer idManager = ImportDelegateManager::instance();
 
@@ -258,12 +258,12 @@ int XMLImportTest()
   importer.setXMLInputFile(MXAUnitTest::DataImportTest::ImportXMLFile);
   // The xmlfile will define the output file so we do NOT need to set it here.
   int32 err = importer.import(); // Run the Import
-  if (err < 0)
-  {
-    std::cout << logTime()  << "Error Importing Data Files. Check any output for possible error logs." << std::endl;
-  }
-  BOOST_REQUIRE (err >= 0);
-  std::cout << logTime() << "Done With XML Based H5 Tiff import Test -----------------" << std::endl;
+//  if (err < 0)
+//  {
+//    std::cout << logTime()  << "Error Importing Data Files. Check any output for possible error logs." << std::endl;
+//  }
+  MXA_REQUIRE (err >= 0);
+ // std::cout << logTime() << "Done With XML Based H5 Tiff import Test -----------------" << std::endl;
   return err;
 }
 
@@ -271,13 +271,14 @@ int XMLImportTest()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
+int main(int argc, char **argv)
 {
-  boost::unit_test::test_suite* test= BOOST_TEST_SUITE ( "Data Import Test");
-  test->add( BOOST_TEST_CASE( &XMLImportTest), 0);
-  test->add( BOOST_TEST_CASE( &SimpleTest), 0);
-  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-  return test;
+int err = EXIT_SUCCESS;
+  MXA_REGISTER_TEST( XMLImportTest() );
+  MXA_REGISTER_TEST( SimpleTest() );
+  MXA_REGISTER_TEST( RemoveTestFiles() );
+  PRINT_TEST_SUMMARY();
+  return err;
 }
 
 

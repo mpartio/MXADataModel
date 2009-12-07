@@ -21,6 +21,7 @@
 #include <Tests/MXAUnitTestDataFileLocations.h>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
+#include "UnitTestSupport.hpp"
 
 //-- C++ includes
 #include <string>
@@ -29,13 +30,7 @@
 //Boost Includes
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-//-- Boost Test Headers
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
 
-
-
-//typedef boost::shared_ptr<MXAAttribute> MXAAttributePtr;
 
 // -----------------------------------------------------------------------------
 //
@@ -73,17 +68,17 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
   {
     numelements *= *(iter);
   }
-  BOOST_REQUIRE(numelements == 10);
-  BOOST_REQUIRE(dims.size() == 2);
-  BOOST_REQUIRE(dims[0] == 5);
-  BOOST_REQUIRE(dims[1] == 2);
+  MXA_REQUIRE(numelements == 10);
+  MXA_REQUIRE(dims.size() == 2);
+  MXA_REQUIRE(dims[0] == 5);
+  MXA_REQUIRE(dims[1] == 2);
   IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32>(dims.size()), &(dims.front()) );
-  BOOST_REQUIRE ( vecPtr->getNumberOfElements() == numelements);
-  BOOST_REQUIRE (vecPtr->getNumberOfDimensions() == 2);
+  MXA_REQUIRE ( vecPtr->getNumberOfElements() == numelements);
+  MXA_REQUIRE (vecPtr->getNumberOfDimensions() == 2);
    std::vector<uint64> mydims(dims.size(), 0);
   vecPtr->getDimensions( &(mydims.front() ) );
-  BOOST_REQUIRE (mydims[0] == 5);
-  BOOST_REQUIRE (mydims[1] == 2);
+  MXA_REQUIRE (mydims[0] == 5);
+  MXA_REQUIRE (mydims[1] == 2);
 
   // Copy data into the attribute container
   T* data = static_cast<T*>( vecPtr->getVoidPointer(0) );
@@ -279,7 +274,7 @@ MXADataModel::Pointer createModelTemplate()
 // -----------------------------------------------------------------------------
 void GenerateMasterXMLFile()
 {
-  std::cout << "Running GenerateMasterXMLFile........";
+
   std::string xmlFile(MXAUnitTest::XMLTest::MasterFile);
   {
     MXADataModel::Pointer model = createModel();
@@ -289,7 +284,7 @@ void GenerateMasterXMLFile()
     out.open(xmlFile.c_str());
     if (NULL == delegate.get() || false == out.is_open() )
      {
-      BOOST_ASSERT(1 == 0);
+      MXA_ASSERT(1 == 0);
      }
 
     MXADataModelWriter<FileStreamType>::Pointer writer =
@@ -297,9 +292,9 @@ void GenerateMasterXMLFile()
 
     int32 err = writer->writeModel(model);
 
-    BOOST_REQUIRE ( err >= 0);
+    MXA_REQUIRE ( err >= 0);
     MXAAbstractAttributes attributes = model->getUserMetaData();
-    BOOST_REQUIRE(attributes.size() == 21);
+    MXA_REQUIRE(attributes.size() == 21);
   }
 
   {
@@ -308,21 +303,22 @@ void GenerateMasterXMLFile()
     FileStreamType::Pointer delegate = FileStreamType::New();
     std::ifstream& out = *(delegate->getStreamPointer());
     out.open(xmlFile.c_str());
-    BOOST_REQUIRE(delegate.get() != NULL);
-    BOOST_REQUIRE(out.is_open() != false);
+    MXA_REQUIRE(delegate.get() != NULL);
+    MXA_REQUIRE(out.is_open() != false);
     MXADataModelReader<FileStreamType>::Pointer reader = MXADataModelReader<FileStreamType>::New(delegate);
     IDataModel::Pointer model = reader->readModel();
 
 
-    BOOST_REQUIRE ( NULL != model.get() );
-    BOOST_REQUIRE (model->getNumberOfDataDimensions() == 4);
+    MXA_REQUIRE ( NULL != model.get() );
+    MXA_REQUIRE (model->getNumberOfDataDimensions() == 4);
     std::string errorMessage;
-    BOOST_REQUIRE (model->isValid(errorMessage) == true);
+    MXA_REQUIRE (model->isValid(errorMessage) == true);
     MXAAbstractAttributes attributes = model->getUserMetaData();
-    BOOST_REQUIRE(attributes.size() == 21);
-    BOOST_REQUIRE(model->getSupportFiles().size() == 1);
-    std::cout << "....... Passed" << std::endl;
+    MXA_REQUIRE(attributes.size() == 21);
+    MXA_REQUIRE(model->getSupportFiles().size() == 1);
+  //  std::cout << "....... Passed" << std::endl;
   }
+  TestPassed("GenerateMasterXMLFile");
 }
 
 // -----------------------------------------------------------------------------
@@ -330,7 +326,7 @@ void GenerateMasterXMLFile()
 // -----------------------------------------------------------------------------
 void XMLModelTest()
 {
-  std::cout << "XMLModelTest Running...";
+ // std::cout << "XMLModelTest Running...";
   std::string masterXmlFile(MXAUnitTest::XMLTest::MasterFile);
   std::string outFile (MXAUnitTest::XMLTest::TestFile);
   std::string errorMessage;
@@ -339,16 +335,16 @@ void XMLModelTest()
     FileStreamType::Pointer delegate = FileStreamType::New();
     std::ifstream& out = *(delegate->getStreamPointer());
     out.open(masterXmlFile.c_str());
-    BOOST_REQUIRE(delegate.get() != NULL);
-    BOOST_REQUIRE(out.is_open() != false);
+    MXA_REQUIRE(delegate.get() != NULL);
+    MXA_REQUIRE(out.is_open() != false);
     MXADataModelReader<FileStreamType>::Pointer reader = MXADataModelReader<FileStreamType>::New(delegate);
     IDataModel::Pointer model = reader->readModel();
 
 
-    BOOST_REQUIRE (model->getNumberOfDataDimensions() == 4);
-    BOOST_REQUIRE (model->isValid(errorMessage) == true);
+    MXA_REQUIRE (model->getNumberOfDataDimensions() == 4);
+    MXA_REQUIRE (model->isValid(errorMessage) == true);
     MXAAbstractAttributes attributes = model->getUserMetaData();
-    BOOST_REQUIRE(attributes.size() == 21);
+    MXA_REQUIRE(attributes.size() == 21);
   }
 
   {
@@ -359,7 +355,7 @@ void XMLModelTest()
     out.open(outFile.c_str());
     if (NULL == delegate.get() || false == out.is_open() )
      {
-      BOOST_ASSERT(1 == 0);
+      MXA_ASSERT(1 == 0);
      }
 
     MXADataModelWriter<FileStreamType>::Pointer writer =
@@ -367,7 +363,7 @@ void XMLModelTest()
 
     int32 err = writer->writeModel(model);
 
-    BOOST_REQUIRE ( err >= 0);
+    MXA_REQUIRE ( err >= 0);
   }
 
   // Now compare the xml files
@@ -392,8 +388,8 @@ void XMLModelTest()
     fclose(fp);
     fp = NULL;
   }
-  BOOST_REQUIRE (masterData == testData);
-  std::cout << "....... Passed" << std::endl;
+  MXA_REQUIRE (masterData == testData);
+ // std::cout << "....... Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------
@@ -401,7 +397,7 @@ void XMLModelTest()
 // -----------------------------------------------------------------------------
 void XMLTemplateTest()
 {
-  std::cout << "XMLTemplateTest Running..." ;
+ // std::cout << "XMLTemplateTest Running..." ;
   std::string errorMessage;
   std::string templateFile (MXAUnitTest::XMLTest::TemplateTestFile);
   {
@@ -412,11 +408,11 @@ void XMLTemplateTest()
     out.open(templateFile.c_str());
     if (NULL == delegate.get() || false == out.is_open() )
      {
-      BOOST_ASSERT(1 == 0);
+      MXA_ASSERT(1 == 0);
      }
     MXADataModelWriter<FileStreamType>::Pointer writer = MXADataModelWriter<FileStreamType>::New(delegate);
     int32 err = writer->writeModel(model);
-    BOOST_REQUIRE ( err >= 0);
+    MXA_REQUIRE ( err >= 0);
 
   }
   {
@@ -424,16 +420,16 @@ void XMLTemplateTest()
     FileStreamType::Pointer delegate = FileStreamType::New();
     std::ifstream& out = *(delegate->getStreamPointer());
     out.open(templateFile.c_str());
-    BOOST_REQUIRE(delegate.get() != NULL);
-    BOOST_REQUIRE(out.is_open() != false);
+    MXA_REQUIRE(delegate.get() != NULL);
+    MXA_REQUIRE(out.is_open() != false);
     MXADataModelReader<FileStreamType>::Pointer reader = MXADataModelReader<FileStreamType>::New(delegate);
     reader->setReturnValidModels(false);
     IDataModel::Pointer readModel;
     readModel = reader->readModel();
 
-    BOOST_REQUIRE ( NULL != readModel.get() ); // This SHOULD fail because we read in a partial model
-    BOOST_REQUIRE ( readModel->isValid(errorMessage) == false);
-    BOOST_REQUIRE ( readModel->getDataRecords().size() == 2);
+    MXA_REQUIRE ( NULL != readModel.get() ); // This SHOULD fail because we read in a partial model
+    MXA_REQUIRE ( readModel->isValid(errorMessage) == false);
+    MXA_REQUIRE ( readModel->getDataRecords().size() == 2);
 
     IDataDimension::Pointer dim0 = readModel->getDataDimension(0);
     dim0->setCount(15);
@@ -463,12 +459,12 @@ void XMLTemplateTest()
     dim3->setIncrement(1);
     dim3->setUniform(1);
 
-    BOOST_REQUIRE ( readModel->isValid(errorMessage) == true); //Model should now validate since we have reasonable values for each dimension
+    MXA_REQUIRE ( readModel->isValid(errorMessage) == true); //Model should now validate since we have reasonable values for each dimension
     //We can write the model back out to XML without any errors
     {
 //      XMLDataModelWriter writer(readModel, MXAUnitTest::XMLTest::TemplateCompleteFile);
 //      err = writer.writeModel(-1);
-//      BOOST_REQUIRE ( err >= 0);
+//      MXA_REQUIRE ( err >= 0);
 
       typedef XMLStreamWriterDelegate<std::ofstream> FileStreamType;
       FileStreamType::Pointer delegate = FileStreamType::New();
@@ -476,25 +472,28 @@ void XMLTemplateTest()
       out.open(MXAUnitTest::XMLTest::TemplateCompleteFile.c_str());
       if (NULL == delegate.get() || false == out.is_open() )
        {
-        BOOST_ASSERT(1 == 0);
+        MXA_ASSERT(1 == 0);
        }
       MXADataModelWriter<FileStreamType>::Pointer writer = MXADataModelWriter<FileStreamType>::New(delegate);
       int32 err = writer->writeModel(readModel);
-      BOOST_REQUIRE ( err >= 0);
+      MXA_REQUIRE ( err >= 0);
     }
   }
-  std::cout << "....... Passed" << std::endl;
+ // std::cout << "....... Passed" << std::endl;
 }
 
-// -----------------------------------------------------------------------------
-//  Use Boost unit test framework
-// -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite(int32 /*argc*/, char* /*argv*/[])
-{
-  boost::unit_test::test_suite* test= BOOST_TEST_SUITE( "XML Tests" );
-  test->add( BOOST_TEST_CASE( &GenerateMasterXMLFile), 0);
-  test->add( BOOST_TEST_CASE( &XMLModelTest), 0);
-  test->add( BOOST_TEST_CASE( &XMLTemplateTest), 0);
-  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-  return test;
+
+int main(int argc, char **argv) {
+
+
+  int err = EXIT_SUCCESS;
+
+  MXA_REGISTER_TEST( GenerateMasterXMLFile() )
+  MXA_REGISTER_TEST( XMLModelTest() )
+  MXA_REGISTER_TEST( XMLTemplateTest() )
+  MXA_REGISTER_TEST( RemoveTestFiles() )
+
+  PRINT_TEST_SUMMARY();
+  return err;
 }
+

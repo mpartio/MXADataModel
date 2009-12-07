@@ -15,6 +15,7 @@
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/DataImport/AbstractImportDelegateFactory.h>
+#include "UnitTestSupport.hpp"
 
 #include <string>
 

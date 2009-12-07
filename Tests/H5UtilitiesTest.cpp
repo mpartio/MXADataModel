@@ -18,16 +18,12 @@
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
-
+#include "UnitTestSupport.hpp"
 
 //-- C++ includes
 #include <list>
 #include <string>
 
-
-//-- Boost Test Headers
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_tools.hpp>
 
 
 #define DIM 6
@@ -62,7 +58,7 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
   T value = 0x0;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "1DArrayAttribute<" + attributeKey + ">";
   int32 rank = 1;
   T data[DIM0];
@@ -74,7 +70,7 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
   dims[0] = DIM0;
 
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -90,7 +86,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
   T value = 0x0;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
 
   attributeKey = "2DArrayAttribute<" + attributeKey + ">";
   int32 rank = RANK_2D;
@@ -105,7 +101,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
   dims[0] = DIM0;
   dims[1] = DIM1;
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -119,7 +115,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
   T value = 0x0;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "3DArrayAttribute<" + attributeKey + ">";
   int32 rank = RANK_3D;
   T data[DIM0][DIM1][DIM2];
@@ -135,7 +131,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
   dims[1] = DIM1;
   dims[2] = DIM2;
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -148,7 +144,7 @@ herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName )
   T value = 0x0;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "VectorAttribute<" + attributeKey + ">";
 
   int32 numElements = DIM0;
@@ -161,7 +157,7 @@ herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName )
   }
   //std::cout << "Attribute->Write: " << objName;
   err = H5Lite::writeVectorAttribute( file_id, dsetName, attributeKey, dims, data );
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -175,10 +171,10 @@ herr_t testWriteScalarAttribute(hid_t file_id, const std::string &dsetName)
   T value = 0x0F;
   herr_t err = -1;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
-  BOOST_REQUIRE(attributeKey.empty() == false);
+  MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "ScalarAttribute<" + attributeKey + ">";
   err = H5Lite::writeScalarAttribute(file_id, dsetName, attributeKey, value);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   return err;
 }
 
@@ -209,7 +205,7 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   dsetName = "Pointer2DArrayDataset<" + dsetName + ">";
   std::cout << "Running " << dsetName << " ... ";
   err = H5Lite::writePointerDataset( file_id, dsetName, rank, dims, &(data.front()) );
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
   err = testWritePointer1DArrayAttribute<int8>(file_id, dsetName);
   err = testWritePointer1DArrayAttribute<uint8>(file_id, dsetName);
   err = testWritePointer1DArrayAttribute<int16>(file_id, dsetName);
@@ -278,97 +274,97 @@ void H5UtilitiesTest()
    hid_t   file_id;
    /* Create a new file using default properties. */
    file_id = H5Fcreate( MXAUnitTest::H5UtilTest::FileName.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
-   BOOST_REQUIRE(file_id > 0);
+   MXA_REQUIRE(file_id > 0);
 
    // std::cout << logTime() << "----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl;
-   BOOST_REQUIRE ( testWritePointer2DArrayDataset<int32>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<int32>(file_id) >= 0);
 
    hid_t dsetId = H5Utilities::openHDF5Object(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>");
-   BOOST_REQUIRE(dsetId > 0);
+   MXA_REQUIRE(dsetId > 0);
 
-   BOOST_REQUIRE( H5Utilities::isGroup(file_id, "/") == true);
-   BOOST_REQUIRE( H5Utilities::isGroup(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>") == false);
+   MXA_REQUIRE( H5Utilities::isGroup(file_id, "/") == true);
+   MXA_REQUIRE( H5Utilities::isGroup(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>") == false);
 
    std::string objName;
    int32 err = H5Utilities::objectNameAtIndex(file_id, 0, objName);
-   BOOST_REQUIRE(objName.compare("Pointer2DArrayDataset<H5T_NATIVE_INT32>") == 0);
+   MXA_REQUIRE(objName.compare("Pointer2DArrayDataset<H5T_NATIVE_INT32>") == 0);
 
    hid_t objType = -1;
    err = H5Utilities::getObjectType(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", &objType);
-   BOOST_REQUIRE(objType == H5G_DATASET);
-   BOOST_REQUIRE(err >= 0);
+   MXA_REQUIRE(objType == H5G_DATASET);
+   MXA_REQUIRE(err >= 0);
 
    err = H5Utilities::getObjectType(file_id, "/", &objType);
-   BOOST_REQUIRE(objType == H5G_GROUP);
-   BOOST_REQUIRE(err >= 0);
+   MXA_REQUIRE(objType == H5G_GROUP);
+   MXA_REQUIRE(err >= 0);
 
    std::string objPath = H5Utilities::getObjectPath(dsetId, false);
-   BOOST_REQUIRE(objPath.compare("Pointer2DArrayDataset<H5T_NATIVE_INT32>") == 0);
+   MXA_REQUIRE(objPath.compare("Pointer2DArrayDataset<H5T_NATIVE_INT32>") == 0);
 
    err = H5Utilities::closeHDF5Object(dsetId);
-   BOOST_REQUIRE(err >= 0);
+   MXA_REQUIRE(err >= 0);
 
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 1", file_id) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 2/", file_id) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 3/", file_id) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/", file_id) < 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 4/Test Path 7", file_id) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 5/Test Path 8/", file_id) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 6/Test Path 9/", file_id) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 1", file_id) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 2/", file_id) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 3/", file_id) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/", file_id) < 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 4/Test Path 7", file_id) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 5/Test Path 8/", file_id) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 6/Test Path 9/", file_id) >= 0);
 
    hid_t grpId = H5Utilities::openHDF5Object(file_id, "Test Path 1");
-   BOOST_REQUIRE(grpId > 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 1", grpId) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 2/", grpId) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 3/", grpId) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/", grpId) < 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 4/Test Path 7", grpId) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 5/Test Path 8/", grpId) >= 0);
-   BOOST_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 6/Test Path 9/", grpId) >= 0);
+   MXA_REQUIRE(grpId > 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 1", grpId) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 2/", grpId) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 3/", grpId) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/", grpId) < 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 4/Test Path 7", grpId) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("/Test Path 5/Test Path 8/", grpId) >= 0);
+   MXA_REQUIRE ( H5Utilities::createGroupsFromPath("Test Path 6/Test Path 9/", grpId) >= 0);
    err = H5Gclose(grpId);
-   BOOST_REQUIRE(err >= 0);
+   MXA_REQUIRE(err >= 0);
 
    hid_t gid = H5Utilities::createGroup(file_id, "test group");
-   BOOST_REQUIRE(gid >= 0);
+   MXA_REQUIRE(gid >= 0);
    err = H5Utilities::closeHDF5Object(gid);
 
    std::list<std::string> groups;
    err = H5Utilities::getGroupObjects(file_id, H5Utilities::MXA_ANY, groups);
-   BOOST_REQUIRE(err >= 0);
-   BOOST_REQUIRE( groups.size() == 8);
+   MXA_REQUIRE(err >= 0);
+   MXA_REQUIRE( groups.size() == 8);
 
 
    err = H5Utilities::createGroupsForDataset("/group1/group2/group3/data", file_id);
-   BOOST_REQUIRE(err >= 0);
+   MXA_REQUIRE(err >= 0);
    gid = H5Utilities::openHDF5Object(file_id, "/group1/group2");
-   BOOST_REQUIRE(gid >= 0);
+   MXA_REQUIRE(gid >= 0);
    err = H5Utilities::closeHDF5Object(gid);
 
    bool success = H5Utilities::probeForAttribute(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", "ScalarAttribute<H5T_NATIVE_INT32>" );
-   BOOST_REQUIRE(success == true);
+   MXA_REQUIRE(success == true);
 
    success = H5Utilities::probeForAttribute(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", "ScalarAttribute<>" );
-   BOOST_REQUIRE(success == false);
+   MXA_REQUIRE(success == false);
 
    std::list<std::string> attributes;
    err = H5Utilities::getAllAttributeNames(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", attributes);
-   BOOST_REQUIRE(err >= 0);
-   BOOST_REQUIRE(attributes.size() == 50);
+   MXA_REQUIRE(err >= 0);
+   MXA_REQUIRE(attributes.size() == 50);
 
    dsetId = H5Utilities::openHDF5Object(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>");
-   BOOST_REQUIRE(dsetId > 0);
+   MXA_REQUIRE(dsetId > 0);
    attributes.clear();
    err = H5Utilities::getAllAttributeNames(dsetId, attributes);
-   BOOST_REQUIRE(err >= 0);
-   BOOST_REQUIRE(attributes.size() == 50);
+   MXA_REQUIRE(err >= 0);
+   MXA_REQUIRE(attributes.size() == 50);
    err = H5Utilities::closeHDF5Object(dsetId);
-   BOOST_REQUIRE(err >= 0);
+   MXA_REQUIRE(err >= 0);
 //
    MXAAbstractAttributes allAttributes;
    err = H5Utilities::readAllAttributes(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", allAttributes );
-   BOOST_REQUIRE(err >= 0);
-   BOOST_REQUIRE(allAttributes.size() == 50);
-   BOOST_REQUIRE(H5Fclose(file_id) >= 0);
+   MXA_REQUIRE(err >= 0);
+   MXA_REQUIRE(allAttributes.size() == 50);
+   MXA_REQUIRE(H5Fclose(file_id) >= 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -385,44 +381,44 @@ void StressTestCreateGroups()
 
   /* Create a new file using default properties. */
   file_id = H5Fcreate( MXAUnitTest::H5UtilTest::GroupTest.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
-  BOOST_REQUIRE(file_id > 0);
+  MXA_REQUIRE(file_id > 0);
 
 
   for (int i = 0; i < 100; ++i) {
     std::cout << logTime() << "Outer Loop: " << i << std::endl;
 //    err = H5Fclose(file_id);
-//    BOOST_REQUIRE(err >= 0);
+//    MXA_REQUIRE(err >= 0);
 //    file_id = H5Fopen(MXAUnitTest::H5UtilTest::GroupTest.c_str(), H5F_ACC_RDWR, H5P_DEFAULT);
     ::memset(path, 0, 64);
     snprintf(path, 64, "/%03d", i);
     grpId = H5Utilities::createGroup(file_id, path);
-    BOOST_REQUIRE(grpId > 0);
+    MXA_REQUIRE(grpId > 0);
     err = H5Gclose(grpId);
-    BOOST_REQUIRE(err >= 0);
+    MXA_REQUIRE(err >= 0);
 
 
     for (int j = 0; j < 100; ++j) {
 
       snprintf(path, 64, "/%03d/%03d", i, j);
       grpId = H5Utilities::createGroup(file_id, path);
-      BOOST_REQUIRE(grpId > 0);
-      BOOST_REQUIRE(grpId > 0);
+      MXA_REQUIRE(grpId > 0);
+      MXA_REQUIRE(grpId > 0);
       err = H5Gclose(grpId);
-      BOOST_REQUIRE(err >= 0);
+      MXA_REQUIRE(err >= 0);
 
       for (int k = 0; k < 100; ++k) {
 
         snprintf(path, 64, "/%03d/%03d/%03d", i, j, k);
         grpId = H5Utilities::createGroup(file_id, path);
-        BOOST_REQUIRE(grpId >= 0);
-        BOOST_REQUIRE(grpId > 0);
+        MXA_REQUIRE(grpId >= 0);
+        MXA_REQUIRE(grpId > 0);
         err = H5Gclose(grpId);
-        BOOST_REQUIRE(err >= 0);
+        MXA_REQUIRE(err >= 0);
       }
     }
   }
   err = H5Fclose(file_id);
-  BOOST_REQUIRE(err >= 0);
+  MXA_REQUIRE(err >= 0);
 }
 
 
@@ -430,11 +426,13 @@ void StressTestCreateGroups()
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
 // -----------------------------------------------------------------------------
-boost::unit_test::test_suite* init_unit_test_suite( int32 /*argc*/, char* /*argv*/[] ) {
-  boost::unit_test::test_suite* test = BOOST_TEST_SUITE( "H5Utilities Tests" );
-  test->add( BOOST_TEST_CASE( &H5UtilitiesTest), 0);
-  test->add( BOOST_TEST_CASE( &RemoveTestFiles), 0);
-  return test;
+int main(int argc, char **argv) {
+  int err = EXIT_SUCCESS;
+
+  MXA_REGISTER_TEST( H5UtilitiesTest() );
+  MXA_REGISTER_TEST( RemoveTestFiles() );
+  PRINT_TEST_SUMMARY();
+  return err;
 }
 
 
