@@ -12,7 +12,7 @@ set (Boost_USE_STATIC_LIBS TRUE)
 SET (Boost_ADDITIONAL_VERSIONS "1.41" "1.41.0" "1.39" "1.39.0")
 
 if ( NOT MXA_BOOST_HEADERS_ONLY)
- set (MXA_BOOST_COMPONENTS program_options unit_test_framework test_exec_monitor)
+ set (MXA_BOOST_COMPONENTS program_options )
 endif()
 
 FIND_PACKAGE(Boost COMPONENTS  ${MXA_BOOST_COMPONENTS} )
