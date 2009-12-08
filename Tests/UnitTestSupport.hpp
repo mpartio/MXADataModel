@@ -14,6 +14,9 @@
 #include <iostream>
 #include <sstream>
 
+#define NUM_COLS 70
+
+
 namespace mxa
 {
 namespace unittest
@@ -22,6 +25,12 @@ namespace unittest
   static int numTestsPass = 0;
   static int numTestFailed = 0;
   static int numTests = 0;
+
+  static char TestMessage[NUM_COLS + 1];
+  static const char Passed[6] = { 'P', 'A', 'S', 'S', 'E', 'D'};
+  static const char Failed[6] = { 'F', 'A', 'I', 'L', 'E', 'D'};
+  static int SizeOfPassed = 6;
+  static int SizeOfFailed = 6;
 }
 }
 
@@ -59,27 +68,30 @@ protected:
       void operator=(const TestException&);  // Operator '=' Not Implemented
 };
 
-#define NUM_COLS 70
+
+
+
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 void TestPassed(const std::string &test)
 {
-  char msg[NUM_COLS];
-  ::memset(msg, ' ', NUM_COLS);
-  msg[NUM_COLS] = 0;
-  std::string::size_type size = (NUM_COLS - sizeof("PASSED") - 1);
-  ::strncpy( &(msg[size]) , "PASSED", sizeof("PASSED") );
+  ::memset(mxa::unittest::TestMessage, ' ', NUM_COLS); // Splat Spaces across the entire message
+  mxa::unittest::TestMessage[NUM_COLS] = 0;  // Make sure it is null terminated
+ 
+  std::string::size_type size = NUM_COLS - mxa::unittest::SizeOfPassed;
+  ::strncpy( &(mxa::unittest::TestMessage[size]) , mxa::unittest::Passed, mxa::unittest::SizeOfPassed );
   if (test.length() < size )
   {
-    ::strncpy(msg, test.c_str(), test.length());
+    ::strncpy(mxa::unittest::TestMessage, test.c_str(), test.length());
   }
   else
   {
-    ::strncpy(msg, test.substr(0, size).c_str(), size);
+    ::strncpy(mxa::unittest::TestMessage, test.substr(0, size).c_str(), size);
   }
-  std::cout << msg << std::endl;
+  mxa::unittest::TestMessage[NUM_COLS] = 0;  // Make sure it is null terminated
+  std::cout << mxa::unittest::TestMessage << std::endl;
   mxa::unittest::numTestsPass++;
 }
 
@@ -88,23 +100,28 @@ void TestPassed(const std::string &test)
 // -----------------------------------------------------------------------------
 void TestFailed(const std::string &test)
 {
-  char msg[NUM_COLS];
-  ::memset(msg, ' ', NUM_COLS);
-  msg[NUM_COLS] = 0;
-  std::string::size_type size = (NUM_COLS - sizeof("FAILED") - 1);
-  ::strncpy( &(msg[size]) , "FAILED", sizeof("FAILED") );
+  ::memset(mxa::unittest::TestMessage, ' ', NUM_COLS); // Splat Spaces across the entire message
+  mxa::unittest::TestMessage[NUM_COLS] = 0;  // Make sure it is null terminated
+
+  std::string::size_type size = NUM_COLS - mxa::unittest::SizeOfFailed;
+  ::strncpy( &(mxa::unittest::TestMessage[size]) , mxa::unittest::Failed, mxa::unittest::SizeOfFailed );
   if (test.length() < size )
   {
-    ::strncpy(msg, test.c_str(), test.length());
+    ::strncpy(mxa::unittest::TestMessage, test.c_str(), test.length());
   }
   else
   {
-    ::strncpy(msg, test.substr(0, size).c_str(), size);
+    ::strncpy(mxa::unittest::TestMessage, test.substr(0, size).c_str(), size);
   }
-  std::cout << msg << std::endl;
+  mxa::unittest::TestMessage[NUM_COLS] = 0;  // Make sure it is null terminated
+  std::cout << mxa::unittest::TestMessage << std::endl;
   mxa::unittest::numTestFailed++;
 }
 
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 #define MXA_TEST_THROW_EXCEPTION( P)\
       throw TestException( P, __FILE__, __LINE__);\
 

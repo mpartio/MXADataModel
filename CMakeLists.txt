@@ -224,7 +224,12 @@ IDE_GENERATED_PROPERTIES( "Generated" "${PROJECT_BINARY_DIR}/MXA/MXAConfiguratio
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
   ADD_DEFINITIONS(-DDEBUG)
-  ADD_DEFINITIONS(-Wall)
+  if (NOT WIN32)
+    ADD_DEFINITIONS(-Wall)
+  endif()
+  IF (MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  ENDIF()
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
 

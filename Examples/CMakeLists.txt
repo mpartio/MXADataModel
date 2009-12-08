@@ -5,6 +5,7 @@
 #--////////////////////////////////////////////////////////////////////////////
 PROJECT (MXAExamples)
 
+if ( NOT MXA_OUTPUT_DIRS_DEFINED )
 # ---------- Setup output Directories -------------------------
 SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
   ${PROJECT_BINARY_DIR}/Bin
@@ -25,31 +26,13 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
   CACHE PATH
   "Single Directory for all static libraries."
   )
-
+ENDIF ( NOT MXA_OUTPUT_DIRS_DEFINED )
 
 INCLUDE_DIRECTORIES(${MXA_SOURCE_DIR}/MXA)
 include_directories(${MXADataModel_SOURCE_DIR})
 
 INCLUDE( ${MXA_CMAKE_DIR}/MXAFindHDF5.cmake )
 SET (MXA_EXAMPLES_SOURCE_DIR ${MXA_SOURCE_DIR}/MXA/Examples)
-
-IF(NOT HDF5_FOUND)
-  MESSAGE(FATAL_ERROR "HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
-ENDIF(NOT HDF5_FOUND)
-
-OPTION(MXA_BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" ON)
-mark_as_advanced(MXA_BUILD_VTK_HDF5)
-IF(MXA_BUILD_VTK_HDF5)
-     #-- Find VTK packages -----------------------------------------
-    FIND_PACKAGE(VTK REQUIRED)
-    INCLUDE(${VTK_USE_FILE})
-    
-    # List the kits from VTK that are needed by this project.
-    SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
-    
-    SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
-    SET(HDF5_VTK_BRIDGE "1")
-ENDIF(MXA_BUILD_VTK_HDF5) 
 
 
 SET (GETDATA_SRCS
@@ -150,20 +133,20 @@ TARGET_LINK_LIBRARIES(MXAPropertyExample ${MXADATAMODEL_LIB_NAME} )
 ToolInstallationSupport (MXAPropertyExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
 
 # ------------------------------------------------------------------------------
-#  Add Executable for Arbitrary File Example
+#  Add Executable for Support File Example
 # ------------------------------------------------------------------------------
-SET (SUPPORT_FILE_EXAMPLE_SRCS
-    ${MXAExamples_SOURCE_DIR}/SupportFileExample.cpp
-    ${MXATests_SOURCE_DIR}/TiffMaker.cpp
-)
-SET (SUPPORT_FILE_EXAMPLE_HEADERS
-    
-)
-IDE_SOURCE_PROPERTIES("MXA/Examples" "${SUPPORT_FILE_EXAMPLE_HEADERS}" "${SUPPORT_FILE_EXAMPLE_SRCS}")
-
-IF ( MXA_USE_HDF5 )
+IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
+    SET (SUPPORT_FILE_EXAMPLE_SRCS
+        ${MXAExamples_SOURCE_DIR}/SupportFileExample.cpp
+        ${MXATests_SOURCE_DIR}/TiffMaker.cpp
+    )
+    SET (SUPPORT_FILE_EXAMPLE_HEADERS
+        
+    )
+    IDE_SOURCE_PROPERTIES("MXA/Examples" "${SUPPORT_FILE_EXAMPLE_HEADERS}" "${SUPPORT_FILE_EXAMPLE_SRCS}")
+ 
     ADD_EXECUTABLE(SupportFileExample ${SUPPORT_FILE_EXAMPLE_SRCS} ${SUPPORT_FILE_EXAMPLE_HEADERS})
     TARGET_LINK_LIBRARIES(SupportFileExample ${MXADATAMODEL_LIB_NAME} )
     ToolInstallationSupport (SupportFileExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
-ENDIF ( MXA_USE_HDF5 )
+ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF )
 

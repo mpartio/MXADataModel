@@ -8,9 +8,10 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef _MHDTIFFIO_H_
-#define _MHDTIFFIO_H_
+#ifndef _H5TIFFIO_H_
+#define _H5TIFFIO_H_
 
+#if MXA_TIFF_SUPPORT
 
 //-- STL Headers
 #include <string>
@@ -236,6 +237,6 @@ class MXA_EXPORT H5TiffIO
 
 };
 
+#endif /* MXA_TIFF_SUPPORT */
 
-
-#endif /* _MHDTIFFIO_H_ */
+#endif /* _H5TIFFIO_H_ */

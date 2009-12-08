@@ -33,7 +33,6 @@ macro (DataImportTestSetup name alt_name start count end  increment index)
     SET (${name}_end ${end} )
     SET (${name}_increment ${increment} )
     SET (${name}_index ${index})
-    
 endmacro (DataImportTestSetup name alt_name start count end increment index)
 
 # --------------------------------------------------------------------------
@@ -86,7 +85,8 @@ IF (MXA_BUILD_TESTING)
 
     CONFIGURE_FILE(${MXA_TEST_SRC_DIR}/TestDataFileLocations.h.in
                ${PROJECT_BINARY_DIR}/MXAUnitTestDataFileLocations.h @ONLY IMMEDIATE)
-  
+
+# --------------------------------------------------------------------
 # --------- FileReader/Writer Test
     SET (FILEREADERWRITER_TEST_SRCS
         ${MXATests_SOURCE_DIR}/MXAFileReaderWriterTest.cpp
@@ -95,6 +95,7 @@ IF (MXA_BUILD_TESTING)
     TARGET_LINK_LIBRARIES (MXA_FileReaderWriterTest ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS} )
     MXA_ADD_TEST(MXA_FileReaderWriterTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_FileReaderWriterTest) 
 
+# --------------------------------------------------------------------
 # -------- Dataset Test
     SET (MXADataset_TEST_SRCS
         ${MXATests_SOURCE_DIR}/DatasetTest.cpp
@@ -114,7 +115,9 @@ IF (MXA_BUILD_TESTING)
     MXA_ADD_TEST(MXA_DatasetTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_DatasetTest)
    ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
     
-    # -------- Data Model Test
+
+# --------------------------------------------------------------------
+# -------- Data Model Test
     SET (MXADATAMODEL_TEST_SRCS
       ${MXATests_SOURCE_DIR}/DataModelTest.cpp
     )
@@ -124,7 +127,8 @@ IF (MXA_BUILD_TESTING)
     TARGET_LINK_LIBRARIES ( MXA_DataModelTest  ${MXADATAMODEL_LIB_NAME}   )
     MXA_ADD_TEST(MXA_DataModelTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_DataModelTest)
   ENDIF ( MXA_USE_HDF5 )
-  
+
+# -------------------------------------------------------------------- 
 # ------ DataImport Test
 IF (MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     SET (MXADATAIMPORT_TEST_SRCS
@@ -158,28 +162,31 @@ IF (MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
     CONFIGURE_FILE(${MXADataModel_SOURCE_DIR}/Resources/XML/DataImportTest.xml.in
                     ${CMAKE_BINARY_DIR}/DataImportTest.xml @ONLY IMMEDIATE)
 ENDIF(MXA_USE_XML AND MXA_USE_HDF5 AND MXA_USE_TIFF)
-    
-# ------- H5Lite Test
-SET (H5LITE_TEST_SRCS
-  ${MXATests_SOURCE_DIR}/H5LiteTest.cpp
-  ${PROJECT_BINARY_DIR}/MXAUnitTestDataFileLocations.h
-)
-IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
-    ADD_EXECUTABLE ( MXA_H5LiteTest ${H5LITE_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (MXA_H5LiteTest ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS})
-    MXA_ADD_TEST(MXA_H5LiteTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_H5LiteTest)
-ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
 
-# ------- H5Utilities Test
-SET (H5UTIL_TEST_SRCS
-  ${MXATests_SOURCE_DIR}/H5UtilitiesTest.cpp
-)
+# --------------------------------------------------------------------
+# ------- H5Lite Test
 IF ( MXA_USE_HDF5 )
+    SET (H5LITE_TEST_SRCS
+      ${MXATests_SOURCE_DIR}/H5LiteTest.cpp
+      ${PROJECT_BINARY_DIR}/MXAUnitTestDataFileLocations.h
+    )
+    ADD_EXECUTABLE ( MXA_H5LiteTest ${H5LITE_TEST_SRCS} )
+    TARGET_LINK_LIBRARIES (MXA_H5LiteTest ${HDF5_LIBRARIES} ${MXADATAMODEL_LIB_NAME}  )
+    MXA_ADD_TEST(MXA_H5LiteTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_H5LiteTest)
+
+
+# --------------------------------------------------------------------
+# ------- H5Utilities Test
+    SET (H5UTIL_TEST_SRCS
+      ${MXATests_SOURCE_DIR}/H5UtilitiesTest.cpp
+    )
+
     ADD_EXECUTABLE ( MXA_H5UtilitiesTest ${H5UTIL_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (MXA_H5UtilitiesTest ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS})
+    TARGET_LINK_LIBRARIES (MXA_H5UtilitiesTest ${HDF5_LIBRARIES} ${MXADATAMODEL_LIB_NAME}  )
     MXA_ADD_TEST(MXA_H5UtilitiesTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_H5UtilitiesTest)
 ENDIF ( MXA_USE_HDF5 )
 
+# --------------------------------------------------------------------
 # ------- DataSourcePathIndexSection  Test
 SET (DATASOURCEPATHINDEXSECTION_TEST_SRCS
   ${MXATests_SOURCE_DIR}/DataSourcePathIndexSectionTest.cpp
@@ -187,7 +194,8 @@ SET (DATASOURCEPATHINDEXSECTION_TEST_SRCS
 ADD_EXECUTABLE ( MXA_DataSourcePathIndexSectionTest ${DATASOURCEPATHINDEXSECTION_TEST_SRCS} )
 TARGET_LINK_LIBRARIES (MXA_DataSourcePathIndexSectionTest ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS} )
 MXA_ADD_TEST(MXA_DataSourcePathIndexSectionTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_DataSourcePathIndexSectionTest)
-       
+
+# --------------------------------------------------------------------    
 # --------- BMP IO Test
 SET (BMP_IO_TEST_SRCS
     ${MXATests_SOURCE_DIR}/BmpIOTest.cpp
@@ -197,7 +205,8 @@ IF ( MXA_USE_HDF5 )
     TARGET_LINK_LIBRARIES (MXA_BmpIOTest  ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS} )
     MXA_ADD_TEST(MXA_BmpIOTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_BmpIOTest)
 ENDIF ( MXA_USE_HDF5 )
-   
+
+# --------------------------------------------------------------------
 # ------- H5ArrayTemplate Test
 SET (H5ARRAYTEMPLATE_TEST_SRCS
     ${MXATests_SOURCE_DIR}/H5ArrayTemplateTest.cpp
@@ -205,7 +214,9 @@ SET (H5ARRAYTEMPLATE_TEST_SRCS
 #ADD_EXECUTABLE(MXA_H5ArrayTemplateTest ${H5ARRAYTEMPLATE_TEST_SRCS})
 #TARGET_LINK_LIBRARIES (MXA_H5ArrayTemplateTest  ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS} )
 #MXA_ADD_TEST(MXA_H5ArrayTemplateTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_H5ArrayTemplateTest)  
-   
+
+
+# -------------------------------------------------------------------- 
 # --------- XML Tests
 IF (MXA_USE_XML)
     SET (XML_TEST_SRCS
@@ -216,6 +227,7 @@ IF (MXA_USE_XML)
     MXA_ADD_TEST(MXA_XMLTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_XMLTest)      
 ENDIF(MXA_USE_XML)
 
+# --------------------------------------------------------------------
 # --------- IImportProperty Test
 SET (IIMPORT_PROPERTY_TEST_SRCS
     ${MXATests_SOURCE_DIR}/IImportPropertyTest.cpp
@@ -223,7 +235,8 @@ SET (IIMPORT_PROPERTY_TEST_SRCS
 ADD_EXECUTABLE(MXA_IImportPropertyTest ${IIMPORT_PROPERTY_TEST_SRCS})
 TARGET_LINK_LIBRARIES (MXA_IImportPropertyTest  ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS} )
 MXA_ADD_TEST(MXA_IImportPropertyTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_IImportPropertyTest) 
-  
+
+# --------------------------------------------------------------------
 # --------- SupportFile Test
    IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
     SET (SUPPORT_FILE_TEST_SRCS
@@ -238,6 +251,7 @@ MXA_ADD_TEST(MXA_IImportPropertyTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_IImpo
     MXA_ADD_TEST(MXA_SupportFileTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_SupportFileTest) 
 ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF ) 
 
+# --------------------------------------------------------------------
 # ----- MXAFileSystemPath Test
 set(MXAFileSystemPathTest_SRCS 
     ${MXATests_SOURCE_DIR}/MXAFileSystemPathTest.cpp
@@ -249,6 +263,7 @@ target_link_libraries(MXA_FileSystemPathTest
                       ${Boost_SYSTEM_LIBRARY})
 add_test(MXA_FileSystemPathTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_FileSystemPathTest)
 
+# --------------------------------------------------------------------
 # ----- MXALogger Test
 set(MXALoggerTest_SRCS 
     ${MXATests_SOURCE_DIR}/MXALoggerTest.cpp
@@ -260,6 +275,7 @@ target_link_libraries(MXA_LoggerTest
                       ${Boost_SYSTEM_LIBRARY})
 add_test(MXA_LoggerTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_LoggerTest)
 
+# --------------------------------------------------------------------
 #---- Writer Delegate Test
 set (WriterDelegateTest_SRCS
     ${MXATests_SOURCE_DIR}/WriterDelegateTest.cpp
@@ -271,7 +287,7 @@ target_link_libraries(MXA_WriterDelegateTest
                       ${Boost_SYSTEM_LIBRARY})
 add_test(MXA_WriterDelegateTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_WriterDelegateTest)
 
-
+# --------------------------------------------------------------------
 # ------- Vtk to HDF5 Bridge test
 IF(MXA_BUILD_VTK_HDF5)
     SET (VTK_HDF5_SRCS
@@ -288,8 +304,8 @@ IF(MXA_BUILD_VTK_HDF5)
     MXA_ADD_TEST(MXA_vtkHDF5Test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_vtkHDF5Test)
 ENDIF(MXA_BUILD_VTK_HDF5)
 
-#-- Copy all the dependent DLLs into the current build directory so that the test
-#-- can run.
+# --------------------------------------------------------------------
+#-- Copy all the dependent DLLs into the current build directory so that the test can run.
 if (WIN32)
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(TYPE "DEBUG")

@@ -15,8 +15,8 @@
 #endif
 
 #include <MXA/Common/MXATypes.h>
-#include <MXA/Common/Win32Defines.h>
-// This will define WINDOWS_LARGE_FILE_SUPPORT to true, which is what we want
+#include <MXA/Common/Win32Defines.h> // This will define WINDOWS_LARGE_FILE_SUPPORT to true, which is what we want
+
 
 // Conditional Includes/Defines for Large File Support on Windows
 #if defined (WINDOWS_LARGE_FILE_SUPPORT)
@@ -25,14 +25,12 @@
 #include <stdlib.h>
 #include <windows.h>
 #define READER64_INPUT_STREAM HANDLE
-
 #else
-
 #include <fstream>
 #define READER64_INPUT_STREAM std::ifstream
-
 #endif
 
+#include <vector>
 /**
  * @class MXAFileReader64 MXAFileReader64.h MXA/Common/IO/MXAFileReader64.h
  * @brief This class is a wrapper around platform specific native streams to make
