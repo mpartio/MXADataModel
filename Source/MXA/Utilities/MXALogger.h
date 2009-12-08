@@ -22,7 +22,7 @@
 #include <fstream>
 #include <sstream>
 
-#include <boost/noncopyable.hpp>
+//#include <boost/noncopyable.hpp>
 
 
 /**
@@ -66,7 +66,7 @@
 * @date May 22, 2009
 * @version $Revision$
 */
-class MXA_EXPORT MXALogger_Implementation : private boost::noncopyable
+class MXA_EXPORT MXALogger_Implementation 
 {
 
   public:
@@ -95,7 +95,7 @@ class MXA_EXPORT MXALogger_Implementation : private boost::noncopyable
 
   private:
     std::ofstream _out;
-
+    MXALogger_Implementation(const MXALogger_Implementation&);   //Copy Constructor Not Implemented
     void operator=(const MXALogger_Implementation&);  // Operator '=' Not Implemented
 
 };

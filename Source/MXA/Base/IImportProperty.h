@@ -20,7 +20,7 @@
  * @brief
  * @author Mike Jackson
  * @date Septermber 2008
- * @version $Revision: 1.2 $
+ * @version Revision: 1.2
  *
  */
 class MXA_EXPORT IImportProperty

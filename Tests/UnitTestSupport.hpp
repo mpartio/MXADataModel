@@ -8,6 +8,7 @@
 #ifndef UNITTESTSUPPORT_HPP_
 #define UNITTESTSUPPORT_HPP_
 
+#include "MXA/Common/MXASetGetMacros.h"
 
 #include <string.h>
 #include <string>
@@ -41,35 +42,56 @@ namespace unittest
 class TestException : public std::exception
 {
   public:
-     TestException(const std::string &what, const std::string &file, int lineNumber) :
-      m_Message(what), m_File(file), m_LineNumber(lineNumber)
+    /**
+    * @brief
+    * @param what
+    * @param file
+    * @param lineNumber
+    */
+     TestException(const std::string &what, const std::string &filename, int lineNumber) :
+      m_Message(what), m_Filename(filename), m_LineNumber(lineNumber)
     {
     }
 
+    /**
+    * @brief Copy Constructor
+    */
+     TestException(const TestException &te)
+     {
+       m_Message = (&te)->getMessage();
+       m_Filename = te.getFilename();
+       m_LineNumber = te.getLineNumber();
+     }
+
      virtual ~TestException() throw() {}
 
+     /**
+     * @brief Over ride from base class
+     */
      std::string what() {
        std::stringstream ss;
        ss << "    Reason: " << m_Message << std::endl;
-       ss << "    File:   " << m_File << std::endl;
+       ss << "    File:   " << m_Filename << std::endl;
        ss << "    Line:   " << m_LineNumber;
        return ss.str();
      }
-protected:
+      
+     MXA_INSTANCE_STRING_PROPERTY_m(Message)
+       std::string getMessage() const { return m_Message; }
+     MXA_INSTANCE_STRING_PROPERTY_m(Filename)
+       std::string getFilename() const { return m_Filename; }
+
+     MXA_INSTANCE_PROPERTY_m(int, LineNumber)
+       int getLineNumber() const { return m_LineNumber; }
+
+  protected:
      TestException() {};
 
   private:
 
-     std::string m_Message;
-     std::string m_File;
-     int         m_LineNumber;
 
-    // TestException(const TestException&);    // Copy Constructor Not Implemented
       void operator=(const TestException&);  // Operator '=' Not Implemented
 };
-
-
-
 
 
 // -----------------------------------------------------------------------------

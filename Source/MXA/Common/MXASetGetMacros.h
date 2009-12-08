@@ -95,7 +95,7 @@ static Pointer New(void) \
 * @brief Creates a "setter" method to set the property.
 */
 #define MXA_SET_PROPERTY(type, prpty, varname) \
-  void set##prpty(type value) { this->varname = value; }
+  void set##prpty(type value) { varname = value; }
 
 /**
 * @brief Creates a "getter" method to retrieve the value of the property.
@@ -189,6 +189,13 @@ static Pointer New(void) \
   public:\
   MXA_SET_STRING_PROPERTY(prpty, varname)\
   MXA_GET_STRING_PROPERTY(prpty, varname)
+
+#define MXA_INSTANCE_STRING_PROPERTY_m(prpty)\
+  private:\
+  std::string      m_##prpty;\
+  public:\
+  MXA_SET_STRING_PROPERTY(prpty,  m_##prpty)\
+  MXA_GET_STRING_PROPERTY(prpty,  m_##prpty)
 
 /**
 * @brief Creates an if conditional where the key is tested against the values constant

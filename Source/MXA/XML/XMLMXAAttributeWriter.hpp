@@ -11,7 +11,6 @@
 #ifndef _XMLMXAAttributeWriter_h_
 #define _XMLMXAAttributeWriter_h_
 
-#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IMXAArray.h>
 #if MXA_HDF5_SUPPORT
 #include <hdf5.h>
@@ -24,7 +23,7 @@
 * @version $Revision: 1.2 $
 */
 
-class MXA_EXPORT XMLMXAAttributeWriter
+class XMLMXAAttributeWriter
 {
   public:
     XMLMXAAttributeWriter(boost::shared_ptr<std::ostream> ofstreamPtr) :

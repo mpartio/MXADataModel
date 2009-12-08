@@ -192,7 +192,7 @@ SET (DATASOURCEPATHINDEXSECTION_TEST_SRCS
   ${MXATests_SOURCE_DIR}/DataSourcePathIndexSectionTest.cpp
 )
 ADD_EXECUTABLE ( MXA_DataSourcePathIndexSectionTest ${DATASOURCEPATHINDEXSECTION_TEST_SRCS} )
-TARGET_LINK_LIBRARIES (MXA_DataSourcePathIndexSectionTest ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS} )
+TARGET_LINK_LIBRARIES (MXA_DataSourcePathIndexSectionTest ${MXADATAMODEL_LIB_NAME} )
 MXA_ADD_TEST(MXA_DataSourcePathIndexSectionTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_DataSourcePathIndexSectionTest)
 
 # --------------------------------------------------------------------    
@@ -202,7 +202,7 @@ SET (BMP_IO_TEST_SRCS
 )
 IF ( MXA_USE_HDF5 )
     ADD_EXECUTABLE(MXA_BmpIOTest ${BMP_IO_TEST_SRCS})
-    TARGET_LINK_LIBRARIES (MXA_BmpIOTest  ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS} )
+    TARGET_LINK_LIBRARIES (MXA_BmpIOTest ${HDF5_LIBRARIES} ${MXADATAMODEL_LIB_NAME} )
     MXA_ADD_TEST(MXA_BmpIOTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_BmpIOTest)
 ENDIF ( MXA_USE_HDF5 )
 
@@ -219,11 +219,9 @@ SET (H5ARRAYTEMPLATE_TEST_SRCS
 # -------------------------------------------------------------------- 
 # --------- XML Tests
 IF (MXA_USE_XML)
-    SET (XML_TEST_SRCS
-        ${MXATests_SOURCE_DIR}/XMLTest.cpp
-        )
+    SET (XML_TEST_SRCS  ${MXATests_SOURCE_DIR}/XMLTest.cpp )
     ADD_EXECUTABLE( MXA_XMLTest ${XML_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (MXA_XMLTest  ${MXADATAMODEL_LIB_NAME} ${DEP_LIBS})
+    TARGET_LINK_LIBRARIES (MXA_XMLTest  ${EXPAT_LIBRARIES} ${MXADATAMODEL_LIB_NAME} )
     MXA_ADD_TEST(MXA_XMLTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_XMLTest)      
 ENDIF(MXA_USE_XML)
 
@@ -233,7 +231,7 @@ SET (IIMPORT_PROPERTY_TEST_SRCS
     ${MXATests_SOURCE_DIR}/IImportPropertyTest.cpp
 )
 ADD_EXECUTABLE(MXA_IImportPropertyTest ${IIMPORT_PROPERTY_TEST_SRCS})
-TARGET_LINK_LIBRARIES (MXA_IImportPropertyTest  ${MXADATAMODEL_LIB_NAME}  ${DEP_LIBS} )
+TARGET_LINK_LIBRARIES (MXA_IImportPropertyTest  ${MXADATAMODEL_LIB_NAME} )
 MXA_ADD_TEST(MXA_IImportPropertyTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_IImportPropertyTest) 
 
 # --------------------------------------------------------------------
@@ -245,8 +243,7 @@ MXA_ADD_TEST(MXA_IImportPropertyTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_IImpo
     )
     ADD_EXECUTABLE(MXA_SupportFileTest ${SUPPORT_FILE_TEST_SRCS})
     TARGET_LINK_LIBRARIES (MXA_SupportFileTest  
-                            ${MXADATAMODEL_LIB_NAME} 
-                             
+                            ${MXADATAMODEL_LIB_NAME}
                             ${DEP_LIBS} )
     MXA_ADD_TEST(MXA_SupportFileTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_SupportFileTest) 
 ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF ) 
@@ -258,9 +255,7 @@ set(MXAFileSystemPathTest_SRCS
 )
 add_executable(MXA_FileSystemPathTest ${MXAFileSystemPathTest_SRCS})
 target_link_libraries(MXA_FileSystemPathTest 
-                      ${MXADATAMODEL_LIB_NAME}
-                      ${Boost_TEST_EXEC_MONITOR_LIBRARY} 
-                      ${Boost_SYSTEM_LIBRARY})
+                      ${MXADATAMODEL_LIB_NAME} )
 add_test(MXA_FileSystemPathTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_FileSystemPathTest)
 
 # --------------------------------------------------------------------
@@ -270,9 +265,7 @@ set(MXALoggerTest_SRCS
 )
 add_executable(MXA_LoggerTest ${MXALoggerTest_SRCS})
 target_link_libraries(MXA_LoggerTest 
-                      ${MXADATAMODEL_LIB_NAME}
-                      ${Boost_TEST_EXEC_MONITOR_LIBRARY} 
-                      ${Boost_SYSTEM_LIBRARY})
+                      ${MXADATAMODEL_LIB_NAME} )
 add_test(MXA_LoggerTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_LoggerTest)
 
 # --------------------------------------------------------------------
@@ -282,9 +275,7 @@ set (WriterDelegateTest_SRCS
 )
 add_executable(MXA_WriterDelegateTest ${WriterDelegateTest_SRCS} )
 target_link_libraries(MXA_WriterDelegateTest 
-                      ${MXADATAMODEL_LIB_NAME}
-                      ${Boost_TEST_EXEC_MONITOR_LIBRARY} 
-                      ${Boost_SYSTEM_LIBRARY})
+                      ${MXADATAMODEL_LIB_NAME} )
 add_test(MXA_WriterDelegateTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_WriterDelegateTest)
 
 # --------------------------------------------------------------------
@@ -296,8 +287,7 @@ IF(MXA_BUILD_VTK_HDF5)
     )
     ADD_EXECUTABLE( MXA_vtkHDF5Test ${VTK_HDF5_SRCS} )
     TARGET_LINK_LIBRARIES (MXA_vtkHDF5Test MXADataModel  
-            ${MXADATAMODEL_LIB_NAME} 
-             
+            ${MXADATAMODEL_LIB_NAME}
             ${DEP_LIBS}   
             ${vtkLocal_LIBS}
     )

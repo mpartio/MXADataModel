@@ -9,9 +9,8 @@
 #define XMLSTREAMWRITERDELEGATE_H_
 
 #include "MXA/Common/MXASetGetMacros.h"
-
-#include "MXA/Base/IMXADataModelWriterDelegate.h"
 #include <MXA/Base/IDataModel.h>
+#include "MXA/Base/IMXADataModelWriterDelegate.h"
 
 #include <iostream>
 /**

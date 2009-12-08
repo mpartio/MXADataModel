@@ -13,6 +13,7 @@
 #include <MXA/Core/MXADataRecord.h>
 #include <MXA/HDF5/H5WriterDelegate.h>
 #include "MXA/XML/XMLStreamWriterDelegate.hpp"
+#include "MXA/XML/XMLMXAAttributeWriter.hpp"
 #include "MXA/Utilities/MXAFileSystemPath.h"
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
