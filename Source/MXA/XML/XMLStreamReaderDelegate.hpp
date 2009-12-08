@@ -5,6 +5,7 @@
 
 #include "MXA/Base/IMXADataModelReaderDelegate.h"
 #include <MXA/Base/IDataModel.h>
+#include "MXA/Core/MXADataModel.h"
 #include "MXA/XML/DataModelXMLEvtHandler.h"
 
 #define BUFFER_SIZE 1024
