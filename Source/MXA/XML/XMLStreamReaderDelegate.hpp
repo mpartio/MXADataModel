@@ -18,7 +18,6 @@ class XMLStreamReaderDelegate: public IMXADataModelReaderDelegate,
     MXA_SHARED_POINTERS(XMLStreamReaderDelegate<T> )
     MXA_TYPE_MACRO(XMLStreamReaderDelegate<T> )
 
-
     typedef typename boost::shared_ptr<T>  StreamPointer;
 
     static Pointer New()
