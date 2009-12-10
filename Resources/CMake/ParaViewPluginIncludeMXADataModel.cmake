@@ -39,27 +39,7 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
 set (MXA_BUILD_TESTING ${MXA_BUILD_TESTING_SAVE})
 SET (MXADATAMODEL_TARGET_ADDED TRUE )
 
-if (false)
-    #-------------------------------------------------------------------------------
-    # ---------- Find Boost Headers/Libraries -----------------------
-    SET (Boost_FIND_REQUIRED TRUE)
-    SET (Boost_FIND_QUIETLY TRUE)
-    SET (Boost_USE_FILESYSTEM FALSE)
-    SET (Boost_USE_SYSTEM FALSE)
-    SET (Boost_USE_UNIT_TEST_FRAMEWORK FALSE)
-    SET (Boost_USE_TEST_EXEC_MONITOR FALSE)
-    SET (Boost_USE_PROGRAM_OPTIONS FALSE)
-    #set (Boost_USE_MULTITHREADED TRUE)
-    
-    FIND_PACKAGE(Boost 1.39 )
-    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})  # Include the Boost Headers
-    LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
-    #- Add the required Libraries for MXA to function
-    SET (PARAVIEW_ADDITIONAL_LIBRARIES 
-        ${PARAVIEW_ADDITIONAL_LIBRARIES} 
-        ${HDF5_LIBRARIES}
-    )
-endif()
+
 SET (MXADATAMODEL_TARGET_ADDED "1" CACHE INTERNAL "MXADataModel Added to ParaView as a libary")
 MESSAGE (STATUS "[${MODULE_NAME}] Added the MXADataModel library.")
 

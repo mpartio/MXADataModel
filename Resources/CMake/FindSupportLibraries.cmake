@@ -4,20 +4,7 @@ IF ( NOT DEFINED  MXA_RESOURCES_DIR)
   SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
 ENDIF ( NOT DEFINED  MXA_RESOURCES_DIR)
 
-# ---------- Find Boost Headers/Libraries -----------------------
-SET (Boost_FIND_REQUIRED TRUE)
-SET (Boost_FIND_QUIETLY TRUE)
-set (Boost_USE_MULTITHREADED TRUE)
-set (Boost_USE_STATIC_LIBS TRUE)
-SET (Boost_ADDITIONAL_VERSIONS "1.41" "1.41.0" "1.39" "1.39.0")
-
-if ( NOT MXA_BOOST_HEADERS_ONLY)
- set (MXA_BOOST_COMPONENTS program_options )
-endif()
-
-FIND_PACKAGE(Boost COMPONENTS  ${MXA_BOOST_COMPONENTS} )
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+include ( ${MXA_RESOURCES_DIR}/CMake/LocateBoostSupportLibraries.cmake )
 
 #-------------------------------------------------------------------------------
 #- Find Expat Library -------------
