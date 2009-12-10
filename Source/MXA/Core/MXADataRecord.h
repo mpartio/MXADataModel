@@ -19,12 +19,8 @@
 #include <MXA/Base/IDataRecordWriter.h>
 #include <MXA/Core/MXAConstants.h>
 #include <MXA/Utilities/StringUtils.h>
-// #include <MXA/Core/MXAAttribute.h>
 
-//Include Boost Headers
-// #include <boost/smart_ptr/shared_ptr.hpp>
-// #include <boost/weak_ptr.hpp>
-#include <boost/tuple/tuple.hpp>
+
 #include <vector>
 /**
  * @brief This class holds the required and any extended information about a

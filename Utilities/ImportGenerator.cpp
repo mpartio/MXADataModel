@@ -18,8 +18,6 @@
 #include <sstream>
 
 #include <boost/algorithm/string.hpp>
-#include <boost/iostreams/device/file.hpp>
-
 
 // Boost program options
 #include <boost/program_options.hpp>
@@ -73,7 +71,7 @@ int parseTemplate(const std::string &inputFile,
 
 
   int err = 0;
-  boost::iostreams::file_source source(inputFile, std::ios_base::in);
+  std::ifstream source(inputFile.c_str(), std::ios_base::in | std::ios::binary);
   if (source.is_open() == false)
   {
     std::cout << "the source file could not be opened for reading.'" << inputFile << "'" << std::endl;

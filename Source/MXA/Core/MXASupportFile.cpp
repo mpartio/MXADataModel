@@ -15,10 +15,11 @@
 #include <MXA/Utilities/MXAFileSystemPath.h>
 
 //-- Boost Headers
-#include <boost/iostreams/device/file.hpp>
+//#include <boost/iostreams/device/file.hpp>
 
 //-- C++ Includes
 #include <iostream>
+#include <fstream>
 
 
 
@@ -322,7 +323,8 @@ int32 MXASupportFile::readFromFileSystem()
    // std::cout << "size of " << argv[1] << " is " << fs::file_size( p )  << std::endl;
     uint64 fileSize = MXAFileSystemPath::fileSize(p);
 
-    boost::iostreams::file_source sourceFile (p, BOOST_IOS::in);
+  //  boost::iostreams::file_source sourceFile (p, BOOST_IOS::in);
+		std::ifstream sourceFile(p.c_str(), std::ifstream::in | std::ifstream::binary );
     if (sourceFile.is_open() == true )
     {
       _fileContents = MXAArrayTemplate<char>::CreateArray(fileSize);
