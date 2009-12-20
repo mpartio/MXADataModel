@@ -93,7 +93,8 @@ public:
     SET_PROPERTY_BODY(MyPropertyNamespace, uint64, UInt64Property, key, value);
 
     // String properties
-    SET_PROPERTY_BODY(MyPropertyNamespace, std::string, StrProperty, key, value);
+    SET_STRING_PROPERTY_BODY(MyPropertyNamespace, std::string, StrProperty, key, value);
+
     // Floating point properties
     SET_PROPERTY_BODY(MyPropertyNamespace, float, FloatProperty, key, value);
     SET_PROPERTY_BODY(MyPropertyNamespace, double, DoubleProperty, key, value);
@@ -105,6 +106,7 @@ public:
   {
     return -1;
   }
+
   // -----------------------------------------------------------------------------
   //  If you want to implement a generic "get" method that will retrieve the proper
   //  type of value from the object then you can use a C++ template function.
@@ -139,6 +141,7 @@ public:
       // Floating point properties
       GET_PROPERTY_BODY(MyPropertyNamespace, T, FloatProperty, _floatProp, key, value);
       GET_PROPERTY_BODY(MyPropertyNamespace, T, DoubleProperty, _doubleProp, key, value);
+
       return 0;
     }
 
@@ -279,7 +282,7 @@ int32 PropertyTest()
   success = pclass.getProperty<double>(MyPropertyNamespace::DoubleProperty, _doubleProp);
   std::string emptyString;
   success = pclass.getProperty<std::string>(MyPropertyNamespace::StrProperty, emptyString);
-
+  
   MXA_REQUIRE (_boolProp == true);
   MXA_REQUIRE (_int8Prop == 'G');
   MXA_REQUIRE (_int16Prop == -2342);
@@ -293,7 +296,6 @@ int32 PropertyTest()
   MXA_REQUIRE (emptyString.compare("Other String Property") == 0);
   MXA_REQUIRE (_floatProp == 4123.4342f);
   MXA_REQUIRE (_doubleProp == 9897.842323);
-
 
 #if 0
   PRINT_RESULTS(BoolProperty, _boolProp)

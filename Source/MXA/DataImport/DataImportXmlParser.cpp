@@ -22,6 +22,7 @@
 //-- C++ stdlib includes
 #include <iostream>
 #include <sstream>
+#include <limits>
 
 
 // -----------------------------------------------------------------------------

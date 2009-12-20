@@ -44,7 +44,7 @@ int32 MyPropertyClass::setProperty(const std::string &key, const std::string &va
   SET_PROPERTY_BODY(MyPropertyNamespace, uint64, UInt64Property, key, value);
   
   // String properties
-  SET_PROPERTY_BODY(MyPropertyNamespace, std::string, StrProperty, key, value);
+  SET_STRING_PROPERTY_BODY(MyPropertyNamespace, std::string, StrProperty, key, value);
   // Floating point properties
   SET_PROPERTY_BODY(MyPropertyNamespace, float, FloatProperty, key, value);
   SET_PROPERTY_BODY(MyPropertyNamespace, double, DoubleProperty, key, value);

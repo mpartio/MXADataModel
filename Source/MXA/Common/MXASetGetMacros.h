@@ -11,10 +11,11 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 
 //-- Boost includes
-#include <boost/any.hpp>
-#include <boost/lexical_cast.hpp>
+//#include <boost/any.hpp>
+//#include <boost/lexical_cast.hpp>
 
 //-- Boost Includes
 #include <boost/smart_ptr/shared_ptr.hpp>
@@ -197,6 +198,36 @@ static Pointer New(void) \
   MXA_SET_STRING_PROPERTY(prpty,  m_##prpty)\
   MXA_GET_STRING_PROPERTY(prpty,  m_##prpty)
 
+namespace boost
+{
+  class bad_lexical_cast : public std::runtime_error {
+  public:
+    bad_lexical_cast(const std::string& s)
+      : std::runtime_error(s)
+    { }
+  };
+
+  class bad_any_cast : public std::runtime_error {
+  public:
+    bad_any_cast(const std::string& s)
+      : std::runtime_error(s)
+    { }
+  };
+
+  template<typename T>
+  T lexical_cast(const std::string &s)
+  {
+    std::istringstream i(s);
+    T x;
+    if (!(i >> x))
+      throw bad_lexical_cast("convertToDouble(\"" + s + "\")");
+
+    return x;
+  }
+}
+
+
+#if 1
 /**
 * @brief Creates an if conditional where the key is tested against the values constant
 * and if a match found then the property value is set
@@ -216,6 +247,16 @@ static Pointer New(void) \
     } \
   }
 
+#define SET_STRING_PROPERTY_BODY(name_space, type, prpty, key, value) \
+  if (name_space::prpty.compare(key) == 0) { \
+  try { \
+  this->set##prpty(value); return 1; \
+}  catch(boost::bad_lexical_cast &excp) { \
+  std::cout << excp.what() << std::endl; \
+  std::cout << "Could not convert value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; \
+} \
+  } 
+
 /**
 * @brief Creates an if condition where the key is tested against the values constant
 * and if a match found the the property is returned using the 'value' argument
@@ -226,15 +267,22 @@ static Pointer New(void) \
 * @param key The Key used for the property
 * @param value The value of the property
 */
+
 #define GET_PROPERTY_BODY(name_space, type, prpty, varname, key, value)\
   if (name_space::prpty.compare(key) == 0) {  \
-  try { value = boost::any_cast<type>(varname); return 1;} \
+  try { value = *(reinterpret_cast<T*>( &(varname))); return 1;} \
   catch(boost::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
+
+#define GET_STRING_PROPERTY_BODY2(name_space, type, prpty, varname, key, value)\
+  if (name_space::prpty.compare(key) == 0) {  \
+  try { value = varname; return 1;} \
+  catch(boost::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
+
 
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
+#endif
 
 
 
