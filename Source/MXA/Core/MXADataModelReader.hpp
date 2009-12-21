@@ -11,7 +11,10 @@
 
 
 #include "MXA/Common/MXASetGetMacros.h"
+#include "MXA/Base/IDataModel.h"
 
+#include <string>
+#include <iostream>
 
 template<typename TDelegate>
 class MXADataModelReader

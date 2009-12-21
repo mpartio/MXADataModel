@@ -14,10 +14,6 @@
 #include <sstream>
 #include <stdexcept>
 
-//-- Boost includes
-//#include <boost/any.hpp>
-//#include <boost/lexical_cast.hpp>
-
 //-- Boost Includes
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/weak_ptr.hpp>
@@ -199,7 +195,9 @@ static Pointer New(void) \
   MXA_SET_STRING_PROPERTY(prpty,  m_##prpty)\
   MXA_GET_STRING_PROPERTY(prpty,  m_##prpty)
 
-namespace boost
+// These are simple over-rides from the boost distribution because we don't want the entire boost distribution just
+// for a few boost headers
+namespace MXA
 {
   class bad_lexical_cast : public std::runtime_error {
   public:
@@ -241,8 +239,8 @@ namespace boost
 #define SET_PROPERTY_BODY(name_space, type, prpty, key, value) \
   if (name_space::prpty.compare(key) == 0) { \
     try { \
-      this->set##prpty(boost::lexical_cast<type>(value)); return 1; \
-    }  catch(boost::bad_lexical_cast &excp) { \
+      this->set##prpty(MXA::lexical_cast<type>(value)); return 1; \
+    }  catch(MXA::bad_lexical_cast &excp) { \
       std::cout << excp.what() << std::endl; \
       std::cout << "Could not convert value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; \
     } \
@@ -252,7 +250,7 @@ namespace boost
   if (name_space::prpty.compare(key) == 0) { \
   try { \
   this->set##prpty(value); return 1; \
-}  catch(boost::bad_lexical_cast &excp) { \
+}  catch(MXA::bad_lexical_cast &excp) { \
   std::cout << excp.what() << std::endl; \
   std::cout << "Could not convert value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; \
 } \
@@ -272,12 +270,12 @@ namespace boost
 #define GET_PROPERTY_BODY(name_space, type, prpty, varname, key, value)\
   if (name_space::prpty.compare(key) == 0) {  \
   try { value = *(reinterpret_cast<T*>( &(varname))); return 1;} \
-  catch(boost::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
+  catch(MXA::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
 
 #define GET_STRING_PROPERTY_BODY2(name_space, type, prpty, varname, key, value)\
   if (name_space::prpty.compare(key) == 0) {  \
   try { value = varname; return 1;} \
-  catch(boost::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
+  catch(MXA::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
 
 
 //

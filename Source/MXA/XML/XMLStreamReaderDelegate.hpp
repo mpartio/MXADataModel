@@ -10,6 +10,13 @@
 
 #define BUFFER_SIZE 1024
 
+/**
+* @class XMLStreamREaderDelegate XMLStreamREaderDelegate.h Source/MXA/XML /XMLStreamREaderDelegate.h
+* @brief Provides a template class the utilizes c++ std::iostreams to read the xml file.
+* @author Michael A. Jackson for BlueQuartz Software
+* @date Dec 21, 2009
+* @version 1.0
+*/
 template<typename T>
 class XMLStreamReaderDelegate: public IMXADataModelReaderDelegate,
                                public ExpatEvtHandler
