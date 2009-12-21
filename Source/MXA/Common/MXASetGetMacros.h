@@ -12,6 +12,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 
 //-- Boost includes
 //#include <boost/any.hpp>
@@ -255,7 +256,7 @@ namespace boost
   std::cout << excp.what() << std::endl; \
   std::cout << "Could not convert value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; \
 } \
-  } 
+  }
 
 /**
 * @brief Creates an if condition where the key is tested against the values constant
