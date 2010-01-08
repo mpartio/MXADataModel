@@ -148,10 +148,10 @@ int MXASupportFile::getIndex()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 MXASupportFile::readFromMXAFile()
+int32_t MXASupportFile::readFromMXAFile()
 {
 
-  int32 err = -1;
+  int32_t err = -1;
 #if MXA_HDF5_SUPPORT
   hid_t fileId = this->_fileId;
   std::string dsetpath = MXA::SupportFilesPath + "/" + StringUtils::numToString(this->_index);
@@ -222,12 +222,12 @@ std::string MXASupportFile::getFileType()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-uint8*  MXASupportFile::getFilePointer(uint64 offset)
+uint8_t*  MXASupportFile::getFilePointer(uint64_t offset)
 {
-  uint8* ptr = NULL;
+  uint8_t* ptr = NULL;
   if ( NULL != this->_fileContents.get() )
   {
-    ptr = static_cast<uint8*>(_fileContents->getVoidPointer(offset));
+    ptr = static_cast<uint8_t*>(_fileContents->getVoidPointer(offset));
   }
   return ptr;
 }
@@ -235,7 +235,7 @@ uint8*  MXASupportFile::getFilePointer(uint64 offset)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-uint64 MXASupportFile::getFileSize()
+uint64_t MXASupportFile::getFileSize()
 {
   if ( NULL != this->_fileContents.get() )
   {
@@ -255,7 +255,7 @@ uint64 MXASupportFile::getFileSize()
       return 0;
     }
     hsize_t fileSize = dims[0];
-    return (uint64)(fileSize);
+    return (uint64_t)(fileSize);
 #endif
   }
 
@@ -300,9 +300,9 @@ bool MXASupportFile::isFileCached()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 MXASupportFile::readFromFileSystem()
+int32_t MXASupportFile::readFromFileSystem()
 {
-  int32 err = 0;
+  int32_t err = 0;
 
   std::string p = MXAFileSystemPath::toNativeSeparators(this->_filesystemPath);
 
@@ -321,7 +321,7 @@ int32 MXASupportFile::readFromFileSystem()
     }
 
    // std::cout << "size of " << argv[1] << " is " << fs::file_size( p )  << std::endl;
-    uint64 fileSize = MXAFileSystemPath::fileSize(p);
+    uint64_t fileSize = MXAFileSystemPath::fileSize(p);
 
   //  boost::iostreams::file_source sourceFile (p, BOOST_IOS::in);
 		std::ifstream sourceFile(p.c_str(), std::ifstream::in | std::ifstream::binary );

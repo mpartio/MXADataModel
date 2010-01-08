@@ -64,27 +64,27 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
   IDataRecord::Pointer record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
 
   // Set the start/end/increment values for each Data Dimension
-  int32 dim0Start = dim0->getStartValue();
-  int32 dim0End = dim0->getEndValue();
-  int32 dim0Increment = dim0->getIncrement();
+  int32_t dim0Start = dim0->getStartValue();
+  int32_t dim0End = dim0->getEndValue();
+  int32_t dim0Increment = dim0->getIncrement();
 
-  int32 dim1Start = dim1->getStartValue();
-  int32 dim1End = dim1->getEndValue();
-  int32 dim1Increment = dim1->getIncrement();
+  int32_t dim1Start = dim1->getStartValue();
+  int32_t dim1End = dim1->getEndValue();
+  int32_t dim1Increment = dim1->getIncrement();
 
   // Create a nested loop to create the necessary DataSource objects that will
   //  be used to import the data into the HDF5 file
-  for (int32 i = dim0Start; i <= dim0End; i += dim0Increment)
+  for (int32_t i = dim0Start; i <= dim0End; i += dim0Increment)
   {
     for (int j = dim1Start; j <= dim1End; j = j + dim1Increment)
     {
       std::string filename(Examples::SimportImportDataInputFile);
-      filename.append( StringUtils::numToString<int32>(i) );
-      filename.append("_").append(StringUtils::numToString<int32>(j)).append(".data");
+      filename.append( StringUtils::numToString<int32_t>(i) );
+      filename.append("_").append(StringUtils::numToString<int32_t>(j)).append(".data");
 
       //Create some Data Sources
       MXADataSource::Pointer ds(new MXADataSource());
-      std::vector<int32> dimValues;
+      std::vector<int32_t> dimValues;
       dimValues.push_back(i);
       dimValues.push_back(j);
       ds->setDimensionValues(dimValues);
@@ -98,7 +98,7 @@ void SimpleImportExample::runImport(const std::string &outputFilePath)
 
   // Import the Data into the HDF5 File
   // std::cout << "IMPORTING DATA NOW" << std::endl;
-  int32 err = dataImport->import();
+  int32_t err = dataImport->import();
   if (err < 0)
   {
 
@@ -119,32 +119,32 @@ void SimpleImportExample::createTestFiles(MXADataModel::Pointer model)
     IDataRecord::Pointer record = model->getDataRecordByNamedPath("DataRecordContainer/Test Data/Deep Nested Data");
 
     // Set the start/end/increment values for each Data Dimension
-    int32 dim0Start = dim0->getStartValue();
-    int32 dim0End = dim0->getEndValue();
-    int32 dim0Increment = dim0->getIncrement();
+    int32_t dim0Start = dim0->getStartValue();
+    int32_t dim0End = dim0->getEndValue();
+    int32_t dim0Increment = dim0->getIncrement();
 
-    int32 dim1Start = dim1->getStartValue();
-    int32 dim1End = dim1->getEndValue();
-    int32 dim1Increment = dim1->getIncrement();
+    int32_t dim1Start = dim1->getStartValue();
+    int32_t dim1End = dim1->getEndValue();
+    int32_t dim1Increment = dim1->getIncrement();
 
     // Create a nested loop to create the necessary DataSource objects that will
     //  be used to import the data into the HDF5 file
-    for (int32 i = dim0Start; i <= dim0End; i += dim0Increment)
+    for (int32_t i = dim0Start; i <= dim0End; i += dim0Increment)
     {
-      for (int32 j = dim1Start; j <= dim1End; j = j + dim1Increment)
+      for (int32_t j = dim1Start; j <= dim1End; j = j + dim1Increment)
       {
         //Create some Data files
         std::string filename(Examples::SimportImportDataInputFile);
-        filename.append( StringUtils::numToString<int32>(i) );
-        filename.append("_").append(StringUtils::numToString<int32>(j)).append(".data");
+        filename.append( StringUtils::numToString<int32_t>(i) );
+        filename.append("_").append(StringUtils::numToString<int32_t>(j)).append(".data");
         std::ofstream file_stream;
         file_stream.open(filename.c_str(), std::ios::binary );
         std::cout << "Creating input file '" << filename << "'" << std::endl;
-        int32 NX = 5; /* dataset dimensions */
-        int32 NY = 3;
-        int32 value = 0;
-        for (int32 k = 0; k < NX; k++) {
-          for (int32 l = 0; l < NY; l++) {
+        int32_t NX = 5; /* dataset dimensions */
+        int32_t NY = 3;
+        int32_t value = 0;
+        for (int32_t k = 0; k < NX; k++) {
+          for (int32_t l = 0; l < NY; l++) {
               value = l + k;
               file_stream.write((char *)(&value), sizeof(value));
           }

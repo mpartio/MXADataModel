@@ -7,10 +7,10 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-IMXAArray::Pointer MXARGBImage::CreateRGBImageArray( int32 width, int32 height)
+IMXAArray::Pointer MXARGBImage::CreateRGBImageArray( int32_t width, int32_t height)
 {
   IMXAArray::Pointer ptr;
-  int32 err = 1;
+  int32_t err = 1;
   MXARGBImage* d = new MXARGBImage(width, height);
   err = d->_allocate();
   if (err >= 0)
@@ -27,9 +27,9 @@ IMXAArray::Pointer MXARGBImage::CreateRGBImageArray( int32 width, int32 height)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXARGBImage* MXARGBImage::New( int32 width, int32 height)
+MXARGBImage* MXARGBImage::New( int32_t width, int32_t height)
 {
-  int32 err = 1;
+  int32_t err = 1;
   MXARGBImage* d = new MXARGBImage( width, height);
   err = d->_allocate();
   if (err < 0)
@@ -45,8 +45,8 @@ MXARGBImage* MXARGBImage::New( int32 width, int32 height)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXARGBImage::MXARGBImage( int32 width, int32 height) :
-MXAArrayTemplate<uint8>( (uint64)(width * height * 3), true),
+MXARGBImage::MXARGBImage( int32_t width, int32_t height) :
+MXAArrayTemplate<uint8_t>( (uint64_t)(width * height * 3), true),
 _width(width * 3),
 _height(height)
 {
@@ -63,7 +63,7 @@ MXARGBImage::~MXARGBImage()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 MXARGBImage::getNumberOfDimensions ()
+int32_t MXARGBImage::getNumberOfDimensions ()
 {
   return 2;
 }
@@ -71,16 +71,16 @@ int32 MXARGBImage::getNumberOfDimensions ()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-uint8* MXARGBImage::getPixelPointer(int32 x, int32 y)
+uint8_t* MXARGBImage::getPixelPointer(int32_t x, int32_t y)
 {
   size_t index = (_width * y ) + x * 3;
-  return static_cast<uint8*>(this->getVoidPointer(index));
+  return static_cast<uint8_t*>(this->getVoidPointer(index));
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 MXARGBImage::resize(uint64 size)
+int32_t MXARGBImage::resize(uint64_t size)
 {
   if(this->_resizeAndExtend(size) || size <= 0)
     {
@@ -97,9 +97,9 @@ int32 MXARGBImage::resize(uint64 size)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 MXARGBImage::resizeArray(int32 width, int32 height)
+int32_t MXARGBImage::resizeArray(int32_t width, int32_t height)
 {
-  int32 err =  this->resize(width * height * 3);
+  int32_t err =  this->resize(width * height * 3);
   this->_width = width * 3;
   this->_height = height;
   if (err == 0)
@@ -118,12 +118,12 @@ std::string MXARGBImage::valueToString(char delimiter)
 {
   std::stringstream sstream;
 
-  uint64 nElements = this->getNumberOfElements();
-  uint64 limit = nElements - 1;
-  int32 wLimit = _width * 3;
-  int32 width = 0;
-  uint8* data = this->getPointer(0);
-  for(uint64 i = 0; i < nElements; i=i+3)
+  uint64_t nElements = this->getNumberOfElements();
+  uint64_t limit = nElements - 1;
+  int32_t wLimit = _width * 3;
+  int32_t width = 0;
+  uint8_t* data = this->getPointer(0);
+  for(uint64_t i = 0; i < nElements; i=i+3)
   {
 
     sstream << "[" << data[i] << "," << data[i+1] << "," << data[i+2] << "]";

@@ -43,7 +43,7 @@ class MXA_EXPORT IAttributeHelper
      * @param writer IAttributeWriter object to use for the writing
      * @return Error condition
      */
-    virtual int32 writeAttribute(int32 locationId, std::string &datasetPath, std::string &key, IAttributeWriter &writer) = 0;
+    virtual int32_t writeAttribute(int32_t locationId, std::string &datasetPath, std::string &key, IAttributeWriter &writer) = 0;
 };
 
 #endif /* _IATTRIBUTECONVERTER_H_ */

@@ -15,7 +15,7 @@
 //-- MXA Headers
 //#include <MXA/Common/DLLExport.h>
 //#include <MXA/Common/MXATypeDefs.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataSource.h>
 #include <MXA/Base/IImportDelegate.h>
@@ -67,7 +67,7 @@ public:
    * @param indices A new set of indices to use to generate the paths
    * @return The generated internal path. Empty if there was an error.
    */
-  std::string generateInternalPath ( std::vector<int32> &indices);
+  std::string generateInternalPath ( std::vector<int32_t> &indices);
 
   /**
    * @brief Set the value of _dataRecord
@@ -130,13 +130,13 @@ public:
    * @brief Set the value of _dimensionValues
    * @param new_var the new value of _dimensionValues
    */
-  void setDimensionValues ( std::vector<int32> new_var );
+  void setDimensionValues ( std::vector<int32_t> new_var );
 
   /**
    * @brief Get the value of m_dimensionValues
    * @return the value of m_dimensionValues
    */
-  std::vector<int32> getDimensionValues ( );
+  std::vector<int32_t> getDimensionValues ( );
 
 private:
 
@@ -144,7 +144,7 @@ private:
   std::string                   _sourcePath;
   IImportDelegate::Pointer            _dataImportDelegate;
   IDataModel::Pointer                 _dataModel;
-  std::vector<int32>            _dimensionValues;
+  std::vector<int32_t>            _dimensionValues;
 
   MXADataSource(const MXADataSource&);   //Copy Constructor Not Implemented
   void operator=(const MXADataSource&); //Copy Assignment Not Implemented

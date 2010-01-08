@@ -13,7 +13,7 @@
 
 
 //#include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 //#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IDataModel.h>
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
@@ -75,7 +75,7 @@ public:
   * @param objType The type of the object
   * @return  Negative value on error
   */
-  static MXA_EXPORT herr_t getObjectType(hid_t objId, const std::string &objName, int32 *objType);
+  static MXA_EXPORT herr_t getObjectType(hid_t objId, const std::string &objName, int32_t *objType);
 
   /**
   * @brief Retrieves the object name for a given index
@@ -84,7 +84,7 @@ public:
   * @param name The variable to store the name
   * @return Negative value is error
   */
-  static MXA_EXPORT herr_t objectNameAtIndex(hid_t fileId, int32 idx, std::string &name);
+  static MXA_EXPORT herr_t objectNameAtIndex(hid_t fileId, int32_t idx, std::string &name);
 
   /**
   * @brief Returns if a given hdf5 object is a group
@@ -127,7 +127,7 @@ public:
   * @param names Variable to store the list
   * @return
   */
-  static MXA_EXPORT herr_t getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<std::string>& names);
+  static MXA_EXPORT herr_t getGroupObjects(hid_t loc_id, int32_t typeFilter, std::list<std::string>& names);
 
   /**
    * @brief Creates a HDF Group by checking if the group already exists. If the
@@ -218,12 +218,12 @@ public:
   template<typename T>
   static IMXAArray::Pointer readH5Data( hid_t locId,
                                          const std::string &datasetPath,
-                                         const std::vector<uint64> &dims)
+                                         const std::vector<uint64_t> &dims)
   {
     herr_t err = -1;
     IMXAArray::Pointer ptr;
 
-    ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32>(dims.size()), &(dims.front()));
+    ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32_t>(dims.size()), &(dims.front()));
     if (ptr.get() == NULL)
     {
       return ptr; // empty attribute
@@ -253,7 +253,7 @@ public:
   static IMXAArray::Pointer readH5Attribute(  hid_t locId,
                                                const std::string &datasetPath,
                                                const std::string &key,
-                                               const std::vector<uint64> &dims)
+                                               const std::vector<uint64_t> &dims)
   {
     herr_t err = -1;
     IMXAArray::Pointer ptr;
@@ -271,7 +271,7 @@ public:
     }
     else // Multi-Dimensional Data
     {
-      IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32>(dims.size()), &(dims.front()));
+      IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32_t>(dims.size()), &(dims.front()));
       if (attr.get() == NULL)
       {
         return ptr; // empty attribute

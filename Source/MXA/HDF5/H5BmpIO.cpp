@@ -34,7 +34,7 @@ herr_t H5BmpIO::importBmp(const std::string &filename,
                   bool asGrayscale)
 {
   // Put the bmp file parsing code here
-  int32 err = 0;
+  int32_t err = 0;
   MXABmpIO reader;
 
   LOAD_TEXTUREBMP_RESULT res = reader.loadBMPData(filename.c_str(), asGrayscale);
@@ -66,9 +66,9 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(hid_t fileId,
 {
 
   UCharArray imageData = reader.getImageData(false);
-  int32 width = reader.getWidth();
-  int32 height = reader.getHeight();
-  int32 err = -1;
+  int32_t width = reader.getWidth();
+  int32_t height = reader.getHeight();
+  int32_t err = -1;
 
   // Store byte array to HDF5 File
   err = H5Image::H5IMmake_image_8bit(fileId, datasetName, width, height, MXA::H5Image::UpperLeft, imageData.get() );
@@ -82,7 +82,7 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(hid_t fileId,
                           const_cast<std::string&>(MXA::H5Image::ImageSubclass),
                           const_cast<std::string&>(MXA::H5Image::ImageGrayScale) );
   // H5LTset_attribute_string(groupId, datasetName.c_str(), MXA::H5Image::ImageSubclass, MXA::H5Image::ImageGrayScale);
-   uint32 white_is_zero = 0;
+   uint32_t white_is_zero = 0;
    err = H5Lite::writeScalarAttribute(fileId,
                           datasetName,
                           const_cast<std::string&>(MXA::H5Image::ImageWhiteIsZero),
@@ -112,9 +112,9 @@ herr_t H5BmpIO::_importRGBFullColorBmp(hid_t fileId,
 									   const std::string &datasetName,
 									   MXABmpIO &reader)
 {
-  int32 err = -1;
-  int32 width = reader.getWidth();
-  int32 height = reader.getHeight();
+  int32_t err = -1;
+  int32_t width = reader.getWidth();
+  int32_t height = reader.getHeight();
 
   UCharArray rgbRaster = reader.getImageData(false);
 

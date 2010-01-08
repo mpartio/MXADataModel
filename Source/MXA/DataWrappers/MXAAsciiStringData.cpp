@@ -17,7 +17,7 @@
 IMXAArray::Pointer MXAAsciiStringData::Create(const std::string &value)
 {
   IMXAArray::Pointer ptr;
-  int32 err = 1;
+  int32_t err = 1;
   MXAAsciiStringData* d = new MXAAsciiStringData( 0);
   std::string::size_type size = value.size();
   std::string::size_type nullTermSize = size + 1;
@@ -26,7 +26,7 @@ IMXAArray::Pointer MXAAsciiStringData::Create(const std::string &value)
     err = d->resize(nullTermSize);
     if (err > 0) //copy data into array
     {
-      uint8* dest = d->getPointer(0);
+      uint8_t* dest = d->getPointer(0);
       const char* source = value.c_str();
       ::memcpy(dest, source, value.size() + 1 );
     }
@@ -47,7 +47,7 @@ IMXAArray::Pointer MXAAsciiStringData::Create(const std::string &value)
 // -----------------------------------------------------------------------------
 MXAAsciiStringData* MXAAsciiStringData::New(const std::string &value)
 {
-  int32 err = 1;
+  int32_t err = 1;
   MXAAsciiStringData* d = new MXAAsciiStringData(0);
   std::string::size_type size = value.size();
   std::string::size_type nullTermSize = size + 1;
@@ -56,7 +56,7 @@ MXAAsciiStringData* MXAAsciiStringData::New(const std::string &value)
     err = d->resize(nullTermSize);
     if (err > 0) //copy data into array
     {
-      uint8* dest = d->getPointer(0);
+      uint8_t* dest = d->getPointer(0);
       const char* source = value.c_str();
       ::memcpy(dest, source, value.size() + 1 );
     }
@@ -93,7 +93,7 @@ std::string MXAAsciiStringData::valueToString(char delimiter)
 //
 // -----------------------------------------------------------------------------
 MXAAsciiStringData::MXAAsciiStringData( size_t numElements) :
- MXAArrayTemplate<uint8>( static_cast<int32>(numElements), true)
+ MXAArrayTemplate<uint8_t>( static_cast<int32_t>(numElements), true)
 {
 }
 
@@ -109,7 +109,7 @@ MXAAsciiStringData::~MXAAsciiStringData()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 MXAAsciiStringData::getDataType()
+int32_t MXAAsciiStringData::getDataType()
 {
   return H5T_STRING;
 }

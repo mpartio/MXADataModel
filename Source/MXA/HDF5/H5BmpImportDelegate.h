@@ -14,7 +14,7 @@
 
 //-- MXA Includes
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 //#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IImportDelegate.h>
@@ -51,7 +51,7 @@ public:
   /**
   * @brief Implementation from the IDataImportDelegate class
   */
-  int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile);
+  int32_t importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile);
 
 
   /*
@@ -75,9 +75,9 @@ public:
   * @param key The name of the property.
   * @param value  The value to set the property to.
   */
-  virtual int32 setProperty(const std::string &key, const std::string &value);
+  virtual int32_t setProperty(const std::string &key, const std::string &value);
 
-  virtual int32 getProperty(const std::string &key, std::string &value)
+  virtual int32_t getProperty(const std::string &key, std::string &value)
   {
     if (key.compare(H5BmpImport::FileNotFoundIsError) == 0)
     {
@@ -98,7 +98,7 @@ public:
   //
   // -----------------------------------------------------------------------------
   template<typename T>
-  int32 getProperty(const std::string &key, T &value)
+  int32_t getProperty(const std::string &key, T &value)
   {
     GET_PROPERTY_BODY(H5BmpImport, T, FileNotFoundIsError, _fileNotFoundIsError, key, value);
     GET_PROPERTY_BODY(H5BmpImport, T, ImportAsGrayScale, _importAsGrayScale, key, value);

@@ -9,7 +9,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //-- MXA Includes
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Core/MXADataDimension.h>
@@ -44,8 +44,8 @@ void listDataDimensions(MXADataModel* model);
 void listDataRecords(MXADataModel* model);
 IMXAArray::Pointer captureSampleImage();
 IMXAArray::Pointer captureSampleSignal();
-int32 generateData();
-int32 readData();
+int32_t generateData();
+int32_t readData();
 void miscTest();
 IMXAArray::Pointer readRGBImageFromFile(IDataFile::Pointer dataFile, const std::string &datasetPath);
 
@@ -74,7 +74,7 @@ std::cout << logTime() << "Example 2 Starting" << std::endl;
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 readData()
+int32_t readData()
 {
   // Open the data file in read-only mode
   IDataFile::Pointer dataFile = H5MXADataFile::OpenFile(Examples::Example2File, true);
@@ -99,11 +99,11 @@ int32 readData()
     return EXIT_FAILURE;
   }
 
-  int32 err = 0;
+  int32_t err = 0;
   // Create an array with 2 values. This will hold the values for the current time and current
   //  pressure indexes. These indexes allow for the construction of the internal HDF5
   // path to the actual data.
-  std::vector<int32> indices (2,0);
+  std::vector<int32_t> indices (2,0);
   IDataRecord::Pointer cameraRec = modelPtr->getDataRecordByNamedPath("Camera");
   IDataRecord::Pointer tempRec = modelPtr->getDataRecordByNamedPath("Temperature");
   if (cameraRec.get() == NULL || tempRec.get() == NULL)
@@ -145,7 +145,7 @@ int32 readData()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 generateData()
+int32_t generateData()
 {
 
 
@@ -159,12 +159,12 @@ int32 generateData()
   //Instantiate 2 Data Dimensions
   // The first dimension has 10 elements from 0 to 9 and increments by 1. Since this
   // is the first dimension we give it an index of 0
-  int32 index = 0;
-  int32 count = 10;
-  int32 start = 0;
-  int32 end = 9;
-  int32 increment = 1;
-  int32 uniform = 1;
+  int32_t index = 0;
+  int32_t count = 10;
+  int32_t start = 0;
+  int32_t end = 9;
+  int32_t increment = 1;
+  int32_t uniform = 1;
   MXADataDimension::Pointer dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
 
   // The second dimension will have 4 elements ranging from 2 to 8 with an increment of 2;
@@ -228,7 +228,7 @@ int32 generateData()
   // in 1 minute intervals for 10 minutes and also incrementing the pressure by
   // 200 KPa starting at 200 and ending at 800 KPa. At each combination of those
   // values we are taking the temperature and capturing an image of our sample
-  std::vector<int32> indices(2, 0); // we keep this for re-use during the loop
+  std::vector<int32_t> indices(2, 0); // we keep this for re-use during the loop
   std::string temperaturePath;
   std::string cameraImagePath;
   float temperature = 1200.0f;
@@ -237,7 +237,7 @@ int32 generateData()
 
   MXAArrayTemplate<float32>* temperatureArray = MXAArrayTemplate<float32>::New(1);
   IMXAArray::Pointer temperaturePtr(temperatureArray); // Let boost clean up the memory when we are finished with it
-  int32 err = 0;
+  int32_t err = 0;
   // Define the height/width of our camera "image"
   std::vector<hsize_t> dims (2,0);
   dims[0] = 10;
@@ -288,9 +288,9 @@ IMXAArray::Pointer captureSampleImage()
     return imagePtr;
   }
   imagePtr.reset(image);
-  uint8* data = image->getPixelPointer(0,0);
-  int32 xDim = 256;
-  int32 yDim = 256;
+  uint8_t* data = image->getPixelPointer(0,0);
+  int32_t xDim = 256;
+  int32_t yDim = 256;
   for (int i = 0; i < xDim; ++i) {
     for (int j = 0; j < yDim; ++j) {
       data[0] = i * j;
@@ -308,15 +308,15 @@ IMXAArray::Pointer captureSampleImage()
 IMXAArray::Pointer captureSampleSignal()
 {
   IMXAArray::Pointer imagePtr;
-  MXA2DArray<uint8>* image = MXA2DArray<uint8>::New(256, 256);
+  MXA2DArray<uint8_t>* image = MXA2DArray<uint8_t>::New(256, 256);
   if (NULL == image)
   {
     return imagePtr;
   }
   imagePtr.reset(image);
-  uint8* data = image->getPointer(0,0);
-  int32 xDim = 256;
-  int32 yDim = 256;
+  uint8_t* data = image->getPointer(0,0);
+  int32_t xDim = 256;
+  int32_t yDim = 256;
   for (int i = 0; i < xDim; ++i) {
     for (int j = 0; j < yDim; ++j) {
       data[0] = i * j;

@@ -123,15 +123,15 @@ class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
     void setDerivedSourceFile(const std::string &derivedSourceFile);
     std::string getDerivedSourceFile();
 
-    int32 setValueForKey(const std::string &key, const std::string &value);
+    int32_t setValueForKey(const std::string &key, const std::string &value);
     std::string getValueForKey (const std::string &key);
 
-    int32 writeToFile (IDataFile::Pointer dataFile);
-    int32 readFromFile (IDataFile::Pointer dataFile);
+    int32_t writeToFile (IDataFile::Pointer dataFile);
+    int32_t readFromFile (IDataFile::Pointer dataFile);
 
     bool isValid(std::string message);
 
-    void printSelf(std::ostream& os, int32 indent);
+    void printSelf(std::ostream& os, int32_t indent);
 
     void generateKeyValueMap(std::map<std::string, std::string> &mdMap);
 

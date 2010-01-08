@@ -60,13 +60,13 @@ class MXA_EXPORT INode
     * @brief Sets the Node Type
     * @param nodeType The type of node, from the Type Enumeration
     */
-    virtual void setNodeType(int32 nodeType) = 0;
+    virtual void setNodeType(int32_t nodeType) = 0;
 
     /**
     * @brief Gets the node type.
     * @return The node type
     */
-    virtual int32 getNodeType() = 0;
+    virtual int32_t getNodeType() = 0;
 
     /**
     * @brief Returns the node type as a string
@@ -79,7 +79,7 @@ class MXA_EXPORT INode
     * @param nodeType One of the Type Enumerations
     * @return String description of the node type
     */
-    static std::string getNodeTypeAsString(int32 nodeType)
+    static std::string getNodeTypeAsString(int32_t nodeType)
     {
       switch(nodeType) {
         case Root:
@@ -146,13 +146,13 @@ class MXA_EXPORT INode
     * @brief Setter for property guid
     * @param aValue The new value to set for property guid
     */
-    virtual void setUniqueId(int32 aValue) = 0;
+    virtual void setUniqueId(int32_t aValue) = 0;
     
     /**
     * @brief Getter for property guid
     * @return The value of guid
     */
-    virtual int32 getUniqueId() = 0;
+    virtual int32_t getUniqueId() = 0;
     
     /**
      * @brief Resets the GUID value for this node
@@ -163,7 +163,7 @@ class MXA_EXPORT INode
     /**
     * @brief Returns the number of Children of this node
     */
-    virtual int32 getNumChildren() const = 0;
+    virtual int32_t getNumChildren() const = 0;
 
 
     /**
@@ -194,14 +194,14 @@ class MXA_EXPORT INode
     * @brief Returns the index of a specific child
     * @param child The child object whose index we are interested in
     */
-    virtual int32 indexOfChild(INode* child) = 0;
+    virtual int32_t indexOfChild(INode* child) = 0;
 
     /**
     * @brief Returns a specific child of this node based on a given index
     * @param index The index of the child to return
     * @return The index of the child
     */
-    virtual INodePtr getChildAt(int32 index) = 0;
+    virtual INodePtr getChildAt(int32_t index) = 0;
     
     /**
     * @brief Returns a reference to the children of this node
@@ -220,14 +220,14 @@ class MXA_EXPORT INode
     * @brief prints the node and the children of this node
     * @param depth The amount of indentation space
     */
-    virtual void printNodeTree(int32 depth=0) = 0;
+    virtual void printNodeTree(int32_t depth=0) = 0;
     
     /**
     * @brief prints the node and the children of this node
     * @param os An ostream to print the node to
     * @param indentSize The amount of indentation space
     */
-    virtual void printNode(std::ostream& os, int32 indentSize=0) = 0;
+    virtual void printNode(std::ostream& os, int32_t indentSize=0) = 0;
   
 };
 

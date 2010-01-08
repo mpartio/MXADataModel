@@ -34,7 +34,7 @@ void DataSourcePathBuilder::clearSections()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-std::string DataSourcePathBuilder::build(std::vector<uint32> &dimValues, int8 &ok)
+std::string DataSourcePathBuilder::build(std::vector<uint32_t> &dimValues, int8_t &ok)
 {
   ok = false;
   std::string path;

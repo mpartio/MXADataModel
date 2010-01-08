@@ -13,7 +13,7 @@
 
 //TODO: Add ability to append any type of attribute to this Data Record
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IDataRecord.h>
 #include <MXA/Base/IDataRecordWriter.h>
@@ -33,7 +33,7 @@
 class MXA_EXPORT MXADataRecord :  public IDataRecord
 {
 
-  static int32 _uniqueGUIDValue;
+  static int32_t _uniqueGUIDValue;
   
 public:
 
@@ -102,25 +102,25 @@ public:
   * @brief Getter for property luid
   * @return The value of luid
   */
-  int32 getLuid() { return _luid; }
+  int32_t getLuid() { return _luid; }
   
   /**
   * @brief Setter for property guid
   * @param aValue The new value to set for property guid
   */
-  void setGuid(int32 aValue) { setUniqueId(aValue); }
+  void setGuid(int32_t aValue) { setUniqueId(aValue); }
 
   /**
   * @brief Getter for property guid
   * @return The value of guid
   */
-  int32 getGuid() { return getUniqueId(); }
+  int32_t getGuid() { return getUniqueId(); }
   
   /**
   * @brief Setter for property luid
   * @param aValue The new value to set for property luid
   */
-  void setLuid(int32 aValue) { 
+  void setLuid(int32_t aValue) { 
     _luid = aValue;
     this->_nodeName = StringUtils::numToString(this->_luid);
   }
@@ -140,7 +140,7 @@ public:
    * @brief Writes this data record using the provided IDataRecordWriter implementation
    * @param writer The IDataRecordWriter object to use to write this data record
    */
-  int32 writeRecord(IDataRecordWriter* writer);
+  int32_t writeRecord(IDataRecordWriter* writer);
 
   /**
    * @brief Checks some basic properties of the model to make sure they are
@@ -155,13 +155,13 @@ public:
     * @brief Setter for property guid
    * @param aValue The new value to set for property guid
    */
-  void setUniqueId(int32 aValue) { _uniqueId = aValue; }
+  void setUniqueId(int32_t aValue) { _uniqueId = aValue; }
   
   /**
     * @brief Getter for property guid
    * @return The value of guid
    */
-  int32 getUniqueId() { return _uniqueId; }
+  int32_t getUniqueId() { return _uniqueId; }
   
   /**
     * @brief
@@ -171,27 +171,27 @@ public:
   /**
     * @brief
    */
-  static int32 nextGUIDValue();
+  static int32_t nextGUIDValue();
   
   /// Accessor for Parent iVar
   void setParent(IDataRecord::WeakPointer parent);
   IDataRecord::WeakPointer getParent();
   
   // Children Methods
-  int32 getNumChildren() const;
+  int32_t getNumChildren() const;
   bool hasChildren() const;
   void addChild(IDataRecord::Pointer child);
   void removeChild(int index);
   void removeChild(IDataRecord* child);
   void removeAllChildren();
-  int32 indexOfChild(IDataRecord* child);
+  int32_t indexOfChild(IDataRecord* child);
 
-  IDataRecord::Pointer getChildAt(int32 index);
+  IDataRecord::Pointer getChildAt(int32_t index);
   IDataRecord::Container& getChildren();
   
   // Utilities
-  void printDataRecordTree(int32 depth=0);
-  virtual void printDataRecord(std::ostream& os, int32 indentSize=0);
+  void printDataRecordTree(int32_t depth=0);
+  virtual void printDataRecord(std::ostream& os, int32_t indentSize=0);
   
   
   // -------- Needed for Parent Child relationship ------------
@@ -200,14 +200,14 @@ public:
 protected:
   MXADataRecord();
 
-  int32 _luid;
+  int32_t _luid;
   std::string _recordName;
   std::string _altName;
 
   // --------------- IDataRecord Related Variables
   // Node Name
   std::string _nodeName;
-  int32 _uniqueId;
+  int32_t _uniqueId;
   IDataRecord::WeakPointer _selfPtr;
   IDataRecord::WeakPointer _parent;
   IDataRecord::Container _children;

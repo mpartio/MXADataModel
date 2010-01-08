@@ -8,7 +8,7 @@
 #ifndef IMXADATAMODELREADERDELEGATE_H_
 #define IMXADATAMODELREADERDELEGATE_H_
 
-#include "MXA/Common/MXATypes.h"
+#include "MXA/MXATypes.h"
 #include "MXA/Common/MXASetGetMacros.h"
 #include "MXA/Base/IDataModel.h"
 

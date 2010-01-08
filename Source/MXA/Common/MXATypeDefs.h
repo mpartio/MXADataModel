@@ -19,7 +19,7 @@
 #include <boost/smart_ptr/weak_ptr.hpp>
 #include <boost/smart_ptr/shared_array.hpp>
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 
 
 /** @file MXATypeDefs.h
@@ -34,18 +34,18 @@ typedef std::string MXAString;
 
 
 //-- Define some Shared Arrays to use
-typedef boost::shared_array<uint8>                 UCharArray;
-typedef boost::shared_array<int8>                  CharArray;
-typedef boost::shared_array<uint16>                UShortArray;
-typedef boost::shared_array<int16>                 ShortArray;
-typedef boost::shared_array<uint32>                UIntArray;
-typedef boost::shared_array<int32>                 IntArray;
-typedef boost::shared_array<uint64>                ULongLongArray;
-typedef boost::shared_array<int64>                 LongLongArray;
+typedef boost::shared_array<uint8_t>                 UCharArray;
+typedef boost::shared_array<int8_t>                  CharArray;
+typedef boost::shared_array<uint16_t>                UShortArray;
+typedef boost::shared_array<int16_t>                 ShortArray;
+typedef boost::shared_array<uint32_t>                UIntArray;
+typedef boost::shared_array<int32_t>                 IntArray;
+typedef boost::shared_array<uint64_t>                ULongLongArray;
+typedef boost::shared_array<int64_t>                 LongLongArray;
 
 
 #define NEW_UCHAR_ARRAY(VarName, Size)\
-  UCharArray VarName(new uint8[Size]);
+  UCharArray VarName(new uint8_t[Size]);
 
 /* If we are compiling WITHOUT HDF5 support then we need some enumerated types */
 #if  MXA_HDF5_SUPPORT == 0
@@ -77,17 +77,17 @@ namespace H5Lite
 template<typename T>
  MXA_EXPORT std::string HDFTypeForPrimitiveAsStr(T value)
 {
-  if (typeid(value) == typeid(int8)) return "H5T_NATIVE_INT8";
-  if (typeid(value) == typeid(uint8)) return "H5T_NATIVE_UINT8";
+  if (typeid(value) == typeid(int8_t)) return "H5T_NATIVE_INT8";
+  if (typeid(value) == typeid(uint8_t)) return "H5T_NATIVE_UINT8";
 
-  if (typeid(value) == typeid(int16)) return "H5T_NATIVE_INT16";
-  if (typeid(value) == typeid(uint16)) return "H5T_NATIVE_UINT16";
+  if (typeid(value) == typeid(int16_t)) return "H5T_NATIVE_INT16";
+  if (typeid(value) == typeid(uint16_t)) return "H5T_NATIVE_UINT16";
 
-  if (typeid(value) == typeid(int32)) return "H5T_NATIVE_INT32";
-  if (typeid(value) == typeid(uint32)) return "H5T_NATIVE_UINT32";
+  if (typeid(value) == typeid(int32_t)) return "H5T_NATIVE_INT32";
+  if (typeid(value) == typeid(uint32_t)) return "H5T_NATIVE_UINT32";
 
-  if (typeid(value) == typeid(int64)) return "H5T_NATIVE_INT64";
-  if (typeid(value) == typeid(uint64)) return "H5T_NATIVE_UINT64";
+  if (typeid(value) == typeid(int64_t)) return "H5T_NATIVE_INT64";
+  if (typeid(value) == typeid(uint64_t)) return "H5T_NATIVE_UINT64";
 
   if (typeid(value) == typeid(float32)) return "H5T_NATIVE_FLOAT";
   if (typeid(value) == typeid(float64)) return "H5T_NATIVE_DOUBLE";
@@ -104,29 +104,29 @@ template<typename T>
  * @return
  */
 template<typename T>
- MXA_EXPORT int32 HDFTypeForPrimitive(T value)
+ MXA_EXPORT int32_t HDFTypeForPrimitive(T value)
 {
   if (typeid(value) == typeid(float32)) return H5T_NATIVE_FLOAT;
   if (typeid(value) == typeid(float64)) return H5T_NATIVE_DOUBLE;
 
-  if (typeid(value) == typeid(int8)) return H5T_NATIVE_INT8;
-  if (typeid(value) == typeid(uint8)) return H5T_NATIVE_UINT8;
+  if (typeid(value) == typeid(int8_t)) return H5T_NATIVE_INT8;
+  if (typeid(value) == typeid(uint8_t)) return H5T_NATIVE_UINT8;
 
-  if (typeid(value) == typeid(int16)) return H5T_NATIVE_INT16;
-  if (typeid(value) == typeid(uint16)) return H5T_NATIVE_UINT16;
+  if (typeid(value) == typeid(int16_t)) return H5T_NATIVE_INT16;
+  if (typeid(value) == typeid(uint16_t)) return H5T_NATIVE_UINT16;
 
-  if (typeid(value) == typeid(int32)) return H5T_NATIVE_INT32;
-  if (typeid(value) == typeid(uint32)) return H5T_NATIVE_UINT32;
+  if (typeid(value) == typeid(int32_t)) return H5T_NATIVE_INT32;
+  if (typeid(value) == typeid(uint32_t)) return H5T_NATIVE_UINT32;
 
-  if (typeid(value) == typeid(int64)) return H5T_NATIVE_INT64;
-  if (typeid(value) == typeid(uint64)) return H5T_NATIVE_UINT64;
+  if (typeid(value) == typeid(int64_t)) return H5T_NATIVE_INT64;
+  if (typeid(value) == typeid(uint64_t)) return H5T_NATIVE_UINT64;
 
   if (typeid(value) == typeid(bool)) return H5T_NATIVE_UINT8;
 
   return -1;
 }
 
-static int32 HDFTypeFromString(const std::string &value)
+static int32_t HDFTypeFromString(const std::string &value)
 {
   if (value.compare("H5T_NATIVE_INT8") == 0) return H5T_NATIVE_INT8;
   if (value.compare("H5T_NATIVE_UINT8") == 0) return H5T_NATIVE_UINT8;

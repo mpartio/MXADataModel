@@ -11,7 +11,7 @@
 
 
 #define H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(type, Suffix)\
-int32 Suffix##H5Attribute::writeHDF5Attribute(hid_t fileId, const std::string &datasetPath)\
+int32_t Suffix##H5Attribute::writeHDF5Attribute(hid_t fileId, const std::string &datasetPath)\
 {\
   herr_t err = 0;\
   err = H5Lite::writeMXAAttribute(fileId, datasetPath, getKey(), getAttributeValue().get() );\
@@ -22,7 +22,7 @@ int32 Suffix##H5Attribute::writeHDF5Attribute(hid_t fileId, const std::string &d
   return err;\
 }\
 \
-int32 Suffix##H5Attribute::readHDF5Attribute(hid_t fileId, const std::string &datasetPath)\
+int32_t Suffix##H5Attribute::readHDF5Attribute(hid_t fileId, const std::string &datasetPath)\
 {\
   herr_t err = -1;\
   IMXAArray* attrValue = H5Lite::readMXAAttribute(fileId, datasetPath, getKey() );\
@@ -46,14 +46,14 @@ void Suffix##H5Attribute::printValue(std::ostream &out)\
 
 
 
-H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(int8, Int8);
-H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(uint8, UInt8);
-H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(int16, Int16);
-H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(uint16, UInt16);
-H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(int32, Int32);
-H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(uint32, UInt32);
-H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(int64, Int64);
-H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(uint64, UInt64);
+H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(int8_t, Int8);
+H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(uint8_t, UInt8);
+H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(int16_t, Int16);
+H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(uint16_t, UInt16);
+H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(int32_t, Int32);
+H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(uint32_t, UInt32);
+H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(int64_t, Int64);
+H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(uint64_t, UInt64);
 H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(float, Float);
 H5ATTRIBUTE_CONCRETE_IMPLEMENTATION(double, Double);
 
@@ -94,10 +94,10 @@ AbstractH5Attribute::Pointer H5Attribute::ReadH5Attribute(hid_t loc_id,
        std::vector<hsize_t> dims;
        err = H5Lite::getAttributeInfo(loc_id, dsetName, attributeKey, dims, type_class, attr_size, typeId);
        if (err < 0){  }
-       std::vector<uint64> _dims(dims.size(), 0);
+       std::vector<uint64_t> _dims(dims.size(), 0);
        for (unsigned int i = 0; i<dims.size(); ++i)
        {
-         _dims[i] = static_cast<uint64>(dims[i]);
+         _dims[i] = static_cast<uint64_t>(dims[i]);
        }
        switch(type_class)
        {

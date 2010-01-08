@@ -63,7 +63,7 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
      * returned.
      */
 #if MXA_HDF5_SUPPORT
-    static ISupportFile::Pointer NewFromMXAFile(int32 dataFile,
+    static ISupportFile::Pointer NewFromMXAFile(int32_t dataFile,
                                                const std::string &index,
                                                bool cacheFile);
 #endif
@@ -102,14 +102,14 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
      * @param offset The offset into the cached file to read.
      * @return Pointer to the data at the specified offset.
      */
-    virtual uint8*  getFilePointer(uint64 offset = 0);
+    virtual uint8_t*  getFilePointer(uint64_t offset = 0);
 
     /**
      * @brief Returns the size of the file which could be Zero if the file has NOT been read
      * or can not be read.
      * @return Size of the file.
      */
-    virtual uint64  getFileSize();
+    virtual uint64_t  getFileSize();
 
     /**
      * @brief Has the file been read into memory.
@@ -122,7 +122,7 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
      * doing this with large files.
      * @return Error code. Negative value indicates error.
      */
-    virtual int32 readFromFileSystem();
+    virtual int32_t readFromFileSystem();
 
     /**
      * @brief If the file is residing in memory, free the memory by unloading the file
@@ -144,19 +144,19 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
      * can write the file out to the local filesystem if needed.
      * @return Error code. Negative is an error.
      */
-    virtual int32 readFromMXAFile();
+    virtual int32_t readFromMXAFile();
 
 
   protected:
     MXASupportFile();
-    MXASupportFile(int32 datafile, int index);
+    MXASupportFile(int32_t datafile, int index);
 
   private:
     std::string  _filesystemPath;
     std::string  _fileType;
     IMXAArray::Pointer _fileContents;
     int          _index;
-    int32        _fileId;
+    int32_t        _fileId;
     int          _source;
 
     MXASupportFile(const MXASupportFile&);    // Copy Constructor Not Implemented

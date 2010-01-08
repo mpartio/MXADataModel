@@ -27,12 +27,12 @@ XMLIODelegate::~XMLIODelegate()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-MXATypes::MXAError XMLIODelegate::writeModelToFile(const std::string &fileName,
+int32_t XMLIODelegate::writeModelToFile(const std::string &fileName,
                                                     IDataModel::Pointer model,
                                                     bool closeWhenFinished,
                                                     bool deleteExisting)
 {
-  int32 success = -1;
+  int32_t success = -1;
   XMLDataModelWriter writer(model, fileName );
   success = writer.writeModel(_fileId);
   return success;
@@ -42,9 +42,9 @@ MXATypes::MXAError XMLIODelegate::writeModelToFile(const std::string &fileName,
 //  Opens the file and then reads the data model from the file. Then closes the
 //  when reading is complete.
 // -----------------------------------------------------------------------------
-MXATypes::MXAError XMLIODelegate::readModelFromFile(const std::string &fileName, IDataModel::Pointer model, bool closeWhenFinished, bool openReadOnly)
+int32_t XMLIODelegate::readModelFromFile(const std::string &fileName, IDataModel::Pointer model, bool closeWhenFinished, bool openReadOnly)
 {
-  int32 success = -1;
+  int32_t success = -1;
   XMLDataModelReader reader(model, fileName);
   success = reader.readDataModel(-1);
   return success;
@@ -67,9 +67,9 @@ bool XMLIODelegate::supportedMXAFileVersion(float version)
 // to the DTD for the MXA project compliant file (has the correct file type and version)
 // -----------------------------------------------------------------------------
 //TODO: Implement XMLIODelegate::isMXAFile(hid_t fileId)
-bool XMLIODelegate::isMXAFile(int32 fileId)
+bool XMLIODelegate::isMXAFile(int32_t fileId)
 {
-  MXATypes::MXAError err=0;
+  int32_t err=0;
   // We can check wellformedness of the XML
   // We could read the model from the file then sanity check the Model for Dimensions/Records/Meta Data
 
@@ -83,7 +83,7 @@ bool XMLIODelegate::isMXAFile(int32 fileId)
 //TODO: Implement XMLIODelegate::isMXAFile(std::string filename)
 bool XMLIODelegate::isMXAFile(const std::string &filename)
 {
-  MXATypes::MXAError err=0;
+  int32_t err=0;
   // We can check wellformedness of the XML
   // We could read the model from the file then sanity check the Model for Dimensions/Records/Meta Data
   return (err >= 0);
@@ -93,9 +93,9 @@ bool XMLIODelegate::isMXAFile(const std::string &filename)
 // -----------------------------------------------------------------------------
 // Opens and returns an hdf file identifier
 //TODO: Implement XMLIODelegate::openMXAFile(std::string filename, bool readOnly)
-int32 XMLIODelegate::openMXAFile(std::string filename, bool readOnly)
+int32_t XMLIODelegate::openMXAFile(std::string filename, bool readOnly)
 {
-  int32 err = -1;
+  int32_t err = -1;
 
   return err;
 }
@@ -111,7 +111,7 @@ void XMLIODelegate::closeMXAFile()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 XMLIODelegate::getOpenFileId()
+int32_t XMLIODelegate::getOpenFileId()
 {
   return _fileId;
 }

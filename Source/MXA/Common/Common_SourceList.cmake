@@ -31,7 +31,7 @@ SET (MXA_COMMON_HEADERS
     ${MXA_SOURCE_DIR}/MXA/Common/DLLExport.h
     ${MXA_SOURCE_DIR}/MXA/Common/MXAEndian.h
     ${MXA_SOURCE_DIR}/MXA/Common/MXATypeDefs.h
-    ${MXA_SOURCE_DIR}/MXA/Common/MXATypes.h
+   # ${MXA_SOURCE_DIR}/MXA/Common/MXATypes.h
     ${MXA_SOURCE_DIR}/MXA/Common/MXAErrorDefinitions.h
     ${MXA_SOURCE_DIR}/MXA/Common/MXASetGetMacros.h
     ${MXA_SOURCE_DIR}/MXA/Common/IO/MXAFileReader64.h

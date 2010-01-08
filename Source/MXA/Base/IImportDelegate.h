@@ -47,13 +47,13 @@ public:
   * @param dataFile The IDataFile object
   * @return Zero or Positive on Success
   */
-  virtual int32 importDataSource(DataSourceType dataSource, DataFileType dataFile) = 0;
+  virtual int32_t importDataSource(DataSourceType dataSource, DataFileType dataFile) = 0;
   
   #if 0
-  virtual int32 setProperty(const std::string &key, const std::string &value)
+  virtual int32_t setProperty(const std::string &key, const std::string &value)
     { return 0; }
 
-  virtual int32 getProperty(const std::string &key,  std::string &value)
+  virtual int32_t getProperty(const std::string &key,  std::string &value)
     { return 0; }
 #endif
 

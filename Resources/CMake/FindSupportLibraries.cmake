@@ -1,10 +1,6 @@
 # IF YOU CHANGE THIS FILE, MAKE SURE YOU UPDATE THE UseMXADataModel.cmake.in FILE ALSO.
 
-IF ( NOT DEFINED  MXA_RESOURCES_DIR)
-  SET (MXA_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
-ENDIF ( NOT DEFINED  MXA_RESOURCES_DIR)
-
-include ( ${MXA_RESOURCES_DIR}/CMake/LocateBoostSupportLibraries.cmake )
+include ( ${PROJECT_CMAKE_DIR}/LocateBoostSupportLibraries.cmake )
 
 #-------------------------------------------------------------------------------
 #- Find Expat Library -------------
@@ -16,7 +12,7 @@ ENDIF (NOT DEFINED MXA_USE_XML)
 
 IF (MXA_USE_XML)
     IF (NOT DEFINED MXA_EXTERNAL_EXPAT_LIBRARY)
-        INCLUDE ( ${MXA_CMAKE_DIR}/MXAFindExpat.cmake)
+        INCLUDE ( ${PROJECT_CMAKE_MODULES_DIR}/MXAFindExpat.cmake)
     ENDIF (NOT DEFINED MXA_EXTERNAL_EXPAT_LIBRARY)
     IF (NOT EXPAT_FOUND)
         MESSAGE (FATAL_ERROR "Expat Library was NOT Found and is needed.")
@@ -43,7 +39,7 @@ IF ( MXA_USE_HDF5 )
   # like a ParaView plugin that is building MXA and provides its own HDF5 implementation
   SET (HDF5_USE_HIGH_LEVEL FALSE)
   IF (NOT DEFINED MXA_EXTERNAL_HDF5_LIBRARY)
-      INCLUDE( ${MXA_CMAKE_DIR}/MXAFindHDF5.cmake )
+      INCLUDE( ${PROJECT_CMAKE_MODULES_DIR}/MXAFindHDF5.cmake )
   ENDIF (NOT DEFINED MXA_EXTERNAL_HDF5_LIBRARY)
   IF(NOT HDF5_FOUND)
     MESSAGE(FATAL_ERROR " HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
@@ -64,7 +60,7 @@ ENDIF (NOT DEFINED MXA_USE_TIFF)
 
 IF(MXA_USE_TIFF)
     IF (NOT DEFINED MXA_EXTERNAL_TIFF_LIBRARY)
-        INCLUDE ( ${MXA_CMAKE_DIR}/MXAFindTiff.cmake)
+        INCLUDE ( ${PROJECT_CMAKE_MODULES_DIR}/MXAFindTiff.cmake)
     ENDIF (NOT DEFINED MXA_EXTERNAL_TIFF_LIBRARY)
     IF (NOT TIFF_FOUND)
       MESSAGE (FATAL_ERROR " Tiff Library was NOT Found and is needed.")

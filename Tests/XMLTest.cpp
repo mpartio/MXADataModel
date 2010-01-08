@@ -60,11 +60,11 @@ void MakeScalarAttribute(T value, std::string key, MXADataModel* model)
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MXADataModel* model)
+void MakeVectorAttribute(T value, std::string key, std::vector<uint64_t> &dims, MXADataModel* model)
 {
   //std::vector<T> data;
-  uint64 numelements = 1;
-  for (std::vector<uint64>::iterator iter = dims.begin(); iter != dims.end(); ++iter)
+  uint64_t numelements = 1;
+  for (std::vector<uint64_t>::iterator iter = dims.begin(); iter != dims.end(); ++iter)
   {
     numelements *= *(iter);
   }
@@ -72,17 +72,17 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
   MXA_REQUIRE(dims.size() == 2);
   MXA_REQUIRE(dims[0] == 5);
   MXA_REQUIRE(dims[1] == 2);
-  IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32>(dims.size()), &(dims.front()) );
+  IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32_t>(dims.size()), &(dims.front()) );
   MXA_REQUIRE ( vecPtr->getNumberOfElements() == numelements);
   MXA_REQUIRE (vecPtr->getNumberOfDimensions() == 2);
-   std::vector<uint64> mydims(dims.size(), 0);
+   std::vector<uint64_t> mydims(dims.size(), 0);
   vecPtr->getDimensions( &(mydims.front() ) );
   MXA_REQUIRE (mydims[0] == 5);
   MXA_REQUIRE (mydims[1] == 2);
 
   // Copy data into the attribute container
   T* data = static_cast<T*>( vecPtr->getVoidPointer(0) );
-  for (uint64 i = 0; i < numelements; ++i)
+  for (uint64_t i = 0; i < numelements; ++i)
   {
     data[i] = static_cast<T>(i * 1.5);
   }
@@ -94,19 +94,19 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
 // -----------------------------------------------------------------------------
 void CreateAttributes(MXADataModel* model)
 {
-    int8  i8  = -8;
-    uint8 ui8 = 8;
-    int16 i16 = -16;
-    uint16 ui16 = 16;
-    int32 i32 = -32;
-    uint32 ui32 = 32;
-    int64 i64 = -64;
-    uint64 ui64 = 64;
+    int8_t  i8  = -8;
+    uint8_t ui8 = 8;
+    int16_t i16 = -16;
+    uint16_t ui16 = 16;
+    int32_t i32 = -32;
+    uint32_t ui32 = 32;
+    int64_t i64 = -64;
+    uint64_t ui64 = 64;
     float32 f32 = 32.32f;
     float64 f64 = 64.64;
 
     //Create vector attributes
-    std::vector<uint64> dims;
+    std::vector<uint64_t> dims;
     dims.push_back(5);
     dims.push_back(2);
 
@@ -290,7 +290,7 @@ void GenerateMasterXMLFile()
     MXADataModelWriter<FileStreamType>::Pointer writer =
                               MXADataModelWriter<FileStreamType>::New(delegate);
 
-    int32 err = writer->writeModel(model);
+    int32_t err = writer->writeModel(model);
 
     MXA_REQUIRE ( err >= 0);
     MXAAbstractAttributes attributes = model->getUserMetaData();
@@ -361,7 +361,7 @@ void XMLModelTest()
     MXADataModelWriter<FileStreamType>::Pointer writer =
                               MXADataModelWriter<FileStreamType>::New(delegate);
 
-    int32 err = writer->writeModel(model);
+    int32_t err = writer->writeModel(model);
 
     MXA_REQUIRE ( err >= 0);
   }
@@ -411,7 +411,7 @@ void XMLTemplateTest()
       MXA_ASSERT(1 == 0);
      }
     MXADataModelWriter<FileStreamType>::Pointer writer = MXADataModelWriter<FileStreamType>::New(delegate);
-    int32 err = writer->writeModel(model);
+    int32_t err = writer->writeModel(model);
     MXA_REQUIRE ( err >= 0);
 
   }
@@ -475,7 +475,7 @@ void XMLTemplateTest()
         MXA_ASSERT(1 == 0);
        }
       MXADataModelWriter<FileStreamType>::Pointer writer = MXADataModelWriter<FileStreamType>::New(delegate);
-      int32 err = writer->writeModel(readModel);
+      int32_t err = writer->writeModel(readModel);
       MXA_REQUIRE ( err >= 0);
     }
   }

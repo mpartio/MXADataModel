@@ -24,9 +24,9 @@ MXADataImport::~MXADataImport ( )
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 MXADataImport::import()
+int32_t MXADataImport::import()
 {
-  int32 err = 1;
+  int32_t err = 1;
   // Ensure the output file is open
   if (this->_dataFile->isFileOpen() == false)
   {

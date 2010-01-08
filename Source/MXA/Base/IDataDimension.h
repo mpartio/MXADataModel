@@ -11,7 +11,7 @@
 #ifndef IDATADIMENSION_H_
 #define IDATADIMENSION_H_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/DLLExport.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataDimensionWriter.h>
@@ -34,67 +34,67 @@ class MXA_EXPORT IDataDimension
     MXA_SHARED_POINTERS(IDataDimension);
     typedef std::vector<Pointer>            Container;
 
-    typedef int32 size_type;
+    typedef int32_t size_type;
 
     /**
      * @brief Setter for property Index
      * @param aValue The new value to set for property Index
      */
-     virtual void setIndex(int32 aValue) = 0;
+     virtual void setIndex(int32_t aValue) = 0;
 
      /**
      * @brief Getter for property Index
      * @return The value of Index
      */
-     virtual int32 getIndex() = 0;
+     virtual int32_t getIndex() = 0;
 
      /**
      * @brief Setter for property Count
      * @param aValue The new value to set for property Count
      */
-     virtual void setCount(int32 aValue) = 0;
+     virtual void setCount(int32_t aValue) = 0;
 
      /**
      * @brief Getter for property Count
      * @return The value of Count
      */
-     virtual int32 getCount() = 0;
+     virtual int32_t getCount() = 0;
 
      /**
      * @brief Setter for property startValue
      * @param aValue The new value to set for property startValue
      */
-     virtual void setStartValue(int32 aValue) = 0;
+     virtual void setStartValue(int32_t aValue) = 0;
 
      /**
      * @brief Getter for property startValue
      * @return The value of startValue
      */
-     virtual int32 getStartValue() = 0;
+     virtual int32_t getStartValue() = 0;
 
      /**
      * @brief Setter for property increment
      * @param aValue The new value to set for property increment
      */
-     virtual void setIncrement(int32 aValue) = 0;
+     virtual void setIncrement(int32_t aValue) = 0;
 
      /**
      * @brief Getter for property increment
      * @return The value of increment
      */
-     virtual int32 getIncrement() = 0;
+     virtual int32_t getIncrement() = 0;
 
      /**
      * @brief Setter for property endValue
      * @param aValue The new value to set for property endValue
      */
-     virtual void setEndValue(int32 aValue) = 0;
+     virtual void setEndValue(int32_t aValue) = 0;
 
      /**
      * @brief Getter for property endValue
      * @return The value of endValue
      */
-     virtual int32 getEndValue() = 0;
+     virtual int32_t getEndValue() = 0;
 
      /**
      * @brief Setter for property name
@@ -124,13 +124,13 @@ class MXA_EXPORT IDataDimension
      * @brief Setter for property uniform
      * @param aValue The new value to set for property uniform
      */
-     virtual void setUniform(int32 aValue) = 0;
+     virtual void setUniform(int32_t aValue) = 0;
 
      /**
      * @brief Getter for property uniform
      * @return The value of uniform
      */
-     virtual int32 getUniform() = 0;
+     virtual int32_t getUniform() = 0;
 
      /**
       * @brief This method uses the given IDataDimensionWriter to serialize itself
@@ -138,7 +138,7 @@ class MXA_EXPORT IDataDimension
       * @param writer Valid (Non Null) IDataDimensioWriter object
       * @return Error condition.
       */
-     virtual int32 writeDimension(IDataDimensionWriter* writer) = 0;
+     virtual int32_t writeDimension(IDataDimensionWriter* writer) = 0;
 
      /**
       * @brief Returns the maximum value that the Start Value can have */
@@ -157,7 +157,7 @@ class MXA_EXPORT IDataDimension
       * @brief Returns is a property, like count, increment.. is equal to either the
       * maximum or minimum value for its type, indicating that the value is uninitialized.
       */
-     virtual bool isPropertyInitialized(int32 value) = 0;
+     virtual bool isPropertyInitialized(int32_t value) = 0;
 
      /**
       * @brief Checks some basic properties of the model to make sure they are
@@ -172,7 +172,7 @@ class MXA_EXPORT IDataDimension
       * @brief This will force the count value to be calculated based on the
       * current start, end and increment values
       */
-     virtual int32 calculateCount() = 0;
+     virtual int32_t calculateCount() = 0;
 
 
   private:

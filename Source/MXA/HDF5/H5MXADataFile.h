@@ -54,19 +54,19 @@ class MXA_EXPORT H5MXADataFile : public IDataFile
      * @brief Creates a new data file, first deleting and existing file with the same name
      * @return Error code < 0 is error. 0 or positive is Success
      */
-    int32 createFile();
+    int32_t createFile();
 
     /**
      * @brief Opens an existing data file.
      * @return Error code < 0 is error. 0 or positive is Success
      */
-    int32 openFile(bool readOnly);
+    int32_t openFile(bool readOnly);
 
     /**
      * @brief Closes the data file. Any further access to the file will fail.
      * @return Error code < 0 is error. 0 or positive is Success
      */
-    int32 closeFile(bool saveModel);
+    int32_t closeFile(bool saveModel);
 
     /**
      * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model
@@ -95,16 +95,16 @@ class MXA_EXPORT H5MXADataFile : public IDataFile
      * data model
      * @return Error code < 0 is error. 0 or positive is Success
      */
-    int32 saveDataModel();
+    int32_t saveDataModel();
 
     // -----------------------------------------------------------------------------
     //  Writing data related methods
 
-    int32 writeData ( const IDataset::Pointer dataset);
+    int32_t writeData ( const IDataset::Pointer dataset);
 
-    int32 readData (const IDataset::Pointer dataset);
+    int32_t readData (const IDataset::Pointer dataset);
 
-    int32 getFileId();
+    int32_t getFileId();
 
   protected:
     H5MXADataFile(const std::string &filename);
@@ -115,14 +115,14 @@ class MXA_EXPORT H5MXADataFile : public IDataFile
      * with the new/modified model
      * @return Error code < 0 is error. 0 or positive is Success
      */
-    int32 _writeDataModel();
+    int32_t _writeDataModel();
 
     /**
      * @brief Loads the data model from the data file. If a data model can not be
      * loaded from the file, then a NULL wrapped model will be returned.
      * @return Error code < 0 is error. 0 or positive is Success
     */
-    int32 _readDataModel();
+    int32_t _readDataModel();
 
     void _setWeakPointer(boost::weak_ptr<IDataFile> weakPtr);
 

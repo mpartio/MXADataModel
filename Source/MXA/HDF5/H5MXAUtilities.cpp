@@ -28,14 +28,14 @@
  //  Use a new set of indices to generate a path
  // -----------------------------------------------------------------------------
  std::string H5MXAUtilities::generateH5PathToDataset ( IDataModel::Pointer model,
-                                                   std::vector<int32> &indices,
+                                                   std::vector<int32_t> &indices,
                                                    IDataRecord::Pointer record)
  {
    std::string path;
    //Put the data root on first
    path += model->getDataRoot();
    //Put the Data Dimensions on Next
-   for (std::vector<int32>::iterator iter = indices.begin(); iter != indices.end(); ++iter ) {
+   for (std::vector<int32_t>::iterator iter = indices.begin(); iter != indices.end(); ++iter ) {
      path += StringUtils::numToString(*iter);
      path += "/";
    }
@@ -91,21 +91,21 @@
    case H5T_INTEGER:
      //std::cout << "User Meta Data Type is Integer" << std::endl;
      if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
-        ptr = H5Utilities::readH5Data<uint8>(dataFile->getFileId(), datasetPath,  dims);
+        ptr = H5Utilities::readH5Data<uint8_t>(dataFile->getFileId(), datasetPath,  dims);
       } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
-        ptr = H5Utilities::readH5Data<uint16>(dataFile->getFileId(), datasetPath,  dims);
+        ptr = H5Utilities::readH5Data<uint16_t>(dataFile->getFileId(), datasetPath,  dims);
       } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
-        ptr = H5Utilities::readH5Data<uint32>(dataFile->getFileId(), datasetPath,  dims);
+        ptr = H5Utilities::readH5Data<uint32_t>(dataFile->getFileId(), datasetPath,  dims);
       } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
-        ptr = H5Utilities::readH5Data<uint64>(dataFile->getFileId(), datasetPath,  dims);
+        ptr = H5Utilities::readH5Data<uint64_t>(dataFile->getFileId(), datasetPath,  dims);
       } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
-        ptr = H5Utilities::readH5Data<int8>(dataFile->getFileId(), datasetPath,  dims);
+        ptr = H5Utilities::readH5Data<int8_t>(dataFile->getFileId(), datasetPath,  dims);
       } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
-        ptr = H5Utilities::readH5Data<int16>(dataFile->getFileId(), datasetPath,  dims);
+        ptr = H5Utilities::readH5Data<int16_t>(dataFile->getFileId(), datasetPath,  dims);
       } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
-        ptr = H5Utilities::readH5Data<int32>(dataFile->getFileId(), datasetPath,  dims);
+        ptr = H5Utilities::readH5Data<int32_t>(dataFile->getFileId(), datasetPath,  dims);
       } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
-        ptr = H5Utilities::readH5Data<int64>(dataFile->getFileId(), datasetPath,  dims);
+        ptr = H5Utilities::readH5Data<int64_t>(dataFile->getFileId(), datasetPath,  dims);
      } else {
        std::cout << "Unknown Type: " << typeId << " at " <<  datasetPath << std::endl;
        err = -1;
@@ -152,14 +152,14 @@
    size_t attr_size;
    std::string res;
 
-   std::vector<uint64> dims;  //Reusable for the loop
+   std::vector<uint64_t> dims;  //Reusable for the loop
    err = H5Lite::getAttributeInfo(fileId, datasetPath, attributeKey, dims, attr_type, attr_size, typeId);
    if (err < 0 )
    {
      return ptr;
    }
    size_t numElements = 1;
-   for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+   for (std::vector<uint64_t>::size_type i = 0; i < dims.size(); ++i)
    {
      numElements = numElements * dims[i];
    }
@@ -172,21 +172,21 @@
    case H5T_INTEGER:
      //std::cout << "User Meta Data Type is Integer" << std::endl;
      if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
-        ptr = H5Utilities::readH5Attribute<uint8>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+        ptr = H5Utilities::readH5Attribute<uint8_t>(dataFile->getFileId(), datasetPath, attributeKey, dims);
       } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
-        ptr = H5Utilities::readH5Attribute<uint16>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+        ptr = H5Utilities::readH5Attribute<uint16_t>(dataFile->getFileId(), datasetPath, attributeKey, dims);
       } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
-        ptr = H5Utilities::readH5Attribute<uint32>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+        ptr = H5Utilities::readH5Attribute<uint32_t>(dataFile->getFileId(), datasetPath, attributeKey, dims);
       } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
-        ptr = H5Utilities::readH5Attribute<uint64>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+        ptr = H5Utilities::readH5Attribute<uint64_t>(dataFile->getFileId(), datasetPath, attributeKey, dims);
       } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
-        ptr = H5Utilities::readH5Attribute<int8>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+        ptr = H5Utilities::readH5Attribute<int8_t>(dataFile->getFileId(), datasetPath, attributeKey, dims);
       } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
-        ptr = H5Utilities::readH5Attribute<int16>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+        ptr = H5Utilities::readH5Attribute<int16_t>(dataFile->getFileId(), datasetPath, attributeKey, dims);
       } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
-        ptr = H5Utilities::readH5Attribute<int32>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+        ptr = H5Utilities::readH5Attribute<int32_t>(dataFile->getFileId(), datasetPath, attributeKey, dims);
       } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
-        ptr = H5Utilities::readH5Attribute<int64>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+        ptr = H5Utilities::readH5Attribute<int64_t>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else {
        std::cout << DEBUG_OUT(logTime) << "Unknown Integer Type: " << typeId << " for attribute:'" << attributeKey << "' for dataset:'" <<  datasetPath <<"'" << std::endl;
        err = -1;

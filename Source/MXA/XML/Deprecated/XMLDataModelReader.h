@@ -46,7 +46,7 @@ public:
   * @param NOT_USED
   * @return Error: Negative is error Condition
   */
-	int32 readDataModel(int32 NOT_USED) ;
+	int32_t readDataModel(int32_t NOT_USED) ;
 
 
 
@@ -54,7 +54,7 @@ public:
 private:
   IDataModel::Pointer     _dataModel;
   const std::string _fileName;
-  int32             _xmlParseError;
+  int32_t             _xmlParseError;
   IDataRecord::Pointer    _currentParentRecord;
   std::string       _userAttributeData;
   bool              _parseData;
@@ -64,7 +64,7 @@ private:
   ExpatParser*      _parser;
 
 
-  int32               _indent;
+  int32_t               _indent;
 
   XMLDataModelReader(const XMLDataModelReader&);   //Copy Constructor Not Implemented
   void operator=(const XMLDataModelReader&); //Copy Assignment Not Implemented

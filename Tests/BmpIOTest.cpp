@@ -9,7 +9,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //-- MXA Headers
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/BMPIO/MXABmpIO.h>
 #include "UnitTestSupport.hpp"
 

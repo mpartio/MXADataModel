@@ -51,7 +51,7 @@ static void EndElementHandler(void* pUserData, const XML_Char* name)
 	ph->OnEndElement(name);
 }
 
-static void CharacterDataHandler(void* pUserData, const XML_Char* data, int32 len)
+static void CharacterDataHandler(void* pUserData, const XML_Char* data, int32_t len)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	ph->OnCharacterData(data, len);
@@ -81,13 +81,13 @@ static void EndCdataSectionHandler(void* pUserData)
 	ph->OnEndCdataSection();
 }
 
-static void DefaultHandler(void* pUserData, const XML_Char* data, int32 len)
+static void DefaultHandler(void* pUserData, const XML_Char* data, int32_t len)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	ph->OnDefault(data, len);
 }
 
-static int32 UnknownEncodingHandler(void* pUserData, const XML_Char* name, XML_Encoding* pInfo)
+static int32_t UnknownEncodingHandler(void* pUserData, const XML_Char* name, XML_Encoding* pInfo)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	return ph->OnUnknownEncoding(name, pInfo) ? 1 : 0;
@@ -105,13 +105,13 @@ static void EndNamespaceDeclHandler(void* pUserData, const XML_Char* prefix)
 	ph->OnEndNamespaceDecl(prefix);
 }
 
-static void XmlDeclHandler(void* pUserData, const XML_Char* version, const XML_Char* encoding, int32 isStandalone)
+static void XmlDeclHandler(void* pUserData, const XML_Char* version, const XML_Char* encoding, int32_t isStandalone)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	ph->OnXmlDecl(version, encoding, isStandalone != 0);
 }
 
-static void StartDoctypeDeclHandler(void* pUserData, const XML_Char* doctype, const XML_Char* sysId, const XML_Char* pubId, int32 hasInternalSubset)
+static void StartDoctypeDeclHandler(void* pUserData, const XML_Char* doctype, const XML_Char* sysId, const XML_Char* pubId, int32_t hasInternalSubset)
 {
 	ExpatEvtHandler* ph = static_cast<ExpatEvtHandler*>(pUserData);
 	ph->OnStartDoctypeDecl(doctype, sysId, pubId, hasInternalSubset != 0);
@@ -341,7 +341,7 @@ int ExpatParser::GetCurrentByteCount(void)
 	return XML_GetCurrentByteCount(m_parser);
 }
 
-const char* ExpatParser::GetInputContext(int32* pOffset, int32* pSize)
+const char* ExpatParser::GetInputContext(int32_t* pOffset, int32_t* pSize)
 {
 	assert(m_parser != NULL);
 	return XML_GetInputContext(m_parser, pOffset, pSize);

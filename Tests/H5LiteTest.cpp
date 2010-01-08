@@ -12,7 +12,7 @@
 //--MXA Includes
 #include <MXA/MXAConfiguration.h>
 #include <MXA/Common/LogTime.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
@@ -27,7 +27,7 @@
 
 
 
-#define DSET0_NAME "2D int32 array"
+#define DSET0_NAME "2D int32_t array"
 #define DSET1_NAME "dataset char"
 #define DSET2_NAME "dataset short"
 #define DSET3_NAME "dataset int"
@@ -87,8 +87,6 @@
  * getAttributeInfo - DONE
  */
 
-using namespace MXATypes;
-
 
 herr_t testMakeStringDataset(hid_t file_id);
 herr_t testMakeStringAttribute(hid_t file_id);
@@ -122,13 +120,13 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
   MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "1DArrayAttribute<" + attributeKey + ">";
-  int32 rank = 1;
+  int32_t rank = 1;
   T data[DIM0];
   for(int i = 0; i < DIM0; ++i)
   {
     data[i] = (T)(i);
   }
-  uint64 dims[1];
+  uint64_t dims[1];
   dims[0] = DIM0;
 
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
@@ -157,7 +155,7 @@ herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetNam
   H5T_class_t attr_type;
   size_t attr_size;
   hid_t typeId = -1;
-  std::vector<uint64> dims;  //Reusable for the loop
+  std::vector<uint64_t> dims;  //Reusable for the loop
   err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 1);
@@ -168,7 +166,7 @@ herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetNam
   MXA_REQUIRE(rank == 1);
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
   typename std::vector<T>::size_type numElements = 1;
-  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+  for (std::vector<uint64_t>::size_type i = 0; i < dims.size(); ++i)
   {
     numElements = numElements * dims[i];
   }
@@ -193,7 +191,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
   MXA_REQUIRE(attributeKey.empty() == false);
 
   attributeKey = "2DArrayAttribute<" + attributeKey + ">";
-  int32 rank = RANK_2D;
+  int32_t rank = RANK_2D;
   T data[DIM0][DIM1];
   for(int i = 0; i < DIM0; ++i)
   {
@@ -201,7 +199,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
       data[i][j] = (T)(i * j);
     }
   }
-  uint64 dims[RANK_2D];
+  uint64_t dims[RANK_2D];
   dims[0] = DIM0;
   dims[1] = DIM1;
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
@@ -231,7 +229,7 @@ herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetNam
   H5T_class_t attr_type;
   size_t attr_size;
   hid_t typeId = -1;
-  std::vector<uint64> dims;  //Reusable for the loop
+  std::vector<uint64_t> dims;  //Reusable for the loop
   err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 2);
@@ -242,7 +240,7 @@ herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetNam
   MXA_REQUIRE(rank == 2);
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
   typename std::vector<T>::size_type numElements = 1;
-  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+  for (std::vector<uint64_t>::size_type i = 0; i < dims.size(); ++i)
   {
     numElements = numElements * dims[i];
   }
@@ -265,7 +263,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
   MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "3DArrayAttribute<" + attributeKey + ">";
-  int32 rank = RANK_3D;
+  int32_t rank = RANK_3D;
   T data[DIM0][DIM1][DIM2];
   for(int i = 0; i < DIM0; ++i) {
     for (int j = 0; j < DIM1; ++j) {
@@ -274,7 +272,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
       }
     }
   }
-  uint64 dims[RANK_3D];
+  uint64_t dims[RANK_3D];
   dims[0] = DIM0;
   dims[1] = DIM1;
   dims[2] = DIM2;
@@ -306,7 +304,7 @@ herr_t testReadPointer3DArrayAttribute(hid_t file_id, const std::string &dsetNam
   H5T_class_t attr_type;
   size_t attr_size;
   hid_t typeId = -1;
-  std::vector<uint64> dims;  //Reusable for the loop
+  std::vector<uint64_t> dims;  //Reusable for the loop
   err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 3);
@@ -317,7 +315,7 @@ herr_t testReadPointer3DArrayAttribute(hid_t file_id, const std::string &dsetNam
   MXA_REQUIRE(rank == 3);
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
   typename std::vector<T>::size_type numElements = 1;
-  for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+  for (std::vector<uint64_t>::size_type i = 0; i < dims.size(); ++i)
   {
     numElements = numElements * dims[i];
   }
@@ -341,8 +339,8 @@ herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName )
   MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "VectorAttribute<" + attributeKey + ">";
 
-  int32 numElements = DIM0;
-  std::vector<uint64> dims (1, DIM0);
+  int32_t numElements = DIM0;
+  std::vector<uint64_t> dims (1, DIM0);
 
   /* Make dataset */
   std::vector<T> data (DIM0, 0);
@@ -367,8 +365,8 @@ herr_t testReadVectorAttribute(hid_t file_id, std::string dsetName )
   MXA_REQUIRE(attributeKey.empty() == false);
   attributeKey = "VectorAttribute<" + attributeKey + ">";
 
-  int32 numElements = DIM0;
-  std::vector<uint64> dims (1, DIM0);
+  int32_t numElements = DIM0;
+  std::vector<uint64_t> dims (1, DIM0);
 
   std::vector<T> data (DIM0, 0);
   for (int i = 0; i < numElements; ++i) {
@@ -426,16 +424,16 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
 
   T value = 0x0;
   herr_t err = 1;
-  int32 rank = 2;
+  int32_t rank = 2;
   // Create the Dimensions
-  uint64 dims[2];
+  uint64_t dims[2];
   dims[0] = DIM0; dims[1] = DIM1;
 
   /* Make dataset char */
-  int32 tSize = dims[0] * dims[1];
+  int32_t tSize = dims[0] * dims[1];
  // T data[dimx*dimy];
   std::vector<T> data(tSize);
-  for (int32 i = 0; i < tSize; ++i) {
+  for (int32_t i = 0; i < tSize; ++i) {
     data[i] = static_cast<T>( i * 5);
   }
 
@@ -444,58 +442,58 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   std::cout << "Running " << dsetName << " ... ";
   err = H5Lite::writePointerDataset( file_id, dsetName, rank, dims, &(data.front()) );
   MXA_REQUIRE(err >= 0);
-  err = testWritePointer1DArrayAttribute<int8>(file_id, dsetName);
-  err = testWritePointer1DArrayAttribute<uint8>(file_id, dsetName);
-  err = testWritePointer1DArrayAttribute<int16>(file_id, dsetName);
-  err = testWritePointer1DArrayAttribute<uint16>(file_id, dsetName);
-  err = testWritePointer1DArrayAttribute<int32>(file_id, dsetName);
-  err = testWritePointer1DArrayAttribute<uint32>(file_id, dsetName);
-  err = testWritePointer1DArrayAttribute<int64>(file_id, dsetName);
-  err = testWritePointer1DArrayAttribute<uint64>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<int8_t>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<uint8_t>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<int16_t>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<uint16_t>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<int32_t>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<uint32_t>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<int64_t>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<uint64_t>(file_id, dsetName);
   err = testWritePointer1DArrayAttribute<float32>(file_id, dsetName);
   err = testWritePointer1DArrayAttribute<float64>(file_id, dsetName);
 
-  err = testWritePointer2DArrayAttribute<int8>(file_id, dsetName);
-  err = testWritePointer2DArrayAttribute<uint8>(file_id, dsetName);
-  err = testWritePointer2DArrayAttribute<int16>(file_id, dsetName);
-  err = testWritePointer2DArrayAttribute<uint16>(file_id, dsetName);
-  err = testWritePointer2DArrayAttribute<int32>(file_id, dsetName);
-  err = testWritePointer2DArrayAttribute<uint32>(file_id, dsetName);
-  err = testWritePointer2DArrayAttribute<int64>(file_id, dsetName);
-  err = testWritePointer2DArrayAttribute<uint64>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<int8_t>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<uint8_t>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<int16_t>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<uint16_t>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<int32_t>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<uint32_t>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<int64_t>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<uint64_t>(file_id, dsetName);
   err = testWritePointer2DArrayAttribute<float32>(file_id, dsetName);
   err = testWritePointer2DArrayAttribute<float64>(file_id, dsetName);
 
-  err = testWritePointer3DArrayAttribute<int8>(file_id, dsetName);
-  err = testWritePointer3DArrayAttribute<uint8>(file_id, dsetName);
-  err = testWritePointer3DArrayAttribute<int16>(file_id, dsetName);
-  err = testWritePointer3DArrayAttribute<uint16>(file_id, dsetName);
-  err = testWritePointer3DArrayAttribute<int32>(file_id, dsetName);
-  err = testWritePointer3DArrayAttribute<uint32>(file_id, dsetName);
-  err = testWritePointer3DArrayAttribute<int64>(file_id, dsetName);
-  err = testWritePointer3DArrayAttribute<uint64>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<int8_t>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<uint8_t>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<int16_t>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<uint16_t>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<int32_t>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<uint32_t>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<int64_t>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<uint64_t>(file_id, dsetName);
   err = testWritePointer3DArrayAttribute<float32>(file_id, dsetName);
   err = testWritePointer3DArrayAttribute<float64>(file_id, dsetName);
 
-  err = testWriteVectorAttribute<int8>(file_id, dsetName);
-  err = testWriteVectorAttribute<uint8>(file_id, dsetName);
-  err = testWriteVectorAttribute<int16>(file_id, dsetName);
-  err = testWriteVectorAttribute<uint16>(file_id, dsetName);
-  err = testWriteVectorAttribute<int32>(file_id, dsetName);
-  err = testWriteVectorAttribute<uint32>(file_id, dsetName);
-  err = testWriteVectorAttribute<int64>(file_id, dsetName);
-  err = testWriteVectorAttribute<uint64>(file_id, dsetName);
+  err = testWriteVectorAttribute<int8_t>(file_id, dsetName);
+  err = testWriteVectorAttribute<uint8_t>(file_id, dsetName);
+  err = testWriteVectorAttribute<int16_t>(file_id, dsetName);
+  err = testWriteVectorAttribute<uint16_t>(file_id, dsetName);
+  err = testWriteVectorAttribute<int32_t>(file_id, dsetName);
+  err = testWriteVectorAttribute<uint32_t>(file_id, dsetName);
+  err = testWriteVectorAttribute<int64_t>(file_id, dsetName);
+  err = testWriteVectorAttribute<uint64_t>(file_id, dsetName);
   err = testWriteVectorAttribute<float32>(file_id, dsetName);
   err = testWriteVectorAttribute<float64>(file_id, dsetName);
 
-  err = testWriteScalarAttribute<int8>(file_id, dsetName);
-  err = testWriteScalarAttribute<uint8>(file_id, dsetName);
-  err = testWriteScalarAttribute<int16>(file_id, dsetName);
-  err = testWriteScalarAttribute<uint16>(file_id, dsetName);
-  err = testWriteScalarAttribute<int32>(file_id, dsetName);
-  err = testWriteScalarAttribute<uint32>(file_id, dsetName);
-  err = testWriteScalarAttribute<int64>(file_id, dsetName);
-  err = testWriteScalarAttribute<uint64>(file_id, dsetName);
+  err = testWriteScalarAttribute<int8_t>(file_id, dsetName);
+  err = testWriteScalarAttribute<uint8_t>(file_id, dsetName);
+  err = testWriteScalarAttribute<int16_t>(file_id, dsetName);
+  err = testWriteScalarAttribute<uint16_t>(file_id, dsetName);
+  err = testWriteScalarAttribute<int32_t>(file_id, dsetName);
+  err = testWriteScalarAttribute<uint32_t>(file_id, dsetName);
+  err = testWriteScalarAttribute<int64_t>(file_id, dsetName);
+  err = testWriteScalarAttribute<uint64_t>(file_id, dsetName);
   err = testWriteScalarAttribute<float32>(file_id, dsetName);
   err = testWriteScalarAttribute<float64>(file_id, dsetName);
 
@@ -515,7 +513,7 @@ herr_t testWriteVectorDataset(hid_t file_id)
   std::vector<hsize_t> dims(RANK_1D, DIM0);
   /* Make dataset char */
   std::vector<T> data(DIM0, 0);
-  for (int32 i = 0; i < DIM0; ++i) {
+  for (int32_t i = 0; i < DIM0; ++i) {
     data[i] = static_cast<T>( i * 5);
   }
 
@@ -540,7 +538,7 @@ herr_t testReadVectorDataset(hid_t file_id)
 
   std::vector<hsize_t> dims(RANK_1D, DIM0);
   std::vector<T> referenceData(DIM0, 0);
-  for (int32 i = 0; i < DIM0; ++i) {
+  for (int32_t i = 0; i < DIM0; ++i) {
     referenceData[i] = static_cast<T>( i * 5);
   }
 
@@ -663,14 +661,14 @@ herr_t testWriteMXAArray(hid_t file_id)
   err = H5Lite::writeMXAArray(file_id, dsetName, array);
   MXA_REQUIRE(err >= 0);
 
-   MXA_REQUIRE ( testMXAAttribute<int8>(file_id, dsetName) >= 0 );
-   MXA_REQUIRE ( testMXAAttribute<uint8>(file_id, dsetName) >= 0 );
-   MXA_REQUIRE ( testMXAAttribute<int16>(file_id, dsetName) >= 0 );
-   MXA_REQUIRE ( testMXAAttribute<uint16>(file_id, dsetName) >= 0 );
-   MXA_REQUIRE ( testMXAAttribute<int32>(file_id, dsetName) >= 0 );
-   MXA_REQUIRE ( testMXAAttribute<uint32>(file_id, dsetName) >= 0 );
-   MXA_REQUIRE ( testMXAAttribute<int64>(file_id, dsetName) >= 0 );
-   MXA_REQUIRE ( testMXAAttribute<uint64>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<int8_t>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<uint8_t>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<int16_t>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<uint16_t>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<int32_t>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<uint32_t>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<int64_t>(file_id, dsetName) >= 0 );
+   MXA_REQUIRE ( testMXAAttribute<uint64_t>(file_id, dsetName) >= 0 );
    MXA_REQUIRE ( testMXAAttribute<float32>(file_id, dsetName) >= 0 );
    MXA_REQUIRE ( testMXAAttribute<float64>(file_id, dsetName) >= 0 );
 
@@ -741,9 +739,9 @@ herr_t testReadPointer2DArrayDataset(hid_t file_id)
   std::vector<hsize_t> dims(2, 0);
   dims[0] = DIM0; dims[1] = DIM1;
 
-  int32 tSize = dims[0] * dims[1];
+  int32_t tSize = dims[0] * dims[1];
   std::vector<T> referenceData(tSize);
-  for (int32 i = 0; i < tSize; ++i) {
+  for (int32_t i = 0; i < tSize; ++i) {
     referenceData[i] = static_cast<T>( i * 5);
   }
   // Generate the data set name
@@ -775,58 +773,58 @@ herr_t testReadPointer2DArrayDataset(hid_t file_id)
   MXA_REQUIRE(data == referenceData);
 
   //Read all the attributes
-  err = testReadPointer1DArrayAttribute<int8>(file_id, dsetName);
-  err = testReadPointer1DArrayAttribute<uint8>(file_id, dsetName);
-  err = testReadPointer1DArrayAttribute<int16>(file_id, dsetName);
-  err = testReadPointer1DArrayAttribute<uint16>(file_id, dsetName);
-  err = testReadPointer1DArrayAttribute<int32>(file_id, dsetName);
-  err = testReadPointer1DArrayAttribute<uint32>(file_id, dsetName);
-  err = testReadPointer1DArrayAttribute<int64>(file_id, dsetName);
-  err = testReadPointer1DArrayAttribute<uint64>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<int8_t>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<uint8_t>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<int16_t>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<uint16_t>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<int32_t>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<uint32_t>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<int64_t>(file_id, dsetName);
+  err = testReadPointer1DArrayAttribute<uint64_t>(file_id, dsetName);
   err = testReadPointer1DArrayAttribute<float32>(file_id, dsetName);
   err = testReadPointer1DArrayAttribute<float64>(file_id, dsetName);
 
-  err = testReadPointer2DArrayAttribute<int8>(file_id, dsetName);
-  err = testReadPointer2DArrayAttribute<uint8>(file_id, dsetName);
-  err = testReadPointer2DArrayAttribute<int16>(file_id, dsetName);
-  err = testReadPointer2DArrayAttribute<uint16>(file_id, dsetName);
-  err = testReadPointer2DArrayAttribute<int32>(file_id, dsetName);
-  err = testReadPointer2DArrayAttribute<uint32>(file_id, dsetName);
-  err = testReadPointer2DArrayAttribute<int64>(file_id, dsetName);
-  err = testReadPointer2DArrayAttribute<uint64>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<int8_t>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<uint8_t>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<int16_t>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<uint16_t>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<int32_t>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<uint32_t>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<int64_t>(file_id, dsetName);
+  err = testReadPointer2DArrayAttribute<uint64_t>(file_id, dsetName);
   err = testReadPointer2DArrayAttribute<float32>(file_id, dsetName);
   err = testReadPointer2DArrayAttribute<float64>(file_id, dsetName);
 
-  err = testReadPointer3DArrayAttribute<int8>(file_id, dsetName);
-  err = testReadPointer3DArrayAttribute<uint8>(file_id, dsetName);
-  err = testReadPointer3DArrayAttribute<int16>(file_id, dsetName);
-  err = testReadPointer3DArrayAttribute<uint16>(file_id, dsetName);
-  err = testReadPointer3DArrayAttribute<int32>(file_id, dsetName);
-  err = testReadPointer3DArrayAttribute<uint32>(file_id, dsetName);
-  err = testReadPointer3DArrayAttribute<int64>(file_id, dsetName);
-  err = testReadPointer3DArrayAttribute<uint64>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<int8_t>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<uint8_t>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<int16_t>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<uint16_t>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<int32_t>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<uint32_t>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<int64_t>(file_id, dsetName);
+  err = testReadPointer3DArrayAttribute<uint64_t>(file_id, dsetName);
   err = testReadPointer3DArrayAttribute<float32>(file_id, dsetName);
   err = testReadPointer3DArrayAttribute<float64>(file_id, dsetName);
 //
-  err = testReadVectorAttribute<int8>(file_id, dsetName);
-  err = testReadVectorAttribute<uint8>(file_id, dsetName);
-  err = testReadVectorAttribute<int16>(file_id, dsetName);
-  err = testReadVectorAttribute<uint16>(file_id, dsetName);
-  err = testReadVectorAttribute<int32>(file_id, dsetName);
-  err = testReadVectorAttribute<uint32>(file_id, dsetName);
-  err = testReadVectorAttribute<int64>(file_id, dsetName);
-  err = testReadVectorAttribute<uint64>(file_id, dsetName);
+  err = testReadVectorAttribute<int8_t>(file_id, dsetName);
+  err = testReadVectorAttribute<uint8_t>(file_id, dsetName);
+  err = testReadVectorAttribute<int16_t>(file_id, dsetName);
+  err = testReadVectorAttribute<uint16_t>(file_id, dsetName);
+  err = testReadVectorAttribute<int32_t>(file_id, dsetName);
+  err = testReadVectorAttribute<uint32_t>(file_id, dsetName);
+  err = testReadVectorAttribute<int64_t>(file_id, dsetName);
+  err = testReadVectorAttribute<uint64_t>(file_id, dsetName);
   err = testReadVectorAttribute<float32>(file_id, dsetName);
   err = testReadVectorAttribute<float64>(file_id, dsetName);
 
-  err = testReadScalarAttribute<int8>(file_id, dsetName);
-  err = testReadScalarAttribute<uint8>(file_id, dsetName);
-  err = testReadScalarAttribute<int16>(file_id, dsetName);
-  err = testReadScalarAttribute<uint16>(file_id, dsetName);
-  err = testReadScalarAttribute<int32>(file_id, dsetName);
-  err = testReadScalarAttribute<uint32>(file_id, dsetName);
-  err = testReadScalarAttribute<int64>(file_id, dsetName);
-  err = testReadScalarAttribute<uint64>(file_id, dsetName);
+  err = testReadScalarAttribute<int8_t>(file_id, dsetName);
+  err = testReadScalarAttribute<uint8_t>(file_id, dsetName);
+  err = testReadScalarAttribute<int16_t>(file_id, dsetName);
+  err = testReadScalarAttribute<uint16_t>(file_id, dsetName);
+  err = testReadScalarAttribute<int32_t>(file_id, dsetName);
+  err = testReadScalarAttribute<uint32_t>(file_id, dsetName);
+  err = testReadScalarAttribute<int64_t>(file_id, dsetName);
+  err = testReadScalarAttribute<uint64_t>(file_id, dsetName);
   err = testReadScalarAttribute<float32>(file_id, dsetName);
   err = testReadScalarAttribute<float64>(file_id, dsetName);
 
@@ -883,14 +881,14 @@ herr_t testReadStringDatasetAndAttributes(hid_t file_id)
   MXA_REQUIRE( ::memcmp(ptr->getAttributeValue()->getVoidPointer(0), refAttrData.c_str(), refAttrData.size() ) == 0 );
 
 
-  std::vector<uint8> attrDataPtr (refAttrData.size() + 1, 0);
+  std::vector<uint8_t> attrDataPtr (refAttrData.size() + 1, 0);
   attributeKey = "c_string";
   err = H5Lite::readStringAttribute(file_id, dsetName, attributeKey, &(attrDataPtr.front() ) );
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE( refAttrData.compare(attrData) == 0);
 
   // Dataset via pointer (c_str)
-  std::vector<uint8> strDataPtr (refData.size() + 1, 0);
+  std::vector<uint8_t> strDataPtr (refData.size() + 1, 0);
   dsetName = "c_string";
   err = H5Lite::readStringDataset(file_id, dsetName, &(strDataPtr.front() ) );
   MXA_REQUIRE(err >= 0);
@@ -935,85 +933,85 @@ void H5LiteTest()
   }
 
   // std::cout << logTime() << "----------- Testing Writing/Reading of Datasets using Raw Pointers -----------" << std::endl;
-   MXA_REQUIRE ( testWritePointer2DArrayDataset<int8>(file_id) >= 0);
-   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint8>(file_id) >= 0);
-   MXA_REQUIRE ( testWritePointer2DArrayDataset<int16>(file_id) >= 0);
-   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint16>(file_id) >= 0);
-   MXA_REQUIRE ( testWritePointer2DArrayDataset<int32>(file_id) >= 0);
-   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint32>(file_id) >= 0);
-   MXA_REQUIRE ( testWritePointer2DArrayDataset<int64>(file_id) >= 0);
-   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<int8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<int16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<int32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<int64_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWritePointer2DArrayDataset<uint64_t>(file_id) >= 0);
    MXA_REQUIRE ( testWritePointer2DArrayDataset<float32>(file_id) >= 0);
    MXA_REQUIRE ( testWritePointer2DArrayDataset<float64>(file_id) >= 0);
 
-   MXA_REQUIRE ( testWriteVectorDataset<int8>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteVectorDataset<uint8>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteVectorDataset<int16>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteVectorDataset<uint16>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteVectorDataset<int32>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteVectorDataset<uint32>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteVectorDataset<int64>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteVectorDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<int8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<uint8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<int16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<uint16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<int32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<uint32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<int64_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteVectorDataset<uint64_t>(file_id) >= 0);
    MXA_REQUIRE ( testWriteVectorDataset<float32>(file_id) >= 0);
    MXA_REQUIRE ( testWriteVectorDataset<float64>(file_id) >= 0);
 
-   MXA_REQUIRE ( testWriteScalarDataset<int8>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteScalarDataset<uint8>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteScalarDataset<int16>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteScalarDataset<uint16>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteScalarDataset<int32>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteScalarDataset<uint32>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteScalarDataset<int64>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteScalarDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<int8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<uint8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<int16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<uint16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<int32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<uint32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<int64_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteScalarDataset<uint64_t>(file_id) >= 0);
    MXA_REQUIRE ( testWriteScalarDataset<float32>(file_id) >= 0);
    MXA_REQUIRE ( testWriteScalarDataset<float64>(file_id) >= 0);
 
    MXA_REQUIRE ( testWriteStringDatasetAndAttributes(file_id) >= 0);
 
-   MXA_REQUIRE ( testWriteMXAArray<int8>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteMXAArray<uint8>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteMXAArray<int16>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteMXAArray<uint16>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteMXAArray<int32>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteMXAArray<uint32>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteMXAArray<int64>(file_id) >= 0);
-   MXA_REQUIRE ( testWriteMXAArray<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<int8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<uint8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<int16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<uint16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<int32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<uint32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<int64_t>(file_id) >= 0);
+   MXA_REQUIRE ( testWriteMXAArray<uint64_t>(file_id) >= 0);
    MXA_REQUIRE ( testWriteMXAArray<float32>(file_id) >= 0);
    MXA_REQUIRE ( testWriteMXAArray<float64>(file_id) >= 0);
 
 
 //  // ******************* Test Reading Data *************************************
-   MXA_REQUIRE ( testReadPointer2DArrayDataset<int8>(file_id) >= 0);
-   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint8>(file_id) >= 0);
-   MXA_REQUIRE ( testReadPointer2DArrayDataset<int16>(file_id) >= 0);
-   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint16>(file_id) >= 0);
-   MXA_REQUIRE ( testReadPointer2DArrayDataset<int32>(file_id) >= 0);
-   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint32>(file_id) >= 0);
-   MXA_REQUIRE ( testReadPointer2DArrayDataset<int64>(file_id) >= 0);
-   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<int8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<int16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<int32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<int64_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadPointer2DArrayDataset<uint64_t>(file_id) >= 0);
    MXA_REQUIRE ( testReadPointer2DArrayDataset<float32>(file_id) >= 0);
    MXA_REQUIRE ( testReadPointer2DArrayDataset<float64>(file_id) >= 0);
 
 
-   MXA_REQUIRE ( testReadVectorDataset<int8>(file_id) >= 0);
-   MXA_REQUIRE ( testReadVectorDataset<uint8>(file_id) >= 0);
-   MXA_REQUIRE ( testReadVectorDataset<int16>(file_id) >= 0);
-   MXA_REQUIRE ( testReadVectorDataset<uint16>(file_id) >= 0);
-   MXA_REQUIRE ( testReadVectorDataset<int32>(file_id) >= 0);
-   MXA_REQUIRE ( testReadVectorDataset<uint32>(file_id) >= 0);
-   MXA_REQUIRE ( testReadVectorDataset<int64>(file_id) >= 0);
-   MXA_REQUIRE ( testReadVectorDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<int8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<uint8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<int16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<uint16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<int32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<uint32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<int64_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadVectorDataset<uint64_t>(file_id) >= 0);
    MXA_REQUIRE ( testReadVectorDataset<float32>(file_id) >= 0);
    MXA_REQUIRE ( testReadVectorDataset<float64>(file_id) >= 0);
 //
-   MXA_REQUIRE ( testReadScalarDataset<int8>(file_id) >= 0);
-   MXA_REQUIRE ( testReadScalarDataset<uint8>(file_id) >= 0);
-   MXA_REQUIRE ( testReadScalarDataset<int16>(file_id) >= 0);
-   MXA_REQUIRE ( testReadScalarDataset<uint16>(file_id) >= 0);
-   MXA_REQUIRE ( testReadScalarDataset<int32>(file_id) >= 0);
-   MXA_REQUIRE ( testReadScalarDataset<uint32>(file_id) >= 0);
-   MXA_REQUIRE ( testReadScalarDataset<int64>(file_id) >= 0);
-   MXA_REQUIRE ( testReadScalarDataset<uint64>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<int8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<uint8_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<int16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<uint16_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<int32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<uint32_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<int64_t>(file_id) >= 0);
+   MXA_REQUIRE ( testReadScalarDataset<uint64_t>(file_id) >= 0);
    MXA_REQUIRE ( testReadScalarDataset<float32>(file_id) >= 0);
    MXA_REQUIRE ( testReadScalarDataset<float64>(file_id) >= 0);
 
@@ -1035,8 +1033,8 @@ void TestLargeFileSupport()
   file_id = H5Fcreate( MXAUnitTest::H5LiteTest::LargeFile.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
   MXA_REQUIRE(file_id > 0);
   std::vector<int> buffer(1000000); // Create a 4 MegaByte Buffer
-	int32 rank = 1;
-	std::vector<uint64> dims(1,1000000);
+	int32_t rank = 1;
+	std::vector<uint64_t> dims(1,1000000);
 	std::string dsetName;
   for (int i = 0; i < 1000; ++i)
   {

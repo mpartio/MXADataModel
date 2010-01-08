@@ -24,8 +24,6 @@
 #include <MXA/Base/IDataModel.h>
 //#include <MXA/Base/IMXAArray.h>
 #include <MXA/Base/IRequiredMetaData.h>
-//#include <MXA/Base/ISupportFile.h>
-//#include <MXA/Core/MXAConstants.h>
 #include <MXA/Base/IDataDimension.h>
 #include <MXA/Base/IDataRecord.h>
 
@@ -75,7 +73,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param message String to store messages regarding missing field
    * @return Error - Negative is error. Zero or Positive is success
    */
-  static MXATypes::MXAError validateRequiredMetaData(MXARequiredMetaData &requiredMetaData, std::string &message);
+  static int32_t validateRequiredMetaData(MXARequiredMetaData &requiredMetaData, std::string &message);
 
   /**
    * @brief Returns the MXA File version that the model adheres to
@@ -132,8 +130,8 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @return A boost::shared_ptr to the newly created Data Dimension
    */
   IDataDimension::Pointer addDataDimension(std::string name, std::string altName,
-      int32 count, int32 startValue,
-      int32 endValue, int32 increment, int32 uniform);
+      int32_t count, int32_t startValue,
+      int32_t endValue, int32_t increment, int32_t uniform);
 
   /**
    * @brief Inserts a Data Dimension at a given index position. If Needed the
@@ -143,7 +141,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param index The index to insert the Data Dimension at
    * @return Error condition
    */
-  int32 insertDataDimension(IDataDimension::Pointer dimension, int32 index);
+  int32_t insertDataDimension(IDataDimension::Pointer dimension, int32_t index);
 
   /**
    * @brief This method will remove any NULL Data Dimensions from the internal
@@ -155,14 +153,14 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief Removes a data dimension by index
    * @param index
    */
-  int32 removeDataDimension(int32 index);
+  int32_t removeDataDimension(int32_t index);
 
   /**
    * @brief Removed a Data Dimension by Name
    * @param dimensionName The 'name' property of the Data Dimension to remove
    * @return Error: Negative is error condition
    */
-  int32 removeDataDimension(const std::string &dimensionName);
+  int32_t removeDataDimension(const std::string &dimensionName);
 
   /**
    * @brief moves the data dimension at index 'fromIndex' to another index
@@ -172,7 +170,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param toIndex The new index to place the data dimension at
    * @return Error condition
    */
-  int32 moveDataDimension(int32 fromIndex, int32 toIndex);
+  int32_t moveDataDimension(int32_t fromIndex, int32_t toIndex);
 
   /**
    * @brief Swaps a pair of Data Dimensions in the index list
@@ -180,7 +178,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param index2 The second Data Dimension to swap with the first
    * @return Error Condition
    */
-  int32 swapDataDimensions(int32 index1, int32 index2);
+  int32_t swapDataDimensions(int32_t index1, int32_t index2);
 
   /**
    * @brief Returns the vector of Data Dimenions
@@ -193,7 +191,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param index
    * @return
    */
-  IDataDimension::Pointer getDataDimension(int32 index);
+  IDataDimension::Pointer getDataDimension(int32_t index);
 
   /**
    * @brief Returns a Data Dimension object given the name of the data dimension
@@ -207,7 +205,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @brief
    * @return The Number of data dimensions
    */
-  int32 getNumberOfDataDimensions();
+  int32_t getNumberOfDataDimensions();
 
   /**
    * @brief Adds a Data Record given a DataRecord shared pointer
@@ -229,7 +227,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param record The record to remove from the Data model
    * @return Error Condition
    */
-  int32 removeDataRecord(IDataRecord::Pointer record);
+  int32_t removeDataRecord(IDataRecord::Pointer record);
 
   /**
    * @brief Returns the Hierarchy of Data Records
@@ -266,7 +264,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param derivedSrcFile
    * @return
    */
-  MXATypes::MXAError setRequiredMetaData( std::string researcherName,
+  int32_t setRequiredMetaData( std::string researcherName,
       std::string dateCreated,
       std::string datasetName,
       std::string description,
@@ -280,13 +278,13 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param metadata
    * @return
    */
-  MXATypes::MXAError setRequiredMetaData(std::map<std::string, std::string> &metadata);
+  int32_t setRequiredMetaData(std::map<std::string, std::string> &metadata);
 
   /**
    * @brief Sets the required meta data
    * @param metaData IRequiredMetaData::Pointer object
    */
-  int32 setRequiredMetaData(IRequiredMetaData::Pointer metaData);
+  int32_t setRequiredMetaData(IRequiredMetaData::Pointer metaData);
 
   /**
    * @brief Returns the RequiredMeta Data in the provided std::map
@@ -358,7 +356,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param indent The number of spaces to use for indenting
    * @return
    */
-  void printModel(std::ostream &os, int32 indent);
+  void printModel(std::ostream &os, int32_t indent);
 
   /**
    * @brief Prints the Data Records section of the model to the provided std::ostream
@@ -366,7 +364,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param indent The number of spaces to use for indenting
    * @return
    */
-  void printDataRecords(std::ostream &os, int32 indent);
+  void printDataRecords(std::ostream &os, int32_t indent);
 
   /**
    * @brief Prints the Data Dimension section of the model to the provided std::ostream
@@ -374,7 +372,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param indent The number of spaces to use for indenting
    * @return
    */
-  void printDataDimensions(std::ostream &os, int32 indent);
+  void printDataDimensions(std::ostream &os, int32_t indent);
 
   /**
    * @brief Prints the Required Meta Data section of the model to the provided std::ostream
@@ -382,7 +380,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param indent The number of spaces to use for indenting
    * @return
    */
-  void printRequiredMetaData(std::ostream &os, int32 indent);
+  void printRequiredMetaData(std::ostream &os, int32_t indent);
 
   /**
    * @brief Prints the User Meta Data section of the model to the provided std::ostream
@@ -390,7 +388,7 @@ class MXA_EXPORT MXADataModel : public IDataModel
    * @param indent The number of spaces to use for indenting
    * @return
    */
-  void printUserMetaData(std::ostream &os, int32 indent);
+  void printUserMetaData(std::ostream &os, int32_t indent);
 
 
    /**

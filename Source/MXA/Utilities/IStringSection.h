@@ -12,7 +12,7 @@
 #define ISOURCEPATHSECTION_H_
 
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
 
 #include <vector>
@@ -43,8 +43,8 @@ class MXA_EXPORT IStringSection
     virtual void setPostText(const std::string &postText)= 0;
 
 
-  //  virtual std::string toString( std::vector<uint32> &dims, int8 &ok) = 0;
-    virtual std::string toString(int value, int8 &ok) = 0;
+  //  virtual std::string toString( std::vector<uint32_t> &dims, int8_t &ok) = 0;
+    virtual std::string toString(int value, int8_t &ok) = 0;
 
   private:
 

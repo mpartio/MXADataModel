@@ -8,7 +8,7 @@
 #ifndef IMXADATAMODELWRITERDELEGATE_H_
 #define IMXADATAMODELWRITERDELEGATE_H_
 
-#include "MXA/Common/MXATypes.h"
+#include "MXA/MXATypes.h"
 #include "MXA/Common/MXASetGetMacros.h"
 #include "MXA/Base/IDataModel.h"
 
@@ -22,7 +22,7 @@ class MXA_EXPORT IMXADataModelWriterDelegate
 
     virtual ~IMXADataModelWriterDelegate() {};
 
-    virtual int32 writeModel(IDataModel::Pointer model) = 0;
+    virtual int32_t writeModel(IDataModel::Pointer model) = 0;
 
   protected:
     IMXADataModelWriterDelegate() {};

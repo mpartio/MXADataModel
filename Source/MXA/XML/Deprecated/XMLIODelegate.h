@@ -42,7 +42,7 @@ public:
 	  * @param deleteExisting
 	  * @return MXAError - Zero or Positive values are success. Negative values are errors
 	  */
-	  int32 writeModelToFile(const std::string &fileName, IDataModel::Pointer model, bool closeWhenFinished, bool deleteExisting) ;
+	  int32_t writeModelToFile(const std::string &fileName, IDataModel::Pointer model, bool closeWhenFinished, bool deleteExisting) ;
 	  
 	  /** @brief Deserializes a Datamodel from a file on disk
 	  * @param fileName The name of the file (including path) to deserialize from
@@ -53,7 +53,7 @@ public:
 	  * release the Object. If an Error occurs during the reading, then a NULL pointer
 	  * is returned.
 	  */
-	  int32 readModelFromFile(const std::string &fileName, IDataModel::Pointer model, bool closeWhenFinished, bool openReadOnly) ;
+	  int32_t readModelFromFile(const std::string &fileName, IDataModel::Pointer model, bool closeWhenFinished, bool openReadOnly) ;
 	  
 	  /**
 	   * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model
@@ -71,7 +71,7 @@ public:
 	  /**
 	   * @brief Is the file identified by the given identifier an MXA Base data file
 	   */
-	  bool isMXAFile(int32 identifier) ;
+	  bool isMXAFile(int32_t identifier) ;
 
 	  /**
 	   * @brief Opens an existing MXA Data File. IE an HDF5 file with the proper data model
@@ -80,7 +80,7 @@ public:
 	   * @param readOnly True if you want the file opened as read only. False if you need to write something to the file
 	   * @return HDF5 file id
 	   */
-	  int32 openMXAFile(std::string filename, bool readOnly=false) ;
+	  int32_t openMXAFile(std::string filename, bool readOnly=false) ;
 	 
 	  /**
 	   * @brief Closes the currently open file
@@ -90,7 +90,7 @@ public:
 	  /**
 	   * @brief Returns the HDF file id of the currently open file
 	   */
-	  int32 getOpenFileId() ;
+	  int32_t getOpenFileId() ;
 	  
 	  /**
 	   * @brief Returns the currently open filename as an absolute path
@@ -102,7 +102,7 @@ private:
     void operator=(const XMLIODelegate&); //Copy Assignment Not Implemented
     
     std::string _openFile; // The value of the currently opened file
-    int32 _fileId;  // The value of the currently opened file id - Not used for XML
+    int32_t _fileId;  // The value of the currently opened file id - Not used for XML
 };
 
 #endif /*XMLIODELEGATE_H_*/

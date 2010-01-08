@@ -21,7 +21,7 @@
  */
 
 //-- MXA Includes
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Core/MXADataDimension.h>
@@ -43,7 +43,7 @@
 // Declare methods
 void listDataDimensions(MXADataModel* model);
 void listDataRecords(MXADataModel* model);
-void captureSampleImage(std::vector<uint8> &imageBuffer);
+void captureSampleImage(std::vector<uint8_t> &imageBuffer);
 void listUserMetaData(IDataFile::Pointer dataFile);
 
 // -----------------------------------------------------------------------------
@@ -62,12 +62,12 @@ int main(int argc, char **argv) {
   //Instantiate 2 Data Dimensions
   // The first dimension has 10 elements from 0 to 9 and increments by 1. Since this
   // is the first dimension we give it an index of 0
-  int32 index = 0;
-  int32 count = 10;
-  int32 start = 0;
-  int32 end = 9;
-  int32 increment = 1;
-  int32 uniform = 1;
+  int32_t index = 0;
+  int32_t count = 10;
+  int32_t start = 0;
+  int32_t end = 9;
+  int32_t increment = 1;
+  int32_t uniform = 1;
   MXADataDimension::Pointer dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
 
   // The second dimension will have 4 elements ranging from 2 to 8 with an increment of 2;
@@ -122,8 +122,8 @@ int main(int argc, char **argv) {
   IMXAArray::Pointer umd = MXAArrayTemplate<float32>::CreateSingleValueArray(value);
   model->addUserMetaData("Float32 User Meta Data", umd);
 
-  int32 iMDValue = 34212;
-  IMXAArray::Pointer iUmd = MXAArrayTemplate<int32>::CreateSingleValueArray(iMDValue);
+  int32_t iMDValue = 34212;
+  IMXAArray::Pointer iUmd = MXAArrayTemplate<int32_t>::CreateSingleValueArray(iMDValue);
   model->addUserMetaData("Int32 User Meta Data", iUmd);
 
   // Export the Model to an XML File
@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
 
   MXADataModelWriter<FileStreamType>::Pointer writer =
                             MXADataModelWriter<FileStreamType>::New(delegate);
-   int32 err = writer->writeModel(modelPtr);
+   int32_t err = writer->writeModel(modelPtr);
    if (err < 0)
    {
      std::cout << "Error writing model to an xml file" << std::endl;
@@ -171,12 +171,12 @@ int main(int argc, char **argv) {
   // 200 KPa starting at 200 and ending at 800 KPa. At each combination of those
   // values we are taking the temperature and capturing an image of our sample
   hid_t fileId = dataFile->getFileId();//We need the HDF5 indentifier for the open file
-  std::vector<int32> indices(2, 0); // we keep this for re-use during the loop
+  std::vector<int32_t> indices(2, 0); // we keep this for re-use during the loop
   std::string temperaturePath;
   std::string cameraImagePath;
   std::string::size_type pos = 0;
   float temperature = 1200.0f;
-  std::vector<uint8> image;
+  std::vector<uint8_t> image;
   err = 0;
   // Define the height/width of our camera "image"
   std::vector<hsize_t> dims (2,0);
@@ -219,7 +219,7 @@ int main(int argc, char **argv) {
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void captureSampleImage(std::vector<uint8> &imageBuffer)
+void captureSampleImage(std::vector<uint8_t> &imageBuffer)
 {
   imageBuffer.clear();  // Clear the Array first
   for (int i = 0; i < 10; ++i) {
@@ -248,7 +248,7 @@ void listUserMetaData(IDataFile::Pointer dataFile)
     if (key.compare("Int32 User Meta Data") == 0)
     {
       // This works because we have a-priori knowledge of the type of data stored
-      int32* valuePtr = static_cast<int32*>( attr->getVoidPointer(0) );
+      int32_t* valuePtr = static_cast<int32_t*>( attr->getVoidPointer(0) );
       std::cout << "Value is: " << *valuePtr << std::endl;
     }
 

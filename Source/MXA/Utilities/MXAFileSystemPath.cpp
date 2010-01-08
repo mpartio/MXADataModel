@@ -37,7 +37,51 @@
 #define MXA_GET_CWD ::getcwd
 #endif
 
+#if defined (MXA_HAVE_SYS_STAT_H)
+#include <sys/stat.h>
 
+#if defined (_WIN32)
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#define MXA_STATBUF    struct _stati64   // non-ANSI defs
+#define MXA_STATBUF4TSTAT  struct _stati64   // non-ANSI defs
+#define MXA_STAT     _stati64
+#define MXA_FSTAT    _fstati64
+
+#define MXA_STAT_REG   _S_IFREG
+#define MXA_STAT_DIR   _S_IFDIR
+#define MXA_STAT_MASK    _S_IFMT
+#if defined(_S_IFLNK)
+#  define MXA_STAT_LNK   _S_IFLNK
+#endif
+
+#elif defined (__APPLE__)
+
+#define MXA_STATBUF    struct stat64
+#define MXA_STATBUF4TSTAT  struct stat64
+#define MXA_STAT     stat64
+#define MXA_FSTAT    fstat64
+
+#define MXA_STAT_REG   S_IFREG
+#define MXA_STAT_DIR   S_IFDIR
+#define MXA_STAT_MASK    S_IFMT
+#define MXA_STAT_LNK   S_IFLNK
+
+#else
+#define MXA_STATBUF    struct stat
+#define MXA_STATBUF4TSTAT  struct stat
+#define MXA_STAT     stat
+#define MXA_FSTAT    fstat
+
+#define MXA_STAT_REG   S_IFREG
+#define MXA_STAT_DIR   S_IFDIR
+#define MXA_STAT_MASK    S_IFMT
+#define MXA_STAT_LNK   S_IFLNK
+#endif
+
+#endif /* defined (MXA_HAVE_SYS_STATS_H) */
 
 // -----------------------------------------------------------------------------
 //
@@ -106,14 +150,14 @@ bool MXAFileSystemPath::isFile(const std::string &fsPath)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-uint64 MXAFileSystemPath::fileSize(const std::string &path)
+uint64_t MXAFileSystemPath::fileSize(const std::string &path)
 {
   int error;
   MXA_STATBUF st;
   error = MXA_STAT(path.c_str(), &st);
   if (!error && (st.st_mode & S_IFMT) == S_IFREG)
   {
-    return (uint64)(st.st_size);
+    return (uint64_t)(st.st_size);
   }
   return 0;
 }
@@ -364,12 +408,12 @@ bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirector
       dirName = MXAFileSystemPath::toNativeSeparators(MXAFileSystemPath::cleanPath(dirName));
       // We specifically search for / so \ would break it..
       std::string::size_type oldslash = std::string::npos;
-      if (dirName[0] == '\\' && dirName[1] == '\\') 
+      if (dirName[0] == '\\' && dirName[1] == '\\')
       {
           // Don't try to create the root fsPath of a UNC fsPath;
           // CreateDirectory() will just return ERROR_INVALID_NAME.
           for (unsigned int i = 0; i < dirName.size(); ++i) {
-              if (dirName[i] != MXAFileSystemPath::Separator) 
+              if (dirName[i] != MXAFileSystemPath::Separator)
               {
                   oldslash = i;
                   break;
@@ -389,7 +433,7 @@ bool MXAFileSystemPath::mkdir(const std::string &name, bool createParentDirector
           if (slash != std::string::npos) {
             std::string chunk = dirName.substr(0, slash);
             bool existed = false;
-            if (!isDirPath(chunk, &existed) && !existed) 
+            if (!isDirPath(chunk, &existed) && !existed)
             {
               if (!::CreateDirectoryA(chunk.c_str(), 0) ) { return false; }
             }
@@ -453,10 +497,10 @@ bool MXAFileSystemPath::rmdir(const std::string &name, bool recurseParentDirecto
 {
 #if defined (WIN32)
   std::string dirName = name;
-  if (recurseParentDirectories) 
+  if (recurseParentDirectories)
   {
       dirName = MXAFileSystemPath::toNativeSeparators(MXAFileSystemPath::cleanPath(dirName));
-      for (std::string::size_type oldslash = 0, slash=dirName.length(); slash > 0; oldslash = slash) 
+      for (std::string::size_type oldslash = 0, slash=dirName.length(); slash > 0; oldslash = slash)
       {
           std::string chunk = dirName.substr(0, slash);
           if (chunk.length() == 2 && isalpha(chunk[0]) && chunk[1] == ':')

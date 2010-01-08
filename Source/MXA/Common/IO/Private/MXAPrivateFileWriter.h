@@ -9,7 +9,7 @@
 #ifndef _FILEWRITER_H_
 #define _FILEWRITER_H_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 
 #include <fstream>
 #define WRITER64_OUTPUT_STREAM std::ofstream
@@ -51,7 +51,7 @@ public:
  * @param data The char pointer to read the data into
  * @param numBytes The number of bytes to read
  */
-  bool write(char* data, int64 numBytes)
+  bool write(char* data, int64_t numBytes)
   {
     _outStream.write(data, numBytes);
     if (_outStream.bad() == true) {return false;}
@@ -77,9 +77,9 @@ public:
    * @param numElements number of elements of the array to write
    */
   template<typename T>
-  bool writeArray(T* front, int64 numElements)
+  bool writeArray(T* front, int64_t numElements)
   {
-    int64 numBytes = numElements * sizeof(T);
+    int64_t numBytes = numElements * sizeof(T);
     _outStream.write(reinterpret_cast<char*>(front), numBytes);
     if (_outStream.bad() == true) {return false;}
     return true;
@@ -89,7 +89,7 @@ public:
  * @brief Sets the filepointer of the underlying stream
  * @param position The position to set the file pointer to
  */
-  void setFilePointer64( int64 position )
+  void setFilePointer64( int64_t position )
   {
     _outStream.seekp(position);
   }
@@ -98,7 +98,7 @@ public:
  * @brief Returns the current position of the file pointer
  * @return the Current position of the file pointer
  */
-  int64 getFilePointer64()
+  int64_t getFilePointer64()
   {
     return _outStream.tellp();
   }

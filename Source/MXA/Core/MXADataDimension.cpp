@@ -6,12 +6,12 @@
 //  Constructor
 // -----------------------------------------------------------------------------
 MXADataDimension::MXADataDimension() :
-_index(std::numeric_limits<int32>::min()),
-_count(std::numeric_limits<int32>::min()),
-_startValue(std::numeric_limits<int32>::max()),
-_endValue(std::numeric_limits<int32>::max()),
-_increment(std::numeric_limits<int32>::max()),
-_uniform(std::numeric_limits<int32>::min()),
+_index(std::numeric_limits<int32_t>::min()),
+_count(std::numeric_limits<int32_t>::min()),
+_startValue(std::numeric_limits<int32_t>::max()),
+_endValue(std::numeric_limits<int32_t>::max()),
+_increment(std::numeric_limits<int32_t>::max()),
+_uniform(std::numeric_limits<int32_t>::min()),
 _dimensionName(""),
 _altName(""),
 _nodeType("Dimension")
@@ -23,8 +23,8 @@ _nodeType("Dimension")
 //  Static New Method that is used to construct a new DataDimension Node
 // -----------------------------------------------------------------------------
 MXADataDimension::Pointer MXADataDimension::New(std::string name, std::string altName,
-    int32 index, int32 count, int32 startValue, 
-    int32 endValue, int32 increment, int32 uniform)
+    int32_t index, int32_t count, int32_t startValue, 
+    int32_t endValue, int32_t increment, int32_t uniform)
 {
   MXADataDimension* dim = new MXADataDimension();
   MXADataDimension::Pointer dimension(dim);
@@ -52,7 +52,7 @@ MXADataDimension::~MXADataDimension()
 // -----------------------------------------------------------------------------
 //  Setter for Index
 // -----------------------------------------------------------------------------
-void MXADataDimension::setIndex(int32 aValue)
+void MXADataDimension::setIndex(int32_t aValue)
 {
     _index = aValue;
     this->_nodeName = StringUtils::numToString(this->_index);
@@ -61,7 +61,7 @@ void MXADataDimension::setIndex(int32 aValue)
 // -----------------------------------------------------------------------------
 //  Getter for Index
 // -----------------------------------------------------------------------------
-int32 MXADataDimension::getIndex()
+int32_t MXADataDimension::getIndex()
 {
     return _index;
 }
@@ -72,8 +72,8 @@ int32 MXADataDimension::getIndex()
 void MXADataDimension::setNodeName(std::string nodeName)
 {
   this->_nodeName = nodeName;
-  int32 i = 0;
-  if ( StringUtils::stringToNum<int32>(i, this->_nodeName, std::dec) )
+  int32_t i = 0;
+  if ( StringUtils::stringToNum<int32_t>(i, this->_nodeName, std::dec) )
   {
     this->_index = i;
   } else {
@@ -84,7 +84,7 @@ void MXADataDimension::setNodeName(std::string nodeName)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataDimension::printNode(std::ostream& os, int32 indent)
+void MXADataDimension::printNode(std::ostream& os, int32_t indent)
 {
   os << StringUtils::indent(indent) << "*-Dimension Name: " << this->_dimensionName << std::endl;
   os << StringUtils::indent(indent) << " |-Alternate Name: " << this->_altName << std::endl;
@@ -102,7 +102,7 @@ void MXADataDimension::printNode(std::ostream& os, int32 indent)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXADataDimension::writeDimension(IDataDimensionWriter* writer)
+int32_t MXADataDimension::writeDimension(IDataDimensionWriter* writer)
 {
   return writer->writeDataDimension(this);
 }
@@ -112,8 +112,8 @@ int32 MXADataDimension::writeDimension(IDataDimensionWriter* writer)
 // -----------------------------------------------------------------------------
 bool MXADataDimension::isValid(std::string &message)
 {
-  int32 limitMax = std::numeric_limits<int32>::max();
-  int32 limitMin = std::numeric_limits<int32>::min();
+  int32_t limitMax = std::numeric_limits<int32_t>::max();
+  int32_t limitMin = std::numeric_limits<int32_t>::min();
   
   bool valid = true;
   if (limitMax == this->_startValue || 
@@ -149,12 +149,12 @@ bool MXADataDimension::isValid(std::string &message)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXADataDimension::calculateCount()
+int32_t MXADataDimension::calculateCount()
 {
   // translate to 0
-  int32 end = _endValue - _startValue;
-  int32 count = end;
-  int32 inc = _increment;
+  int32_t end = _endValue - _startValue;
+  int32_t count = end;
+  int32_t inc = _increment;
   count = (count/inc) + 1;
   _count = count;
   return _count;

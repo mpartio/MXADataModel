@@ -11,7 +11,7 @@
 #ifndef MXA_BMP_HEADERS_H
 #define MXA_BMP_HEADERS_H
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 
 enum CompressionType {
   BMP_BI_RGB=0, 
@@ -25,11 +25,11 @@ enum CompressionType {
  */
 struct MXABMPFileHeader
 {
-	int16 signature;		/* Must be 4D42 hex */
-	int32 fileSize;			/* size of file in bytes */
-	int16 reserved1;
-	int16 reserved2;
-	int32 dataOffset;		/* starting address of bitmap data */
+	int16_t signature;		/* Must be 4D42 hex */
+	int32_t fileSize;			/* size of file in bytes */
+	int16_t reserved1;
+	int16_t reserved2;
+	int32_t dataOffset;		/* starting address of bitmap data */
 };
 
 /* Only supported header is the V3 header */
@@ -39,17 +39,17 @@ struct MXABMPFileHeader
  */
 struct MXABMPDIBHeader
 {
-	uint32 headerSize;		/* Must be 40 */
-	int32 width;
-	int32 height;
-	int16 numColorPlanes;	/* Everything I see says this must be 1 */
-	int16 bitsPerPixel;		/* Typical values are 1, 4, 8, 16, 24 and 32. */
+	uint32_t headerSize;		/* Must be 40 */
+	int32_t width;
+	int32_t height;
+	int16_t numColorPlanes;	/* Everything I see says this must be 1 */
+	int16_t bitsPerPixel;		/* Typical values are 1, 4, 8, 16, 24 and 32. */
 	CompressionType compressionMethod;
-	uint32 imageSize;
-	int32 horizontalResolution;
-	int32 verticalResolution;
-	uint32 numPaletteColors;
-	uint32 numImportantColors;
+	uint32_t imageSize;
+	int32_t horizontalResolution;
+	int32_t verticalResolution;
+	uint32_t numPaletteColors;
+	uint32_t numImportantColors;
 };
 
 

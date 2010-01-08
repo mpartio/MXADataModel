@@ -24,7 +24,7 @@ IDataset::Pointer H5Dataset::LoadFromFile(IDataFile::Pointer dataFile, const std
   IDataset::Pointer ptr (new H5Dataset(datasetPath, data));
   //Load all the Attributes
   std::list<std::string> attributeNames;
-  int32 err = H5Utilities::getAllAttributeNames(dataFile->getFileId(), datasetPath, attributeNames );
+  int32_t err = H5Utilities::getAllAttributeNames(dataFile->getFileId(), datasetPath, attributeNames );
   if (err < 0)
   {
     return ptr;
@@ -158,7 +158,7 @@ IMXAArray::Pointer H5Dataset::getAttribute(const std::string &attributeKey)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5Dataset::writeToFile (IDataFile::Pointer dataFile)
+int32_t H5Dataset::writeToFile (IDataFile::Pointer dataFile)
 {
   herr_t err = -1;
   err = H5Utilities::createGroupsForDataset( this->_datasetPath, dataFile->getFileId());
@@ -190,7 +190,7 @@ int32 H5Dataset::writeToFile (IDataFile::Pointer dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5Dataset::readFromFile (IDataFile::Pointer dataFile)
+int32_t H5Dataset::readFromFile (IDataFile::Pointer dataFile)
 {
   std::string datasetPath = this->getDatasetPath();
   if (datasetPath.empty() == true)
@@ -205,7 +205,7 @@ int32 H5Dataset::readFromFile (IDataFile::Pointer dataFile)
   this->_data = data;
   //Load all the Attributes
   std::list<std::string> attributeNames;
-  int32 err = H5Utilities::getAllAttributeNames(dataFile->getFileId(), datasetPath, attributeNames );
+  int32_t err = H5Utilities::getAllAttributeNames(dataFile->getFileId(), datasetPath, attributeNames );
   if (err < 0)
   {
     return err;

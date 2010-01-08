@@ -11,7 +11,7 @@
 #ifndef _MXADATAMODELNODE_H_
 #define _MXADATAMODELNODE_H_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataDimension.h>
 #include <MXA/Core/MXAConstants.h>
@@ -51,12 +51,12 @@ public:
   * @return A Boost SharedPointer to the MXANode Object
   */
   static MXADataDimension::Pointer New(std::string name, std::string altName,
-        int32 index = std::numeric_limits<int32>::min(),
-        int32 count = std::numeric_limits<int32>::min(),
-        int32 startValue  = std::numeric_limits<int32>::max(),
-        int32 endValue = std::numeric_limits<int32>::max(),
-        int32 increment = std::numeric_limits<int32>::max(),
-        int32 uniform = std::numeric_limits<int32>::min()
+        int32_t index = std::numeric_limits<int32_t>::min(),
+        int32_t count = std::numeric_limits<int32_t>::min(),
+        int32_t startValue  = std::numeric_limits<int32_t>::max(),
+        int32_t endValue = std::numeric_limits<int32_t>::max(),
+        int32_t increment = std::numeric_limits<int32_t>::max(),
+        int32_t uniform = std::numeric_limits<int32_t>::min()
   );
 
   /**
@@ -80,61 +80,61 @@ public:
   * @brief Setter for property Index
   * @param aValue The new value to set for property Index
   */
-  void setIndex(int32 aValue);
+  void setIndex(int32_t aValue);
 
   /**
   * @brief Getter for property Index
   * @return The value of Index
   */
-  int32 getIndex();
+  int32_t getIndex();
 
   /**
   * @brief Setter for property Count
   * @param aValue The new value to set for property Count
   */
-  void setCount(int32 aValue) { _count = aValue; }
+  void setCount(int32_t aValue) { _count = aValue; }
 
   /**
   * @brief Getter for property Count
   * @return The value of Count
   */
-  int32 getCount() { return _count; }
+  int32_t getCount() { return _count; }
 
   /**
   * @brief Setter for property startValue
   * @param aValue The new value to set for property startValue
   */
-  void setStartValue(int32 aValue) { _startValue = aValue; }
+  void setStartValue(int32_t aValue) { _startValue = aValue; }
 
   /**
   * @brief Getter for property startValue
   * @return The value of startValue
   */
-  int32 getStartValue() { return _startValue; }
+  int32_t getStartValue() { return _startValue; }
 
   /**
   * @brief Setter for property increment
   * @param aValue The new value to set for property increment
   */
-  void setIncrement(int32 aValue) { _increment = aValue; }
+  void setIncrement(int32_t aValue) { _increment = aValue; }
 
   /**
   * @brief Getter for property increment
   * @return The value of increment
   */
-  int32 getIncrement() { return _increment; }
+  int32_t getIncrement() { return _increment; }
 
   /**
   * @brief Setter for property endValue
   * @param aValue The new value to set for property endValue
   */
-  void setEndValue(int32 aValue) { _endValue = aValue; }
+  void setEndValue(int32_t aValue) { _endValue = aValue; }
 
   /**
   * @brief Getter for property endValue
   * @return The value of endValue
   */
-  int32 getEndValue() { return _endValue; }
+  int32_t getEndValue() { return _endValue; }
 
   /**
   * @brief Setter for property name
@@ -164,39 +164,39 @@ public:
   * @brief Setter for property uniform
   * @param aValue The new value to set for property uniform
   */
-  void setUniform(int32 aValue) { _uniform = aValue; }
+  void setUniform(int32_t aValue) { _uniform = aValue; }
 
   /**
   * @brief Getter for property uniform
   * @return The value of uniform
   */
-  int32 getUniform() { return _uniform; }
+  int32_t getUniform() { return _uniform; }
 
-  int32 writeDimension(IDataDimensionWriter* writer);
+  int32_t writeDimension(IDataDimensionWriter* writer);
 
  // Over ride from Superclass
   void setNodeName(std::string nodeName);
   // Print out the node information to the console
-  void printNode(std::ostream& os, int32 indent);
+  void printNode(std::ostream& os, int32_t indent);
 
   /**
    * @brief Returns the maximum value that the Start Value can have */
-  IDataDimension::size_type maxStartValue() { return std::numeric_limits<int32>::max(); }
+  IDataDimension::size_type maxStartValue() { return std::numeric_limits<int32_t>::max(); }
 
   /** @brief Returns the maximum value that the End Value can have  */
-  IDataDimension::size_type  maxEndValue() { return std::numeric_limits<int32>::max(); }
+  IDataDimension::size_type  maxEndValue() { return std::numeric_limits<int32_t>::max(); }
 
   /** @brief Returns the Maximun Increment value */
-  IDataDimension::size_type  maxIncrement() { return std::numeric_limits<int32>::max(); }
+  IDataDimension::size_type  maxIncrement() { return std::numeric_limits<int32_t>::max(); }
 
   /** @brief returns the maximum value that the Count can be */
-  IDataDimension::size_type  maxCount() { return std::numeric_limits<int32>::max(); }
+  IDataDimension::size_type  maxCount() { return std::numeric_limits<int32_t>::max(); }
 
   /** @brief   */
-  bool isPropertyInitialized(int32 value)
+  bool isPropertyInitialized(int32_t value)
   {
-    if (value == std::numeric_limits<int32>::max() ||
-        value == std::numeric_limits<int32>::min() )
+    if (value == std::numeric_limits<int32_t>::max() ||
+        value == std::numeric_limits<int32_t>::min() )
       { return false; }
 
     return true;
@@ -204,18 +204,18 @@ public:
 
   bool isValid(std::string &message);
 
-  int32 calculateCount();
+  int32_t calculateCount();
 
 
 protected:
   MXADataDimension();
 
-  int32 _index;
-  int32 _count;
-  int32 _startValue;
-  int32 _endValue;
-  int32 _increment;
-  int32 _uniform;
+  int32_t _index;
+  int32_t _count;
+  int32_t _startValue;
+  int32_t _endValue;
+  int32_t _increment;
+  int32_t _uniform;
   std::string _dimensionName;
   std::string _altName;
   std::string _nodeName;

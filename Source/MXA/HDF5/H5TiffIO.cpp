@@ -78,7 +78,7 @@ herr_t H5TiffIO::importTiff(const std::string &filename,
   if (asGrayscale) {
     err = _importGrayscaleTiffImage(_tiff, groupId, datasetName);
   } else {
-    int32 imageClass = _determineTiffImageClass(_tiff);
+    int32_t imageClass = _determineTiffImageClass(_tiff);
 
     switch (imageClass) {
       case GrayscaleTiffImage:
@@ -115,10 +115,10 @@ void H5TiffIO::extractTiffTagContents(ITiffTagExtractor* extractor)
 // ---------------------------------------------------------------------
 int H5TiffIO::_determineTiffImageClass(TIFF *in)
 {
-  uint16 samplesperpixel = 0;
-  uint16 bitspersample = 0;
-  uint16 compression = 0;
-  uint16 photometric = 0;
+  uint16_t samplesperpixel = 0;
+  uint16_t bitspersample = 0;
+  uint16_t compression = 0;
+  uint16_t photometric = 0;
 
   // Get determining fields
   TIFFGetField(in, TIFFTAG_SAMPLESPERPIXEL, &samplesperpixel);
@@ -158,8 +158,8 @@ int H5TiffIO::_determineTiffImageClass(TIFF *in)
 herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::string &datasetName)
 {
   unsigned char* raster;     /* retrieve RGBA image */
-  uint32  width, height;    /* image width & height */
-  int16 samplesPerPixel = 0;
+  uint32_t  width, height;    /* image width & height */
+  int16_t samplesPerPixel = 0;
   herr_t err = 0;
 
   //std::cout << "Importing grayscale tiff image" << std::endl;
@@ -179,14 +179,14 @@ herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::s
   //  samples
 
   /* Read the image in one chunk into an RGBA array */
-  if (!TIFFReadRGBAImageOriented(in, width, height, (uint32*)(raster), ORIENTATION_TOPLEFT, 0)) {
+  if (!TIFFReadRGBAImageOriented(in, width, height, (uint32_t*)(raster), ORIENTATION_TOPLEFT, 0)) {
     _TIFFfree(raster);
     return (-1);
   }
 
   // Collapse the data down to a single channel, that will end up
   //  being the grayscale values
-  int32 pixel_count = width * height;
+  int32_t pixel_count = width * height;
   unsigned char *src, *dst;
   // The collapse is done IN PLACE
   src = raster;
@@ -214,7 +214,7 @@ herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::s
                          const_cast<std::string&>(MXA::H5Image::ImageSubclass),
                          const_cast<std::string&>(MXA::H5Image::ImageGrayScale) );
  // H5LTset_attribute_string(groupId, datasetName.c_str(), MXA::H5Image::ImageSubclass, MXA::H5Image::ImageGrayScale);
-  uint32 white_is_zero = 0;
+  uint32_t white_is_zero = 0;
   H5Lite::writeScalarAttribute(groupId,
                          datasetName,
                          const_cast<std::string&>(MXA::H5Image::ImageWhiteIsZero),
@@ -255,9 +255,9 @@ herr_t H5TiffIO::_importPaletteColorTiff( TIFF *in, hid_t groupId, const std::st
     return -1;
   }
 
-  uint32* raster;     /* retrieve RGBA image */
-  uint32  width, height;    /* image width & height */
-  uint16  bitspersample;
+  uint32_t* raster;     /* retrieve RGBA image */
+  uint32_t  width, height;    /* image width & height */
+  uint16_t  bitspersample;
 
  // std::cout << "Importing 8bit color palette tiff image" << std::endl;
 
@@ -265,7 +265,7 @@ herr_t H5TiffIO::_importPaletteColorTiff( TIFF *in, hid_t groupId, const std::st
   TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
   TIFFGetField(in, TIFFTAG_BITSPERSAMPLE, &bitspersample);
 
-  raster = (uint32*)_TIFFmalloc(width * height * sizeof (uint32));
+  raster = (uint32_t*)_TIFFmalloc(width * height * sizeof (uint32_t));
   if (raster == 0) {
     TIFFError(TIFFFileName(in), "No space for raster buffer");
     return (-1);
@@ -283,7 +283,7 @@ herr_t H5TiffIO::_importPaletteColorTiff( TIFF *in, hid_t groupId, const std::st
   }
 
   // Strip out the Alpha Components
-  int32 pixel_count = width * height;
+  int32_t pixel_count = width * height;
   unsigned char *src, *dst;
 
   src = (unsigned char *) raster;
@@ -311,8 +311,8 @@ herr_t H5TiffIO::_importPaletteColorTiff( TIFF *in, hid_t groupId, const std::st
 // ---------------------------------------------------------------------
 herr_t H5TiffIO::_importRGBFullColorTiff(TIFF *in, hid_t groupId, const std::string &datasetName)
 {
-  uint32* raster;     /* retrieve RGBA image */
-  uint32  width, height;    /* image width & height */
+  uint32_t* raster;     /* retrieve RGBA image */
+  uint32_t  width, height;    /* image width & height */
   herr_t err = -1;
 
   std::cout << "Importing rgb full color tiff image" << std::endl;
@@ -320,7 +320,7 @@ herr_t H5TiffIO::_importRGBFullColorTiff(TIFF *in, hid_t groupId, const std::str
   TIFFGetField(in, TIFFTAG_IMAGEWIDTH, &width);
   TIFFGetField(in, TIFFTAG_IMAGELENGTH, &height);
 
-  raster = (uint32*)_TIFFmalloc(width * height * sizeof (uint32));
+  raster = (uint32_t*)_TIFFmalloc(width * height * sizeof (uint32_t));
   if (raster == 0) {
     TIFFError(TIFFFileName(in), "No space for raster buffer");
     return (0);
@@ -336,7 +336,7 @@ herr_t H5TiffIO::_importRGBFullColorTiff(TIFF *in, hid_t groupId, const std::str
   /*
   ** Strip out the Alpha Components
   */
-  int32 pixel_count = width * height;
+  int32_t pixel_count = width * height;
   unsigned char *src, *dst;
 
   src = (unsigned char *) raster;
@@ -368,7 +368,7 @@ herr_t H5TiffIO::_importRGBFullColorTiff(TIFF *in, hid_t groupId, const std::str
 int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, const string &img_dataset_name)
 {
   herr_t err = 0;
-  int32 dimRank;
+  int32_t dimRank;
 
   err = H5Lite::getAttributeNDims(fileId, img_dataset_name, const_cast<std::string&>(MXA::H5Image::ImageSubclass), dimRank);
   if (err < 0) {
@@ -378,7 +378,7 @@ int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, const string &img_dat
   size_t type_size;
   H5T_class_t class_type;
   hid_t attrType = -1;
-  std::vector<uint64> dimensions;
+  std::vector<uint64_t> dimensions;
   err = H5Lite::getAttributeInfo(fileId,
                                  img_dataset_name,
                                  const_cast<std::string&>(MXA::H5Image::ImageSubclass),
@@ -418,7 +418,7 @@ int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, const string &img_dat
 //   and close the one matching.
 void H5TiffIO::_closePaletteCreatedDataset(hid_t fileId, hid_t groupId,
               string datasetName,
-              int32 num_attrs)
+              int32_t num_attrs)
 {
   hid_t *attr_ids;
   attr_ids = (hid_t *)malloc(num_attrs * sizeof(hid_t));
@@ -453,7 +453,7 @@ void H5TiffIO::_closePaletteCreatedDataset(hid_t fileId, hid_t groupId,
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5TiffIO::_findColorMapIndex(int max, int32 imgR, int32 imgG, int32 imgB,
+int32_t H5TiffIO::_findColorMapIndex(int max, int32_t imgR, int32_t imgG, int32_t imgB,
          unsigned char *colorMap)
 {
   // note - colorMap is in the format for HDF5 which means it's a flat
@@ -487,8 +487,8 @@ herr_t H5TiffIO::exportTiff(hid_t fileId,
     return err;
   }
 
-  std::vector<uint8>::size_type dSize = static_cast<std::vector<uint8>::size_type> (width * height);
-  std::vector<uint8> data(dSize);
+  std::vector<uint8_t>::size_type dSize = static_cast<std::vector<uint8_t>::size_type> (width * height);
+  std::vector<uint8_t> data(dSize);
   err = H5Image::H5IMread_image(fileId, img_dataset_name, &(data.front() ) );
   if (err < 0) {
     std::cout << "Error reading image data" << std::endl;
@@ -501,7 +501,7 @@ herr_t H5TiffIO::exportTiff(hid_t fileId,
     return -1;
   }
 
-  int32 imageClass = _determineTiffOutputImageClass(fileId, img_dataset_name);
+  int32_t imageClass = _determineTiffOutputImageClass(fileId, img_dataset_name);
   char h5_filename[1024];
   ::memset(h5_filename, 0,1024);  // Zero everything out
   size_t filename_size = 1024;
@@ -552,7 +552,7 @@ herr_t H5TiffIO::_exportRGBFullColorTiff(TIFF* out,
 //
 // -----------------------------------------------------------------------------
 herr_t H5TiffIO::_exportGrayScaleTiff(TIFF *image,
-                                     uint8* data,
+                                     uint8_t* data,
                                      hsize_t width,
                                      hsize_t height,
                                      const std::string &documentName,
@@ -591,7 +591,7 @@ herr_t H5TiffIO::_exportGrayScaleTiff(TIFF *image,
   // Insert Resolution Units here if possible
 
   std::string software ("MXADataModel Version ");
-  software.append(MXA::Version::MXAVersion).append(" using ");
+  software.append(MXA::Version::Complete).append(" using ");
 #ifdef PACKAGE_STRING
   software.append(PACKAGE_STRING);
 #else

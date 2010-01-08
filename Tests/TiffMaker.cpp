@@ -43,7 +43,7 @@ void TiffMaker::createTiffFile(const std::string &filename)
   const char* outfilename = filename.c_str();
 
   TIFF *output;
-  uint32 width, height;
+  uint32_t width, height;
   unsigned char* raster;
 
   // Open the output image
@@ -66,9 +66,9 @@ void TiffMaker::createTiffFile(const std::string &filename)
 
   // Write some color data into the raster
   unsigned char* curRaster = raster;
-  for (uint32 i = 0; i < height; ++i)
+  for (uint32_t i = 0; i < height; ++i)
   {
-    for (uint32 j = 0; j < width; ++j)
+    for (uint32_t j = 0; j < width; ++j)
     {
       *curRaster = i;
       curRaster++;

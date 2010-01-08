@@ -12,7 +12,7 @@
 #define DATAFILEGENERATOR_H_
 
 //-- MXA Headers
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Base/IImportDelegate.h>
@@ -44,10 +44,10 @@ namespace DataGen
   const std::string TableRec ("Table Data");
   const std::string VolumeRec ("Volume Data");
 
-  const std::string Uint8Rec ("UInt8 Data");
-  const std::string Uint16Rec ("UInt16 Data");
-  const std::string Uint32Rec ("UInt32 Data");
-  const std::string Uint64Rec ("UInt64 Data");
+  const std::string Uint8_tRec ("UInt8 Data");
+  const std::string Uint16_tRec ("UInt16 Data");
+  const std::string Uint32_tRec ("UInt32 Data");
+  const std::string Uint64_tRec ("UInt64 Data");
   const std::string Int8Rec ("Int8 Data");
   const std::string Int16Rec ("Int16 Data");
   const std::string Int32Rec ("Int32 Data");
@@ -126,13 +126,13 @@ public:
 	   }
 
 	   // Set the start/end/increment values for each Data Dimension
-	     int32 dim0Start = dim0->getStartValue();
-	     int32 dim0End = dim0->getEndValue();
-	     int32 dim0Increment = dim0->getIncrement();
+	     int32_t dim0Start = dim0->getStartValue();
+	     int32_t dim0End = dim0->getEndValue();
+	     int32_t dim0Increment = dim0->getIncrement();
 
-	     int32 dim1Start = dim1->getStartValue();
-	     int32 dim1End = dim1->getEndValue();
-	     int32 dim1Increment = dim1->getIncrement();
+	     int32_t dim1Start = dim1->getStartValue();
+	     int32_t dim1End = dim1->getEndValue();
+	     int32_t dim1Increment = dim1->getIncrement();
 
 	     // These are the actual dimensions of the data
 	     IImportDelegate* delegate = new AnyDataDelegate<T>(tableDims);
@@ -141,13 +141,13 @@ public:
 	     // Create a nested loop to create the necessary DataSource objects that will
 	     //  be used to import the data into the HDF5 file
 	     //std::cout << "CREATING DATA SOURCES" << std::endl;
-	     for( int32 i = dim0Start; i <= dim0End; i += dim0Increment )
+	     for( int32_t i = dim0Start; i <= dim0End; i += dim0Increment )
 	     {
 	       for (int j = dim1Start; j <= dim1End; j = j+ dim1Increment)
 	       {
 	         //Create a Scalar Data Source
 	         MXADataSource::Pointer ds( new MXADataSource() );
-	         std::vector<int32> dimValues;
+	         std::vector<int32_t> dimValues;
 	         dimValues.push_back(i);
 	         dimValues.push_back(j);
 	         ds->setDimensionValues(dimValues);

@@ -89,14 +89,14 @@ IDataModel::Pointer MXADataSource::getDataModel ( ) {
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void MXADataSource::setDimensionValues ( std::vector<int32> new_var ) {
+void MXADataSource::setDimensionValues ( std::vector<int32_t> new_var ) {
   _dimensionValues = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-std::vector<int32> MXADataSource::getDimensionValues ( ) {
+std::vector<int32_t> MXADataSource::getDimensionValues ( ) {
   return _dimensionValues;
 }
 
@@ -109,7 +109,7 @@ std::string MXADataSource::generateInternalPath ( )
   //Put the data root on first
   path += this->_dataModel->getDataRoot();
   //Put the Data Dimensions on Next
-  for (std::vector<int32>::iterator iter = this->_dimensionValues.begin(); iter != this->_dimensionValues.end(); ++iter ) {
+  for (std::vector<int32_t>::iterator iter = this->_dimensionValues.begin(); iter != this->_dimensionValues.end(); ++iter ) {
     path += StringUtils::numToString(*iter);
     path += "/";
   }
@@ -121,7 +121,7 @@ std::string MXADataSource::generateInternalPath ( )
 // -----------------------------------------------------------------------------
 //  Use a new set of indices to generate a path
 // -----------------------------------------------------------------------------
-std::string MXADataSource::generateInternalPath ( std::vector<int32> &indices)
+std::string MXADataSource::generateInternalPath ( std::vector<int32_t> &indices)
 {
   std::string path;
   //make sure the new set of indices is _atleast_ as large as the original set
@@ -132,7 +132,7 @@ std::string MXADataSource::generateInternalPath ( std::vector<int32> &indices)
   //Put the data root on first
   path += this->_dataModel->getDataRoot();
   //Put the Data Dimensions on Next
-  for (std::vector<int32>::iterator iter = indices.begin(); iter != indices.end(); ++iter ) {
+  for (std::vector<int32_t>::iterator iter = indices.begin(); iter != indices.end(); ++iter ) {
     path += StringUtils::numToString(*iter);
     path += "/";
   }

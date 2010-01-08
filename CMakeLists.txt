@@ -79,25 +79,25 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 #-------------------------------------------------------------------------------
 #  Define the location of the Resources Directory
-SET (MXA_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
+SET (PROJECT_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
+SET (PROJECT_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/CMake)
+SET (PROJECT_CMAKE_MODULES_DIR ${PROJECT_CMAKE_DIR}/Modules)
+SET (OSX_TOOLS_DIR ${PROJECT_RESOURCES_DIR}/OSX_Tools)
 SET (MXA_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Source)
-SET (MXA_CMAKE_DIR ${MXA_RESOURCES_DIR}/CMake)
 SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
 SET (MXAExamples_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Examples)
-SET (PROJECT_RESOURCES_DIR ${MXA_RESOURCES_DIR})
 SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
-SET (OSX_TOOLS_DIR ${PROJECT_RESOURCES_DIR}/OSX_Tools)
+SET (PROJECT_PREFIX "MXA" CACHE STRING "The 3 Letter Prefix to be used for Preprocessor definitions")
+SET (EXE_DEBUG_EXTENSION "_debug")
 
-# - Set our Library Version to some default values. This should be changed later
-# - in the process by using the try_run command to get a better version string
-SET (MXADATAMODEL_VER_MAJOR "1970")
-SET (MXADATAMODEL_VER_MINOR "01")
-SET (MXADATAMODEL_VER_PATCH "01")
-SET (MXADATAMODEL_VERSION ${MXADATAMODEL_VER_MAJOR}.${MXADATAMODEL_VER_MINOR}.${MXADATAMODEL_VER_PATCH})
+INCLUDE (${PROJECT_RESOURCES_DIR}/CMake/CMakeMacros.cmake )
+INCLUDE (${PROJECT_RESOURCES_DIR}/CMake/ConfigureChecks.cmake)
 
-#-------------------------------------------------------------------------------
-INCLUDE (${MXA_CMAKE_DIR}/vtkTestTypes.cmake )
-INCLUDE (${MXA_CMAKE_DIR}/ConfigureChecks.cmake)
+# --------------------------------------------------------------------
+# Generate a Header file with Compile Version variables
+# --------------------------------------------------------------------
+GenerateVersionString( ${PROJECT_NAME} "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" "${PROJECT_PREFIX}" )
+
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 if (NOT DEFINED MXA_BUILD_TESTING)
@@ -125,11 +125,11 @@ IF (BUILD_SHARED_LIBS)
 ENDIF (BUILD_SHARED_LIBS)
 
 #-- Find all the support libraries needed
-INCLUDE (${MXA_CMAKE_DIR}/FindSupportLibraries.cmake)
+INCLUDE (${PROJECT_CMAKE_DIR}/FindSupportLibraries.cmake)
 
 #-- Include a Macro to setup source file properties
-INCLUDE ( ${MXA_CMAKE_DIR}/MXA_CMakeMacros.cmake)
-include ( ${MXA_CMAKE_DIR}/InstallationSupport.cmake)
+INCLUDE ( ${PROJECT_CMAKE_DIR}/CMakeMacros.cmake)
+include ( ${PROJECT_CMAKE_DIR}/InstallationSupport.cmake)
 
 #-- Include all the source files
 INCLUDE (${MXA_SOURCE_DIR}/MXA/Base/Base_SourceList.cmake)
@@ -210,16 +210,21 @@ if ( ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" )
     set (NMAKE_GENERATOR 1)
 endif()
 
-#-- Configure the Header file and then add the Binary Directory to the Includes list
-CONFIGURE_FILE(${MXADataModel_SOURCE_DIR}/Source/MXA/Common/MXAConfiguration.h.in
-               ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h @ONLY IMMEDIATE)
-
-# Generate the version string
-GenerateVersionString(${PROJECT_NAME})
-configure_file(${MXADataModel_SOURCE_DIR}/Source/MXA/Common/MXAVersion.h.in
-               ${PROJECT_BINARY_DIR}/MXA/MXAVersion.h @ONLY IMMEDIATE)
-               
-IDE_GENERATED_PROPERTIES( "Generated" "${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h" "${PROJECT_BINARY_DIR}/MXA/MXAVersion.h")               
+# --------------------------------------------------------------------
+# Generate our header files
+# --------------------------------------------------------------------
+configure_file(${PROJECT_RESOURCES_DIR}/CMake/Configuration.h.in
+               ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h )
+configure_file(${PROJECT_RESOURCES_DIR}/CMake/PrimitiveTypes.h.in
+               ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h )
+configure_file(${PROJECT_SOURCE_DIR}/License.txt
+                ${PROJECT_BINARY_DIR}/License.txt )
+configure_file(${PROJECT_SOURCE_DIR}/ReadMe.txt
+                ${PROJECT_BINARY_DIR}/ReadMe.txt ) 
+IDE_GENERATED_PROPERTIES( "Generated" 
+"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
+"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h" 
+"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h")               
                                
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
@@ -243,8 +248,9 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 SET (MXADATAMODEL_HEADERS 
     ${MXADATAMODEL_HEADERS}
-    ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h  
-    ${PROJECT_BINARY_DIR}/MXA/MXAVersion.h
+    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h
+    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h
+    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h 
 )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
@@ -316,4 +322,4 @@ endif(MXA_BUILD_API_DOCS)
 
 
 #--- Set up the installation Code for Make Install
-include ( ${MXA_CMAKE_DIR}/MXAInstall.cmake)
+include ( ${PROJECT_CMAKE_DIR}/MXAInstall.cmake)

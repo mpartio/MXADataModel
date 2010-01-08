@@ -7,7 +7,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
 #include <Tests/MXAUnitTestDataFileLocations.h>

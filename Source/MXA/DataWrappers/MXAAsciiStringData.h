@@ -22,7 +22,7 @@
 * @date Jan 4, 2008
 * @version $Revision: 1.2 $
 */
-class MXA_EXPORT MXAAsciiStringData : public MXAArrayTemplate<uint8>
+class MXA_EXPORT MXAAsciiStringData : public MXAArrayTemplate<uint8_t>
 {
   public:
 
@@ -34,7 +34,7 @@ class MXA_EXPORT MXAAsciiStringData : public MXAArrayTemplate<uint8>
 
     virtual ~MXAAsciiStringData();
 
-    virtual int32 getDataType();
+    virtual int32_t getDataType();
 
     virtual std::string valueToString(char delimiter = ' ');
 

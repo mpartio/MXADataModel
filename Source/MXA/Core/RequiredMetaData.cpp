@@ -220,7 +220,7 @@ std::string RequiredMetaData::getDerivedSourceFile()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 RequiredMetaData::setValueForKey(const std::string &key, const std::string &value)
+int32_t RequiredMetaData::setValueForKey(const std::string &key, const std::string &value)
 {
   if (key.compare(MXA::MXA_CREATOR_TAG) == 0 )
     {
@@ -303,9 +303,9 @@ std::string RequiredMetaData::getValueForKey(const std::string &key)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 RequiredMetaData::writeToFile(IDataFile::Pointer dataFile)
+int32_t RequiredMetaData::writeToFile(IDataFile::Pointer dataFile)
 {
-  int32 err = -1;
+  int32_t err = -1;
   //TODO: This is NOT implemented yet.
   return err;
 }
@@ -313,7 +313,7 @@ int32 RequiredMetaData::writeToFile(IDataFile::Pointer dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 RequiredMetaData::readFromFile(IDataFile::Pointer dataFile)
+int32_t RequiredMetaData::readFromFile(IDataFile::Pointer dataFile)
 {
   //TODO: This is not implemented yet.
   return -1;
@@ -389,7 +389,7 @@ void RequiredMetaData::generateKeyValueMap(std::map<std::string, std::string> &r
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void RequiredMetaData::printSelf(std::ostream& os, int32 indent)
+void RequiredMetaData::printSelf(std::ostream& os, int32_t indent)
 {
   std::string ind = StringUtils::indent(indent);
   os << ind << "Required Meta Data" << std::endl;

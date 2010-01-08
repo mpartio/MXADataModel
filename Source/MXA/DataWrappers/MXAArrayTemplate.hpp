@@ -53,7 +53,7 @@ class MXAArrayTemplate : public IMXAArray
  * @param numElements The number of elements in the internal array.
  * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
  */
-    static IMXAArray::Pointer CreateArray( uint64 numElements)
+    static IMXAArray::Pointer CreateArray( uint64_t numElements)
     {
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( numElements, true);
       if ( d->_allocate() < 0)
@@ -70,7 +70,7 @@ class MXAArrayTemplate : public IMXAArray
     * @param dims Size of each dimension
     * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
     */
-    static IMXAArray::Pointer CreateMultiDimensionalArray(size_t nDims, const uint64* dims)
+    static IMXAArray::Pointer CreateMultiDimensionalArray(size_t nDims, const uint64_t* dims)
     {
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( nDims, dims, true);
       if ( d->_allocate() < 0)
@@ -105,7 +105,7 @@ class MXAArrayTemplate : public IMXAArray
  * @param numElements The number of elements in the internal array.
  * @return
  */
-    static MXAArrayTemplate<T>* New( uint64 numElements)
+    static MXAArrayTemplate<T>* New( uint64_t numElements)
     {
       MXAArrayTemplate<T>* ptr = new MXAArrayTemplate<T>( numElements, true);
       if (ptr->_allocate() < 0)
@@ -121,9 +121,9 @@ class MXAArrayTemplate : public IMXAArray
      * @param dims The size of each dimension
      * @return Pointer to Object or NULL if there was an error creating the object.
      */
-    static MXAArrayTemplate<T>* New(size_t nDims, const uint64* dims)
+    static MXAArrayTemplate<T>* New(size_t nDims, const uint64_t* dims)
     {
-      MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( static_cast<int32>(nDims), dims, true);
+      MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( static_cast<int32_t>(nDims), dims, true);
       if ( d->_allocate() < 0)
       {  // Could not allocate enough memory, reset the pointer to null and return
         d = NULL;
@@ -194,7 +194,7 @@ class MXAArrayTemplate : public IMXAArray
      * @param size The new size of the internal array
      * @return 1 on success, 0 on failure
      */
-    virtual int32 resize(uint64 size)
+    virtual int32_t resize(uint64_t size)
     {
       if(this->_resizeAndExtend(size) || size <= 0)
         {
@@ -213,7 +213,7 @@ class MXAArrayTemplate : public IMXAArray
    * @param i The index to have the returned pointer pointing to.
    * @return Void Pointer. Possibly NULL.
    */
-    virtual void* getVoidPointer(uint64 i)
+    virtual void* getVoidPointer(uint64_t i)
     {
       if (i >= this->getNumberOfElements() )
       {
@@ -227,7 +227,7 @@ class MXAArrayTemplate : public IMXAArray
    * @param i The index to return the value at
    * @return The value at index i
    */
-    virtual T getValue(uint64 i)
+    virtual T getValue(uint64_t i)
     {
       return this->_data[i];
     }
@@ -235,7 +235,7 @@ class MXAArrayTemplate : public IMXAArray
     /**
      * @brief Returns the number of elements in the internal array.
      */
-    virtual uint64 getNumberOfElements()
+    virtual uint64_t getNumberOfElements()
     {
       return _nElements;
     }
@@ -244,18 +244,18 @@ class MXAArrayTemplate : public IMXAArray
      * @brief Copies the values of the dimensions into the supplied pointer
      * @param dims Pointer to store the dimension values into
      */
-    virtual void getDimensions(uint64* dims)
+    virtual void getDimensions(uint64_t* dims)
     {
-      uint64 nBytes = _dims.size() * sizeof(uint64);
+      uint64_t nBytes = _dims.size() * sizeof(uint64_t);
       ::memcpy(dims, &(_dims.front()), nBytes );
     }
 
     /**
      * Returns the number of dimensions the data has.
      */
-    virtual int32 getNumberOfDimensions()
+    virtual int32_t getNumberOfDimensions()
     {
-      return static_cast<int32>(this->_dims.size());
+      return static_cast<int32_t>(this->_dims.size());
     }
 
 /**
@@ -263,7 +263,7 @@ class MXAArrayTemplate : public IMXAArray
  * @param i The index of the value to set
  * @param value The new value to be set at the specified index
  */
-    void setValue(uint64 i, T value)
+    void setValue(uint64_t i, T value)
     {
       this->_data[i] = value;
     }
@@ -273,7 +273,7 @@ class MXAArrayTemplate : public IMXAArray
      * of primitive stored in the internal array. Currently the HDF5 type is returned
      * in order to use this class effectively with HDF5
      */
-    virtual int32 getDataType()
+    virtual int32_t getDataType()
     {
       T value = 0x0;
       return H5Lite::HDFTypeForPrimitive<T>(value);
@@ -300,7 +300,7 @@ class MXAArrayTemplate : public IMXAArray
       char* ptr = (char*)(_data);
       char t[8];
       size_t size = getTypeSize();
-      for (uint64 var = 0; var < _nElements; ++var)
+      for (uint64_t var = 0; var < _nElements; ++var)
       {
         if (sizeof(T) == 2) {
           mxa_bswap(0, 1, t);
@@ -329,7 +329,7 @@ class MXAArrayTemplate : public IMXAArray
  * @param i The index to return the pointer to.
  * @return The pointer to the index
  */
-    virtual T* getPointer(uint64 i)
+    virtual T* getPointer(uint64_t i)
     {
       return (T*)(&(_data[i]) );
     }
@@ -339,9 +339,9 @@ class MXAArrayTemplate : public IMXAArray
      * @param expProps The properties to use when saving the array
      * @return Error code.
      */
-    virtual int32 exportToFile(DataExportProperties::Pointer expProps)
+    virtual int32_t exportToFile(DataExportProperties::Pointer expProps)
     {
-      int32 err = -1;
+      int32_t err = -1;
       if (expProps->getFileType() == MXA::Export::Binary)
       {
         err = _binaryExport(expProps);
@@ -357,9 +357,9 @@ class MXAArrayTemplate : public IMXAArray
     // -----------------------------------------------------------------------------
     //
     // -----------------------------------------------------------------------------
-    int32 _binaryExport(DataExportProperties::Pointer expProps)
+    int32_t _binaryExport(DataExportProperties::Pointer expProps)
     {
-      int32 err = -1;
+      int32_t err = -1;
     #ifdef MXA_LITTLE_ENDIAN
       int system = MXA::Export::LittleEndian;
     #elif defined MXA_BIG_ENDIAN
@@ -401,9 +401,9 @@ class MXAArrayTemplate : public IMXAArray
     // -----------------------------------------------------------------------------
     //
     // -----------------------------------------------------------------------------
-    int32 _asciiExport(DataExportProperties::Pointer expProps)
+    int32_t _asciiExport(DataExportProperties::Pointer expProps)
     {
-      int32 err = -1;
+      int32_t err = -1;
       std::string delimiter = expProps->getAsciiDelimiter();
 
       // Create our output file
@@ -416,8 +416,8 @@ class MXAArrayTemplate : public IMXAArray
       }
 
       //std::stringstream sstream;
-      uint64 limit = _nElements - 1;
-      for(uint64 i = 0; i < _nElements; ++i)
+      uint64_t limit = _nElements - 1;
+      for(uint64_t i = 0; i < _nElements; ++i)
       {
         if (sizeof(T) != 1 )
          {
@@ -425,7 +425,7 @@ class MXAArrayTemplate : public IMXAArray
          }
          else
          {
-           out << static_cast<int32>(_data[i]);
+           out << static_cast<int32_t>(_data[i]);
          }
         if (i < limit)
         {
@@ -443,20 +443,20 @@ class MXAArrayTemplate : public IMXAArray
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation
 // -----------------------------------------------------------------------------
-    virtual int32 writeToFile(IDataFile::Pointer dataFile)
+    virtual int32_t writeToFile(IDataFile::Pointer dataFile)
     {
       if (dataFile->getFileId() < 0)
       {
         return -1;
       }
-      int32 rank = this->getNumberOfDimensions();
+      int32_t rank = this->getNumberOfDimensions();
       return H5Lite::writePointerAttribute(dataFile->getFileId(), _datasetPath, _attributeKey, rank, &(_dims.front()), this->getPointer(0) );
     }
 
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-    virtual int32 readFromFile(IDataFile::Pointer dataFile)
+    virtual int32_t readFromFile(IDataFile::Pointer dataFile)
     {
       if (dataFile->getFileId() < 0)
       {
@@ -468,15 +468,15 @@ class MXAArrayTemplate : public IMXAArray
       size_t attr_nElements;
       std::string res;
 
-      std::vector<uint64> dims;  //Reusable for the loop
+      std::vector<uint64_t> dims;  //Reusable for the loop
       err = H5Lite::getAttributeInfo(dataFile->getFileId(), _datasetPath, _attributeKey, dims, attr_type, attr_nElements, typeId);
       if (err < 0)
       {
         return err;
       }
       err = H5Tclose(typeId);
-      uint64 numElements = 1;
-      for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+      uint64_t numElements = 1;
+      for (std::vector<uint64_t>::size_type i = 0; i < dims.size(); ++i)
       {
         numElements = numElements * dims[i];
       }
@@ -496,7 +496,7 @@ class MXAArrayTemplate : public IMXAArray
      * @param os
      * @param indent
      */
-    virtual void printSelf(std::ostream &os, int32 indent)
+    virtual void printSelf(std::ostream &os, int32_t indent)
     {
       std::string ind = StringUtils::indent(indent);
       os << ind << "MXAArrayTemplate<T>" << std::endl;
@@ -507,7 +507,7 @@ class MXAArrayTemplate : public IMXAArray
       os << ind << "Begin Data" << std::endl;
       os << ind << "{";
       T* data = this->getPointer(0);
-      for (uint64 i = 0; i < this->getNumberOfElements(); ++i)
+      for (uint64_t i = 0; i < this->getNumberOfElements(); ++i)
       {
         os << ind << *data << " ";
         if (i%10 ==0)
@@ -527,8 +527,8 @@ class MXAArrayTemplate : public IMXAArray
     virtual std::string valueToString(char delimiter = ' ')
     {
       std::stringstream sstream;
-      uint64 limit = _nElements - 1;
-      for(uint64 i = 0; i < _nElements; ++i)
+      uint64_t limit = _nElements - 1;
+      for(uint64_t i = 0; i < _nElements; ++i)
       {
         if (sizeof(T) != 1 )
          {
@@ -536,7 +536,7 @@ class MXAArrayTemplate : public IMXAArray
          }
          else
          {
-           sstream  << static_cast<int32>(_data[i]);
+           sstream  << static_cast<int32_t>(_data[i]);
          }
         if (i < limit)
         {
@@ -553,7 +553,7 @@ class MXAArrayTemplate : public IMXAArray
    * @param numElements The number of elements in the internal array.
    * @param takeOwnership Will the class clean up the memory. Default=true
      */
-      MXAArrayTemplate(int32 numElements,
+      MXAArrayTemplate(int32_t numElements,
                        bool ownsData = true) :
         _data(NULL),
         _nElements(numElements),
@@ -570,13 +570,13 @@ class MXAArrayTemplate : public IMXAArray
    * @param takeOwnership Will the class clean up the memory. Default=true
    */
       MXAArrayTemplate(size_t numDims,
-                       const uint64* dims,
+                       const uint64_t* dims,
                        bool ownsData = true) :
         _data(NULL),
         _ownsData(ownsData)
       {
         _dims.resize(numDims);
-        ::memcpy( &(_dims.front()), dims, numDims * sizeof(uint64));
+        ::memcpy( &(_dims.front()), dims, numDims * sizeof(uint64_t));
         _nElements = 1;
         for(size_t i = 0; i < numDims; ++i)
         {
@@ -589,7 +589,7 @@ class MXAArrayTemplate : public IMXAArray
      * @brief Allocates the memory needed for this class
      * @return 1 on success, -1 on failure
      */
-        int32 _allocate()
+        int32_t _allocate()
         {
           if ( (NULL != this->_data) && (true == this->_ownsData) )
           {
@@ -613,10 +613,10 @@ class MXAArrayTemplate : public IMXAArray
        * @param size
        * @return Pointer to the internal array
        */
-      virtual T* _resizeAndExtend(uint64 size)
+      virtual T* _resizeAndExtend(uint64_t size)
         {
           T* newArray;
-          uint64 newSize;
+          uint64_t newSize;
 
           if (size > this->_nElements)
           {
@@ -678,10 +678,10 @@ class MXAArrayTemplate : public IMXAArray
   private:
 
     T* _data;
-    uint64 _nElements;
+    uint64_t _nElements;
     bool _ownsData;
 
-    std::vector<uint64> _dims;
+    std::vector<uint64_t> _dims;
 
     MXAArrayTemplate(const MXAArrayTemplate&);    //Not Implemented
     void operator=(const MXAArrayTemplate&); //Not Implemented

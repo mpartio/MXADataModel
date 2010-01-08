@@ -105,8 +105,8 @@ class MXA_EXPORT IDataModel
     * @return A boost::shared_ptr to the newly created DataDimension Object
     */
     virtual IDataDimension::Pointer addDataDimension(std::string name, std::string altName,
-                                    int32 count, int32 startValue,
-                                    int32 endValue, int32 increment, int32 uniform) = 0;
+                                    int32_t count, int32_t startValue,
+                                    int32_t endValue, int32_t increment, int32_t uniform) = 0;
 
 
     /**
@@ -116,7 +116,7 @@ class MXA_EXPORT IDataModel
      * @param index The index to insert the Data Dimension at
      * @return Error condition
      */
-    virtual int32 insertDataDimension(IDataDimension::Pointer dimension, int32 index) = 0;
+    virtual int32_t insertDataDimension(IDataDimension::Pointer dimension, int32_t index) = 0;
 
 
     /**
@@ -130,7 +130,7 @@ class MXA_EXPORT IDataModel
     * @param index The index of the data dimension to remove
     * @return Standard HDF5 Error Condition
     */
-    virtual int32 removeDataDimension(int32 index) = 0;
+    virtual int32_t removeDataDimension(int32_t index) = 0;
 
     /**
      * @brief moves the data dimension at index 'fromIndex' to another index
@@ -139,7 +139,7 @@ class MXA_EXPORT IDataModel
      * @param toIndex The new index to place the data dimension at
      * @return Error condition
      */
-    virtual int32 moveDataDimension(int32 fromIndex, int32 toIndex) = 0;
+    virtual int32_t moveDataDimension(int32_t fromIndex, int32_t toIndex) = 0;
 
     /**
      * @brief Swaps a pair of Data Dimensions in the index list.
@@ -147,7 +147,7 @@ class MXA_EXPORT IDataModel
      * @param index2 The second Data Dimension to swap with the first
      * @return Error Condition
      */
-    virtual int32 swapDataDimensions(int32 index1, int32 index2) = 0;
+    virtual int32_t swapDataDimensions(int32_t index1, int32_t index2) = 0;
 
     /**
     * @brief Returns the data dimensions of the Model in a std::vector.
@@ -159,7 +159,7 @@ class MXA_EXPORT IDataModel
     * @param index The index to return
     * @return A Pointer to the data dimension or NULL if there is an error
     */
-    virtual IDataDimension::Pointer getDataDimension(int32 index) = 0;
+    virtual IDataDimension::Pointer getDataDimension(int32_t index) = 0;
     /**
     * @brief Returns a specific Data Dimension from the model. Technically Data
     * dimensions could have the same names as Data Dimensions are only differentiated
@@ -175,7 +175,7 @@ class MXA_EXPORT IDataModel
     /**
      * @brief Returns the number of data dimensions in the model.
      */
-    virtual int32 getNumberOfDataDimensions() = 0;
+    virtual int32_t getNumberOfDataDimensions() = 0;
 
     //------------- Data Records Methods ---------------------------------------
     /**
@@ -198,7 +198,7 @@ class MXA_EXPORT IDataModel
      * @param record The record to remove from the Data model
      * @return Error Condition
      */
-    virtual int32 removeDataRecord(IDataRecord::Pointer record) = 0;
+    virtual int32_t removeDataRecord(IDataRecord::Pointer record) = 0;
 
     /**
     * @brief Returns the Data Records from the model. The natural form of the
@@ -249,7 +249,7 @@ class MXA_EXPORT IDataModel
     * @param pedigree More detailed information regarding the data, its collection methods, the instrumentation, and the research
     * @param derivedSrcFile Is this data derived from another data set or set of data files?
     */
-    virtual MXATypes::MXAError setRequiredMetaData( std::string researcherName,
+    virtual int32_t setRequiredMetaData( std::string researcherName,
                                                     std::string dateCreated,
                                                     std::string datasetName,
                                                     std::string description,
@@ -261,13 +261,13 @@ class MXA_EXPORT IDataModel
     * @brief Sets the required meta data using a std::map of keys/values
     * @param metadata The meta data
     */
-    virtual MXATypes::MXAError setRequiredMetaData(std::map<std::string, std::string> &metadata) = 0;
+    virtual int32_t setRequiredMetaData(std::map<std::string, std::string> &metadata) = 0;
 
     /**
      * @brief Sets the required meta data
      * @param metaData IRequiredMetaData::Pointer object
      */
-    virtual int32 setRequiredMetaData(IRequiredMetaData::Pointer metaData) = 0;
+    virtual int32_t setRequiredMetaData(IRequiredMetaData::Pointer metaData) = 0;
 
     /**
     * @brief Returns the meta data for the data model
@@ -309,7 +309,7 @@ class MXA_EXPORT IDataModel
     * @param os The output stream to print to
     * @param indent The level of indentation to start with
     */
-    virtual void printUserMetaData(std::ostream &os, int32 indent) = 0;
+    virtual void printUserMetaData(std::ostream &os, int32_t indent) = 0;
 
     //-------------- Methods to add arbitrary support files to the model ----------
     /**
@@ -340,25 +340,25 @@ class MXA_EXPORT IDataModel
     * @param os The output stream to print to
     * @param indent The level of indentation to start with
     */
-    virtual void printModel(std::ostream &os, int32 indent) = 0;
+    virtual void printModel(std::ostream &os, int32_t indent) = 0;
     /**
     * @brief Prints the data record from the model
     * @param os The output stream to print to
     * @param indent The level of indentation to start with
     */
-    virtual void printDataRecords(std::ostream &os, int32 indent) = 0;
+    virtual void printDataRecords(std::ostream &os, int32_t indent) = 0;
     /**
     * @brief Prints the data dimensions from the model
     * @param os The output stream to print to
     * @param indent The level of indentation to start with
     */
-    virtual void printDataDimensions(std::ostream &os, int32 indent) = 0;
+    virtual void printDataDimensions(std::ostream &os, int32_t indent) = 0;
     /**
     * @brief prints the required Meta data from the model
     * @param os The output stream to print to
     * @param indent The level of indentation to start with
     */
-    virtual void printRequiredMetaData(std::ostream &os, int32 indent) = 0;
+    virtual void printRequiredMetaData(std::ostream &os, int32_t indent) = 0;
 
 
     /**

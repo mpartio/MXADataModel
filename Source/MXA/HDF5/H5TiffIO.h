@@ -11,7 +11,7 @@
 #ifndef _H5TIFFIO_H_
 #define _H5TIFFIO_H_
 
-#include "MXA/Common/MXATypes.h"
+#include "MXA/MXATypes.h"
 
 #if MXA_TIFF_SUPPORT
 
@@ -110,7 +110,7 @@ class MXA_EXPORT H5TiffIO
    * @param in The Tiff Image
    * @return element from tiffImageClasses enum
    */
-  int32 _determineTiffImageClass(TIFF *in);
+  int32_t _determineTiffImageClass(TIFF *in);
 
 
   /**
@@ -119,7 +119,7 @@ class MXA_EXPORT H5TiffIO
    * @param img_dataset_name The path to the dataset
    * @return One of the enumerated types from tiffImageClasses.
    */
-  int32 _determineTiffOutputImageClass(hid_t fileId, const string &img_dataset_name);
+  int32_t _determineTiffOutputImageClass(hid_t fileId, const string &img_dataset_name);
 
   /**
    * @brief Reads a grayscale tiff file and stores the image as raw
@@ -193,7 +193,7 @@ class MXA_EXPORT H5TiffIO
    * @return Standard HDF5 error condition
    */
   herr_t _exportGrayScaleTiff(TIFF* image,
-                               uint8* data,
+                               uint8_t* data,
                                hsize_t width,
                                hsize_t height,
                                const std::string &documentName,
@@ -222,12 +222,12 @@ class MXA_EXPORT H5TiffIO
 
 
  private:
-  int32 _findColorMapIndex(int max, int32 imgR, int32 imgG, int32 imgB,
+  int32_t _findColorMapIndex(int max, int32_t imgR, int32_t imgG, int32_t imgB,
       unsigned char *colorMap);
 
   void _closePaletteCreatedDataset(hid_t fileId, hid_t groupId,
                 string datasetName,
-                int32 num_attrs);
+                int32_t num_attrs);
 
 };
 

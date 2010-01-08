@@ -204,7 +204,7 @@ std::string H5MXARequiredMetaData::getDerivedSourceFile()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXARequiredMetaData::setValueForKey(const std::string &key, const std::string &value)
+int32_t H5MXARequiredMetaData::setValueForKey(const std::string &key, const std::string &value)
 {
   if (key.compare(MXA::MXA_CREATOR_TAG) == 0 )
     {
@@ -287,10 +287,10 @@ std::string H5MXARequiredMetaData::getValueForKey(const std::string &key)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXARequiredMetaData::writeToFile(IDataFile::Pointer dataFile)
+int32_t H5MXARequiredMetaData::writeToFile(IDataFile::Pointer dataFile)
 {
   herr_t err = -1;
-  int32 data = 0;
+  int32_t data = 0;
   hid_t fileId = dataFile->getFileId();
   //err = this->_writeScalarDataset(fileId, const_cast<std::string&>(MXA::RequiredMetaDataPath), data);
   err = H5Lite::writeScalarDataset(fileId,const_cast<std::string&>(MXA::RequiredMetaDataPath), data );
@@ -313,7 +313,7 @@ int32 H5MXARequiredMetaData::writeToFile(IDataFile::Pointer dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXARequiredMetaData::readFromFile(IDataFile::Pointer dataFile)
+int32_t H5MXARequiredMetaData::readFromFile(IDataFile::Pointer dataFile)
 {
 
   hid_t fileId = dataFile->getFileId();
@@ -439,7 +439,7 @@ void H5MXARequiredMetaData::generateKeyValueMap(std::map<std::string, std::strin
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void H5MXARequiredMetaData::printSelf(std::ostream& os, int32 indent)
+void H5MXARequiredMetaData::printSelf(std::ostream& os, int32_t indent)
 {
   std::string ind = StringUtils::indent(indent);
   os << ind << "Required Meta Data" << std::endl;

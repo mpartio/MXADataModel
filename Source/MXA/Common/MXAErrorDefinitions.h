@@ -72,14 +72,14 @@
 
 /* C++ style constants */
 namespace MXA {
-  const int32 ErrorFileNotMXA = MXA_ERROR_FILE_NOT_MXA;
-  const int32 ErrorFileNotFound = MXA_ERROR_FILE_NOT_FOUND;
-  const int32 ErrorFileNotDefined = MXA_ERROR_FILE_NOT_DEFINED;
-  const int32 ErrorFileZeroSize = MXA_ERROR_FILE_ZERO_SIZE;
-  const int32 ErrorFileNotOpened = MXA_ERROR_FILE_NOT_OPENED;
-  const int32 ErrorImageFormatNotSupported = MXA_ERROR_IMAGE_FORMAT_NOT_SUPPORTED;
-  const int32 ErrorUnknownDataRecordType = MXA_UNKNOWN_DATA_RECORD_TYPE;
-  const int32 ErrorFileFormatNotSupported = MXA_ERROR_FILE_FORMAT_NOT_SUPPORTED;
+  const int32_t ErrorFileNotMXA = MXA_ERROR_FILE_NOT_MXA;
+  const int32_t ErrorFileNotFound = MXA_ERROR_FILE_NOT_FOUND;
+  const int32_t ErrorFileNotDefined = MXA_ERROR_FILE_NOT_DEFINED;
+  const int32_t ErrorFileZeroSize = MXA_ERROR_FILE_ZERO_SIZE;
+  const int32_t ErrorFileNotOpened = MXA_ERROR_FILE_NOT_OPENED;
+  const int32_t ErrorImageFormatNotSupported = MXA_ERROR_IMAGE_FORMAT_NOT_SUPPORTED;
+  const int32_t ErrorUnknownDataRecordType = MXA_UNKNOWN_DATA_RECORD_TYPE;
+  const int32_t ErrorFileFormatNotSupported = MXA_ERROR_FILE_FORMAT_NOT_SUPPORTED;
 };
 
 

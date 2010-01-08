@@ -14,7 +14,7 @@
 
 //-- MXA Includes
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataImport.h>
@@ -95,7 +95,7 @@ public:
   /** @brief Imports the data into the data file
   * @return Error Condition. Zero or Positive is Success
   */
-  int32 import();
+  int32_t import();
 
 private:
   std::string                 _outputFilePath;

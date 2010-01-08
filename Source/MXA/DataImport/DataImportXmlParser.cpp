@@ -49,9 +49,9 @@ DataImportXmlParser::~DataImportXmlParser()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 DataImportXmlParser::import()
+int32_t DataImportXmlParser::import()
 {
-  MXATypes::MXAError err = 1;
+  int32_t err = 1;
 
   if (this->_xmlFilename.empty() )
   {
@@ -121,10 +121,10 @@ int32 DataImportXmlParser::import()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 DataImportXmlParser::_mergeModelToDisk()
+int32_t DataImportXmlParser::_mergeModelToDisk()
 {
 
-  int32 err = 1;
+  int32_t err = 1;
   //Read the model from the file, leaving it open and in Read/Write mode
   _dataFile = H5MXADataFile::OpenFile(this->_outputFilePath, false);
 
@@ -146,11 +146,11 @@ int32 DataImportXmlParser::_mergeModelToDisk()
     return -1;
   }
 
-  int32 dimSize = mModel->getNumberOfDataDimensions();
+  int32_t dimSize = mModel->getNumberOfDataDimensions();
   IDataDimension::Pointer mDim;
   IDataDimension::Pointer fDim;
   // Iterate over the Dimensions
-  for (int32 i = 0; i < dimSize; ++i) {
+  for (int32_t i = 0; i < dimSize; ++i) {
     mDim = mModel->getDataDimension(i);
     fDim = fModel->getDataDimension(i);
     if (mDim->getStartValue() < fDim->getStartValue())
@@ -250,7 +250,7 @@ IDataSource::Collection DataImportXmlParser::getDataSources ( ) {
 int DataImportXmlParser::_loadDataModelFromTemplateFile(const std::string &modelFile)
 {
   //std::cout << logTime() << "---------------- IMPORTING DATA MODEL TEMPLATE ------------------" << std::endl;
-  MXATypes::MXAError err = 0;
+  int32_t err = 0;
   if ( StringUtils::endsWith(modelFile, std::string(".xml") ) )
   {
     typedef XMLStreamReaderDelegate<std::ifstream> FileStreamType;
@@ -519,8 +519,8 @@ void DataImportXmlParser::start_Dimension_Tag(const XML_Char* name, const XML_Ch
     for (int i = 0; attrs[i]; i += 2) {
       attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
     }
-    int32  start, end, increment = std::numeric_limits<int32>::max();
-    int32  index, count, uniform = std::numeric_limits<int32>::min();
+    int32_t  start, end, increment = std::numeric_limits<int32_t>::max();
+    int32_t  index, count, uniform = std::numeric_limits<int32_t>::min();
 
     //Check for each Attribute. If the attribute was in the list then parse its value
     if ( attrMap.find(MXA::MXA_INDEX_TAG) != attrMap.end() ) { StringUtils::stringToNum(index, attrMap[MXA::MXA_INDEX_TAG], std::dec); }
@@ -619,7 +619,7 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
   //Read the Data Dimension Values
   std::istringstream istream ( attrMap[MXA_DataImport::Attr_DataDimension_Values] );
   std::vector<int> dimValues;
-  int32 temp;
+  int32_t temp;
   while ( istream.good() )
   {
     istream >> temp;
@@ -718,14 +718,14 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
 {
   // std::cout << "  DataImportXmlParser::_createDataSource" << std::endl;
   IDataDimension::Pointer dim = _implDataDimensions[index];
-  int32 start = dim->getStartValue();
-  int32 end = dim->getEndValue();
-  int32 incr = dim->getIncrement();
+  int32_t start = dim->getStartValue();
+  int32_t end = dim->getEndValue();
+  int32_t incr = dim->getIncrement();
   if (index == dimValues.size())
   {
     dimValues.push_back(start);
   }
-  int8 ok = true;
+  int8_t ok = true;
   for (int i = start; i <= end; i+=incr)
   {
   //  std::cout << dim->getDimensionName() << " i:" << i << std::endl;
@@ -814,7 +814,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
   }
 
   XMLAttributeMap::iterator mapIter = attrMap.end();
-  int32 index = static_cast<int32>(_implDataDimensions.size());
+  int32_t index = static_cast<int32_t>(_implDataDimensions.size());
   std::string paddingChar;
   mapIter = attrMap.find(MXA_DataImport::Attr_Padding_Char);
   // Check for the Padding_Char attribute
@@ -824,7 +824,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
   }
 
   // Check for the Max size of the character string to generate
-  int32 width = -1; // Default to -1 so the string grows as needed
+  int32_t width = -1; // Default to -1 so the string grows as needed
   std::string charLength("");
   mapIter = attrMap.find(MXA_DataImport::Attr_Max_Char_Length);
   if (mapIter != attrMap.end() )

@@ -9,7 +9,7 @@
 
 
 //-- MXA Includes
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 
 #if MXA_HDF5_SUPPORT
@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
 
   int numValues = 10;
   // Create an Array to hold a 1 Dimensional Array of 10 values of 32 bit integers
-  MXAArrayTemplate<int32>* int32array = MXAArrayTemplate<int32>::New(numValues);
+  MXAArrayTemplate<int32_t>* int32_tarray = MXAArrayTemplate<int32_t>::New(numValues);
 
   // Since we used the static "New" method without any wrapper we are responsible for deleting the pointer.
   // The array is full of junk values as we have not placed any default values into the array. You should
@@ -102,10 +102,10 @@ int main(int argc, char **argv) {
   // use pointer manipulations to set the values.
   for (int i = 0; i < numValues; ++i)
   {
-    int32array->setValue(i, 33);  // Set each value in the array to 33
+    int32_tarray->setValue(i, 33);  // Set each value in the array to 33
   }
 
-  int32* ptr32 = int32array->getPointer(0); // Get a pointer to the '0' index which is the first element in the array
+  int32_t* ptr32 = int32_tarray->getPointer(0); // Get a pointer to the '0' index which is the first element in the array
   for (int i = 0; i < numValues; ++i)
   {
     *ptr32 = 33;  // Set each value in the array to 33
@@ -116,18 +116,18 @@ int main(int argc, char **argv) {
   // destroy any existing data, retrieving the number of dimensions and the sizes
   // of the dimensions
 
-  int32 numDimensions = int32array->getNumberOfDimensions();
+  int32_t numDimensions = int32_tarray->getNumberOfDimensions();
   std::cout << "There are " << numDimensions << " dimensions in the array." << std::endl;
-  std::vector<uint64> dimensions(numDimensions);
-  int32array->getDimensions( &(dimensions.front() ) );
+  std::vector<uint64_t> dimensions(numDimensions);
+  int32_tarray->getDimensions( &(dimensions.front() ) );
 
   for (int i = 0; i < numDimensions; ++i) {
     std::cout << "Dimension[" << i << "] = " << dimensions[i] << std::endl;
   }
   //Write the data
-  WriteHDF5File(int32array, "Int32PointerExampleData");
+  WriteHDF5File(int32_tarray, "Int32PointerExampleData");
 
-  delete int32array; // Clean up the memory
+  delete int32_tarray; // Clean up the memory
 
   std::cout << "-------------------------------------------------" << std::endl;
 
@@ -138,28 +138,28 @@ int main(int argc, char **argv) {
   dimensions.push_back(5);
 
   // Create a 3D array of size 10 x 3 x 5 of 8bit signed char values
-  MXAArrayTemplate<int8>* int8Array = MXAArrayTemplate<int8>::New(numDimensions, &(dimensions.front() ) );
-  numValues = int8Array->getNumberOfElements();
+  MXAArrayTemplate<int8_t>* int8_tArray = MXAArrayTemplate<int8_t>::New(numDimensions, &(dimensions.front() ) );
+  numValues = int8_tArray->getNumberOfElements();
 
-  int8* ptr8 = int8Array->getPointer(0); // Get a pointer to the '0' index which is the first element in the array
+  int8_t* ptr8 = int8_tArray->getPointer(0); // Get a pointer to the '0' index which is the first element in the array
   for (int i = 0; i < numValues; ++i)
   {
     *ptr8 = 1;  // Set each value in the array to 33
     ptr8++; // Increment the pointer
   }
 
-  numDimensions = int8Array->getNumberOfDimensions();
+  numDimensions = int8_tArray->getNumberOfDimensions();
   std::cout << "There are " << numDimensions << " dimensions in the array." << std::endl;
   dimensions.resize(numDimensions);
-  int8Array->getDimensions( &(dimensions.front() ) );
+  int8_tArray->getDimensions( &(dimensions.front() ) );
 
   for (int i = 0; i < numDimensions; ++i) {
     std::cout << "Dimension[" << i << "] = " << dimensions[i] << std::endl;
   }
 
-  WriteHDF5File(int8Array, "RawPointerExampleData");
+  WriteHDF5File(int8_tArray, "RawPointerExampleData");
 
-  delete int8Array; // Clean up the memory
+  delete int8_tArray; // Clean up the memory
 
   std::cout << "-------------------------------------------------" << std::endl;
 
@@ -169,8 +169,8 @@ int main(int argc, char **argv) {
    */
   {
     numValues = 10;
-    IMXAArray::Pointer bPtr32 = MXAArrayTemplate<int32>::CreateArray(numValues);
-    MXAArrayTemplate<int32>* wrappedPointer = dynamic_cast< MXAArrayTemplate<int32>* > (bPtr32.get() );
+    IMXAArray::Pointer bPtr32 = MXAArrayTemplate<int32_t>::CreateArray(numValues);
+    MXAArrayTemplate<int32_t>* wrappedPointer = dynamic_cast< MXAArrayTemplate<int32_t>* > (bPtr32.get() );
 
     // bPtr32 is a boost::shared_ptr object that wraps the actual pointer to the MXAArrayTemplate
     // bPtr32 will ALWAYS be valid. The contained pointer is what you want to check to make
@@ -178,7 +178,7 @@ int main(int argc, char **argv) {
     // the contained pointer will be NULL.
     if ( NULL == bPtr32.get() )
     {
-      std::cout << "MXAArrayTemplate<int32> was NOT allocated properly." << std::endl;
+      std::cout << "MXAArrayTemplate<int32_t> was NOT allocated properly." << std::endl;
     }
     // We can initialize the array in the same way since the operators for boost::shared_ptr are overloaded.
     for (int i = 0; i < numValues; ++i)

@@ -7,7 +7,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/DataImport/DataImportXmlParser.h>
 #include <MXA/Utilities/IStringSection.h>
 #include <MXA/Utilities/DataSourcePathIndexSection.h>
@@ -53,12 +53,12 @@ void RemoveTestFiles()
 int DataSourcePathIndexSectionTest_EntryPoint()
 {
 	int err = 0;
-	int8 ok = 1;
+	int8_t ok = 1;
 	std::string preText("0-Test_");
 
-	int32 dimIndex = 0;
+	int32_t dimIndex = 0;
 	std::string paddingChar("");
-	int32 width = -1;
+	int32_t width = -1;
 	std::string numericType ("Integer");
 	{
     IStringSection::Pointer section (new DataSourcePathIndexSection(dimIndex, paddingChar, width, numericType) );

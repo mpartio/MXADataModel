@@ -25,12 +25,12 @@
 * @date Jan 9, 2008
 * @version $Revision: 1.2 $
 */
-class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8>
+class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8_t>
 {
   public:
-    static IMXAArray::Pointer CreateRGBImageArray(int32 width, int32 height);
+    static IMXAArray::Pointer CreateRGBImageArray(int32_t width, int32_t height);
 
-    static MXARGBImage* New( int32 width, int32 height);
+    static MXARGBImage* New( int32_t width, int32_t height);
 
     virtual ~MXARGBImage();
 
@@ -38,23 +38,23 @@ class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8>
     /**
      * Returns the number of dimensions the data has.
      */
-    virtual int32 getNumberOfDimensions ();
+    virtual int32_t getNumberOfDimensions ();
 
     // -----------------------------------------------------------------------------
     //
     // -----------------------------------------------------------------------------
-    virtual void getDimensions(uint64* dims)
+    virtual void getDimensions(uint64_t* dims)
     {
       dims[1] = _width;
       dims[0] = _height;
     }
 
-    uint8* getPixelPointer(int32 x, int32 y);
-    virtual int32 getWidth() { return _width/3; }
-    virtual int32 getHeight() { return _height; }
+    uint8_t* getPixelPointer(int32_t x, int32_t y);
+    virtual int32_t getWidth() { return _width/3; }
+    virtual int32_t getHeight() { return _height; }
 
 
-    virtual int32 resize(uint64 size);
+    virtual int32_t resize(uint64_t size);
 
     /**
      * @brief Resizes the data array to the specified width and height
@@ -62,7 +62,7 @@ class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8>
      * @param height The new height of the array
      * @return 1 on success and Zero (0) on failure
      */
-    int32 resizeArray(int32 width, int32 height);
+    int32_t resizeArray(int32_t width, int32_t height);
 
     /**
     * @brief Serializes the value(s) of the array to a string using the delimiter
@@ -71,11 +71,11 @@ class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8>
     virtual std::string valueToString(char delimiter = ' ');
 
   protected:
-      MXARGBImage( int32 width, int32 height);
+      MXARGBImage( int32_t width, int32_t height);
 
   private:
-    int32 _width;
-    int32 _height;
+    int32_t _width;
+    int32_t _height;
 
     MXARGBImage(const MXARGBImage&);    //Not Implemented
     void operator=(const MXARGBImage&); //Not Implemented

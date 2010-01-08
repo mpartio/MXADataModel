@@ -45,9 +45,9 @@ class MXA_EXPORT IAttribute
     virtual Any getValue() = 0;
 
     /**
-     * @brief Converts the data value to an int32 value
+     * @brief Converts the data value to an int32_t value
      */
-    virtual int32 valueToInt32() = 0;
+    virtual int32_t valueToInt32() = 0;
 
     /**
      * @brief Converts the data value to a float value
@@ -67,7 +67,7 @@ class MXA_EXPORT IAttribute
     /**
      * @brief Writes the Attribute using the IAttributeWriter Object
      */
-    virtual int32 write(int32 locationId, std::string datasetPath, IAttributeWriter &writer) = 0;
+    virtual int32_t write(int32_t locationId, std::string datasetPath, IAttributeWriter &writer) = 0;
     
   private:
     IAttribute(const IAttribute&);    //Not Implemented
