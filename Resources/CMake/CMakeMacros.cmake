@@ -17,6 +17,10 @@ ENDMACRO (IDE_GENERATED_PROPERTIES SOURCE_PATH HEADERS SOURCES)
 #-------------------------------------------------------------------------------
 
 MACRO (IDE_SOURCE_PROPERTIES SOURCE_PATH HEADERS SOURCES)
+    INSTALL (FILES ${HEADERS}
+             DESTINATION include/${SOURCE_PATH}
+             COMPONENT Headers           
+    )
 
     STRING(REPLACE "/" "\\\\" source_group_path ${SOURCE_PATH}  )
     source_group(${source_group_path} FILES ${HEADERS} ${SOURCES})
@@ -104,9 +108,9 @@ macro(ToolInstallationSupport EXE_NAME EXE_DEBUG_EXTENSION EXE_BINARY_DIR)
     )
     
     if (APPLE)
-        set(TOOL_INSTALL_LOCATION "./")
+        set(TOOL_INSTALL_LOCATION "bin")
     else()
-        set(TOOL_INSTALL_LOCATION "./")
+        set(TOOL_INSTALL_LOCATION "bin")
     endif()
     
     INSTALL(TARGETS ${EXE_NAME} 
@@ -169,6 +173,7 @@ macro(LibraryProperties targetName )
     IF (APPLE AND BUILD_SHARED_LIBS)
       OPTION (MXA_BUILD_WITH_INSTALL_NAME "Build Libraries with the install_name set to the installation prefix. This is good if you are going to run from the installation location" OFF)
       IF(MXA_BUILD_WITH_INSTALL_NAME)
+      
           SET_TARGET_PROPERTIES(${MXADATAMODEL_LIB_NAME}
              PROPERTIES
              LINK_FLAGS "-current_version ${${PROJECT_NAME}_VERSION} -compatibility_version ${${PROJECT_NAME}_VERSION}"
@@ -265,27 +270,52 @@ endmacro()
 #
 #-------------------------------------------------------------------------------
 macro(GenerateVersionString PROJECT_NAME GENERATED_FILE_PATH NAMESPACE )
-#    message(STATUS "Generating Versions String for ${PROJECT_NAME}")
-#    message(STATUS "EmInit_CMAKE_DIR: ${EmInit_CMAKE_DIR}")
-    try_run(RUN_RESULT_VAR COMPILE_RESULT_VAR 
+    # message(STATUS "Generating Version Strings for ${PROJECT_NAME}")
+    if ( ${PROJECT_PREFIX}_HAVE_TIME_GETTIMEOFDAY )
+      set ( VERSION_COMPILE_FLAGS "-DHAVE_TIME_GETTIMEOFDAY")
+    endif()
+    
+    if(${PROJECT_PREFIX}_HAVE_SYS_TIME_GETTIMEOFDAY)
+        set ( VERSION_COMPILE_FLAGS "-DHAVE_SYS_TIME_GETTIMEOFDAY")
+    endif(${PROJECT_PREFIX}_HAVE_SYS_TIME_GETTIMEOFDAY)
+      
+    try_run(VERSION_RUN_RESULT VERSION_COMPILE_RESULT 
             ${CMAKE_CURRENT_BINARY_DIR} ${PROJECT_RESOURCES_DIR}/CMake/GenerateVersionString.cpp
             COMPILE_DEFINITIONS ${VERSION_COMPILE_FLAGS}
             COMPILE_OUTPUT_VARIABLE VERSION_COMPILE_OUTPUT
-            RUN_OUTPUT_VARIABLE VERSION_GEN_COMPLETE )
-   
+            RUN_OUTPUT_VARIABLE VERSION_RUN_OUTPUT )
+                 
+    if (NOT VERSION_RUN_OUTPUT) 
+        message(STATUS "VERSION_COMPILE_OUTPUT: ${VERSION_COMPILE_OUTPUT}")
+        message(STATUS "VERSION_RUN_OUTPUT: ${VERSION_RUN_OUTPUT}")
+        FILE(APPEND ${CMAKE_BINARY_DIR}/CMakeFiles/CMakeError.log
+            "Attempting to Generate a Version Number from a GetTimeofDay() function failed with the following output\n"
+            "----------- COMPILE OUTPUT ---------------------------------------------------\n"
+            "${VERSION_COMPILE_OUTPUT}\n"
+            "----------- RUN OUTPUT ---------------------------------------------------\n"
+            "${VERSION_RUN_OUTPUT}\m"
+            "--------------------------------------------------------------\n" )
+         message(FATAL_ERROR "The program to generate a version was not able to be run. Are we cross compiling? Do we have the GetTimeOfDay() function?")
+            
+    endif()
     # and now the version string given by qmake
-    STRING(REGEX REPLACE "^([0-9]+)\\.[0-9]+\\.[0-9]+.*" "\\1" VERSION_GEN_VER_MAJOR "${VERSION_GEN_COMPLETE}")
-    STRING(REGEX REPLACE "^[0-9]+\\.([0-9]+)\\.[0-9]+.*" "\\1" VERSION_GEN_VER_MINOR "${VERSION_GEN_COMPLETE}")
-    STRING(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_GEN_VER_PATCH "${VERSION_GEN_COMPLETE}")
-    
+    STRING(REGEX REPLACE "^([0-9]+)\\.[0-9]+\\.[0-9]+.*" "\\1" VERSION_GEN_VER_MAJOR "${VERSION_RUN_OUTPUT}")
+    STRING(REGEX REPLACE "^[0-9]+\\.([0-9]+)\\.[0-9]+.*" "\\1" VERSION_GEN_VER_MINOR "${VERSION_RUN_OUTPUT}")
+    STRING(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" VERSION_GEN_VER_PATCH "${VERSION_RUN_OUTPUT}")
+
+
     set (VERSION_GEN_NAME "${PROJECT_NAME}")
     set (VERSION_GEN_NAMESPACE "${NAMESPACE}")
-    set (${PROJECT_NAME}_VERSION   ${VERSION_GEN_COMPLETE}  CACHE STRING "Complete Version String")
+    set (${PROJECT_NAME}_VERSION   ${VERSION_RUN_OUTPUT}      CACHE STRING "Complete Version String")
     set (${PROJECT_NAME}_VER_MAJOR ${VERSION_GEN_VER_MAJOR} CACHE STRING "Major Version String")
     set (${PROJECT_NAME}_VER_MINOR ${VERSION_GEN_VER_MINOR} CACHE STRING "Minor Version String")
     set (${PROJECT_NAME}_VER_PATCH ${VERSION_GEN_VER_PATCH} CACHE STRING "Patch Version String")
     configure_file(${PROJECT_RESOURCES_DIR}/CMake/Version.h.in
                    ${GENERATED_FILE_PATH})
+
+#    MESSAGE(STATUS "${PROJECT_NAME}_VERSION: ${${PROJECT_NAME}_VERSION}")
+#    message(STATUS "VERSION_RUN_OUTPUT: ${VERSION_RUN_OUTPUT}")
+    
     MARK_AS_ADVANCED(${PROJECT_NAME}_VERSION ${PROJECT_NAME}_VER_MAJOR ${PROJECT_NAME}_VER_MINOR ${PROJECT_NAME}_VER_PATCH)
 endmacro()
 

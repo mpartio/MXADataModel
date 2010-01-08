@@ -71,5 +71,5 @@ file(MAKE_DIRECTORY "@CMAKE_INSTALL_PREFIX@/bin/tool_lib")
 
 # -- Run the BundleUtilities cmake code
 include(@PROJECT_RESOURCES_DIR@/OSX_Tools/ToolUtilities.cmake)
-deploy_tool("@CMAKE_INSTALL_PREFIX@/bin/@target@" "${PluginList}" "Plugins")
+deploy_tool("@CMAKE_INSTALL_PREFIX@/bin/@target@" "${PluginList}" "")
 

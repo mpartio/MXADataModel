@@ -87,6 +87,10 @@ IF("ON" STREQUAL "@MXA_USE_TIFF@")
 ENDIF()
  
 #-- These need to be run also
+set (PROJECT_RESOURCES_DIR_SAVE ${PROJECT_RESOURCES_DIR})
+set (PROJECT_RESOURCES_DIR ${MXADATAMODEL_RESOURCES_DIR})
 INCLUDE(${MXA_CMAKE_DIR}/ConfigureChecks.cmake)
 #-- Make sure we have install rules for our support libraries
+
 include(${MXA_CMAKE_DIR}/InstallMXASupportLibraries.cmake)
+set (PROJECT_RESOURCES_DIR ${PROJECT_RESOURCES_DIR_SAVE} )

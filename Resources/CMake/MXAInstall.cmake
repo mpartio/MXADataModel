@@ -4,7 +4,9 @@
 #--  BSD License: http://www.opensource.org/licenses/bsd-license.html
 #--////////////////////////////////////////////////////////////////////////////
     
-INSTALL (FILES ${PROJECT_BINARY_DIR}/MXA/MXAConfiguration.h ${PROJECT_BINARY_DIR}/MXA/MXAVersion.h 
+INSTALL (FILES  "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
+                "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h" 
+                "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h" 
          DESTINATION include/MXA 
          COMPONENT Headers           
 )
@@ -25,9 +27,14 @@ SET (MXA_CMAKE_INSTALLED_RESOURCES
         ${PROJECT_CMAKE_MODULES_DIR}/MXAFindMinGW.cmake
         ${PROJECT_CMAKE_MODULES_DIR}/MXAFindSZip.cmake
         ${PROJECT_CMAKE_MODULES_DIR}/MXAFindTiff.cmake
-        ${PROJECT_CMAKE_DIR}/GetTimeOfDayTest.cpp
-        ${PROJECT_CMAKE_DIR}/FindSupportLibraries.cmake
-        ${PROJECT_CMAKE_DIR}/GenerateVersionString.cpp
+
+       ${PROJECT_CMAKE_DIR}/GenerateVersionString.cpp
+       ${PROJECT_CMAKE_DIR}/GetTimeOfDayTest.cpp
+       ${PROJECT_CMAKE_DIR}/TestBoolType.cxx
+       ${PROJECT_CMAKE_DIR}/TestCharSignedness.cxx
+       ${PROJECT_CMAKE_DIR}/TestCompareTypes.cxx
+       ${PROJECT_CMAKE_DIR}/TestConvertTypes.cxx
+       ${PROJECT_CMAKE_DIR}/TestMiscFeatures.c
 )
 
 INSTALL (FILES ${MXA_CMAKE_INSTALLED_RESOURCES} 
@@ -36,9 +43,9 @@ INSTALL (FILES ${MXA_CMAKE_INSTALLED_RESOURCES}
 
 
 SET (MXA_XML_INSTALLED_RESOURCES
-        ${MXA_RESOURCES_DIR}/XML/ModelTemplate.xml
-        ${MXA_RESOURCES_DIR}/XML/mxa_0.4.dtd
-        ${MXA_RESOURCES_DIR}/XML/mxa_import.dtd
+        ${PROJECT_RESOURCES_DIR}/XML/ModelTemplate.xml
+        ${PROJECT_RESOURCES_DIR}/XML/mxa_0.4.dtd
+        ${PROJECT_RESOURCES_DIR}/XML/mxa_import.dtd
 )
 
 INSTALL (FILES ${MXA_XML_INSTALLED_RESOURCES} 
