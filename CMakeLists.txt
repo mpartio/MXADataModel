@@ -129,7 +129,7 @@ INCLUDE (${PROJECT_CMAKE_DIR}/FindSupportLibraries.cmake)
 
 #-- Include a Macro to setup source file properties
 INCLUDE ( ${PROJECT_CMAKE_DIR}/CMakeMacros.cmake)
-include ( ${PROJECT_CMAKE_DIR}/InstallationSupport.cmake)
+
 
 #-- Include all the source files
 INCLUDE (${MXA_SOURCE_DIR}/MXA/Base/Base_SourceList.cmake)
@@ -323,3 +323,5 @@ endif(MXA_BUILD_API_DOCS)
 
 #--- Set up the installation Code for Make Install
 include ( ${PROJECT_CMAKE_DIR}/MXAInstall.cmake)
+include ( ${PROJECT_CMAKE_DIR}/PackageProject.cmake)
+

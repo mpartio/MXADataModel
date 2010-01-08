@@ -255,7 +255,7 @@ set(MXAFileSystemPathTest_SRCS
 add_executable(MXA_FileSystemPathTest ${MXAFileSystemPathTest_SRCS})
 target_link_libraries(MXA_FileSystemPathTest 
                       ${MXADATAMODEL_LIB_NAME} )
-add_test(MXA_FileSystemPathTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_FileSystemPathTest)
+MXA_ADD_TEST(MXA_FileSystemPathTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_FileSystemPathTest)
 
 # --------------------------------------------------------------------
 # ----- MXALogger Test
@@ -265,7 +265,7 @@ set(MXALoggerTest_SRCS
 add_executable(MXA_LoggerTest ${MXALoggerTest_SRCS})
 target_link_libraries(MXA_LoggerTest 
                       ${MXADATAMODEL_LIB_NAME} )
-add_test(MXA_LoggerTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_LoggerTest)
+MXA_ADD_TEST(MXA_LoggerTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_LoggerTest)
 
 # --------------------------------------------------------------------
 #---- Writer Delegate Test
@@ -275,7 +275,7 @@ set (WriterDelegateTest_SRCS
 add_executable(MXA_WriterDelegateTest ${WriterDelegateTest_SRCS} )
 target_link_libraries(MXA_WriterDelegateTest 
                       ${MXADATAMODEL_LIB_NAME} )
-add_test(MXA_WriterDelegateTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_WriterDelegateTest)
+MXA_ADD_TEST(MXA_WriterDelegateTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_WriterDelegateTest)
 
 # --------------------------------------------------------------------
 # ------- Vtk to HDF5 Bridge test

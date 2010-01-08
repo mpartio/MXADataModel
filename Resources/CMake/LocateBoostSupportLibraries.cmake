@@ -1,3 +1,8 @@
+# --------------------------------------------------------------------
+#  This file is used to gather in one spot the locating of the boost
+# libraries. It is called from several different CMake files.
+# --------------------------------------------------------------------
+
 # ---------- Find Boost Headers/Libraries -----------------------
 SET (Boost_FIND_REQUIRED TRUE)
 SET (Boost_FIND_QUIETLY TRUE)
