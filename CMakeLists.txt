@@ -80,6 +80,7 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 #-------------------------------------------------------------------------------
 #  Define the location of the Resources Directory
 SET (PROJECT_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
+SET (MXADATAMODEL_RESOURCES_DIR ${PROJECT_RESOURCES_DIR})
 SET (PROJECT_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/CMake)
 SET (PROJECT_CMAKE_MODULES_DIR ${PROJECT_CMAKE_DIR}/Modules)
 SET (OSX_TOOLS_DIR ${PROJECT_RESOURCES_DIR}/OSX_Tools)
@@ -92,12 +93,6 @@ SET (EXE_DEBUG_EXTENSION "_debug")
 
 INCLUDE (${PROJECT_RESOURCES_DIR}/CMake/CMakeMacros.cmake )
 INCLUDE (${PROJECT_RESOURCES_DIR}/CMake/ConfigureChecks.cmake)
-
-# --------------------------------------------------------------------
-# Generate a Header file with Compile Version variables
-# --------------------------------------------------------------------
-GenerateVersionString( ${PROJECT_NAME} "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" "${PROJECT_PREFIX}" )
-
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 if (NOT DEFINED MXA_BUILD_TESTING)
@@ -220,7 +215,14 @@ configure_file(${PROJECT_RESOURCES_DIR}/CMake/PrimitiveTypes.h.in
 configure_file(${PROJECT_SOURCE_DIR}/License.txt
                 ${PROJECT_BINARY_DIR}/License.txt )
 configure_file(${PROJECT_SOURCE_DIR}/ReadMe.txt
-                ${PROJECT_BINARY_DIR}/ReadMe.txt ) 
+                ${PROJECT_BINARY_DIR}/ReadMe.txt )
+SET(MXADATAMODEL_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/Source;${MXADataModel_BINARY_DIR}"  )
+
+# --------------------------------------------------------------------
+# Generate a Header file with Compile Version variables
+# --------------------------------------------------------------------
+GenerateVersionString( ${PROJECT_NAME} "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" "${PROJECT_PREFIX}" )
+
 IDE_GENERATED_PROPERTIES( "Generated" 
 "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
 "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h" 
@@ -261,10 +263,12 @@ IF (BUILD_SHARED_LIBS)
     SET (MXA_BUILT_AS_DYNAMIC_LIB 1)
 endif()
 
-#-- Add the MXADataModel Library and link to needed libraries-------------------
+# --------------------------------------------------------------------
+# -- Add the MXADataModel Library and link to needed libraries 
+# --------------------------------------------------------------------
 ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
-LibraryProperties( ${MXADATAMODEL_LIB_NAME} )
+LibraryProperties( ${MXADATAMODEL_LIB_NAME} ${EXE_DEBUG_EXTENSION})
 
 set (lib_rt_dest lib)
 if (WIN32 AND BUILD_SHARED_LIBS)

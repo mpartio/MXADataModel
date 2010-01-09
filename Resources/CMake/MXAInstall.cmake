@@ -17,17 +17,10 @@ CONFIGURE_FILE(${PROJECT_CMAKE_DIR}/InstallMXASupportLibraries.cmake.in
                 ${PROJECT_BINARY_DIR}/InstallMXASupportLibraries.cmake @ONLY IMMEDIATE)
 
 SET (MXA_CMAKE_INSTALLED_RESOURCES
-        ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
-        ${PROJECT_BINARY_DIR}/InstallMXASupportLibraries.cmake
-        ${PROJECT_CMAKE_DIR}/ConfigureChecks.cmake
-        ${PROJECT_CMAKE_MODULES_DIR}/AdjustLibVars.cmake
-        ${PROJECT_CMAKE_MODULES_DIR}/MXAFindBoost.cmake
-        ${PROJECT_CMAKE_MODULES_DIR}/MXAFindExpat.cmake
-        ${PROJECT_CMAKE_MODULES_DIR}/MXAFindHDF5.cmake
-        ${PROJECT_CMAKE_MODULES_DIR}/MXAFindMinGW.cmake
-        ${PROJECT_CMAKE_MODULES_DIR}/MXAFindSZip.cmake
-        ${PROJECT_CMAKE_MODULES_DIR}/MXAFindTiff.cmake
-
+       ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
+       ${PROJECT_BINARY_DIR}/InstallMXASupportLibraries.cmake
+ 			 ${PROJECT_CMAKE_DIR}/CMakeMacros.cmake
+       ${PROJECT_CMAKE_DIR}/ConfigureChecks.cmake
        ${PROJECT_CMAKE_DIR}/GenerateVersionString.cpp
        ${PROJECT_CMAKE_DIR}/GetTimeOfDayTest.cpp
        ${PROJECT_CMAKE_DIR}/TestBoolType.cxx
@@ -35,12 +28,28 @@ SET (MXA_CMAKE_INSTALLED_RESOURCES
        ${PROJECT_CMAKE_DIR}/TestCompareTypes.cxx
        ${PROJECT_CMAKE_DIR}/TestConvertTypes.cxx
        ${PROJECT_CMAKE_DIR}/TestMiscFeatures.c
+			 ${PROJECT_CMAKE_DIR}/PrimitiveTypes.h.in
+ 			 ${PROJECT_CMAKE_DIR}/Version.h.in
 )
 
 INSTALL (FILES ${MXA_CMAKE_INSTALLED_RESOURCES} 
         DESTINATION share/MXADataModel/Resources/CMake
         COMPONENT Resources)
 
+SET (MXA_INSTALLED_CMAKE_MODULES 
+  ${PROJECT_CMAKE_MODULES_DIR}/AdjustLibVars.cmake
+  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindBoost.cmake
+  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindExpat.cmake
+  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindHDF5.cmake
+  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindMinGW.cmake
+  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindSZip.cmake
+  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindTiff.cmake
+)
+
+
+INSTALL (FILES ${MXA_INSTALLED_CMAKE_MODULES}
+  DESTINATION share/MXADataModel/Resources/CMake/Modules
+  COMPONENT Resources)
 
 SET (MXA_XML_INSTALLED_RESOURCES
         ${PROJECT_RESOURCES_DIR}/XML/ModelTemplate.xml
