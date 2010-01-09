@@ -13,8 +13,9 @@
 
 #include <MXA/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
-//#include <MXA/Base/IDataModel.h>
-//#include <MXA/Base/IDataset.h>
+
+#define MXA_READ_ONLY true
+#define MXA_READ_WRITE false
 
 #include <string>
 
@@ -35,7 +36,7 @@ class MXA_EXPORT IDataFile
     MXA_SHARED_POINTERS(IDataFile);
     typedef boost::shared_ptr<IDataModel> DataModelType;
     typedef boost::shared_ptr<IDataset>   DatasetType;
-    
+
     explicit IDataFile(const std::string &filename) {};
     virtual ~IDataFile() {};
 
