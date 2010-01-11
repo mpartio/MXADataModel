@@ -103,23 +103,27 @@ class MXA_EXPORT DataExportProperties
 
     virtual int32 setProperty (const std::string &key, const std::string &value)
     {
+      /*
       SET_PROPERTY_BODY(MXA::Export, hid_t, HDFFileId, key, value);
       SET_PROPERTY_BODY(MXA::Export, std::string, ExportFile, key, value);
       SET_PROPERTY_BODY(MXA::Export, std::string, HDFDatasetPath, key, value);
       SET_PROPERTY_BODY(MXA::Export, int, FileType, key, value);
       SET_PROPERTY_BODY(MXA::Export, std::string, AsciiDelimiter, key, value);
       SET_PROPERTY_BODY(MXA::Export, int, Endian, key, value);
+      */
       return -1;
     }
 
     virtual int32 getProperty(const std::string &key, std::string &value)
     {
+#if 0
       GET_PROPERTY_BODY(MXA::Export, hid_t, HDFFileId, _fileId, key, value);
       GET_PROPERTY_BODY(MXA::Export, std::string, ExportFile, _exportFile, key, value);
       GET_PROPERTY_BODY(MXA::Export, std::string, HDFDatasetPath,_datasetPath, key, value);
       GET_PROPERTY_BODY(MXA::Export, int, FileType, _fileType, key, value);
       GET_PROPERTY_BODY(MXA::Export, std::string, AsciiDelimiter, _asciiDelimiter, key, value);
       GET_PROPERTY_BODY(MXA::Export, int, Endian, _endian, key, value);
+#endif
       return -1;
     }
 

@@ -13,8 +13,8 @@
 #include <iostream>
 
 //-- Boost includes
-#include <boost/any.hpp>
-#include <boost/lexical_cast.hpp>
+//#include <boost/any.hpp>
+//#include <boost/lexical_cast.hpp>
 
 //-- Boost Includes
 #include <boost/smart_ptr/shared_ptr.hpp>
@@ -197,6 +197,29 @@ static Pointer New(void) \
   MXA_SET_STRING_PROPERTY(prpty,  m_##prpty)\
   MXA_GET_STRING_PROPERTY(prpty,  m_##prpty)
 
+namespace boost
+{
+  class bad_lexical_cast : public std::runtime_error {
+  public:
+    bad_lexical_cast(const std::string& s)
+      : std::runtime_error(s)
+    { }
+  };
+
+  template<typename T>
+  T lexical_cast(const std::string &s)
+  {
+    std::istringstream i(s);
+    T x;
+    if (!(i >> x))
+      throw bad_lexical_cast("convertToDouble(\"" + s + "\")");
+
+    return x;
+  }
+}
+
+
+#if 1
 /**
 * @brief Creates an if conditional where the key is tested against the values constant
 * and if a match found then the property value is set
@@ -234,7 +257,7 @@ static Pointer New(void) \
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
+#endif
 
 
 
