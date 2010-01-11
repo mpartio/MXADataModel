@@ -14,7 +14,6 @@
 #include <sstream>
 #include <stdexcept>
 
-
 //-- Boost Includes
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/weak_ptr.hpp>
@@ -196,13 +195,9 @@ static Pointer New(void) \
   MXA_SET_STRING_PROPERTY(prpty,  m_##prpty)\
   MXA_GET_STRING_PROPERTY(prpty,  m_##prpty)
 
-<<<<<<< HEAD
-namespace boost
-=======
 // These are simple over-rides from the boost distribution because we don't want the entire boost distribution just
 // for a few boost headers
 namespace MXA
->>>>>>> 3a284f9e4f8c88eb4c088141fdd6bb610c698e1b
 {
   class bad_lexical_cast : public std::runtime_error {
   public:
@@ -211,8 +206,6 @@ namespace MXA
     { }
   };
 
-<<<<<<< HEAD
-=======
   class bad_any_cast : public std::runtime_error {
   public:
     bad_any_cast(const std::string& s)
@@ -220,7 +213,6 @@ namespace MXA
     { }
   };
 
->>>>>>> 3a284f9e4f8c88eb4c088141fdd6bb610c698e1b
   template<typename T>
   T lexical_cast(const std::string &s)
   {
