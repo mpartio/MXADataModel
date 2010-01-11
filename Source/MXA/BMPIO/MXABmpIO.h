@@ -12,7 +12,7 @@
 #define MXA_BMP_IO_H
 
 //MXA Includes
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/DLLExport.h>
 #include <MXA/BMPIO/MXABmpHeaders.h>
@@ -67,17 +67,17 @@ public:
   /**
    * @brief Returns height of image
    */
-  int32 getHeight();
+  int32_t getHeight();
 
   /**
    * @brief returns width of image
    */
-  int32 getWidth();
+  int32_t getWidth();
 
   /**
    * @brief Returns the number of color channels in the Image
    */
-  int32 getNumberOfChannels();
+  int32_t getNumberOfChannels();
 
   /**
    * @brief Loads the bmp from file into memory
@@ -109,15 +109,15 @@ public:
    * all the data.
    * @return error condition if there was an error.
    */
-  int32 copyImageData(uint8* destinationBuffer);
+  int32_t copyImageData(uint8_t* destinationBuffer);
 
 protected:
 
 private:
   UCharArray bitmapDataVec;
-  int32 width;
-  int32 height;
-  int32 numChannels;
+  int32_t width;
+  int32_t height;
+  int32_t numChannels;
 
   bool isGrayscale;
   bool _imageFlipped;
@@ -131,19 +131,19 @@ private:
   Reader64Ptr _reader64Ptr;
 
   // Palette used for paletted images during load.
-  uint8 palette[3][256];
+  uint8_t palette[3][256];
 
   /**
    * @brief Reads a 4 byte integer from the file */
-  int32 read32BitValue();
+  int32_t read32BitValue();
 
   /**
    * @brief Reads a 2 byte integer from the file */
-  int16 read16BitValue();
+  int16_t read16BitValue();
 
   /**
    * @brief Reads a 1 byte integer from the file */
-  uint8 read8BitValue();
+  uint8_t read8BitValue();
 
   /**
    * @brief Reads the file header from the bmp file

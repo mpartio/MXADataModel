@@ -18,7 +18,7 @@ DataSourcePathTextSection::~DataSourcePathTextSection()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-std::string DataSourcePathTextSection::toString (int value, int8 &ok)
+std::string DataSourcePathTextSection::toString (int value, int8_t &ok)
 {
   ok = true;
   std::string path = _preText;

@@ -33,7 +33,7 @@ public:
 // -----------------------------------------------------------------------------
 //  Implemented Method from the IDataImportDelegate interface
 // -----------------------------------------------------------------------------
-  int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
+  int32_t importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
   {
     std::string path ( dataSource->generateInternalPath() );
   //  std::cout << logTime() << "VectorDataDelegate::importDataSource() " << path << std::endl;
@@ -46,7 +46,7 @@ public:
     dims.push_back(128);
     dims.push_back(128);
     dims.push_back(128);
-    std::vector<uint8> data;
+    std::vector<uint8_t> data;
     for (int i = 0; i < 128; ++i)
     {
       for (int j = 0; j < 128; ++j)
@@ -59,13 +59,13 @@ public:
     return H5Lite::writeVectorDataset(fileId, path, dims, data);
   }
 
-  virtual int32 setProperty(const std::string &key, const std::string &value)
+  virtual int32_t setProperty(const std::string &key, const std::string &value)
   {
     std::cout << "VectorDataDelegate::setProperty is NOT implemented" << std::endl;
     return -1;
   }
 
-  virtual int32 getProperty(const std::string &key, std::string &value)
+  virtual int32_t getProperty(const std::string &key, std::string &value)
   {
     std::cout << "VectorDataDelegate::getProperty is NOT implemented" << std::endl;
     return -1;

@@ -14,7 +14,7 @@
   please file a bug report.
 #endif
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/Win32Defines.h> // This will define WINDOWS_LARGE_FILE_SUPPORT to true, which is what we want
 
 
@@ -119,10 +119,10 @@ public:
    * @param size The number of elements in the array
    */
   template < typename EndianPolicy, typename P>
-  bool readArrayWithSwap(P* t, int32 size)
+  bool readArrayWithSwap(P* t, int32_t size)
   {
     bool ok = false;
-    for (int32 i = 0; i < size; ++i)
+    for (int32_t i = 0; i < size; ++i)
     {
       ok = read<EndianPolicy>(t[i]);
       if (!ok)
@@ -138,7 +138,7 @@ public:
    * @param numElements The number of elements in the array
    */
   template <typename T>
-  bool readArray(T* t, int64 numElements)
+  bool readArray(T* t, int64_t numElements)
   {
     DWORD nBytesToRead = static_cast<DWORD>(numElements * sizeof(T));
     DWORD nBytesRead = 0;
@@ -160,7 +160,7 @@ public:
  * @brief Sets the filepointer of the underlying stream
  * @param position The position to set the file pointer to
  */
-  void setFilePointer64( int64 position )
+  void setFilePointer64( int64_t position )
   {
     LARGE_INTEGER posOut;
     LARGE_INTEGER offset;
@@ -172,7 +172,7 @@ public:
  * @brief Returns the current position of the file pointer
  * @return the Current position of the file pointer
  */
-  int64 getFilePointer64()
+  int64_t getFilePointer64()
   {
     LARGE_INTEGER posOut;
     LARGE_INTEGER offset;

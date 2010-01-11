@@ -35,7 +35,7 @@ public:
   * @param record The Data Record to Write
   * @return Error Code: Negate is error condition
   */
-  virtual int32 writeDataRecord(IDataRecord* record) = 0;
+  virtual int32_t writeDataRecord(IDataRecord* record) = 0;
   
 private:
     IDataRecordWriter(const IDataRecordWriter&);   //Copy Constructor Not Implemented

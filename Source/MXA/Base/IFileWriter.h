@@ -36,7 +36,7 @@ class MXA_EXPORT IFileWriter
      * @param dataFile The file to write the data into
      * @return Error condition. 0 or positive is success. Negative is failure
      */
-    virtual int32 writeToFile(DataFileType dataFile) = 0;
+    virtual int32_t writeToFile(DataFileType dataFile) = 0;
 
   protected:
 

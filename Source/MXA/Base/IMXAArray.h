@@ -11,7 +11,7 @@
 #ifndef _IAbstractDataArray_h_
 #define _IAbstractDataArray_h_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/DataWrappers/DataExportProperties.h>
 #include <MXA/Common/MXASetGetMacros.h>
 
@@ -59,29 +59,29 @@ class MXA_EXPORT IMXAArray
      * @param i The index to have the returned pointer pointing to.
      * @return Void Pointer. Possibly NULL.
      */
-    virtual void* getVoidPointer ( uint64 i) = 0;
+    virtual void* getVoidPointer ( uint64_t i) = 0;
 
     /**
      * @brief Returns the number of elements in the internal array.
      */
-    virtual uint64 getNumberOfElements () = 0;
+    virtual uint64_t getNumberOfElements () = 0;
 
     /**
      * Returns the number of dimensions the data has.
      */
-    virtual int32 getNumberOfDimensions () = 0;
+    virtual int32_t getNumberOfDimensions () = 0;
 
     /**
      * @brief Copies the values of the dimensions into the supplied pointer.
      * @param dims
      */
-    virtual void getDimensions(uint64* dims) = 0;
+    virtual void getDimensions(uint64_t* dims) = 0;
 
     /**
      * @brief Returns an enumerated type that can be used to find out the type
      * of primitive stored in the internal array.
      */
-    virtual int32 getDataType () = 0;
+    virtual int32_t getDataType () = 0;
 
     /**
      * @brief Returns the number of bytes that make up the data type.
@@ -108,7 +108,7 @@ class MXA_EXPORT IMXAArray
      * @param os
      * @param indent
      */
-    virtual void printSelf(std::ostream &os, int32 indent) = 0;
+    virtual void printSelf(std::ostream &os, int32_t indent) = 0;
 
     /**
      * @brief Converts the data array into a string delimited by the supplied
@@ -124,7 +124,7 @@ class MXA_EXPORT IMXAArray
      * @param expProps The properties to use when saving the array
      * @return Error code.
      */
-    virtual int32 exportToFile(DataExportProperties::Pointer expProps) = 0;
+    virtual int32_t exportToFile(DataExportProperties::Pointer expProps) = 0;
 
   protected:
 

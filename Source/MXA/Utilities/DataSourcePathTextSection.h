@@ -11,7 +11,7 @@
 #ifndef DataSourcePathTextSection_H_
 #define DataSourcePathTextSection_H_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Utilities/IStringSection.h>
 
@@ -55,7 +55,7 @@ public:
    * @param ok Was the string created properly
    * @return The created string
    */
-  std::string toString (int value, int8 &ok);
+  std::string toString (int value, int8_t &ok);
 
   private:
     std::string _text;

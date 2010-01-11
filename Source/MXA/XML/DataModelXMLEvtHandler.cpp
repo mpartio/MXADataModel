@@ -168,7 +168,7 @@ void DataModelXMLEvtHandler::OnEndElement(const XML_Char* name)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void DataModelXMLEvtHandler::OnCharacterData(const XML_Char* data, int32 len)
+void DataModelXMLEvtHandler::OnCharacterData(const XML_Char* data, int32_t len)
 {
  // std::cout << "------------------------------------------------" << std::endl;
  // std::cout << "Character Data: " << data << std::endl;
@@ -239,10 +239,10 @@ void DataModelXMLEvtHandler::onDimensionStartTag(const XML_Char* name, const XML
     for (int i = 0; attrs[i]; i += 2) {
       attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
     }
-    int32  start, end, increment;
-  start = end = increment = std::numeric_limits<int32>::max();
-    int32  index, count, uniform;
-  index = count = uniform = std::numeric_limits<int32>::min();
+    int32_t  start, end, increment;
+  start = end = increment = std::numeric_limits<int32_t>::max();
+    int32_t  index, count, uniform;
+  index = count = uniform = std::numeric_limits<int32_t>::min();
 
     //Check for each Attribute. If the attribute was in the list then parse its value
     if ( attrMap.find(MXA::MXA_INDEX_TAG) != attrMap.end() ) { StringUtils::stringToNum(index, attrMap[MXA::MXA_INDEX_TAG], std::dec); }
@@ -302,11 +302,11 @@ void DataModelXMLEvtHandler::onSignal_GroupStartTag(const XML_Char* name, const 
   }
   //std::cout << StringUtils::indent(_indent) << "DataModelXMLEvtHandler::onSignal_GroupStartTag: " << attrMap[MXA::MXA_NAME_TAG] << " " << this->m_DataModel->getDataRecords().size() << std::endl;
 
-  int32 luid = -1;
+  int32_t luid = -1;
   if (NULL == _currentParentRecord.get() )
   {
     //std::cout << StringUtils::indent(_indent) << "_currentParentRecord was NULL" << std::endl;
-    luid = static_cast<int32>( this->m_DataModel->getDataRecords().size() ); // This is actually an UNSIGNED int..
+    luid = static_cast<int32_t>( this->m_DataModel->getDataRecords().size() ); // This is actually an UNSIGNED int..
   }
   else
   {
@@ -338,11 +338,11 @@ void DataModelXMLEvtHandler::onSignalStartTag(const XML_Char* name, const XML_Ch
   }
  // std::cout << StringUtils::indent(_indent) << "DataModelXMLEvtHandler::onSignalStartTag: " << attrMap[MXA::MXA_NAME_TAG] << " " << this->m_DataModel->getDataRecords().size() << std::endl;
 
-  int32 luid = -1;
+  int32_t luid = -1;
   if (NULL == _currentParentRecord.get() )
   {
   //  std::cout << StringUtils::indent(_indent) << "_currentParentRecord was NULL" << std::endl;
-    luid = static_cast<int32>( this->m_DataModel->getDataRecords().size() ); // This is actually an UNSIGNED int..
+    luid = static_cast<int32_t>( this->m_DataModel->getDataRecords().size() ); // This is actually an UNSIGNED int..
   }
   else
   {
@@ -461,31 +461,31 @@ void DataModelXMLEvtHandler::onUserMetaDataEndTag(const XML_Char* name)
   }
   else
   {
-    std::vector<uint64> dims;
-    uint64 temp = 0;
+    std::vector<uint64_t> dims;
+    uint64_t temp = 0;
     std::istringstream istream (this->_userMDDims);
     while(istream.good() )
     {
       istream >> temp;
       dims.push_back(temp);
     }
-   // int32 typeId = H5Lite::HDFTypeFromString(this->_userMDType);
+   // int32_t typeId = H5Lite::HDFTypeFromString(this->_userMDType);
     if ( this->_userMDType.compare("H5T_NATIVE_UINT8") == 0) {
-      this->m_ParseError = readPrimitiveAttribute<uint8>( dims);
+      this->m_ParseError = readPrimitiveAttribute<uint8_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_UINT16") == 0) {
-      this->m_ParseError = readPrimitiveAttribute<uint16>( dims);
+      this->m_ParseError = readPrimitiveAttribute<uint16_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_UINT32") == 0) {
-      this->m_ParseError = readPrimitiveAttribute<uint32>( dims);
+      this->m_ParseError = readPrimitiveAttribute<uint32_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_UINT64") == 0) {
-      this->m_ParseError = readPrimitiveAttribute<uint64>( dims);
+      this->m_ParseError = readPrimitiveAttribute<uint64_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_INT8") == 0) {
-      this->m_ParseError = readPrimitiveAttribute<int8>( dims);
+      this->m_ParseError = readPrimitiveAttribute<int8_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_INT16") == 0) {
-      this->m_ParseError = readPrimitiveAttribute<int16>( dims);
+      this->m_ParseError = readPrimitiveAttribute<int16_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_INT32") == 0) {
-      this->m_ParseError = readPrimitiveAttribute<int32>( dims);
+      this->m_ParseError = readPrimitiveAttribute<int32_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_INT64") == 0 ) {
-      this->m_ParseError = readPrimitiveAttribute<int64>( dims);
+      this->m_ParseError = readPrimitiveAttribute<int64_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_FLOAT") == 0) {
       this->m_ParseError = readPrimitiveAttribute<float>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_DOUBLE") == 0) {

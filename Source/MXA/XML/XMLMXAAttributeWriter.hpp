@@ -37,7 +37,7 @@ class XMLMXAAttributeWriter
 // -----------------------------------------------------------------------------
       std::string indent(int depth)
       {
-        const int32 indentSize = 2;
+        const int32_t indentSize = 2;
         return std::string(indentSize * depth, ' ');
       }
 
@@ -47,10 +47,10 @@ class XMLMXAAttributeWriter
  * @param attribute The attribute to write
  * @return Error condition - Negative is error
  */
-    int32 writeAttribute(const std::string &attributeKey, IMXAArray::Pointer attribute)
+    int32_t writeAttribute(const std::string &attributeKey, IMXAArray::Pointer attribute)
     {
-      int32 typeId = attribute->getDataType();
-      int32 err = -1;
+      int32_t typeId = attribute->getDataType();
+      int32_t err = -1;
       if (typeId == H5T_NATIVE_FLOAT)
       {
         err = this->writeAttributeData<float32>(attributeKey, attribute);
@@ -62,38 +62,38 @@ class XMLMXAAttributeWriter
 
       else if (typeId == H5T_NATIVE_INT8)
       {
-        err = this->writeAttributeData<int8>(attributeKey, attribute);
+        err = this->writeAttributeData<int8_t>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_UINT8)
       {
-        err = this->writeAttributeData<uint8>(attributeKey, attribute);
+        err = this->writeAttributeData<uint8_t>(attributeKey, attribute);
       }
 
       else if (typeId == H5T_NATIVE_INT16)
       {
-        err = this->writeAttributeData<int16>(attributeKey, attribute);
+        err = this->writeAttributeData<int16_t>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_UINT16)
       {
-        err = this->writeAttributeData<uint16>(attributeKey, attribute);
+        err = this->writeAttributeData<uint16_t>(attributeKey, attribute);
       }
 
       else if (typeId == H5T_NATIVE_INT32)
       {
-        err = this->writeAttributeData<int32>(attributeKey, attribute);
+        err = this->writeAttributeData<int32_t>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_UINT32)
       {
-        err = this->writeAttributeData<uint32>(attributeKey, attribute);
+        err = this->writeAttributeData<uint32_t>(attributeKey, attribute);
       }
 
       else if (typeId == H5T_NATIVE_INT64)
       {
-        err = this->writeAttributeData<int64>(attributeKey, attribute);
+        err = this->writeAttributeData<int64_t>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_UINT64)
       {
-        err = this->writeAttributeData<uint64>(attributeKey, attribute);
+        err = this->writeAttributeData<uint64_t>(attributeKey, attribute);
       }
 
       else if (typeId == H5T_STRING)
@@ -114,16 +114,16 @@ class XMLMXAAttributeWriter
  * @return Error Condition - Negative is Error.
  */
     template<typename T>
-    int32 writeAttributeData(const std::string &attributeKey, IMXAArray::Pointer attribute)
+    int32_t writeAttributeData(const std::string &attributeKey, IMXAArray::Pointer attribute)
     {
       std::ostream &stream = *(m_OutStream.get());
       T* value = static_cast<T*> (attribute->getVoidPointer(0) );
-      uint64 nElements = attribute->getNumberOfElements();
-      int32 size = attribute->getNumberOfDimensions();
+      uint64_t nElements = attribute->getNumberOfElements();
+      int32_t size = attribute->getNumberOfDimensions();
 
       std::string sType = H5Lite::HDFTypeForPrimitiveAsStr(value[0]);
       stream << indent(5) << "<UserMetaData key=\"" << attributeKey << "\" dims=\"" ;
-      std::vector<uint64> dims(size, 0);
+      std::vector<uint64_t> dims(size, 0);
       attribute->getDimensions( &(dims.front() ) );
 
       // Write the values of each dimension to the file
@@ -138,7 +138,7 @@ class XMLMXAAttributeWriter
       stream << "\" type=\"" << sType << "\">";
 
       // Now Write the data
-      for(uint64 i = 0; i < nElements; ++i)
+      for(uint64_t i = 0; i < nElements; ++i)
       {
        if ( i%dims[0] == 0)
         {
@@ -150,7 +150,7 @@ class XMLMXAAttributeWriter
         }
         else
         {
-          stream  << static_cast<int32>(value[i]);
+          stream  << static_cast<int32_t>(value[i]);
         }
         stream << " ";
 
@@ -165,12 +165,12 @@ class XMLMXAAttributeWriter
  * @param attribute The attribute to write
  * @return Error Condition - Negative is error
  */
-    int32 writeStringAttributeData(const std::string &attributeKey, IMXAArray::Pointer attribute)
+    int32_t writeStringAttributeData(const std::string &attributeKey, IMXAArray::Pointer attribute)
     {
       std::ostream &stream = *(m_OutStream.get());
       stream << indent(5) << "<UserMetaData key=\"" << attributeKey << "\" dims=\"1\" type=\"H5T_STRING\">";
       char* s = static_cast<char*>(attribute->getVoidPointer(0));
-      uint64 nElements = attribute->getNumberOfElements();
+      uint64_t nElements = attribute->getNumberOfElements();
       if (s[nElements-1] == 0) // Null Terminated
       {
         nElements -= 1;

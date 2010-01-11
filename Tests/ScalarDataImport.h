@@ -40,27 +40,27 @@ public:
    * @param dataFile The IDataFile object
    * @return
    */
-  int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
+  int32_t importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
   {
 
     std::string path ( dataSource->generateInternalPath() );
   //  std::cout << logTime() << "ScalarDataDelegate::importDataSource() " << path << std::endl;
     std::string::size_type pos = path.find_last_of("/");
     std::string parentPath ( path.substr(0, pos)  );
-    int32 value = 55;
+    int32_t value = 55;
     hid_t fileId = dataFile->getFileId();
     H5Utilities::createGroupsFromPath(parentPath,  fileId);
     //Write the Data to the HDF5 File
     return H5Lite::writeScalarDataset(fileId, path, value);
   }
 
-  virtual int32 setProperty(const std::string &key, const std::string &value)
+  virtual int32_t setProperty(const std::string &key, const std::string &value)
   {
     std::cout << "ScalarDataDelegate::setProperty is NOT implemented" << std::endl;
     return -1;
   }
 
-  virtual int32 getProperty(const std::string &key, std::string &value)
+  virtual int32_t getProperty(const std::string &key, std::string &value)
   {
     std::cout << "ScalarDataDelegate::getProperty is NOT implemented" << std::endl;
     return -1;

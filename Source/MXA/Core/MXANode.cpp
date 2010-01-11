@@ -12,7 +12,7 @@ int MXANode::_uniqueGUIDValue(0);
 // -----------------------------------------------------------------------------
 //  Protected 2 Argument constructor
 // -----------------------------------------------------------------------------
-MXANode::MXANode(int32 nodeType, std::string nodeName) :
+MXANode::MXANode(int32_t nodeType, std::string nodeName) :
 _nodeName(nodeName),
 _nodeType(nodeType),
 _uniqueId(0)
@@ -30,7 +30,7 @@ MXANode::~MXANode()
 // -----------------------------------------------------------------------------
 //  Static New Method that should be used to create a MXANode
 // -----------------------------------------------------------------------------
-MXANodePtr MXANode::New(int32 nodeType, std::string nodeName)
+MXANodePtr MXANode::New(int32_t nodeType, std::string nodeName)
 {
   MXANodePtr node(new MXANode(nodeType, nodeName));
   node->_setWeakPtr(boost::weak_ptr<MXANode>(node));
@@ -40,7 +40,7 @@ MXANodePtr MXANode::New(int32 nodeType, std::string nodeName)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXANode::generateLUT(std::map<int32, MXANodePtr> &lut, MXANodes &nodes)
+void MXANode::generateLUT(std::map<int32_t, MXANodePtr> &lut, MXANodes &nodes)
 {
     for ( MXANodes::iterator iter = nodes.begin(); iter < nodes.end(); ++iter )
     {
@@ -86,7 +86,7 @@ std::string MXANode::getNodeName()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXANode::setNodeType(int32 newtype) 
+void MXANode::setNodeType(int32_t newtype) 
 {
   this->_nodeType = newtype;
 }
@@ -94,7 +94,7 @@ void MXANode::setNodeType(int32 newtype)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXANode::getNodeType()
+int32_t MXANode::getNodeType()
 {
   return this->_nodeType;
 }
@@ -110,7 +110,7 @@ void MXANode::resetGUIDValue()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXANode::nextGUIDValue()
+int32_t MXANode::nextGUIDValue()
 {
   return MXANode::_uniqueGUIDValue++;
 }
@@ -205,9 +205,9 @@ void MXANode::removeChild(MXANodePtr child)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXANode::indexOfChild(MXANodePtr child)
+int32_t MXANode::indexOfChild(MXANodePtr child)
 {
-  int32 retVal = -1;
+  int32_t retVal = -1;
   for (MXANodeChildren::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
   {
     if ( *(iter) == child )
@@ -222,9 +222,9 @@ int32 MXANode::indexOfChild(MXANodePtr child)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXANode::indexOfChild(MXANode* child)
+int32_t MXANode::indexOfChild(MXANode* child)
 {
-  int32 retVal = -1;
+  int32_t retVal = -1;
   for (MXANodeChildren::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
   {
     if ( (*(iter)).get() == child )
@@ -239,9 +239,9 @@ int32 MXANode::indexOfChild(MXANode* child)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXANodePtr MXANode::getChildAt(int32 index)
+MXANodePtr MXANode::getChildAt(int32_t index)
 {
-  if (static_cast<uint32>(index) < this->_children.size())
+  if (static_cast<uint32_t>(index) < this->_children.size())
     return this->_children[index];
     else {
       //std::cout << "MXANode(GUID): " << this->getUniqueId() << " Num Children: " << this->_children.size() << "  Index:" << index << std::endl;
@@ -352,14 +352,14 @@ void MXANode::setData(float node_data)
 // -----------------------------------------------------------------------------
 std::string MXANode::_indent(int depth)
 {
-  const int32 indentSize = 2;
+  const int32_t indentSize = 2;
   return std::string(indentSize * depth, ' ');
 }
 
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-std::string MXANode::getNodeTypeAsString(int32 node_type)
+std::string MXANode::getNodeTypeAsString(int32_t node_type)
 {
   switch(node_type) {
   case Root:
@@ -400,7 +400,7 @@ std::string MXANode::getNodeTypeAsString(int32 node_type)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXANode::printNodeTree(int32 depth)
+void MXANode::printNodeTree(int32_t depth)
 {
   std::cout << _indent(depth) << "Node(" << this->getNodeTypeString() << "): " << this->_nodeName << std::endl;
 
@@ -415,7 +415,7 @@ void MXANode::printNodeTree(int32 depth)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXANode::printNode(std::ostream& os, int32 indentSize)
+void MXANode::printNode(std::ostream& os, int32_t indentSize)
 {
   os << _indent(indentSize) << "Name: " << this->_nodeName << std::endl;
   os << _indent(indentSize) << "Type: " << this->getNodeTypeString() << std::endl;

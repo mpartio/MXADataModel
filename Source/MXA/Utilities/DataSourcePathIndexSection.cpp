@@ -9,9 +9,9 @@
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-DataSourcePathIndexSection::DataSourcePathIndexSection(  int32 dimIndex,
+DataSourcePathIndexSection::DataSourcePathIndexSection(  int32_t dimIndex,
                                                          const std::string  &fillChar,
-                                                         int32 width,
+                                                         int32_t width,
                                                          const std::string &numericType) :
   _index(dimIndex),
   _fillChar (fillChar),
@@ -29,7 +29,7 @@ DataSourcePathIndexSection::~DataSourcePathIndexSection()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-std::string DataSourcePathIndexSection::toString (int value, int8 &ok)
+std::string DataSourcePathIndexSection::toString (int value, int8_t &ok)
 {
 //  if (_index > dims.size() -1 )
 //  {

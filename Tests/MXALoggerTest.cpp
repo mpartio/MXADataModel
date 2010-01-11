@@ -35,14 +35,14 @@ int MXALoggerTest_EntryPoint()
 {
 	int err = 0;
 
-	uint8 ui8 = 50;
-	int8 i8 = 51;
-	uint16 ui16 = 53;
-	int16 i16 = 54;
-	uint32 ui32 = 55;
-	int32  i32 = 56;
-	uint64 ui64 = 57;
-	int64 i64 = 58;
+	uint8_t ui8 = 50;
+	int8_t i8 = 51;
+	uint16_t ui16 = 53;
+	int16_t i16 = 54;
+	uint32_t ui32 = 55;
+	int32_t  i32 = 56;
+	uint64_t ui64 = 57;
+	int64_t i64 = 58;
 	float f = 59.59f;
 	double d = 60.60;
 

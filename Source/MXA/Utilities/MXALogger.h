@@ -13,7 +13,7 @@
 #error REMOVE THE DEFINITION YOU DONT NEED IT ANYMORE
 #endif
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Common/MXASetGetMacros.h>
 
@@ -82,13 +82,13 @@ class MXA_EXPORT MXALogger_Implementation
     std::ostream& dateTime() { CHECK_PRECONDITION(logTime()) }
     std::ostream& warn() { CHECK_PRECONDITION("[Warning] ")}
     std::ostream& error() { CHECK_PRECONDITION("[Error] ")}
-    std::ostream& operator<<(uint8 v) { CHECK_PRECONDITION(v) }
-    std::ostream& operator<<(int8 v) { CHECK_PRECONDITION(v) }
-    std::ostream& operator<<(uint16 v) { CHECK_PRECONDITION(v) }
-    std::ostream& operator<<(uint32 v) { CHECK_PRECONDITION(v) }
-    std::ostream& operator<<(int32 v) { CHECK_PRECONDITION(v) }
-    std::ostream& operator<<(uint64 v) { CHECK_PRECONDITION(v) }
-    std::ostream& operator<<(int64 v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(uint8_t v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(int8_t v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(uint16_t v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(uint32_t v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(int32_t v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(uint64_t v) { CHECK_PRECONDITION(v) }
+    std::ostream& operator<<(int64_t v) { CHECK_PRECONDITION(v) }
     std::ostream& operator<<(double v)  { CHECK_PRECONDITION(v) }
     std::ostream& operator<<(const std::string &v) { CHECK_PRECONDITION(v) }
     std::ostream& operator<<(const char* v) { CHECK_PRECONDITION(v) }

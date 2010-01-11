@@ -40,7 +40,7 @@ class MXADataModelWriter
 
     DelegatePointer getDelegate() { return m_Delegate; }
 
-    int32 writeModel(IDataModel::Pointer model)
+    int32_t writeModel(IDataModel::Pointer model)
     {
       m_Delegate->writeModel(model);
       return 1;

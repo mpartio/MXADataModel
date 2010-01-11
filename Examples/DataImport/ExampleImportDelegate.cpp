@@ -31,7 +31,7 @@ ExampleImportDelegate::~ExampleImportDelegate()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 ExampleImportDelegate::importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer mxaFile)
+int32_t ExampleImportDelegate::importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer mxaFile)
 {
   std::cout << "Importing data file '" << dataSource->getSourcePath() << "'" << std::endl;
   herr_t err = 0;
@@ -61,17 +61,17 @@ int32 ExampleImportDelegate::importDataSource(IDataSource::Pointer dataSource, I
 
 
   // Create a 2D Dataset using the DataWrappers
-  int32 nDims = 2;
-  int32 NX  =  5; /* dataset dimensions */
-  int32 NY   =  3;
-  uint64 dims[2] = {NX, NY};
-  IMXAArray::Pointer array = MXAArrayTemplate<int32>::CreateMultiDimensionalArray(nDims, dims);
-  int32* data = static_cast<int32*>(array->getVoidPointer(0) );
+  int32_t nDims = 2;
+  int32_t NX  =  5; /* dataset dimensions */
+  int32_t NY   =  3;
+  uint64_t dims[2] = {NX, NY};
+  IMXAArray::Pointer array = MXAArrayTemplate<int32_t>::CreateMultiDimensionalArray(nDims, dims);
+  int32_t* data = static_cast<int32_t*>(array->getVoidPointer(0) );
 
   //Open the input file as a binary file
   std::ifstream fin(dataSource->getSourcePath().c_str(), std::ios::binary);
   // Read the contents of the data file into an MXAArray
-  fin.read((char *)(data), array->getNumberOfElements() * sizeof(int32) );
+  fin.read((char *)(data), array->getNumberOfElements() * sizeof(int32_t) );
 
   //Write the Data to the HDF5 File
   err = H5Lite::writeMXAArray(fileId, path, array.get() );

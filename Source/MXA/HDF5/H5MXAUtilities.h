@@ -37,7 +37,7 @@ class H5MXAUtilities
      * @return The hdf5 path
      */
     static MXA_EXPORT std::string generateH5PathToDataset (  IDataModel::Pointer model,
-                                                  std::vector<int32> &indices,
+                                                  std::vector<int32_t> &indices,
                                                   IDataRecord::Pointer record);
 
    /**

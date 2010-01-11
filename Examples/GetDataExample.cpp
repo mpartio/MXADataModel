@@ -61,7 +61,7 @@ int main(int argc, char **argv)
   }
 
   // We know that the data dimensions have ranges of 1->2 and 1->3, so lets get the data for the first index of each one.
-  std::vector<int32> indices;
+  std::vector<int32_t> indices;
   indices.push_back(1); indices.push_back(1);
   // We also know the exact path to the Data Record, so lets use it to retrieve the Data Record from the Model
   IDataRecord::Pointer record = modelPtr->getDataRecordByNamedPath(DataGen::TableRec + "/" + DataGen::Float32Rec);
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 
   //If you know nothing of the datatype then you will have to interrogate the dataset
   // to find out...
-  //uint32 type_size = 0;
+  //uint32_t type_size = 0;
  // H5T_class_t type_class = -1;
  // err = H5Lite::getDatasetInfo(fileId, dsetPath, dims, type_class, type_size);
   if (err < 0)

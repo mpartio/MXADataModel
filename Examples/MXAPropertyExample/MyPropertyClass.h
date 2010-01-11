@@ -10,7 +10,7 @@
 #define _MYPROPERTYCLASS_H_
 
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IImportProperty.h>
 
@@ -56,20 +56,20 @@ public:
   MXA_PROPERTY(bool, BoolProperty, _boolProp)
 
   // Character type properties - These are essentially single character string properties
-  // Attempting to use either int8 or uint8 types to store actual integer values has undefined
-  // results. Try using int16 or uint16 to store these types of values instead.
-  MXA_PROPERTY(uint8, UInt8Property,  _uint8Prop)
-  MXA_PROPERTY(int8,  Int8Property,  _int8Prop)
+  // Attempting to use either int8_t or uint8_t types to store actual integer values has undefined
+  // results. Try using int16_t or uint16_t to store these types of values instead.
+  MXA_PROPERTY(uint8_t, UInt8Property,  _uint8_tProp)
+  MXA_PROPERTY(int8_t,  Int8Property,  _int8_tProp)
 
   // Signed integer Properties
-  MXA_PROPERTY(int16, Int16Property, _int16Prop)
-  MXA_PROPERTY(int32, Int32Property, _int32Prop)
-  MXA_PROPERTY(int64, Int64Property, _int64Prop)
+  MXA_PROPERTY(int16_t, Int16Property, _int16_tProp)
+  MXA_PROPERTY(int32_t, Int32Property, _int32_tProp)
+  MXA_PROPERTY(int64_t, Int64Property, _int64_tProp)
 
   // Unsigned Integer properties
-  MXA_PROPERTY(uint16, UInt16Property, _uint16Prop)
-  MXA_PROPERTY(uint32, UInt32Property, _uint32Prop)
-  MXA_PROPERTY(uint64, UInt64Property, _uint64Prop)
+  MXA_PROPERTY(uint16_t, UInt16Property, _uint16_tProp)
+  MXA_PROPERTY(uint32_t, UInt32Property, _uint32_tProp)
+  MXA_PROPERTY(uint64_t, UInt64Property, _uint64_tProp)
 
   // String properties
   MXA_PROPERTY(std::string, StrProperty, _strProp)
@@ -81,7 +81,7 @@ public:
   //  If you want to add a generic 'set' method that takes a string key and string
   //   value then implement the following method
   // -----------------------------------------------------------------------------
-  virtual int32 setProperty(const std::string &key, const std::string &value);
+  virtual int32_t setProperty(const std::string &key, const std::string &value);
 
 
   // -----------------------------------------------------------------------------
@@ -97,21 +97,21 @@ public:
   * retrieval was successful. There may also be error messages printed to the std::cout device
   */
     template<typename T>
-    int32 getProperty(const std::string &key, T &value)
+    int32_t getProperty(const std::string &key, T &value)
     {
       GET_PROPERTY_BODY(MyPropertyNamespace, T, BoolProperty, _boolProp, key, value);
 
       // Signed integer Properties
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int8Property, _int8Prop, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int16Property, _int16Prop, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int32Property, _int32Prop, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int64Property, _int64Prop, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int8Property, _int8_tProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int16Property, _int16_tProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int32Property, _int32_tProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int64Property, _int64_tProp, key, value);
 
       // Unsigned Integer properties
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt8Property, _uint8Prop,  key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt16Property, _uint16Prop, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt32Property, _uint32Prop, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt64Property, _uint64Prop, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt8Property, _uint8_tProp,  key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt16Property, _uint16_tProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt32Property, _uint32_tProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt64Property, _uint64_tProp, key, value);
 
       // String properties
       GET_PROPERTY_BODY(MyPropertyNamespace, T, StrProperty, _strProp, key, value);
@@ -123,14 +123,14 @@ public:
 
   private:
     bool _boolProp;
-    int8 _int8Prop;
-    int16 _int16Prop;
-    int32 _int32Prop;
-    int64 _int64Prop;
-    uint8 _uint8Prop;
-    uint16 _uint16Prop;
-    uint32 _uint32Prop;
-    uint64 _uint64Prop;
+    int8_t _int8_tProp;
+    int16_t _int16_tProp;
+    int32_t _int32_tProp;
+    int64_t _int64_tProp;
+    uint8_t _uint8_tProp;
+    uint16_t _uint16_tProp;
+    uint32_t _uint32_tProp;
+    uint64_t _uint64_tProp;
     std::string _strProp;
     float _floatProp;
     double _doubleProp;

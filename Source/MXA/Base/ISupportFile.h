@@ -73,14 +73,14 @@ public:
    * @param offset The offset into the cached file to read.
    * @return Pointer to the data at the specified offset.
    */
-	virtual uint8*  getFilePointer(uint64 offset) = 0;
+	virtual uint8_t*  getFilePointer(uint64_t offset) = 0;
 
 	/**
 	 * @brief Returns the size of the file which could be Zero if the file has NOT been read
 	 * or can not be read.
 	 * @return Size of the file.
 	 */
-  virtual uint64  getFileSize() = 0;
+  virtual uint64_t  getFileSize() = 0;
 
   /**
    * @brief Has the file been read into memory.
@@ -99,7 +99,7 @@ public:
    * doing this with large files.
    * @return Error code. Negative value indicates error.
    */
- 	virtual int32 readFromFileSystem() = 0;
+ 	virtual int32_t readFromFileSystem() = 0;
 
  	/**
  	 * @brief Sets the internal value used by the MXA API to store the file in teh HDF5 file.
@@ -117,7 +117,7 @@ public:
    * can write the file out to the local filesystem if needed.
    * @return Error code. Negative is an error.
    */
-  virtual int32 readFromMXAFile() = 0;
+  virtual int32_t readFromMXAFile() = 0;
 
 
 protected:

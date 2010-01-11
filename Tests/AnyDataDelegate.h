@@ -12,7 +12,7 @@
 #define ANYDATADELEGATE_H_
 
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IImportDelegate.h>
 #include <MXA/Base/IDataFile.h>
@@ -45,11 +45,11 @@ class AnyDataDelegate: public IImportDelegate
      * @param dataFile The IDataFile object
      * @return error condition. Negative is error.
      */
-    int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
+    int32_t importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
     {
       std::string path ( dataSource->generateInternalPath() );
     //  std::cout << logTime() << "VectorDataDelegate::importDataSource() " << path << std::endl;
-      uint32 pos = path.find_last_of("/");
+      uint32_t pos = path.find_last_of("/");
       std::string parentPath ( path.substr(0, pos)  );
       hid_t fileId = dataFile->getFileId();
       H5Utilities::createGroupsFromPath(parentPath, fileId);
@@ -60,7 +60,7 @@ class AnyDataDelegate: public IImportDelegate
       {
         numElements += numElements * static_cast<typename std::vector<T>::size_type>(*iter);
       }
-      std::vector<int32> dataDimValues = dataSource->getDimensionValues();
+      std::vector<int32_t> dataDimValues = dataSource->getDimensionValues();
       std::vector<T> data;
       data.resize(numElements);
       for (typename std::vector<T>::size_type i = 0; i < numElements; ++i)

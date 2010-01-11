@@ -13,7 +13,7 @@
 #define IDATAMODELREADER_H_
 
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Base/IFileIODelegate.h>
 
 /**
@@ -36,7 +36,7 @@ public:
   * @param locId The HDF5 ID or other unique ID of the file
   * @return Standard Error Condition
   */
-  virtual int32 readDataModel(int32 locId) = 0;
+  virtual int32_t readDataModel(int32_t locId) = 0;
 
 
 protected:

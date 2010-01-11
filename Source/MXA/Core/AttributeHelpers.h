@@ -13,7 +13,7 @@
 
 // MXA inludes
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Base/IAttributeHelper.h>
 #include <MXA/Base/IAttributeWriter.h>
 
@@ -52,7 +52,7 @@ class StringAttributeHelper : public IAttributeHelper
   // -----------------------------------------------------------------------------
   //  IAttributeWriter Implementation
   // -----------------------------------------------------------------------------
-  int32 writeAttribute(int32 fileId, std::string &datasetPath, std::string &key, IAttributeWriter &writer)
+  int32_t writeAttribute(int32_t fileId, std::string &datasetPath, std::string &key, IAttributeWriter &writer)
   {
     return writer.writeAttribute(fileId, datasetPath, key, _value);
   }
@@ -84,7 +84,7 @@ class NumberAttributeHelper : public IAttributeHelper
       if (size != 1) {
         sstream << _value;
       } else {
-        sstream << static_cast<int32>(_value);
+        sstream << static_cast<int32_t>(_value);
       }
     }
     
@@ -102,7 +102,7 @@ class NumberAttributeHelper : public IAttributeHelper
   // -----------------------------------------------------------------------------
   //  IAttributeWriter Implementation
   // -----------------------------------------------------------------------------
-  int32 writeAttribute(int32 fileId, std::string &datasetPath, std::string &key, IAttributeWriter &writer)
+  int32_t writeAttribute(int32_t fileId, std::string &datasetPath, std::string &key, IAttributeWriter &writer)
   {
     return writer.writeAttribute(fileId, datasetPath, key, _value);
   }
@@ -121,7 +121,7 @@ template<typename T>
 class VectorAttributeHelper : public IAttributeHelper
 {
   public:
-    VectorAttributeHelper(std::vector<T> value, std::vector<uint64> dims)
+    VectorAttributeHelper(std::vector<T> value, std::vector<uint64_t> dims)
     {
       _value = value;
       _dims = dims;
@@ -131,7 +131,7 @@ class VectorAttributeHelper : public IAttributeHelper
     
     void convert(std::stringstream &sstream)
     {
-      int32 size = _value.size();
+      int32_t size = _value.size();
       for(int i = 0; i < size; ++i) 
       {
         sstream << _value[i];
@@ -150,14 +150,14 @@ class VectorAttributeHelper : public IAttributeHelper
   // -----------------------------------------------------------------------------
   //  IAttributeWriter Implementation
   // -----------------------------------------------------------------------------
-  int32 writeAttribute(int32 fileId, std::string &datasetPath, std::string &key, IAttributeWriter &writer)
+  int32_t writeAttribute(int32_t fileId, std::string &datasetPath, std::string &key, IAttributeWriter &writer)
   {
     return writer.writeAttribute(fileId, datasetPath, key, _dims, _value);
   }
     
   protected:
     std::vector<T> _value;
-    std::vector<uint64> _dims;
+    std::vector<uint64_t> _dims;
       
 };
 

@@ -8,7 +8,7 @@
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Base/IImportDelegate.h>
@@ -110,24 +110,24 @@ void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
   MXA_REQUIRE(NULL != record.get()); // Used for Boost Unit Test Framework
 
   // Set the start/end/increment values for each Data Dimension
-  int32 dim0Start = dim0->getStartValue();
-  int32 dim0End = dim0->getEndValue();
-  int32 dim0Increment = dim0->getIncrement();
+  int32_t dim0Start = dim0->getStartValue();
+  int32_t dim0End = dim0->getEndValue();
+  int32_t dim0Increment = dim0->getIncrement();
 
-  int32 dim1Start = dim1->getStartValue();
-  int32 dim1End = dim1->getEndValue();
-  int32 dim1Increment = dim1->getIncrement();
+  int32_t dim1Start = dim1->getStartValue();
+  int32_t dim1End = dim1->getEndValue();
+  int32_t dim1Increment = dim1->getIncrement();
 
   // Create a nested loop to create the necessary DataSource objects that will
   //  be used to import the data into the HDF5 file
   //std::cout << "CREATING DATA SOURCES" << std::endl;
-  for( int32 i = dim0Start; i <= dim0End; i += dim0Increment )
+  for( int32_t i = dim0Start; i <= dim0End; i += dim0Increment )
   {
     for (int j = dim1Start; j <= dim1End; j = j+ dim1Increment)
     {
       //Create some Data Sources
       MXADataSource::Pointer ds( new MXADataSource() );
-      std::vector<int32> dimValues;
+      std::vector<int32_t> dimValues;
       dimValues.push_back(i);
       dimValues.push_back(j);
       ds->setDimensionValues(dimValues);
@@ -141,7 +141,7 @@ void ImportSimpleData(MXADataModel::Pointer model, std::string outputFilePath)
 
   // Import the Data into the HDF5 File
   //std::cout << "IMPORTING DATA NOW" << std::endl;
-  int32 err = dataImport->import();
+  int32_t err = dataImport->import();
   MXA_REQUIRE(err >= 0); // Used for Boost Unit Test Framework
   dataFile->closeFile(false);
 }
@@ -195,7 +195,7 @@ MXADataModel::Pointer createSimpleModel()
 int SimpleTest()
 {
  // std::cout << logTime() << "Running SimpleImportTest ------------------------" << std::endl;
-  int32 err = 0;
+  int32_t err = 0;
   MXADataModel::Pointer model = createSimpleModel();
   ImportSimpleData(model, MXAUnitTest::DataImportTest::SimpleImport);
  // std::cout << logTime() << "Ending SimpleImportTest" << std::endl;
@@ -211,7 +211,7 @@ void CreateTiffImages()
   DataImportXmlParser importer;
   importer.setXMLInputFile(MXAUnitTest::DataImportTest::ImportXMLFile);
   // The xmlfile will define the output file so we do NOT need to set it here.
-  int32 err = importer.parseXMLFile();
+  int32_t err = importer.parseXMLFile();
   MXA_REQUIRE(err >= 0);
 
   IDataSource::Collection dataSources = importer.getDataSources();
@@ -257,7 +257,7 @@ int XMLImportTest()
   DataImportXmlParser importer;
   importer.setXMLInputFile(MXAUnitTest::DataImportTest::ImportXMLFile);
   // The xmlfile will define the output file so we do NOT need to set it here.
-  int32 err = importer.import(); // Run the Import
+  int32_t err = importer.import(); // Run the Import
 //  if (err < 0)
 //  {
 //    std::cout << logTime()  << "Error Importing Data Files. Check any output for possible error logs." << std::endl;

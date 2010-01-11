@@ -17,7 +17,7 @@ IDataFile::Pointer H5MXADataFile::OpenFile(const std::string &filename, bool rea
 {
   H5MXADataFile* dataFile = new H5MXADataFile(filename);
   IDataFile::Pointer filePtr (dynamic_cast<IDataFile*>(dataFile) );
-  int32 err = filePtr->openFile(readOnly);
+  int32_t err = filePtr->openFile(readOnly);
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
     H5MXADataFile* nullDataFile = 0x0;
@@ -37,7 +37,7 @@ IDataFile::Pointer H5MXADataFile::CreateFileWithModel(const std::string &filenam
 {
   H5MXADataFile* dataFile = new H5MXADataFile(filename, model);
   IDataFile::Pointer filePtr (dynamic_cast<IDataFile*>(dataFile) );
-  int32 err = filePtr->createFile();
+  int32_t err = filePtr->createFile();
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
     std::cout << logTime() << "H5MXADataFile::CreateFileWithModel - Error Creating file.\t[" << filePtr->getFilename() << "]" << std::endl;
@@ -117,7 +117,7 @@ IDataFile::Pointer H5MXADataFile::CreateEmptyFile(const std::string &filename)
 {
   IDataModel::Pointer modelPtr = MXADataModel::New();
   IDataFile::Pointer filePtr (new H5MXADataFile(filename, modelPtr));
-  int32 err = filePtr->createFile();
+  int32_t err = filePtr->createFile();
   if (err < 0)
   { // Something went wrong - Return a null wrapped pointer
     std::cout << logTime() << "H5MXADataFile::CreateFileWithModel - Error Creating file.\t[" << filePtr->getFilename() << "]" << std::endl;
@@ -146,9 +146,9 @@ IDataModel::Pointer H5MXADataFile::getDataModel()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::createFile()
+int32_t H5MXADataFile::createFile()
 {
-  int32 err = 1;
+  int32_t err = 1;
   if (_fileId > 0)
   {
     err = this->closeFile(false); // Close the file first if it is open.
@@ -195,7 +195,7 @@ int32 H5MXADataFile::createFile()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::openFile(bool readOnly)
+int32_t H5MXADataFile::openFile(bool readOnly)
 {
   if (this->_filename.empty() == true)
   {
@@ -220,7 +220,7 @@ int32 H5MXADataFile::openFile(bool readOnly)
   }
 
   // Now load the model from the file
-  int32 err = this->_readDataModel();
+  int32_t err = this->_readDataModel();
   if (err < 0)
   {
     std::cout << logTime() << "The data model could NOT be loaded from the file.\t[" << this->_filename << "]" << std::endl;
@@ -237,7 +237,7 @@ int32 H5MXADataFile::openFile(bool readOnly)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::closeFile(bool saveModel)
+int32_t H5MXADataFile::closeFile(bool saveModel)
 {
   herr_t err = 1;
   if (this->_fileId < 0) {  // fileId isn't open
@@ -258,7 +258,7 @@ int32 H5MXADataFile::closeFile(bool saveModel)
 
   // Get the number of open identifiers of all types
   //  except files
-  int32 num_open = H5Fget_obj_count(_fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |
+  int32_t num_open = H5Fget_obj_count(_fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |
             H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
   if (num_open > 0) {
     std::cout << "WARNING: Some IDs weren't closed. Closing them."  << std::endl;
@@ -310,7 +310,7 @@ bool H5MXADataFile::isReadOnly()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::saveDataModel()
+int32_t H5MXADataFile::saveDataModel()
 {
   return this->_writeDataModel();
 }
@@ -318,7 +318,7 @@ int32 H5MXADataFile::saveDataModel()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::_writeDataModel()
+int32_t H5MXADataFile::_writeDataModel()
 {
   H5WriterDelegate::Pointer writer = H5WriterDelegate::New(_fileId);
   return writer->writeModel(this->_dataModel);
@@ -327,7 +327,7 @@ int32 H5MXADataFile::_writeDataModel()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::_readDataModel()
+int32_t H5MXADataFile::_readDataModel()
 {
   H5ReaderDelegate::Pointer reader = H5ReaderDelegate::New(_fileId);
   this->_dataModel = reader->readModel();
@@ -341,7 +341,7 @@ int32 H5MXADataFile::_readDataModel()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::writeData(const IDataset::Pointer dataset)
+int32_t H5MXADataFile::writeData(const IDataset::Pointer dataset)
 {
   return dataset->writeToFile(this->_weakPtr.lock() );
 }
@@ -349,7 +349,7 @@ int32 H5MXADataFile::writeData(const IDataset::Pointer dataset)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5MXADataFile::readData(const IDataset::Pointer dataset)
+int32_t H5MXADataFile::readData(const IDataset::Pointer dataset)
 {
   return dataset->writeToFile(this->_weakPtr.lock() );
 }

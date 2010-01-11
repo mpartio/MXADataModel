@@ -9,7 +9,7 @@
 #ifndef _MXAFileSystemPath_h_
 #define _MXAFileSystemPath_h_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 
 
 //-- STL includes
@@ -101,7 +101,7 @@ class MXAFileSystemPath
     /**
      * @brief Get the size of the file in bytes
      */
-    static MXA_EXPORT uint64 fileSize(const std::string &path);
+    static MXA_EXPORT uint64_t fileSize(const std::string &path);
 
     /**
      * @brief Does the path actually exist on the file system

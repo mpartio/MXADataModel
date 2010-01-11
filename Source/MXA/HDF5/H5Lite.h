@@ -12,7 +12,7 @@
 #define _HDF5_LITE_H_
 
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/LogTime.h>
 
 //--C++ Headers
@@ -103,7 +103,7 @@ public:
  * @param obj_type The HDF5_TYPE of object
  * @return Standard HDF5 Error Conditions
  */
-static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int32 obj_type);
+static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int32_t obj_type);
 
 /**
  * @brief Opens an HDF5 Object
@@ -111,7 +111,7 @@ static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int32
  * @param obj_type Basic Object Type
  * @return Standard HDF5 Error Conditions
  */
-static MXA_EXPORT herr_t closeId( hid_t obj_id, int32 obj_type );
+static MXA_EXPORT herr_t closeId( hid_t obj_id, int32_t obj_type );
 
 /**
  * @brief Given one of the HDF Types as a string, this will return the HDF Type
@@ -180,17 +180,17 @@ static std::string StringForHDFType(hid_t type)
 template<typename T>
 static std::string HDFTypeForPrimitiveAsStr(T value)
 {
-  if (typeid(value) == typeid(int8)) return "H5T_NATIVE_INT8";
-  if (typeid(value) == typeid(uint8)) return "H5T_NATIVE_UINT8";
+  if (typeid(value) == typeid(int8_t)) return "H5T_NATIVE_INT8";
+  if (typeid(value) == typeid(uint8_t)) return "H5T_NATIVE_UINT8";
 
-  if (typeid(value) == typeid(int16)) return "H5T_NATIVE_INT16";
-  if (typeid(value) == typeid(uint16)) return "H5T_NATIVE_UINT16";
+  if (typeid(value) == typeid(int16_t)) return "H5T_NATIVE_INT16";
+  if (typeid(value) == typeid(uint16_t)) return "H5T_NATIVE_UINT16";
 
-  if (typeid(value) == typeid(int32)) return "H5T_NATIVE_INT32";
-  if (typeid(value) == typeid(uint32)) return "H5T_NATIVE_UINT32";
+  if (typeid(value) == typeid(int32_t)) return "H5T_NATIVE_INT32";
+  if (typeid(value) == typeid(uint32_t)) return "H5T_NATIVE_UINT32";
 
-  if (typeid(value) == typeid(int64)) return "H5T_NATIVE_INT64";
-  if (typeid(value) == typeid(uint64)) return "H5T_NATIVE_UINT64";
+  if (typeid(value) == typeid(int64_t)) return "H5T_NATIVE_INT64";
+  if (typeid(value) == typeid(uint64_t)) return "H5T_NATIVE_UINT64";
 
   if (typeid(value) == typeid(float32)) return "H5T_NATIVE_FLOAT";
   if (typeid(value) == typeid(float64)) return "H5T_NATIVE_DOUBLE";
@@ -214,24 +214,24 @@ static hid_t HDFTypeForPrimitive(T value)
   if (typeid(value) == typeid(float32)) return H5T_NATIVE_FLOAT;
   if (typeid(value) == typeid(float64)) return H5T_NATIVE_DOUBLE;
 
-  if (typeid(value) == typeid(int8)) return H5T_NATIVE_INT8;
-  if (typeid(value) == typeid(uint8)) return H5T_NATIVE_UINT8;
+  if (typeid(value) == typeid(int8_t)) return H5T_NATIVE_INT8;
+  if (typeid(value) == typeid(uint8_t)) return H5T_NATIVE_UINT8;
 
-  if (typeid(value) == typeid(int16)) return H5T_NATIVE_INT16;
-  if (typeid(value) == typeid(uint16)) return H5T_NATIVE_UINT16;
+  if (typeid(value) == typeid(int16_t)) return H5T_NATIVE_INT16;
+  if (typeid(value) == typeid(uint16_t)) return H5T_NATIVE_UINT16;
 
-  if (typeid(value) == typeid(int32)) return H5T_NATIVE_INT32;
-  if (typeid(value) == typeid(uint32)) return H5T_NATIVE_UINT32;
+  if (typeid(value) == typeid(int32_t)) return H5T_NATIVE_INT32;
+  if (typeid(value) == typeid(uint32_t)) return H5T_NATIVE_UINT32;
 
-  if (typeid(value) == typeid(int64)) return H5T_NATIVE_INT64;
-  if (typeid(value) == typeid(uint64)) return H5T_NATIVE_UINT64;
+  if (typeid(value) == typeid(int64_t)) return H5T_NATIVE_INT64;
+  if (typeid(value) == typeid(uint64_t)) return H5T_NATIVE_UINT64;
 
   if (typeid(value) == typeid(bool)) return H5T_NATIVE_UINT8;
 
   std::cout << DEBUG_OUT(logTime) << "Error: HDFTypeForPrimitive - Unknown Type: " << (typeid(value).name()) << std::endl;
   const char* name = typeid(value).name();
   if (NULL != name && name[0] == 'l' ) {
-    std::cout << "You are using 'long int' as a type which is not 32/64 bit safe. Suggest you use one of the MXATypes defined in <Common/MXATypes.h> such as int32 or uint32." << std::endl;
+    std::cout << "You are using 'long int' as a type which is not 32/64 bit safe. Suggest you use one of the MXATypes defined in <Common/MXATypes.h> such as int32_t or uint32_t." << std::endl;
   }
   return -1;
 }
@@ -296,10 +296,10 @@ static herr_t writeVectorDataset (hid_t loc_id,
     return -1;
   }
   //Create the DataSpace
-  std::vector<uint64>::size_type size = dims.size();
+  std::vector<uint64_t>::size_type size = dims.size();
   //std::vector<hsize_t> _dims(size, 0);
   std::vector<hsize_t> _dims(size, 0);
-  for (std::vector<uint64>::size_type i = 0; i < size; ++i)
+  for (std::vector<uint64_t>::size_type i = 0; i < size; ++i)
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
@@ -346,7 +346,7 @@ static herr_t writeVectorDataset (hid_t loc_id,
 template <typename T>
 static herr_t writePointerDataset (hid_t loc_id,
                             const std::string& dsetName,
-                            int32   rank,
+                            int32_t   rank,
                             hsize_t* dims,
                             T* data)
 {
@@ -362,10 +362,10 @@ static herr_t writePointerDataset (hid_t loc_id,
     return -1;
   }
   //Create the DataSpace
-  std::vector<uint64>::size_type size = static_cast<std::vector<uint64>::size_type>(rank);
+  std::vector<uint64_t>::size_type size = static_cast<std::vector<uint64_t>::size_type>(rank);
 
   std::vector<hsize_t> _dims(size, 0);
-  for (int32 i = 0; i < rank; ++i)
+  for (int32_t i = 0; i < rank; ++i)
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
@@ -429,7 +429,7 @@ static herr_t writePointerDataset (hid_t loc_id,
 template<typename T>
 static herr_t writeDataset(hid_t loc_id,
                            const std::string& dsetName,
-                           int32 &rank,
+                           int32_t &rank,
                            hsize_t* dims,
                            T* data)
 {
@@ -572,12 +572,12 @@ template <typename T>
 static herr_t writePointerAttribute(hid_t loc_id,
                              const std::string& objName,
                              const std::string& attrName,
-                             int32   rank,
-                             uint64* dims,
+                             int32_t   rank,
+                             uint64_t* dims,
                              T* data)
 {
   hid_t      obj_id, sid, attr_id;
-  int32        has_attr;
+  int32_t        has_attr;
   H5G_stat_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
@@ -604,7 +604,7 @@ static herr_t writePointerAttribute(hid_t loc_id,
   hsize_t* dimsPtr = 0x0;
  // size mismatch between hsize_t and size_t
   std::vector<hsize_t> _dims(rank, 0);
-  for (int32 i = 0; i < rank; ++i)
+  for (int32_t i = 0; i < rank; ++i)
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
@@ -677,12 +677,12 @@ template <typename T>
 static herr_t writeVectorAttribute(hid_t loc_id,
                              const std::string& objName,
                              const std::string& attrName,
-                             std::vector<uint64> &dims,
+                             std::vector<uint64_t> &dims,
                              std::vector<T> &data )
 {
   hid_t      obj_id, sid, attr_id;
   //hsize_t    dim_size = data.size();
-  int32        has_attr;
+  int32_t        has_attr;
   H5G_stat_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
@@ -706,10 +706,10 @@ static herr_t writeVectorAttribute(hid_t loc_id,
   /* Create the data space for the attribute. */
   hsize_t* dimsPtr = 0x0;
   //size mismatch between hsize_t and size_t
-  std::vector<uint64>::size_type _size = dims.size();
+  std::vector<uint64_t>::size_type _size = dims.size();
   //hsize_t _dims[ _size ];
   std::vector<hsize_t> _dims(_size, 0);
-  for (std::vector<uint64>::size_type i = 0; i < _size; ++i)
+  for (std::vector<uint64_t>::size_type i = 0; i < _size; ++i)
   {
     _dims[i] = static_cast<hsize_t>(dims[i]);
   }
@@ -825,7 +825,7 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
 {
 
   hid_t      obj_id, sid, attr_id;
-  int32        has_attr;
+  int32_t        has_attr;
   H5G_stat_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
@@ -998,7 +998,7 @@ static herr_t readVectorDataset(hid_t loc_id,
   if ( did >= 0 ) {
     spaceId = H5Dget_space(did);
     if ( spaceId > 0 ) {
-      int32 rank = H5Sget_simple_extent_ndims(spaceId);
+      int32_t rank = H5Sget_simple_extent_ndims(spaceId);
       if (rank > 0) {
         std::vector<hsize_t> dims;
         dims.resize(rank);// Allocate enough room for the dims
@@ -1010,7 +1010,7 @@ static herr_t readVectorDataset(hid_t loc_id,
        // std::cout << "NumElements: " << numElements << std::endl;
         //Resize the vector
         data.resize( static_cast<int>(numElements) );
-       // for (uint32 i = 0; i<numElements; ++i) { data[i] = 55555555;  }
+       // for (uint32_t i = 0; i<numElements; ++i) { data[i] = 55555555;  }
         err = H5Dread(did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, &( data.front() ) );
         if (err < 0) {
           std::cout << "Error Reading Data." << std::endl;
@@ -1068,7 +1068,7 @@ static herr_t readScalarDataset(hid_t loc_id,
   if ( did >= 0 ) {
     spaceId = H5Dget_space(did);
     if ( spaceId > 0 ) {
-      int32 rank = H5Sget_simple_extent_ndims(spaceId);
+      int32_t rank = H5Sget_simple_extent_ndims(spaceId);
       if (rank > 0) {
         std::vector<hsize_t> dims;
         dims.resize(rank);// Allocate enough room for the dims
@@ -1126,7 +1126,7 @@ static MXA_EXPORT herr_t readStringDataset(hid_t loc_id,
  */
 static MXA_EXPORT herr_t readStringDataset(hid_t loc_id,
                                            const std::string &dsetName,
-                                           uint8* data);
+                                           uint8_t* data);
 
 /**
  * @brief Reads an Attribute from an HDF5 Object.
@@ -1174,10 +1174,10 @@ static herr_t readVectorAttribute(hid_t loc_id,
       //Need to allocate the array size
       H5T_class_t type_class;
       size_t type_size;
-      std::vector<uint64> dims;
+      std::vector<uint64_t> dims;
       err = H5Lite::getAttributeInfo(loc_id, objName, attrName, dims, type_class, type_size, tid);
       hsize_t numElements = 1;
-      for (std::vector<uint64>::iterator iter = dims.begin(); iter < dims.end(); ++iter )
+      for (std::vector<uint64_t>::iterator iter = dims.begin(); iter < dims.end(); ++iter )
       {
         numElements *= *(iter);
       }
@@ -1356,7 +1356,7 @@ static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id,
 static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id,
                                    const std::string& objName,
                                    const std::string& attrName,
-                                   uint8* data);
+                                   uint8_t* data);
 /**
  * @brief Returns the number of dimensions for a given attribute
  * @param loc_id The HDF5 id of the parent group/file for the objName
@@ -1418,7 +1418,7 @@ static MXA_EXPORT herr_t getDatasetInfo( hid_t loc_id,
 static MXA_EXPORT herr_t getAttributeInfo(hid_t loc_id,
                                const std::string& objName,
                                const std::string& attr_name,
-                               std::vector<uint64> &dims,
+                               std::vector<uint64_t> &dims,
                                H5T_class_t &type_class,
                                size_t &type_size,
                                hid_t &attr_type);

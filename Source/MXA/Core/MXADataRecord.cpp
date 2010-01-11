@@ -2,7 +2,7 @@
 #include <MXA/Common/LogTime.h>
 
 // Set the initial value of the _uniqueGUIDValue
-int32 MXADataRecord::_uniqueGUIDValue(0);
+int32_t MXADataRecord::_uniqueGUIDValue(0);
 
 // -----------------------------------------------------------------------------
 //  Constructor
@@ -61,7 +61,7 @@ void MXADataRecord::generateLUT(IDataRecord::LookupTable &lut, IDataRecord::Cont
 //  
 // -----------------------------------------------------------------------------
 
-void MXADataRecord::printDataRecord(std::ostream& os, int32 indent)
+void MXADataRecord::printDataRecord(std::ostream& os, int32_t indent)
 {
   os << StringUtils::indent(indent) << "*-Record Name: " << this->_recordName << std::endl;
   os << StringUtils::indent(indent) << " |-Alternate Name: " << this->_altName << std::endl;
@@ -84,7 +84,7 @@ void MXADataRecord::printDataRecord(std::ostream& os, int32 indent)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataRecord::printDataRecordTree(int32 depth)
+void MXADataRecord::printDataRecordTree(int32_t depth)
 {
   if ( this->hasChildren() ) {
     IDataRecord::Container::const_iterator iter;
@@ -131,7 +131,7 @@ std::string MXADataRecord::generateParentPath()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXADataRecord::writeRecord(IDataRecordWriter* writer)
+int32_t MXADataRecord::writeRecord(IDataRecordWriter* writer)
 {
   return writer->writeDataRecord(this);
 }
@@ -173,7 +173,7 @@ void MXADataRecord::resetGUIDValue()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXADataRecord::nextGUIDValue()
+int32_t MXADataRecord::nextGUIDValue()
 {
   return MXADataRecord::_uniqueGUIDValue++;
 }
@@ -198,9 +198,9 @@ IDataRecord::WeakPointer MXADataRecord::getParent()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXADataRecord::getNumChildren() const
+int32_t MXADataRecord::getNumChildren() const
 {
-  return static_cast<int32>(this->_children.size());
+  return static_cast<int32_t>(this->_children.size());
 }
 
 // -----------------------------------------------------------------------------
@@ -266,10 +266,10 @@ void MXADataRecord::removeAllChildren()
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-int32 MXADataRecord::indexOfChild(IDataRecord* child)
+int32_t MXADataRecord::indexOfChild(IDataRecord* child)
 {
-  int32 retVal = -1;
-  int32 index = 0;
+  int32_t retVal = -1;
+  int32_t index = 0;
   for (IDataRecord::Container::iterator iter = this->_children.begin(); iter != this->_children.end(); ++iter)
   {
     if ( (*(iter)).get() == child )
@@ -284,9 +284,9 @@ int32 MXADataRecord::indexOfChild(IDataRecord* child)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-IDataRecord::Pointer MXADataRecord::getChildAt(int32 index)
+IDataRecord::Pointer MXADataRecord::getChildAt(int32_t index)
 {
-  if (static_cast<uint32>(index) < this->_children.size())
+  if (static_cast<uint32_t>(index) < this->_children.size())
     return this->_children[index];
     else {
       //std::cout << "MXADataRecord(GUID): " << this->getUniqueId() << " Num Children: " << this->_children.size() << "  Index:" << index << std::endl;

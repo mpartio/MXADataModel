@@ -14,7 +14,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //#include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 
 /**
  * @brief
@@ -30,9 +30,9 @@ public:
   IImportProperty(){};
   virtual ~IImportProperty(){};
 
-  virtual int32 setProperty(const std::string &key, const std::string &value) = 0;
+  virtual int32_t setProperty(const std::string &key, const std::string &value) = 0;
 
-  virtual int32 getProperty(const std::string &key, std::string &value) = 0;
+  virtual int32_t getProperty(const std::string &key, std::string &value) = 0;
 
 
 };

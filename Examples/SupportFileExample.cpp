@@ -33,12 +33,12 @@ MXADataModel::Pointer createDataModel()
   //Instantiate 2 Data Dimensions
   // The first dimension has 10 elements from 0 to 9 and increments by 1. Since this
   // is the first dimension we give it an index of 0
-  int32 index = 0;
-  int32 count = 10;
-  int32 start = 0;
-  int32 end = 9;
-  int32 increment = 1;
-  int32 uniform = 1;
+  int32_t index = 0;
+  int32_t count = 10;
+  int32_t start = 0;
+  int32_t end = 9;
+  int32_t increment = 1;
+  int32_t uniform = 1;
   MXADataDimension::Pointer dim1 = MXADataDimension::New("Time", "Time (minutes)", index, count, start, end, increment, uniform);
 
   // The second dimension will have 4 elements ranging from 2 to 8 with an increment of 2;

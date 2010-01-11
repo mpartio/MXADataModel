@@ -14,7 +14,7 @@
 #define _MHDNODE_H_
 
 //MXA Includes
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/INode.h>
@@ -47,7 +47,7 @@ class MXA_EXPORT MXANode : public INode
    MXA_SHARED_POINTERS(MXANode);
    MXA_TYPE_MACRO(MXANode);
    
-   static int32 _uniqueGUIDValue;
+   static int32_t _uniqueGUIDValue;
    
    /**
     * @brief Creates a flat look up table using the GUID of the data record as the
@@ -55,7 +55,7 @@ class MXA_EXPORT MXANode : public INode
     * @param lut The look up table to be populated.
     * @param nodes The nodes to use in the lookup table
     */
-   static void generateLUT(std::map<int32, MXANodePtr> &lut, MXANodes &nodes);
+   static void generateLUT(std::map<int32_t, MXANodePtr> &lut, MXANodes &nodes);
    
    enum Type {
      Root,
@@ -83,7 +83,7 @@ class MXA_EXPORT MXANode : public INode
   * @param nodeName The Name of this node
   * @return A Boost SharedPointer to the MXANode Object
   */
-  static MXANodePtr New(int32 type, std::string nodeName);
+  static MXANodePtr New(int32_t type, std::string nodeName);
   
 
   
@@ -91,8 +91,8 @@ class MXA_EXPORT MXANode : public INode
   virtual ~MXANode();  //Needs to be virtual if someone wants to subclass
   
   /// Accessor for NodeType iVar
-  void setNodeType(int32 nodeType);
-  int32 getNodeType();
+  void setNodeType(int32_t nodeType);
+  int32_t getNodeType();
   std::string getNodeTypeString();
   
   /**
@@ -100,7 +100,7 @@ class MXA_EXPORT MXANode : public INode
    * @param node_type The type of node
    * @return The node type as a string
    */
-  static std::string getNodeTypeAsString(int32 node_type);
+  static std::string getNodeTypeAsString(int32_t node_type);
   
   
   /// Accessors for NodeName iVar
@@ -113,13 +113,13 @@ class MXA_EXPORT MXANode : public INode
   * @brief Setter for property guid
   * @param aValue The new value to set for property guid
   */
-  void setUniqueId(int32 aValue) { _uniqueId = aValue; }
+  void setUniqueId(int32_t aValue) { _uniqueId = aValue; }
   
   /**
   * @brief Getter for property guid
   * @return The value of guid
   */
-  int32 getUniqueId() { return _uniqueId; }
+  int32_t getUniqueId() { return _uniqueId; }
   
   /**
    * @brief
@@ -129,21 +129,21 @@ class MXA_EXPORT MXANode : public INode
   /**
    * @brief
    */
-  static int32 nextGUIDValue();
+  static int32_t nextGUIDValue();
   
   /// Accessor for Parent iVar
   void setParent(MXANodeWeakPtr parent);
   MXANodeWeakPtr getParent();
   
   // Children Methods
-  int32 getNumChildren() const;
+  int32_t getNumChildren() const;
   bool hasChildren() const;
   void addChild(MXANodePtr child);
   void removeChild(int index);
   void removeChild(MXANodePtr child);
-  int32 indexOfChild(MXANodePtr child);
-  int32 indexOfChild(MXANode* child);
-  MXANodePtr getChildAt(int32 index);
+  int32_t indexOfChild(MXANodePtr child);
+  int32_t indexOfChild(MXANode* child);
+  MXANodePtr getChildAt(int32_t index);
   MXANodeChildren& getChildren();
   
   // Template Method for native types
@@ -159,8 +159,8 @@ class MXA_EXPORT MXANode : public INode
   void removeAttribute(std::string);
 
   // Utilities
-  void printNodeTree(int32 depth=0);
-  virtual void printNode(std::ostream& os, int32 indentSize=0);
+  void printNodeTree(int32_t depth=0);
+  virtual void printNode(std::ostream& os, int32_t indentSize=0);
   
   
   // -------- Needed for Parent Child relationship ------------
@@ -169,12 +169,12 @@ class MXA_EXPORT MXANode : public INode
 protected:
   
   MXANode(){}; //Protect this constructor
-  MXANode(int32 nodeType, std::string nodeName); // This is the normal constructor
+  MXANode(int32_t nodeType, std::string nodeName); // This is the normal constructor
   
   // Node Name
   std::string _nodeName;
-  int32 _nodeType;
-  int32 _uniqueId;
+  int32_t _nodeType;
+  int32_t _uniqueId;
   MXANodeWeakPtr _selfPtr;
   MXANodeWeakPtr _parent;
   MXANodeChildren _children;

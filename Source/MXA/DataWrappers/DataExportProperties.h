@@ -9,7 +9,7 @@
 #ifndef _DataExportProperties_h_
 #define _DataExportProperties_h_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IImportProperty.h>
@@ -101,7 +101,7 @@ class MXA_EXPORT DataExportProperties
     virtual void setEndianToBig() { this->_endian = MXA::Export::BigEndian; }
     virtual void setEndianToLittle() { this->_endian = MXA::Export::LittleEndian;  }
 
-    virtual int32 setProperty (const std::string &key, const std::string &value)
+    virtual int32_t setProperty (const std::string &key, const std::string &value)
     {
       /*
       SET_PROPERTY_BODY(MXA::Export, hid_t, HDFFileId, key, value);
@@ -114,7 +114,7 @@ class MXA_EXPORT DataExportProperties
       return -1;
     }
 
-    virtual int32 getProperty(const std::string &key, std::string &value)
+    virtual int32_t getProperty(const std::string &key, std::string &value)
     {
 #if 0
       GET_PROPERTY_BODY(MXA::Export, hid_t, HDFFileId, _fileId, key, value);

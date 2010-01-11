@@ -48,9 +48,9 @@ XMLStreamWriterDelegate<T>::~XMLStreamWriterDelegate()
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 XMLStreamWriterDelegate<T>::writeModel(IDataModel::Pointer model)
+int32_t XMLStreamWriterDelegate<T>::writeModel(IDataModel::Pointer model)
 {
-  int32 err = 1;
+  int32_t err = 1;
   std::ostream& stream = *(m_StreamPointer.get());
   m_DataModel = model;
   stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -149,7 +149,7 @@ template<typename T>
 std::string XMLStreamWriterDelegate<T>::_toUpper(const std::string str)
 {
   std::string res = str;
-  int32 (*pf)(int)= toupper;
+  int32_t (*pf)(int)= toupper;
   transform(res.begin(), res.end(), res.begin(), pf);
   return res;
 }
@@ -159,7 +159,7 @@ std::string XMLStreamWriterDelegate<T>::_toUpper(const std::string str)
 // -----------------------------------------------------------------------------
 template<typename T>
 void XMLStreamWriterDelegate<T>::_openTag(const std::string &tagName,
-                                  int32 depth,
+                                  int32_t depth,
                                   bool group,
                                   std::map<std::string, std::string> &attributes )
 {
@@ -184,7 +184,7 @@ void XMLStreamWriterDelegate<T>::_openTag(const std::string &tagName,
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-void XMLStreamWriterDelegate<T>::_openTag(const std::string &tagName, int32 depth, bool group)
+void XMLStreamWriterDelegate<T>::_openTag(const std::string &tagName, int32_t depth, bool group)
 {
   std::map<std::string, std::string> attrs;
   _openTag(tagName, depth, group, attrs);
@@ -194,7 +194,7 @@ void XMLStreamWriterDelegate<T>::_openTag(const std::string &tagName, int32 dept
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-void XMLStreamWriterDelegate<T>::_closeGroupTag(const std::string &tagName, int32 depth)
+void XMLStreamWriterDelegate<T>::_closeGroupTag(const std::string &tagName, int32_t depth)
 {
   std::ostream& stream = *(m_StreamPointer.get());
   stream << StringUtils::indent(depth) << "</" << tagName << ">" << "\n";
@@ -204,7 +204,7 @@ void XMLStreamWriterDelegate<T>::_closeGroupTag(const std::string &tagName, int3
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-void XMLStreamWriterDelegate<T>::_writeDataRoot(int32 depth)
+void XMLStreamWriterDelegate<T>::_writeDataRoot(int32_t depth)
 {
   std::map<std::string, std::string> attrs;
   attrs[MXA_XML::Attribute::Name] = m_DataModel->getDataRoot();
@@ -215,7 +215,7 @@ void XMLStreamWriterDelegate<T>::_writeDataRoot(int32 depth)
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 XMLStreamWriterDelegate<T>::writeDataDimensions(int32 depth)
+int32_t XMLStreamWriterDelegate<T>::writeDataDimensions(int32_t depth)
 {
   _openTag(MXA_XML::Data_Dimensions, depth);
   IDataDimension::Container dimensions = m_DataModel->getDataDimensions();
@@ -233,13 +233,13 @@ int32 XMLStreamWriterDelegate<T>::writeDataDimensions(int32 depth)
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 XMLStreamWriterDelegate<T>::writeDataRecords(int32 depth)
+int32_t XMLStreamWriterDelegate<T>::writeDataRecords(int32_t depth)
 {
 
   _openTag(MXA_XML::Data_Records, this->_dataRecordIndentation);
   IDataRecord::Container records =  m_DataModel->getDataRecords();
   MXADataRecord* rec;
-  int32 err = 0;
+  int32_t err = 0;
   for ( IDataRecord::Container::iterator iter = records.begin(); iter < records.end(); ++iter )
   {
     rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
@@ -254,7 +254,7 @@ int32 XMLStreamWriterDelegate<T>::writeDataRecords(int32 depth)
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 XMLStreamWriterDelegate<T>::writeRequiredMetaData(int32 depth)
+int32_t XMLStreamWriterDelegate<T>::writeRequiredMetaData(int32_t depth)
 {
   std::map<std::string, std::string> meta;
   m_DataModel->getRequiredMetaData();
@@ -269,13 +269,13 @@ int32 XMLStreamWriterDelegate<T>::writeRequiredMetaData(int32 depth)
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 XMLStreamWriterDelegate<T>::writeUserMetaData(int32 depth)
+int32_t XMLStreamWriterDelegate<T>::writeUserMetaData(int32_t depth)
 {
   std::map<std::string, std::string> meta;
   _openTag(MXA_XML::UserDefined_MD, depth, true, meta);
 
-  int32 err = 0;
-  //int32 fileId = 0;
+  int32_t err = 0;
+  //int32_t fileId = 0;
 
   MXAAbstractAttributes metadata = m_DataModel->getUserMetaData();
   for (MXAAbstractAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
@@ -296,7 +296,7 @@ int32 XMLStreamWriterDelegate<T>::writeUserMetaData(int32 depth)
 //  IDataDimensionWriter Interface
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 XMLStreamWriterDelegate<T>::writeDataDimension(IDataDimension* dim)
+int32_t XMLStreamWriterDelegate<T>::writeDataDimension(IDataDimension* dim)
 {
   std::map<std::string, std::string> attrs;
   attrs[MXA::MXA_NAME_TAG] = dim->getDimensionName();
@@ -337,10 +337,10 @@ int32 XMLStreamWriterDelegate<T>::writeDataDimension(IDataDimension* dim)
 //  IDataRecordWriter Interface
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 XMLStreamWriterDelegate<T>::writeDataRecord(IDataRecord* record)
+int32_t XMLStreamWriterDelegate<T>::writeDataRecord(IDataRecord* record)
 {
-  //int32 depth = 3;
-  int32 err = -1;
+  //int32_t depth = 3;
+  int32_t err = -1;
   std::map<std::string, std::string> attrs;
   attrs[MXA_XML::Attribute::Name] = record->getRecordName();
   attrs[MXA_XML::Attribute::AltName] = record->getAltName();
@@ -367,9 +367,9 @@ int32 XMLStreamWriterDelegate<T>::writeDataRecord(IDataRecord* record)
 //  IDataModelWriter Interface
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 XMLStreamWriterDelegate<T>::writeSupportFiles(int32 indentDepth)
+int32_t XMLStreamWriterDelegate<T>::writeSupportFiles(int32_t indentDepth)
 {
-  int32 err = 0;
+  int32_t err = 0;
   std::map<std::string, std::string> attrs;
   ISupportFile::Container files = this->m_DataModel->getSupportFiles();
   ISupportFile* file;

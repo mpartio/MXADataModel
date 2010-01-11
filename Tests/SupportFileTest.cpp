@@ -6,7 +6,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Base/ISupportFile.h>
@@ -97,7 +97,7 @@ void TestMXASupportFile()
   std::cout << "|--TestMXASupportFile" << std::endl;
   ISupportFile::Pointer file =
       MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::BinaryInputFile, SupportFile::FileType::Binary, false);
-  uint8* contents = NULL;
+  uint8_t* contents = NULL;
   // Get the contents which should be NULL because the file has NOT been read yet
   contents = file->getFilePointer(0);
   MXA_REQUIRE(contents == NULL);
@@ -163,7 +163,7 @@ void TestMXARead()
 void TestMXAWrite()
 {
   std::cout << "|--MXAWrite Test" << std::endl;
-  int32 err = 0;
+  int32_t err = 0;
   MXADataModel::Pointer model = createSimpleModel();
   ISupportFile::Pointer binaryFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::BinaryInputFile, SupportFile::FileType::Binary);
   ISupportFile::Pointer textFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text);
@@ -181,7 +181,7 @@ void TestMXAWrite()
 int SupportFileTest_EntryPoint()
 {
   std::cout << "Running SupportFileTest" << std::endl;
-  int32 err = 0;
+  int32_t err = 0;
   // Create the input files first
   CreateInputFiles();
 

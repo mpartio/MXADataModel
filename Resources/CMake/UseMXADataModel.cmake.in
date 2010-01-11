@@ -40,7 +40,7 @@ endif()
 #- Find Expat Library -------------
 IF ("ON" STREQUAL "@MXA_USE_XML@")
     IF (NOT DEFINED MXA_EXTERNAL_EXPAT_LIBRARY)
-        INCLUDE ( ${MXA_CMAKE_DIR}/MXAFindExpat.cmake)
+        INCLUDE ( ${MXA_CMAKE_DIR}/Modules/MXAFindExpat.cmake)
     ENDIF (NOT DEFINED MXA_EXTERNAL_EXPAT_LIBRARY)
     IF (NOT EXPAT_FOUND)
         MESSAGE (FATAL_ERROR "Expat Library was NOT Found and is needed.")
@@ -62,7 +62,7 @@ IF ( "ON" STREQUAL "@MXA_USE_HDF5@")
   # like a ParaView plugin that is building MXA and provides its own HDF5 implementation
   SET (HDF5_USE_HIGH_LEVEL FALSE)
   IF (NOT DEFINED MXA_EXTERNAL_HDF5_LIBRARY)
-      INCLUDE( ${MXA_CMAKE_DIR}/MXAFindHDF5.cmake )
+      INCLUDE( ${MXA_CMAKE_DIR}/Modules/MXAFindHDF5.cmake )
   ENDIF (NOT DEFINED MXA_EXTERNAL_HDF5_LIBRARY)
   IF(NOT HDF5_FOUND)
     MESSAGE(FATAL_ERROR " HDF5 was not found. Set the include/lib manually or set the HDF_INSTALL environment variable")
@@ -77,7 +77,7 @@ ENDIF()
 # Find TIFF Library 
 IF("ON" STREQUAL "@MXA_USE_TIFF@")
     IF (NOT DEFINED MXA_EXTERNAL_TIFF_LIBRARY)
-        INCLUDE ( ${MXA_CMAKE_DIR}/MXAFindTiff.cmake)
+        INCLUDE ( ${MXA_CMAKE_DIR}/Modules/MXAFindTiff.cmake)
     ENDIF (NOT DEFINED MXA_EXTERNAL_TIFF_LIBRARY)
     IF (NOT TIFF_FOUND)
       MESSAGE (FATAL_ERROR " Tiff Library was NOT Found and is needed.")
@@ -87,6 +87,10 @@ IF("ON" STREQUAL "@MXA_USE_TIFF@")
 ENDIF()
  
 #-- These need to be run also
-INCLUDE(${MXA_CMAKE_DIR}/ConfigureChecks.cmake)
+set (PROJECT_RESOURCES_DIR_SAVE ${PROJECT_RESOURCES_DIR})
+set (PROJECT_RESOURCES_DIR ${MXADATAMODEL_RESOURCES_DIR})
+#INCLUDE(${MXA_CMAKE_DIR}/ConfigureChecks.cmake)
 #-- Make sure we have install rules for our support libraries
+
 include(${MXA_CMAKE_DIR}/InstallMXASupportLibraries.cmake)
+set (PROJECT_RESOURCES_DIR ${PROJECT_RESOURCES_DIR_SAVE} )

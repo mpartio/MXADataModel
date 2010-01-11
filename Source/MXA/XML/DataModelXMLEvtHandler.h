@@ -10,7 +10,7 @@
 #ifndef DATAMODELXMLEVTHANDLER_H_
 #define DATAMODELXMLEVTHANDLER_H_
 
-#include "MXA/Common/MXATypes.h"
+#include "MXA/MXATypes.h"
 #include "MXA/Common/MXASetGetMacros.h"
 #include "MXA/Base/IDataModel.h"
 
@@ -74,7 +74,7 @@ class MXA_EXPORT DataModelXMLEvtHandler : public ExpatEvtHandler
     /**
      * @brief Returns the current parser error.
      */
-    MXA_INSTANCE_PROPERTY_m(int32, ParseError)
+    MXA_INSTANCE_PROPERTY_m(int32_t, ParseError)
 
     // -----------------------------------------------------------------------------
     //  ExpatEvtHandler Implementation Begin
@@ -86,7 +86,7 @@ class MXA_EXPORT DataModelXMLEvtHandler : public ExpatEvtHandler
     void OnEndElement(const XML_Char* name);
 
     // Over ride from ExpatEvtHandler class
-    void OnCharacterData(const XML_Char* data, int32 len);
+    void OnCharacterData(const XML_Char* data, int32_t len);
 
     //  ExpatEvtHandler Implementation End
     // -----------------------------------------------------------------------------
@@ -191,13 +191,13 @@ class MXA_EXPORT DataModelXMLEvtHandler : public ExpatEvtHandler
       * @return Error Code. Zero or positive is success.
       */
       template<typename T>
-      int32 readPrimitiveAttribute( const std::vector<uint64> &dims)
+      int32_t readPrimitiveAttribute( const std::vector<uint64_t> &dims)
       {
         //std::cout << logTime() << "readPrimitiveAttribute: " << this->_userMDKey << std::endl;
-        int32 err = 1;
+        int32_t err = 1;
         std::istringstream istream (this->_userAttributeData);
-        uint64 size = 1;
-        for (std::vector<uint64>::const_iterator iter = dims.begin(); iter != dims.end(); ++iter )
+        uint64_t size = 1;
+        for (std::vector<uint64_t>::const_iterator iter = dims.begin(); iter != dims.end(); ++iter )
         {
           size *= *iter;
         }
@@ -206,7 +206,7 @@ class MXA_EXPORT DataModelXMLEvtHandler : public ExpatEvtHandler
         {
           //std::cout << logTime() << "  Scalar Value" << std::endl;
           T temp;
-          int32 tmp;
+          int32_t tmp;
           if (sizeof(T) == 1) // If we try to read a 'char' then the stream will only read a single char from the file, not what we want
           {
             if ( (istream >> tmp).good() )
@@ -230,7 +230,7 @@ class MXA_EXPORT DataModelXMLEvtHandler : public ExpatEvtHandler
          // std::cout << logTime() << "  Vector Value" << std::endl;
           std::vector<T> data;
           T temp;
-          int32 tmp;
+          int32_t tmp;
           if (sizeof(T) == 1) // If we try to read a 'char' then the stream will only read a single char from the file, not what we want
           {
             while( (istream >> tmp).good() )
@@ -268,8 +268,8 @@ class MXA_EXPORT DataModelXMLEvtHandler : public ExpatEvtHandler
       std::string             _userMDKey;
       std::string             _userMDDims;
       std::string             _userMDType;
-      int32                   _indent;
-      //int32                   _xmlParseError;
+      int32_t                   _indent;
+      //int32_t                   _xmlParseError;
 
     DataModelXMLEvtHandler(const DataModelXMLEvtHandler&);    // Copy Constructor Not Implemented
     void operator=(const DataModelXMLEvtHandler&);  // Operator '=' Not Implemented

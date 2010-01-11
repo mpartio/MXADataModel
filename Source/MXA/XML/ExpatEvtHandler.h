@@ -33,7 +33,7 @@
 
 
 //MXA Includes
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include "MXA/Common/MXASetGetMacros.h"
 #include <expat.h>
 
@@ -58,12 +58,12 @@ public:
   virtual void OnPostCreate(void);
   virtual void OnStartElement(const XML_Char* name, const XML_Char** attrs);
   virtual void OnEndElement(const XML_Char* name);
-  virtual void OnCharacterData(const XML_Char* data, int32 len);
+  virtual void OnCharacterData(const XML_Char* data, int32_t len);
   virtual void OnProcessingInstruction(const XML_Char* target, const XML_Char* data);
   virtual void OnComment(const XML_Char* data);
   virtual void OnStartCdataSection(void);
   virtual void OnEndCdataSection(void);
-  virtual void OnDefault(const XML_Char* data, int32 len);
+  virtual void OnDefault(const XML_Char* data, int32_t len);
   virtual bool OnUnknownEncoding(const XML_Char* name, XML_Encoding* pInfo);
   virtual void OnStartNamespaceDecl(const XML_Char* prefix, const XML_Char* uri);
   virtual void OnEndNamespaceDecl(const XML_Char* prefix);
@@ -71,7 +71,7 @@ public:
   virtual void OnStartDoctypeDecl(const XML_Char* doctype, const XML_Char* sysId, const XML_Char* pubId, bool hasInternalSubset);
   virtual void OnEndDoctypeDecl(void);
 
-  virtual int32 getParseError();
+  virtual int32_t getParseError();
 private:
   ExpatEvtHandler(const ExpatEvtHandler&); //Copy Constructor Not Implemented
   void operator=(const ExpatEvtHandler&); //Copy Assignment Not Implemented

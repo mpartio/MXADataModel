@@ -163,8 +163,8 @@ MXANode::SharedPtr MXADataModel::getDataDimension(int order)
 // -----------------------------------------------------------------------------
 MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName,
           map<string, string> attributes,
-          int32 order, int32 start_value, int32 count,
-          int32 increment, int32 end_value)
+          int32_t order, int32_t start_value, int32_t count,
+          int32_t increment, int32_t end_value)
 {
   DimensionData dim;
   dim.uniform = true;
@@ -210,9 +210,9 @@ MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName,
 //  
 // -----------------------------------------------------------------------------
 MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName, 
-          int32 order, int32 start_value, 
-          int32 count, int32 increment, 
-          int32 end_value)
+          int32_t order, int32_t start_value, 
+          int32_t count, int32_t increment, 
+          int32_t end_value)
 {
   map<string, string> attributes;
   return addDataDimension(name, altName, attributes, order,
@@ -224,7 +224,7 @@ MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName,
 // -----------------------------------------------------------------------------
 MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName)
 {
-  int32 order = _dataDimensions->int_data;
+  int32_t order = _dataDimensions->int_data;
   map<string, string> attributes;
   return addDataDimension(name, altName, attributes, order, 0, 1, 1, 0);
 }
@@ -235,9 +235,9 @@ MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName)
 // -----------------------------------------------------------------------------
 MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName, 
           map<string, string> attributes,
-          int32 order, list<int> indecies)
+          int32_t order, list<int> indecies)
 {
-  int32 num_indecies = indecies.size();
+  int32_t num_indecies = indecies.size();
   
   DimensionData dim;
   dim.uniform = false;
@@ -280,7 +280,7 @@ MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName,
 //  
 // -----------------------------------------------------------------------------
 MXANode::SharedPtr MXADataModel::addDataDimension(string name, string altName, 
-          int32 order, std::list<int> indecies)
+          int32_t order, std::list<int> indecies)
 {
   map<string, string> attributes;
   return addDataDimension(name, altName, attributes, order, indecies);
@@ -298,14 +298,14 @@ void MXADataModel::removeDataDimension(MXANode *node)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataModel::moveDataDimension(int src_order, int32 dst_order)
+void MXADataModel::moveDataDimension(int src_order, int32_t dst_order)
 {
   if (src_order == dst_order) {
     std::cout << "Attempting to move data dimension to same spot" << std::endl;
     return;
   }
 
-  int32 adder;
+  int32_t adder;
   if (src_order > dst_order) {
     adder = -1;
   } else {
@@ -336,7 +336,7 @@ void MXADataModel::setDimensionUniform(MXANode *node, bool uniform)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataModel::setDimensionCount(MXANode *node, int32 new_count)
+void MXADataModel::setDimensionCount(MXANode *node, int32_t new_count)
 {
   node->data.count = new_count;
   node->setAttributeValue(MXA_COUNT_TAG, new_count);
@@ -344,7 +344,7 @@ void MXADataModel::setDimensionCount(MXANode *node, int32 new_count)
   // If uniform - the end_value changes, if it's not uniform,
   //   the indicies list gets shorter and the end value changes
   if (node->data.uniform) {
-    int32 new_end =
+    int32_t new_end =
       node->data.start_value + (node->data.increment * (node->data.count - 1));
     node->data.end_value = new_end;
     node->setAttributeValue(MXA_END_VALUE_TAG, new_end);
@@ -356,14 +356,14 @@ void MXADataModel::setDimensionCount(MXANode *node, int32 new_count)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataModel::setDimensionIncrement(MXANode *node, int32 new_increment)
+void MXADataModel::setDimensionIncrement(MXANode *node, int32_t new_increment)
 {
   node->data.increment = new_increment;
   node->setAttributeValue(MXA_INCREMENT_TAG, new_increment);
 
   // The end value changes if the increment changes (if uniform)
   if (node->data.uniform) {
-    int32 new_end =
+    int32_t new_end =
       node->data.start_value + (node->data.increment * (node->data.count - 1));
     node->data.end_value = new_end;
     node->setAttributeValue(MXA_END_VALUE_TAG, new_end);
@@ -374,14 +374,14 @@ void MXADataModel::setDimensionIncrement(MXANode *node, int32 new_increment)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-void MXADataModel::setDimensionStartValue(MXANode *node, int32 new_start)
+void MXADataModel::setDimensionStartValue(MXANode *node, int32_t new_start)
 {
-  int32 old_start = node->data.start_value;
+  int32_t old_start = node->data.start_value;
   node->data.start_value = new_start;
   node->setAttributeValue(MXA_START_VALUE_TAG, new_start);
 
   // The count has also changed if the start value changes
-  int32 new_count;
+  int32_t new_count;
   if (node->data.uniform) {
     new_count = node->data.count + (new_start - old_start);
   } else {
@@ -423,7 +423,7 @@ bool _recguidCompare(const void *guid, const void *node)
 {
   const MXANode *rnode = static_cast<const MXANode *>(node);
   const RecordData rec = rnode->data;
-  const int32 *tst_guid = static_cast<const int32 *>(guid); 
+  const int32_t *tst_guid = static_cast<const int32_t *>(guid); 
   return (rec.guid == *tst_guid);
 }
 
@@ -434,7 +434,7 @@ bool _recluidCompare(const void *luid, const void *node)
 {
   const MXANode *rnode = static_cast<const MXANode *>(node);
   const RecordData rec = rnode->data;
-  const int32 *tst_luid = static_cast<const int32 *>(luid); 
+  const int32_t *tst_luid = static_cast<const int32_t *>(luid); 
   return (rec.luid == *tst_luid);
 }
 
@@ -451,7 +451,7 @@ MXANode::SharedPtr MXADataModel::getDataRecord(int guid)
 // -----------------------------------------------------------------------------
 //  
 // -----------------------------------------------------------------------------
-MXANode::SharedPtr MXADataModel::getDataRecordChild(MXANode *parent, int32 luid)
+MXANode::SharedPtr MXADataModel::getDataRecordChild(MXANode *parent, int32_t luid)
 {
   MXANode *node;
   node = parent->findChildIf(&_recluidCompare, (const void *)&luid);
@@ -515,9 +515,9 @@ std::string MXADataModel::getDataRecordPath(int recGuid)
 MXANode * MXADataModel::addDataRecord(string name, string altName, 
              string objPath, 
              map<string, string> attributes,
-             int32 luid, int32 guid, MXANode *parent)
+             int32_t luid, int32_t guid, MXANode *parent)
 {
-  int32 num_records = _dataRecords->int_data;
+  int32_t num_records = _dataRecords->int_data;
   RecordData rec;
 
   rec.name = name;
@@ -555,7 +555,7 @@ MXANode * MXADataModel::addDataRecord(string name, string altName,
 // -----------------------------------------------------------------------------
 MXANode * MXADataModel::addDataRecord(string name, string altName, 
              string objPath, 
-             int32 luid, int32 guid, MXANode *parent)
+             int32_t luid, int32_t guid, MXANode *parent)
 {
   map<string, string> attributes;
   return addDataRecord(name, altName, objPath, attributes,
@@ -576,8 +576,8 @@ MXANode * MXADataModel::addDataRecord(string name, string altName,
     nodeParent = parent;
   }
 
-  int32 guid = _dataRecords->int_data;
-  int32 luid = nodeParent->numChildren();
+  int32_t guid = _dataRecords->int_data;
+  int32_t luid = nodeParent->numChildren();
   string recPath = getDataRecordPath(nodeParent);
   recPath += "/" + luid;
 
@@ -637,7 +637,7 @@ std::string MXADataModel::generateDataSourcePath(DataSource source)
 
 
 pDataSource MXADataModel::findDataSource(std::map<int, int> dimMap,
-          std::string recPath, int32 luid)
+          std::string recPath, int32_t luid)
 {
   std::vector<DataSource>::iterator iter;
   for (iter=_dataSources.begin(); iter!=_dataSources.end(); iter++) {
@@ -680,7 +680,7 @@ void MXADataModel::addDataSource(MXANode *rNode, std::string &sourcePath)
 {
   std::map<int, int> dimMap = getDimensionOrderMap();
   std::string recPath = getDataRecordParentPath(rNode);
-  int32 luid = rNode->data.luid;
+  int32_t luid = rNode->data.luid;
 
   addDataSource(dimMap, recPath, luid, sourcePath, NULL);
 }
@@ -689,7 +689,7 @@ void MXADataModel::addDataSource(MXANode *rNode, std::string &sourcePath)
 //  
 // -----------------------------------------------------------------------------
 void MXADataModel::addDataSource(std::map<int, int> dimensionValues,
-        std::string recordPath, int32 luid,
+        std::string recordPath, int32_t luid,
         std::string sourcePath, AbstractDataParserDelegate* delegate)
 {
   pDataSource source = findDataSource(dimensionValues, recordPath, luid);

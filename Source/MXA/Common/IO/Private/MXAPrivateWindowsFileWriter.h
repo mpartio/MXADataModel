@@ -9,7 +9,7 @@
 #ifndef WINDOWSFILEWRITER_H_
 #define WINDOWSFILEWRITER_H_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 
 #if defined (_MSC_VER)
 #include <MXA/Common/Win32Defines.h>
@@ -66,7 +66,7 @@ public:
  * @param data The char pointer to read the data into
  * @param numBytes The number of bytes to read
  */
-  bool write(char* data, int64 numBytes)
+  bool write(char* data, int64_t numBytes)
   {
   DWORD nBytesToWrite = static_cast<DWORD>(numBytes);
   DWORD nBytesWritten = 0;
@@ -111,7 +111,7 @@ public:
    * @param numElements number of elements of the array to write
    */
   template<typename T>
-  bool writeArray(T* front, int64 numElements)
+  bool writeArray(T* front, int64_t numElements)
   {
     DWORD nBytesToWrite = static_cast<DWORD>(sizeof(T) * numElements);
     DWORD nBytesWritten = 0;
@@ -133,7 +133,7 @@ public:
  * @brief Sets the filepointer of the underlying stream
  * @param position The position to set the file pointer to
  */
-  void setFilePointer64( int64 position )
+  void setFilePointer64( int64_t position )
   {
     LARGE_INTEGER posOut;
     LARGE_INTEGER offset;
@@ -146,7 +146,7 @@ public:
  * @brief Returns the current position of the file pointer
  * @return the Current position of the file pointer
  */
-  int64 getFilePointer64()
+  int64_t getFilePointer64()
   {
     LARGE_INTEGER posOut;
     LARGE_INTEGER offset;

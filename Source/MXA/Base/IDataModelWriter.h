@@ -12,7 +12,7 @@
 #define _IDATAMODELWRITER_H_
 
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 //#include <MXA/Base/IFileIODelegate.h>
 
 
@@ -36,49 +36,49 @@ public:
   * @param fileId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
-  virtual int32 writeModel(int32 fileId) = 0;
+  virtual int32_t writeModel(int32_t fileId) = 0;
 
   /**
   * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
-  virtual int32 writeDataModelTemplate(int32 uniqueId) = 0;
+  virtual int32_t writeDataModelTemplate(int32_t uniqueId) = 0;
 
   /**
   * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
-  virtual int32 writeDataDimensions(int32 uniqueId) = 0;
+  virtual int32_t writeDataDimensions(int32_t uniqueId) = 0;
 
   /**
   * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
-  virtual int32 writeDataRecords(int32 uniqueId) = 0;
+  virtual int32_t writeDataRecords(int32_t uniqueId) = 0;
 
   /**
   * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
-  virtual int32 writeRequiredMetaData(int32 uniqueId) = 0;
+  virtual int32_t writeRequiredMetaData(int32_t uniqueId) = 0;
 
   /**
   * @brief
   * @param uniqueId The unique ID of a file on the underlying filesystem
   * @return If the write was successful
   */
-  virtual int32 writeUserMetaData(int32 uniqueId) = 0;
+  virtual int32_t writeUserMetaData(int32_t uniqueId) = 0;
 
   /**
   * @brief Writes the support files to the hdf5 data file
   * @param uniqueId HDF5 file id to write to
   * @return error code
   */
-  virtual int32 writeSupportFiles(int32 uniqueId) = 0;
+  virtual int32_t writeSupportFiles(int32_t uniqueId) = 0;
 
 protected:
     IDataModelWriter(){};

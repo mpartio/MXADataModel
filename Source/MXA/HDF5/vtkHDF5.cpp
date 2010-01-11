@@ -24,7 +24,7 @@ herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id, const std::string &datasetPath, 
   H5T_class_t classType;
   size_t typeSize;
   //hid_t typeId = -1;
-  std::vector<uint64> dims; // The dimensions of the data set
+  std::vector<uint64_t> dims; // The dimensions of the data set
   err = H5Lite::getDatasetInfo(loc_id, datasetPath, dims, classType, typeSize);
   if (err < 0)
   {
@@ -32,7 +32,7 @@ herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id, const std::string &datasetPath, 
     return -1;
   }
   //Holds dimensions for our vtkImage Object
-  int32 xDim=1, yDim=1, zDim=1;
+  int32_t xDim=1, yDim=1, zDim=1;
 
   //..Check for each dimension and assign its size to the variable
   if (dims.size() >= 1)
@@ -48,7 +48,7 @@ herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id, const std::string &datasetPath, 
     zDim = dims[2];
   }
 
-  int32 scalarType = vtkHDF5::getScalarType(loc_id, datasetPath);
+  int32_t scalarType = vtkHDF5::getScalarType(loc_id, datasetPath);
   if (scalarType < 0)
   {
     return -1;
@@ -82,10 +82,10 @@ herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id, const std::string &datasetPath, 
 int vtkHDF5::getScalarType(hid_t loc_id, const std::string &datasetPath)
 {
   herr_t err = 1;
-  int32 scalarType = -1;
+  int32_t scalarType = -1;
   H5T_class_t classType;
   size_t typeSize;
-  std::vector<uint64> dims; // The dimensions of the data set
+  std::vector<uint64_t> dims; // The dimensions of the data set
   err = H5Lite::getDatasetInfo(loc_id, datasetPath, dims, classType, typeSize);
   if (err < 0)
   {
@@ -233,7 +233,7 @@ herr_t vtkHDF5::_readVtkImageDataSet(hid_t loc_id, const std::string &dsetName, 
   if ( did >= 0 ) {
     spaceId = H5Dget_space(did);
     if ( spaceId > 0 ) {
-      int32 rank = H5Sget_simple_extent_ndims(spaceId);
+      int32_t rank = H5Sget_simple_extent_ndims(spaceId);
       if (rank > 0) {
         std::vector<hsize_t> dims;
         dims.resize(rank);// Allocate enough room for the dims

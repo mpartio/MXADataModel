@@ -168,8 +168,8 @@ MXADataDimension::Pointer H5ReaderDelegate::_loadDataDimension(hid_t loc_id, std
 {
  // MXADataDimension* node = NULL;
   std::string dimName, altName;
-  int32 count=1, start_val=0, end_val=0, dim_order;
-  int32 uniform=1, increment=1;
+  int32_t count=1, start_val=0, end_val=0, dim_order;
+  int32_t uniform=1, increment=1;
   herr_t err=0;
 
   // Read the Data Dimension values
@@ -292,7 +292,7 @@ herr_t H5ReaderDelegate::_traverseDataRecords( hid_t gid, MXADataRecord::Pointer
     return err;
   }
 
-  uint32 index = 0;
+  uint32_t index = 0;
 
   for (index = 0; index < numObjects; ++index) {
     std::string objName;
@@ -341,7 +341,7 @@ MXADataRecord::Pointer H5ReaderDelegate::_loadDataRecord(hid_t loc_id, std::stri
   herr_t err=0;
   //MXANode *node=NULL;
   std::string recName, altName;
-  int32 guid=-1, luid =-1;
+  int32_t guid=-1, luid =-1;
   MXADataRecord::Pointer record; // This will contain a NULL Pointer to the DataRecordNode
   // Read the Data Record Values
   // Name

@@ -12,7 +12,7 @@
 #include <MXA/MXAConfiguration.h>
 
 #include <MXA/Common/MXATypeDefs.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Utilities/DataSourcePathBuilder.h>
 #include <MXA/Utilities/IStringSection.h>
 #include <MXA/Utilities/DataSourcePathTextSection.h>
@@ -48,8 +48,8 @@ void DataSourcePathTest()
 
   IStringSectionPtr f5 ( new DataSourcePathTextSection(".data") );
   builder.addSection(f5);
-  int8 ok = false;
-  std::vector<uint32> dims;
+  int8_t ok = false;
+  std::vector<uint32_t> dims;
   dims.push_back(23);
   dims.push_back(234);
   std::string path = builder.build(dims, ok);
@@ -78,10 +78,10 @@ void DataSourcePathTest()
     IStringSectionPtr f5 ( new DataSourcePathTextSection(".data") );
     builder.addSection(f5);
 
-    std::vector<uint32> dims;
+    std::vector<uint32_t> dims;
     dims.push_back(23);
     //dims.push_back(234);
-    int8 ok = true;
+    int8_t ok = true;
     std::string path = builder.build(dims, ok);
    // std::cout << "Built Path: " << path << std::endl;
     MXA_REQUIRE( ok == false);

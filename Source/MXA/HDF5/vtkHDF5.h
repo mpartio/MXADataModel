@@ -45,7 +45,7 @@ public:
    * @param dsetName The path/name to the data set
    * @return The VTK Type of the data.
    */
-  static MXA_EXPORT int32 getScalarType(hid_t loc_id, const std::string &dsetName);
+  static MXA_EXPORT int32_t getScalarType(hid_t loc_id, const std::string &dsetName);
   
   static MXA_EXPORT herr_t getDataAsVTKImage(hid_t loc_id, const std::string &dsetName, vtkImageData* imgData);
   

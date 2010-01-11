@@ -11,10 +11,11 @@
 #ifndef IDATAFILE_H_
 #define IDATAFILE_H_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
-//#include <MXA/Base/IDataModel.h>
-//#include <MXA/Base/IDataset.h>
+
+#define MXA_READ_ONLY true
+#define MXA_READ_WRITE false
 
 #include <string>
 
@@ -35,7 +36,7 @@ class MXA_EXPORT IDataFile
     MXA_SHARED_POINTERS(IDataFile);
     typedef boost::shared_ptr<IDataModel> DataModelType;
     typedef boost::shared_ptr<IDataset>   DatasetType;
-    
+
     explicit IDataFile(const std::string &filename) {};
     virtual ~IDataFile() {};
 
@@ -59,20 +60,20 @@ class MXA_EXPORT IDataFile
      * @brief Creates a new data file, first deleting and existing file with the same name
      * @return Error code < 0 is error. 0 or positive is Success
      */
-    virtual int32 createFile() = 0;
+    virtual int32_t createFile() = 0;
 
     /**
      * @brief Opens an existing data file.
      * @param readOnly Open the file in Read-Only Mode
      * @return Error code < 0 is error. 0 or positive is Success
      */
-    virtual int32 openFile(bool readOnly) = 0;
+    virtual int32_t openFile(bool readOnly) = 0;
 
     /**
      * @brief Closes the data file. Any further access to the file will fail.
      * @return Error code < 0 is error. 0 or positive is Success
      */
-    virtual int32 closeFile(bool saveModel) = 0;
+    virtual int32_t closeFile(bool saveModel) = 0;
 
     /**
      * @brief Checks if the file version of the data file is with in the bounds of the library to read/parse the data model
@@ -95,7 +96,7 @@ class MXA_EXPORT IDataFile
      * @brief Returns the unique identifier for the open file
      * @return
      */
-    virtual int32 getFileId() = 0;
+    virtual int32_t getFileId() = 0;
 
 // -----------------------------------------------------------------------------
 //  Data Model Related Methods
@@ -106,15 +107,15 @@ class MXA_EXPORT IDataFile
      * data model
      * @return Error code < 0 is error. 0 or positive is Success
      */
-    virtual int32 saveDataModel() = 0;
+    virtual int32_t saveDataModel() = 0;
 
 
 // -----------------------------------------------------------------------------
 //  Writing data related methods
 
-    virtual int32 writeData ( const DatasetType dataset) = 0;
+    virtual int32_t writeData ( const DatasetType dataset) = 0;
 
-    virtual int32 readData (const DatasetType dataset) = 0;
+    virtual int32_t readData (const DatasetType dataset) = 0;
 
 
   protected:

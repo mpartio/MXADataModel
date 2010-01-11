@@ -13,7 +13,7 @@
 
 //-- MXA Includes
 #include <MXA/Common/MXATypeDefs.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Base/IDataModel.h>
 #include <MXA/Base/IDataImport.h>
 #include <MXA/Core/MXADataModel.h>
@@ -171,13 +171,13 @@ public:
    * datasources for the import
    * @return Error condition
    */
-  int32 parseXMLFile();
+  int32_t parseXMLFile();
 
 
   /** @brief Imports the data into the data file
   * @return Error Condition. Zero or Positive is Success
   */
-  int32 import();
+  int32_t import();
 
   MXA_INSTANCE_PROPERTY(bool, Verbose, _verbose);
 
@@ -188,7 +188,7 @@ private:
   IDataFile::Pointer       _dataFile;
   IDataModel::Pointer      m_DataModel;
   IDataSource::Collection       _dataSources;
-  int32              _xmlParseError;
+  int32_t              _xmlParseError;
   bool               _parseData;
   std::string        _errorMessage;
   ExpatParser*       _parser;
@@ -282,12 +282,12 @@ private:
      * @param modelFile The xml or HDF5 file
      * @return Error condition
      */
-    int32 _loadDataModelFromTemplateFile(const std::string &modelFile);
+    int32_t _loadDataModelFromTemplateFile(const std::string &modelFile);
 
     /**
      * @brief Merges the Model in memory to the model resident on disk.
      */
-    int32 _mergeModelToDisk();
+    int32_t _mergeModelToDisk();
 
 }; // End Class DataImportXmlParser
 

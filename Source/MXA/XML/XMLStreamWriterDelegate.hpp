@@ -39,7 +39,7 @@ class XMLStreamWriterDelegate: public IMXADataModelWriterDelegate
 
     virtual ~XMLStreamWriterDelegate();
 
-    virtual int32 writeModel(IDataModel::Pointer model);
+    virtual int32_t writeModel(IDataModel::Pointer model);
 
     MXA_INSTANCE_PROPERTY_m(StreamPointer, StreamPointer);
 
@@ -52,48 +52,48 @@ class XMLStreamWriterDelegate: public IMXADataModelWriterDelegate
      * @param indentDepth The number of spaced to indent this section of XML
      * @return Error Code: Negative is Error Condition
      */
-    int32 writeDataModelTemplate(int32 indentDepth);
+    int32_t writeDataModelTemplate(int32_t indentDepth);
 
     /**
      * @brief Writes the Data Dimensions
      * @param indentDepth The number of spaced to indent this section of XML
      * @return Error Code: Negative is Error Condition
      */
-    int32 writeDataDimensions(int32 indentDepth);
+    int32_t writeDataDimensions(int32_t indentDepth);
 
     /**
      * @brief Writes the Data Records
      * @param indentDepth The number of spaced to indent this section of XML
      * @return Error Code: Negative is Error Condition
      */
-    int32 writeDataRecords(int32 indentDepth);
+    int32_t writeDataRecords(int32_t indentDepth);
 
     /**
      * @brief Writes the RequiredMeta Data
      * @param indentDepth The number of spaced to indent this section of XML
      * @return Error Code: Negative is Error Condition
      */
-    int32 writeRequiredMetaData(int32 indentDepth);
+    int32_t writeRequiredMetaData(int32_t indentDepth);
 
     /**
      * @brief Writes the User Meta Data
      * @param indentDepth The number of spaced to indent this section of XML
      * @return Error Code: Negative is Error Condition
      */
-    int32 writeUserMetaData(int32 indentDepth);
+    int32_t writeUserMetaData(int32_t indentDepth);
 
     /**
      * @brief Writes the File Type and File version tags
      * @param depth The number of spaces to indent this section of XML
      * @return Error Code: negative is error condition
      */
-    int32 _writeMXAInfo(int32 depth);
+    int32_t _writeMXAInfo(int32_t depth);
 
     /**
      * @brief Writes the data root to the XML file
      * @param indentDepth The number of spaced to indent this section of XML
      */
-    void _writeDataRoot(int32 indentDepth);
+    void _writeDataRoot(int32_t indentDepth);
 
     // --------IDataDimensionWriter Interface ----------------------
     /**
@@ -101,7 +101,7 @@ class XMLStreamWriterDelegate: public IMXADataModelWriterDelegate
      * @param dim Non-NULL IDataDimension object
      * @return Error condition
      */
-    int32 writeDataDimension(IDataDimension* dim);
+    int32_t writeDataDimension(IDataDimension* dim);
 
     // --------IDataRecordWriter Interface -------------------------
     /**
@@ -109,14 +109,14 @@ class XMLStreamWriterDelegate: public IMXADataModelWriterDelegate
     * @param record The Data Record to Write
     * @return Error Code: Negate is error condition
     */
-    int32 writeDataRecord(IDataRecord* record);
+    int32_t writeDataRecord(IDataRecord* record);
 
     /**
     * @brief Writes the support files to the hdf5 data file
     * @param indentDepth The number of spaces to indent the xml code
     * @return error code
     */
-    int32 writeSupportFiles(int32 indentDepth);
+    int32_t writeSupportFiles(int32_t indentDepth);
 
     static std::string _toUpper(const std::string value);
     static void _replaceAll(std::string&, std::string, std::string);
@@ -124,20 +124,20 @@ class XMLStreamWriterDelegate: public IMXADataModelWriterDelegate
     static std::string escapedAttribute(const std::string &value);
 
     void _openTag(const std::string &tagName,
-                  int32 depth,
+                  int32_t depth,
                   bool group,
                   std::map<std::string, std::string> &attributes);
 
     void _openTag(const std::string &tagName,
-                  int32 depth,
+                  int32_t depth,
                   bool group=true);
 
-    void _closeGroupTag(const std::string &tagName, int32 depth);
+    void _closeGroupTag(const std::string &tagName, int32_t depth);
 
 
   private:
     MXA_INSTANCE_PROPERTY_m(IDataModel::Pointer, DataModel)
-    int32                   _dataRecordIndentation;
+    int32_t                   _dataRecordIndentation;
 
     XMLStreamWriterDelegate(const XMLStreamWriterDelegate&); // Copy Constructor Not Implemented
     void operator=(const XMLStreamWriterDelegate&); // Operator '=' Not Implemented

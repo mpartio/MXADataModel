@@ -167,7 +167,7 @@ class MXA_EXPORT IRequiredMetaData : public IDataFileIO
      * @param value The value of meta data to set
      * @return Zero or positive on success.
      */
-    virtual int32 setValueForKey(const std::string &key, const std::string &value) = 0;
+    virtual int32_t setValueForKey(const std::string &key, const std::string &value) = 0;
 
     /**
      * @brief Returns the value for a given key
@@ -189,7 +189,7 @@ class MXA_EXPORT IRequiredMetaData : public IDataFileIO
      * @param os An output stream to write to.
      * @param indent The number of spaces to use for indentation
      */
-    virtual void printSelf(std::ostream& os, int32 indent) = 0;
+    virtual void printSelf(std::ostream& os, int32_t indent) = 0;
 
     /**
      * @brief Generates a std::map of the meta data key to its associated value.

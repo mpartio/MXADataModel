@@ -57,7 +57,7 @@ public:
   * @param fileId HDF5 FileId to write to
    * @return true on success
    */
-  int32 writeModel(IDataModel::Pointer model);
+  int32_t writeModel(IDataModel::Pointer model);
 
 
 protected:
@@ -70,42 +70,42 @@ protected:
   * @param uniqueId HDF5 FileId to write to
    * @return
    */
-  int32 writeDataModelTemplate(hid_t uniqueId);
+  int32_t writeDataModelTemplate(hid_t uniqueId);
 
   /**
    * @brief Writes the Data Dimensions from the Model
   * @param fileId HDF5 FileId to write to
   * @return
   */
-  int32 writeDataDimensions(hid_t fileId);
+  int32_t writeDataDimensions(hid_t fileId);
 
   /**
   * @brief Writes the Data Records
   * @param fileId HDF5 FileId to write to
   * @return
   */
-  int32 writeDataRecords(hid_t fileId);
+  int32_t writeDataRecords(hid_t fileId);
 
   /**
    * @brief Writes the Required MetaData
   * @param fileId HDF5 FileId to write to
   * @return
   */
-  int32 writeRequiredMetaData(hid_t fileId);
+  int32_t writeRequiredMetaData(hid_t fileId);
 
   /**
    * @brief Writes the User Meta Data
   * @param fileId HDF5 FileId to write to
   * @return
   */
-  int32 writeUserMetaData(hid_t fileId);
+  int32_t writeUserMetaData(hid_t fileId);
 
   /**
   * @brief Writes the support files to the hdf5 data file
   * @param fileId HDF5 file id to write to
   * @return error code
   */
-  int32 writeSupportFiles(hid_t fileId);
+  int32_t writeSupportFiles(hid_t fileId);
 
 
   /**
@@ -114,7 +114,7 @@ protected:
 * @param records
 * @return
 */
-  int32 _traverseDataRecords(hid_t gid,  IDataRecord::Container &records);
+  int32_t _traverseDataRecords(hid_t gid,  IDataRecord::Container &records);
 
   /**
    * @brief Writes a std::string as a HDF Dataset.

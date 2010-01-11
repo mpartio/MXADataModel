@@ -35,7 +35,7 @@ public:
    * @param dim Non-NULL IDataDimension object
    * @return Error condition
    */
-  virtual int32 writeDataDimension(IDataDimension* dim) = 0;
+  virtual int32_t writeDataDimension(IDataDimension* dim) = 0;
 
 private:
     IDataDimensionWriter(const IDataDimensionWriter&);   //Copy Constructor Not Implemented

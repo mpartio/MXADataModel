@@ -45,7 +45,7 @@ public:
    * @param dataFile The IDataFile object
    * @return
    */
-  int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
+  int32_t importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
   {
     IDataModel::Pointer model = dataFile->getDataModel();
     std::string path ( dataSource->generateInternalPath() );
@@ -62,20 +62,20 @@ public:
    * @brief Sets the value to write to the h5 file
    * @param value The value to write to the file
    */
-  void setValue(int32 value)
+  void setValue(int32_t value)
   {
     this->_value = value;
   }
 
   /* Need these implemented but we are not going to make use of the functionality */
-  virtual int32 setProperty(const std::string &key, const std::string &value)
+  virtual int32_t setProperty(const std::string &key, const std::string &value)
     { return -1; }
 
-  virtual int32 getProperty(const std::string &key, std::string &value)
+  virtual int32_t getProperty(const std::string &key, std::string &value)
     { return -1; }
 
 private:
-  int32 _value;
+  int32_t _value;
 
   H5ImportTestDelegate(const H5ImportTestDelegate&);   //Copy Constructor Not Implemented
   void operator=(const H5ImportTestDelegate&); //Copy Assignment Not Implemented

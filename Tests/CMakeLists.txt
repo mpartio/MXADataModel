@@ -171,7 +171,7 @@ IF ( MXA_USE_HDF5 )
       ${PROJECT_BINARY_DIR}/MXAUnitTestDataFileLocations.h
     )
     ADD_EXECUTABLE ( MXA_H5LiteTest ${H5LITE_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (MXA_H5LiteTest ${HDF5_LIBRARIES} ${MXADATAMODEL_LIB_NAME}  )
+    TARGET_LINK_LIBRARIES (MXA_H5LiteTest ${MXADATAMODEL_LIB_NAME}  )
     MXA_ADD_TEST(MXA_H5LiteTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_H5LiteTest)
 
 
@@ -180,9 +180,8 @@ IF ( MXA_USE_HDF5 )
     SET (H5UTIL_TEST_SRCS
       ${MXATests_SOURCE_DIR}/H5UtilitiesTest.cpp
     )
-
     ADD_EXECUTABLE ( MXA_H5UtilitiesTest ${H5UTIL_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (MXA_H5UtilitiesTest ${HDF5_LIBRARIES} ${MXADATAMODEL_LIB_NAME}  )
+    TARGET_LINK_LIBRARIES (MXA_H5UtilitiesTest ${MXADATAMODEL_LIB_NAME}  )
     MXA_ADD_TEST(MXA_H5UtilitiesTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_H5UtilitiesTest)
 ENDIF ( MXA_USE_HDF5 )
 
@@ -202,7 +201,7 @@ SET (BMP_IO_TEST_SRCS
 )
 IF ( MXA_USE_HDF5 )
     ADD_EXECUTABLE(MXA_BmpIOTest ${BMP_IO_TEST_SRCS})
-    TARGET_LINK_LIBRARIES (MXA_BmpIOTest ${HDF5_LIBRARIES} ${MXADATAMODEL_LIB_NAME} )
+    TARGET_LINK_LIBRARIES (MXA_BmpIOTest ${MXADATAMODEL_LIB_NAME} )
     MXA_ADD_TEST(MXA_BmpIOTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_BmpIOTest)
 ENDIF ( MXA_USE_HDF5 )
 
@@ -221,7 +220,7 @@ SET (H5ARRAYTEMPLATE_TEST_SRCS
 IF (MXA_USE_XML)
     SET (XML_TEST_SRCS  ${MXATests_SOURCE_DIR}/XMLTest.cpp )
     ADD_EXECUTABLE( MXA_XMLTest ${XML_TEST_SRCS} )
-    TARGET_LINK_LIBRARIES (MXA_XMLTest  ${EXPAT_LIBRARIES} ${MXADATAMODEL_LIB_NAME} )
+    TARGET_LINK_LIBRARIES (MXA_XMLTest ${MXADATAMODEL_LIB_NAME} )
     MXA_ADD_TEST(MXA_XMLTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_XMLTest)      
 ENDIF(MXA_USE_XML)
 
@@ -256,7 +255,7 @@ set(MXAFileSystemPathTest_SRCS
 add_executable(MXA_FileSystemPathTest ${MXAFileSystemPathTest_SRCS})
 target_link_libraries(MXA_FileSystemPathTest 
                       ${MXADATAMODEL_LIB_NAME} )
-add_test(MXA_FileSystemPathTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_FileSystemPathTest)
+MXA_ADD_TEST(MXA_FileSystemPathTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_FileSystemPathTest)
 
 # --------------------------------------------------------------------
 # ----- MXALogger Test
@@ -266,7 +265,7 @@ set(MXALoggerTest_SRCS
 add_executable(MXA_LoggerTest ${MXALoggerTest_SRCS})
 target_link_libraries(MXA_LoggerTest 
                       ${MXADATAMODEL_LIB_NAME} )
-add_test(MXA_LoggerTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_LoggerTest)
+MXA_ADD_TEST(MXA_LoggerTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_LoggerTest)
 
 # --------------------------------------------------------------------
 #---- Writer Delegate Test
@@ -276,7 +275,7 @@ set (WriterDelegateTest_SRCS
 add_executable(MXA_WriterDelegateTest ${WriterDelegateTest_SRCS} )
 target_link_libraries(MXA_WriterDelegateTest 
                       ${MXADATAMODEL_LIB_NAME} )
-add_test(MXA_WriterDelegateTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_WriterDelegateTest)
+MXA_ADD_TEST(MXA_WriterDelegateTest ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MXA_WriterDelegateTest)
 
 # --------------------------------------------------------------------
 # ------- Vtk to HDF5 Bridge test

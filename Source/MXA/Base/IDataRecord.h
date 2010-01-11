@@ -35,7 +35,7 @@ class MXA_EXPORT IDataRecord
     MXA_SHARED_POINTERS(IDataRecord);
     MXA_TYPE_MACRO(IDataRecord);
     typedef std::vector<Pointer>          Container;
-    typedef std::map<int32, Pointer>      LookupTable;
+    typedef std::map<int32_t, Pointer>      LookupTable;
   //  typedef boost::weak_ptr<IDataRecord>              WeakPointer;
 
     /**
@@ -67,31 +67,31 @@ class MXA_EXPORT IDataRecord
      * @brief Setter for property luid
      * @param aValue The new value to set for property luid
      */
-     virtual void setLuid(int32 aValue) = 0;
+     virtual void setLuid(int32_t aValue) = 0;
 
      /**
      * @brief Getter for property luid
      * @return The value of luid
      */
-     virtual int32 getLuid() = 0;
+     virtual int32_t getLuid() = 0;
 
      /**
      * @brief Setter for property guid
      * @param aValue The new value to set for property guid
      */
-     virtual void setGuid(int32 aValue) = 0;
+     virtual void setGuid(int32_t aValue) = 0;
 
      /**
      * @brief Getter for property guid
      * @return The value of guid
      */
-     virtual int32 getGuid() = 0;
+     virtual int32_t getGuid() = 0;
 
 
      virtual std::string generatePath()  = 0;
      virtual std::string generateParentPath()  = 0;
 
-     virtual int32 writeRecord(IDataRecordWriter* writer) = 0;
+     virtual int32_t writeRecord(IDataRecordWriter* writer) = 0;
 
      /**
       * @brief Checks some basic properties of the model to make sure they are
@@ -122,13 +122,13 @@ class MXA_EXPORT IDataRecord
     * @brief Setter for property guid
     * @param aValue The new value to set for property guid
     */
-    virtual void setUniqueId(int32 aValue) = 0;
+    virtual void setUniqueId(int32_t aValue) = 0;
 
     /**
     * @brief Getter for property guid
     * @return The value of guid
     */
-    virtual int32 getUniqueId() = 0;
+    virtual int32_t getUniqueId() = 0;
 
     /**
      * @brief Resets the GUID value for this node
@@ -139,7 +139,7 @@ class MXA_EXPORT IDataRecord
     /**
     * @brief Returns the number of Children of this node
     */
-    virtual int32 getNumChildren() const = 0;
+    virtual int32_t getNumChildren() const = 0;
 
 
     /**
@@ -174,14 +174,14 @@ class MXA_EXPORT IDataRecord
     * @brief Returns the index of a specific child
     * @param child The child object whose index we are interested in
     */
-    virtual int32 indexOfChild(IDataRecord* child) = 0;
+    virtual int32_t indexOfChild(IDataRecord* child) = 0;
 
     /**
     * @brief Returns a specific child of this node based on a given index
     * @param index The index of the child to return
     * @return The index of the child
     */
-    virtual IDataRecord::Pointer getChildAt(int32 index) = 0;
+    virtual IDataRecord::Pointer getChildAt(int32_t index) = 0;
 
     /**
     * @brief Returns a reference to the children of this node
@@ -200,14 +200,14 @@ class MXA_EXPORT IDataRecord
     * @brief prints the node and the children of this node
     * @param depth The amount of indentation space
     */
-    virtual void printDataRecordTree(int32 depth=0) = 0;
+    virtual void printDataRecordTree(int32_t depth=0) = 0;
 
     /**
     * @brief prints the node and the children of this node
     * @param os An ostream to print the node to
     * @param indentSize The amount of indentation space
     */
-    virtual void printDataRecord(std::ostream& os, int32 indentSize=0) = 0;
+    virtual void printDataRecord(std::ostream& os, int32_t indentSize=0) = 0;
 
 
 

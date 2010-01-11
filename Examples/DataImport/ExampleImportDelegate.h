@@ -9,7 +9,7 @@
 #ifndef EXAMPLEIMPORTDELEGATE_H_
 #define EXAMPLEIMPORTDELEGATE_H_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataSource.h>
 #include <MXA/Base/IDataFile.h>
@@ -37,20 +37,20 @@ public:
    * @param dataFile The IDataFile object
    * @return
    */
-	int32 importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile);
+	int32_t importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile);
 
   /**
   * @brief Sets a property of this class with the given value.
   * @param key The name of the property.
   * @param value  The value to set the property to.
   */
-  virtual int32 setProperty(const std::string &key, const std::string &value)
+  virtual int32_t setProperty(const std::string &key, const std::string &value)
   {
     std::cout << "ExampleImportDelegate::setProperty is NOT implemented" << std::endl;
     return -1;
   }
 
-  virtual int32 getProperty(const std::string &key,  std::string &value)
+  virtual int32_t getProperty(const std::string &key,  std::string &value)
   {
     std::cout << "ExampleImportDelegate::getProperty is NOT implemented" << std::endl;
     return -1;

@@ -193,7 +193,7 @@ public:
 	int  GetCurrentColumnNumber(void);
 	int  GetCurrentByteCount(void);
 
-	const char* GetInputContext(int32* pOffset, int32* pSize);
+	const char* GetInputContext(int32_t* pOffset, int32_t* pSize);
 	const XML_LChar* GetErrorString();
 
 	/*************************************************** Parser Interface **/

@@ -11,7 +11,7 @@
 #ifndef DataSourcePathIndexSection_H_
 #define DataSourcePathIndexSection_H_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Utilities/IStringSection.h>
 
@@ -37,8 +37,8 @@ public:
    * @param width The number of characters to use when creating the vnumber
    * @param numericType The type of number to create.
    */
-  DataSourcePathIndexSection( int32 dimIndex, const std::string  &fillChar,
-                              int32 width, const std::string &numericType);
+  DataSourcePathIndexSection( int32_t dimIndex, const std::string  &fillChar,
+                              int32_t width, const std::string &numericType);
 
   virtual ~DataSourcePathIndexSection();
 
@@ -60,12 +60,12 @@ public:
    * @param ok Was the string created properly
    * @return The created string
    */
-  std::string toString (int value, int8 &ok);
+  std::string toString (int value, int8_t &ok);
 
  private:
-   int32 _index;
+   int32_t _index;
    std::string _fillChar;
-   int32 _width;
+   int32_t _width;
    std::string _numericType;
    std::string _preText;
    std::string _postText;

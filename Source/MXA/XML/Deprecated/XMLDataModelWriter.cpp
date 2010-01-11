@@ -41,7 +41,7 @@ XMLDataModelWriter::~XMLDataModelWriter()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeModel(int32 NOT_USED)
+int32_t XMLDataModelWriter::writeModel(int32_t NOT_USED)
 {
   // Open the file in the proper mode.
   _ofstreamPtr.reset( new std::ofstream ( _fileName.c_str() ) );
@@ -93,7 +93,7 @@ int32 XMLDataModelWriter::writeModel(int32 NOT_USED)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeDataModelTemplate(int32 uniqueId)
+int32_t XMLDataModelWriter::writeDataModelTemplate(int32_t uniqueId)
 {
   std::cout << "XMLDataModelWriter::writeDataModelTemplate NOT IMPLEMENTED" << std::endl;
   return -1;
@@ -153,7 +153,7 @@ std::string XMLDataModelWriter::escapedAttribute(const std::string &str)
 std::string XMLDataModelWriter::_toUpper(const std::string str)
 {
   std::string res = str;
-  int32 (*pf)(int)= toupper;
+  int32_t (*pf)(int)= toupper;
   transform(res.begin(), res.end(), res.begin(), pf);
   return res;
 }
@@ -162,7 +162,7 @@ std::string XMLDataModelWriter::_toUpper(const std::string str)
 //
 // -----------------------------------------------------------------------------
 void XMLDataModelWriter::_openTag(const std::string &tagName,
-                                  int32 depth,
+                                  int32_t depth,
                                   bool group,
                                   std::map<std::string, std::string> &attributes )
 {
@@ -186,7 +186,7 @@ void XMLDataModelWriter::_openTag(const std::string &tagName,
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void XMLDataModelWriter::_openTag(const std::string &tagName, int32 depth, bool group)
+void XMLDataModelWriter::_openTag(const std::string &tagName, int32_t depth, bool group)
 {
   std::map<std::string, std::string> attrs;
   _openTag(tagName, depth, group, attrs);
@@ -195,7 +195,7 @@ void XMLDataModelWriter::_openTag(const std::string &tagName, int32 depth, bool 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void XMLDataModelWriter::_closeGroupTag(const std::string &tagName, int32 depth)
+void XMLDataModelWriter::_closeGroupTag(const std::string &tagName, int32_t depth)
 {
   std::ofstream &stream = *(_ofstreamPtr.get());
   stream << StringUtils::indent(depth) << "</" << tagName << ">" << "\n";
@@ -204,7 +204,7 @@ void XMLDataModelWriter::_closeGroupTag(const std::string &tagName, int32 depth)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-void XMLDataModelWriter::_writeDataRoot(int32 depth)
+void XMLDataModelWriter::_writeDataRoot(int32_t depth)
 {
   std::map<std::string, std::string> attrs;
   attrs[MXA_XML::Attribute::Name] = _dataModel->getDataRoot();
@@ -214,7 +214,7 @@ void XMLDataModelWriter::_writeDataRoot(int32 depth)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeDataDimensions(int32 depth)
+int32_t XMLDataModelWriter::writeDataDimensions(int32_t depth)
 {
   _openTag(MXA_XML::Data_Dimensions, depth);
   IDataDimension::Container dimensions = _dataModel->getDataDimensions();
@@ -232,13 +232,13 @@ int32 XMLDataModelWriter::writeDataDimensions(int32 depth)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeDataRecords(int32 depth)
+int32_t XMLDataModelWriter::writeDataRecords(int32_t depth)
 {
 
   _openTag(MXA_XML::Data_Records, this->_dataRecordIndentation);
   IDataRecord::Container records =  _dataModel->getDataRecords();
   MXADataRecord* rec;
-  int32 err = 0;
+  int32_t err = 0;
   for ( IDataRecord::Container::iterator iter = records.begin(); iter < records.end(); ++iter )
   {
     rec = dynamic_cast<MXADataRecord*> ( (*(iter)).get() ); //get the Raw pointer to the object
@@ -253,7 +253,7 @@ int32 XMLDataModelWriter::writeDataRecords(int32 depth)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeRequiredMetaData(int32 depth)
+int32_t XMLDataModelWriter::writeRequiredMetaData(int32_t depth)
 {
   std::map<std::string, std::string> meta;
   _dataModel->getRequiredMetaData();
@@ -267,13 +267,13 @@ int32 XMLDataModelWriter::writeRequiredMetaData(int32 depth)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeUserMetaData(int32 depth)
+int32_t XMLDataModelWriter::writeUserMetaData(int32_t depth)
 {
   std::map<std::string, std::string> meta;
   _openTag(MXA_XML::UserDefined_MD, depth, true, meta);
 
-  int32 err = 0;
-  //int32 fileId = 0;
+  int32_t err = 0;
+  //int32_t fileId = 0;
 
   MXAAbstractAttributes metadata = _dataModel->getUserMetaData();
   for (MXAAbstractAttributes::iterator iter = metadata.begin(); iter!=metadata.end(); iter++) {
@@ -293,7 +293,7 @@ int32 XMLDataModelWriter::writeUserMetaData(int32 depth)
 // -----------------------------------------------------------------------------
 //  IDataDimensionWriter Interface
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeDataDimension(IDataDimension* dim)
+int32_t XMLDataModelWriter::writeDataDimension(IDataDimension* dim)
 {
   std::map<std::string, std::string> attrs;
   attrs[MXA::MXA_NAME_TAG] = dim->getDimensionName();
@@ -333,10 +333,10 @@ int32 XMLDataModelWriter::writeDataDimension(IDataDimension* dim)
 // -----------------------------------------------------------------------------
 //  IDataRecordWriter Interface
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeDataRecord(IDataRecord* record)
+int32_t XMLDataModelWriter::writeDataRecord(IDataRecord* record)
 {
-  //int32 depth = 3;
-  int32 err = -1;
+  //int32_t depth = 3;
+  int32_t err = -1;
   std::map<std::string, std::string> attrs;
   attrs[MXA_XML::Attribute::Name] = record->getRecordName();
   attrs[MXA_XML::Attribute::AltName] = record->getAltName();
@@ -362,9 +362,9 @@ int32 XMLDataModelWriter::writeDataRecord(IDataRecord* record)
 // -----------------------------------------------------------------------------
 //  IDataModelWriter Interface
 // -----------------------------------------------------------------------------
-int32 XMLDataModelWriter::writeSupportFiles(int32 indentDepth)
+int32_t XMLDataModelWriter::writeSupportFiles(int32_t indentDepth)
 {
-  int32 err = 0;
+  int32_t err = 0;
   std::map<std::string, std::string> attrs;
   ISupportFile::Container files = this->_dataModel->getSupportFiles();
   ISupportFile* file;

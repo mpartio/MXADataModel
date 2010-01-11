@@ -59,7 +59,7 @@ herr_t H5Utilities::closeFile(hid_t &fileId)
 
   // Get the number of open identifiers of all types
   //  except files
-  int32 num_open = H5Fget_obj_count(fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |
+  int32_t num_open = H5Fget_obj_count(fileId, H5F_OBJ_DATASET | H5F_OBJ_GROUP |
             H5F_OBJ_DATATYPE | H5F_OBJ_ATTR);
   if (num_open > 0) {
     std::cout << "WARNING: Some IDs weren't closed. Closing them."  << std::endl;
@@ -106,7 +106,7 @@ std::string H5Utilities::getObjectPath(hid_t loc_id, bool trim)
 // @brief Retrieves the HDF object type for obj_name at loc_id and stores
 //    it in the parameter obj_type passed in.
 // -----------------------------------------------------------------------------
-herr_t H5Utilities::getObjectType(hid_t objId, const std::string &objName, int32 *objType)
+herr_t H5Utilities::getObjectType(hid_t objId, const std::string &objName, int32_t *objType)
 {
   herr_t err=1;
   H5G_stat_t obj_info;
@@ -127,7 +127,7 @@ herr_t H5Utilities::getObjectType(hid_t objId, const std::string &objName, int32
 //  different open and close methods for different types of objects
 hid_t H5Utilities::openHDF5Object(hid_t loc_id, const std::string &objName)
 {
-  int32 obj_type;
+  int32_t obj_type;
   hid_t obj_id;
   herr_t err=0;
   HDF_ERROR_HANDLER_OFF;
@@ -206,7 +206,7 @@ herr_t H5Utilities::closeHDF5Object(hid_t obj_id)
  *  command.  Or you can pass in HDF5_ANY (equivalent to: HDF5_GROUP |
  *  HDF5_DATASET | HDF5_TYPE | HDF5_LINK) to not filter at all
  */
-herr_t H5Utilities::getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<std::string>& names)
+herr_t H5Utilities::getGroupObjects(hid_t loc_id, int32_t typeFilter, std::list<std::string>& names)
 {
   herr_t err=0;
   hsize_t numObjs = 0;
@@ -223,7 +223,7 @@ herr_t H5Utilities::getGroupObjects(hid_t loc_id, int32 typeFilter, std::list<st
   }
 
   size_t size=0;
-  int32 type=-1;
+  int32_t type=-1;
 
   for (hsize_t i=0; i<numObjs; i++) {
     size = 1 + H5Gget_objname_by_idx(loc_id, i, NULL, 0);
@@ -278,7 +278,7 @@ hid_t H5Utilities::createGroup(hid_t loc_id, const std::string &group)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5Utilities::createGroupsForDataset(const std::string &datasetPath, hid_t parent)
+int32_t H5Utilities::createGroupsForDataset(const std::string &datasetPath, hid_t parent)
 {
   // Generate the internal HDF dataset path and create all the groups necessary to write the dataset
   std::string::size_type pos = 0;
@@ -297,7 +297,7 @@ int32 H5Utilities::createGroupsForDataset(const std::string &datasetPath, hid_t 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 H5Utilities::createGroupsFromPath(const std::string &pathToCheck, hid_t parent)
+int32_t H5Utilities::createGroupsFromPath(const std::string &pathToCheck, hid_t parent)
 {
 
   hid_t gid = 1;
@@ -406,7 +406,7 @@ bool H5Utilities::probeForAttribute(hid_t loc_id,
                                     const std::string &attr_name)
 {
   herr_t err=0;
-  int32 rank;
+  int32_t rank;
   HDF_ERROR_HANDLER_OFF
   err = H5Lite::getAttributeNDims(loc_id, obj_name, attr_name, rank);
   HDF_ERROR_HANDLER_ON
@@ -426,7 +426,7 @@ herr_t H5Utilities::getAllAttributeNames(hid_t obj_id,
 {
   if (obj_id < 0) { return -1; }
   herr_t err = -1;
-  int32 num_attrs;
+  int32_t num_attrs;
   hid_t attr_id;
   size_t name_size;
 
@@ -480,7 +480,7 @@ herr_t H5Utilities::getAllAttributeNames(hid_t obj_id,
    hid_t tid;
    MXATypes::Int32Vector ires;
    MXATypes::Float32Vector fres;
-   std::vector<uint64> dims;  //Reusable for the loop
+   std::vector<uint64_t> dims;  //Reusable for the loop
    std::list<std::string> names;
    err = getAllAttributeNames(loc_id, obj_name, names);
    if (err < 0) { return err; }
@@ -539,7 +539,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
   size_t attr_size;
   std::string res;
 
-  std::vector<uint64> dims;  //Reusable for the loop
+  std::vector<uint64_t> dims;  //Reusable for the loop
   std::list<std::string> names;
   err = H5Utilities::getAllAttributeNames(fileId, datasetPath, names );
 
@@ -562,28 +562,28 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
       case H5T_INTEGER:
         //std::cout << "User Meta Data Type is Integer" << std::endl;
         if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint8_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint16_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint32_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint64_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int8>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int8_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int16>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int16_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int32_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int64_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
         } else {
           std::cout << "Unknown Type: " << typeId << " at " <<  datasetPath << std::endl;
@@ -712,7 +712,7 @@ void H5Utilities::printHDFClassType(H5T_class_t class_type)
 // -----------------------------------------------------------------------------
 //  Returns a std::string that is the name of the object at the given index
 // -----------------------------------------------------------------------------
-herr_t H5Utilities::objectNameAtIndex(hid_t fileId, int32 idx, std::string &name)
+herr_t H5Utilities::objectNameAtIndex(hid_t fileId, int32_t idx, std::string &name)
 {
   herr_t err = -1;
   // call H5Gget_objname_by_idx with name as NULL to get its length

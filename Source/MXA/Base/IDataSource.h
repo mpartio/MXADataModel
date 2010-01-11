@@ -37,7 +37,7 @@ public:
     * @param indices A new set of indices to use to generate the paths
     * @return The generated internal path. Empty if there was an error.
     */
-   virtual std::string generateInternalPath ( std::vector<int32> &indices) = 0;
+   virtual std::string generateInternalPath ( std::vector<int32_t> &indices) = 0;
 
    /**
     * Set the value of m_dataRecord
@@ -100,13 +100,13 @@ public:
     * Set the value of m_dimensionValues
     * @param new_var the new value of m_dimensionValues
     */
-   virtual void setDimensionValues ( std::vector<int32> new_var ) = 0;
+   virtual void setDimensionValues ( std::vector<int32_t> new_var ) = 0;
 
    /**
     * Get the value of m_dimensionValues
     * @return the value of m_dimensionValues
     */
-   virtual std::vector<int32> getDimensionValues ( ) = 0;
+   virtual std::vector<int32_t> getDimensionValues ( ) = 0;
 
 private:
 

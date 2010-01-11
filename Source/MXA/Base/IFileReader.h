@@ -38,7 +38,7 @@ class MXA_EXPORT IFileReader
    * @param dataFile The file to read the data from
    * @return Error condition. 0 or positive is success. Negative is failure
    */
-    virtual int32 readFromFile(DataFileType dataFile) = 0;
+    virtual int32_t readFromFile(DataFileType dataFile) = 0;
 
   protected:
 

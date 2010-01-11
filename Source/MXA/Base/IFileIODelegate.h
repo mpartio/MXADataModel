@@ -13,7 +13,7 @@
 
 //MXA Includes
 #include <MXA/Common/DLLExport.h>
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Core/MXADataModel.h>
 
@@ -51,7 +51,7 @@ public:
   * @param deleteExisting Delete existing file of the same name and create a new file
   * @return MXAError - Zero or Positive values are success. Negative values are errors
   */
-  virtual int32 writeModelToFile(const std::string &fileName,
+  virtual int32_t writeModelToFile(const std::string &fileName,
                                  IDataModel::Pointer model,
                                  bool closeWhenFinished,
                                  bool deleteExisting) = 0;
@@ -61,7 +61,7 @@ public:
      * @param stream
      * @param model The Model to serialize
      */
-    virtual int32 writeModelToStream(const std::ostream &stream, IDataModel::Pointer model) = 0;
+    virtual int32_t writeModelToStream(const std::ostream &stream, IDataModel::Pointer model) = 0;
 
   /** @brief Deserializes a Datamodel from a file on disk
   * @param fileName The name of the file (including path) to deserialize from
@@ -72,7 +72,7 @@ public:
   * release the Object. If an Error occurs during the reading, then a NULL pointer
   * is returned.
   */
-  virtual int32 readModelFromFile(const std::string &fileName,
+  virtual int32_t readModelFromFile(const std::string &fileName,
                                   IDataModel::Pointer model,
                                   bool closeWhenFinished,
                                   bool openReadOnly) = 0;
@@ -97,7 +97,7 @@ public:
    * @param readOnly True if you want the file opened as read only. False if you need to write something to the file
    * @return HDF5 file id
    */
-  virtual int32 openMXAFile(std::string filename, bool readOnly=false) = 0;
+  virtual int32_t openMXAFile(std::string filename, bool readOnly=false) = 0;
 
   /**
    * @brief Closes the currently open file
@@ -107,7 +107,7 @@ public:
   /**
    * @brief Returns the HDF file id of the currently open file
    */
-  virtual int32 getOpenFileId() = 0;
+  virtual int32_t getOpenFileId() = 0;
 
   /**
    * @brief Returns the currently open filename as an absolute path

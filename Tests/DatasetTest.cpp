@@ -86,14 +86,14 @@ void MakeDataRecord( const std::string &key, IDataModel::Pointer model)
 template<typename T>
 void MakeAttribute(const std::string &dsPath, IDataset::Pointer dataset)
 {
-  int32 numElements = 1;
+  int32_t numElements = 1;
   T value = 0xFF;
   std::string attributeKey = H5Lite::HDFTypeForPrimitiveAsStr(value);
   attributeKey = "H5Attribute<" + attributeKey + ">";
 
   MXAArrayTemplate<T>* attribute = MXAArrayTemplate<T>::New( numElements);
   IMXAArray::Pointer attr (static_cast<IMXAArray*>(attribute));
-  for (int32 i = 0; i < numElements; ++i)
+  for (int32_t i = 0; i < numElements; ++i)
   {
     attribute->setValue (i, i*4) ;
   }
@@ -182,7 +182,7 @@ IDataModel::Pointer createModel()
     md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
     md[MXA::MXA_RELEASE_NUMBER_TAG] = "Not Applicable";
 
-    int32 err = -1;
+    int32_t err = -1;
     err = model->setRequiredMetaData(md);
     errorMessage.clear();
     MXA_REQUIRE ( (model->isValid(errorMessage) ) == true );
@@ -193,7 +193,7 @@ IDataModel::Pointer createModel()
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFile)
+int32_t _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFile)
 {
 //  T t;
 //   std::cout << "Running _WriteDatasetTest<" << H5Lite::HDFTypeForPrimitiveAsStr(t) << ">" << std::endl;
@@ -201,16 +201,16 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFile
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   MXA_REQUIRE(rec.get() != NULL);
 
-  std::vector<int32> mxaDims;
+  std::vector<int32_t> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
   std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
-  int32 err = 1;
+  int32_t err = 1;
 
   // Create the data
   int rank = 1;
-  std::vector<uint64> dims(rank, 0);
+  std::vector<uint64_t> dims(rank, 0);
 
-  uint64 numElements = 5;
+  uint64_t numElements = 5;
   MXAArrayTemplate<T>* data = MXAArrayTemplate<T>::New( numElements);
   IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data));
   MXA_REQUIRE(data != 0x0);
@@ -231,12 +231,12 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFile
   MXA_REQUIRE(data->getNumberOfElements() == numElements);
   data->getDimensions( &(dims.front() )  );
   MXA_REQUIRE(dims[0] == numElements);
-  for (uint64 i = 0; i < numElements; ++i) {
+  for (uint64_t i = 0; i < numElements; ++i) {
     data->setValue(i, static_cast<T>(i) );
   }
   // Actually set some meaningful data to the array
   T* value = static_cast<T*>(data->getVoidPointer(0) );
-  for (uint64 i = 0; i < numElements; ++i) {
+  for (uint64_t i = 0; i < numElements; ++i) {
     MXA_REQUIRE(value[i] == static_cast<T>(i) );
   }
 
@@ -244,14 +244,14 @@ int32 _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFile
   IDataset::Pointer ds = H5Dataset::CreateDatasetPtr(dsPath, dataPtr);
 
   //Create Attributes for each primitive type
-  MakeAttribute<int8>(dsPath, ds );
-  MakeAttribute<uint8>( dsPath, ds );
-  MakeAttribute<int16>( dsPath, ds );
-  MakeAttribute<uint16>( dsPath, ds );
-  MakeAttribute<int32>( dsPath, ds );
-  MakeAttribute<uint32>(dsPath, ds );
-  MakeAttribute<int64>( dsPath, ds );
-  MakeAttribute<uint64>(dsPath, ds );
+  MakeAttribute<int8_t>(dsPath, ds );
+  MakeAttribute<uint8_t>( dsPath, ds );
+  MakeAttribute<int16_t>( dsPath, ds );
+  MakeAttribute<uint16_t>( dsPath, ds );
+  MakeAttribute<int32_t>( dsPath, ds );
+  MakeAttribute<uint32_t>(dsPath, ds );
+  MakeAttribute<int64_t>( dsPath, ds );
+  MakeAttribute<uint64_t>(dsPath, ds );
   MakeAttribute<float32>(dsPath, ds );
   MakeAttribute<float64>( dsPath, ds );
   MakeStringAttribute(dsPath, ds);
@@ -272,10 +272,10 @@ void _WriteStringDataTest ( const std::string &recName, IDataFile::Pointer dataF
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   MXA_REQUIRE(rec.get() != NULL);
 
-  std::vector<int32> mxaDims;
+  std::vector<int32_t> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
   std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
-  int32 err = 1;
+  int32_t err = 1;
 
   std::string stringData ("This is some string data");
   IMXAArray::Pointer strData = MXAAsciiStringData::Create(stringData);
@@ -285,14 +285,14 @@ void _WriteStringDataTest ( const std::string &recName, IDataFile::Pointer dataF
 
 
   //Create Attributes for each primitive type
-  MakeAttribute<int8>(dsPath, ds );
-  MakeAttribute<uint8>( dsPath, ds );
-  MakeAttribute<int16>( dsPath, ds );
-  MakeAttribute<uint16>( dsPath, ds );
-  MakeAttribute<int32>( dsPath, ds );
-  MakeAttribute<uint32>(dsPath, ds );
-  MakeAttribute<int64>( dsPath, ds );
-  MakeAttribute<uint64>(dsPath, ds );
+  MakeAttribute<int8_t>(dsPath, ds );
+  MakeAttribute<uint8_t>( dsPath, ds );
+  MakeAttribute<int16_t>( dsPath, ds );
+  MakeAttribute<uint16_t>( dsPath, ds );
+  MakeAttribute<int32_t>( dsPath, ds );
+  MakeAttribute<uint32_t>(dsPath, ds );
+  MakeAttribute<int64_t>( dsPath, ds );
+  MakeAttribute<uint64_t>(dsPath, ds );
   MakeAttribute<float32>(dsPath, ds );
   MakeAttribute<float64>( dsPath, ds );
   MakeStringAttribute(dsPath, ds);
@@ -307,7 +307,7 @@ void _WriteStringDataTest ( const std::string &recName, IDataFile::Pointer dataF
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-int32 _Write2DArrayTest( const std::string &recName, IDataFile::Pointer dataFile)
+int32_t _Write2DArrayTest( const std::string &recName, IDataFile::Pointer dataFile)
 {
 //  T t;
 //  std::cout << "Running _Write2DArrayTest<" << H5Lite::HDFTypeForPrimitiveAsStr(t) << ">" << std::endl;
@@ -315,15 +315,15 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFile::Pointer dataFile
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   MXA_REQUIRE(rec.get() != NULL);
 
-  std::vector<int32> mxaDims;
+  std::vector<int32_t> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
   std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
-  int32 err = 1;
+  int32_t err = 1;
 
   // Create the data
-  uint64 numElements = 256 * 100;
+  uint64_t numElements = 256 * 100;
   int rank = 2;
-  std::vector<uint64> dims(rank, 0);
+  std::vector<uint64_t> dims(rank, 0);
   MXA2DArray<T>* data = MXA2DArray<T>::New( 256, 100);
   IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
 
@@ -370,12 +370,12 @@ int32 _Write2DArrayTest( const std::string &recName, IDataFile::Pointer dataFile
   data->getDimensions( &(dims.front() ) );
   MXA_REQUIRE(dims[0] == 212);
   MXA_REQUIRE(dims[1] == 120);
-  for (uint64 i = 0; i < numElements; ++i) {
+  for (uint64_t i = 0; i < numElements; ++i) {
     data->setValue(i, static_cast<T>(i) );
   }
 
   T* value = static_cast<T*>(data->getVoidPointer(0) );
-  for (uint64 i = 0; i < numElements; ++i) {
+  for (uint64_t i = 0; i < numElements; ++i) {
     MXA_REQUIRE(value[i] == static_cast<T>(i) );
   }
 
@@ -399,15 +399,15 @@ void _WriteRGBImageTest( const std::string &recName, IDataFile::Pointer dataFile
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   MXA_REQUIRE(rec.get() != NULL);
 
-  std::vector<int32> mxaDims;
+  std::vector<int32_t> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
   std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
-  int32 err = 1;
+  int32_t err = 1;
 
   // Create the data
-  uint64 numElements = 256 * 100 * 3;
+  uint64_t numElements = 256 * 100 * 3;
   int rank = 2;
-  std::vector<uint64> dims(rank, 0);
+  std::vector<uint64_t> dims(rank, 0);
   MXARGBImage* data = MXARGBImage::New( 256, 100);
   IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
   MXA_REQUIRE(data != 0x0);
@@ -428,9 +428,9 @@ void _WriteRGBImageTest( const std::string &recName, IDataFile::Pointer dataFile
   MXA_REQUIRE(dims[0] == 101);
 
   //put some actual data into the image
-  uint8* pixel = data->getPixelPointer(0,0);
-  int32 xDim = 150;
-  int32 yDim = 101;
+  uint8_t* pixel = data->getPixelPointer(0,0);
+  int32_t xDim = 150;
+  int32_t yDim = 101;
   for (int i = 0; i < yDim; ++i) {
     for (int j = 0; j < xDim; ++j) {
       *pixel = i + j;
@@ -465,14 +465,14 @@ void WriteDatasetTest()
  MXA_REQUIRE( NULL != dataFile.get() );
 
   // These will test WRITING Data to the data file
-  _WriteDatasetTest<int8>( "Dataset Int 8", dataFile );
-  _WriteDatasetTest<uint8>( "Dataset UInt 8", dataFile );
-  _WriteDatasetTest<int16>( "Dataset Int 16", dataFile );
-  _WriteDatasetTest<uint16>( "Dataset UInt 16", dataFile );
-  _WriteDatasetTest<int32>( "Dataset Int 32", dataFile );
-  _WriteDatasetTest<uint32>( "Dataset UInt 32", dataFile );
-  _WriteDatasetTest<int64>( "Dataset Int 64", dataFile );
-  _WriteDatasetTest<uint64>( "Dataset UInt 64", dataFile );
+  _WriteDatasetTest<int8_t>( "Dataset Int 8", dataFile );
+  _WriteDatasetTest<uint8_t>( "Dataset UInt 8", dataFile );
+  _WriteDatasetTest<int16_t>( "Dataset Int 16", dataFile );
+  _WriteDatasetTest<uint16_t>( "Dataset UInt 16", dataFile );
+  _WriteDatasetTest<int32_t>( "Dataset Int 32", dataFile );
+  _WriteDatasetTest<uint32_t>( "Dataset UInt 32", dataFile );
+  _WriteDatasetTest<int64_t>( "Dataset Int 64", dataFile );
+  _WriteDatasetTest<uint64_t>( "Dataset UInt 64", dataFile );
   _WriteDatasetTest<float32>( "Dataset Float 32", dataFile );
   _WriteDatasetTest<float64>( "Dataset Float 64", dataFile );
   std::cout << "... Passed." << std::endl;
@@ -482,14 +482,14 @@ void WriteDatasetTest()
   std::cout << "... Passed." << std::endl;
 
   std::cout << "Running _Write2DArrayTest<T> Test ....";
-  _Write2DArrayTest<int8>( "2DArray Int 8", dataFile );
-  _Write2DArrayTest<uint8>( "2DArray UInt 8", dataFile );
-  _Write2DArrayTest<int16>( "2DArray Int 16", dataFile );
-  _Write2DArrayTest<uint16>( "2DArray UInt 16", dataFile );
-  _Write2DArrayTest<int32>( "2DArray Int 32", dataFile );
-  _Write2DArrayTest<uint32>( "2DArray UInt 32", dataFile );
-  _Write2DArrayTest<int64>( "2DArray Int 64", dataFile );
-  _Write2DArrayTest<uint64>( "2DArray UInt 64", dataFile );
+  _Write2DArrayTest<int8_t>( "2DArray Int 8", dataFile );
+  _Write2DArrayTest<uint8_t>( "2DArray UInt 8", dataFile );
+  _Write2DArrayTest<int16_t>( "2DArray Int 16", dataFile );
+  _Write2DArrayTest<uint16_t>( "2DArray UInt 16", dataFile );
+  _Write2DArrayTest<int32_t>( "2DArray Int 32", dataFile );
+  _Write2DArrayTest<uint32_t>( "2DArray UInt 32", dataFile );
+  _Write2DArrayTest<int64_t>( "2DArray Int 64", dataFile );
+  _Write2DArrayTest<uint64_t>( "2DArray UInt 64", dataFile );
   _Write2DArrayTest<float32>( "2DArray Float 32", dataFile );
   _Write2DArrayTest<float64>( "2DArray Float 64", dataFile );
   std::cout << "... Passed." << std::endl;
@@ -504,13 +504,13 @@ void WriteDatasetTest()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 _readDatasetTest(const std::string &recName, IDataFile::Pointer dataFile)
+int32_t _readDatasetTest(const std::string &recName, IDataFile::Pointer dataFile)
 {
   IDataModel::Pointer model = dataFile->getDataModel();
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   MXA_REQUIRE(rec.get() != NULL);
 
-  std::vector<int32> mxaDims;
+  std::vector<int32_t> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
   std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
 
@@ -523,22 +523,22 @@ int32 _readDatasetTest(const std::string &recName, IDataFile::Pointer dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-int32 _readRGBImageTest(const std::string &recName, IDataFile::Pointer dataFile)
+int32_t _readRGBImageTest(const std::string &recName, IDataFile::Pointer dataFile)
 {
   IDataModel::Pointer model = dataFile->getDataModel();
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName, NULL);
   MXA_REQUIRE(rec.get() != NULL);
 
-  std::vector<int32> mxaDims;
+  std::vector<int32_t> mxaDims;
   mxaDims.push_back(2); // This data set is for index '2' of the 'Data Container' MXA Data Dimension
   std::string dsPath = H5MXAUtilities::generateH5PathToDataset(model, mxaDims, rec);
 
   //MXARGBImage* data = MXARGBImage::New( 150, 101);
  // IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
   IMXAArray::Pointer dataPtr = H5MXAUtilities::readData(dataFile, dsPath);
-  uint64 numElements = 150 * 101 * 3;
+  uint64_t numElements = 150 * 101 * 3;
   int rank = 2;
-  std::vector<uint64> dims(rank, 0);
+  std::vector<uint64_t> dims(rank, 0);
   //MXA_REQUIRE(dataPtr->getWidth() == 150);
   //MXA_REQUIRE(dataPtr->getHeight() == 101);
   MXA_REQUIRE(dataPtr->getNumberOfElements() == numElements);
@@ -548,9 +548,9 @@ int32 _readRGBImageTest(const std::string &recName, IDataFile::Pointer dataFile)
 #if 0
 #warning RGBImage class needs to have special file writing code
 
-  uint8* pixel = dataPtr->getPixelPointer(0,0);
-  int32 xDim = 150;
-  int32 yDim = 101;
+  uint8_t* pixel = dataPtr->getPixelPointer(0,0);
+  int32_t xDim = 150;
+  int32_t yDim = 101;
   for (int i = 0; i < yDim; ++i) {
     for (int j = 0; j < xDim; ++j) {
       pixel = data->getPixelPointer(j, i);
@@ -597,15 +597,15 @@ void ReadDatasetTest( )
 // -----------------------------------------------------------------------------
 void TestDataWrapper()
 {
-  uint32 i32Array[10] = { 0x00000001,0x00000002,0x00000003,0x00000004,0x00000005,
+  uint32_t i32Array[10] = { 0x00000001,0x00000002,0x00000003,0x00000004,0x00000005,
                           0x00000006,0x00000007,0x00000008,0x00000009,0x0000000A};
-  uint32 i32ArraySwap[10] = { 0x01000000,0x02000000,0x03000000,0x04000000,0x05000000,
+  uint32_t i32ArraySwap[10] = { 0x01000000,0x02000000,0x03000000,0x04000000,0x05000000,
                               0x06000000,0x07000000,0x08000000,0x09000000,0x0A000000};
 
-  MXAArrayTemplate<uint32>* ui32;
-  IMXAArray::Pointer ptr32 = MXAArrayTemplate<uint32>::CreateArray(10);
-  ui32 = dynamic_cast<MXAArrayTemplate<uint32>*>(ptr32.get());
-  for (uint32 i = 0; i < 10; ++i) {
+  MXAArrayTemplate<uint32_t>* ui32;
+  IMXAArray::Pointer ptr32 = MXAArrayTemplate<uint32_t>::CreateArray(10);
+  ui32 = dynamic_cast<MXAArrayTemplate<uint32_t>*>(ptr32.get());
+  for (uint32_t i = 0; i < 10; ++i) {
     ui32->setValue(i, i32Array[i]);
   }
   ui32->byteSwapElements();
@@ -615,14 +615,14 @@ void TestDataWrapper()
   }
 
 
-  uint64 i64Array[10] = { 0x0000000000000001,0x0000000000000002,0x0000000000000003,0x0000000000000004,0x0000000000000005,
+  uint64_t i64Array[10] = { 0x0000000000000001,0x0000000000000002,0x0000000000000003,0x0000000000000004,0x0000000000000005,
                           0x0000000000000006,0x0000000000000007,0x0000000000000008,0x0000000000000009,0x000000000000000A};
-  uint64 i64ArraySwap[10] = { 0x0100000000000000ull,0x0200000000000000ull,0x0300000000000000ull,0x0400000000000000ull,0x0500000000000000ull,
+  uint64_t i64ArraySwap[10] = { 0x0100000000000000ull,0x0200000000000000ull,0x0300000000000000ull,0x0400000000000000ull,0x0500000000000000ull,
                               0x0600000000000000ull,0x0700000000000000ull,0x0800000000000000ull,0x0900000000000000ull,0x0A00000000000000ull};
-  MXAArrayTemplate<uint64>* ui64;
-  IMXAArray::Pointer ptr64 = MXAArrayTemplate<uint64>::CreateArray(10);
-  ui64 = dynamic_cast<MXAArrayTemplate<uint64>*>(ptr64.get());
-  for (uint64 i = 0; i < 10; ++i) {
+  MXAArrayTemplate<uint64_t>* ui64;
+  IMXAArray::Pointer ptr64 = MXAArrayTemplate<uint64_t>::CreateArray(10);
+  ui64 = dynamic_cast<MXAArrayTemplate<uint64_t>*>(ptr64.get());
+  for (uint64_t i = 0; i < 10; ++i) {
     ui64->setValue(i, i64Array[i]);
   }
   ui64->byteSwapElements();

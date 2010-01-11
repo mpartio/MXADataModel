@@ -52,7 +52,7 @@ INSTALL (FILES ${IMPORTGENERATOR_INSTALLED_RESOURCES}
         DESTINATION share/MXADataModel/Resources/Templates
         COMPONENT Resources)
 
-INSTALL (FILES ${MXA_CMAKE_DIR}/FindMXADataModel.cmake
+INSTALL (FILES ${PROJECT_CMAKE_DIR}/FindMXADataModel.cmake
         DESTINATION share/MXADataModel/Resources/CMake
         COMPONENT Resources
         )

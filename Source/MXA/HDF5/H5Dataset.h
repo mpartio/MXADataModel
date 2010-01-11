@@ -101,8 +101,8 @@ public:
   // -----------------------------------------------------------------------------
   // IDataFileIO Methods
   // -----------------------------------------------------------------------------
-  virtual int32 writeToFile (IDataFile::Pointer dataFile);
-  virtual int32 readFromFile (IDataFile::Pointer dataFile);
+  virtual int32_t writeToFile (IDataFile::Pointer dataFile);
+  virtual int32_t readFromFile (IDataFile::Pointer dataFile);
 
 protected:
   H5Dataset() {}  // Protected constructor

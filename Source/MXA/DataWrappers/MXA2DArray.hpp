@@ -40,10 +40,10 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @param height The height of the array.
      * @return Boost::shared_pointer wrapped MXA2DArray pointer
      */
-    static IMXAArray::Pointer CreateAbstractDataArray( int32 width, int32 height)
+    static IMXAArray::Pointer CreateAbstractDataArray( int32_t width, int32_t height)
     {
       IMXAArray::Pointer ptr;
-      int32 err = 1;
+      int32_t err = 1;
       MXA2DArray<T>* d = new MXA2DArray<T>( width, height);
       err = d->_allocate();
       if (err >= 0)
@@ -64,9 +64,9 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @param height The height of the array.
      * @return Pointer to an MXA2DArray Object
      */
-    static MXA2DArray* New( int32 width, int32 height)
+    static MXA2DArray* New( int32_t width, int32_t height)
     {
-      int32 err = 1;
+      int32_t err = 1;
       MXA2DArray* d = new MXA2DArray( width, height);
       err = d->_allocate();
       if (err < 0)
@@ -83,7 +83,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
     /**
      * @brief Returns the number of dimensions the data has.
      */
-    virtual int32 getNumberOfDimensions ()
+    virtual int32_t getNumberOfDimensions ()
     {
       return 2;
     }
@@ -93,7 +93,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @brief Returns the sizes of the dimensions
      * @param dims A pointer to an array of at least size=2.
      */
-    virtual void getDimensions(uint64* dims)
+    virtual void getDimensions(uint64_t* dims)
     {
       dims[0] = _width;
       dims[1] = _height;
@@ -103,13 +103,13 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @brief Returns the width of the array
      * @return
      */
-    virtual int32 getWidth() { return _width; }
+    virtual int32_t getWidth() { return _width; }
 
     /**
      * @brief Returns the height of the array.
      * @return
      */
-    virtual int32 getHeight() { return _height; }
+    virtual int32_t getHeight() { return _height; }
 
     /**
      * @brief Returns the a pointer to the data value located at pixel (x,y)
@@ -117,13 +117,13 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @param y The y location of the pixel
      * @return A pointer to the value.
      */
-    T* getPointer(int32 x, int32 y)
+    T* getPointer(int32_t x, int32_t y)
     {
       if (x < 0 || y < 0 || y >= _height || x >= _width)
       {
         return NULL;
       }
-      uint64 index = (_width * y ) + x ;
+      uint64_t index = (_width * y ) + x ;
       return static_cast<T*>(this->getVoidPointer(index));
     }
 
@@ -133,7 +133,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @param size The new size of the array
      * @return 1 if the resize succeeded, 0 on error
      */
-    virtual int32 resize(uint64 size)
+    virtual int32_t resize(uint64_t size)
     {
       if(this->_resizeAndExtend(size) || size <= 0)
         {
@@ -153,9 +153,9 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @param height The new height of the array
      * @return 1 on success and Zero (0) on failure
      */
-    int32 resizeArray(int32 width, int32 height)
+    int32_t resizeArray(int32_t width, int32_t height)
     {
-      int32 err =  this->resize(width * height);
+      int32_t err =  this->resize(width * height);
       this->_width = width;
       this->_height = height;
       if (err == 0)
@@ -181,10 +181,10 @@ class MXA2DArray : public MXAArrayTemplate<T>
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileWriter)
 // -----------------------------------------------------------------------------
-    virtual int32 writeToFile (IDataFile::Pointer dataFile)
+    virtual int32_t writeToFile (IDataFile::Pointer dataFile)
     {
-      int32 err = -1;
-      std::vector<uint64> dims (2, 0 );
+      int32_t err = -1;
+      std::vector<uint64_t> dims (2, 0 );
       dims[0] = this->_width;
       dims[1] = this->_height;
       err = H5Utilities::createGroupsForDataset(this->getDatasetPath(), dataFile->getFileId() );
@@ -200,7 +200,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
 // -----------------------------------------------------------------------------
 //  IDataFileIO Implementation (IFileReader)
 // -----------------------------------------------------------------------------
-    virtual int32 readFromFile(IDataFile::Pointer dataFile)
+    virtual int32_t readFromFile(IDataFile::Pointer dataFile)
     {
       hid_t fileId = dataFile->getFileId();
       if (fileId < 0)
@@ -222,8 +222,8 @@ class MXA2DArray : public MXAArrayTemplate<T>
       {
         return -1;
       }
-      uint64 numElements = 1;
-      for (std::vector<uint64>::size_type i = 0; i < dims.size(); ++i)
+      uint64_t numElements = 1;
+      for (std::vector<uint64_t>::size_type i = 0; i < dims.size(); ++i)
       {
         numElements = numElements * dims[i];
       }
@@ -249,11 +249,11 @@ class MXA2DArray : public MXAArrayTemplate<T>
     virtual std::string valueToString(char delimiter = ' ')
     {
       std::stringstream sstream;
-      uint64 nElements = this->getNumberOfElements();
-      uint64 limit = nElements - 1;
-      int32 width = 0;
+      uint64_t nElements = this->getNumberOfElements();
+      uint64_t limit = nElements - 1;
+      int32_t width = 0;
       T* data = this->getPointer(0, 0);
-      for(uint64 i = 0; i < nElements; ++i)
+      for(uint64_t i = 0; i < nElements; ++i)
       {
         if (sizeof(T) != 1 )
          {
@@ -261,7 +261,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
          }
          else
          {
-           sstream  << static_cast<int32>(data[i]);
+           sstream  << static_cast<int32_t>(data[i]);
          }
         if (i < limit && width != _width)
         {
@@ -279,15 +279,15 @@ class MXA2DArray : public MXAArrayTemplate<T>
 
 
   protected:
-      MXA2DArray( int32 width, int32 height):
+      MXA2DArray( int32_t width, int32_t height):
         MXAArrayTemplate<T>( width * height, true),
         _width(width),
         _height(height)
         { }
 
   private:
-    int32 _width;
-    int32 _height;
+    int32_t _width;
+    int32_t _height;
 
       MXA2DArray(const MXA2DArray&);    //Not Implemented
       void operator=(const MXA2DArray&); //Not Implemented

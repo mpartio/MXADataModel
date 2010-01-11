@@ -7,7 +7,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXAEndian.h>
 #include <MXA/Common/IO/MXAFileReader64.h>
 #include <MXA/Common/IO/MXAFileWriter64.h>
@@ -24,14 +24,14 @@ typedef MXAFILEREADER_CLASS_NAME FileReader64;
 
 typedef union
 {
-  int32 i;
+  int32_t i;
   float f;
 
 } _FourByteData;
 
 typedef union
 {
-  int64 ll;
+  int64_t ll;
   double d;
 } _EightByteData;
 
@@ -49,7 +49,7 @@ typedef MXA::Endian::FromBigToSystem    EndianPolicy;
 #define WriteArray(type, initValue) \
 {type* type##Array = new type[ARRAY_SIZE];\
   for (int index = 0; index < ARRAY_SIZE; ++index) { type##Array[index] = initValue; }\
-  ok = writer.writeArray<type>(type##Array, (int64)(ARRAY_SIZE) );\
+  ok = writer.writeArray<type>(type##Array, (int64_t)(ARRAY_SIZE) );\
   MXA_REQUIRE_EQUAL(ok, true);\
   delete type##Array;}\
   /*writer.write( &newLine, 1);*/
@@ -58,7 +58,7 @@ typedef MXA::Endian::FromBigToSystem    EndianPolicy;
   type* type##CharArray = new type[ARRAY_SIZE];\
   for (int index = 0; index < ARRAY_SIZE; ++index) { type##CharArray[index] = initValue; }\
   numBytes = sizeof(type) * ARRAY_SIZE;\
-  ok = writer.write(reinterpret_cast<char*>(type##CharArray), (int64)(numBytes) );\
+  ok = writer.write(reinterpret_cast<char*>(type##CharArray), (int64_t)(numBytes) );\
   MXA_REQUIRE_EQUAL(ok, true);\
   delete type##CharArray;\
   /*writer.write( &newLine, 1);*/
@@ -90,12 +90,12 @@ int TestMXAFileWriter()
   bool isReady = writer.initWriter();
   MXA_REQUIRE( isReady == true )
 
-  int64 numBytes = 0;
+  int64_t numBytes = 0;
   //char ascii[4] = { 'A', 'S', 'C', 'I'};
   char c = 0x63;
-  int16 s = 0x7368;
-  int32 i = 0x696E745F;
-  int64 ll = 0x6C6F6E676C6F6E67ll;
+  int16_t s = 0x7368;
+  int32_t i = 0x696E745F;
+  int64_t ll = 0x6C6F6E676C6F6E67ll;
 
   FourByteData fd;
   EightByteData ed;
@@ -107,39 +107,39 @@ int TestMXAFileWriter()
   // numBytes = sizeof(ascii);
  // writer.write(ascii, numBytes);
   writer.writeValue<char>(&c);
-  writer.writeValue<int16>(&s);
-  writer.writeValue<int32>(&i);
-  writer.writeValue<int64>(&ll);
+  writer.writeValue<int16_t>(&s);
+  writer.writeValue<int32_t>(&i);
+  writer.writeValue<int64_t>(&ll);
   writer.writeValue<float>(&fd.f);
   writer.writeValue<double>(&ed.d);
 
-  WriteCharArray(int8, c);
-  WriteCharArray(int16, s);
-  WriteCharArray(int32, i);
-  WriteCharArray(int64, ll);
+  WriteCharArray(int8_t, c);
+  WriteCharArray(int16_t, s);
+  WriteCharArray(int32_t, i);
+  WriteCharArray(int64_t, ll);
   WriteCharArray(float, f);
   WriteCharArray(double, d);
 //std::cout << "Pos: " << writer.getFilePointer64() << std::endl;
   // Should be at byte 31 at this point
 
- // WriteArray(int8, c);
+ // WriteArray(int8_t, c);
 {
-  int8* int8Array = new int8[ARRAY_SIZE];
-  for (int index = 0; index < ARRAY_SIZE; ++index) { int8Array[index] = c; }
-  ok = writer.writeArray<int8>(int8Array, (int64)(ARRAY_SIZE) );
+  int8_t* int8_tArray = new int8_t[ARRAY_SIZE];
+  for (int index = 0; index < ARRAY_SIZE; ++index) { int8_tArray[index] = c; }
+  ok = writer.writeArray<int8_t>(int8_tArray, (int64_t)(ARRAY_SIZE) );
   MXA_REQUIRE_EQUAL(ok, true);
-  delete int8Array;
+  delete int8_tArray;
 }
 
 //  std::cout << "Pos: " << writer.getFilePointer64() << std::endl;
-  WriteArray(int16, s);
+  WriteArray(int16_t, s);
 //  std::cout << "Pos: " << writer.getFilePointer64() << std::endl;
-  WriteArray(int32, i);
-  WriteArray(int64, ll);
+  WriteArray(int32_t, i);
+  WriteArray(int64_t, ll);
   WriteArray(float, f);
   WriteArray(double, d);
 //std::cout << "Pos: " << writer.getFilePointer64() << std::endl;
-  int64 pos = writer.getFilePointer64();
+  int64_t pos = writer.getFilePointer64();
   MXA_REQUIRE_EQUAL(pos, 243);
 
   return err;
@@ -194,9 +194,9 @@ int TestMXAFileReader()
   int err = 0;
   bool ok = false;
   char c = 0x63;
-  int16 s = 0x7368;
-  int32 i = 0x696E745F;
-  int64 ll = 0x6C6F6E676C6F6E67ll;
+  int16_t s = 0x7368;
+  int32_t i = 0x696E745F;
+  int64_t ll = 0x6C6F6E676C6F6E67ll;
 
   FourByteData fd;
   EightByteData ed;
@@ -208,31 +208,31 @@ int TestMXAFileReader()
   FileReader64 reader(MXAUnitTest::MXAFileReaderWriterTest::OutputFile);
   MXA_REQUIRE( reader.initReader() == true )
 
-  ReadValue(int8, c);
-  ReadValue(int16, s);
-  ReadValue(int32, i);
-  ReadValue(int64, ll);
+  ReadValue(int8_t, c);
+  ReadValue(int16_t, s);
+  ReadValue(int32_t, i);
+  ReadValue(int64_t, ll);
   ReadValue(float, f);
   ReadValue(double, d);
 
-  RawRead(int8, c);
-  RawRead(int16, s);
-  RawRead(int32, i);
-  RawRead(int64, ll);
+  RawRead(int8_t, c);
+  RawRead(int16_t, s);
+  RawRead(int32_t, i);
+  RawRead(int64_t, ll);
   RawRead(float, f);
   RawRead(double, d);
 
-  ReadArray(int8, c);
-  ReadArray(int16, s);
-  ReadArray(int32, i);
-  ReadArray(int64, ll);
+  ReadArray(int8_t, c);
+  ReadArray(int16_t, s);
+  ReadArray(int32_t, i);
+  ReadArray(int64_t, ll);
   ReadArray(float, f);
   ReadArray(double, d);
 
   // Now test the Byte Swapping functionality
   reader.setFilePointer64(0ll);
-  int8 int8Read;
-  reader.readValue<int8>(int8Read);
+  int8_t int8_tRead;
+  reader.readValue<int8_t>(int8_tRead);
   EndianPolicy::convert(s);
   EndianPolicy::convert(i);
   EndianPolicy::convert(ll);
@@ -240,16 +240,16 @@ int TestMXAFileReader()
   EndianPolicy::convert(d);
 
   // Read and test the Swapped Values
-  ReadSwappedValue(int16, s);
-  ReadSwappedValue(int32, i);
-  ReadSwappedValue(int64, ll);
+  ReadSwappedValue(int16_t, s);
+  ReadSwappedValue(int32_t, i);
+  ReadSwappedValue(int64_t, ll);
   ReadSwappedValue(float, f);
   ReadSwappedValue(double, d);
 
-  ReadArray(int8, c);
-  ReadSwappedArray(int16, s);
-  ReadSwappedArray(int32, i);
-  ReadSwappedArray(int64, ll);
+  ReadArray(int8_t, c);
+  ReadSwappedArray(int16_t, s);
+  ReadSwappedArray(int32_t, i);
+  ReadSwappedArray(int64_t, ll);
   ReadSwappedArray(float, f);
   ReadSwappedArray(double, d);
 

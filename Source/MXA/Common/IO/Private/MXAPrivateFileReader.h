@@ -9,7 +9,7 @@
 #ifndef _MXAPRIVATE_FILEREADER_H_
 #define _MXAPRIVATE_FILEREADER_H_
 
-#include <MXA/Common/MXATypes.h>
+#include <MXA/MXATypes.h>
 
 // Hard set our stream buffer to 4096 bytes
 #define BUFF_SIZE 4096
@@ -99,10 +99,10 @@ class MXA_EXPORT MXAFILEREADER_CLASS_NAME
        * @param size The number of elements in the array
        */
       template < typename EndianPolicy, typename P>
-      bool readArrayWithSwap(P* t, int64 size)
+      bool readArrayWithSwap(P* t, int64_t size)
       {
         bool ok = false;
-        for (int32 i = 0; i < size; ++i)
+        for (int32_t i = 0; i < size; ++i)
         {
           ok = read<EndianPolicy>(t[i]);
           if (!ok)
@@ -118,9 +118,9 @@ class MXA_EXPORT MXAFILEREADER_CLASS_NAME
        * @param numElements The number of elements in the array
        */
       template <typename T>
-      bool readArray(T* t, int64 numElements)
+      bool readArray(T* t, int64_t numElements)
       {
-        int64 numBytes = numElements * sizeof(T);
+        int64_t numBytes = numElements * sizeof(T);
         return rawRead(reinterpret_cast<char*>(t), numBytes);
       }
 
@@ -128,7 +128,7 @@ class MXA_EXPORT MXAFILEREADER_CLASS_NAME
      * @brief Sets the filepointer of the underlying stream
      * @param position The position to set the file pointer to
      */
-      void setFilePointer64( int64 position )
+      void setFilePointer64( int64_t position )
       {
         _instream.seekg(position);
       }
@@ -137,7 +137,7 @@ class MXA_EXPORT MXAFILEREADER_CLASS_NAME
      * @brief Returns the current position of the file pointer
      * @return the Current position of the file pointer
      */
-      int64 getFilePointer64()
+      int64_t getFilePointer64()
       {
         return _instream.tellg();
       }

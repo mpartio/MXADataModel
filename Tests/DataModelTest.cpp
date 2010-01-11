@@ -65,11 +65,11 @@ void MakeScalarAttribute(T value, std::string key, MXADataModel* model)
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MXADataModel* model)
+void MakeVectorAttribute(T value, std::string key, std::vector<uint64_t> &dims, MXADataModel* model)
 {
     //std::vector<T> data;
-    uint64 numelements =1;
-    for (std::vector<uint64>::iterator iter = dims.begin(); iter != dims.end(); ++iter)
+    uint64_t numelements =1;
+    for (std::vector<uint64_t>::iterator iter = dims.begin(); iter != dims.end(); ++iter)
     {
       numelements *= *(iter);
     }
@@ -77,7 +77,7 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
     IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int>(dims.size()), &(dims.front()) );
     // Copy data into the attribute container
     T* data = static_cast<T*>( vecPtr->getVoidPointer(0) );
-    for (uint32 i = 0; i < numelements; ++i)
+    for (uint32_t i = 0; i < numelements; ++i)
     {
       data[i] = static_cast<T>(i * 1.5);
     }
@@ -90,20 +90,20 @@ void MakeVectorAttribute(T value, std::string key, std::vector<uint64> &dims, MX
 void CreateAttributes(MXADataModel* model)
 {
 
-    int8  i8  = -8;
-    uint8 ui8 = 8;
-    int16 i16 = -16;
-    uint16 ui16 = 16;
-    int32 i32 = -32;
-    uint32 ui32 = 32;
-    int64 i64 = -64;
-    uint64 ui64 = 64;
+    int8_t  i8  = -8;
+    uint8_t ui8 = 8;
+    int16_t i16 = -16;
+    uint16_t ui16 = 16;
+    int32_t i32 = -32;
+    uint32_t ui32 = 32;
+    int64_t i64 = -64;
+    uint64_t ui64 = 64;
     float32 f32 = 32.32f;
     float64 f64 = 64.64;
 
 
     //Create vector attributes
-    std::vector<uint64> dims;
+    std::vector<uint64_t> dims;
     dims.push_back(3);
     dims.push_back(3);
 
@@ -208,7 +208,7 @@ MXADataModel::Pointer createModel()
 	  md[MXA::MXA_RIGHTS_TAG] = "Unlimited";
 	  md[MXA::MXA_RELEASE_NUMBER_TAG] = "AFRL/WS07-0476";
 
-	  int32 err = -1;
+	  int32_t err = -1;
 	  err = model->setRequiredMetaData(md);
 	  errorMessage.clear();
 	  MXA_REQUIRE ( (modelPtr->isValid(errorMessage) ) == true );
@@ -222,7 +222,7 @@ MXADataModel::Pointer createModel()
 // -----------------------------------------------------------------------------
 void TestRequiredMetaData()
 {
-  int32 err = -1;
+  int32_t err = -1;
   std::string errorMessage;
  // std::cout << "TestRequiredMetaData Running...." ;
   MXADataModel::Pointer model = createModel();
@@ -386,7 +386,7 @@ void TestDataDimensionMethods()
 {
  // std::cout << "Test DataDimensionMethods Running....";
   MXADataModel::Pointer model = createModel(); // Created on the stack
-  int32 error = 0;
+  int32_t error = 0;
 
   IDataDimension::Pointer dim0 = model->getDataDimension(0);
   IDataDimension::Pointer dim1 = model->getDataDimension(1);
@@ -480,7 +480,7 @@ void TestDimensionCount()
 {
  // std::cout << "Testing Dimension Count Running...." ;
   IDataDimension::Pointer dim = MXADataDimension::New("Test", "Test", 0, 10, 0, 9, 1, 1);
-  int32 count = dim->calculateCount();
+  int32_t count = dim->calculateCount();
   MXA_REQUIRE(count == 10);
 
   dim->setStartValue(1);
@@ -534,11 +534,11 @@ void TestDimensionCount()
 void TestEndianSwap()
 {
  // std::cout << "Testing Endian Swapping Running....";
-  uint32 value = 0xAABBCCDD;
+  uint32_t value = 0xAABBCCDD;
   MXA::Endian::reverseBytes ( value );
   MXA_REQUIRE(0xDDCCBBAA == value);
 
-  uint16 value16 = 0xAABB;
+  uint16_t value16 = 0xAABB;
   MXA::Endian::reverseBytes( value16);
   MXA_REQUIRE(0xBBAA == value16);
   // std::cout << "......Passed" << std::endl;
@@ -591,17 +591,17 @@ void TestDataModelOverWrite()
     dim0->setStartValue(0);
     dim0->setEndValue(9);
     dim0->setIncrement(1);
-    int32 count = dim0->calculateCount();
+    int32_t count = dim0->calculateCount();
     model->setDataRoot("New/Data/Root/");
     MXA_REQUIRE(count == 10);
-    int8  i8  = -8 * 2;
-    uint8 ui8 = 8 * 2;
-    int16 i16 = -16 * 2;
-    uint16 ui16 = 16 * 2;
-    int32 i32 = -32 * 2;
-    uint32 ui32 = 32 * 2;
-    int64 i64 = -64 * 2;
-    uint64 ui64 = 64 * 2;
+    int8_t  i8  = -8 * 2;
+    uint8_t ui8 = 8 * 2;
+    int16_t i16 = -16 * 2;
+    uint16_t ui16 = 16 * 2;
+    int32_t i32 = -32 * 2;
+    uint32_t ui32 = 32 * 2;
+    int64_t i64 = -64 * 2;
+    uint64_t ui64 = 64 * 2;
     float32 f32 = 32.32f * 2;
     float64 f64 = 64.64 * 2;
     MakeScalarAttribute( i8, "Scalar Int 8", model);
@@ -615,7 +615,7 @@ void TestDataModelOverWrite()
     // Floating point Numbers
     MakeScalarAttribute( f32, "Scalar Float 32", model);
     MakeScalarAttribute( f64, "Scalar Float 64", model);
-    int32 err = dataFile->saveDataModel();
+    int32_t err = dataFile->saveDataModel();
     MXA_REQUIRE(err >= 0); // This must pass
   }
   //Reread the model from the file and compare values

@@ -77,7 +77,7 @@ class MXA_EXPORT IDataImport
     /** @brief Imports the data into the data file
     * @return Error Condition. Zero or Positive is Success
     */
-    virtual int32 import() = 0;
+    virtual int32_t import() = 0;
 
   private:
     IDataImport(const IDataImport&);    //Not Implemented
