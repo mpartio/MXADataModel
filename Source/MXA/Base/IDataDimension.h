@@ -36,6 +36,9 @@ class MXA_EXPORT IDataDimension
 
     typedef int32_t size_type;
 
+    // Print out the node information to the console
+    virtual void printNode(std::ostream& os, int32_t indent) = 0;
+
     /**
      * @brief Setter for property Index
      * @param aValue The new value to set for property Index

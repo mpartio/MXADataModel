@@ -464,7 +464,7 @@ herr_t H5ReaderDelegate::readSupportFiles(hid_t locId)
   herr_t err = 0;
   hid_t gid = H5Gopen(locId, MXA::SupportFilesPath.c_str() );
   if (gid < 0){
-    return -1;
+    return err; // Either the file does not have a support files section or something else went wrong.
   }
   std::list<std::string> indices;
   err = H5Utilities::getGroupObjects(gid, H5Utilities::MXA_DATASET, indices);

@@ -16,9 +16,11 @@ vtkHDF5::~vtkHDF5()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
-herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id, const std::string &datasetPath, vtkImageData* imgData)
+herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id,
+                                  const std::string &datasetPath,
+                                  vtkImageData* imgData)
 {
   herr_t err = 1;
   H5T_class_t classType;
@@ -77,7 +79,7 @@ herr_t vtkHDF5::getDataAsVTKImage(hid_t loc_id, const std::string &datasetPath, 
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 int vtkHDF5::getScalarType(hid_t loc_id, const std::string &datasetPath)
 {
@@ -93,12 +95,12 @@ int vtkHDF5::getScalarType(hid_t loc_id, const std::string &datasetPath)
     return err;
   }
   hid_t typeId = H5Lite::getDatasetType(loc_id, datasetPath);
-  if (typeId < 0) { 
-    std::cout << DEBUG_OUT(logTime) << "Error getting type id for data set" << std::endl; 
-    return -1; 
+  if (typeId < 0) {
+    std::cout << DEBUG_OUT(logTime) << "Error getting type id for data set" << std::endl;
+    return -1;
    }
-  
-  
+
+
   switch(classType)
    {
      case H5T_STRING:
@@ -106,7 +108,7 @@ int vtkHDF5::getScalarType(hid_t loc_id, const std::string &datasetPath)
        err = -1;
        break;
      case H5T_INTEGER:
- 
+
        if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) )
        {
          scalarType = (VTK_TYPE_UINT8);
@@ -164,9 +166,9 @@ int vtkHDF5::getScalarType(hid_t loc_id, const std::string &datasetPath)
        std::cout << "Error: Unknown data type: " << classType << std::endl;
        H5Utilities::printHDFClassType(classType);
    }
-  
+
   err = H5Tclose(typeId);
-  if (err < 0) 
+  if (err < 0)
   {
     std::cout << logTime() << "Error Closing H5Type." << std::endl;
     scalarType = -1;
@@ -177,25 +179,25 @@ int vtkHDF5::getScalarType(hid_t loc_id, const std::string &datasetPath)
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 hid_t vtkHDF5::HDFTypeForVTKType(int value)
 {
   if ( value == VTK_FLOAT) return H5T_NATIVE_FLOAT;
   if ( value == VTK_DOUBLE) return H5T_NATIVE_DOUBLE;
-  
+
   if ( value == VTK_TYPE_INT8) return H5T_NATIVE_INT8;
-  if ( value == VTK_TYPE_UINT8) return H5T_NATIVE_UINT8; 
-  
+  if ( value == VTK_TYPE_UINT8) return H5T_NATIVE_UINT8;
+
   if ( value == VTK_TYPE_INT16) return H5T_NATIVE_INT16;
-  if ( value == VTK_TYPE_UINT16) return H5T_NATIVE_UINT16; 
-  
+  if ( value == VTK_TYPE_UINT16) return H5T_NATIVE_UINT16;
+
   if ( value == VTK_TYPE_INT32) return H5T_NATIVE_INT32;
-  if ( value == VTK_TYPE_UINT32) return H5T_NATIVE_UINT32; 
-  
+  if ( value == VTK_TYPE_UINT32) return H5T_NATIVE_UINT32;
+
   if ( value == VTK_TYPE_INT8) return H5T_NATIVE_INT64;
-  if ( value == VTK_TYPE_UINT64) return H5T_NATIVE_UINT64; 
-  
+  if ( value == VTK_TYPE_UINT64) return H5T_NATIVE_UINT64;
+
   std::cout << DEBUG_OUT(logTime) <<  "Error: HDFTypeForPrimitive - Unknown Type: " << value << " Consult vtkType.h for more information."<< std::endl;
 
   return -1;
@@ -203,7 +205,7 @@ hid_t vtkHDF5::HDFTypeForVTKType(int value)
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 herr_t vtkHDF5::_readVtkImageDataSet(hid_t loc_id, const std::string &dsetName, vtkImageData* imgData)
 {
@@ -211,7 +213,7 @@ herr_t vtkHDF5::_readVtkImageDataSet(hid_t loc_id, const std::string &dsetName, 
   {
     std::cout << DEBUG_OUT(logTime) << "Error: imgData pointer was NULL." << std::endl;
   }
-  void* dataPtr = imgData->GetScalarPointer();  
+  void* dataPtr = imgData->GetScalarPointer();
   //unsigned char *data = static_cast < unsigned char* > ( imgData->GetScalarPointer( ) );
   hid_t   did;
   herr_t  err = 0;
@@ -240,11 +242,11 @@ herr_t vtkHDF5::_readVtkImageDataSet(hid_t loc_id, const std::string &dsetName, 
         rank = H5Sget_simple_extent_dims(spaceId, &(dims.front()), NULL);
         hsize_t numElements = 1;
         for (std::vector<hsize_t>::iterator iter = dims.begin(); iter < dims.end(); ++iter ) {
-          numElements = numElements * (*iter); 
+          numElements = numElements * (*iter);
         }
         err = H5Dread(did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, dataPtr );
         if (err < 0) {
-          std::cout << "Error Reading Data." << std::endl; 
+          std::cout << "Error Reading Data." << std::endl;
           retErr = err;
         }
       }
