@@ -17,7 +17,7 @@
 #include <MXA/Core/MXAConstants.h>
 #include <MXA/Utilities/StringUtils.h>
 
-//#include <boost/smart_ptr/shared_ptr.hpp>
+//#include <boost/shared_ptr.hpp>
 
 #include <limits>
 

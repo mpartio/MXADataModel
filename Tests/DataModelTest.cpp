@@ -34,7 +34,7 @@
 #include <map>
 
 //Boost Includes
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
 
@@ -670,6 +670,18 @@ void CopyConstructorTest()
   // std::cout << "......Passed" << std::endl;
 
 }
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void Test()
+{
+
+  MXADataModel::Pointer model = MXADataModel::New(MXA::MXACurrentFileVersion, MXA::ModelType, "Data");
+
+
+}
+
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework

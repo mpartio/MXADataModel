@@ -10,7 +10,7 @@
 
 #include <sstream>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #define BUFFER_SIZE 1024
 

@@ -16,7 +16,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 
 #define PRINT_LINE_NUMBER() \
