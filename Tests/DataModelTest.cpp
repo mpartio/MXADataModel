@@ -671,17 +671,6 @@ void CopyConstructorTest()
 
 }
 
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-void Test()
-{
-
-  MXADataModel::Pointer model = MXADataModel::New(MXA::MXACurrentFileVersion, MXA::ModelType, "Data");
-
-
-}
-
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
