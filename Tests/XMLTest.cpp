@@ -18,6 +18,7 @@
 #include "MXA/Core/MXADataModelReader.hpp"
 #include "MXA/XML/XMLStreamReaderDelegate.hpp"
 #include "MXA/XML/XMLStreamWriterDelegate.hpp"
+#include "MXA/XML/XMLFileUtilities.hpp"
 #include <Tests/MXAUnitTestDataFileLocations.h>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include <MXA/Utilities/MXAFileSystemPath.h>
@@ -318,8 +319,8 @@ void GenerateMasterXMLFile()
     MXA_REQUIRE(model->getSupportFiles().size() == 1);
   //  std::cout << "....... Passed" << std::endl;
   }
-  TestPassed("GenerateMasterXMLFile");
 }
+
 
 // -----------------------------------------------------------------------------
 //
@@ -331,16 +332,8 @@ void XMLModelTest()
   std::string outFile (MXAUnitTest::XMLTest::TestFile);
   std::string errorMessage;
   {
-    typedef XMLStreamReaderDelegate<std::ifstream> FileStreamType;
-    FileStreamType::Pointer delegate = FileStreamType::New();
-    std::ifstream& out = *(delegate->getStreamPointer());
-    out.open(masterXmlFile.c_str());
-    MXA_REQUIRE(delegate.get() != NULL);
-    MXA_REQUIRE(out.is_open() != false);
-    MXADataModelReader<FileStreamType>::Pointer reader = MXADataModelReader<FileStreamType>::New(delegate);
-    IDataModel::Pointer model = reader->readModel();
-
-
+    IDataModel::Pointer model = MXAXMLModelFileReader::readModel(masterXmlFile);
+    MXA_REQUIRE (model.get() != NULL)
     MXA_REQUIRE (model->getNumberOfDataDimensions() == 4);
     MXA_REQUIRE (model->isValid(errorMessage) == true);
     MXAAbstractAttributes attributes = model->getUserMetaData();
@@ -349,20 +342,7 @@ void XMLModelTest()
 
   {
     MXADataModel::Pointer model = createModel();
-    typedef XMLStreamWriterDelegate<std::ofstream> FileStreamType;
-    FileStreamType::Pointer delegate = FileStreamType::New();
-    std::ofstream& out = *(delegate->getStreamPointer());
-    out.open(outFile.c_str());
-    if (NULL == delegate.get() || false == out.is_open() )
-     {
-      MXA_ASSERT(1 == 0);
-     }
-
-    MXADataModelWriter<FileStreamType>::Pointer writer =
-                              MXADataModelWriter<FileStreamType>::New(delegate);
-
-    int32_t err = writer->writeModel(model);
-
+    int32_t err = MXAXMLModelFileWriter::writeModel(model, outFile);
     MXA_REQUIRE ( err >= 0);
   }
 

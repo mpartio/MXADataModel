@@ -13,7 +13,7 @@ SET (MXA_XML_HEADERS
 #    ${MXA_SOURCE_DIR}/MXA/XML/XMLIODelegate.h
 #    ${MXA_SOURCE_DIR}/MXA/XML/XMLDataModelWriter.h
 #    ${MXA_SOURCE_DIR}/MXA/XML/XMLDataModelReader.h
-
+	${MXA_SOURCE_DIR}/MXA/XML/XMLFileUtilities.hpp
     ${MXA_SOURCE_DIR}/MXA/XML/DataModelXMLEvtHandler.h
     ${MXA_SOURCE_DIR}/MXA/XML/XMLMXAAttributeWriter.hpp
     ${MXA_SOURCE_DIR}/MXA/XML/XMLUserMetaDataWriter.h

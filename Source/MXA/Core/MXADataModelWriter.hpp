@@ -1,9 +1,10 @@
-/*
- * MXADataModelWriter.h
- *
- *  Created on: Dec 2, 2009
- *      Author: mjackson
- */
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2007, mjackson
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+///////////////////////////////////////////////////////////////////////////////
 
 #ifndef MXADATAMODELWRITER_H_
 #define MXADATAMODELWRITER_H_
