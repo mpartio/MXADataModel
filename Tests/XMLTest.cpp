@@ -110,6 +110,9 @@ void GenerateMasterXMLFile()
   std::string xmlFile(MXAUnitTest::XMLTest::MasterFile);
   {
     MXADataModel::Pointer model = createModel();
+    ISupportFile::Pointer spFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text, false);
+    model->addSupportFile(spFile);
+
     err = MXAXMLModelFileWriter::writeModel(model, xmlFile);
     MXA_REQUIRE ( err >= 0);
     MXAAbstractAttributes attributes = model->getUserMetaData();
@@ -151,6 +154,8 @@ void XMLModelTest()
 
   {
     MXADataModel::Pointer model = createModel();
+    ISupportFile::Pointer spFile = MXASupportFile::NewFromFileSystem(MXAUnitTest::SupportFileTest::TextInputFile, SupportFile::FileType::Text, false);
+    model->addSupportFile(spFile);
     int32_t err = MXAXMLModelFileWriter::writeModel(model, outFile);
     MXA_REQUIRE ( err >= 0);
   }
