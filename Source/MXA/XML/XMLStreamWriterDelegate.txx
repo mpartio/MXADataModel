@@ -1,9 +1,10 @@
-/*
- * XMLStreamWriterDelegate<T>.cpp
- *
- *  Created on: Dec 2, 2009
- *      Author: mjackson
- */
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2010, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+///////////////////////////////////////////////////////////////////////////////
 
 #include "XMLStreamWriterDelegate.hpp"
 #include <MXA/Core/MXADataDimension.h>

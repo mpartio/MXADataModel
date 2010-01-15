@@ -54,7 +54,6 @@
 boost::shared_ptr<PointerType> BoostVariable (Pointer);
 
 // Declare all the methods
-IDataModel::Pointer createModel();
 void DatasetTest();
 void MakeDataRecord( const std::string &key, IDataModel::Pointer model);
 
@@ -115,7 +114,7 @@ void MakeStringAttribute(const std::string &dsPath, IDataset::Pointer dataset)
 // -----------------------------------------------------------------------------
 //  Creates a Data Model to use
 // -----------------------------------------------------------------------------
-IDataModel::Pointer createModel()
+IDataModel::Pointer createModel2()
 {
     std::string errorMessage;
     IDataModel::Pointer model = MXADataModel::New();
@@ -460,7 +459,7 @@ void WriteDatasetTest()
   std::cout << "Running _WriteDatasetTest<T> Test ....";
   // Create our Test File to output our test data into
   std::string testFile(MXAUnitTest::DatasetTest::TestFile);
-  IDataModel::Pointer model = createModel();
+  IDataModel::Pointer model = createModel2();
   IDataFile::Pointer dataFile = H5MXADataFile::CreateFileWithModel(testFile, model);
  MXA_REQUIRE( NULL != dataFile.get() );
 

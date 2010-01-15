@@ -9,10 +9,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/MXAConfiguration.h>
-
-#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/MXATypes.h>
+#include <MXA/Common/MXATypeDefs.h>
+
 #include <MXA/Utilities/DataSourcePathBuilder.h>
 #include <MXA/Utilities/IStringSection.h>
 #include <MXA/Utilities/DataSourcePathTextSection.h>

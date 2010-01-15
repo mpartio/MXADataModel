@@ -32,6 +32,7 @@ typedef boost::shared_ptr<std::string>    MXAString;
 typedef std::string MXAString;
 #endif
 
+typedef boost::shared_ptr<std::string>   MXASharedString;
 
 //-- Define some Shared Arrays to use
 typedef boost::shared_array<uint8_t>                 UCharArray;
