@@ -118,6 +118,13 @@ class MXA_EXPORT IMXAArray
      */
     virtual std::string valueToString(char delimiter) = 0;
 
+     /**
+     * @brief Converts the data array into a string delimited by the supplied
+     * delimiter.
+     * @param delimiter The delimiter to use between each value
+     * @return The generated string
+     */
+    virtual std::string valueToString(const std::string &delimiter=" ") = 0;
 
     /**
      * @brief Saves the array to an external file on the system

@@ -546,6 +546,34 @@ class MXAArrayTemplate : public IMXAArray
       return sstream.str();
     }
 
+     /**
+     * @brief Converts the data array into a string delimited by the supplied
+     * delimiter.
+     * @param delimiter The delimiter to use between each value. Default is a single space
+     * @return The generated string
+     */
+    virtual std::string valueToString(const std::string &delimiter=" ")
+    {
+      std::stringstream sstream;
+      uint64_t limit = _nElements - 1;
+      for(uint64_t i = 0; i < _nElements; ++i)
+      {
+        if (sizeof(T) != 1 )
+        {
+          sstream  << _data[i];
+        }
+        else
+        {
+          sstream  << static_cast<int32_t>(_data[i]);
+        }
+        if (i < limit)
+        {
+          sstream << delimiter;
+        }
+      }
+      return sstream.str();
+    }
+
   protected:
 
   /**
