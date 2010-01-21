@@ -238,6 +238,7 @@ herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetNam
   err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(rank == 2);
+
   CloseH5T(typeId, err, retErr); //Close the H5A type Id that was retrieved during the loop
   typename std::vector<T>::size_type numElements = 1;
   for (std::vector<uint64_t>::size_type i = 0; i < dims.size(); ++i)
@@ -728,6 +729,63 @@ herr_t testWriteStringDatasetAndAttributes(hid_t file_id)
 
 
 // -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+herr_t HDF5Dump_datatype(hid_t dataset_id, std::ostream &iostr)
+{
+  herr_t status = 0;
+
+  hid_t type_id = H5Dget_type(dataset_id);
+
+  iostr << "    ";
+  iostr << "DATATYPE \"";
+
+  switch (H5Tget_class(type_id)) {
+  case H5T_INTEGER:
+    iostr << "Integer";
+    break;
+
+  case H5T_FLOAT:
+    if (H5Tequal(type_id, H5T_IEEE_F32BE) ||
+  H5Tequal(type_id, H5T_IEEE_F32LE) ||
+  H5Tequal(type_id, H5T_NATIVE_FLOAT)) {
+      // Float
+      iostr << "Float";
+
+    } else if (H5Tequal(type_id, H5T_IEEE_F64BE) ||
+         H5Tequal(type_id, H5T_IEEE_F64LE) ||
+         H5Tequal(type_id, H5T_NATIVE_DOUBLE) ||
+         H5Tequal(type_id, H5T_NATIVE_LDOUBLE)) {
+      // Double
+      iostr << "Double";
+
+    } else {
+      iostr << "Undefined HDF5 float.";
+    }
+    break;
+
+  case H5T_STRING:
+    iostr << "String - Unsupported";
+    break;
+
+  case H5T_COMPOUND:
+    iostr << "Compound - Unsupported";
+    break;
+
+  default:
+    iostr << "Unsupported or unknown data type";
+    break;
+  }
+
+  iostr << "\"" << endl;
+
+  status = H5Tclose(type_id);
+
+  return status;
+}
+
+
+// -----------------------------------------------------------------------------
 //  Uses Raw Pointers to read data from the data file
 // -----------------------------------------------------------------------------
 template <typename T>
@@ -765,6 +823,41 @@ herr_t testReadPointer2DArrayDataset(hid_t file_id)
   {
     numElements = numElements * dims[i];
   }
+
+
+  herr_t retErr = 0;
+  hid_t did = -1;
+  /* Open the dataset. */
+  if ( (did = H5Dopen( file_id, dsetName.c_str() )) < 0 )
+  {
+     return -2;
+  }
+  /* Get an identifier for the datatype. */
+  hid_t tid =  H5Dget_type( did );
+
+  err = H5Dclose(did);
+  if (err < 0)
+  {
+    std::cout << "File: " << __FILE__ << "(" << __LINE__ << "): " << "Error Closing Dataset." << std::endl;
+    retErr = err;
+  }
+  if (retErr < 0)
+  {
+    return retErr;
+  }
+
+  MXA_REQUIRE (tid > 0);
+  std::cout << H5Lite::StringForHDFType(tid) << std::endl;
+  err = H5Tclose(tid);
+  MXA_REQUIRE(err >= 0);
+
+  hid_t dsType = H5Lite::getDatasetType(file_id, dsetName);
+  MXA_REQUIRE (dsType > 0);
+  std::cout << H5Lite::StringForHDFType(dsType) << std::endl;
+
+
+  err = H5Tclose(dsType);
+  MXA_REQUIRE(err >= 0);
 
   std::vector<T> data(numElements, 0);
   err = H5Lite::readPointerDataset(file_id, dsetName, &(data.front() ) );
