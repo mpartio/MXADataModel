@@ -4,7 +4,8 @@
 #include <MXA/HDF5/H5WriterDelegate.h>
 #include <MXA/HDF5/H5ReaderDelegate.h>
 #include <MXA/HDF5/H5Utilities.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXAFileInfo.h>
+#include <MXA/Utilities/MXADir.h>
 
 
 #include <hdf5.h>
@@ -161,10 +162,10 @@ int32_t H5MXADataFile::createFile()
 #if 1
   //bool didDeleteFile = 1;
   // Now delete the file if it really exists
-  if (true == MXAFileSystemPath::exists(this->_filename) )
+  if (true == MXAFileInfo::exists(this->_filename) )
   {
-    static_cast<void>(MXAFileSystemPath::remove(this->_filename) );
-    if (true == MXAFileSystemPath::exists(this->_filename) )
+    static_cast<void>(MXADir::remove(this->_filename) );
+    if (true == MXAFileInfo::exists(this->_filename) )
     {
       std::cout << "H5IODelegate::writeModelToFile: The file could not be deleted\n  " << this->_filename << std::endl;
       return -20;

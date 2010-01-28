@@ -9,7 +9,8 @@
 
 #include <MXA/MXATypes.h>
 #include <MXA/Common/LogTime.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
+#include <MXA/Utilities/MXAFileInfo.h>
 #include <Tests/MXAUnitTestDataFileLocations.h>
 #include "UnitTestSupport.hpp"
 
@@ -20,7 +21,7 @@
 
 
 #define PRINT_LINE_NUMBER() \
-  std::cout << "|--MXAFileSystemPathTest.cpp(" << __LINE__ << ")" << std::endl;
+  std::cout << "|--MXADirTest.cpp(" << __LINE__ << ")" << std::endl;
 
 #define FileWriter MXAFILEWRITER_CLASS_NAME
 // -----------------------------------------------------------------------------
@@ -30,7 +31,7 @@ void RemoveTestFiles()
 {
   std::cout << "|--Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(MXAUnitTest::MXAFileSystemPathTest::OutputFile);
+  MXADir::remove(MXAUnitTest::MXAFileSystemPathTest::OutputFile);
 #endif
 }
 
@@ -51,7 +52,7 @@ void CheckFile(const std::string &filepath,
       std::cout << "|--  Create: '" << filepath << "'" << std::endl;
       std::ofstream outStream(filepath.c_str(), std::ios::out | std::ios::binary);
       MXA_REQUIRE_EQUAL(false, outStream.fail() );
-      std::string data ( "MXAFileSystemPath_Test Contents");
+      std::string data ( "MXADir_Test Contents");
       outStream.write(data.c_str(), data.length());
       MXA_REQUIRE_EQUAL (outStream.bad(), false);
       outStream.close();
@@ -64,26 +65,26 @@ void CheckFile(const std::string &filepath,
       compName = compName.substr(0, compName.size() - 1);
     }
 
-    isDir = MXAFileSystemPath::isDirectory(filepath);
+    isDir = MXADir::isDirectory(filepath);
     MXA_REQUIRE_EQUAL(isDir, false);
-    isFile = MXAFileSystemPath::isFile(filepath);
+    isFile = MXADir::isFile(filepath);
     MXA_REQUIRE_EQUAL(isFile, true);
-    exists = MXAFileSystemPath::exists(filepath);
+    exists = MXADir::exists(filepath);
     MXA_REQUIRE_EQUAL(exists, true);
-    std::string fn = MXAFileSystemPath::filename(filepath);
+    std::string fn = MXAFileInfo::filename(filepath);
     MXA_REQUIRE_EQUAL(fn, compName);
-    std::string ext = MXAFileSystemPath::extension(filepath);
+    std::string ext = MXAFileInfo::extension(filepath);
     MXA_REQUIRE_EQUAL(ext, extension);
 
     // Now try to delete the file
     std::cout << "|--  Delete: '" << filepath << "'" << std::endl;
-    ok = MXAFileSystemPath::remove(filepath);
+    ok = MXADir::remove(filepath);
     MXA_REQUIRE_EQUAL(ok, true);
-    exists = MXAFileSystemPath::exists(filepath);
+    exists = MXADir::exists(filepath);
     MXA_REQUIRE_EQUAL(exists, false);
 
     std::cout << "|--  Delete Again:" << std::endl;
-    ok = MXAFileSystemPath::remove(filepath);
+    ok = MXADir::remove(filepath);
     MXA_REQUIRE_EQUAL(ok, false);
 }
 
@@ -187,30 +188,30 @@ int FilesTest()
   CheckFile(testFilePath, testFileName, ext);
 
   testFileName = "Normal.txt";
-  ok = MXAFileSystemPath::mkdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, true);
+  ok = MXADir::mkdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, true);
   MXA_REQUIRE_EQUAL(ok, true);
   testFilePath = testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator + testFileName;
   ext = "txt";
   CheckFile(testFilePath, testFileName, ext);
-  ok = MXAFileSystemPath::rmdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, false);
+  ok = MXADir::rmdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, false);
   MXA_REQUIRE_EQUAL(ok, true);
 
   testFileName = "No_Extension";
-  ok = MXAFileSystemPath::mkdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, true);
+  ok = MXADir::mkdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, true);
   MXA_REQUIRE_EQUAL(ok, true);
   testFilePath = testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator + testFileName;
   ext = "";
   CheckFile(testFilePath, testFileName, ext);
-  ok = MXAFileSystemPath::rmdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, false);
+  ok = MXADir::rmdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, false);
   MXA_REQUIRE_EQUAL(ok, true);
 
   testFileName = "EndsWithDot.";
-  ok = MXAFileSystemPath::mkdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, true);
+  ok = MXADir::mkdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, true);
   MXA_REQUIRE_EQUAL(ok, true);
   testFilePath = testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator + testFileName;
   ext = "";
   CheckFile(testFilePath, testFileName, ext);
-  ok = MXAFileSystemPath::rmdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, false);
+  ok = MXADir::rmdir(testdir + MXAUnitTest::DirSeparator + "Dot.Dir" + MXAUnitTest::DirSeparator, false);
   MXA_REQUIRE_EQUAL(ok, true);
 
 
@@ -228,7 +229,7 @@ int AbsolutePathTest()
 
   std::string testdir = MXAUnitTest::MXATempDir + MXAUnitTest::MXAFileSystemPathTest::TestDir;
 
-  std::string currentPath = MXAFileSystemPath::currentPath();
+  std::string currentPath = MXADir::currentPath();
   std::cout << "|++ currentPath:           " << currentPath << std::endl;
   std::cout << "|++ MXATestBinaryDirectory:" << MXAUnitTest::MXATestBinaryDirectory << std::endl;
   success = currentPath.compare(MXAUnitTest::MXATestBinaryDirectory);
@@ -237,8 +238,8 @@ int AbsolutePathTest()
   std::string file = MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   PRINT_LINE_NUMBER();
   CheckFile(MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
-  file = MXAFileSystemPath::absolutePath(file);
-  std::string refPath = MXAUnitTest::MXATestBinaryDirectory + MXAFileSystemPath::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
+  file = MXADir::absolutePath(file);
+  std::string refPath = MXAUnitTest::MXATestBinaryDirectory + MXADir::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   std::cout << "|-- file: " << file << std::endl;
   success = file.compare(refPath);
   MXA_REQUIRE_EQUAL(success, 0);
@@ -248,9 +249,9 @@ int AbsolutePathTest()
   // Check with a ./ prefixed to the file path
   file = MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   PRINT_LINE_NUMBER();
-  CheckFile("." + MXAFileSystemPath::getSeparator() + MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
-  file = MXAFileSystemPath::absolutePath(file);
-  refPath = MXAUnitTest::MXATestBinaryDirectory + MXAFileSystemPath::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
+  CheckFile("." + MXADir::getSeparator() + MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
+  file = MXADir::absolutePath(file);
+  refPath = MXAUnitTest::MXATestBinaryDirectory + MXADir::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   std::cout << "|-- file: " << file << std::endl;
   success = file.compare(refPath);
   MXA_REQUIRE_EQUAL(success, 0);
@@ -260,9 +261,9 @@ int AbsolutePathTest()
   // Check with a ../ prefixed to the file anem
   file = MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   PRINT_LINE_NUMBER();
-  CheckFile( ".." + MXAFileSystemPath::getSeparator() + MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
-  file = MXAFileSystemPath::absolutePath(".." + MXAFileSystemPath::getSeparator() + file);
-  refPath = MXAUnitTest::MXABuildDir + MXAFileSystemPath::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
+  CheckFile( ".." + MXADir::getSeparator() + MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
+  file = MXADir::absolutePath(".." + MXADir::getSeparator() + file);
+  refPath = MXAUnitTest::MXABuildDir + MXADir::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   std::cout << "|-- file: " << file << std::endl;
   success = file.compare(refPath);
   MXA_REQUIRE_EQUAL(success, 0);
@@ -292,48 +293,48 @@ int MakeDirectoriesTest()
 
 
   std::string dirPath(testdir
-                      + MXAFileSystemPath::Separator
+                      + MXADir::Separator
                       + MXAUnitTest::MXAFileSystemPathTest::TestDirName1
-                      + MXAFileSystemPath::Separator);
+                      + MXADir::Separator);
   std::cout << "|-- Creating Deeply Nested Directories: '" << dirPath << "'" << std::endl;
 
-  exists = MXAFileSystemPath::exists(dirPath);
+  exists = MXADir::exists(dirPath);
   MXA_REQUIRE_EQUAL(exists, false);
-  err = MXAFileSystemPath::mkdir(dirPath, true);
+  err = MXADir::mkdir(dirPath, true);
   MXA_REQUIRE_EQUAL(err, 1);
-  isDir = MXAFileSystemPath::isDirectory(dirPath);
+  isDir = MXADir::isDirectory(dirPath);
   MXA_REQUIRE_EQUAL(isDir, true);
-  isFile = MXAFileSystemPath::isFile(dirPath);
+  isFile = MXADir::isFile(dirPath);
   MXA_REQUIRE_EQUAL(isFile, false);
-  exists = MXAFileSystemPath::exists(dirPath);
+  exists = MXADir::exists(dirPath);
   MXA_REQUIRE_EQUAL(exists, true);
-  ok = MXAFileSystemPath::rmdir(dirPath, false);
+  ok = MXADir::rmdir(dirPath, false);
   MXA_REQUIRE_EQUAL(ok, true);
-  exists = MXAFileSystemPath::exists(dirPath);
+  exists = MXADir::exists(dirPath);
   MXA_REQUIRE_EQUAL(exists, false);
 
   dirPath = testdir
-              + MXAFileSystemPath::Separator
+              + MXADir::Separator
               + MXAUnitTest::MXAFileSystemPathTest::TestDirName1;
 
-  exists = MXAFileSystemPath::exists(dirPath);
+  exists = MXADir::exists(dirPath);
   MXA_REQUIRE_EQUAL(exists, false);
-  err = MXAFileSystemPath::mkdir(dirPath, true);
+  err = MXADir::mkdir(dirPath, true);
   MXA_REQUIRE_EQUAL(err, 1);
-  isDir = MXAFileSystemPath::isDirectory(dirPath);
+  isDir = MXADir::isDirectory(dirPath);
   MXA_REQUIRE_EQUAL(isDir, true);
-  isFile = MXAFileSystemPath::isFile(dirPath);
+  isFile = MXADir::isFile(dirPath);
   MXA_REQUIRE_EQUAL(isFile, false);
-  exists = MXAFileSystemPath::exists(dirPath);
+  exists = MXADir::exists(dirPath);
   MXA_REQUIRE_EQUAL(exists, true);
-  ok = MXAFileSystemPath::rmdir(dirPath, false);
+  ok = MXADir::rmdir(dirPath, false);
   MXA_REQUIRE_EQUAL(ok, true);
-  exists = MXAFileSystemPath::exists(dirPath);
+  exists = MXADir::exists(dirPath);
   MXA_REQUIRE_EQUAL(exists, false);
 
-  isRelative = MXAFileSystemPath::isRelativePath(dirPath);
+  isRelative = MXADir::isRelativePath(dirPath);
   MXA_REQUIRE_EQUAL(isRelative, false);
-  isAbsolute = MXAFileSystemPath::isAbsolutePath(dirPath);
+  isAbsolute = MXADir::isAbsolutePath(dirPath);
   MXA_REQUIRE_EQUAL(isAbsolute, true);
 
   return err;
@@ -349,7 +350,7 @@ int RemoveDirectoriesTest()
   bool ok;
   std::string testdir = MXAUnitTest::MXATempDir + MXAUnitTest::MXAFileSystemPathTest::TestDir;
   std::cout << "|-- Removing top level test dir: '" << testdir << "'" << std::endl;
-  ok = MXAFileSystemPath::rmdir(testdir, false);
+  ok = MXADir::rmdir(testdir, false);
   MXA_REQUIRE_EQUAL(ok, true);
 
   return err;
@@ -363,13 +364,13 @@ int DirListTest()
   std::cout  << "|- DirListTest -----------------" << std::endl;
 
   int err = 0;
-  std::vector<std::string> list = MXAFileSystemPath::entryList(MXAUnitTest::MXABuildDir);
+  std::vector<std::string> list = MXADir::entryList(MXAUnitTest::MXABuildDir);
 
   for (std::vector<std::string>::iterator iter = list.begin(); iter != list.end(); ++iter ) {
     std::cout << "|--- DIR_LIST_ENTRY--> " << *iter << std::endl;
   }
 
-  std::string ppath = MXAFileSystemPath::parentPath(MXAUnitTest::MXATestBinaryDirectory);
+  std::string ppath = MXADir::parentPath(MXAUnitTest::MXATestBinaryDirectory);
   //std::cout << "Child Path: " << MXAUnitTest::MXATestBinaryDirectory << std::endl;
   //std::cout << "ppath: " << ppath << std::endl;
   //std::cout << "Ref Path:   " << MXAUnitTest::MXABuildDir << std::endl;
@@ -387,25 +388,25 @@ int FileNameExtensionTest()
   int err = 0;
 #if 0
   std::string file("SomeFile.txt");
-  std::string base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  std::string base = MXADir::fileNameWithOutExtension(file);
   MXA_REQUIRE_EQUAL(base, "SomeFile");
 
   file ="SomeFile";
-  base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  base = MXADir::fileNameWithOutExtension(file);
   MXA_REQUIRE_EQUAL(base, "SomeFile");
 
 
   file ="SomeFile.";
-  base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  base = MXADir::fileNameWithOutExtension(file);
   MXA_REQUIRE_EQUAL(base, "SomeFile.");
 
 
   file ="SomeFile.txt.bin";
-  base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  base = MXADir::fileNameWithOutExtension(file);
   MXA_REQUIRE_EQUAL(base, "SomeFile.txt");
 
   file ="/SomePath/To/SomeFile.txt.bin";
-  base = MXAFileSystemPath::fileNameWithOutExtension(file);
+  base = MXADir::fileNameWithOutExtension(file);
   MXA_REQUIRE_EQUAL(base, "SomeFile.txt");
 #endif
 
@@ -416,43 +417,43 @@ int FileNameExtensionTest()
   std::string test = ".hidden_file";
   std::string testFileName = testdir + fnBase;
   std::string ext = "";
-  std::string fnWoExt = MXAFileSystemPath::fileNameWithOutExtension(testFileName);
+  std::string fnWoExt = MXAFileInfo::fileNameWithOutExtension(testFileName);
   MXA_REQUIRE_EQUAL(fnWoExt, test);
 
 
   fnBase = "Normal.txt";
   test = "Normal";
   testFileName = testdir + fnBase;
-  fnWoExt = MXAFileSystemPath::fileNameWithOutExtension(testFileName);
+  fnWoExt = MXAFileInfo::fileNameWithOutExtension(testFileName);
   MXA_REQUIRE_EQUAL(fnWoExt, test);
 
   fnBase = "No_Extension";
   test = "No_Extension";
   testFileName = testdir + fnBase;
-  fnWoExt = MXAFileSystemPath::fileNameWithOutExtension(testFileName);
+  fnWoExt = MXAFileInfo::fileNameWithOutExtension(testFileName);
   MXA_REQUIRE_EQUAL(fnWoExt, test);
 
   fnBase = "EndsWithDot.";
   test = "EndsWithDot";
   testFileName = testdir + fnBase;
-  fnWoExt = MXAFileSystemPath::fileNameWithOutExtension(testFileName);
+  fnWoExt = MXAFileInfo::fileNameWithOutExtension(testFileName);
   MXA_REQUIRE_EQUAL(fnWoExt, test);
 
 
   fnBase = "Normal.txt.bin";
   test = "Normal.txt";
   testFileName = testdir + fnBase;
-  fnWoExt = MXAFileSystemPath::fileNameWithOutExtension(testFileName);
+  fnWoExt = MXAFileInfo::fileNameWithOutExtension(testFileName);
   MXA_REQUIRE_EQUAL(fnWoExt, test);
-  ext = MXAFileSystemPath::extension(testFileName);
+  ext = MXAFileInfo::extension(testFileName);
   MXA_REQUIRE_EQUAL(ext, "bin");
 
   fnBase = ".txt.bin";
   test = ".txt";
   testFileName = testdir + fnBase;
-  fnWoExt = MXAFileSystemPath::fileNameWithOutExtension(testFileName);
+  fnWoExt = MXAFileInfo::fileNameWithOutExtension(testFileName);
   MXA_REQUIRE_EQUAL(fnWoExt, test);
-  ext = MXAFileSystemPath::extension(testFileName);
+  ext = MXAFileInfo::extension(testFileName);
   MXA_REQUIRE_EQUAL(ext, "bin");
 
   return err;

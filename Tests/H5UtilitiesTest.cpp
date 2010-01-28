@@ -17,7 +17,7 @@
 #include <MXA/Common/Win32Defines.h>
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 #include "UnitTestSupport.hpp"
 
 //-- C++ includes
@@ -41,7 +41,7 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(MXAUnitTest::H5UtilTest::FileName);
+  MXADir::remove(MXAUnitTest::H5UtilTest::FileName);
 #endif
 }
 

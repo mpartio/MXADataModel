@@ -25,7 +25,7 @@
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include <Tests/MXAUnitTestDataFileLocations.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 #include "UnitTestSupport.hpp"
 
 // C++ Includes
@@ -45,9 +45,9 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(MXAUnitTest::DataModelTest::BeforeH5File);
-  MXAFileSystemPath::remove(MXAUnitTest::DataModelTest::AfterH5File);
-  MXAFileSystemPath::remove(MXAUnitTest::DataModelTest::OverwriteH5File);
+  MXADir::remove(MXAUnitTest::DataModelTest::BeforeH5File);
+  MXADir::remove(MXAUnitTest::DataModelTest::AfterH5File);
+  MXADir::remove(MXAUnitTest::DataModelTest::OverwriteH5File);
 #endif
 }
 

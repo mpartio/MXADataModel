@@ -11,7 +11,7 @@
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/HDF5/H5AttributeWriter.h>
 #include <MXA/Utilities/StringUtils.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXAFileInfo.h>
 
 // -----------------------------------------------------------------------------
 //
@@ -90,7 +90,7 @@ int32_t H5WriterDelegate::writeSupportFiles(hid_t fileId)
           err = H5Lite::writePointerDataset<uint8_t>(fileId, dsetName, rank, fileSize, fileContents);
           err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILESYSTEM_PATH_TAG, file->getFileSystemPath() );
           err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILETYPE_TAG, file->getFileType() );
-          std::string path = MXAFileSystemPath::filename( file->getFileSystemPath() );
+          std::string path = MXAFileInfo::filename( file->getFileSystemPath() );
           err = H5Lite::writeStringAttribute(fileId, dsetName, MXA::MXA_FILENAME_TAG, path);
 
         }

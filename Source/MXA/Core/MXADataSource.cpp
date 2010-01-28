@@ -4,7 +4,7 @@
 #include <MXA/Core/MXADataSource.h>
 //#include <MXA/Core/MXADataModel.h>
 //#include <MXA/Utilities/StringUtils.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXAFileInfo.h>
 //
 //#include <iostream>
 
@@ -53,7 +53,7 @@ std::string MXADataSource::getSourcePath ( ) {
 // -----------------------------------------------------------------------------
 bool MXADataSource::dataSourceExists()
 {
-  return MXAFileSystemPath::exists(this->_sourcePath);
+  return MXAFileInfo::exists(this->_sourcePath);
 }
 
 

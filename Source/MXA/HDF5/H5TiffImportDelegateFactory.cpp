@@ -1,3 +1,10 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2010, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+///////////////////////////////////////////////////////////////////////////////
 #include <MXA/HDF5/H5TiffImportDelegateFactory.h>
 #include <MXA/HDF5/H5TiffImportDelegate.h>
 

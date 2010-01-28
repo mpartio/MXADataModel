@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <MXA/Utilities/MXALogger.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 #include "MXAUnitTestDataFileLocations.h"
 
 //-- C++
@@ -24,7 +24,7 @@ void RemoveTestFiles()
 {
   std::cout << "   Removing Test files" << std::endl;
 #ifdef REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(MXAUnitTest::MXALoggerTest::TestFile);
+  MXADir::remove(MXAUnitTest::MXALoggerTest::TestFile);
 #endif
 }
 

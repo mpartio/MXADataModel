@@ -12,7 +12,7 @@
 #include "UnitTestSupport.hpp"
 #include <MXA/XML/XMLFileUtilities.hpp>
 #include <Tests/MXAUnitTestDataFileLocations.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 
 
 //-- C++ includes
@@ -30,10 +30,10 @@
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(MXAUnitTest::XMLTest::TestFile) ;
-  MXAFileSystemPath::remove(MXAUnitTest::XMLTest::MasterFile);
-  MXAFileSystemPath::remove(MXAUnitTest::XMLTest::TemplateTestFile) ;
-  MXAFileSystemPath::remove(MXAUnitTest::XMLTest::TemplateCompleteFile);
+  MXADir::remove(MXAUnitTest::XMLTest::TestFile) ;
+  MXADir::remove(MXAUnitTest::XMLTest::MasterFile);
+  MXADir::remove(MXAUnitTest::XMLTest::TemplateTestFile) ;
+  MXADir::remove(MXAUnitTest::XMLTest::TemplateCompleteFile);
 #endif
 }
 

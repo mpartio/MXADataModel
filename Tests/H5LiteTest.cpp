@@ -17,7 +17,7 @@
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXA2DArray.hpp>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 #include <MXA/HDF5/H5Attribute.h>
 #include <Tests/MXAUnitTestDataFileLocations.h>
 
@@ -103,8 +103,8 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(MXAUnitTest::H5LiteTest::FileName);
-  MXAFileSystemPath::remove(MXAUnitTest::H5LiteTest::LargeFile);
+  MXADir::remove(MXAUnitTest::H5LiteTest::FileName);
+  MXADir::remove(MXAUnitTest::H5LiteTest::LargeFile);
 #endif
 }
 

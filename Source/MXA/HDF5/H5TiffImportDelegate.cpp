@@ -11,7 +11,7 @@
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 #include <MXA/HDF5/H5TiffIO.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXAFileInfo.h>
 
 //-- STL Includes
 #include <iostream>
@@ -66,9 +66,9 @@ int32_t H5TiffImportDelegate::importDataSource(IDataSource::Pointer dataSource, 
   herr_t err = -1;
   // Make sure the file Exists first before we go much further
   std::string sourcePath ( dataSource->getSourcePath() );
-  if ( !MXAFileSystemPath::exists(sourcePath) )
+  if ( !MXAFileInfo::exists(sourcePath) )
   {
-    std::cout << logTime() << "Error: Tiff image not found: " << MXAFileSystemPath::toNativeSeparators(sourcePath) << std::endl;
+    std::cout << logTime() << "Error: Tiff image not found: " << MXAFileInfo::toNativeSeparators(sourcePath) << std::endl;
     if (_fileNotFoundIsError)
     {
       return MXA_ERROR_FILE_NOT_FOUND;
@@ -82,7 +82,7 @@ int32_t H5TiffImportDelegate::importDataSource(IDataSource::Pointer dataSource, 
   std::cout << "H5TiffImportDelegate::importDataSource '" << dataSource->getSourcePath() << "'" << std::endl;
 #endif
   //Check for valid TIFF file extension - tif or tiff.
-  std::string fileExt( MXAFileSystemPath::extension(sourcePath) );
+  std::string fileExt( MXAFileInfo::extension(sourcePath) );
   std::transform ( fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower );
   if ( fileExt != MXA::Tiff::TiffExtension )
   {

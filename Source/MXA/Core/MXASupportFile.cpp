@@ -12,7 +12,7 @@
 #include <MXA/HDF5/H5MXADataFile.h>
 #endif
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXAFileInfo.h>
 
 //-- Boost Headers
 //#include <boost/iostreams/device/file.hpp>
@@ -259,9 +259,9 @@ uint64_t MXASupportFile::getFileSize()
 #endif
   }
 
-  std::string p = MXAFileSystemPath::toNativeSeparators(this->_filesystemPath);
+  std::string p = MXAFileInfo::toNativeSeparators(this->_filesystemPath);
   // Make sure the file exists
-  if ( !MXAFileSystemPath::exists( p ) )
+  if ( !MXAFileInfo::exists( p ) )
     {
       std::cout << "Error at " << __FILE__ << "(" << __LINE__ << ")  ";
       std::cout << "File '" << this->_filesystemPath << "' not found." << std::endl;
@@ -269,14 +269,14 @@ uint64_t MXASupportFile::getFileSize()
     }
 
   // Check to make sure the file is regular
-  if ( !MXAFileSystemPath::isFile( p ) )
+  if ( !MXAFileInfo::isFile( p ) )
     {
       std::cout << "Error at " << __FILE__ << "(" << __LINE__ << ")  ";
       std::cout << "File '" << this->_filesystemPath << "' not a regular file." << std::endl;
       return 0;
     }
 
-    return MXAFileSystemPath::fileSize(p);
+    return MXAFileInfo::fileSize(p);
 }
 
 // -----------------------------------------------------------------------------
@@ -304,24 +304,24 @@ int32_t MXASupportFile::readFromFileSystem()
 {
   int32_t err = 0;
 
-  std::string p = MXAFileSystemPath::toNativeSeparators(this->_filesystemPath);
+  std::string p = MXAFileInfo::toNativeSeparators(this->_filesystemPath);
 
   // Make sure the file exists
-  if ( !MXAFileSystemPath::exists( p ) )
+  if ( !MXAFileInfo::exists( p ) )
     {
       std::cout << this->_filesystemPath << " not found." << std::endl;
       return -1;
     }
 
   // Check to make sure the file is regular
-  if ( !MXAFileSystemPath::isFile( p ) )
+  if ( !MXAFileInfo::isFile( p ) )
     {
       std::cout << this->_filesystemPath << "not a regular file." << std::endl;
       return -1;
     }
 
    // std::cout << "size of " << argv[1] << " is " << fs::file_size( p )  << std::endl;
-    uint64_t fileSize = MXAFileSystemPath::fileSize(p);
+    uint64_t fileSize = MXAFileInfo::fileSize(p);
 
   //  boost::iostreams::file_source sourceFile (p, BOOST_IOS::in);
 		std::ifstream sourceFile(p.c_str(), std::ifstream::in | std::ifstream::binary );

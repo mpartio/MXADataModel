@@ -12,7 +12,7 @@
 #include <MXA/Common/IO/MXAFileReader64.h>
 #include <MXA/Common/IO/MXAFileWriter64.h>
 #include <MXAUnitTestDataFileLocations.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 #include "UnitTestSupport.hpp"
 
 
@@ -70,7 +70,7 @@ void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
  // std::cout << "   Removing Test files" << std::endl;
-  MXAFileSystemPath::remove(MXAUnitTest::MXAFileReaderWriterTest::OutputFile);
+  MXADir::remove(MXAUnitTest::MXAFileReaderWriterTest::OutputFile);
 #else
   std::cout << "   Test files NOT removed." << std::endl;
   #endif

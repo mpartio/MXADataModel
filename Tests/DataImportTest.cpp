@@ -26,7 +26,7 @@
 #include <MXA/HDF5/H5MXADataFile.h>
 #include <MXA/DataImport/DataImportXmlParser.h>
 #include <MXA/DataImport/ImportDelegateManager.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 #include "Tests/MXAUnitTestDataFileLocations.h"
 #include "H5ImportTest.h"
 #include "TiffMaker.h"
@@ -43,17 +43,17 @@ void RemoveTestFiles()
  // std::cout << logTime() << "Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
   bool success;
-  MXAFileSystemPath::remove(MXAUnitTest::DataImportTest::SimpleImport);
-  MXAFileSystemPath::remove(MXAUnitTest::DataImportTest::H5TiffOutputFile);
+  MXADir::remove(MXAUnitTest::DataImportTest::SimpleImport);
+  MXADir::remove(MXAUnitTest::DataImportTest::H5TiffOutputFile);
   for (std::vector<std::string>::iterator iter = createdPaths.begin(); iter != createdPaths.end(); ++iter ) {
-    success = MXAFileSystemPath::remove(*iter);
+    success = MXADir::remove(*iter);
     MXA_REQUIRE_EQUAL(success, true);
   }
-  success = MXAFileSystemPath::rmdir(MXAUnitTest::MXATempDir +
+  success = MXADir::rmdir(MXAUnitTest::MXATempDir +
                                      MXAUnitTest::DataImportTest::TestDir +
-                                     MXAFileSystemPath::Separator + "test_data", false);
+                                     MXADir::Separator + "test_data", false);
   MXA_REQUIRE_EQUAL(success, true);
-  success = MXAFileSystemPath::rmdir(MXAUnitTest::MXATempDir +
+  success = MXADir::rmdir(MXAUnitTest::MXATempDir +
                                      MXAUnitTest::DataImportTest::TestDir, false);
   MXA_REQUIRE_EQUAL(success, true);
 #endif
@@ -232,13 +232,13 @@ void CreateTiffImages()
 int XMLImportTest()
 {
 
-  bool success = MXAFileSystemPath::mkdir(MXAUnitTest::MXATempDir +
+  bool success = MXADir::mkdir(MXAUnitTest::MXATempDir +
                                           MXAUnitTest::DataImportTest::TestDir, true);
   MXA_REQUIRE_EQUAL(success, true);
 
-  success = MXAFileSystemPath::mkdir(MXAUnitTest::MXATempDir +
+  success = MXADir::mkdir(MXAUnitTest::MXATempDir +
                                           MXAUnitTest::DataImportTest::TestDir +
-                                          MXAFileSystemPath::Separator + "test_data", true);
+                                          MXADir::Separator + "test_data", true);
   MXA_REQUIRE_EQUAL(success, true);
 
   //std::cout << logTime() << "Starting XMLImportTest -----------------" << std::endl;

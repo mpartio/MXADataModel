@@ -15,7 +15,7 @@
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXASupportFile.h>
 #include <MXA/HDF5/H5MXADataFile.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 
 //-- MXA Unit Test Headers
 #include "MXAUnitTestDataFileLocations.h"
@@ -30,8 +30,8 @@ void RemoveTestFiles()
 {
   std::cout << "   Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(MXAUnitTest::SupportFileTest::OutputFile);
-  MXAFileSystemPath::remove(MXAUnitTest::SupportFileTest::BinaryInputFile);
+  MXADir::remove(MXAUnitTest::SupportFileTest::OutputFile);
+  MXADir::remove(MXAUnitTest::SupportFileTest::BinaryInputFile);
 #endif
 }
 

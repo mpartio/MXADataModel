@@ -12,7 +12,7 @@
 #include <MXA/Utilities/IStringSection.h>
 #include <MXA/Utilities/DataSourcePathIndexSection.h>
 #include "MXAUnitTestDataFileLocations.h"
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 #include "UnitTestSupport.hpp"
 
 
@@ -43,7 +43,7 @@ void RemoveTestFiles()
 {
   std::cout << "   Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(Testing::DataSourcePathIndexSectionTest::DataSourcePathIndexSectionTest_OuptutFile);
+  MXADir::remove(Testing::DataSourcePathIndexSectionTest::DataSourcePathIndexSectionTest_OuptutFile);
 #endif
 }
 

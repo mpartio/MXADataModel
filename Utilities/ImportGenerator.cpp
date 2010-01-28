@@ -9,7 +9,7 @@
 
 // Wheret to find our code templates
 #include <UtilityFileLocations.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 
 // STL includes
 #include <string>
@@ -173,22 +173,22 @@ int main(int argc, char **argv)
 
 
   // Create the output directory
-  std::string outputPath = outputDir + MXAFileSystemPath::Separator + projectName;
-  outputPath = MXAFileSystemPath::toNativeSeparators(outputPath);
+  std::string outputPath = outputDir + MXADir::Separator + projectName;
+  outputPath = MXADir::toNativeSeparators(outputPath);
   std::cout << "Creating directory: " << outputPath << std::endl;
 
-  bool success = MXAFileSystemPath::mkdir(outputDir, true);
+  bool success = MXADir::mkdir(outputDir, true);
   std::cout << "Creating directory: " << outputPath << "/src" << std::endl;
-  success = MXAFileSystemPath::mkdir(outputPath + MXAFileSystemPath::Separator + "src", true);
+  success = MXADir::mkdir(outputPath + MXADir::Separator + "src", true);
 
 
   int err = 0;
   {
     // Create the new CMakeLists.txt file
     std::string inputFile (ImportGenerator::CMakeListsInput);
-    std::string outputFile (outputPath + MXAFileSystemPath::Separator + ImportGenerator::CMakeListsOutput);
-    err = parseTemplate(MXAFileSystemPath::toNativeSeparators(inputFile),
-                        MXAFileSystemPath::toNativeSeparators(outputFile), projectName);
+    std::string outputFile (outputPath + MXADir::Separator + ImportGenerator::CMakeListsOutput);
+    err = parseTemplate(MXADir::toNativeSeparators(inputFile),
+                        MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
     {
       exit(EXIT_FAILURE);
@@ -198,9 +198,9 @@ int main(int argc, char **argv)
   {
     // Create the new FindMXADataModel.cmake file
     std::string inputFile (ImportGenerator::FindMXADataModelInput);
-    std::string outputFile (outputPath + MXAFileSystemPath::Separator + ImportGenerator::FindMXADataModelOutput);
-    err = parseTemplate(MXAFileSystemPath::toNativeSeparators(inputFile),
-                        MXAFileSystemPath::toNativeSeparators(outputFile), projectName);
+    std::string outputFile (outputPath + MXADir::Separator + ImportGenerator::FindMXADataModelOutput);
+    err = parseTemplate(MXADir::toNativeSeparators(inputFile),
+                        MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
     {
       exit(EXIT_FAILURE);
@@ -210,9 +210,9 @@ int main(int argc, char **argv)
   {
     // Create the new ImportDelegate.h Header file
     std::string inputFile (ImportGenerator::ImportDelegateInputHeader);
-    std::string outputFile = MXAFileSystemPath::toNativeSeparators(outputPath) + MXAFileSystemPath::Separator + "src" + MXAFileSystemPath::Separator + projectName +  ImportGenerator::ImportDelegateOutputHeader;
-    err = parseTemplate(MXAFileSystemPath::toNativeSeparators(inputFile),
-                        MXAFileSystemPath::toNativeSeparators(outputFile), projectName);
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + projectName +  ImportGenerator::ImportDelegateOutputHeader;
+    err = parseTemplate(MXADir::toNativeSeparators(inputFile),
+                        MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
     {
       exit(EXIT_FAILURE);
@@ -222,9 +222,9 @@ int main(int argc, char **argv)
   {
     // Create the new  ImportDelegate.cpp Source file
     std::string inputFile (ImportGenerator::ImportDelegateInputSource);
-    std::string outputFile = MXAFileSystemPath::toNativeSeparators(outputPath) + MXAFileSystemPath::Separator + "src" + MXAFileSystemPath::Separator + projectName + ImportGenerator::ImportDelegateOutputSource;
-    err = parseTemplate(MXAFileSystemPath::toNativeSeparators(inputFile),
-                        MXAFileSystemPath::toNativeSeparators(outputFile), projectName);
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + projectName + ImportGenerator::ImportDelegateOutputSource;
+    err = parseTemplate(MXADir::toNativeSeparators(inputFile),
+                        MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
     {
       exit(EXIT_FAILURE);
@@ -236,9 +236,9 @@ int main(int argc, char **argv)
   {
     // Create the new ImportDelegateFactory.h Header file
     std::string inputFile (ImportGenerator::ImportDelegateFactoryInputHeader);
-    std::string outputFile = MXAFileSystemPath::toNativeSeparators(outputPath) + MXAFileSystemPath::Separator + "src" + MXAFileSystemPath::Separator + projectName + ImportGenerator::ImportDelegateFactoryOutputHeader;
-    err = parseTemplate(MXAFileSystemPath::toNativeSeparators(inputFile),
-                        MXAFileSystemPath::toNativeSeparators(outputFile), projectName);
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + projectName + ImportGenerator::ImportDelegateFactoryOutputHeader;
+    err = parseTemplate(MXADir::toNativeSeparators(inputFile),
+                        MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
     {
       exit(EXIT_FAILURE);
@@ -248,9 +248,9 @@ int main(int argc, char **argv)
   {
     // Create the new  ImportDelegateFactory.cpp Source file
     std::string inputFile (ImportGenerator::ImportDelegateFactoryInputSource);
-    std::string outputFile = MXAFileSystemPath::toNativeSeparators(outputPath) + MXAFileSystemPath::Separator + "src" + MXAFileSystemPath::Separator + projectName  + ImportGenerator::ImportDelegateFactoryOutputSource;
-    err = parseTemplate(MXAFileSystemPath::toNativeSeparators(inputFile),
-                        MXAFileSystemPath::toNativeSeparators(outputFile), projectName);
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + projectName  + ImportGenerator::ImportDelegateFactoryOutputSource;
+    err = parseTemplate(MXADir::toNativeSeparators(inputFile),
+                        MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
     {
       exit(EXIT_FAILURE);
@@ -260,16 +260,16 @@ int main(int argc, char **argv)
   {
     // Create the new  main.cpp Source file
     std::string inputFile (ImportGenerator::MainInputSource);
-    std::string outputFile = MXAFileSystemPath::toNativeSeparators(outputPath) + MXAFileSystemPath::Separator + "src" + MXAFileSystemPath::Separator + ImportGenerator::MainOutput;
-    err = parseTemplate(MXAFileSystemPath::toNativeSeparators(inputFile),
-                        MXAFileSystemPath::toNativeSeparators(outputFile), projectName);
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + ImportGenerator::MainOutput;
+    err = parseTemplate(MXADir::toNativeSeparators(inputFile),
+                        MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
     {
       exit(EXIT_FAILURE);
     }
   }
 
-  std::cout << "ImportGenerator is now complete. You can find your new project at " << MXAFileSystemPath::toNativeSeparators(outputPath) << std::endl;
+  std::cout << "ImportGenerator is now complete. You can find your new project at " << MXADir::toNativeSeparators(outputPath) << std::endl;
   std::cout << "The project is automatically setup to use CMake." << std::endl;
   std::cout << "Setting the environment variable 'MXADataModel_INSTALL' will help this new project configure more quickly." << std::endl;
 

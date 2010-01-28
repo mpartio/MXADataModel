@@ -3,7 +3,7 @@
 //-- MXA Includes
 #include <MXA/Common/MXAErrorDefinitions.h>
 #include <MXA/Common/LogTime.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXAFileInfo.h>
 #include <MXA/Base/IDataFile.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXADataSource.h>
@@ -65,9 +65,9 @@ int32_t H5BmpImportDelegate::importDataSource(IDataSource::Pointer dataSource, I
   herr_t err = -1;
   // Make sure the file Exists first before we go much further
   std::string sourcePath =  dataSource->getSourcePath();
-  if ( MXAFileSystemPath::exists(sourcePath) == false)
+  if ( MXAFileInfo::exists(sourcePath) == false)
   {
-    std::cout << logTime() << "Error: BMP image not found: " << MXAFileSystemPath::toNativeSeparators(sourcePath) << std::endl;
+    std::cout << logTime() << "Error: BMP image not found: " << MXAFileInfo::toNativeSeparators(sourcePath) << std::endl;
     if (_fileNotFoundIsError)
     {
       return MXA_ERROR_FILE_NOT_FOUND;
@@ -79,7 +79,7 @@ int32_t H5BmpImportDelegate::importDataSource(IDataSource::Pointer dataSource, I
   }
 
   //Check for valid BMP file extension - BMP or BMP.
-  std::string fileExt = MXAFileSystemPath::extension(sourcePath);
+  std::string fileExt = MXAFileInfo::extension(sourcePath);
   std::transform ( fileExt.begin(), fileExt.end(), fileExt.begin(), ::tolower );
   if (fileExt != MXA::Bmp::FileExtension )
   {

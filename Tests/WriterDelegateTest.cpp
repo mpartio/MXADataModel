@@ -15,7 +15,7 @@
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
 #include <MXAUnitTestDataFileLocations.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 #include "UnitTestSupport.hpp"
 
 #include <iostream>
@@ -29,7 +29,7 @@ void RemoveTestFiles()
 {
   std::cout << "   Removing Test files" << std::endl;
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove( MXAUnitTest::WriterDelegateTest::TestFile);
+  MXADir::remove( MXAUnitTest::WriterDelegateTest::TestFile);
 #endif
 }
 

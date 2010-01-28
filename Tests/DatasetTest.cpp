@@ -28,7 +28,7 @@
 
 #include <MXA/DataWrappers/MXA2DArray.hpp>
 #include <MXA/DataWrappers/MXARGBImage.h>
-#include <MXA/Utilities/MXAFileSystemPath.h>
+#include <MXA/Utilities/MXADir.h>
 
 #include "UnitTestSupport.hpp"
 
@@ -65,7 +65,7 @@ int recLuid = 0;
 void RemoveTestFiles()
 {
 #if REMOVE_TEST_FILES
-  MXAFileSystemPath::remove(MXAUnitTest::DatasetTest::TestFile) ;
+  MXADir::remove(MXAUnitTest::DatasetTest::TestFile) ;
 #endif
 }
 
