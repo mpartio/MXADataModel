@@ -119,7 +119,10 @@ IF (BUILD_SHARED_LIBS)
   ENDIF (WIN32)
 ENDIF (BUILD_SHARED_LIBS)
 
-#-- Find all the support libraries needed
+# --------------------------------------------------------------------
+# Find all the support libraries needed. Including the Boost Program
+# options library which the ImportGenerator Needs
+SET (Boost_USE_PROGRAM_OPTIONS TRUE)
 INCLUDE (${PROJECT_CMAKE_DIR}/FindSupportLibraries.cmake)
 
 #-- Include a Macro to setup source file properties

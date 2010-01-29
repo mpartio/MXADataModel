@@ -8,10 +8,13 @@ SET (Boost_FIND_REQUIRED TRUE)
 SET (Boost_FIND_QUIETLY TRUE)
 set (Boost_USE_MULTITHREADED TRUE)
 set (Boost_USE_STATIC_LIBS TRUE)
-SET (Boost_ADDITIONAL_VERSIONS "1.41" "1.41.0" "1.39" "1.39.0" "1.36" "1.36.0")
-set (MXA_BOOST_HEADERS_ONLY 1)
+SET (Boost_ADDITIONAL_VERSIONS "1.36" "1.36.0" "1.41" "1.41.0" "1.39" "1.39.0")
 
-
+# --------------------------------------------------------------------
+# MXA_BOOST_HEADERS_ONLY determines if any boost libraries are going to
+# be found with the boost headers. For MXADataModel itself NO boost 
+# libraries are required but if you choose to build the ImportGenerator
+# program then you will need the boost program_options library.
 if ( NOT MXA_BOOST_HEADERS_ONLY)
  set (MXA_BOOST_COMPONENTS program_options )
 endif()
