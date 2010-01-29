@@ -16,7 +16,7 @@ SET (MXA_UTILITIES_HEADERS
   ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathBuilder.h
  # ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileSystemPath.h
   ${MXA_SOURCE_DIR}/MXA/Utilities/MXADir.h
-  ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileInfo.cpp
+  ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileInfo.h
   ${MXA_SOURCE_DIR}/MXA/Utilities/MXALogger.h
 )
 
