@@ -1,7 +1,7 @@
 #ifndef DIRENT_INCLUDED
 #define DIRENT_INCLUDED
 
-#if !defined (__WIN32)
+#if !defined (WIN32)
 #error This header is NOT to be included on POSIX systems
 #endif
 /*
