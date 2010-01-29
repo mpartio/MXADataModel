@@ -1,4 +1,8 @@
-
+#--////////////////////////////////////////////////////////////////////////////
+#--  Copyright (c) 2009, 2010 Michael A. Jackson. BlueQuartz Software
+#--  All rights reserved.
+#--  BSD License: http://www.opensource.org/licenses/bsd-license.html
+#--////////////////////////////////////////////////////////////////////////////
 
 #-------------------------------------------------------------------------------
 MACRO (IDE_GENERATED_PROPERTIES SOURCE_PATH HEADERS SOURCES)
@@ -12,7 +16,6 @@ MACRO (IDE_GENERATED_PROPERTIES SOURCE_PATH HEADERS SOURCES)
   #)
 
 ENDMACRO (IDE_GENERATED_PROPERTIES SOURCE_PATH HEADERS SOURCES)
-
 
 #-------------------------------------------------------------------------------
 
@@ -33,18 +36,10 @@ MACRO (IDE_SOURCE_PROPERTIES SOURCE_PATH HEADERS SOURCES)
 
 ENDMACRO (IDE_SOURCE_PROPERTIES NAME HEADERS SOURCES)
 
-# --------------------------------------------------------------------
-#///////////////////////////////////////////////////////////////////////////////
-#//
-#//  Copyright (c) 2008, Michael A. Jackson. BlueQuartz Software
-#//  All rights reserved.
-#//  BSD License: http://www.opensource.org/licenses/bsd-license.html
-#//
-#///////////////////////////////////////////////////////////////////////////////
+
 # ------------------------------------------------------------------------------ 
 # This CMake code installs the needed support libraries
 # ------------------------------------------------------------------------------ 
-
 macro(InstallationSupport EXE_NAME EXE_DEBUG_EXTENSION EXE_BINARY_DIR)
 
     SET_TARGET_PROPERTIES( ${EXE_NAME} 
@@ -216,44 +211,92 @@ endmacro(StaticLibraryProperties)
 # --------------------------------------------------------------------
 #-- Copy all the dependent DLLs into the current build directory so that the test
 #-- can run.
-MACRO (MXA_COPY_DEPENDENT_LIBRARIES TARGET_NAME)
-
-if (WIN32)
-    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set(TYPE "DEBUG")
-    else()
-        set(TYPE "RELEASE")
-    endif()
-    set(TYPE "DEBUG")
-    SET (mxa_lib_list tiff expat hdf5)
+MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
+  set (mxa_lib_list ${mxa_lib_list})
+  SET (TYPES Debug Release)
+  if (MSVC)
+    # Make all the necessary intermediate directories for Visual Studio
+    file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
+    file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release)
+    file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MinSizeRel)
+    file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/RelWithDebInfo)
     FOREACH(lib ${mxa_lib_list})
       STRING(TOUPPER ${lib} upperlib)
-      if (HAVE_${upperlib}_DLL)
-            file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug)
-            file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release)
-            file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MinSizeRel)
-            file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/RelWithDebInfo)
-            message(STATUS "${upperlib}_BIN_DIR: ${${upperlib}_BIN_DIR}")
-            message(STATUS "CMAKE_CFG_INTDIR: ${variable}")
-            message (STATUS "${upperlib}_LIBRARY_${TYPE}: ${${upperlib}_LIBRARY_${TYPE}} ")
-      
-            get_filename_component(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
-            get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
-            
-            message(STATUS "${${upperlib}_BIN_DIR}/${lib_name}.dll")
-            message(STATUS "MXADATAMODEL_LIB_NAME: ${MXADATAMODEL_LIB_NAME}")
-            message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-            message(STATUS "${TARGET_NAME}")
-            ADD_CUSTOM_COMMAND(TARGET ${TARGET_NAME}  POST_BUILD
-                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${${upperlib}_BIN_DIR}/${lib_name}.dll
-                      ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/ 
-                      COMMENT "Copying ${lib_name}.dll to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/")
-      endif()
-    ENDFOREACH()
-endif()  
+      if (${upperlib}_IS_SHARED)
+        FOREACH(BTYPE ${TYPES} )
+          STRING(TOUPPER ${BTYPE} TYPE)        
+          get_filename_component(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
+          get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
+          message(STATUS "Looking for DLL Version of ${lib_name}")
+          find_path(${upperlib}_LIBRARY_DLL_${TYPE} 
+                NAMES ${lib_name}.dll  
+                PATHS ${lib_path}/ ${lib_path}/../bin ${lib_path}/..
+                NO_DEFAULT_PATH )
+          
+          if ( ${${upperlib}_LIBRARY_DLL_${TYPE}} STREQUAL  "${upperlib}_LIBRARY_DLL_${TYPE}-NOTFOUND")
+            message(FATAL_ERROR "According to how ${upperlib}_LIBRARY_${TYPE} was found the library should"
+                                " have been built as a DLL but no .dll file can be found. I looked in the "
+                                " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
+          endif()
+
+          #SET(${upperlib}_LIBRARY_DLL_${TYPE} "${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll" CACHE FILEPATH "The path to the DLL Portion of the library" FORCE)
+          # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
+          message(STATUS "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
+          ADD_CUSTOM_TARGET(ZZ_${upperlib}_DLL_${TYPE}-Copy ALL 
+                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll
+                      ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/ 
+                      COMMENT "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
+#          INSTALL(FILES ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll
+#            DESTINATION bin 
+#            CONFIGURATIONS ${BTYPE} 
+#            COMPONENT Runtime)
+
+        ENDFOREACH(BTYPE ${TYPES})
+      ENDIF(${upperlib}_IS_SHARED)
+    ENDFOREACH(lib ${mxa_lib_list})
+  ENDIF(MSVC)  
     
 endmacro()
 
+# --------------------------------------------------------------------
+# This macro generates install rules for Visual Studio builds so that
+# dependent DLL libraries (HDF5, Tiff, Expat, MXADataModel) will be
+# properly installed with your project.
+# --------------------------------------------------------------------
+MACRO (MXA_LIBRARIES_INSTALL_RULES mxa_lib_list destination)
+  set (mxa_lib_list ${mxa_lib_list})
+  SET (TYPES Debug Release)
+  if (MSVC)
+   
+    FOREACH(lib ${mxa_lib_list})
+      STRING(TOUPPER ${lib} upperlib)
+      if (${upperlib}_IS_SHARED)
+        FOREACH(BTYPE ${TYPES} )
+          STRING(TOUPPER ${BTYPE} TYPE)        
+          get_filename_component(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
+          get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
+          message(STATUS "Generating Install Rule for DLL Version of ${lib_name}")
+          find_path(${upperlib}_LIBRARY_DLL_${TYPE} 
+                NAMES ${lib_name}.dll  
+                PATHS ${lib_path}/ ${lib_path}/../bin ${lib_path}/..
+                NO_DEFAULT_PATH )
+          
+          if ( ${${upperlib}_LIBRARY_DLL_${TYPE}} STREQUAL  "${upperlib}_LIBRARY_DLL_${TYPE}-NOTFOUND")
+            message(FATAL_ERROR "According to how ${upperlib}_LIBRARY_${TYPE} was found the library should"
+                                " have been built as a DLL but no .dll file can be found. I looked in the "
+                                " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
+          endif()
+
+          INSTALL(FILES ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll
+            DESTINATION ${destination} 
+            CONFIGURATIONS ${BTYPE} 
+            COMPONENT Runtime)
+
+        ENDFOREACH(BTYPE ${TYPES})
+      ENDIF(${upperlib}_IS_SHARED)
+    ENDFOREACH(lib ${mxa_lib_list})
+  ENDIF(MSVC) 
+ENDMACRO()
 
 #-------------------------------------------------------------------------------
 # This macro will attempt a try_run command in order to compile and then 

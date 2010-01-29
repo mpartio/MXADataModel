@@ -274,26 +274,38 @@ set (lib_rt_dest lib)
 if (WIN32 AND BUILD_SHARED_LIBS)
   set (lib_rt_dest bin)
 endif()
+if (0)
 INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME}
-        DESTINATION ${lib_rt_dest}
+      #  DESTINATION ${lib_rt_dest}
         ARCHIVE DESTINATION lib 
         COMPONENT SDKLibrary)
 INSTALL (TARGETS ${MXADATAMODEL_LIB_NAME}
-        DESTINATION ${lib_rt_dest}
+     #   DESTINATION ${lib_rt_dest}
         RUNTIME DESTINATION ${lib_rt_dest}
         COMPONENT SDKLibrary)
+endif()
+
 INSTALL (TARGETS ${MXADATAMODEL_LIB_NAME}
         DESTINATION lib
         LIBRARY DESTINATION lib
         COMPONENT SDKLibrary)
+if (WIN32 AND BUILD_SHARED_LIBS)
+    INSTALL (TARGETS ${MXADATAMODEL_LIB_NAME}
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        COMPONENT SDKLibrary)
+endif()
 
 #----- Use MSVC Naming conventions for Shared Libraries for MinGW --------------
 IF (MINGW)
     SET (CMAKE_COLOR_MAKEFILE 0)
 endif()
 
+# Copy DLL libraries into the correct build location on MSVC platforms
+MXA_COPY_DEPENDENT_LIBRARIES ("tiff;expat;hdf5")
 
-MXA_COPY_DEPENDENT_LIBRARIES (${MXADATAMODEL_LIB_NAME})  
+# Generate Install Rules for the DLL Libraries
+MXA_LIBRARIES_INSTALL_RULES ("tiff;expat;hdf5" "bin" )
 
 #-- Include the MXADataModel Testing Sources
 IF ( MXA_BUILD_TESTING )

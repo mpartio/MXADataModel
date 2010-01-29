@@ -8,15 +8,17 @@ IF ( NOT DEFINED  MXA_RESOURCES_DIR)
 ENDIF ( NOT DEFINED  MXA_RESOURCES_DIR)
 
 #-- Get the name of the library
-SET(MXADATAMODEL_LIBRARY_DEBUG_NAME @MXADATAMODEL_LIB_NAME@@MXA_DEBUG_EXTENSION@)
+SET(MXADATAMODEL_LIBRARY_DEBUG_NAME @MXADATAMODEL_LIB_NAME@@EXE_DEBUG_EXTENSION@)
 SET(MXADATAMODEL_LIBRARY_RELEASE_NAME @MXADATAMODEL_LIB_NAME@)
+
+SET(MXADATAMODEL_IS_SHARED @MXA_BUILT_AS_DYNAMIC_LIB@)
 
 # ---------- Find Boost Headers/Libraries -----------------------
 SET (Boost_FIND_REQUIRED TRUE)
 SET (Boost_FIND_QUIETLY TRUE)
-set (Boost_USE_STATIC_LIBS @Boost_USE_STATIC_LIBS@)
+SET (Boost_USE_STATIC_LIBS @Boost_USE_STATIC_LIBS@)
 SET (Boost_USE_THREADS TRUE)
-set (Boost_USE_PROGRAM_OPTIONS TRUE)
+SET (Boost_USE_PROGRAM_OPTIONS TRUE)
 SET (Boost_ADDITIONAL_VERSIONS "1.39" "1.39.0" "1.41" "1.41.0" )
 
 FIND_PACKAGE(Boost COMPONENTS program_options thread)
@@ -27,7 +29,7 @@ LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 # --------------------------------------------------------------------
 # Find the pthread library on Linux if we are using threads
 # --------------------------------------------------------------------
-if (Boost_USE_THREAD)
+if (Boost_USE_THREADS)
   IF (CMAKE_SYSTEM MATCHES "Linux")
       find_package(Threads)
       if (NOT  Threads_FOUND)
@@ -87,10 +89,9 @@ IF("ON" STREQUAL "@MXA_USE_TIFF@")
 ENDIF()
  
 #-- These need to be run also
-set (PROJECT_RESOURCES_DIR_SAVE ${PROJECT_RESOURCES_DIR})
-set (PROJECT_RESOURCES_DIR ${MXADATAMODEL_RESOURCES_DIR})
-#INCLUDE(${MXA_CMAKE_DIR}/ConfigureChecks.cmake)
-#-- Make sure we have install rules for our support libraries
+SET (PROJECT_RESOURCES_DIR_SAVE ${PROJECT_RESOURCES_DIR})
+SET (PROJECT_RESOURCES_DIR ${MXADATAMODEL_RESOURCES_DIR})
 
-include(${MXA_CMAKE_DIR}/InstallMXASupportLibraries.cmake)
-set (PROJECT_RESOURCES_DIR ${PROJECT_RESOURCES_DIR_SAVE} )
+#-- Make sure we have install rules for our support libraries
+#INCLUDE(${MXA_CMAKE_DIR}/InstallMXASupportLibraries.cmake)
+SET (PROJECT_RESOURCES_DIR ${PROJECT_RESOURCES_DIR_SAVE} )

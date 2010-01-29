@@ -1,3 +1,9 @@
+#--////////////////////////////////////////////////////////////////////////////
+#--  Copyright (c) 2009, 2010 Michael A. Jackson. BlueQuartz Software
+#--  All rights reserved.
+#--  BSD License: http://www.opensource.org/licenses/bsd-license.html
+#--////////////////////////////////////////////////////////////////////////////
+
 # ------------------------------------------------------------------------------ 
 # This CMake code installs the needed support libraries on NON OSX platforms.
 # For OS X platforms build and install MXADataModel using the RPATH. Then when
@@ -5,45 +11,56 @@
 # of the MXADataModel library using "install_name_tool" to be what you need.
 # ------------------------------------------------------------------------------
 
-#------- Macro to find and install the proper dynamic libraries ----------------
+# --------------------------------------------------------------------
+# Macro to install any DLL libraries that MXADataModel depends on, and
+# thus your project will depend on them.
+# --------------------------------------------------------------------
 MACRO (MXA_INSTALL_SUPPORT_LIBRARY basename)
-    IF (HAVE_${basename}_DLL)
-      IF (WIN32 AND HAVE_${basename}_DLL STREQUAL "1")
-        GET_FILENAME_COMPONENT(${basename}_LIB_DEBUG_NAME ${${basename}_LIBRARY_DEBUG} NAME_WE)
-        GET_FILENAME_COMPONENT(${basename}_LIB_RELEASE_NAME ${${basename}_LIBRARY_RELEASE} NAME_WE)
+  IF (WIN32 )
+    message(STATUS "Generating Install Rule for ${basename} library because it is a DLL")
+    GET_FILENAME_COMPONENT(${basename}_LIB_DEBUG_NAME ${${basename}_LIBRARY_DEBUG} NAME_WE)
+    GET_FILENAME_COMPONENT(${basename}_LIB_RELEASE_NAME ${${basename}_LIBRARY_RELEASE} NAME_WE)
 
-        INSTALL(FILES ${${basename}_BIN_DIR}/${${basename}_LIB_DEBUG_NAME}.dll 
-            DESTINATION bin 
-            CONFIGURATIONS Debug 
-            COMPONENT Runtime)
-        INSTALL(FILES ${${basename}_BIN_DIR}/${${basename}_LIB_RELEASE_NAME}.dll 
-            DESTINATION bin 
-            CONFIGURATIONS Release 
-            COMPONENT Runtime)
-      ENDIF (WIN32 AND HAVE_${basename}_DLL STREQUAL "1")
-    ENDIF (HAVE_${basename}_DLL)
+    INSTALL(FILES ${${basename}_BIN_DIR}/${${basename}_LIB_DEBUG_NAME}.dll 
+        DESTINATION bin 
+        CONFIGURATIONS Debug 
+        COMPONENT Runtime)
+    INSTALL(FILES ${${basename}_BIN_DIR}/${${basename}_LIB_RELEASE_NAME}.dll 
+        DESTINATION bin 
+        CONFIGURATIONS Release 
+        COMPONENT Runtime)
+  ENDIF (WIN32 )
 ENDMACRO(MXA_INSTALL_SUPPORT_LIBRARY basename)
 
 #-- Install the support libraries if needed
 IF ( "ON" STREQUAL "@MXA_USE_HDF5@")
-set(HAVE_HDF5_DLL @HAVE_HDF5_DLL@)
+set(HDF5_IS_SHARED @HDF5_IS_SHARED@)
+if (HDF5_IS_SHARED)
 MXA_INSTALL_SUPPORT_LIBRARY(HDF5)
+endif()
 ENDIF()
 
 IF ("ON" STREQUAL "@MXA_USE_XML@")
-set(HAVE_EXPAT_DLL @HAVE_EXPAT_DLL@)
+set(EXPAT_IS_SHARED @EXPAT_IS_SHARED@)
+if (EXPAT_IS_SHARED)
 MXA_INSTALL_SUPPORT_LIBRARY(EXPAT)
+endif()
 ENDIF()
 
 IF("ON" STREQUAL "@MXA_USE_TIFF@")
-set(HAVE_TIFF_DLL @HAVE_TIFF_DLL@)
+set(TIFF_IS_SHARED @TIFF_IS_SHARED@)
+if (TIFF_IS_SHARED)
 MXA_INSTALL_SUPPORT_LIBRARY(TIFF)
+endif()
 ENDIF()
 
 #-- Anything that depends on MXADataModel will need to have it installed
-set(HAVE_MXADATAMODEL_DLL @MXA_BUILT_AS_DYNAMIC_LIB@)
+IF("1" STREQUAL "@MXA_BUILT_AS_DYNAMIC_LIB@")
+set(MXA_IS_SHARED @MXA_BUILT_AS_DYNAMIC_LIB@)
+if(MXA_IS_SHARED)
 MXA_INSTALL_SUPPORT_LIBRARY(MXADATAMODEL)
-
+endif()
+ENDIF()
 # -------------------------- Find the MinGW Runtime library --------------------
 IF (MINGW)
     INCLUDE ( ${MXA_CMAKE_DIR}/MXAFindMinGW.cmake )

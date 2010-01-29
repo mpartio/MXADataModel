@@ -17,7 +17,7 @@
 #include "MXA/MXATypes.h"
 
 
-class MXA_EXPORT MXADir
+class  MXADir
 {
   public:
 
