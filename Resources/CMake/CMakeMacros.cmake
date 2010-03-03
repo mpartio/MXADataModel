@@ -227,7 +227,7 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
           STRING(TOUPPER ${BTYPE} TYPE)        
           get_filename_component(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
           get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
-          message(STATUS "Looking for DLL Version of ${lib_name}")
+          #message(STATUS "Looking for DLL Version of ${lib_name}")
           find_path(${upperlib}_LIBRARY_DLL_${TYPE} 
                 NAMES ${lib_name}.dll  
                 PATHS ${lib_path}/ ${lib_path}/../bin ${lib_path}/..
@@ -241,7 +241,7 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
 
           #SET(${upperlib}_LIBRARY_DLL_${TYPE} "${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll" CACHE FILEPATH "The path to the DLL Portion of the library" FORCE)
           # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
-          message(STATUS "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
+          # message(STATUS "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
           ADD_CUSTOM_TARGET(ZZ_${upperlib}_DLL_${TYPE}-Copy ALL 
                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll
                       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/ 
