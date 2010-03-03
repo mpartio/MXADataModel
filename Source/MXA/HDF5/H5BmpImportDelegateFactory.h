@@ -52,6 +52,7 @@ class MXA_EXPORT H5BmpImportDelegateFactory : public AbstractImportDelegateFacto
    */
   std::string delegateClassName();
 
+  int32_t setProperty(const std::string &key, const std::string &value);
   /**
   * @brief Sets the 'FileNotFoundIsError' flag.
   * @param value If this is true then the import will abort if an input file can not be found

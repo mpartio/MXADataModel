@@ -699,6 +699,9 @@ void DataImportXmlParser::start_Implicit_Data_Source_Tag(const XML_Char* name, c
 
 }
 
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void DataImportXmlParser::end_Implicit_Data_Source_Tag(const XML_Char* name)
 {
   //std::cout << "Ending " << std::string(name) << std::endl;
@@ -716,6 +719,21 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
                                             std::vector<IDataDimension*>::size_type index,
                                             std::vector<int> &dimValues)
 {
+
+
+  AbstractImportDelegateFactory::Pointer factory = ImportDelegateManager::instance()->getImportDelegateFactory(_implSourceType);
+  if (NULL != factory.get())
+  {
+    XMLAttributeMap* propMap = _curImportPropertyMap.get();
+    for (XMLAttributeMap::iterator iter = propMap->begin(); iter != propMap->end(); ++iter )
+    {
+      std::string key = (*iter).first;
+      std::string value = (*iter).second;
+      factory->setProperty(key, value);
+    }
+  }
+
+
   // std::cout << "  DataImportXmlParser::_createDataSource" << std::endl;
   IDataDimension::Pointer dim = _implDataDimensions[index];
   int32_t start = dim->getStartValue();
@@ -747,9 +765,13 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
       ds->setDataRecord(_implDataRecord);
       ds->setSourcePath(completePath);
 
+
       IImportDelegate::Pointer importDelegatePtr = ImportDelegateManager::createNewImportDelegate(_implSourceType);
       if (importDelegatePtr.get() != NULL )
       {
+        // Get the key/Value from the Import_Property XML Attribute that is a
+        // possible part of the Implicit Data source and set those values
+        // into the current import delegate.
         getCurrentImportDelegateProperties(importDelegatePtr);
         ds->setImportDelegate(importDelegatePtr);
         ds->setDataModel(this->m_DataModel);
@@ -770,7 +792,7 @@ void DataImportXmlParser::getCurrentImportDelegateProperties(IImportDelegate::Po
   XMLAttributeMap* map = this->_curImportPropertyMap.get();
   for (XMLAttributeMap::iterator iter = map->begin(); iter != map->end(); ++iter)
   {
-//    std::cout << "getting property '" << (*iter).first << "' with value '" << (*iter).second << "'" << std::endl;
+  //  std::cout << "getting property '" << (*iter).first << "' with value '" << (*iter).second << "'" << std::endl;
     importDelegatePtr.get()->setProperty( (*iter).first, (*iter).second);
   }
 }

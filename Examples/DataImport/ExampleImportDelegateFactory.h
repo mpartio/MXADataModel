@@ -43,6 +43,16 @@ class ExampleImportDelegateFactory : public AbstractImportDelegateFactory
      */
     std::string delegateClassName();
 
+    /**
+    * @brief Sets a property of this class with the given value.
+    * @param key The name of the property.
+    * @param value  The value to set the property to.
+    */
+    virtual int32_t setProperty(const std::string &key, const std::string &value)
+    {
+      return 0;
+    }
+
   private:
 
     ExampleImportDelegateFactory(const ExampleImportDelegateFactory&);    //Not Implemented

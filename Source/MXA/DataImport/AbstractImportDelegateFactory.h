@@ -57,6 +57,13 @@ class MXA_EXPORT AbstractImportDelegateFactory
      */
     virtual std::string delegateClassName() = 0;
 
+    /**
+    * @brief Sets a property of this class with the given value.
+    * @param key The name of the property.
+    * @param value  The value to set the property to.
+    */
+    virtual int32_t setProperty(const std::string &key, const std::string &value) = 0;
+
   protected:
     AbstractImportDelegateFactory() {};
 

@@ -128,6 +128,17 @@ class H5ImportTestDelegateFactory : public AbstractImportDelegateFactory
     return H5ImportTest::Detail::ClassName;
   }
 
+  /**
+   * @brief
+   * @param key
+   * @param value
+   * @return
+   */
+  int32_t setProperty(const std::string &key, const std::string &value)
+  {
+    return 0;
+  }
+
   private:
     H5ImportTestDelegateFactory(const H5ImportTestDelegateFactory&);    //Not Implemented
     void operator=(const H5ImportTestDelegateFactory&);  //Not Implemented

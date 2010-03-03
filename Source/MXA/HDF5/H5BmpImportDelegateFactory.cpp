@@ -4,7 +4,7 @@
 
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 H5BmpImportDelegateFactory::H5BmpImportDelegateFactory() :
   _fileNotFoundIsError(false),
@@ -13,15 +13,15 @@ H5BmpImportDelegateFactory::H5BmpImportDelegateFactory() :
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 H5BmpImportDelegateFactory::~H5BmpImportDelegateFactory()
 {
-  
+
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 IImportDelegate::Pointer H5BmpImportDelegateFactory::newDataImportDelegate (const std::string &className )
 {
@@ -37,7 +37,7 @@ IImportDelegate::Pointer H5BmpImportDelegateFactory::newDataImportDelegate (cons
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 std::string H5BmpImportDelegateFactory::delegateClassName()
 {
@@ -45,7 +45,18 @@ std::string H5BmpImportDelegateFactory::delegateClassName()
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
+// -----------------------------------------------------------------------------
+int32_t H5BmpImportDelegateFactory::setProperty(const std::string &key, const std::string &value)
+{
+  SET_PROPERTY_BODY(H5BmpImport, bool, FileNotFoundIsError, key, value);
+  SET_PROPERTY_BODY(H5BmpImport, bool, ImportAsGrayScale, key, value);
+  return 0;
+}
+
+
+// -----------------------------------------------------------------------------
+//
 // -----------------------------------------------------------------------------
 void H5BmpImportDelegateFactory::setFileNotFoundIsError(bool value)
 {
@@ -53,7 +64,7 @@ void H5BmpImportDelegateFactory::setFileNotFoundIsError(bool value)
 }
 
 // -----------------------------------------------------------------------------
-//  
+//
 // -----------------------------------------------------------------------------
 void H5BmpImportDelegateFactory::setImportAsGrayScale(bool value)
 {

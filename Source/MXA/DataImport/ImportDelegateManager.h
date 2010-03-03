@@ -100,6 +100,7 @@ class MXA_EXPORT ImportDelegateManager
       */
      virtual AbstractImportDelegateFactory::Pointer getImportDelegateFactory(const std::string &classname);
 
+     virtual AbstractImportDelegateFactory::Collection getFactories() { return _factories; }
 
    protected:
      ImportDelegateManager();

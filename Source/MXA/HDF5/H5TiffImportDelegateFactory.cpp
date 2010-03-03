@@ -54,6 +54,16 @@ std::string H5TiffImportDelegateFactory::delegateClassName()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
+int32_t H5TiffImportDelegateFactory::setProperty(const std::string &key, const std::string &value)
+{
+  SET_PROPERTY_BODY(H5TiffImport, bool, FileNotFoundIsError, key, value);
+  SET_PROPERTY_BODY(H5TiffImport, bool, ImportAsGrayScale, key, value);
+  return 0;
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
 void H5TiffImportDelegateFactory::setFileNotFoundIsError(bool value)
 {
   this->_fileNotFoundIsError = value;

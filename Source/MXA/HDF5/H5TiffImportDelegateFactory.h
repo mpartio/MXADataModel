@@ -54,6 +54,13 @@ class MXA_EXPORT H5TiffImportDelegateFactory : public AbstractImportDelegateFact
   std::string delegateClassName();
 
   /**
+  * @brief Sets a property of this class with the given value.
+  * @param key The name of the property.
+  * @param value  The value to set the property to.
+  */
+  virtual int32_t setProperty(const std::string &key, const std::string &value);
+
+  /**
   * @brief Sets the 'FileNotFoundIsError' flag.
   * @param value If this is true then the import will abort if an input file can not be found
   */
@@ -64,6 +71,7 @@ class MXA_EXPORT H5TiffImportDelegateFactory : public AbstractImportDelegateFact
   * @param value If TRUE, then the tiff file will be converted to Grayscale
   */
   void setImportAsGrayScale(bool value);
+
 
   private:
 
