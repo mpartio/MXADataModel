@@ -158,33 +158,48 @@ hid_t H5Utilities::openHDF5Object(hid_t loc_id, const std::string &objName)
 // -----------------------------------------------------------------------------
 herr_t H5Utilities::closeHDF5Object(hid_t obj_id)
 {
+  if (obj_id < 0) // Object was not valid.
+  {
+    return 0;
+  }
   H5I_type_t obj_type;
   herr_t err=-1;  // default to an error
-
+  char name[1024];
+  ::memset(name, 0, 1024);
   obj_type = H5Iget_type(obj_id);
+  ssize_t charsRead = H5Iget_name( obj_id, name, 1024);
+  if (charsRead < 0)
+  {
+    std::cout << "Error Trying to get the name of an hdf object that was not closed. This is probably pretty bad. " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
+    return -1;
+  }
 
   switch(obj_type) {
   case H5I_FILE:
     err = H5Fclose(obj_id);
     break;
   case H5I_GROUP:
+    std::cout << "H5 Group Object left open. Id=" << obj_id  << " Name='" << name << "'" << std::endl;
     err = H5Gclose(obj_id);
     break;
   case H5I_DATASET:
+    std::cout << "H5 Dataset Object left open. Id=" << obj_id << " Name='" << name << "'" << std::endl;
     err = H5Dclose(obj_id);
     break;
   case H5I_ATTR:
+    std::cout << "H5 Attribute Object left open. Id=" << obj_id << " Name='" << name << "'" << std::endl;
     err = H5Aclose(obj_id);
     break;
   case H5I_DATATYPE:
+    std::cout << "H5 DataType Object left open. Id=" << obj_id << " Name='" << name << "'" << std::endl;
     err = H5Tclose(obj_id);
     break;
   case H5I_DATASPACE:
+    std::cout << "H5 Data Space Object left open. Id=" << obj_id << " Name='" << name << "'" << std::endl;
     err = H5Sclose(obj_id);
     break;
   default:
-    std::cout << "Error unknown HDF object for closing: "
-	      << obj_type << std::endl;
+    std::cout << "Error unknown HDF object for closing: " << " Name='" << name << "'" << " Object Type=" << obj_type << std::endl;
     err = -1;
   }
 
