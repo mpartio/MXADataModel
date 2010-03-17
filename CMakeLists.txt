@@ -277,27 +277,7 @@ set (lib_rt_dest lib)
 if (WIN32 AND BUILD_SHARED_LIBS)
   set (lib_rt_dest bin)
 endif()
-if (0)
-INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME}
-      #  DESTINATION ${lib_rt_dest}
-        ARCHIVE DESTINATION lib 
-        COMPONENT SDKLibrary)
-INSTALL (TARGETS ${MXADATAMODEL_LIB_NAME}
-     #   DESTINATION ${lib_rt_dest}
-        RUNTIME DESTINATION ${lib_rt_dest}
-        COMPONENT SDKLibrary)
-endif()
 
-INSTALL (TARGETS ${MXADATAMODEL_LIB_NAME}
-        DESTINATION lib
-        LIBRARY DESTINATION lib
-        COMPONENT SDKLibrary)
-if (WIN32 AND BUILD_SHARED_LIBS)
-    INSTALL (TARGETS ${MXADATAMODEL_LIB_NAME}
-        ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin
-        COMPONENT SDKLibrary)
-endif()
 
 #----- Use MSVC Naming conventions for Shared Libraries for MinGW --------------
 IF (MINGW)
@@ -341,6 +321,7 @@ endif(MXA_BUILD_API_DOCS)
 
 
 #--- Set up the installation Code for Make Install
-include ( ${PROJECT_CMAKE_DIR}/MXAInstall.cmake)
-include ( ${PROJECT_CMAKE_DIR}/PackageProject.cmake)
-
+if ( NOT DEFINED MXA_IGNORE_INSTALL_RULES )
+    include ( ${PROJECT_CMAKE_DIR}/MXAInstall.cmake)
+    include ( ${PROJECT_CMAKE_DIR}/PackageProject.cmake)
+endif()

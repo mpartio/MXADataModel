@@ -53,21 +53,24 @@ SET (MXA_COMMON_HEADERS
     ${MXA_WIN_COMMON_HEADERS}
     ${MXA_UNIX_COMMON_HEADERS}
 )
+
+if ( NOT DEFINED MXA_IGNORE_INSTALL_RULES )
+
+    INSTALL (FILES  ${MXA_SOURCE_DIR}/MXA/Common/IO/MXAFileReader64.h
+                    ${MXA_SOURCE_DIR}/MXA/Common/IO/MXAFileWriter64.h
+             DESTINATION include/MXA/Common/IO
+             COMPONENT Headers           
+    )
     
-INSTALL (FILES  ${MXA_SOURCE_DIR}/MXA/Common/IO/MXAFileReader64.h
-                ${MXA_SOURCE_DIR}/MXA/Common/IO/MXAFileWriter64.h
-         DESTINATION include/MXA/Common/IO
-         COMPONENT Headers           
-)
-
-INSTALL (FILES  ${MXA_WIN_COMMON_HEADERS}
-                ${MXA_UNIX_COMMON_HEADERS}
-         DESTINATION include/MXA/Common/IO/Private
-         COMPONENT Headers           
-)
-
-INSTALL (FILES   ${MXA_SOURCE_DIR}/MXA/Common/Cast/Cast.h
-         DESTINATION include/MXA/Common/Cast
-         COMPONENT Headers           
-)
+    INSTALL (FILES  ${MXA_WIN_COMMON_HEADERS}
+                    ${MXA_UNIX_COMMON_HEADERS}
+             DESTINATION include/MXA/Common/IO/Private
+             COMPONENT Headers           
+    )
+    
+    INSTALL (FILES   ${MXA_SOURCE_DIR}/MXA/Common/Cast/Cast.h
+             DESTINATION include/MXA/Common/Cast
+             COMPONENT Headers           
+    )
+endif()
 

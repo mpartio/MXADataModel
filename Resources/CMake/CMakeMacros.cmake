@@ -20,11 +20,12 @@ ENDMACRO (IDE_GENERATED_PROPERTIES SOURCE_PATH HEADERS SOURCES)
 #-------------------------------------------------------------------------------
 
 MACRO (IDE_SOURCE_PROPERTIES SOURCE_PATH HEADERS SOURCES)
+    if ( NOT DEFINED MXA_IGNORE_INSTALL_RULES )
     INSTALL (FILES ${HEADERS}
              DESTINATION include/${SOURCE_PATH}
              COMPONENT Headers           
     )
-
+    endif()
     STRING(REPLACE "/" "\\\\" source_group_path ${SOURCE_PATH}  )
     source_group(${source_group_path} FILES ${HEADERS} ${SOURCES})
 
@@ -48,16 +49,17 @@ macro(InstallationSupport EXE_NAME EXE_DEBUG_EXTENSION EXE_BINARY_DIR)
         RELEASE_OUTPUT_NAME ${EXE_NAME}
     )
     
-    
-    INSTALL(TARGETS ${EXE_NAME} 
-        RUNTIME
-        DESTINATION ./
-        COMPONENT Applications
-        LIBRARY DESTINATION ./ 
-        ARCHIVE DESTINATION ./
-        RUNTIME DESTINATION ./
-        BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/.
-    )   
+    if ( NOT DEFINED MXA_IGNORE_INSTALL_RULES )
+        INSTALL(TARGETS ${EXE_NAME} 
+            RUNTIME
+            DESTINATION ./
+            COMPONENT Applications
+            LIBRARY DESTINATION ./ 
+            ARCHIVE DESTINATION ./
+            RUNTIME DESTINATION ./
+            BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/.
+        )   
+    endif()
     
     # --- If we are on OS X copy all the embedded libraries to the app bundle
     if(DEFINED GUI_TYPE)
