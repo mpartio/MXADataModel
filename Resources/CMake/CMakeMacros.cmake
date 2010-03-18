@@ -291,7 +291,7 @@ MACRO (MXA_LIBRARIES_INSTALL_RULES mxa_lib_list destination)
               set(${upperlib}_LIBRARY_DLL_${TYPE}  ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll)
               message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
               message(STATUS "Generating Install Rule for ${btype} Version of ${upperlib}_LIBRARY_${TYPE}")
-              INSTALL(FILES ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll
+              INSTALL(FILES ${${upperlib}_LIBRARY_DLL_${TYPE}}
                 DESTINATION ${destination} 
                 CONFIGURATIONS ${BTYPE} 
                 COMPONENT Runtime)
