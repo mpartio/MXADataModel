@@ -5,8 +5,9 @@ SET(MXA_USE_HDF5 ON)
 SET(MXA_EXTERNAL_HDF5_LIBRARY ${PARAVIEW_HDF5_LIBRARIES})
 SET(HDF5_FOUND 1)
 SET(HDF5_LIBRARIES ${PARAVIEW_HDF5_LIBRARIES})
+SET(HDF5_LIBRARY  ${PARAVIEW_HDF5_LIBRARIES} CACHE FILEPATH "" )
+
 INCLUDE_DIRECTORIES( ${HDF5_INCLUDE_DIR} )
-#SET(HDF5_INCLUDE_DIRS "${ParaView_SOURCE_DIR}/Utilities/hdf5" ${ParaView_BINARY_DIR}/Utilities/hdf5)
 
 # ------- Add support for Expat and XML parsing
 SET (MXA_USE_XML  ON)
@@ -15,14 +16,8 @@ SET (EXPAT_FOUND 1)
 SET (EXPAT_LIBRARIES vtkexpat)
 SET (EXPAT_INCLUDE_DIRS "${ParaView_SOURCE_DIR}/VTK/Utilities/vtkexpat")
 
-# ---- Add support for Tiff image functionality
+# ---- Remove support for Tiff image functionality
 SET (MXA_USE_TIFF OFF)
-#SET (MXA_EXTERNAL_TIFF_LIBRARY vtktiff)
-#SET (TIFF_FOUND 1)
-#SET (TIFF_LIBRARIES vtktiff)
-#SET (TIFF_INCLUDE_DIRS  ${ParaView_SOURCE_DIR}/VTK/Utilities/vtktiff
-#                        ${ParaView_BINARY_DIR}/VTK/Utilities/vtktiff )
-
 
 SET (MXA_BUILD_EXAMPLES OFF CACHE BOOL "" )
 SET (MXA_BUILD_TESTING FALSE)
@@ -48,3 +43,5 @@ MESSAGE (STATUS "[${MODULE_NAME}] Added the MXADataModel library.")
 INCLUDE_DIRECTORIES (${MXADataModel_SOURCE_DIR}/Source)
 INCLUDE_DIRECTORIES (${ParaView_BINARY_DIR}/MXADataModel)
 
+include (${MXADataModel_SOURCE_DIR}/Resources/CMake/CMakeMacros.cmake)
+MXA_LIBRARIES_INSTALL_RULES ("hdf5" "bin")
