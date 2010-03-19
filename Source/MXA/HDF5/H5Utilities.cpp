@@ -71,7 +71,7 @@ herr_t H5Utilities::closeFile(hid_t &fileId)
     {
       char name[1024];
       ::memset(name, 0, 1024);
-      hid_t obj_type = H5Iget_type(attr_ids[i]);
+      //hid_t obj_type = H5Iget_type(attr_ids[i]);
       ssize_t charsRead = H5Iget_name( attr_ids[i], name, 1024);
       if (charsRead < 0)
       {

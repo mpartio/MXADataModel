@@ -31,7 +31,7 @@ SET (MXADATAMODEL_LIB_NAME MXADataModel)
 SET (MXA_USE_DEBUG_LIBRARY_NAME FALSE)
 set (MXA_BOOST_HEADERS_ONLY TRUE)
 
-set (MXA_IGNORE_INSTALL_RULES ON CACHE BOOL "Ignore the MXA Install Rules, defaulting to the enclosing projects install rules")
+set (MXA_INSTALL_FILES 0 CACHE INTERNAL "Ignore the MXA Install Rules, defaulting to the enclosing projects install rules")
 set (MXA_BUILD_TESTING_SAVE ${MXA_BUILD_TESTING})
 #SET (MXA_BUILD_TESTING ON)
 SET (MXA_OUTPUT_DIRS_DEFINED 1)

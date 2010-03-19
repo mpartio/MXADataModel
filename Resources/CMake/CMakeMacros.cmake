@@ -20,7 +20,7 @@ ENDMACRO (IDE_GENERATED_PROPERTIES SOURCE_PATH HEADERS SOURCES)
 #-------------------------------------------------------------------------------
 
 MACRO (IDE_SOURCE_PROPERTIES SOURCE_PATH HEADERS SOURCES)
-    if ( NOT DEFINED MXA_IGNORE_INSTALL_RULES )
+    if ( ${MXA_INSTALL_FILES} EQUAL 1 )
     INSTALL (FILES ${HEADERS}
              DESTINATION include/${SOURCE_PATH}
              COMPONENT Headers           
@@ -49,7 +49,7 @@ macro(InstallationSupport EXE_NAME EXE_DEBUG_EXTENSION EXE_BINARY_DIR)
         RELEASE_OUTPUT_NAME ${EXE_NAME}
     )
     
-    if ( NOT DEFINED MXA_IGNORE_INSTALL_RULES )
+    if ( ${MXA_INSTALL_FILES} EQUAL 1 )
         INSTALL(TARGETS ${EXE_NAME} 
             RUNTIME
             DESTINATION ./

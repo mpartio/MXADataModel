@@ -7,6 +7,9 @@
 PROJECT( MXADataModel )
 cmake_minimum_required(VERSION 2.6)
 
+if (NOT DEFINED MXA_INSTALL_FILES)
+    set (MXA_INSTALL_FILES 1 CACHE INTERNAL "Ignore the MXA Install Rules, defaulting to the enclosing projects install rules")
+endif()
 #-- Need this for link line stuff?
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
@@ -273,12 +276,11 @@ ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
 LibraryProperties( ${MXADATAMODEL_LIB_NAME} ${EXE_DEBUG_EXTENSION})
 
-if (NOT APPLE AND DEFINED MXA_IGNORE_INSTALL_RULES )
+if ( ${MXA_INSTALL_FILES} EQUAL 1 )
     INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
-        LIBRARY DESTINATION bin
+        LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin
-    )
+        RUNTIME DESTINATION bin )
 endif()
 
 set (lib_rt_dest lib)
@@ -329,7 +331,7 @@ endif(MXA_BUILD_API_DOCS)
 
 
 #--- Set up the installation Code for Make Install
-if ( NOT DEFINED MXA_IGNORE_INSTALL_RULES )
+if ( ${MXA_INSTALL_FILES} EQUAL 1 )
     include ( ${PROJECT_CMAKE_DIR}/MXAInstall.cmake)
     include ( ${PROJECT_CMAKE_DIR}/PackageProject.cmake)
 endif()
