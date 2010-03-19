@@ -294,11 +294,13 @@ IF (MINGW)
     SET (CMAKE_COLOR_MAKEFILE 0)
 endif()
 
-# Copy DLL libraries into the correct build location on MSVC platforms
-MXA_COPY_DEPENDENT_LIBRARIES ("tiff;expat;hdf5")
-
-# Generate Install Rules for the DLL Libraries
-MXA_LIBRARIES_INSTALL_RULES ("tiff;expat;hdf5" "bin" )
+if ( NOT DEFINED MXA_IGNORE_INSTALL_RULES )
+    # Copy DLL libraries into the correct build location on MSVC platforms
+    MXA_COPY_DEPENDENT_LIBRARIES ("tiff;expat;hdf5")
+    
+    # Generate Install Rules for the DLL Libraries
+    MXA_LIBRARIES_INSTALL_RULES ("tiff;expat;hdf5" "bin" )
+endif()
 
 #-- Include the MXADataModel Testing Sources
 IF ( MXA_BUILD_TESTING )
