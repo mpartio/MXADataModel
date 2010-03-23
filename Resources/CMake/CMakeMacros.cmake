@@ -20,11 +20,13 @@ ENDMACRO (IDE_GENERATED_PROPERTIES SOURCE_PATH HEADERS SOURCES)
 #-------------------------------------------------------------------------------
 
 MACRO (IDE_SOURCE_PROPERTIES SOURCE_PATH HEADERS SOURCES)
-    if ( ${MXA_INSTALL_FILES} EQUAL 1 )
+    if ( DEFINED MXA_INSTALL_FILES)
+    if( ${MXA_INSTALL_FILES} EQUAL 1 )
     INSTALL (FILES ${HEADERS}
              DESTINATION include/${SOURCE_PATH}
              COMPONENT Headers           
     )
+    endif()
     endif()
     STRING(REPLACE "/" "\\\\" source_group_path ${SOURCE_PATH}  )
     source_group(${source_group_path} FILES ${HEADERS} ${SOURCES})
@@ -49,6 +51,7 @@ macro(InstallationSupport EXE_NAME EXE_DEBUG_EXTENSION EXE_BINARY_DIR)
         RELEASE_OUTPUT_NAME ${EXE_NAME}
     )
     
+    if ( DEFINED MXA_INSTALL_FILES)
     if ( ${MXA_INSTALL_FILES} EQUAL 1 )
         INSTALL(TARGETS ${EXE_NAME} 
             RUNTIME
@@ -59,6 +62,7 @@ macro(InstallationSupport EXE_NAME EXE_DEBUG_EXTENSION EXE_BINARY_DIR)
             RUNTIME DESTINATION ./
             BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/.
         )   
+    endif()
     endif()
     
     # --- If we are on OS X copy all the embedded libraries to the app bundle
@@ -229,7 +233,7 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
           STRING(TOUPPER ${BTYPE} TYPE)        
           get_filename_component(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
           get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
-          #message(STATUS "Looking for DLL Version of ${lib_name}")
+          message(STATUS "Looking for DLL Version of ${lib_name}")
           find_path(${upperlib}_LIBRARY_DLL_${TYPE} 
                 NAMES ${lib_name}.dll  
                 PATHS ${lib_path}/ ${lib_path}/../bin ${lib_path}/..
@@ -284,13 +288,13 @@ MACRO (MXA_LIBRARIES_INSTALL_RULES mxa_lib_list destination)
                 NO_DEFAULT_PATH )
 
           if ( ${${upperlib}_LIBRARY_DLL_${TYPE}} STREQUAL  "${upperlib}_LIBRARY_DLL_${TYPE}-NOTFOUND")
-            message(STATUS "A Companion DLL for ${upperlib}_LIBRARY_${TYPE} was NOT found which usually means"
-                                " that the library was NOT built as a DLL. I looked in the "
-                                " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
+           # message(STATUS "A Companion DLL for ${upperlib}_LIBRARY_${TYPE} was NOT found which usually means"
+           #                     " that the library was NOT built as a DLL. I looked in the "
+           #                     " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
           else()
               set(${upperlib}_LIBRARY_DLL_${TYPE}  ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll)
-              message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
-              message(STATUS "Generating Install Rule for ${btype} Version of ${upperlib}_LIBRARY_${TYPE}")
+             # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
+             # message(STATUS "Generating Install Rule for ${btype} Version of ${upperlib}_LIBRARY_${TYPE}")
               INSTALL(FILES ${${upperlib}_LIBRARY_DLL_${TYPE}}
                 DESTINATION ${destination} 
                 CONFIGURATIONS ${BTYPE} 
