@@ -237,10 +237,11 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
         #  message(STATUS "lib_path: ${lib_path}")
         #  message(STATUS "lib_name: ${lib_name}")
           
-          find_path(${upperlib}_LIBRARY_DLL_${TYPE} 
-                NAMES ${lib_name}.dll  
-                PATHS ${lib_path}/ ${lib_path}/../bin ${lib_path}/..
-                NO_DEFAULT_PATH )
+          find_file(${upperlib}_LIBRARY_DLL_${TYPE}
+                        NAMES ${lib_name}.dll
+                        PATHS  ${lib_path}/../bin ${lib_path}/.. ${lib_path}/
+                        NO_DEFAULT_PATH )
+          message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
           
           if ( ${${upperlib}_LIBRARY_DLL_${TYPE}} STREQUAL  "${upperlib}_LIBRARY_DLL_${TYPE}-NOTFOUND")
             message(FATAL_ERROR "According to how ${upperlib}_LIBRARY_${TYPE} was found the library should"
@@ -248,13 +249,13 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
                                 " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
           endif()
 
-          SET(${upperlib}_LIBRARY_DLL_${TYPE} "${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll" CACHE FILEPATH "The path to the DLL Portion of the library" FORCE)
+         # SET(${upperlib}_LIBRARY_DLL_${TYPE} "${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll" CACHE FILEPATH "The path to the DLL Portion of the library" FORCE)
          # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
          # message(STATUS "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
           ADD_CUSTOM_TARGET(ZZ_${upperlib}_DLL_${TYPE}-Copy ALL 
-                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll
+                      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${${upperlib}_LIBRARY_DLL_${TYPE}}
                       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/ 
-                      COMMENT "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
+                      COMMENT "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
 
         ENDFOREACH(BTYPE ${TYPES})
       ENDIF(${upperlib}_IS_SHARED)
@@ -262,7 +263,7 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
   ENDIF(MSVC)  
     
 endmacro()
-
+#
 # --------------------------------------------------------------------
 # This macro generates install rules for Visual Studio builds so that
 # dependent DLL libraries (HDF5, Tiff, Expat, MXADataModel) will be
