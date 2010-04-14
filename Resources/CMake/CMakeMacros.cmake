@@ -230,10 +230,13 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
       STRING(TOUPPER ${lib} upperlib)
       if (${upperlib}_IS_SHARED)
         FOREACH(BTYPE ${TYPES} )
+        #  message(STATUS "Looking for ${BTYPE} DLL Version of ${lib_name}")
           STRING(TOUPPER ${BTYPE} TYPE)        
           get_filename_component(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
           get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
-          message(STATUS "Looking for DLL Version of ${lib_name}")
+        #  message(STATUS "lib_path: ${lib_path}")
+        #  message(STATUS "lib_name: ${lib_name}")
+          
           find_path(${upperlib}_LIBRARY_DLL_${TYPE} 
                 NAMES ${lib_name}.dll  
                 PATHS ${lib_path}/ ${lib_path}/../bin ${lib_path}/..
@@ -245,17 +248,13 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
                                 " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
           endif()
 
-          #SET(${upperlib}_LIBRARY_DLL_${TYPE} "${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll" CACHE FILEPATH "The path to the DLL Portion of the library" FORCE)
-          # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
-          # message(STATUS "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
+          SET(${upperlib}_LIBRARY_DLL_${TYPE} "${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll" CACHE FILEPATH "The path to the DLL Portion of the library" FORCE)
+         # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
+         # message(STATUS "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
           ADD_CUSTOM_TARGET(ZZ_${upperlib}_DLL_${TYPE}-Copy ALL 
                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll
                       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/ 
                       COMMENT "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
-#          INSTALL(FILES ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll
-#            DESTINATION bin 
-#            CONFIGURATIONS ${BTYPE} 
-#            COMPONENT Runtime)
 
         ENDFOREACH(BTYPE ${TYPES})
       ENDIF(${upperlib}_IS_SHARED)
