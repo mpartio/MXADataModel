@@ -6,7 +6,7 @@
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = MXADataModel
 PROJECT_NUMBER         = 
-OUTPUT_DIRECTORY       = @MXADataModel_BINARY_DIR@/API-Docs
+OUTPUT_DIRECTORY       = @MXADataModel_BINARY_DIR@/Documentation
 CREATE_SUBDIRS         = YES
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
