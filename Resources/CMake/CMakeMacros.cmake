@@ -52,17 +52,17 @@ macro(InstallationSupport EXE_NAME EXE_DEBUG_EXTENSION EXE_BINARY_DIR)
     )
     
     if ( DEFINED MXA_INSTALL_FILES)
-    if ( ${MXA_INSTALL_FILES} EQUAL 1 )
-        INSTALL(TARGETS ${EXE_NAME} 
-            RUNTIME
-            DESTINATION ./
-            COMPONENT Applications
-            LIBRARY DESTINATION ./ 
-            ARCHIVE DESTINATION ./
-            RUNTIME DESTINATION ./
-            BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/.
-        )   
-    endif()
+        if ( ${MXA_INSTALL_FILES} EQUAL 1 )
+            INSTALL(TARGETS ${EXE_NAME} 
+                RUNTIME
+                DESTINATION ./
+                COMPONENT Applications
+                LIBRARY DESTINATION ./ 
+                ARCHIVE DESTINATION ./
+                RUNTIME DESTINATION ./
+                BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/.
+            )   
+        endif()
     endif()
     
     # --- If we are on OS X copy all the embedded libraries to the app bundle
@@ -241,8 +241,8 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
                         NAMES ${lib_name}.dll
                         PATHS  ${lib_path}/../bin ${lib_path}/.. ${lib_path}/
                         NO_DEFAULT_PATH )
-          message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
-          
+         # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
+          mark_as_advanced(${upperlib}_LIBRARY_DLL_${TYPE})
           if ( ${${upperlib}_LIBRARY_DLL_${TYPE}} STREQUAL  "${upperlib}_LIBRARY_DLL_${TYPE}-NOTFOUND")
             message(FATAL_ERROR "According to how ${upperlib}_LIBRARY_${TYPE} was found the library should"
                                 " have been built as a DLL but no .dll file can be found. I looked in the "
@@ -251,7 +251,7 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
 
          # SET(${upperlib}_LIBRARY_DLL_${TYPE} "${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll" CACHE FILEPATH "The path to the DLL Portion of the library" FORCE)
          # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
-         # message(STATUS "  Copy: ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll\n    To: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/")
+          message(STATUS "Generating Copy Rule for DLL File for ${upperlib}_LIBRARY_${TYPE}")
           ADD_CUSTOM_TARGET(ZZ_${upperlib}_DLL_${TYPE}-Copy ALL 
                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${${upperlib}_LIBRARY_DLL_${TYPE}}
                       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BTYPE}/ 
@@ -282,19 +282,20 @@ MACRO (MXA_LIBRARIES_INSTALL_RULES mxa_lib_list destination)
           get_filename_component(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
           get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
           
-          find_path(${upperlib}_LIBRARY_DLL_${TYPE} 
-                NAMES ${lib_name}.dll  
-                PATHS ${lib_path}/ ${lib_path}/../bin ${lib_path}/..
-                NO_DEFAULT_PATH )
-
+          find_file(${upperlib}_LIBRARY_DLL_${TYPE}
+                        NAMES ${lib_name}.dll
+                        PATHS  ${lib_path}/../bin ${lib_path}/.. ${lib_path}/
+                        NO_DEFAULT_PATH )
+         # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
+          mark_as_advanced(${upperlib}_LIBRARY_DLL_${TYPE})
           if ( ${${upperlib}_LIBRARY_DLL_${TYPE}} STREQUAL  "${upperlib}_LIBRARY_DLL_${TYPE}-NOTFOUND")
-           # message(STATUS "A Companion DLL for ${upperlib}_LIBRARY_${TYPE} was NOT found which usually means"
-           #                     " that the library was NOT built as a DLL. I looked in the "
-           #                     " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
+            # message(STATUS "A Companion DLL for ${upperlib}_LIBRARY_${TYPE} was NOT found which usually means"
+            #                    " that the library was NOT built as a DLL. I looked in the "
+            #                    " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
           else()
-              set(${upperlib}_LIBRARY_DLL_${TYPE}  ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll)
+             # set(${upperlib}_LIBRARY_DLL_${TYPE}  ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll)
              # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
-             # message(STATUS "Generating Install Rule for ${btype} Version of ${upperlib}_LIBRARY_${TYPE}")
+              message(STATUS "Generating Install Rule for DLL File for ${upperlib}_LIBRARY_${TYPE}")
               INSTALL(FILES ${${upperlib}_LIBRARY_DLL_${TYPE}}
                 DESTINATION ${destination} 
                 CONFIGURATIONS ${BTYPE} 
