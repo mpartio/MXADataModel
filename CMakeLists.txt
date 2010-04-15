@@ -298,7 +298,7 @@ if (WIN32 AND BUILD_SHARED_LIBS)
 endif()
 
 
-#----- Use MSVC Naming conventions for Shared Libraries for MinGW --------------
+#-----
 IF (MINGW)
     SET (CMAKE_COLOR_MAKEFILE 0)
 endif()
