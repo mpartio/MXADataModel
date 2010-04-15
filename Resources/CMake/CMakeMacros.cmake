@@ -241,7 +241,7 @@ MACRO (MXA_COPY_DEPENDENT_LIBRARIES mxa_lib_list)
                         NAMES ${lib_name}.dll
                         PATHS  ${lib_path}/../bin ${lib_path}/.. ${lib_path}/
                         NO_DEFAULT_PATH )
-          message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
+         # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
           
           if ( ${${upperlib}_LIBRARY_DLL_${TYPE}} STREQUAL  "${upperlib}_LIBRARY_DLL_${TYPE}-NOTFOUND")
             message(FATAL_ERROR "According to how ${upperlib}_LIBRARY_${TYPE} was found the library should"
@@ -282,19 +282,20 @@ MACRO (MXA_LIBRARIES_INSTALL_RULES mxa_lib_list destination)
           get_filename_component(lib_path ${${upperlib}_LIBRARY_${TYPE}} PATH)
           get_filename_component(lib_name ${${upperlib}_LIBRARY_${TYPE}} NAME_WE)
           
-          find_path(${upperlib}_LIBRARY_DLL_${TYPE} 
-                NAMES ${lib_name}.dll  
-                PATHS ${lib_path}/ ${lib_path}/../bin ${lib_path}/..
-                NO_DEFAULT_PATH )
+          find_file(${upperlib}_LIBRARY_DLL_${TYPE}
+                        NAMES ${lib_name}.dll
+                        PATHS  ${lib_path}/../bin ${lib_path}/.. ${lib_path}/
+                        NO_DEFAULT_PATH )
+         # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
 
           if ( ${${upperlib}_LIBRARY_DLL_${TYPE}} STREQUAL  "${upperlib}_LIBRARY_DLL_${TYPE}-NOTFOUND")
-           # message(STATUS "A Companion DLL for ${upperlib}_LIBRARY_${TYPE} was NOT found which usually means"
-           #                     " that the library was NOT built as a DLL. I looked in the "
-           #                     " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
+            # message(STATUS "A Companion DLL for ${upperlib}_LIBRARY_${TYPE} was NOT found which usually means"
+            #                    " that the library was NOT built as a DLL. I looked in the "
+            #                    " following locations:  ${lib_path}\n  ${lib_path}/..\n  ${lib_path}/../bin")
           else()
-              set(${upperlib}_LIBRARY_DLL_${TYPE}  ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll)
+             # set(${upperlib}_LIBRARY_DLL_${TYPE}  ${${upperlib}_LIBRARY_DLL_${TYPE}}/${lib_name}.dll)
              # message(STATUS "${upperlib}_LIBRARY_DLL_${TYPE}: ${${upperlib}_LIBRARY_DLL_${TYPE}}")
-             # message(STATUS "Generating Install Rule for ${btype} Version of ${upperlib}_LIBRARY_${TYPE}")
+              message(STATUS "Generating Install Rule for DLL File for ${upperlib}_LIBRARY_${TYPE}")
               INSTALL(FILES ${${upperlib}_LIBRARY_DLL_${TYPE}}
                 DESTINATION ${destination} 
                 CONFIGURATIONS ${BTYPE} 
