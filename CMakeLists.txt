@@ -8,7 +8,7 @@ PROJECT( MXADataModel )
 cmake_minimum_required(VERSION 2.6)
 
 if (NOT DEFINED MXA_INSTALL_FILES)
-    set (MXA_INSTALL_FILES 1 CACHE INTERNAL "Ignore the MXA Install Rules, defaulting to the enclosing projects install rules")
+    set (MXA_INSTALL_FILES 1 CACHE INTERNAL "Use the Normal Install rules for the MXADataModel Project")
 endif()
 #-- Need this for link line stuff?
 if(COMMAND cmake_policy)
@@ -303,7 +303,7 @@ IF (MINGW)
     SET (CMAKE_COLOR_MAKEFILE 0)
 endif()
 
-if ( NOT DEFINED MXA_IGNORE_INSTALL_RULES )
+if (  ${MXA_INSTALL_FILES} EQUAL 1 )
     # Copy DLL libraries into the correct build location on MSVC platforms
     MXA_COPY_DEPENDENT_LIBRARIES ("tiff;expat;hdf5")
     
