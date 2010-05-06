@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Copyright (c) 2007, mjackson
+//  Copyright (c) 2007, 2010 Michael A. Jackson for BlueQuartz Software
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
-//  This code was written under United States Air Force Contract number 
+//  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,24 +21,24 @@ typedef boost::any Any;
 class IAttributeWriter;
 
 /**
- * @brief Base class for attributes. This is used becase subclasses are usually
+ * @brief Base class for attributes. This is used because subclasses are usually
  * templated.
  * @author Mike Jackson
  * @date March 2007
  * @version $Revision: 1.2 $
- *  
+ *
  */
-class MXA_EXPORT IAttribute 
+class MXA_EXPORT IAttribute
 {
   public:
     IAttribute() {};
     virtual ~IAttribute() {};
-     
+
     /**
      * @brief Returns the Key for this attribute
      */
     virtual std::string getKey() = 0;
-    
+
     /**
      * @brief Returns the data value of the attribute as an Boost Any
      */
@@ -53,22 +53,22 @@ class MXA_EXPORT IAttribute
      * @brief Converts the data value to a float value
      */
     virtual float32 valueToFloat32() = 0;
-	
+
     /**
      * @brief Converts the data value to a double value
      */
     virtual float64 valueToFloat64() = 0;
-    
+
     /**
      * @brief Converts the data value to a string
      */
     virtual std::string valueToString() = 0;
-    
+
     /**
      * @brief Writes the Attribute using the IAttributeWriter Object
      */
     virtual int32_t write(int32_t locationId, std::string datasetPath, IAttributeWriter &writer) = 0;
-    
+
   private:
     IAttribute(const IAttribute&);    //Not Implemented
     void operator=(const IAttribute&); //Not Implemented
