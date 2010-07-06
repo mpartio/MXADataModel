@@ -84,7 +84,7 @@ void TestBMPIO()
 
 
 // -----------------------------------------------------------------------------
-//  Use Boost unit test framework
+//  Use test framework
 // -----------------------------------------------------------------------------
 int main(int argc, char **argv) {
   int err = EXIT_SUCCESS;

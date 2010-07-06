@@ -85,47 +85,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = @MXA_SOURCE_DIR@/MXA
 INPUT_ENCODING         = UTF-8
-FILE_PATTERNS          = *.c \
-                         *.cc \
-                         *.cxx \
-                         *.cpp \
-                         *.c++ \
-                         *.d \
-                         *.java \
-                         *.ii \
-                         *.ixx \
-                         *.ipp \
-                         *.i++ \
-                         *.inl \
-                         *.h \
-                         *.hh \
-                         *.hxx \
-                         *.hpp \
-                         *.h++ \
-                         *.idl \
-                         *.odl \
-                         *.cs \
-                         *.php \
-                         *.php3 \
-                         *.inc \
-                         *.m \
-                         *.mm \
-                         *.dox \
-                         *.py \
-                         *.C \
-                         *.CC \
-                         *.C++ \
-                         *.II \
-                         *.I++ \
-                         *.H \
-                         *.HH \
-                         *.H++ \
-                         *.CS \
-                         *.PHP \
-                         *.PHP3 \
-                         *.M \
-                         *.MM \
-                         *.PY
+FILE_PATTERNS = *.c *.cc *.cxx *.cpp *.h *.hxx *.hpp *.m *.mm *.dox
 RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_SYMLINKS       = NO
@@ -228,15 +188,40 @@ PERLMOD_MAKEVAR_PREFIX =
 #---------------------------------------------------------------------------
 # Configuration options related to the preprocessor   
 #---------------------------------------------------------------------------
-ENABLE_PREPROCESSING   = YES
-MACRO_EXPANSION        = NO
-EXPAND_ONLY_PREDEF     = NO
-SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = 
-INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             = DOXYGEN_COMMENTS
-EXPAND_AS_DEFINED      = 
-SKIP_FUNCTION_MACROS   = YES
+INCLUDE_FILE_PATTERNS = 
+ENABLE_PREPROCESSING = YES
+MACRO_EXPANSION      = YES
+SEARCH_INCLUDES      = YES
+INCLUDE_PATH         =
+EXPAND_ONLY_PREDEF   = YES
+PREDEFINED  = "MXA_INSTANCE_PROPERTY_m(type, prpty)= \
+                /** Sets the prpty instance variable */ \
+                 void set##prpty (type); \
+                 /** Gets the prpty instance variable */ \
+                 type get##prpty (type);" \
+              "MXA_INSTANCE_PROPERTY(type, prpty, name)= \
+                /** Sets the prpty instance variable */ \
+                 void set##prpty (type); \
+                 /** Gets the prpty instance variable */ \
+                 type get##prpty (type);" \
+              "MXA_SHARED_POINTERS(class)=\
+                typedef CrossCorrelation             Self;\
+                typedef boost::shared_ptr< Self >       Pointer;\
+                typedef boost::shared_ptr<const Self >  ConstPointer;\
+                static Pointer NullPointer(void)\
+                { \
+                  return Pointer(static_cast<CrossCorrelation*>(0));\
+                }"\
+              "MXA_STATIC_NEW_MACRO(class)=\
+                static Pointer New(void) \
+                { \
+                  Pointer sharedPtr (new CrossCorrelationData); \
+                  return sharedPtr; \
+                }"\
+              "MXA_TYPE_MACRO(class)=\
+                virtual const char* getNameOfClass() const \
+                {return "CrossCorrelationData";}"
 #---------------------------------------------------------------------------
 # Configuration::additions related to external references   
 #---------------------------------------------------------------------------
