@@ -58,17 +58,17 @@ public:
   * @brief Sets the 'FileNotFoundIsError' flag.
   * @param bool If this is true then the import will abort if an input file can not be found
   * @param FileNotFoundIsError If the input file is NOT found, consider this on error
-  * @param _fileNotFoundIsError Internal Storage variable
+  * @param m_FileNotFoundIsError Internal Storage variable
   */
-  MXA_PROPERTY(bool, FileNotFoundIsError, _fileNotFoundIsError);
+  MXA_INSTANCE_PROPERTY(bool, FileNotFoundIsError);
 
   /*
   * @brief Sets the 'ImportAsGrayScale' value
   * @param bool If TRUE, then the tiff file will be converted to Grayscale
   * @param ImportAsGrayScale Import the image as a grayscale image
-  * @param _importAsGrayScale Internal Storage variable
+  * @param m_ImportAsGrayScale Internal Storage variable
   */
-  MXA_PROPERTY(bool, ImportAsGrayScale, _importAsGrayScale);
+  MXA_INSTANCE_PROPERTY(bool, ImportAsGrayScale);
 
   /**
   * @brief Sets a property of this class with the given value.
@@ -81,13 +81,13 @@ public:
   {
     if (key.compare(H5BmpImport::FileNotFoundIsError) == 0)
     {
-      if (this->_fileNotFoundIsError == true) {  value = "1"; }
+      if (this->m_FileNotFoundIsError == true) {  value = "1"; }
       else {  value = "0"; }
       return 0;
     }
     if (key.compare(H5BmpImport::ImportAsGrayScale) == 0)
     {
-      if (this->_importAsGrayScale == true) {  value = "1"; }
+      if (this->m_ImportAsGrayScale == true) {  value = "1"; }
       else {  value = "0"; }
       return 0;
     }
@@ -100,15 +100,13 @@ public:
   template<typename T>
   int32_t getProperty(const std::string &key, T &value)
   {
-    GET_PROPERTY_BODY(H5BmpImport, T, FileNotFoundIsError, _fileNotFoundIsError, key, value);
-    GET_PROPERTY_BODY(H5BmpImport, T, ImportAsGrayScale, _importAsGrayScale, key, value);
+    GET_PROPERTY_BODY(H5BmpImport, T, FileNotFoundIsError, key, value);
+    GET_PROPERTY_BODY(H5BmpImport, T, ImportAsGrayScale, key, value);
     return 0;
   }
 
 private:
-  IDataModel::Pointer      _modelPtr;
-  bool _fileNotFoundIsError;
-  bool _importAsGrayScale;
+  IDataModel::Pointer      m_modelPtr;
 
   H5BmpImportDelegate(const H5BmpImportDelegate&);   //Copy Constructor Not Implemented
   void operator=(const H5BmpImportDelegate&); //Copy Assignment Not Implemented

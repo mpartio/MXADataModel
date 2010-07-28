@@ -30,8 +30,8 @@
 // -----------------------------------------------------------------------------
 DataImportXmlParser::DataImportXmlParser()
 {
-_xmlParseError=0;
-_verbose = 0;
+m_XmlParseError=0;
+m_Verbose = 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -53,7 +53,7 @@ int32_t DataImportXmlParser::import()
 {
   int32_t err = 1;
 
-  if (this->_xmlFilename.empty() )
+  if (this->m_XmlFilename.empty() )
   {
     std::cout << "Input XML File must be set." << std::endl;
     return -3;
@@ -76,12 +76,12 @@ int32_t DataImportXmlParser::import()
   }
   // Now create the Output file and leave it open
 //  bool deleteExisting = false;
-  if ( this->_deleteExistingDataFile.compare("true") == 0 )
+  if ( this->m_DeleteExistingDataFile.compare("true") == 0 )
   {
-    _dataFile = H5MXADataFile::CreateFileWithModel(this->_outputFilePath, this->m_DataModel);
-    if (NULL == _dataFile.get())
+    m_DataFile = H5MXADataFile::CreateFileWithModel(this->m_OutputFilePath, this->m_DataModel);
+    if (NULL == m_DataFile.get())
     {
-      std::cout << "DataImportXmlParser::import - Error Creating Output file: " << this->_outputFilePath << std::endl;
+      std::cout << "DataImportXmlParser::import - Error Creating Output file: " << this->m_OutputFilePath << std::endl;
       return -100;
     }
   }
@@ -97,16 +97,16 @@ int32_t DataImportXmlParser::import()
     }
   }
 
-  std::cout << logTime() << "Input XML: " << this->_xmlFilename << std::endl;
-  std::cout << logTime() << "Output File: " << this->_outputFilePath << std::endl;
+  std::cout << logTime() << "Input XML: " << this->m_XmlFilename << std::endl;
+  std::cout << logTime() << "Output File: " << this->m_OutputFilePath << std::endl;
   //std::cout << "Starting Import loop.... " << std::endl;
 
   // Finally try to run the import loop
  // int i = 1;
-  for (IDataSource::Collection::iterator iter = _dataSources.begin(); iter != _dataSources.end(); ++iter)
+  for (IDataSource::Collection::iterator iter = m_DataSources.begin(); iter != m_DataSources.end(); ++iter)
   {
-    if (this->_verbose) { std::cout << "Importing data source: " << (*(iter))->getSourcePath()   << std::endl; }
-    err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->_dataFile );
+    if (this->m_Verbose) { std::cout << "Importing data source: " << (*(iter))->getSourcePath()   << std::endl; }
+    err = (*(iter))->getImportDelegate()->importDataSource( *(iter), this->m_DataFile );
     if ( err < 0 )
     {
       break;
@@ -126,23 +126,23 @@ int32_t DataImportXmlParser::_mergeModelToDisk()
 
   int32_t err = 1;
   //Read the model from the file, leaving it open and in Read/Write mode
-  _dataFile = H5MXADataFile::OpenFile(this->_outputFilePath, false);
+  m_DataFile = H5MXADataFile::OpenFile(this->m_OutputFilePath, false);
 
-  if ( NULL == _dataFile.get() ) // Ouput file does NOT exist on file system, write the model in memory
+  if ( NULL == m_DataFile.get() ) // Ouput file does NOT exist on file system, write the model in memory
   {
-    _dataFile = H5MXADataFile::CreateFileWithModel(this->_outputFilePath, this->m_DataModel);
-    if(_dataFile.get() == NULL) { err = -1; }
+    m_DataFile = H5MXADataFile::CreateFileWithModel(this->m_OutputFilePath, this->m_DataModel);
+    if(m_DataFile.get() == NULL) { err = -1; }
     else { err = 1; }
     return err;
   }
 
-  IDataModel::Pointer fModelPtr = _dataFile->getDataModel();
+  IDataModel::Pointer fModelPtr = m_DataFile->getDataModel();
   IDataModel* fModel = fModelPtr.get();
   IDataModel* mModel = this->m_DataModel.get();
   //Sanity check the number of dims first
   if (mModel->getNumberOfDataDimensions() != fModel->getNumberOfDataDimensions())
   {
-    this->_xmlParseError = -1;
+    this->m_XmlParseError = -1;
     return -1;
   }
 
@@ -165,7 +165,7 @@ int32_t DataImportXmlParser::_mergeModelToDisk()
     // throw the model into chaos
   }
   //write the model to disk and close the file
-  err = _dataFile->saveDataModel();
+  err = m_DataFile->saveDataModel();
   this->m_DataModel = fModelPtr;
   return err;
 }
@@ -175,7 +175,7 @@ int32_t DataImportXmlParser::_mergeModelToDisk()
 //
 // -----------------------------------------------------------------------------
 void DataImportXmlParser::addDataSource (IDataSource::Pointer dataSource ) {
-  this->_dataSources.push_back(dataSource);
+  this->m_DataSources.push_back(dataSource);
 }
 
 
@@ -183,14 +183,14 @@ void DataImportXmlParser::addDataSource (IDataSource::Pointer dataSource ) {
 //
 // -----------------------------------------------------------------------------
 void DataImportXmlParser::setOutputFilePath ( std::string new_var ) {
-  _outputFilePath = new_var;
+  m_OutputFilePath = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 std::string DataImportXmlParser::getOutputFilePath ( ) {
-  return _outputFilePath;
+  return m_OutputFilePath;
 }
 
 // -----------------------------------------------------------------------------
@@ -198,7 +198,7 @@ std::string DataImportXmlParser::getOutputFilePath ( ) {
 // -----------------------------------------------------------------------------
 void DataImportXmlParser::setDeleteExistingDataFile( std::string deleteExistingDataFile)
 {
-  this->_deleteExistingDataFile = deleteExistingDataFile;
+  this->m_DeleteExistingDataFile = deleteExistingDataFile;
 }
 
 // -----------------------------------------------------------------------------
@@ -206,7 +206,7 @@ void DataImportXmlParser::setDeleteExistingDataFile( std::string deleteExistingD
 // -----------------------------------------------------------------------------
 std::string DataImportXmlParser::getDeleteExistingDataFile()
 {
-  return this->_deleteExistingDataFile;
+  return this->m_DeleteExistingDataFile;
 }
 
 
@@ -215,7 +215,7 @@ std::string DataImportXmlParser::getDeleteExistingDataFile()
 // -----------------------------------------------------------------------------
 void DataImportXmlParser::setDataFile ( IDataFile::Pointer dataFile )
 {
-  _dataFile = dataFile;
+  m_DataFile = dataFile;
 }
 
 // -----------------------------------------------------------------------------
@@ -223,21 +223,21 @@ void DataImportXmlParser::setDataFile ( IDataFile::Pointer dataFile )
 // -----------------------------------------------------------------------------
 IDataFile::Pointer DataImportXmlParser::getDataFile ( )
 {
-  return _dataFile;
+  return m_DataFile;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 void DataImportXmlParser::setDataSources ( IDataSource::Collection &new_var ) {
-  _dataSources = new_var;
+  m_DataSources = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 IDataSource::Collection DataImportXmlParser::getDataSources ( ) {
-  return _dataSources;
+  return m_DataSources;
 }
 
 
@@ -302,7 +302,7 @@ int DataImportXmlParser::parseXMLFile()
     this->m_DataModel =  MXADataModel::New();
   }
   // Clear any error messages that have been hanging around from previous imports
-  _errorMessage.clear();
+  m_ErrorMessage.clear();
 
   char buf[BUFFER_SIZE];
   // Create and initialise an instance of the parser.
@@ -312,15 +312,15 @@ int DataImportXmlParser::parseXMLFile()
   parser->EnableElementHandler();
   parser->EnableCharacterDataHandler();
   // Load the XML file.
-  FILE*  fh    = fopen(_xmlFilename.c_str(), "r");
+  FILE*  fh    = fopen(m_XmlFilename.c_str(), "r");
   if (NULL == fh)
   {
-    std::cout << "Could Not Open XML File for reading: " << _xmlFilename << std::endl;
+    std::cout << "Could Not Open XML File for reading: " << m_XmlFilename << std::endl;
     return -1;
   }
   bool   atEnd = false;
   size_t nRead;
-  while (!atEnd && this->_xmlParseError >= 0)
+  while (!atEnd && this->m_XmlParseError >= 0)
   {
     // Read a block from the XML file and pass it to the parser
     nRead = fread(buf, 1, BUFFER_SIZE, fh);
@@ -329,7 +329,7 @@ int DataImportXmlParser::parseXMLFile()
   }
   fclose(fh);
 
-  return this->_xmlParseError;
+  return this->m_XmlParseError;
 }
 
 // -----------------------------------------------------------------------------
@@ -487,8 +487,8 @@ void DataImportXmlParser::start_Data_Model_Tag(const XML_Char* name, const XML_C
       if (MXA_DataImport::Attr_Template_File.compare( attrs[i] ) == 0)
       {  // Found the template attribute - now load the model from that file
         std::string filename (attrs[i+1]);
-        this->_xmlParseError = this->_loadDataModelFromTemplateFile( filename );
-        if (_xmlParseError < 0)
+        this->m_XmlParseError = this->_loadDataModelFromTemplateFile( filename );
+        if (m_XmlParseError < 0)
          {
            std::cout << "Could not load template model from file: " << std::string(attrs[i+1]) << std::endl;
          }
@@ -501,7 +501,7 @@ void DataImportXmlParser::start_Data_Model_Tag(const XML_Char* name, const XML_C
     }
     if (false == readXMLTemplate)
     {
-      this->_xmlParseError = -1;
+      this->m_XmlParseError = -1;
       std::cout << "You must supply the " << MXA_DataImport::Attr_Template_File << " attribute for the <Data_Model> tag."  << std::endl;
     }
 }
@@ -544,7 +544,7 @@ void DataImportXmlParser::start_Dimension_Tag(const XML_Char* name, const XML_Ch
     else  // If the Dimension is NULL, then that dimension is not in the model
     {
       std::cout << DEBUG_OUT(logTime) << "\n\t\tThe Data Dimension '" <<  attrMap[MXA::MXA_NAME_TAG] << "' was not found in the Data Model Template File. Check the spelling in each xml file as possible causes for the mismatch." << std::endl;
-      this->_xmlParseError = -1;
+      this->m_XmlParseError = -1;
     }
 }
 
@@ -581,8 +581,8 @@ void DataImportXmlParser::start_Output_File_Tag(const XML_Char* name, const XML_
   }
   else
   {
-    _errorMessage.append("Did not find the 'Absolute_Path' attribute in the 'Output_File' tag");
-    this->_xmlParseError = -1; // Set the error flag to stop the import
+    m_ErrorMessage.append("Did not find the 'Absolute_Path' attribute in the 'Output_File' tag");
+    this->m_XmlParseError = -1; // Set the error flag to stop the import
   }
 
   // Check to make sure the Overwrite_Existing_File was found
@@ -592,8 +592,8 @@ void DataImportXmlParser::start_Output_File_Tag(const XML_Char* name, const XML_
   }
   else
   {
-    _errorMessage.append("Did not find the 'Delete_Existing_File' attribute in the 'Output_File' tag");
-    this->_xmlParseError = -1; // Set the error flag to stop the import
+    m_ErrorMessage.append("Did not find the 'Delete_Existing_File' attribute in the 'Output_File' tag");
+    this->m_XmlParseError = -1; // Set the error flag to stop the import
   }
 }
 
@@ -633,7 +633,7 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
   {
     std::cout << "Error Retrieving Data Record from model. Path given from XML file was '"
     << dataRecordPath << "' and that path was not found in the data model."<< std::endl;
-    this->_xmlParseError = -1;
+    this->m_XmlParseError = -1;
     return;
   }
 
@@ -651,7 +651,7 @@ void DataImportXmlParser::start_Explicit_Data_Source_Tag(const XML_Char* name, c
     this->addDataSource(ds);
   } else {
     std::cout << "Could not locate an ImportDelegate for Source_Type '" << sourceType << "'" << std::endl;
-    this->_xmlParseError = -1;
+    this->m_XmlParseError = -1;
   }
 }
 
@@ -666,12 +666,12 @@ void DataImportXmlParser::start_Implicit_Data_Source_Tag(const XML_Char* name, c
 {
    //  std::cout << "DataImportXmlParser::start_Implicit_Data_Source_Tag " << std::string(name) << std::endl;
      // Read the attributes into a map for easier look up
-     _implDataDimensions.clear(); // Clear for new values
-     _implPathMap.clear(); // Clear the PathMap to prepare for new values
-     _implDataRecord.reset(); //Clear the Pointer
-     _implSourceType = "";
+     m_ImplDataDimensions.clear(); // Clear for new values
+     m_ImplPathMap.clear(); // Clear the PathMap to prepare for new values
+     m_ImplDataRecord.reset(); //Clear the Pointer
+     m_ImplSourceType = "";
      XMLAttributeMap* propMap = new XMLAttributeMap;
-     _curImportPropertyMap.reset(propMap);
+     m_CurImportPropertyMap.reset(propMap);
 
      // Read all the XML attributes into the map
      XMLAttributeMap attrMap;
@@ -681,7 +681,7 @@ void DataImportXmlParser::start_Implicit_Data_Source_Tag(const XML_Char* name, c
 
      // Get the Data Record and the Source Type from the attributes
      std::string dataRecordPath (attrMap[MXA_DataImport::Attr_Data_Record] );
-     _implSourceType = attrMap[MXA_DataImport::Attr_Source_Type];
+     m_ImplSourceType = attrMap[MXA_DataImport::Attr_Source_Type];
 
      IDataModel* model = static_cast<MXADataModel*>(this->m_DataModel.get() );
      IDataRecord::Pointer recordPtr = model->getDataRecordByNamedPath(dataRecordPath, NULL);
@@ -689,12 +689,12 @@ void DataImportXmlParser::start_Implicit_Data_Source_Tag(const XML_Char* name, c
      {
        std::cout << "Error Retrieving Data Record from model. Path given from XML file was '"
        << dataRecordPath << "' and that path was not found in the data model."<< std::endl;
-       this->_xmlParseError = -1;
+       this->m_XmlParseError = -1;
        return;
      }
      else
      {
-       _implDataRecord = recordPtr;
+       m_ImplDataRecord = recordPtr;
      }
 
 }
@@ -721,10 +721,10 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
 {
 
 
-  AbstractImportDelegateFactory::Pointer factory = ImportDelegateManager::instance()->getImportDelegateFactory(_implSourceType);
+  AbstractImportDelegateFactory::Pointer factory = ImportDelegateManager::instance()->getImportDelegateFactory(m_ImplSourceType);
   if (NULL != factory.get())
   {
-    XMLAttributeMap* propMap = _curImportPropertyMap.get();
+    XMLAttributeMap* propMap = m_CurImportPropertyMap.get();
     for (XMLAttributeMap::iterator iter = propMap->begin(); iter != propMap->end(); ++iter )
     {
       std::string key = (*iter).first;
@@ -735,7 +735,7 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
 
 
   // std::cout << "  DataImportXmlParser::_createDataSource" << std::endl;
-  IDataDimension::Pointer dim = _implDataDimensions[index];
+  IDataDimension::Pointer dim = m_ImplDataDimensions[index];
   int32_t start = dim->getStartValue();
   int32_t end = dim->getEndValue();
   int32_t incr = dim->getIncrement();
@@ -748,25 +748,25 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
   {
   //  std::cout << dim->getDimensionName() << " i:" << i << std::endl;
     // Create a new Path
-    IStringSection::Pointer strSection = _implPathMap[dim];
+    IStringSection::Pointer strSection = m_ImplPathMap[dim];
     std::string newPath = strSection->toString(i, ok);
     std::string completePath = currentTemplate + newPath;
     dimValues[index] = i; // Set the correct dimension Value for this increment
-    if ( index+1 < _implDataDimensions.size()) // <============ RECURSIVE ALGORITHM HERE !!!!!
+    if ( index+1 < m_ImplDataDimensions.size()) // <============ RECURSIVE ALGORITHM HERE !!!!!
     {
       this->_createDataSource(completePath, index+1, dimValues);
     }
     else
     {
       // Create the data source
-      completePath.append( _implPreTextSection ); // This should be dangling since we never had another index part
+      completePath.append( m_ImplPreTextSection ); // This should be dangling since we never had another index part
       IDataSource::Pointer ds( new MXADataSource() ); //Create a new MXADataSource
       ds->setDimensionValues(dimValues);
-      ds->setDataRecord(_implDataRecord);
+      ds->setDataRecord(m_ImplDataRecord);
       ds->setSourcePath(completePath);
 
 
-      IImportDelegate::Pointer importDelegatePtr = ImportDelegateManager::createNewImportDelegate(_implSourceType);
+      IImportDelegate::Pointer importDelegatePtr = ImportDelegateManager::createNewImportDelegate(m_ImplSourceType);
       if (importDelegatePtr.get() != NULL )
       {
         // Get the key/Value from the Import_Property XML Attribute that is a
@@ -777,8 +777,8 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
         ds->setDataModel(this->m_DataModel);
         this->addDataSource(ds);
       } else {
-        std::cout << "Could not locate an ImportDelegate for Source_Type '" << _implSourceType << "'" << std::endl;
-        this->_xmlParseError = -1;
+        std::cout << "Could not locate an ImportDelegate for Source_Type '" << m_ImplSourceType << "'" << std::endl;
+        this->m_XmlParseError = -1;
       }
     }
   }
@@ -789,7 +789,7 @@ void DataImportXmlParser::_createDataSource(std::string currentTemplate,
 // -----------------------------------------------------------------------------
 void DataImportXmlParser::getCurrentImportDelegateProperties(IImportDelegate::Pointer importDelegatePtr)
 {
-  XMLAttributeMap* map = this->_curImportPropertyMap.get();
+  XMLAttributeMap* map = this->m_CurImportPropertyMap.get();
   for (XMLAttributeMap::iterator iter = map->begin(); iter != map->end(); ++iter)
   {
   //  std::cout << "getting property '" << (*iter).first << "' with value '" << (*iter).second << "'" << std::endl;
@@ -801,7 +801,7 @@ void DataImportXmlParser::getCurrentImportDelegateProperties(IImportDelegate::Po
 void DataImportXmlParser::start_File_Path_Tag(const XML_Char* name, const XML_Char** attrs)
 {
   //   std::cout << "Starting " << std::string(name) << std::endl;
-  _implPreTextSection.clear();
+  m_ImplPreTextSection.clear();
 }
 
 void DataImportXmlParser::end_File_Path_Tag(const XML_Char* name)
@@ -818,7 +818,7 @@ void DataImportXmlParser::start_Text_Part_Tag(const XML_Char* name, const XML_Ch
     attrMap[ std::string(attrs[i]) ] = std::string( attrs[i + 1] );
   }
   std::string text ( attrMap[MXA_DataImport::Attr_Text] );
-  _implPreTextSection.append(text);
+  m_ImplPreTextSection.append(text);
 }
 
 void DataImportXmlParser::end_Text_Part_Tag(const XML_Char* name)
@@ -836,7 +836,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
   }
 
   XMLAttributeMap::iterator mapIter = attrMap.end();
-  int32_t index = static_cast<int32_t>(_implDataDimensions.size());
+  int32_t index = static_cast<int32_t>(m_ImplDataDimensions.size());
   std::string paddingChar;
   mapIter = attrMap.find(MXA_DataImport::Attr_Padding_Char);
   // Check for the Padding_Char attribute
@@ -866,7 +866,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
     std::cout << "Dataimport xml parsing error: The tag 'Index_Part' is missing an attriubte." << std::endl;
     std::cout << "  Either '" << MXA_DataImport::Attr_Max_Char_Length << "' and '" << MXA_DataImport::Attr_Padding_Char
       << "' must BOTH appear or NEITHER must appear." << std::endl;
-    this->_xmlParseError = -12;
+    this->m_XmlParseError = -12;
     return;
   }
 
@@ -874,7 +874,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
   std::string numericType ( attrMap[MXA_DataImport::Attr_Numeric_Type] );
 
   IStringSection::Pointer section (new DataSourcePathIndexSection(index, paddingChar, width, numericType) );
-  section->setPreText(_implPreTextSection);
+  section->setPreText(m_ImplPreTextSection);
 
   std::string dimName = attrMap[MXA_DataImport::Attr_Data_Dimension];
   IDataModel* model = static_cast<MXADataModel*>(this->m_DataModel.get() );
@@ -885,13 +885,13 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
   if ( dim.get() == NULL)
   {
     std::cout << logTime() << "DataImportXmlParser::start_Index_Part_Tag: Could not retrieve Data Dimension from Model" << std::endl;
-    this->_xmlParseError = -11;
+    this->m_XmlParseError = -11;
     return;
   }
   // Add the Data Dimension to the vector
-  _implDataDimensions.push_back(dim);
+  m_ImplDataDimensions.push_back(dim);
   //Add an entry to the map
-  _implPathMap[dim] = section;
+  m_ImplPathMap[dim] = section;
 }
 
 // -----------------------------------------------------------------------------
@@ -900,7 +900,7 @@ void DataImportXmlParser::start_Index_Part_Tag(const XML_Char* name, const XML_C
 void DataImportXmlParser::end_Index_Part_Tag(const XML_Char* name)
 {
   //std::cout << "Ending " << std::string(name) << std::endl;
-  _implPreTextSection.clear(); //Clear this variable at the close of the tag
+  m_ImplPreTextSection.clear(); //Clear this variable at the close of the tag
 }
 
 // -----------------------------------------------------------------------------
@@ -908,7 +908,7 @@ void DataImportXmlParser::end_Index_Part_Tag(const XML_Char* name)
 // -----------------------------------------------------------------------------
 void DataImportXmlParser::start_Import_Property_Tag(const XML_Char* name, const XML_Char** attrs)
 {
-  XMLAttributeMap* attrMap = _curImportPropertyMap.get();
+  XMLAttributeMap* attrMap = m_CurImportPropertyMap.get();
   for (int i = 0; attrs[i]; i += 4)
   {
    // std::cout << "Adding Import_Property: " << attrs[i+1] << "=" << attrs[i+3] << std::endl;

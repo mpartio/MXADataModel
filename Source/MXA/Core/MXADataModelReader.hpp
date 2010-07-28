@@ -59,7 +59,7 @@ class MXADataModelReader
     /**
      * @Brief Property to force the return of a valid model only True by default
      */
-    MXA_INSTANCE_PROPERTY_m(bool, ReturnValidModels)
+    MXA_INSTANCE_PROPERTY(bool, ReturnValidModels)
 
     /**
      * @brief

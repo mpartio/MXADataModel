@@ -143,7 +143,11 @@ void TestRequiredMetaData()
 bool recordExists(MXADataModel::Pointer model, std::string recName)
 {
   IDataRecord::Pointer rec = model->getDataRecordByNamedPath(recName);
-  return (rec.get() != NULL) ? true : false;
+  //std::cout << "recName: " << recName << " <===> rec.get()" << rec.get() << std::endl;
+  if (rec.get() != NULL) {
+    return true;
+  }
+  return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -172,12 +176,15 @@ void TestLookupTableGeneration()
   }
 }
 
+#define TEST_BOOL(function, pass)\
+  b=function;\
+  MXA_REQUIRE ( b == pass)
+
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 void TestRetrieveDataRecords()
 {
- // std::cout << "TestRetrieveDataRecords Running....";
   MXADataModel::Pointer model = createModel();
   MXA_REQUIRE( recordExists(model, "/Order Parameters/Eta1/") == true);
   MXA_REQUIRE( recordExists(model, "Order Parameters/Eta1") == true);
@@ -198,7 +205,6 @@ void TestRetrieveDataRecords()
   MXA_REQUIRE( recordExists(model, "//") == false);
   MXA_REQUIRE( recordExists(model, "///") == false);
 
-
   MXA_REQUIRE( recordInternalPathExists(model, "") == false);
   MXA_REQUIRE( recordInternalPathExists(model, "/") == false);
   MXA_REQUIRE( recordInternalPathExists(model, "//") == false);
@@ -211,7 +217,7 @@ void TestRetrieveDataRecords()
   MXA_REQUIRE( recordInternalPathExists(model, "/1/3/") == true);
   MXA_REQUIRE( recordInternalPathExists(model, "/1/3/0") == true);
   MXA_REQUIRE( recordInternalPathExists(model, "/1/3/3") == false);
-  // std::cout << "......Passed" << std::endl;
+ // std::cout << "......Passed" << std::endl;
 }
 
 // -----------------------------------------------------------------------------

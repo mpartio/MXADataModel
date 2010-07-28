@@ -70,8 +70,11 @@ class MXA_EXPORT DataExportProperties
     /**
      * @brief
      */
-    static DataExportProperties::Pointer New(hid_t fileId, const std::string &exportFile, const std::string &datasetPath,
-                         int fileType, const std::string &asciiDelimiter, int endian)
+    static DataExportProperties::Pointer New(hid_t fileId, const std::string &exportFile,
+                                             const std::string &datasetPath,
+                                             int fileType,
+                                             const std::string &asciiDelimiter,
+                                             int endian)
     {
       DataExportProperties::Pointer ptr(new DataExportProperties);
       ptr->setHDFFileId(fileId);
@@ -85,21 +88,21 @@ class MXA_EXPORT DataExportProperties
 
     virtual ~DataExportProperties(){}
 
-    MXA_PROPERTY(hid_t, HDFFileId, _fileId);
+    MXA_INSTANCE_PROPERTY(hid_t, HDFFileId);
 
-    MXA_STRING_PROPERTY(HDFDatasetPath, _datasetPath);
+    MXA_INSTANCE_STRING_PROPERTY(HDFDatasetPath);
 
-    MXA_STRING_PROPERTY(ExportFile, _exportFile);
+    MXA_INSTANCE_STRING_PROPERTY(ExportFile);
 
-    MXA_PROPERTY (int, FileType, _fileType);
-    virtual void setFileTypeToBinary() { this->_fileType = MXA::Export::Binary; }
-    virtual void setFileTypeToAscii() { this->_fileType = MXA::Export::Ascii; }
+    MXA_INSTANCE_PROPERTY (int, FileType);
+    virtual void setFileTypeToBinary() { this->m_FileType = MXA::Export::Binary; }
+    virtual void setFileTypeToAscii() { this->m_FileType = MXA::Export::Ascii; }
 
-    MXA_STRING_PROPERTY( AsciiDelimiter, _asciiDelimiter);
+    MXA_INSTANCE_STRING_PROPERTY( AsciiDelimiter);
 
-    MXA_PROPERTY (int, Endian, _endian);
-    virtual void setEndianToBig() { this->_endian = MXA::Export::BigEndian; }
-    virtual void setEndianToLittle() { this->_endian = MXA::Export::LittleEndian;  }
+    MXA_INSTANCE_PROPERTY (int, Endian);
+    virtual void setEndianToBig() { this->m_Endian = MXA::Export::BigEndian; }
+    virtual void setEndianToLittle() { this->m_Endian = MXA::Export::LittleEndian;  }
 
     virtual int32_t setProperty (const std::string &key, const std::string &value)
     {
@@ -129,22 +132,15 @@ class MXA_EXPORT DataExportProperties
 
   protected:
     DataExportProperties() :
-     _fileId (-1),
-     _exportFile(),
-     _datasetPath(),
-     _fileType(MXA::Export::Ascii),
-     _asciiDelimiter(MXA::Export::Comma),
-     _endian(MXA::Export::LittleEndian)
+     m_HDFFileId (-1),
+     m_HDFDatasetPath(),
+     m_ExportFile(),
+     m_FileType(MXA::Export::Ascii),
+     m_AsciiDelimiter(MXA::Export::Comma),
+     m_Endian(MXA::Export::LittleEndian)
     {}
 
   private:
-    hid_t _fileId;
-    std::string _exportFile;
-    std::string _datasetPath;
-    int _fileType;
-    std::string _asciiDelimiter;
-    int _endian;
-
     DataExportProperties(const DataExportProperties&);    //Not Implemented
     void operator=(const DataExportProperties&); //Not Implemented
 

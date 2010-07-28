@@ -55,8 +55,8 @@ class AbstractH5Attribute
 
     virtual ~AbstractH5Attribute() {}
 
-    MXA_INSTANCE_STRING_PROPERTY(Key, _key);
-    MXA_INSTANCE_PROPERTY(IMXAArray::Pointer, AttributeValue, _attrValue);
+    MXA_INSTANCE_STRING_PROPERTY(Key);
+    MXA_INSTANCE_PROPERTY(IMXAArray::Pointer, AttributeValue);
 
     virtual int writeHDF5Attribute(hid_t fileId, const std::string &datasetPath) = 0;
     virtual int readHDF5Attribute(hid_t fileId, const std::string &datasetPath) = 0;

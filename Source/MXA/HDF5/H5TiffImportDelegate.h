@@ -63,13 +63,13 @@ public:
   * @brief Sets the 'FileNotFoundIsError' flag.
   * @param value If this is true then the import will abort if an input file can not be found
   */
-  MXA_PROPERTY(bool, FileNotFoundIsError, _fileNotFoundIsError);
+  MXA_INSTANCE_PROPERTY(bool, FileNotFoundIsError);
 
   /*
   * @brief Sets the 'ImportAsGrayScale' value
   * @param value If TRUE, then the tiff file will be converted to Grayscale
   */
-  MXA_PROPERTY(bool, ImportAsGrayScale, _importAsGrayScale);
+  MXA_INSTANCE_PROPERTY(bool, ImportAsGrayScale);
 
   /**
   * @brief Sets a property of this class with the given value.
@@ -82,13 +82,13 @@ public:
   {
     if (key.compare(H5TiffImport::FileNotFoundIsError) == 0)
     {
-      if (this->_fileNotFoundIsError == true) {  value = "1"; }
+      if (this->m_FileNotFoundIsError == true) {  value = "1"; }
       else {  value = "0"; }
       return 0;
     }
     if (key.compare(H5TiffImport::ImportAsGrayScale) == 0)
     {
-      if (this->_importAsGrayScale == true) {  value = "1"; }
+      if (this->m_ImportAsGrayScale == true) {  value = "1"; }
       else {  value = "0"; }
       return 0;
     }
@@ -101,16 +101,12 @@ public:
   template<typename T>
   int32_t getProperty(const std::string &key, T &value)
   {
-    GET_PROPERTY_BODY(H5TiffImport, T, FileNotFoundIsError, _fileNotFoundIsError, key, value);
-    GET_PROPERTY_BODY(H5TiffImport, T, ImportAsGrayScale, _importAsGrayScale, key, value);
+    GET_PROPERTY_BODY(H5TiffImport, T, FileNotFoundIsError, key, value);
+    GET_PROPERTY_BODY(H5TiffImport, T, ImportAsGrayScale, key, value);
     return 0;
   }
 
 private:
-  //IDataFile::Pointer      _dataFilePtr;
-  bool              _fileNotFoundIsError;
-  bool              _importAsGrayScale;
-
   H5TiffImportDelegate(const H5TiffImportDelegate&);   //Copy Constructor Not Implemented
   void operator=(const H5TiffImportDelegate&); //Copy Assignment Not Implemented
 };

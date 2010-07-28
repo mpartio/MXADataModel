@@ -21,14 +21,14 @@
 XMLDataModelReader::XMLDataModelReader( IDataModel::Pointer dataModel, const std::string &fileName) :
 _dataModel(dataModel),
 _fileName(fileName),
-_xmlParseError(0),
+m_XmlParseError(0),
 _userAttributeData(""),
-_parseData(false),
+m_ParseData(false),
 _userMDKey(""),
 _userMDDims(""),
 _userMDType("")
 {
-  _parser = NULL;
+  m_Parser = NULL;
 }
 // -----------------------------------------------------------------------------
 //
@@ -54,7 +54,7 @@ int32_t XMLDataModelReader::readDataModel(int32_t locId)
 
   // Create and initialise an instance of the parser.
   ExpatParser parser( dynamic_cast<ExpatEvtHandler*>( this ) );
-  this->_parser = &parser;
+  this->m_Parser = &parser;
   parser.Create(NULL, NULL);
   parser.EnableElementHandler();
   parser.EnableCharacterDataHandler();
@@ -68,7 +68,7 @@ int32_t XMLDataModelReader::readDataModel(int32_t locId)
   }
   bool   atEnd = false;
   size_t nRead;
-  while (!atEnd && this->_xmlParseError >= 0)
+  while (!atEnd && this->m_XmlParseError >= 0)
   {
     // Read a block from the XML file and pass it to the parser
     nRead = fread(buf, 1, BUFFER_SIZE, fh);
@@ -81,14 +81,14 @@ int32_t XMLDataModelReader::readDataModel(int32_t locId)
   if ( validModel == false )
   {
     std::cout << logTime() << "DataModel is NOT valid: Error Message is: \n" << message << "\n      " << "Source File: " << __FILE__ << "(" << __LINE__ << ")" << std::endl;
-    _xmlParseError = -1;
+    m_XmlParseError = -1;
   }
 
 //  std::cout << logTime() << "XMLDataModelReader::readDataModel Printing Data Records" << std::endl;
 //  std::cout << logTime() << "XMLDataModelReader::readDataModel  Data Records Size: " << this->_dataModel->getDataRecords().size() << std::endl;
 //  this->_dataModel->printDataRecords(std::cout, 1);
 //  std::cout << logTime() << "XMLDataModelReader::readDataModel  Done Printing Data Records" << std::endl;
-  return this->_xmlParseError;
+  return this->m_XmlParseError;
 }
 
 // -----------------------------------------------------------------------------
@@ -96,7 +96,7 @@ int32_t XMLDataModelReader::readDataModel(int32_t locId)
 // -----------------------------------------------------------------------------
 int32_t XMLDataModelReader::getParseError()
 {
-  return this->_xmlParseError;
+  return this->m_XmlParseError;
 }
 
 // -----------------------------------------------------------------------------
@@ -236,7 +236,7 @@ void XMLDataModelReader::OnCharacterData(const XML_Char* data, int32_t len)
  // std::cout << "------------------------------------------------" << std::endl;
  // std::cout << "Character Data: " << data << std::endl;
  // std::cout << "------------------------------------------------" << std::endl;
-  if (this->_parseData)
+  if (this->m_ParseData)
   {
     this->_userAttributeData.append(data, len);
   }
@@ -445,7 +445,7 @@ void XMLDataModelReader::onRequired_MDStartTag(const XML_Char* name, const XML_C
   if (this->_dataModel->setRequiredMetaData(attrMap) < 0 )
   {
     std::cout << "Error: Not all Required Meta Data was found in the file." << std::endl;
-    this->_xmlParseError = -1;
+    this->m_XmlParseError = -1;
   }
 }
 
@@ -495,15 +495,15 @@ void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_
   if (this->_userMDKey.empty() || this->_userMDDims.empty()
       || this->_userMDType.empty() )
   {
-    this->_xmlParseError = -1;
+    this->m_XmlParseError = -1;
     std::cout << "One of the Required Attributes for tag "
         << MXA_XML::UserMetaData::Tag << " is missing at line "
-        <<this->_parser->GetCurrentLineNumber() << ", column "
-        << this->_parser->GetCurrentColumnNumber() << std::endl;
+        <<this->m_Parser->GetCurrentLineNumber() << ", column "
+        << this->m_Parser->GetCurrentColumnNumber() << std::endl;
   }
 
   this->_userAttributeData.clear(); //Clear the User MetaData String
-  this->_parseData = true; // We want to parse all character from now until this is set to false
+  this->m_ParseData = true; // We want to parse all character from now until this is set to false
 }
 
 // -----------------------------------------------------------------------------
@@ -511,7 +511,7 @@ void XMLDataModelReader::onUserMetaDataStartTag(const XML_Char* name, const XML_
 // -----------------------------------------------------------------------------
 void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
 {
-  if (this->_xmlParseError < 0)
+  if (this->m_XmlParseError < 0)
   {
     return;
   }
@@ -532,32 +532,32 @@ void XMLDataModelReader::onUserMetaDataEndTag(const XML_Char* name)
     }
    // int32_t typeId = H5Lite::HDFTypeFromString(this->_userMDType);
     if ( this->_userMDType.compare("H5T_NATIVE_UINT8") == 0) {
-      this->_xmlParseError = readPrimitiveAttribute<uint8_t>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<uint8_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_UINT16") == 0) {
-      this->_xmlParseError = readPrimitiveAttribute<uint16_t>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<uint16_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_UINT32") == 0) {
-      this->_xmlParseError = readPrimitiveAttribute<uint32_t>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<uint32_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_UINT64") == 0) {
-      this->_xmlParseError = readPrimitiveAttribute<uint64_t>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<uint64_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_INT8") == 0) {
-      this->_xmlParseError = readPrimitiveAttribute<int8_t>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<int8_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_INT16") == 0) {
-      this->_xmlParseError = readPrimitiveAttribute<int16_t>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<int16_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_INT32") == 0) {
-      this->_xmlParseError = readPrimitiveAttribute<int32_t>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<int32_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_INT64") == 0 ) {
-      this->_xmlParseError = readPrimitiveAttribute<int64_t>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<int64_t>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_FLOAT") == 0) {
-      this->_xmlParseError = readPrimitiveAttribute<float>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<float>( dims);
     } else if ( this->_userMDType.compare("H5T_NATIVE_DOUBLE") == 0) {
-      this->_xmlParseError = readPrimitiveAttribute<double>( dims);
+      this->m_XmlParseError = readPrimitiveAttribute<double>( dims);
     } else {
       std::cout << "Unknown Type: " << this->_userMDType << " for a read value of " << this->_userMDType << std::endl;
-      this->_xmlParseError = -1;
+      this->m_XmlParseError = -1;
     }
   }
 
-  this->_parseData = false; // Stop parsing character data
+  this->m_ParseData = false; // Stop parsing character data
 }
 
 

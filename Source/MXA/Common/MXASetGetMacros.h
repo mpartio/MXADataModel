@@ -39,11 +39,11 @@
  * reference the class.
  */
 #define MXA_SHARED_POINTERS(thisClass)\
-  typedef thisClass                      Self;\
+  typedef thisClass                       Self;\
   typedef boost::shared_ptr<Self >        Pointer;\
   typedef boost::shared_ptr<const Self >  ConstPointer;\
-  typedef boost::weak_ptr<thisClass > WeakPointer;\
-  typedef boost::weak_ptr<thisClass > ConstWeakPointer;\
+  typedef boost::weak_ptr<thisClass >     WeakPointer;\
+  typedef boost::weak_ptr<thisClass >     ConstWeakPointer;\
   MXA_NULL_SHARED_POINTER(thisClass)
 
 /**
@@ -89,56 +89,27 @@ static Pointer New(void) \
 #define MXA_PROPERTY_CONSTANT(prpty) \
   const std::string prpty ( #prpty );
 
-/**
-* @brief Creates a "setter" method to set the property.
-*/
-#define MXA_SET_PROPERTY(type, prpty, varname) \
-  void set##prpty(type value) { varname = value; }
-
-/**
-* @brief Creates a "getter" method to retrieve the value of the property.
-*/
-#define MXA_GET_PROPERTY(type, prpty, varname) \
-  type get##prpty() { return varname; }
-
-/**
-* @brief Convenience macro to create both the setter and getter methods.
-*/
-#define MXA_PROPERTY(type, prpty, varname) \
-  MXA_SET_PROPERTY(type, prpty, varname)\
-  MXA_GET_PROPERTY(type, prpty, varname)
-
-/**
-* @brief Convenience macro to create both the setter and getter methods in addition
-* to the instance variable.
-*/
-#define MXA_INSTANCE_PROPERTY(type, prpty, varname)\
-  private:\
-      type   varname;\
-  public:\
-    MXA_SET_PROPERTY(type, prpty, varname)\
-    MXA_GET_PROPERTY(type, prpty, varname)
 
 
 /**
 * @brief Creates a "setter" method to set the property.
 */
-#define MXA_SET_PROPERTY_m(type, prpty) \
+#define MXA_SET_PROPERTY(type, prpty) \
   void set##prpty(type value) { this->m_##prpty = value; }
 
 /**
 * @brief Creates a "getter" method to retrieve the value of the property.
 */
-#define MXA_GET_PROPERTY_m(type, prpty) \
+#define MXA_GET_PROPERTY(type, prpty) \
   type get##prpty() { return m_##prpty; }
 
 
-#define MXA_INSTANCE_PROPERTY_m(type, prpty)\
+#define MXA_INSTANCE_PROPERTY(type, prpty)\
   private:\
       type   m_##prpty;\
   public:\
-    MXA_SET_PROPERTY_m(type, prpty)\
-    MXA_GET_PROPERTY_m(type, prpty)
+    MXA_SET_PROPERTY(type, prpty)\
+    MXA_GET_PROPERTY(type, prpty)
 
 
 
@@ -174,21 +145,8 @@ static Pointer New(void) \
 #define MXA_GET_STRING_PROPERTY( prpty, varname) \
   std::string get##prpty() { return varname; }
 
-/**
- * @brief Creates setters and getters in the form of 'setXXX()' and 'getXXX()' methods
- */
-#define MXA_STRING_PROPERTY(prpty, varname)\
-  MXA_SET_STRING_PROPERTY(prpty, varname)\
-  MXA_GET_STRING_PROPERTY(prpty, varname)
 
-#define MXA_INSTANCE_STRING_PROPERTY(prpty, varname)\
-  private:\
-  std::string      varname;\
-  public:\
-  MXA_SET_STRING_PROPERTY(prpty, varname)\
-  MXA_GET_STRING_PROPERTY(prpty, varname)
-
-#define MXA_INSTANCE_STRING_PROPERTY_m(prpty)\
+#define MXA_INSTANCE_STRING_PROPERTY(prpty)\
   private:\
   std::string      m_##prpty;\
   public:\
@@ -267,14 +225,14 @@ namespace MXA
 * @param value The value of the property
 */
 
-#define GET_PROPERTY_BODY(name_space, type, prpty, varname, key, value)\
+#define GET_PROPERTY_BODY(name_space, type, prpty, key, value)\
   if (name_space::prpty.compare(key) == 0) {  \
-  try { value = *(reinterpret_cast<T*>( &(varname))); return 1;} \
+  try { value = *(reinterpret_cast<T*>( &(m_##prpty))); return 1;} \
   catch(MXA::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
 
-#define GET_STRING_PROPERTY_BODY2(name_space, type, prpty, varname, key, value)\
+#define GET_STRING_PROPERTY_BODY2(name_space, type, prpty, key, value)\
   if (name_space::prpty.compare(key) == 0) {  \
-  try { value = varname; return 1;} \
+  try { value = m_##prpty; return 1;} \
   catch(MXA::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
 
 

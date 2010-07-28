@@ -48,29 +48,29 @@ public:
 //  These macros will create the named get/set methods for each property
 // -----------------------------------------------------------------------------
   // Boolean Property
-  MXA_PROPERTY(bool, BoolProperty, _boolProp)
+  MXA_INSTANCE_PROPERTY(bool, BoolProperty)
 
   // Character type properties - These are essentially single character string properties
   // Attempting to use either int8_t or uint8_t types to store actual integer values has undefined
   // results. Try using int16_t or uint16_t to store these types of values instead.
-  MXA_PROPERTY(uint8_t, UInt8Property,  _uint8_tProp)
-  MXA_PROPERTY(int8_t,  Int8Property,  _int8_tProp)
+  MXA_INSTANCE_PROPERTY(uint8_t, UInt8Property)
+  MXA_INSTANCE_PROPERTY(int8_t,  Int8Property)
 
   // Signed integer Properties
-  MXA_PROPERTY(int16_t, Int16Property, _int16_tProp)
-  MXA_PROPERTY(int32_t, Int32Property, _int32_tProp)
-  MXA_PROPERTY(int64_t, Int64Property, _int64_tProp)
+  MXA_INSTANCE_PROPERTY(int16_t, Int16Property)
+  MXA_INSTANCE_PROPERTY(int32_t, Int32Property)
+  MXA_INSTANCE_PROPERTY(int64_t, Int64Property)
 
   // Unsigned Integer properties
-  MXA_PROPERTY(uint16_t, UInt16Property, _uint16_tProp)
-  MXA_PROPERTY(uint32_t, UInt32Property, _uint32_tProp)
-  MXA_PROPERTY(uint64_t, UInt64Property, _uint64_tProp)
+  MXA_INSTANCE_PROPERTY(uint16_t, UInt16Property)
+  MXA_INSTANCE_PROPERTY(uint32_t, UInt32Property)
+  MXA_INSTANCE_PROPERTY(uint64_t, UInt64Property)
 
   // String properties
-  MXA_PROPERTY(std::string, StrProperty, _strProp)
+  MXA_INSTANCE_STRING_PROPERTY(StrProperty)
   // Floating point properties
-  MXA_PROPERTY(float, FloatProperty, _floatProp)
-  MXA_PROPERTY(double, DoubleProperty, _doubleProp)
+  MXA_INSTANCE_PROPERTY(float, FloatProperty)
+  MXA_INSTANCE_PROPERTY(double, DoubleProperty)
 
   // -----------------------------------------------------------------------------
   //  If you want to add a generic 'set' method that takes a string key and string
@@ -122,25 +122,25 @@ public:
     template<typename T>
     int32_t getProperty(const std::string &key, T &value)
     {
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, BoolProperty, _boolProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, BoolProperty, key, value);
 
       // Signed integer Properties
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int8Property, _int8_tProp, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int16Property, _int16_tProp, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int32Property, _int32_tProp, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int64Property, _int64_tProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int8Property, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int16Property,  key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int32Property,  key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, Int64Property,  key, value);
 
       // Unsigned Integer properties
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt8Property, _uint8_tProp,  key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt16Property, _uint16_tProp, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt32Property, _uint32_tProp, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt64Property, _uint64_tProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt8Property,   key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt16Property,  key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt32Property,  key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, UInt64Property,  key, value);
 
       // String properties
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, StrProperty, _strProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, StrProperty,  key, value);
       // Floating point properties
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, FloatProperty, _floatProp, key, value);
-      GET_PROPERTY_BODY(MyPropertyNamespace, T, DoubleProperty, _doubleProp, key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, FloatProperty,  key, value);
+      GET_PROPERTY_BODY(MyPropertyNamespace, T, DoubleProperty,  key, value);
 
       return 0;
     }
@@ -282,7 +282,7 @@ int32_t PropertyTest()
   success = pclass.getProperty<double>(MyPropertyNamespace::DoubleProperty, _doubleProp);
   std::string emptyString;
   success = pclass.getProperty<std::string>(MyPropertyNamespace::StrProperty, emptyString);
-  
+
   MXA_REQUIRE (_boolProp == true);
   MXA_REQUIRE (_int8_tProp == 'G');
   MXA_REQUIRE (_int16_tProp == -2342);

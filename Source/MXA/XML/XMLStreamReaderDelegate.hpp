@@ -38,7 +38,7 @@ class XMLStreamReaderDelegate: public IMXADataModelReaderDelegate,
 
     virtual IDataModel::Pointer readModel();
 
-    MXA_INSTANCE_PROPERTY_m(StreamPointer, StreamPointer);
+    MXA_INSTANCE_PROPERTY(StreamPointer, StreamPointer);
 
 
   protected:
@@ -48,8 +48,8 @@ class XMLStreamReaderDelegate: public IMXADataModelReaderDelegate,
     }
 
   private:
-    MXA_INSTANCE_PROPERTY_m(IDataModel::Pointer, DataModel)
-    MXA_INSTANCE_PROPERTY_m(DataModelXMLEvtHandler::Pointer, XMLEvtHandler)
+    MXA_INSTANCE_PROPERTY(IDataModel::Pointer, DataModel)
+    MXA_INSTANCE_PROPERTY(DataModelXMLEvtHandler::Pointer, XMLEvtHandler)
 
     ExpatParser::Pointer      m_Parser;
 

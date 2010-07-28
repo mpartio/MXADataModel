@@ -111,14 +111,14 @@ public:
 	{
 
 	  // We have two dimensions for this model, create a loop to create data sets for each possible dimension value
-	   MXADataDimension* dim0 = dynamic_cast<MXADataDimension*>(model->getDataDimension(0) ); // Get the first Dimension, since there is only one this works
+	   MXADataDimension* dim0 = dynamic_cast<MXADataDimension*>(model->getDataDimension(0).get()); // Get the first Dimension, since there is only one this works
 	  if (dim0 == NULL)
 	  {
 	    std::cout << "Error getting the data dimension from the model: dim0" << std::endl;
 	    return -1;
 	  }
 
-	   MXADataDimension* dim1 = dynamic_cast<MXADataDimension*>(model->getDataDimension(1));
+	   MXADataDimension* dim1 = dynamic_cast<MXADataDimension*>(model->getDataDimension(1).get());
 	   if (dim1 == NULL)
 	   {
 	     std::cout << "Error getting the data dimension from the model: dim1" << std::endl;

@@ -35,8 +35,8 @@ if ( err < 0 ) {\
 //
 // -----------------------------------------------------------------------------
 H5TiffImportDelegate::H5TiffImportDelegate() :
-  _fileNotFoundIsError(true),
-  _importAsGrayScale(false)
+  m_FileNotFoundIsError(true),
+  m_ImportAsGrayScale(false)
 {
 }
 
@@ -69,7 +69,7 @@ int32_t H5TiffImportDelegate::importDataSource(IDataSource::Pointer dataSource, 
   if ( !MXAFileInfo::exists(sourcePath) )
   {
     std::cout << logTime() << "Error: Tiff image not found: " << MXAFileInfo::toNativeSeparators(sourcePath) << std::endl;
-    if (_fileNotFoundIsError)
+    if (m_FileNotFoundIsError)
     {
       return MXA_ERROR_FILE_NOT_FOUND;
     }
@@ -113,7 +113,7 @@ int32_t H5TiffImportDelegate::importDataSource(IDataSource::Pointer dataSource, 
 
   //Read the Tiff and Import it into the HDF5 File
   H5TiffIO tiffIO(fileId);
-  err = tiffIO.importTiff(dataSource->getSourcePath(), fileId, datasetPath, this->_importAsGrayScale);
+  err = tiffIO.importTiff(dataSource->getSourcePath(), fileId, datasetPath, this->m_ImportAsGrayScale);
   if (err < 0)
   {
     std::cout << logTime() << "Error Importing Tiff Image: " << dataSource->getSourcePath() << std::endl;

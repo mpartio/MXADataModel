@@ -86,7 +86,7 @@ public:
    */
   void setXMLInputFile(const std::string &inputFile)
   {
-    this->_xmlFilename = inputFile;
+    this->m_XmlFilename = inputFile;
   }
 
   /**
@@ -94,7 +94,7 @@ public:
    */
   std::string getXMLInputFile()
   {
-    return this->_xmlFilename;
+    return this->m_XmlFilename;
   }
 
   //------------- ExpatEvtHandler Methods --------------------------------------
@@ -179,27 +179,27 @@ public:
   */
   int32_t import();
 
-  MXA_INSTANCE_PROPERTY(bool, Verbose, _verbose);
+  MXA_INSTANCE_PROPERTY(bool, Verbose);
 
 private:
-  std::string        _xmlFilename;
-  std::string        _outputFilePath;
-  std::string        _deleteExistingDataFile;
-  IDataFile::Pointer       _dataFile;
+  std::string        m_XmlFilename;
+  std::string        m_OutputFilePath;
+  std::string        m_DeleteExistingDataFile;
+  IDataFile::Pointer       m_DataFile;
   IDataModel::Pointer      m_DataModel;
-  IDataSource::Collection       _dataSources;
-  int32_t              _xmlParseError;
-  bool               _parseData;
-  std::string        _errorMessage;
-  ExpatParser*       _parser;
+  IDataSource::Collection       m_DataSources;
+  int32_t              m_XmlParseError;
+  bool               m_ParseData;
+  std::string        m_ErrorMessage;
+  ExpatParser*       m_Parser;
 
   // - Implicit Data Source Variables
-  std::vector<IDataDimension::Pointer>                  _implDataDimensions;
-  std::map<IDataDimension::Pointer, IStringSection::Pointer>  _implPathMap;
-  IDataRecord::Pointer                                _implDataRecord;
-  std::string                                   _implSourceType;
-  std::string                                   _implPreTextSection;
-  XMLAttributeMapPtr                            _curImportPropertyMap;
+  std::vector<IDataDimension::Pointer>                  m_ImplDataDimensions;
+  std::map<IDataDimension::Pointer, IStringSection::Pointer>  m_ImplPathMap;
+  IDataRecord::Pointer                                m_ImplDataRecord;
+  std::string                                   m_ImplSourceType;
+  std::string                                   m_ImplPreTextSection;
+  XMLAttributeMapPtr                            m_CurImportPropertyMap;
 
   DataImportXmlParser(const DataImportXmlParser&); //Copy Constructor Not Implemented
   void operator=(const DataImportXmlParser&); //Copy Assignment Not Implemented

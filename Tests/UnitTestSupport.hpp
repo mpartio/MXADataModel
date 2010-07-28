@@ -84,12 +84,12 @@ class TestException : public std::exception
        return ss.str();
      }
 
-     MXA_INSTANCE_STRING_PROPERTY_m(Message)
+     MXA_INSTANCE_STRING_PROPERTY(Message)
        std::string getMessage() const { return m_Message; }
-     MXA_INSTANCE_STRING_PROPERTY_m(Filename)
+     MXA_INSTANCE_STRING_PROPERTY(Filename)
        std::string getFilename() const { return m_Filename; }
 
-     MXA_INSTANCE_PROPERTY_m(int, LineNumber)
+     MXA_INSTANCE_PROPERTY(int, LineNumber)
        int getLineNumber() const { return m_LineNumber; }
 
   protected:

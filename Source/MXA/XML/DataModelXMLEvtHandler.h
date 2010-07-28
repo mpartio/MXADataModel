@@ -69,12 +69,12 @@ class MXA_EXPORT DataModelXMLEvtHandler : public ExpatEvtHandler
 
     virtual ~DataModelXMLEvtHandler();
 
-    MXA_INSTANCE_PROPERTY_m(IDataModel::Pointer, DataModel)
-    MXA_INSTANCE_PROPERTY_m(ExpatParser*, Parser)
+    MXA_INSTANCE_PROPERTY(IDataModel::Pointer, DataModel)
+    MXA_INSTANCE_PROPERTY(ExpatParser*, Parser)
     /**
      * @brief Returns the current parser error.
      */
-    MXA_INSTANCE_PROPERTY_m(int32_t, ParseError)
+    MXA_INSTANCE_PROPERTY(int32_t, ParseError)
 
     // -----------------------------------------------------------------------------
     //  ExpatEvtHandler Implementation Begin

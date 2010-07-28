@@ -63,7 +63,7 @@ public:
 	virtual ~ExpatParser();
 
 
-	MXA_INSTANCE_PROPERTY_m(ExpatEvtHandler*, pHandler)
+	MXA_INSTANCE_PROPERTY(ExpatEvtHandler*, pHandler)
 
 
 	/**

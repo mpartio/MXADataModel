@@ -33,9 +33,10 @@ if ( err < 0 ) {\
 //
 // -----------------------------------------------------------------------------
 H5BmpImportDelegate::H5BmpImportDelegate() :
-  _modelPtr(),
-  _fileNotFoundIsError(true),
-  _importAsGrayScale(false)
+  m_FileNotFoundIsError(true),
+  m_ImportAsGrayScale(false),
+  m_modelPtr()
+
 {
 }
 
@@ -61,14 +62,14 @@ int32_t H5BmpImportDelegate::setProperty(const std::string &key, const std::stri
 // -----------------------------------------------------------------------------
 int32_t H5BmpImportDelegate::importDataSource(IDataSource::Pointer dataSource, IDataFile::Pointer dataFile)
 {
-  //std::cout << "H5BmpImportDelegate::importDataSource:  Importing as grayscale->" << this->_importAsGrayScale << std::endl;
+  //std::cout << "H5BmpImportDelegate::importDataSource:  Importing as grayscale->" << this->m_ImportAsGrayScale << std::endl;
   herr_t err = -1;
   // Make sure the file Exists first before we go much further
   std::string sourcePath =  dataSource->getSourcePath();
   if ( MXAFileInfo::exists(sourcePath) == false)
   {
     std::cout << logTime() << "Error: BMP image not found: " << MXAFileInfo::toNativeSeparators(sourcePath) << std::endl;
-    if (_fileNotFoundIsError)
+    if (m_FileNotFoundIsError)
     {
       return MXA_ERROR_FILE_NOT_FOUND;
     }
@@ -113,7 +114,7 @@ int32_t H5BmpImportDelegate::importDataSource(IDataSource::Pointer dataSource, I
 
   //Read the BMP and Import it into the HDF5 File
   H5BmpIO bmpIO(fileId);
-  err = bmpIO.importBmp(dataSource->getSourcePath(), fileId, datasetPath, this->_importAsGrayScale);
+  err = bmpIO.importBmp(dataSource->getSourcePath(), fileId, datasetPath, this->m_ImportAsGrayScale);
   if (err < 0)
   {
     std::cout << logTime() << "Error Importing BMP Image: " << dataSource->getSourcePath() << std::endl;

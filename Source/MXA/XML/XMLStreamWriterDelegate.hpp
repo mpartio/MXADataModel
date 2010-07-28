@@ -42,7 +42,7 @@ class XMLStreamWriterDelegate: public IMXADataModelWriterDelegate
 
     virtual int32_t writeModel(IDataModel::Pointer model);
 
-    MXA_INSTANCE_PROPERTY_m(StreamPointer, StreamPointer);
+    MXA_INSTANCE_PROPERTY(StreamPointer, StreamPointer);
 
   protected:
     XMLStreamWriterDelegate(StreamPointer stream);
@@ -137,7 +137,7 @@ class XMLStreamWriterDelegate: public IMXADataModelWriterDelegate
 
 
   private:
-    MXA_INSTANCE_PROPERTY_m(IDataModel::Pointer, DataModel)
+    MXA_INSTANCE_PROPERTY(IDataModel::Pointer, DataModel)
     int32_t                   _dataRecordIndentation;
 
     XMLStreamWriterDelegate(const XMLStreamWriterDelegate&); // Copy Constructor Not Implemented

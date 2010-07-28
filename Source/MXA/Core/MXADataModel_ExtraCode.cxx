@@ -602,7 +602,7 @@ void MXADataModel::removeDataRecord(MXANode *node)
 void MXADataModel::clearDataSources()
 {
   _num_sources = 0;
-  _dataSources.clear();
+  m_DataSources.clear();
 }
 
 std::string MXADataModel::dimensionOrderString(DataSource source)
@@ -640,7 +640,7 @@ pDataSource MXADataModel::findDataSource(std::map<int, int> dimMap,
           std::string recPath, int32_t luid)
 {
   std::vector<DataSource>::iterator iter;
-  for (iter=_dataSources.begin(); iter!=_dataSources.end(); iter++) {
+  for (iter=m_DataSources.begin(); iter!=m_DataSources.end(); iter++) {
     if (recPath == iter->record_path &&
   dimMap == iter->dimensions &&
   luid == iter->record_id) {
@@ -701,7 +701,7 @@ void MXADataModel::addDataSource(std::map<int, int> dimensionValues,
     newSource.record_id = luid;
     newSource.source_path = sourcePath;
     newSource.parseDelegate = delegate;
-    _dataSources.push_back(newSource);  //Pushing a copy onto the vector
+    m_DataSources.push_back(newSource);  //Pushing a copy onto the vector
     _num_sources++;
   } else { // Just update the existing data source
     //std::cout << "MXAataModel::addDataSource source was NOT NULL" << std::endl;
@@ -713,9 +713,9 @@ void MXADataModel::addDataSource(std::map<int, int> dimensionValues,
 void MXADataModel::removeDataSource(DataSource source)
 {
   std::vector<DataSource>::iterator iter;
-  for (iter=_dataSources.begin(); iter!=_dataSources.end(); iter++) {
+  for (iter=m_DataSources.begin(); iter!=m_DataSources.end(); iter++) {
     if ((*iter) == source) {
-      _dataSources.erase(iter);
+      m_DataSources.erase(iter);
       return;
     }
   }

@@ -61,14 +61,14 @@ void MXADataImport::addDataSource (IDataSource::Pointer dataSource ) {
 //
 // -----------------------------------------------------------------------------
 void MXADataImport::setOutputFilePath ( std::string new_var ) {
-  _outputFilePath = new_var;
+  m_OutputFilePath = new_var;
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
 std::string MXADataImport::getOutputFilePath ( ) {
-  return _outputFilePath;
+  return m_OutputFilePath;
 }
 #endif
 
