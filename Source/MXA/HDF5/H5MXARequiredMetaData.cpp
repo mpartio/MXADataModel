@@ -373,7 +373,7 @@ int32_t H5MXARequiredMetaData::readFromFile(IDataFile::Pointer dataFile)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool H5MXARequiredMetaData::isValid(std::string message)
+bool H5MXARequiredMetaData::isValid(std::string &message)
 {
   bool valid = true;
   if (_researcherName.empty() )

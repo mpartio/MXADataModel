@@ -26,10 +26,10 @@
 */
 class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
 {
-  
+
   MXA_SHARED_POINTERS(RequiredMetaData);
   MXA_TYPE_MACRO(RequiredMetaData);
-  
+
   public:
     /**
      * @brief Static method to create a new IRequiredMetaData object that is
@@ -56,13 +56,13 @@ class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
                                      std::string releaseNumber,
                                      std::string pedigree,
                                      std::string derivedSrcFile);
-    
+
     /**
     * @brief Creates a copy of the object from another object
     * @param md The object to make a copy from
     * @return The newly copied object
     */
-    static IRequiredMetaData::Pointer New(IRequiredMetaData::Pointer md);                                 
+    static IRequiredMetaData::Pointer New(IRequiredMetaData::Pointer md);
 
     /**
      * @brief Creates a new IRequiredMetaData::Pointer object that has all empty values.
@@ -129,7 +129,8 @@ class MXA_EXPORT RequiredMetaData : public IRequiredMetaData
     int32_t writeToFile (IDataFile::Pointer dataFile);
     int32_t readFromFile (IDataFile::Pointer dataFile);
 
-    bool isValid(std::string message);
+    bool isValid(std::string &message);
+
 
     void printSelf(std::ostream& os, int32_t indent);
 

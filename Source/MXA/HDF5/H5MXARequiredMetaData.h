@@ -119,7 +119,7 @@ class MXA_EXPORT H5MXARequiredMetaData : public IRequiredMetaData
     int32_t writeToFile (IDataFile::Pointer dataFile);
     int32_t readFromFile (IDataFile::Pointer dataFile);
 
-    bool isValid(std::string message);
+    bool isValid(std::string &message);
 
     void printSelf(std::ostream& os, int32_t indent);
 

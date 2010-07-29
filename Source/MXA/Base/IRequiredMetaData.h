@@ -29,9 +29,9 @@
 class MXA_EXPORT IRequiredMetaData : public IDataFileIO
 {
   public:
-    
+
     MXA_SHARED_POINTERS(IRequiredMetaData)
-    
+
     IRequiredMetaData() {}
     virtual ~IRequiredMetaData() {}
 
@@ -182,8 +182,7 @@ class MXA_EXPORT IRequiredMetaData : public IDataFileIO
      * @param message A std::string to store error messages
      * @return If this is a valid set of Required Meta Data
      */
-    virtual bool isValid(std::string message) = 0;
-
+    virtual bool isValid(std::string &message) = 0;
     /**
      * @brief prints a debugging type diagnostic description of the contents of this class
      * @param os An output stream to write to.

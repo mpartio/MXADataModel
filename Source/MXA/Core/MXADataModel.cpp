@@ -618,7 +618,9 @@ int32_t MXADataModel::setRequiredMetaData(std::string researcherName,
                                                   derivedSrcFile);
 #endif
   std::string message;
-  if ( _requiredMetaData->isValid(message) == true) { return 1; }
+
+  if ( true == _requiredMetaData->isValid(message)) { return 1; }
+
   return -1;
 }
 

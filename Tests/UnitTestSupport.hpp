@@ -161,8 +161,15 @@ void TestFailed(const std::string &test)
 
 
 #define MXA_REQUIRE( P ) \
-  if ( (P) == false) \
-  {MXA_TEST_THROW_EXCEPTION( #P)}
+  { \
+  bool b = (P);\
+  if ( (b) == (false) ) \
+  {\
+    std::string s ("Your test required the following\n            '");\
+    s = s.append(#P).append("'\n            but this condition was not met.");\
+    MXA_TEST_THROW_EXCEPTION( s )\
+  }\
+  }
 
 
 #define MXA_REQUIRE_NE( L, R )\

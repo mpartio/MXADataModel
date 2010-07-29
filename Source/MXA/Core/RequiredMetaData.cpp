@@ -42,10 +42,10 @@ IRequiredMetaData::Pointer RequiredMetaData::New(IRequiredMetaData::Pointer md)
                                                          md->getDatasetName(),
                                                          md->getDescription(),
                                                          md->getDistributionRights(),
-                                                         md->getReleaseNumber(), 
+                                                         md->getReleaseNumber(),
                                                          md->getPedigree(),
                                                          md->getDerivedSourceFile());
-  
+
   return ptr;
 }
 
@@ -319,11 +319,10 @@ int32_t RequiredMetaData::readFromFile(IDataFile::Pointer dataFile)
   return -1;
 }
 
-
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool RequiredMetaData::isValid(std::string message)
+bool RequiredMetaData::isValid(std::string &message)
 {
   bool valid = true;
   if (_researcherName.empty() )
