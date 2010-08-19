@@ -1,19 +1,26 @@
-#include "MXABmpIO.h"
-#include <iostream>
-
-//-- MXA Includes
-#include <MXA/Common/LogTime.h>
-#include <MXA/Common/MXAEndian.h>
-#include <MXA/MXATypes.h>
-#include <MXA/Common/DLLExport.h>
-#include <MXA/Common/IO/MXAFileReader64.h>
-#include <MXA/BMPIO/MXABmpHeaders.h>
-
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2010, Michael A. Jackson. BlueQuartz Software
+//  All rights reserved.
+//  BSD License: http://www.opensource.org/licenses/bsd-license.html
+//
+///////////////////////////////////////////////////////////////////////////////
 //-- C Includes
 #include <stdio.h>
 #include <math.h>
 #include <memory.h>
 #include <string.h>
+
+//-- C++ includes
+#include <iostream>
+
+//-- MXA Includes
+#include <MXA/Common/LogTime.h>
+#include <MXA/Common/MXAEndian.h>
+#include <MXA/Common/IO/MXAFileReader64.h>
+
+//-- our own includes
+#include "MXABmpIO.h"
 
 // -----------------------------------------------------------------------------
 //
@@ -28,7 +35,8 @@ MXABmpIO::MXABmpIO() :
   _convertToGrayScale(false),
   bytesRead(0)
 {
-
+  bitmapDataVec = NULL;
+  m_Reader64 = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -36,6 +44,8 @@ MXABmpIO::MXABmpIO() :
 // -----------------------------------------------------------------------------
 MXABmpIO::~MXABmpIO()
 {
+  if (NULL != bitmapDataVec) { delete[] bitmapDataVec; }
+  if (NULL != m_Reader64) { delete m_Reader64; }
 }
 
 // -----------------------------------------------------------------------------
@@ -46,8 +56,8 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGray
   this->_convertToGrayScale = readAsGrayScale;
   // Open file for buffered read.
   LOAD_TEXTUREBMP_RESULT res = LOAD_TEXTUREBMP_SUCCESS;
-  _reader64Ptr = Reader64Ptr(new MXAFILEREADER_CLASS_NAME(fName) );
-  if ( false == _reader64Ptr->initReader() )
+  m_Reader64 = new MXAFILEREADER_CLASS_NAME(fName);
+  if ( false == m_Reader64->initReader() )
   {
     return LOAD_TEXTUREBMP_COULD_NOT_FIND_OR_READ_FILE;
   }
@@ -79,8 +89,8 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::loadBMPData( const char* fName, bool readAsGray
   }
   // Reset the Shared Pointer forces the wrapped pointer to be deleted
   //  and the underlying file closed
-  Reader64Ptr nullReader;
-  _reader64Ptr.swap(nullReader);
+  delete m_Reader64;
+  m_Reader64 = NULL;
 
   // Flip the y values of the image since the (0,0) is in the lower left of a bitmap file
   if (false == this->_imageFlipped)
@@ -103,7 +113,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData()
 {
 
   // Make sure we have a large enough buffer
-  this->bitmapDataVec = UCharArray(new uint8_t[width*height*3]);
+  this->bitmapDataVec = new uint8_t[width*height*3];
   // Pad until byteoffset. Most images will need no padding
   // since they already are made to use as little space as
   // possible.
@@ -143,24 +153,26 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
 
 
   if (true == this->_convertToGrayScale) {
-    this->bitmapDataVec = UCharArray(new uint8_t[width*height]);
+    if (bitmapDataVec != NULL) { delete bitmapDataVec; bitmapDataVec = NULL; }
+    this->bitmapDataVec = new uint8_t[width*height];
     componentNumBytes = 1;
   }
-  uint8_t* bitmapData = this->bitmapDataVec.get();
+  uint8_t* bitmapData =  (this->bitmapDataVec);
   int32_t widthByComponentNumBytes = componentNumBytes * width;
 
-  UCharArray buffer = UCharArray(new uint8_t[numBytes]);// Create a buffer large enough to hold a row of rgb
+  uint8_t* buffer = new uint8_t[numBytes];// Create a buffer large enough to hold a row of rgb
   // For each scan line
   int targetRow = 0;
-  char* buffPtr = (char*)(buffer.get());
+  char* buffPtr = (char*)buffer;
   float fTmp;
   for (int i = 0; i < height; i++)
   {
     //read a row of bytes
-    _reader64Ptr->rawRead( (char*)(buffer.get()), numBytes);
+    m_Reader64->rawRead( (char*)buffer, numBytes);
     bytesRead += numBytes;
     offset = 0;  //Reset the offset to start of the buffer
-    buffPtr = (char*)(buffer.get());
+    char* buf = (char*)((buffer));
+    buffPtr = (char*)((buffer));
 
     targetRow = height - i - 1;
     index = targetRow * widthByComponentNumBytes;
@@ -177,9 +189,9 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
       }
       else
       {
-        blue = buffer[offset++];
-        green = buffer[offset++];
-        red = buffer[offset++];
+        blue = buf[offset++];
+        green = buf[offset++];
+        red = buf[offset++];
 		    temp = index + j * 3;
         bitmapData[temp++] = red;
         bitmapData[temp++] = green;
@@ -201,6 +213,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
     this->_imageConvertedToGrayScale = true;
     this->numChannels = 1;
   }
+  delete buffer;
   return LOAD_TEXTUREBMP_SUCCESS;
 }
 
@@ -227,23 +240,24 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
   // We are going to convert to grayscale on the fly if needed
   if (this->dibHeader.compressionMethod == BMP_BI_RGB)
   {
-    UCharArray buffer = UCharArray(new uint8_t[numBytes]);// Create a buffer large enough to hold a row of rgb
-    char* buffPtr = (char*)(buffer.get());
+    uint8_t* buffer = new uint8_t[numBytes];// Create a buffer large enough to hold a row of rgb
+    char* buffPtr = (char*)((buffer));
     if (true == this->_convertToGrayScale) {
-      this->bitmapDataVec = UCharArray(new uint8_t[width*height]);
+      if (NULL != bitmapDataVec) { delete[] bitmapDataVec; bitmapDataVec = NULL;}
+      this->bitmapDataVec = new uint8_t[width*height];
       componentNumBytes = 1;
     }
-    uint8_t* bitmapData = this->bitmapDataVec.get();
+    uint8_t* bitmapData = (this->bitmapDataVec);
     int32_t widthByComponentNumBytes = componentNumBytes * width;
 
     // For each scan line
     int targetRow = 0;
     for (int i = 0;i < height; ++i)
     {
-      _reader64Ptr->rawRead( (char*)(buffer.get()), numBytes);
+      m_Reader64->rawRead( (char*)((buffer)), numBytes);
       bytesRead += numBytes;
       offset = 0;  //Reset the offset to start of the buffer
-      buffPtr = (char*)(buffer.get());
+      buffPtr = (char*)((buffer));
       targetRow = height - i - 1;
       index = targetRow * widthByComponentNumBytes;
       for (int j=0;j<width;j++)
@@ -269,7 +283,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
       int32_t kEnd = width%4;
       for (int k = 0; k < kEnd; ++k) {
          char value;
-         this->_reader64Ptr->readValue(value);
+         this->m_Reader64->readValue(value);
          bytesRead+=1;
       }
     }
@@ -279,7 +293,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
       this->_imageConvertedToGrayScale = true;
       this->numChannels = 1;
     }
-
+    delete[] buffer;
   }
 
   if (this->dibHeader.compressionMethod == BMP_BI_RLE8)
@@ -292,7 +306,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData8Bit()
 
     // Clear bitmap data since it is legal not to
     // fill it all out.
-    uint8_t* bitmapData = this->bitmapDataVec.get();
+    uint8_t* bitmapData = (this->bitmapDataVec);
     memset(bitmapData,0,sizeof(unsigned char)*width*height*3);
 
     while(true)
@@ -472,7 +486,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readPalette()
 // -----------------------------------------------------------------------------
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData1Bit()
 {
-  uint8_t* bitmapData = this->bitmapDataVec.get();
+  uint8_t* bitmapData = (this->bitmapDataVec);
   // 1-bit format cannot be compressed
   if (this->dibHeader.compressionMethod != BMP_BI_RGB)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
@@ -546,7 +560,7 @@ bool MXABmpIO::handleEscapeCode(int secondByte, int* x, int* y,
 // Draw a 4-bit image. Can be uncompressed or RLE-4 compressed.
 LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData4Bit()
 {
-  uint8_t* bitmapData = this->bitmapDataVec.get();
+  uint8_t* bitmapData = (this->bitmapDataVec);
   if (this->dibHeader.compressionMethod != BMP_BI_RGB &&
       this->dibHeader.compressionMethod != BMP_BI_RLE4)
     return LOAD_TEXTUREBMP_ILLEGAL_FILE_FORMAT;
@@ -703,9 +717,9 @@ int32_t MXABmpIO::getNumberOfChannels()
 // -----------------------------------------------------------------------------
 void MXABmpIO::flipBitmap()
 {
-  uint8_t* bitmapData = this->bitmapDataVec.get();
-  UCharArray flippedVec;
-  uint8_t* flippedImage = 0x0;
+  uint8_t* bitmapData = (this->bitmapDataVec);
+  uint8_t* flippedVec = NULL;
+  uint8_t* flippedImage = NULL;
 //  uint8_t* temp;
   int32_t element1, element2, width3, el1, el2;
 
@@ -713,8 +727,8 @@ void MXABmpIO::flipBitmap()
 
   if ( !isGrayscale )
   {
-  	flippedVec = UCharArray(new uint8_t[height*width3]);
-  	flippedImage = flippedVec.get();
+  	flippedVec = new uint8_t[height*width3];
+  	flippedImage = (flippedVec);
   	for ( int32_t row1 = 0, row2 = (height - 1); row1 < height || row2 > 0; row1++, row2-- )
   	{
 		el1 = (row1 * width3); // Beginning of scan line in source
@@ -732,8 +746,8 @@ void MXABmpIO::flipBitmap()
   }
   else
   {
-    flippedVec = UCharArray(new uint8_t[height*width]);
-    flippedImage = flippedVec.get();
+    flippedVec = new uint8_t[height*width];
+    flippedImage = flippedVec;
   	for ( int32_t row1 = 0, row2 = (height - 1); row1 < height || row2 > 0; row1++, row2-- )
   	{
   	  for ( int32_t col = 0; col < width; col++ )
@@ -744,7 +758,11 @@ void MXABmpIO::flipBitmap()
   	  }
   	}
   }
- // this->bitmapData.swap(flippedVec);
+ if (bitmapDataVec != NULL)
+ {
+   delete[] bitmapDataVec;
+   bitmapDataVec = NULL;
+ }
   this->bitmapDataVec = flippedVec;
 }
 
@@ -753,7 +771,7 @@ void MXABmpIO::flipBitmap()
 // -----------------------------------------------------------------------------
 void MXABmpIO::convertToGrayscale()
 {
-  uint8_t* bitmapData = this->bitmapDataVec.get();
+  uint8_t* bitmapData = (this->bitmapDataVec);
   //Uses the function Y = 0.3R + 0.59G + 0.11B
   if ( this->isGrayscale )
   {
@@ -762,8 +780,8 @@ void MXABmpIO::convertToGrayscale()
 
   uint8_t* grayscaleImage;
   int32_t element1, element2;
-  UCharArray grayscaleVec = UCharArray(new uint8_t[this->height * this->width]);
-  grayscaleImage = grayscaleVec.get();
+  uint8_t* grayscaleVec = new uint8_t[this->height * this->width];
+  grayscaleImage = (grayscaleVec);
   for ( int32_t row = 0; row < height; row++ )
   {
     for ( int32_t col = 0; col < width; col++ )
@@ -777,6 +795,11 @@ void MXABmpIO::convertToGrayscale()
   }
   isGrayscale = true;
   this->_imageConvertedToGrayScale = true;
+  if (bitmapDataVec != NULL)
+  {
+    delete[] bitmapDataVec;
+    bitmapDataVec = NULL;
+  }
   this->bitmapDataVec = grayscaleVec;
   this->numChannels = 1;
 }
@@ -792,15 +815,17 @@ bool MXABmpIO::isGrayscaleImage()
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-UCharArray MXABmpIO::getImageData(bool makeCopy)
+uint8_t* MXABmpIO::getImageData()
 {
+#if 0
   if (makeCopy)
   {
     size_t m_length = this->width * this->height * this->numChannels;
-    UCharArray copy(new uint8_t[m_length]);
-    ::memcpy(copy.get(), this->bitmapDataVec.get(), m_length);
+    uint8_t* copy = new uint8_t[m_length];
+    ::memcpy(copy, this->bitmapDataVec, m_length);
     return copy;
   }
+#endif
   return this->bitmapDataVec;
 }
 
@@ -810,7 +835,7 @@ UCharArray MXABmpIO::getImageData(bool makeCopy)
 int32_t MXABmpIO::copyImageData(uint8_t* destinationBuffer)
 {
   size_t m_length = this->width * this->height * this->numChannels;
-  uint8_t* b = static_cast<uint8_t*>(::memcpy(destinationBuffer, this->bitmapDataVec.get(), m_length));
+  uint8_t* b = static_cast<uint8_t*>(::memcpy(destinationBuffer, this->bitmapDataVec, m_length));
   return (b == destinationBuffer) ? 1 : -1;
 }
 
@@ -820,7 +845,7 @@ int32_t MXABmpIO::copyImageData(uint8_t* destinationBuffer)
 int32_t MXABmpIO::read32BitValue()
 {
   int32_t value;
-  this->_reader64Ptr->read<MXA::Endian::FromLittleToSystem>(value);
+  this->m_Reader64->read<MXA::Endian::FromLittleToSystem>(value);
   bytesRead+=4;
   return value;
 }
@@ -831,7 +856,7 @@ int32_t MXABmpIO::read32BitValue()
 int16_t MXABmpIO::read16BitValue()
 {
   int16_t value;
-  this->_reader64Ptr->read<MXA::Endian::FromLittleToSystem>(value);
+  this->m_Reader64->read<MXA::Endian::FromLittleToSystem>(value);
   bytesRead+=2;
   return value;
 }
@@ -842,7 +867,7 @@ int16_t MXABmpIO::read16BitValue()
 uint8_t MXABmpIO::read8BitValue()
 {
   uint8_t value;
-  this->_reader64Ptr->readValue(value);
+  this->m_Reader64->readValue(value);
   bytesRead+=1;
   return value;
 }

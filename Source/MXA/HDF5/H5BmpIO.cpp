@@ -65,13 +65,13 @@ herr_t H5BmpIO::_importGrayscaleBmpImage(hid_t fileId,
 										 MXABmpIO &reader)
 {
 
-  UCharArray imageData = reader.getImageData(false);
+  uint8_t* imageData = reader.getImageData();
   int32_t width = reader.getWidth();
   int32_t height = reader.getHeight();
   int32_t err = -1;
 
   // Store byte array to HDF5 File
-  err = H5Image::H5IMmake_image_8bit(fileId, datasetName, width, height, MXA::H5Image::UpperLeft, imageData.get() );
+  err = H5Image::H5IMmake_image_8bit(fileId, datasetName, width, height, MXA::H5Image::UpperLeft, imageData );
   if (err<0) {
     std::cout << "Error storing Image data with H5IM API:  datasetName: "
         << datasetName << std::endl;
@@ -116,12 +116,12 @@ herr_t H5BmpIO::_importRGBFullColorBmp(hid_t fileId,
   int32_t width = reader.getWidth();
   int32_t height = reader.getHeight();
 
-  UCharArray rgbRaster = reader.getImageData(false);
+  uint8_t* rgbRaster = reader.getImageData();
 
   // Store byte array to HDF5 File
   // SET THE INTERLACE MODE CORRECTLY - EITHER H5IM_INTERLACE_PIXEL OR H5IM_INTERLACE_PLANE
   err = H5Image::H5IMmake_image_24bit(fileId, datasetName, width, height,
-                        MXA::H5Image::InterlacePixel,  rgbRaster.get() );
+                        MXA::H5Image::InterlacePixel,  rgbRaster );
   if (err<0) {
     std::cout << "Error storing 24 bit true color Image data with H5IM API. datasetName: " << datasetName << std::endl;
   }

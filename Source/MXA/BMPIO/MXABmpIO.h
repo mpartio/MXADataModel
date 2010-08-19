@@ -11,16 +11,14 @@
 #ifndef MXA_BMP_IO_H
 #define MXA_BMP_IO_H
 
-//MXA Includes
-#include <MXA/MXATypes.h>
-#include <MXA/Common/MXATypeDefs.h>
-#include <MXA/Common/DLLExport.h>
-#include <MXA/BMPIO/MXABmpHeaders.h>
-
 //STL includes
 #include <string>
 #include <vector>
 
+//MXA Includes
+#include <MXA/MXATypes.h>
+#include <MXA/Common/DLLExport.h>
+#include <MXA/BMPIO/MXABmpHeaders.h>
 
 namespace MXA
 {
@@ -31,7 +29,29 @@ namespace MXA
 }
 
 class MXAFILEREADER_CLASS_NAME;
-typedef boost::shared_ptr<MXAFILEREADER_CLASS_NAME>    Reader64Ptr;
+
+#if defined(QT_CORE_LIB)
+//-- Qt includes
+//#include <QtCore/QSharedPointer>
+//typedef QSharedPointer< MXAFILEREADER_CLASS_NAME >        Reader64Ptr;
+//typedef QSharedPointer<uint8_t>                          UCharArray;
+
+#define CONTAINED_POINTER(ptr)\
+    (ptr).data()
+
+#else
+//-- Boost Includes
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+//typedef boost::shared_ptr<MXAFILEREADER_CLASS_NAME>    Reader64Ptr;
+//typedef boost::shared_array<uint8_t>                 UCharArray;
+
+#define CONTAINED_POINTER(ptr)\
+  (ptr).get()
+
+#endif
+
+
 
 // The following is the function return type. Use this to
 // get information about how the loading operation went.
@@ -98,11 +118,10 @@ public:
   bool isGrayscaleImage();
 
   /**
-   * @brief Either makes a new copy of the image data or returns a reference to
-   * the actual memory.
-   * @param copy If true, make a copy of the data instead of returning a reference.
+   * @brief Returns a pointer to the actual memory being used by the image
+   * @return Pointer to the image buffer.
    */
-  UCharArray getImageData(bool copy=true);
+  uint8_t* getImageData();
 
   /**
    * @brief Copies the image data. The destination buffer MUST already be preallocated to hold
@@ -114,7 +133,7 @@ public:
 protected:
 
 private:
-  UCharArray bitmapDataVec;
+  uint8_t* bitmapDataVec;
   int32_t width;
   int32_t height;
   int32_t numChannels;
@@ -128,7 +147,7 @@ private:
 
   MXABMPFileHeader fileHeader;
   MXABMPDIBHeader dibHeader;
-  Reader64Ptr _reader64Ptr;
+  MXAFILEREADER_CLASS_NAME* m_Reader64;
 
   // Palette used for paletted images during load.
   uint8_t palette[3][256];
