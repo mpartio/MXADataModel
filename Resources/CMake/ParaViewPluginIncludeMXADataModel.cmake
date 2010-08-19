@@ -41,6 +41,7 @@ SET (MXA_OUTPUT_DIRS_DEFINED 1)
 
 #-- We need some more boost libraries?
 set (MXA_BOOST_HEADERS_ONLY 0)
+INCLUDE ("${MXADataModel_SOURCE_DIR}/Resources/CMake/LocateBoostSupportLibraries.cmake" )
 
 # --------------------------------------------------------------------
 #-- Build the MXADataModel library
