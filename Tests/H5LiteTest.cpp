@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //--MXA Includes
-#include <MXA/MXAConfiguration.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/MXATypes.h>
 #include <MXA/HDF5/H5Lite.h>

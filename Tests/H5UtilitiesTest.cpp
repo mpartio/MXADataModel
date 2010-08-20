@@ -11,9 +11,8 @@
 
 //--MXA Includes
 #include <Tests/MXAUnitTestDataFileLocations.h>
-#include <MXA/MXAConfiguration.h>
-#include <MXA/Common/LogTime.h>
 #include <MXA/MXATypes.h>
+#include <MXA/Common/LogTime.h>
 #include <MXA/Common/Win32Defines.h>
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>

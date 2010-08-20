@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //-- MXA Includes
-#include <MXA/MXAConfiguration.h>
+#include <MXA/MXATypes.h>
 #include <Tests/MXAUnitTestDataFileLocations.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IDataFile.h>

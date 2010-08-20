@@ -77,7 +77,7 @@ INSTALL (DIRECTORY ${MXA_DOCUMENTATION_DIR}
 
 #-- Install the generated Doxygen documentation
 if (MXA_BUILD_API_DOCS)
-    INSTALL(DIRECTORY ${MXADataModel_BINARY_DIR}/Documentation
+    INSTALL(DIRECTORY ${MXADataModel_BINARY_DIR}/API-Docs
             DESTINATION doc/MXADataModel/Documentation
             COMPONENT Documentation )
 endif()

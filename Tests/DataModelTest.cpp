@@ -11,7 +11,7 @@
 
 //TODO: Write a Unit Test for Data Dimension Insertion
 
-#include <MXA/MXAConfiguration.h>
+#include <MXA/MXATypes.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXAEndian.h>
 #include <MXA/Base/IDataFile.h>
