@@ -162,12 +162,12 @@ protected:
       return sid;
     }
     HDF_ERROR_HANDLER_OFF
-    did = H5Dopen(loc_id, dsetName.c_str() );
+    did = H5Dopen(loc_id, dsetName.c_str(), H5P_DEFAULT );
     HDF_ERROR_HANDLER_ON
 
     if ( did < 0 ) // dataset does not exist
     {
-      did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
+      did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     }
     if ( did >= 0 )
     {

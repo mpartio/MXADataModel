@@ -135,7 +135,7 @@ herr_t H5ReaderDelegate::readDataDimensions(hid_t locId)
   herr_t err = 0;
   std::list<std::string> dimNames;
   //Open the DataModel/DataDimensions Group
-  hid_t dataDimId = H5Gopen(locId, MXA::DataDimensionsPath.c_str());
+  hid_t dataDimId = H5Gopen(locId, MXA::DataDimensionsPath.c_str(), H5P_DEFAULT);
   if(dataDimId > 0) {
     err = H5Utilities::getGroupObjects(dataDimId, H5Utilities::MXA_DATASET,  dimNames);
     //std::cout << "Found " << dimNames.size() << " Dimensions:" << std::endl;
@@ -261,7 +261,7 @@ herr_t H5ReaderDelegate::readDataRecords(hid_t fileId)
   herr_t err = -1;
   hid_t recId = -1;
   // Open the Data Records Group
-  recId = H5Gopen(fileId, MXA::DataRecordsPath.c_str());
+  recId = H5Gopen(fileId, MXA::DataRecordsPath.c_str(), H5P_DEFAULT);
   if (recId<0) {
     std::cout << "Error Opening '/Data Model/Data Records' HDF Group:" << recId << std::endl;
     return recId;
@@ -318,7 +318,7 @@ herr_t H5ReaderDelegate::_traverseDataRecords( hid_t gid, MXADataRecord::Pointer
 
     if ( H5Utilities::isGroup(gid, objName) ) {   //Data Record is a Group
       //std::cout << "Data Record is a HDF Group" << std::endl;
-      hid_t currentGroup = H5Gopen(gid, objName.c_str() );
+      hid_t currentGroup = H5Gopen(gid, objName.c_str(), H5P_DEFAULT );
       if (currentGroup < 0) {
         std::cout << "Error Opening HDF5 Group" << std::endl;
         return -1;
@@ -462,7 +462,7 @@ herr_t H5ReaderDelegate::readUserMetaData(hid_t locId)
 herr_t H5ReaderDelegate::readSupportFiles(hid_t locId)
 {
   herr_t err = 0;
-  hid_t gid = H5Gopen(locId, MXA::SupportFilesPath.c_str() );
+  hid_t gid = H5Gopen(locId, MXA::SupportFilesPath.c_str(), H5P_DEFAULT );
   if (gid < 0){
     return err; // Either the file does not have a support files section or something else went wrong.
   }

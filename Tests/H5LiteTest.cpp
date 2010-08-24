@@ -828,7 +828,7 @@ herr_t testReadPointer2DArrayDataset(hid_t file_id)
   herr_t retErr = 0;
   hid_t did = -1;
   /* Open the dataset. */
-  if ( (did = H5Dopen( file_id, dsetName.c_str() )) < 0 )
+  if ( (did = H5Dopen( file_id, dsetName.c_str(), H5P_DEFAULT )) < 0 )
   {
      return -2;
   }
@@ -998,14 +998,14 @@ herr_t testReadStringDatasetAndAttributes(hid_t file_id)
 void H5LiteTest()
 {
  // herr_t err = -1;
-  hid_t   file_id;
+  hid_t   file_id = 0;
   /* Create a new file using default properties. */
   file_id = H5Fcreate( MXAUnitTest::H5LiteTest::FileName.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
   MXA_REQUIRE(file_id > 0);
   //Create the Extra Groups
-  hid_t sintGid = H5Gcreate(file_id, "Signed Int", 0);
-  hid_t uintGid = H5Gcreate(file_id, "Unsigned Int", 0);
-  hid_t pointer = H5Gcreate(file_id, "Pointer", 0);
+  hid_t sintGid = H5Gcreate(file_id, "Signed Int", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  hid_t uintGid = H5Gcreate(file_id, "Unsigned Int", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+  hid_t pointer = H5Gcreate(file_id, "Pointer", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
   herr_t err = H5Gclose(sintGid);
   if (err < 0)
   {
@@ -1144,7 +1144,7 @@ MXA_REQUIRE(err >= 0);
 
 
 // -----------------------------------------------------------------------------
-//  Use Boost unit test framework
+//  Use unit test framework
 // -----------------------------------------------------------------------------
 int main(int argc, char **argv)
 {

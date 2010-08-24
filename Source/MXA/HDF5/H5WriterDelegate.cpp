@@ -140,7 +140,7 @@ int32_t H5WriterDelegate::writeDataModelTemplate(hid_t fileId)
 
   err = 0;
   //Write the File Version
-  hid_t modelGroupId = H5Gopen(fileId, MXA::DataModelPath.c_str());
+  hid_t modelGroupId = H5Gopen(fileId, MXA::DataModelPath.c_str(), H5P_DEFAULT);
   if (modelGroupId < 0)
   {
     err = -1;
@@ -423,7 +423,7 @@ herr_t H5WriterDelegate::_writeStringDataset (hid_t loc_id,
           if (overwrite == true)
           {
             HDF_ERROR_HANDLER_OFF
-            did = H5Dopen(loc_id, dsetName.c_str() );
+            did = H5Dopen(loc_id, dsetName.c_str(), H5P_DEFAULT );
             if (did > 0)
             {
               hsize_t storageSize = H5Dget_storage_size(did);
@@ -442,7 +442,7 @@ herr_t H5WriterDelegate::_writeStringDataset (hid_t loc_id,
           }
           if (did < 0 && retErr >= 0) // dataset does not exist
           {
-            did = H5Dcreate(loc_id, dsetName.c_str(), tid, sid, H5P_DEFAULT);
+            did = H5Dcreate(loc_id, dsetName.c_str(), tid, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
           }
           if ( did >= 0 && retErr >= 0)
           {

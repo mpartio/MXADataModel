@@ -30,7 +30,7 @@ SET (HDF5_LIB_SEARCH_DIRS
 )
 
 SET (HDF5_BIN_SEARCH_DIRS
-  $ENV{HDF5_INSTALL}/bin
+  $ENV{HDF5_INSTALL}/bin $ENV{HDF5_INSTALL}/bin/tools
 )
 
 # -- Find the Include directory for HDF5
@@ -192,7 +192,11 @@ IF (HDF5_FOUND)
 
   CHECK_SYMBOL_EXISTS(HDF5_BUILT_AS_DYNAMIC_LIB "H5config.h" HAVE_HDF5_DLL)
   if (HAVE_HDF5_DLL)
-   SET (HDF5_IS_SHARED 1 CACHE INTERNAL "HDF5 Built as DLL or Shared Library")
+    # The Official HDF5 CMake release uses a slightly different preprocessor define
+    CHECK_SYMBOL_EXISTS(H5_BUILT_AS_DYNAMIC_LIB "H5config.h" HAVE_HDF5_DLL)
+    if (HAVE_HDF5_DLL)
+        SET (HDF5_IS_SHARED 1 CACHE INTERNAL "HDF5 Built as DLL or Shared Library")
+    endif()
   endif()
 
   # Restore CMAKE_REQUIRED_INCLUDES and CMAKE_REQUIRED_FLAGS variables
