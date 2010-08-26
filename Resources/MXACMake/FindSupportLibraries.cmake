@@ -4,7 +4,7 @@ include ( ${PROJECT_CMAKE_DIR}/LocateBoostSupportLibraries.cmake )
 
 #-------------------------------------------------------------------------------
 #- Find Expat Library -------------
-SET (MXA_XML_SUPPORT "0")
+SET (MXA_XML_SUPPORT "0" CACHE INTERNAL "")
 IF (NOT DEFINED MXA_USE_XML)
     OPTION(MXA_USE_XML "Adds Ability to read/write models to XML Files" ON)
     mark_as_advanced(MXA_USE_XML)

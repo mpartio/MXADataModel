@@ -1,4 +1,4 @@
-SET (MXA_CORE_SRCS
+SET (MXA_Core_SRCS
   ${MXA_CODE_DIR}/MXA/Core/MXADataModel.cpp
   ${MXA_CODE_DIR}/MXA/Core/MXADataDimension.cpp
   ${MXA_CODE_DIR}/MXA/Core/MXADataRecord.cpp
@@ -9,7 +9,7 @@ SET (MXA_CORE_SRCS
 
 )
 
-SET (MXA_CORE_HEADERS
+SET (MXA_Core_HEADERS
   ${MXA_CODE_DIR}/MXA/Core/AttributeHelpers.h
   ${MXA_CODE_DIR}/MXA/Core/MXAConstants.h
   ${MXA_CODE_DIR}/MXA/Core/MXADataDimension.h
@@ -23,4 +23,4 @@ SET (MXA_CORE_HEADERS
   ${MXA_CODE_DIR}/MXA/Core/MXADataModelReader.hpp
 )
 
-IDE_SOURCE_PROPERTIES( "MXA/Core" "${MXA_CORE_HEADERS}" "${MXA_CORE_SRCS}")
+IDE_SOURCE_PROPERTIES( "MXA/Core" "${MXA_Core_HEADERS}" "${MXA_Core_SRCS}")

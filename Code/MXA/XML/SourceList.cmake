@@ -1,3 +1,5 @@
+IF (MXA_USE_XML)
+
 SET ( MXA_XML_SRCS
     ${MXA_CODE_DIR}/MXA/XML/ExpatParser.cpp
     ${MXA_CODE_DIR}/MXA/XML/ExpatEvtHandler.cpp
@@ -26,3 +28,7 @@ SET (MXA_XML_HEADERS
 
 
 IDE_SOURCE_PROPERTIES( "MXA/XML" "${MXA_XML_HEADERS}" "${MXA_XML_SRCS}")
+
+SET (MXA_XML_SUPPORT "1")
+
+endif()

@@ -1,9 +1,9 @@
-SET (MXA_BASE_SRCS
+SET (MXA_Base_SRCS
 
 )
 
 
-SET (MXA_BASE_HEADERS
+SET (MXA_Base_HEADERS
   ${MXA_CODE_DIR}/MXA/Base/IAttribute.h
   ${MXA_CODE_DIR}/MXA/Base/IAttributeHelper.h
   ${MXA_CODE_DIR}/MXA/Base/IAttributeWriter.h
@@ -33,5 +33,5 @@ SET (MXA_BASE_HEADERS
   ${MXA_CODE_DIR}/MXA/Base/IMXADataModelReaderDelegate.h
 )
 
-IDE_SOURCE_PROPERTIES( "MXA/Base" "${MXA_BASE_HEADERS}" "${MXA_BASE_SRCS}")
+IDE_SOURCE_PROPERTIES( "MXA/Base" "${MXA_Base_SRCS}" "${MXA_Base_HEADERS}")
 

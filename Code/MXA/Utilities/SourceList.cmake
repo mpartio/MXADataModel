@@ -1,4 +1,4 @@
-SET (MXA_UTILITIES_SRCS
+SET (MXA_Utilities_SRCS
   ${MXA_CODE_DIR}/MXA/Utilities/DataSourcePathIndexSection.cpp
   ${MXA_CODE_DIR}/MXA/Utilities/DataSourcePathTextSection.cpp
   ${MXA_CODE_DIR}/MXA/Utilities/DataSourcePathBuilder.cpp
@@ -8,7 +8,7 @@ SET (MXA_UTILITIES_SRCS
   ${MXA_CODE_DIR}/MXA/Utilities/MXALogger.cpp
 )
 
-SET (MXA_UTILITIES_HEADERS
+SET (MXA_Utilities_HEADERS
   ${MXA_CODE_DIR}/MXA/Utilities/StringUtils.h
   ${MXA_CODE_DIR}/MXA/Utilities/IStringSection.h
   ${MXA_CODE_DIR}/MXA/Utilities/DataSourcePathIndexSection.h
@@ -21,14 +21,14 @@ SET (MXA_UTILITIES_HEADERS
 )
 
 IF (MSVC)
-    SET (MXA_UTILITIES_SRCS ${MXA_UTILITIES_SRCS} ${MXA_CODE_DIR}/MXA/Utilities/MXADirent.c )
-    SET (MXA_UTILITIES_HEADERS ${MXA_UTILITIES_HEADERS} ${MXA_CODE_DIR}/MXA/Utilities/MXADirent.h )
+    SET (MXA_Utilities_SRCS ${MXA_Utilities_SRCS} ${MXA_CODE_DIR}/MXA/Utilities/MXADirent.c )
+    SET (MXA_Utilities_HEADERS ${MXA_Utilities_HEADERS} ${MXA_CODE_DIR}/MXA/Utilities/MXADirent.h )
 endif()
 
 if ( ${MXA_INSTALL_FILES} EQUAL 1 )
-    INSTALL (FILES ${MXA_UTILITIES_HEADERS}
+    INSTALL (FILES ${MXA_Utilities_HEADERS}
             DESTINATION include/MXA/Utilities
             COMPONENT Headers   )
 endif()
-IDE_SOURCE_PROPERTIES( "MXA/Utilities" "${MXA_UTILITIES_HEADERS}" "${MXA_UTILITIES_SRCS}")
+IDE_SOURCE_PROPERTIES( "MXA/Utilities" "${MXA_Utilities_HEADERS}" "${MXA_Utilities_SRCS}")
 

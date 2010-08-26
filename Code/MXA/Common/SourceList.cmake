@@ -1,32 +1,32 @@
 if (MSVC)
-    SET (MXA_WIN_COMMON_SRCS
+    SET (MXA_WIN_Common_SRCS
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileReader.cpp
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileWriter.cpp
     )
-    SET (MXA_WIN_COMMON_HEADERS
+    SET (MXA_WIN_Common_HEADERS
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileReader.h
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileWriter.h
     )
-    IDE_SOURCE_PROPERTIES( "MXA/Common/IO/Private" "${MXA_WIN_COMMON_HEADERS}" "${MXA_WIN_COMMON_SRCS}")
+    IDE_SOURCE_PROPERTIES( "MXA/Common/IO/Private" "${MXA_WIN_Common_HEADERS}" "${MXA_WIN_Common_SRCS}")
 else(MSVC)
-    SET (MXA_UNIX_COMMON_SRCS
+    SET (MXA_UNIX_Common_SRCS
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateFileReader.cpp
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateFileWriter.cpp
     )
-    SET (MXA_UNIX_COMMON_HEADERS
+    SET (MXA_UNIX_Common_HEADERS
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateFileReader.h
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateFileWriter.h
     )
-    IDE_SOURCE_PROPERTIES( "MXA/Common/IO/Private" "${MXA_UNIX_COMMON_HEADERS}" "${MXA_UNIX_COMMON_SRCS}")
+    IDE_SOURCE_PROPERTIES( "MXA/Common/IO/Private" "${MXA_UNIX_Common_HEADERS}" "${MXA_UNIX_Common_SRCS}")
 endif()
 
 
 
-SET (MXA_COMMON_SRCS
+SET (MXA_Common_SRCS
 
 )
 
-SET (MXA_COMMON_HEADERS 
+SET (MXA_Common_HEADERS 
     ${MXA_CODE_DIR}/MXA/Common/LogTime.h
     ${MXA_CODE_DIR}/MXA/Common/DLLExport.h
     ${MXA_CODE_DIR}/MXA/Common/MXAEndian.h
@@ -40,17 +40,17 @@ SET (MXA_COMMON_HEADERS
 )
 
 
-IDE_SOURCE_PROPERTIES( "MXA/Common" "${MXA_COMMON_HEADERS}" "${MXA_COMMON_SRCS}")
+IDE_SOURCE_PROPERTIES( "MXA/Common" "${MXA_Common_HEADERS}" "${MXA_Common_SRCS}")
 
-SET (MXA_COMMON_SRCS
-    ${MXA_WIN_COMMON_SRCS}
-    ${MXA_UNIX_COMMON_SRCS}
+SET (MXA_Common_SRCS
+    ${MXA_WIN_Common_SRCS}
+    ${MXA_UNIX_Common_SRCS}
 )
 
-SET (MXA_COMMON_HEADERS 
-    ${MXA_COMMON_HEADERS}
-    ${MXA_WIN_COMMON_HEADERS}
-    ${MXA_UNIX_COMMON_HEADERS}
+SET (MXA_Common_HEADERS 
+    ${MXA_Common_HEADERS}
+    ${MXA_WIN_Common_HEADERS}
+    ${MXA_UNIX_Common_HEADERS}
 )
 
 if ( ${MXA_INSTALL_FILES} EQUAL 1 )
@@ -61,8 +61,8 @@ if ( ${MXA_INSTALL_FILES} EQUAL 1 )
              COMPONENT Headers           
     )
     
-    INSTALL (FILES  ${MXA_WIN_COMMON_HEADERS}
-                    ${MXA_UNIX_COMMON_HEADERS}
+    INSTALL (FILES  ${MXA_WIN_Common_HEADERS}
+                    ${MXA_UNIX_Common_HEADERS}
              DESTINATION include/MXA/Common/IO/Private
              COMPONENT Headers           
     )
