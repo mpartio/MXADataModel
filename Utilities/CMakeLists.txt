@@ -28,6 +28,7 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 CONFIGURE_FILE(${MXAUtilities_SOURCE_DIR}/UtilityFileLocations.h.in ${PROJECT_BINARY_DIR}/UtilityFileLocations.h)
 
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR})
+include_directories(${MXAUtilities_SOURCE_DIR})
 
 
 # List the source files here
@@ -35,7 +36,7 @@ SET (ImportGenerator_SRCS
     ${MXAUtilities_SOURCE_DIR}/ImportGenerator.cpp
 )
 ADD_EXECUTABLE(ImportGenerator ${ImportGenerator_SRCS} )
-TARGET_LINK_LIBRARIES(ImportGenerator ${MXADATAMODEL_LIB_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY} )
+TARGET_LINK_LIBRARIES(ImportGenerator ${MXADATAMODEL_LIB_NAME} )
 ToolInstallationSupport (ImportGenerator "_debug" ${MXADataModel_BINARY_DIR} "Utilities")
 
         

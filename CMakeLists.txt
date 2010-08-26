@@ -94,8 +94,20 @@ SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
 SET (PROJECT_PREFIX "MXA" CACHE STRING "The 3 Letter Prefix to be used for Preprocessor definitions")
 SET (EXE_DEBUG_EXTENSION "_debug")
 
-
+#-------------------------------------------------------------------------------
+# Include the cmp project to perform all the basic configuration tests for the 
+# project.
+#------------------------------------------------------------------------------- 
+set (CMP_HEADER_DIR ${MXADataModel_BINARY_DIR}/MXA)
+set (CMP_CONFIGURATION_FILE_NAME "CMPConfiguration.h")
+set (CMP_TYPES_FILE_NAME "MXATypes.h")
+set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
+set (CMP_EXTRA_CONFIGURATION_FILE "MXAConfiguration.h")
+set (CMP_PROJECT_NAMESPACE "MXA")
 INCLUDE (${PROJECT_RESOURCES_DIR}/cmp/cmpTests.cmake)
+
+# --------------------------------------------------------------------
+# Generate our MXA Specific Configuration File
 
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
@@ -216,19 +228,10 @@ configure_file(${PROJECT_SOURCE_DIR}/License.txt
                 ${PROJECT_BINARY_DIR}/License.txt )
 configure_file(${PROJECT_SOURCE_DIR}/ReadMe.txt
                 ${PROJECT_BINARY_DIR}/ReadMe.txt )
+configure_file(${PROJECT_RESOURCES_DIR}/MXACMake/MXAConfiguration.h.in
+               ${CMP_HEADER_DIR}/MXAConfiguration.h)
 SET(MXADATAMODEL_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/Source;${MXADataModel_BINARY_DIR}"  )
-
-# --------------------------------------------------------------------
-# Generate a Header file with Compile Version variables
-# --------------------------------------------------------------------
-#cmpGenerateVersionString( ${PROJECT_NAME} 
-#"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
-#"${PROJECT_PREFIX}" )
-#
-#IDE_GENERATED_PROPERTIES( "Generated" 
-#"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
-#"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h" 
-#"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h")               
+            
                                
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
@@ -251,9 +254,9 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 SET (MXADATAMODEL_HEADERS 
     ${MXADATAMODEL_HEADERS}
-    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h
-    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h
-    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h 
+    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/MXAVersion.h
+    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/MXAConfiguration.h
+    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/MXATypes.h 
 )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
@@ -343,3 +346,4 @@ if ( ${MXA_INSTALL_FILES} EQUAL 1 )
     include ( ${PROJECT_RESOURCES_DIR}/MXACMake/MXAInstall.cmake)
     include ( ${PROJECT_RESOURCES_DIR}/CPack/PackageProject.cmake)
 endif()
+

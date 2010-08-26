@@ -10,6 +10,8 @@
 // Wheret to find our code templates
 #include <UtilityFileLocations.h>
 #include <MXA/Utilities/MXADir.h>
+#include <MXA/MXAVersion.h>
+#include <MXA/Common/LogTime.h>
 
 // STL includes
 #include <string>
@@ -19,10 +21,9 @@
 
 #include <boost/algorithm/string.hpp>
 
-// Boost program options
-#include <boost/program_options.hpp>
-namespace ProgramOptions = boost::program_options;
-
+//-- tclap headers
+#include "tclap/CmdLine.h"
+#include "tclap/ValueArg.h"
 
 /**
  * @namespace ImportGenerator
@@ -123,52 +124,23 @@ int main(int argc, char **argv)
   std::string projectName;
   try
   {
-    ProgramOptions::options_description desc("Allowed options");
-    desc.add_options()("help", "produce help message")
-    (ImportGenerator::ProjectName.c_str(), ProgramOptions::value<std::string>(), "Name of the Project. Something like RawImporter or BinaryImporter")
-    (ImportGenerator::OutputDir.c_str(), ProgramOptions::value<std::string>(), "Output Directory for Project files. Something like /tmp or C:/Workspace/");
+    //CmdLine Parser generator
+    TCLAP::CmdLine cmd("M3C Program", ' ', MXA::Version::Complete);
+    TCLAP::ValueArg<std::string > projectNameArg("n", "name", "Name of the Project", true, "", "Name of the Project");
+    cmd.add(projectNameArg);
+    TCLAP::ValueArg<std::string > outputDirArg("o", "output", "Output Directory for Project files", true, "", "Output Directory for Project files");
+    cmd.add(outputDirArg);
 
-    ProgramOptions::variables_map vm;
-    ProgramOptions::store(ProgramOptions::command_line_parser(argc, argv).options(desc).run(), vm);
-    ProgramOptions::notify(vm);
+    // Parse the argv array.
+    cmd.parse(argc, argv);
 
-    if (vm.size() == 0 || vm.count("help"))
-    {
-      std::cout << "Usage: options_description [options]\n";
-      std::cout << desc;
-      return 0;
-    }
-
-    // Get the output directory
-    if (vm.count(ImportGenerator::OutputDir))
-    {
-      outputDir =  vm[ImportGenerator::OutputDir].as<std::string> ();
-      //std::cout << "Adding Option: " << ImportGenerator::OutputDir << " --> " << vm[ImportGenerator::OutputDir].as<std::string> () << std::endl;
-    }
-    else
-    {
-      std::cout << "Required Option " << ImportGenerator::OutputDir << " was not found. Exiting" << std::endl;
-      exit(-1);
-    }
-
-    // Get the Project Name
-    if (vm.count(ImportGenerator::ProjectName))
-    {
-      projectName =  vm[ImportGenerator::ProjectName].as<std::string> ();
-      //std::cout << "Adding Option: " << ImportGenerator::ProjectName << " --> " << vm[ImportGenerator::ProjectName].as<std::string> () << std::endl;
-    }
-    else
-    {
-      std::cout << "Required Option " << ImportGenerator::ProjectName << " was not found. Exiting" << std::endl;
-      exit(-1);
-    }
-
-
+    outputDir = outputDirArg.getValue();
+    projectName = projectNameArg.getValue();
   }
-  catch (std::exception& e)
+  catch (TCLAP::ArgException &e)
   {
-    std::cout << e.what() << "\n";
-    return 1;
+    std::cerr << logTime() << " error: " << e.error() << " for arg " << e.argId() << std::endl;
+    return EXIT_FAILURE;
   }
 
 
@@ -210,7 +182,9 @@ int main(int argc, char **argv)
   {
     // Create the new ImportDelegate.h Header file
     std::string inputFile (ImportGenerator::ImportDelegateInputHeader);
-    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + projectName +  ImportGenerator::ImportDelegateOutputHeader;
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src"
+          + MXADir::Separator + projectName +  ImportGenerator::ImportDelegateOutputHeader;
+
     err = parseTemplate(MXADir::toNativeSeparators(inputFile),
                         MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
@@ -222,7 +196,8 @@ int main(int argc, char **argv)
   {
     // Create the new  ImportDelegate.cpp Source file
     std::string inputFile (ImportGenerator::ImportDelegateInputSource);
-    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + projectName + ImportGenerator::ImportDelegateOutputSource;
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src"
+        + MXADir::Separator + projectName + ImportGenerator::ImportDelegateOutputSource;
     err = parseTemplate(MXADir::toNativeSeparators(inputFile),
                         MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
@@ -236,7 +211,8 @@ int main(int argc, char **argv)
   {
     // Create the new ImportDelegateFactory.h Header file
     std::string inputFile (ImportGenerator::ImportDelegateFactoryInputHeader);
-    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + projectName + ImportGenerator::ImportDelegateFactoryOutputHeader;
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src"
+        + MXADir::Separator + projectName + ImportGenerator::ImportDelegateFactoryOutputHeader;
     err = parseTemplate(MXADir::toNativeSeparators(inputFile),
                         MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
@@ -248,7 +224,8 @@ int main(int argc, char **argv)
   {
     // Create the new  ImportDelegateFactory.cpp Source file
     std::string inputFile (ImportGenerator::ImportDelegateFactoryInputSource);
-    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + projectName  + ImportGenerator::ImportDelegateFactoryOutputSource;
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src"
+        + MXADir::Separator + projectName  + ImportGenerator::ImportDelegateFactoryOutputSource;
     err = parseTemplate(MXADir::toNativeSeparators(inputFile),
                         MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
@@ -260,7 +237,8 @@ int main(int argc, char **argv)
   {
     // Create the new  main.cpp Source file
     std::string inputFile (ImportGenerator::MainInputSource);
-    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src" + MXADir::Separator + ImportGenerator::MainOutput;
+    std::string outputFile = MXADir::toNativeSeparators(outputPath) + MXADir::Separator + "src"
+        + MXADir::Separator + ImportGenerator::MainOutput;
     err = parseTemplate(MXADir::toNativeSeparators(inputFile),
                         MXADir::toNativeSeparators(outputFile), projectName);
     if (err < 0)
