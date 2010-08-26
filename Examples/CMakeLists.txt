@@ -31,7 +31,7 @@ ENDIF ( NOT MXA_OUTPUT_DIRS_DEFINED )
 INCLUDE_DIRECTORIES(${MXA_SOURCE_DIR}/MXA)
 include_directories(${MXADataModel_SOURCE_DIR})
 
-INCLUDE( ${PROJECT_CMAKE_MODULES_DIR}/MXAFindHDF5.cmake )
+INCLUDE( ${CMP_MODULES_SOURCE_DIR}/FindHDF5.cmake )
 SET (MXA_EXAMPLES_SOURCE_DIR ${MXA_SOURCE_DIR}/MXA/Examples)
 
 
@@ -53,7 +53,7 @@ endif()
 
 CONFIGURE_FILE(${MXAExamples_SOURCE_DIR}/ExampleFileLocations.h.in
                ${PROJECT_BINARY_DIR}/ExampleFileLocations.h @ONLY IMMEDIATE)
-IDE_GENERATED_PROPERTIES ("Generated" " ${PROJECT_BINARY_DIR}/ExampleFileLocations.h" "" )
+cmp_IDE_GENERATED_PROPERTIES ("Generated" " ${PROJECT_BINARY_DIR}/ExampleFileLocations.h" "" )
 
 # ------------------------------------------------------------------------------
 #  Add Executable for GetDataExample

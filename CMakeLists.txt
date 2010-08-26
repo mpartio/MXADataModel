@@ -84,7 +84,7 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 #  Define the location of the Resources Directory
 SET (PROJECT_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
 SET (MXADATAMODEL_RESOURCES_DIR ${PROJECT_RESOURCES_DIR})
-SET (PROJECT_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/CMake)
+SET (PROJECT_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/MXACMake)
 SET (PROJECT_CMAKE_MODULES_DIR ${PROJECT_CMAKE_DIR}/Modules)
 SET (OSX_TOOLS_DIR ${PROJECT_RESOURCES_DIR}/OSX_Tools)
 SET (MXA_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Source)
@@ -94,8 +94,9 @@ SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
 SET (PROJECT_PREFIX "MXA" CACHE STRING "The 3 Letter Prefix to be used for Preprocessor definitions")
 SET (EXE_DEBUG_EXTENSION "_debug")
 
-INCLUDE (${PROJECT_RESOURCES_DIR}/CMake/CMakeMacros.cmake )
-INCLUDE (${PROJECT_RESOURCES_DIR}/CMake/ConfigureChecks.cmake)
+
+INCLUDE (${PROJECT_RESOURCES_DIR}/cmp/cmpTests.cmake)
+
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 if (NOT DEFINED MXA_BUILD_TESTING)
@@ -127,9 +128,6 @@ ENDIF (BUILD_SHARED_LIBS)
 # options library which the ImportGenerator Needs
 SET (Boost_USE_PROGRAM_OPTIONS TRUE)
 INCLUDE (${PROJECT_CMAKE_DIR}/FindSupportLibraries.cmake)
-
-#-- Include a Macro to setup source file properties
-INCLUDE ( ${PROJECT_CMAKE_DIR}/CMakeMacros.cmake)
 
 
 #-- Include all the source files
@@ -214,10 +212,6 @@ endif()
 # --------------------------------------------------------------------
 # Generate our header files
 # --------------------------------------------------------------------
-configure_file(${PROJECT_RESOURCES_DIR}/CMake/Configuration.h.in
-               ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h )
-configure_file(${PROJECT_RESOURCES_DIR}/CMake/PrimitiveTypes.h.in
-               ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h )
 configure_file(${PROJECT_SOURCE_DIR}/License.txt
                 ${PROJECT_BINARY_DIR}/License.txt )
 configure_file(${PROJECT_SOURCE_DIR}/ReadMe.txt
@@ -227,12 +221,14 @@ SET(MXADATAMODEL_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/Source;${MXADataModel_BINAR
 # --------------------------------------------------------------------
 # Generate a Header file with Compile Version variables
 # --------------------------------------------------------------------
-GenerateVersionString( ${PROJECT_NAME} "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" "${PROJECT_PREFIX}" )
-
-IDE_GENERATED_PROPERTIES( "Generated" 
-"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
-"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h" 
-"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h")               
+#cmpGenerateVersionString( ${PROJECT_NAME} 
+#"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
+#"${PROJECT_PREFIX}" )
+#
+#IDE_GENERATED_PROPERTIES( "Generated" 
+#"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
+#"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h" 
+#"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h")               
                                
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
@@ -306,10 +302,10 @@ endif()
 
 if (  ${MXA_INSTALL_FILES} EQUAL 1 )
     # Copy DLL libraries into the correct build location on MSVC platforms
-    MXA_COPY_DEPENDENT_LIBRARIES ("tiff;expat;hdf5")
+    CMP_COPY_DEPENDENT_LIBRARIES ("tiff;expat;hdf5")
     
     # Generate Install Rules for the DLL Libraries
-    MXA_LIBRARIES_INSTALL_RULES ("tiff;expat;hdf5" "bin" )
+    CMP_LIBRARIES_INSTALL_RULES ("tiff;expat;hdf5" "bin" )
 endif()
 
 #-- Include the MXADataModel Testing Sources
@@ -344,6 +340,6 @@ endif(MXA_BUILD_API_DOCS)
 
 #--- Set up the installation Code for Make Install
 if ( ${MXA_INSTALL_FILES} EQUAL 1 )
-    include ( ${PROJECT_CMAKE_DIR}/MXAInstall.cmake)
-    include ( ${PROJECT_CMAKE_DIR}/PackageProject.cmake)
+    include ( ${PROJECT_RESOURCES_DIR}/MXACMake/MXAInstall.cmake)
+    include ( ${PROJECT_RESOURCES_DIR}/CPack/PackageProject.cmake)
 endif()
