@@ -87,7 +87,7 @@ SET (MXADATAMODEL_RESOURCES_DIR ${PROJECT_RESOURCES_DIR})
 SET (PROJECT_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/MXACMake)
 SET (PROJECT_CMAKE_MODULES_DIR ${PROJECT_CMAKE_DIR}/Modules)
 SET (OSX_TOOLS_DIR ${PROJECT_RESOURCES_DIR}/OSX_Tools)
-SET (MXA_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Source)
+SET (MXA_CODE_DIR ${MXADataModel_SOURCE_DIR}/Code)
 SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
 SET (MXAExamples_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Examples)
 SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
@@ -119,7 +119,7 @@ IF(MXA_BUILD_TESTING)
 ENDIF(MXA_BUILD_TESTING)
 
 # Extend the include path to include the MXADataModel source directory
-INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}" )
+INCLUDE_DIRECTORIES( "${MXA_CODE_DIR}" )
 # ----- Also include our binary directory as some headers are generated into that directory
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
 
@@ -143,13 +143,13 @@ INCLUDE (${PROJECT_CMAKE_DIR}/FindSupportLibraries.cmake)
 
 
 #-- Include all the source files
-INCLUDE (${MXA_SOURCE_DIR}/MXA/Base/Base_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/BMPIO/BMPIO_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/Common/Common_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/Core/Core_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/DataImport/DataImport_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/DataWrappers/DataWrappers_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/Utilities/Utilities_SourceList.cmake)
+INCLUDE (${MXA_CODE_DIR}/MXA/Base/Base_SourceList.cmake)
+INCLUDE (${MXA_CODE_DIR}/MXA/BMPIO/BMPIO_SourceList.cmake)
+INCLUDE (${MXA_CODE_DIR}/MXA/Common/Common_SourceList.cmake)
+INCLUDE (${MXA_CODE_DIR}/MXA/Core/Core_SourceList.cmake)
+INCLUDE (${MXA_CODE_DIR}/MXA/DataImport/DataImport_SourceList.cmake)
+INCLUDE (${MXA_CODE_DIR}/MXA/DataWrappers/DataWrappers_SourceList.cmake)
+INCLUDE (${MXA_CODE_DIR}/MXA/Utilities/Utilities_SourceList.cmake)
 
 # ------- Set up the MXADataModel Project Source Files -----------
 SET( MXADATAMODEL_SRCS
@@ -173,14 +173,14 @@ SET (MXADATAMODEL_HEADERS
 
 #--------- XML Sources ---------------------------------------------------
 IF (MXA_USE_XML)
-    INCLUDE (${MXA_SOURCE_DIR}/MXA/XML/XML_SourceList.cmake)
+    INCLUDE (${MXA_CODE_DIR}/MXA/XML/XML_SourceList.cmake)
     SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
     SET (MXA_XML_SUPPORT "1")
 ENDIF(MXA_USE_XML)
 
 #------- HDF5 Dependant Sources ------------------------------
 IF ( MXA_USE_HDF5 )
-  INCLUDE (${MXA_SOURCE_DIR}/MXA/HDF5/HDF5_SourceList.cmake)
+  INCLUDE (${MXA_CODE_DIR}/MXA/HDF5/HDF5_SourceList.cmake)
   SET(MXA_HDF5_SUPPORT "1")
   OPTION(MXA_BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
   IF(MXA_BUILD_VTK_HDF5)
@@ -191,8 +191,8 @@ IF ( MXA_USE_HDF5 )
     # List the kits from VTK that are needed by this project.
     SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
     
-    SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} ${MXA_SOURCE_DIR}/MXA/HDF5/vtkHDF5.cpp)
-    SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} ${MXA_SOURCE_DIR}/MXA/HDF5/vtkHDF5.h)
+    SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} ${MXA_CODE_DIR}/MXA/HDF5/vtkHDF5.cpp)
+    SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} ${MXA_CODE_DIR}/MXA/HDF5/vtkHDF5.h)
     SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
     SET(HDF5_VTK_BRIDGE "1")
   ENDIF (MXA_BUILD_VTK_HDF5)

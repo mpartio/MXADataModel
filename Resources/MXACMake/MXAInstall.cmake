@@ -19,18 +19,18 @@ CONFIGURE_FILE(${PROJECT_CMAKE_DIR}/InstallMXASupportLibraries.cmake.in
 SET (MXA_CMAKE_INSTALLED_RESOURCES
        ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake
        ${PROJECT_BINARY_DIR}/InstallMXASupportLibraries.cmake
- 	   ${PROJECT_CMAKE_DIR}/CMakeMacros.cmake
-       ${PROJECT_CMAKE_DIR}/ConfigureChecks.cmake
-       ${PROJECT_CMAKE_DIR}/GenerateVersionString.cpp
-       ${PROJECT_CMAKE_DIR}/GetTimeOfDayTest.cpp
-       ${PROJECT_CMAKE_DIR}/TestBoolType.cxx
-       ${PROJECT_CMAKE_DIR}/TestCharSignedness.cxx
-       ${PROJECT_CMAKE_DIR}/TestCompareTypes.cxx
-       ${PROJECT_CMAKE_DIR}/TestConvertTypes.cxx
-       ${PROJECT_CMAKE_DIR}/TestMiscFeatures.c
-	   ${PROJECT_CMAKE_DIR}/PrimitiveTypes.h.in
- 	   ${PROJECT_CMAKE_DIR}/Version.h.in
- 	   ${PROJECT_CMAKE_DIR}/LocateBoostSupportLibraries.cmake
+# 	   ${PROJECT_CMAKE_DIR}/CMakeMacros.cmake
+#       ${PROJECT_CMAKE_DIR}/ConfigureChecks.cmake
+#       ${PROJECT_CMAKE_DIR}/GenerateVersionString.cpp
+#       ${PROJECT_CMAKE_DIR}/GetTimeOfDayTest.cpp
+#       ${PROJECT_CMAKE_DIR}/TestBoolType.cxx
+#       ${PROJECT_CMAKE_DIR}/TestCharSignedness.cxx
+#       ${PROJECT_CMAKE_DIR}/TestCompareTypes.cxx
+#       ${PROJECT_CMAKE_DIR}/TestConvertTypes.cxx
+#       ${PROJECT_CMAKE_DIR}/TestMiscFeatures.c
+#	   ${PROJECT_CMAKE_DIR}/PrimitiveTypes.h.in
+# 	   ${PROJECT_CMAKE_DIR}/Version.h.in
+# 	   ${PROJECT_CMAKE_DIR}/LocateBoostSupportLibraries.cmake
 )
 
 INSTALL (FILES ${MXA_CMAKE_INSTALLED_RESOURCES} 
@@ -38,13 +38,13 @@ INSTALL (FILES ${MXA_CMAKE_INSTALLED_RESOURCES}
         COMPONENT Resources)
 
 SET (MXA_INSTALLED_CMAKE_MODULES 
-  ${PROJECT_CMAKE_MODULES_DIR}/AdjustLibVars.cmake
-  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindBoost.cmake
-  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindExpat.cmake
-  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindHDF5.cmake
-  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindMinGW.cmake
-  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindSZip.cmake
-  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindTiff.cmake
+#  ${PROJECT_CMAKE_MODULES_DIR}/AdjustLibVars.cmake
+#  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindBoost.cmake
+#  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindExpat.cmake
+#  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindHDF5.cmake
+#  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindMinGW.cmake
+#  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindSZip.cmake
+#  ${PROJECT_CMAKE_MODULES_DIR}/MXAFindTiff.cmake
 )
 
 
