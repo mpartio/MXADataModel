@@ -20,5 +20,10 @@ SET (MXA_DataImport_HEADERS
 
 ENDIF (MXA_USE_HDF5 AND MXA_USE_XML)
 
-IDE_SOURCE_PROPERTIES( "MXA/DataImport" "${MXA_DataImport_HEADERS}" "${MXA_DataImport_SRCS}")
+if ( DEFINED MXA_INSTALL_FILES)
+    if( ${MXA_INSTALL_FILES} EQUAL 1 )
+        set (install_files "1")
+    endif()
+endif()
+cmp_IDE_SOURCE_PROPERTIES( "MXA/DataImport" "${MXA_DataImport_HEADERS}" "${MXA_DataImport_SRCS}" ${install_files})
 

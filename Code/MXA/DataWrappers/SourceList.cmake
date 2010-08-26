@@ -11,6 +11,9 @@ SET (MXA_DataWrappers_HEADERS
   ${MXA_CODE_DIR}/MXA/DataWrappers/DataExportProperties.h
   )
   
-IDE_SOURCE_PROPERTIES( "MXA/DataWrappers" "${MXA_DataWrappers_HEADERS}" "${MXA_DataWrappers_SRCS}")
-
-
+if ( DEFINED MXA_INSTALL_FILES)
+if( ${MXA_INSTALL_FILES} EQUAL 1 )
+    set (install_files "1")
+endif()
+endif()
+cmp_IDE_SOURCE_PROPERTIES( "MXA/DataWrappers" "${MXA_DataWrappers_HEADERS}" "${MXA_DataWrappers_SRCS}" ${install_files})

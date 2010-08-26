@@ -1,3 +1,9 @@
+if ( DEFINED MXA_INSTALL_FILES)
+    if( ${MXA_INSTALL_FILES} EQUAL 1 )
+        set (install_files "1")
+    endif()
+endif()
+
 if (MSVC)
     SET (MXA_WIN_Common_SRCS
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileReader.cpp
@@ -7,7 +13,7 @@ if (MSVC)
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileReader.h
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateWindowsFileWriter.h
     )
-    IDE_SOURCE_PROPERTIES( "MXA/Common/IO/Private" "${MXA_WIN_Common_HEADERS}" "${MXA_WIN_Common_SRCS}")
+    cmp_IDE_SOURCE_PROPERTIES( "MXA/Common/IO/Private" "${MXA_WIN_Common_HEADERS}" "${MXA_WIN_Common_SRCS}" ${install_files})
 else(MSVC)
     SET (MXA_UNIX_Common_SRCS
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateFileReader.cpp
@@ -17,7 +23,7 @@ else(MSVC)
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateFileReader.h
       ${MXA_CODE_DIR}/MXA/Common/IO/Private/MXAPrivateFileWriter.h
     )
-    IDE_SOURCE_PROPERTIES( "MXA/Common/IO/Private" "${MXA_UNIX_Common_HEADERS}" "${MXA_UNIX_Common_SRCS}")
+    cmp_IDE_SOURCE_PROPERTIES( "MXA/Common/IO/Private" "${MXA_UNIX_Common_HEADERS}" "${MXA_UNIX_Common_SRCS}" ${install_files})
 endif()
 
 
@@ -40,7 +46,7 @@ SET (MXA_Common_HEADERS
 )
 
 
-IDE_SOURCE_PROPERTIES( "MXA/Common" "${MXA_Common_HEADERS}" "${MXA_Common_SRCS}")
+cmp_IDE_SOURCE_PROPERTIES( "MXA/Common" "${MXA_Common_HEADERS}" "${MXA_Common_SRCS}" ${install_files})
 
 SET (MXA_Common_SRCS
     ${MXA_WIN_Common_SRCS}

@@ -25,10 +25,12 @@ IF (MSVC)
     SET (MXA_Utilities_HEADERS ${MXA_Utilities_HEADERS} ${MXA_CODE_DIR}/MXA/Utilities/MXADirent.h )
 endif()
 
-if ( ${MXA_INSTALL_FILES} EQUAL 1 )
-    INSTALL (FILES ${MXA_Utilities_HEADERS}
-            DESTINATION include/MXA/Utilities
-            COMPONENT Headers   )
+if ( DEFINED MXA_INSTALL_FILES)
+    if( ${MXA_INSTALL_FILES} EQUAL 1 )
+        set (install_files "1")
+    endif()
 endif()
-IDE_SOURCE_PROPERTIES( "MXA/Utilities" "${MXA_Utilities_HEADERS}" "${MXA_Utilities_SRCS}")
+
+
+cmp_IDE_SOURCE_PROPERTIES( "MXA/Utilities" "${MXA_Utilities_HEADERS}" "${MXA_Utilities_SRCS}" ${install_files})
 

@@ -25,10 +25,14 @@ SET (MXA_XML_HEADERS
     ${MXA_CODE_DIR}/MXA/XML/XMLStreamReaderDelegate.hpp
 )
 
+if ( DEFINED MXA_INSTALL_FILES)
+    if( ${MXA_INSTALL_FILES} EQUAL 1 )
+        set (install_files "1")
+    endif()
+endif()
 
+cmp_IDE_SOURCE_PROPERTIES( "MXA/XML" "${MXA_XML_HEADERS}" "${MXA_XML_SRCS}" ${install_files})
 
-IDE_SOURCE_PROPERTIES( "MXA/XML" "${MXA_XML_HEADERS}" "${MXA_XML_SRCS}")
-
-SET (MXA_XML_SUPPORT "1")
+SET (MXA_XML_SUPPORT "1" CACHE INTERNAL "")
 
 endif()
