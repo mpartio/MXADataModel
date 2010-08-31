@@ -101,12 +101,12 @@ IF (MXA_BUILD_TESTING)
         ${MXATests_SOURCE_DIR}/DatasetTest.cpp
     )
     SET (MXADataset_TEST_HEADERS 
-      ${MXA_SOURCE_DIR}/MXA/DataWrappers/MXAArrayTemplate.hpp
-      ${MXA_SOURCE_DIR}/MXA/HDF5/H5Dataset.h
-      ${MXA_SOURCE_DIR}/MXA/Base/IFileReader.h
-      ${MXA_SOURCE_DIR}/MXA/Base/IFileWriter.h
-      ${MXA_SOURCE_DIR}/MXA/Base/IMXAArray.h
-      ${MXA_SOURCE_DIR}/MXA/Base/IDataFileIO.h
+      ${MXA_CODE_DIR}/MXA/DataWrappers/MXAArrayTemplate.hpp
+      ${MXA_CODE_DIR}/MXA/HDF5/H5Dataset.h
+      ${MXA_CODE_DIR}/MXA/Base/IFileReader.h
+      ${MXA_CODE_DIR}/MXA/Base/IFileWriter.h
+      ${MXA_CODE_DIR}/MXA/Base/IMXAArray.h
+      ${MXA_CODE_DIR}/MXA/Base/IDataFileIO.h
       )
    # source_group(src\\Testing FILES ${MXADataset_TEST_SRCS} ${MXADataset_TEST_HEADERS})
    IF ( MXA_USE_HDF5 AND MXA_USE_TIFF )
