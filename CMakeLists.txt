@@ -105,7 +105,7 @@ set (CMP_TYPES_FILE_NAME "MXATypes.h")
 set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
 set (CMP_EXTRA_CONFIGURATION_FILE "MXAConfiguration.h")
 set (CMP_PROJECT_NAMESPACE "MXA")
-INCLUDE (${PROJECT_RESOURCES_DIR}/cmp/cmpTests.cmake)
+INCLUDE (${PROJECT_RESOURCES_DIR}/cmp/cmpProject.cmake)
 
 # --------------------------------------------------------------------
 # Generate our MXA Specific Configuration File
