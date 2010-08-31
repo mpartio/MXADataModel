@@ -4,9 +4,10 @@
 #--  BSD License: http://www.opensource.org/licenses/bsd-license.html
 #--////////////////////////////////////////////////////////////////////////////
     
-INSTALL (FILES  "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
-                "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h" 
-                "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h" 
+INSTALL (FILES  "${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME}" 
+                "${CMP_HEADER_DIR}/${CMP_CONFIGURATION_FILE_NAME}" 
+                "${CMP_HEADER_DIR}/${CMP_TYPES_FILE_NAME}"
+                "${CMP_HEADER_DIR}/${CMP_EXTRA_CONFIGURATION_FILE}"
          DESTINATION include/MXA 
          COMPONENT Headers           
 )

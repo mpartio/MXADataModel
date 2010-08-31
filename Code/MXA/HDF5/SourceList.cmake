@@ -39,7 +39,7 @@ IF ( MXA_USE_HDF5 )
         ${MXA_CODE_DIR}/MXA/HDF5/H5MXAUtilities.h
         ${MXA_CODE_DIR}/MXA/HDF5/H5Attribute.h
     )
-    cmp_IDE_SOURCE_PROPERTIES( "MXA/HDF5" "${MXA_HDF5_HEADERS}" "${MXA_HDF5_SRCS}" ${install_files})
+    
     
     IF(MXA_USE_TIFF)
         #-------------------------------------------------------------------------------
@@ -58,7 +58,6 @@ IF ( MXA_USE_HDF5 )
             ${MXA_CODE_DIR}/MXA/HDF5/H5TiffImportDelegate.h
             ${MXA_CODE_DIR}/MXA/HDF5/H5TiffImportDelegateFactory.h
         )
-        cmp_IDE_SOURCE_PROPERTIES( "MXA/HDF5" "${MXA_HDF5_TIFF_HEADERS}" "${MXA_HDF5_TIFF_SRCS}" ${install_files})
         SET (MXA_TIFF_SUPPORT "1" CACHE INTERNAL "")
     endif()
 
@@ -77,5 +76,5 @@ IF ( MXA_USE_HDF5 )
         SET(HDF5_VTK_BRIDGE "1")
     ENDIF (MXA_BUILD_VTK_HDF5)
   
-
+    cmp_IDE_SOURCE_PROPERTIES( "MXA/HDF5" "${MXA_HDF5_HEADERS}" "${MXA_HDF5_SRCS}" ${install_files})
 endif()

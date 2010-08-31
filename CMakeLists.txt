@@ -99,7 +99,7 @@ SET (EXE_DEBUG_EXTENSION "_debug")
 # project.
 #------------------------------------------------------------------------------- 
 set (CMP_HEADER_DIR ${MXADataModel_BINARY_DIR}/MXA)
-set (CMP_CONFIGURATION_FILE_NAME "CMPConfiguration.h")
+set (CMP_CONFIGURATION_FILE_NAME "MXACMPConfiguration.h")
 set (CMP_TYPES_FILE_NAME "MXATypes.h")
 set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
 set (CMP_EXTRA_CONFIGURATION_FILE "MXAConfiguration.h")
