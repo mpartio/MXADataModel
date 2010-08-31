@@ -4,6 +4,7 @@
 #--  BSD License: http://www.opensource.org/licenses/bsd-license.html
 #--////////////////////////////////////////////////////////////////////////////
 # Set project's name
+
 PROJECT( MXADataModel )
 cmake_minimum_required(VERSION 2.6)
 
