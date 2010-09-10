@@ -154,11 +154,11 @@ static Pointer New(void) \
   MXA_GET_STRING_PROPERTY(prpty,  m_##prpty)
 
 
-
 /**
 * @brief Creates a "setter" method to set the property.
 */
 #define MXA_SET_PROPERTY_OLD(type, prpty, var) \
+  void set##prpty(type value) { this->var = value; }
 
 /**
 * @brief Creates a "getter" method to retrieve the value of the property.
