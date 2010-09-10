@@ -12,9 +12,9 @@ INSTALL (FILES  "${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME}"
          COMPONENT Headers           
 )
 
-CONFIGURE_FILE(${PROJECT_CMAKE_DIR}/UseMXADataModel.cmake.in 
+CONFIGURE_FILE(${MXA_CMAKE_DIR}/UseMXADataModel.cmake.in 
                 ${PROJECT_BINARY_DIR}/UseMXADataModel.cmake @ONLY IMMEDIATE)
-CONFIGURE_FILE(${PROJECT_CMAKE_DIR}/InstallMXASupportLibraries.cmake.in 
+CONFIGURE_FILE(${MXA_CMAKE_DIR}/InstallMXASupportLibraries.cmake.in 
                 ${PROJECT_BINARY_DIR}/InstallMXASupportLibraries.cmake @ONLY IMMEDIATE)
 
 SET (MXA_CMAKE_INSTALLED_RESOURCES

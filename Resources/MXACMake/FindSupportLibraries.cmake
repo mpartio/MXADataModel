@@ -1,6 +1,6 @@
 # IF YOU CHANGE THIS FILE, MAKE SURE YOU UPDATE THE UseMXADataModel.cmake.in FILE ALSO.
 
-include ( ${PROJECT_CMAKE_DIR}/LocateBoostSupportLibraries.cmake )
+include ( ${MXA_CMAKE_DIR}/LocateBoostSupportLibraries.cmake )
 
 #-------------------------------------------------------------------------------
 #- Find Expat Library -------------

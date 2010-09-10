@@ -19,14 +19,13 @@ Add_MXALib_Dir(HDF5)
 Add_MXALib_Dir(Utilities)
 Add_MXALib_Dir(XML)
 
-
 # --------------------------------------------------------------------
 # Include the generated Headers
 SET (MXALib_PROJECT_FILES 
     ${MXALib_PROJECT_FILES}
-    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/MXAVersion.h
-    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/MXAConfiguration.h
-    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/MXATypes.h 
+    ${MXADataModel_BINARY_DIR}/${CMP_PROJECT_PREFIX}/MXAVersion.h
+    ${MXADataModel_BINARY_DIR}/${CMP_PROJECT_PREFIX}/MXAConfiguration.h
+    ${MXADataModel_BINARY_DIR}/${CMP_PROJECT_PREFIX}/MXATypes.h 
 )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
@@ -45,7 +44,7 @@ configure_file(${MXADataModel_SOURCE_DIR}/ReadMe.txt
                 ${MXADataModel_BINARY_DIR}/ReadMe.txt )
 configure_file(${PROJECT_RESOURCES_DIR}/MXACMake/MXAConfiguration.h.in
                ${CMP_HEADER_DIR}/MXAConfiguration.h)
-SET(MXADATAMODEL_INCLUDE_DIRS "${MXA_CODE_DIR};${MXADataModel_BINARY_DIR}"  )
+SET(MXADATAMODEL_INCLUDE_DIRS "${PROJECT_CODE_DIR};${MXADataModel_BINARY_DIR}"  )
 
 
 # --------------------------------------------------------------------

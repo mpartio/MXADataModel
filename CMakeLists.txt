@@ -84,16 +84,8 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 #-------------------------------------------------------------------------------
 #  Define the location of the Resources Directory
 SET (PROJECT_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
-SET (MXADATAMODEL_RESOURCES_DIR ${PROJECT_RESOURCES_DIR})
-SET (PROJECT_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/MXACMake)
-SET (PROJECT_CMAKE_MODULES_DIR ${PROJECT_CMAKE_DIR}/Modules)
-# SET (OSX_TOOLS_DIR ${PROJECT_RESOURCES_DIR}/OSX_Tools)
-SET (MXA_CODE_DIR ${MXADataModel_SOURCE_DIR}/Code)
-SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
-SET (MXAExamples_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Examples)
-SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
-SET (PROJECT_PREFIX "MXA" CACHE STRING "The 3 Letter Prefix to be used for Preprocessor definitions")
-SET (EXE_DEBUG_EXTENSION "_debug")
+SET (PROJECT_CODE_DIR ${MXADataModel_SOURCE_DIR}/Code)
+
 
 #-------------------------------------------------------------------------------
 # Include the cmp project to perform all the basic configuration tests for the 
@@ -104,11 +96,17 @@ set (CMP_CONFIGURATION_FILE_NAME "MXACMPConfiguration.h")
 set (CMP_TYPES_FILE_NAME "MXATypes.h")
 set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
 set (CMP_EXTRA_CONFIGURATION_FILE "MXAConfiguration.h")
+SET (CMP_PROJECT_PREFIX "MXA" CACHE STRING "The 3 Letter Prefix to be used for Preprocessor definitions")
 set (CMP_PROJECT_NAMESPACE "MXA")
 INCLUDE (${PROJECT_RESOURCES_DIR}/cmp/cmpProject.cmake)
 
 # --------------------------------------------------------------------
-# Generate our MXA Specific Configuration File
+# Project Specific Variables
+SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
+SET (MXAExamples_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Examples)
+SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
+SET (MXA_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/MXACMake)
+SET (EXE_DEBUG_EXTENSION "_debug")
 
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
@@ -120,7 +118,7 @@ IF(MXA_BUILD_TESTING)
 ENDIF(MXA_BUILD_TESTING)
 
 # Extend the include path to include the MXADataModel source directory
-INCLUDE_DIRECTORIES( "${MXA_CODE_DIR}" )
+INCLUDE_DIRECTORIES( "${PROJECT_CODE_DIR}" )
 # ----- Also include our binary directory as some headers are generated into that directory
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}")
 
@@ -160,7 +158,7 @@ ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 # --------------------------------------------------------------------
 # Find all the support libraries needed. Including the Boost Program
 # options library which the ImportGenerator Needs
-INCLUDE (${PROJECT_CMAKE_DIR}/FindSupportLibraries.cmake)
+INCLUDE (${MXA_CMAKE_DIR}/FindSupportLibraries.cmake)
 
 
 # ---------- Set up the Project Options -----------------------
