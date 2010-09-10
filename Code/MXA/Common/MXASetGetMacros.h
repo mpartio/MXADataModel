@@ -153,6 +153,37 @@ static Pointer New(void) \
   MXA_SET_STRING_PROPERTY(prpty,  m_##prpty)\
   MXA_GET_STRING_PROPERTY(prpty,  m_##prpty)
 
+
+
+/**
+* @brief Creates a "setter" method to set the property.
+*/
+#define MXA_SET_PROPERTY_OLD(type, prpty, var) \
+
+/**
+* @brief Creates a "getter" method to retrieve the value of the property.
+*/
+#define MXA_GET_PROPERTY_OLD(type, prpty, var) \
+  type get##prpty() { return var; }
+
+
+#define MXA_INSTANCE_PROPERTY_OLD(type, prpty, var)\
+  private:\
+      type   var;\
+  public:\
+    MXA_SET_PROPERTY_OLD(type, prpty, var)\
+    MXA_GET_PROPERTY_OLD(type, prpty, var)
+
+
+#define MXA_INSTANCE_STRING_PROPERTY_OLD(prpty, var)\
+  private:\
+  std::string      var;\
+  public:\
+  MXA_SET_STRING_PROPERTY(prpty,  var)\
+  MXA_GET_STRING_PROPERTY(prpty,  var)
+
+
+
 // These are simple over-rides from the boost distribution because we don't want the entire boost distribution just
 // for a few boost headers
 namespace MXA
