@@ -292,7 +292,7 @@ int MakeDirectoriesTest()
   std::string testdir = MXAUnitTest::MXATempDir + MXAUnitTest::MXAFileSystemPathTest::TestDir;
 
 
-  std::string dirPath(testdir
+  std::string dirPath( testdir
                       + MXADir::Separator
                       + MXAUnitTest::MXAFileSystemPathTest::TestDirName1
                       + MXADir::Separator);
