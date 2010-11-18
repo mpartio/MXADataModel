@@ -86,6 +86,14 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 SET (PROJECT_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
 SET (PROJECT_CODE_DIR ${MXADataModel_SOURCE_DIR}/Code)
 
+# - Include all the cmake code to make sure that the MXA Library is built
+if(NOT EXISTS ${PROJECT_RESOURCES_DIR}/cmp/cmpProject.cmake)
+	message(STATUS "CMP is a git submodule of MXADataModel and does not seem to be cloned")
+	message(STATUS "from the repository properly. Use the following command to pull")
+	message(STATUS "the CMP project from the repository")
+	message(STATUS "git submodule update --init")
+	message(FATAL_ERROR "")
+endif()
 
 #-------------------------------------------------------------------------------
 # Include the cmp project to perform all the basic configuration tests for the 

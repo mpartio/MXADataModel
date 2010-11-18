@@ -41,7 +41,7 @@ SET (MXA_OUTPUT_DIRS_DEFINED 1)
 
 #-- We need some more boost libraries?
 set (MXA_BOOST_HEADERS_ONLY 0)
-INCLUDE ("${MXADataModel_SOURCE_DIR}/Resources/CMake/LocateBoostSupportLibraries.cmake" )
+INCLUDE ("${MXADataModel_SOURCE_DIR}/Resources/MXACMake/LocateBoostSupportLibraries.cmake" )
 
 # --------------------------------------------------------------------
 #-- Build the MXADataModel library
@@ -61,5 +61,5 @@ INCLUDE_DIRECTORIES (${MXADataModel_SOURCE_DIR}/Source)
 INCLUDE_DIRECTORIES (${ParaView_BINARY_DIR}/MXADataModel)
 
 #-- Include a CMake file with some Macros that will be needed.
-include (${MXADataModel_SOURCE_DIR}/Resources/CMake/CMakeMacros.cmake)
-MXA_LIBRARIES_INSTALL_RULES ("hdf5" "bin")
+include (${MXADataModel_SOURCE_DIR}/Resources/cmp/cmpCMakeMacros.cmake)
+CMP_LIBRARIES_INSTALL_RULES ("hdf5" "bin")

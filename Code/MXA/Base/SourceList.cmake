@@ -33,9 +33,10 @@ SET (MXA_Base_HEADERS
   ${PROJECT_CODE_DIR}/MXA/Base/IMXADataModelReaderDelegate.h
 )
 
+set (install_files 0)
 if ( DEFINED MXA_INSTALL_FILES)
     if( ${MXA_INSTALL_FILES} EQUAL 1 )
         set (install_files "1")
     endif()
 endif()
-cmp_IDE_SOURCE_PROPERTIES( "MXA/Base" "${MXA_Base_HEADERS}" "${MXA_Base_SRCS}" ${install_files})
+cmp_IDE_SOURCE_PROPERTIES( "MXA/Base" "${MXA_Base_HEADERS}" "${MXA_Base_SRCS}" "${install_files}")
