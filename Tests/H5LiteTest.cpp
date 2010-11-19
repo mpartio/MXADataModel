@@ -1120,28 +1120,66 @@ void H5LiteTest()
 // -----------------------------------------------------------------------------
 void TestLargeFileSupport()
 {
- // herr_t err = -1;
-  hid_t   file_id;
+  // herr_t err = -1;
+  hid_t file_id;
   /* Create a new file using default properties. */
-  file_id = H5Fcreate( MXAUnitTest::H5LiteTest::LargeFile.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT );
+  file_id = H5Fcreate(MXAUnitTest::H5LiteTest::LargeFile.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
   MXA_REQUIRE(file_id > 0);
-  std::vector<int> buffer(1000000); // Create a 4 MegaByte Buffer
-	int32_t rank = 1;
-	std::vector<uint64_t> dims(1,1000000);
-	std::string dsetName;
+  std::vector<int > buffer(1000000); // Create a 4 MegaByte Buffer
+  int32_t rank = 1;
+  std::vector<uint64_t > dims(1, 1000000);
+  std::string dsetName;
   for (int i = 0; i < 1000; ++i)
   {
-	  dsetName = "/" + StringUtils::numToString(i);
-	  H5Lite::writePointerDataset<int>(file_id, dsetName, rank, &(dims.front()), &(buffer.front()) );
-	  std::cout << "Large File " << i << "/1000" << std::endl;
+    dsetName = "/" + StringUtils::numToString(i);
+    H5Lite::writePointerDataset<int >(file_id, dsetName, rank, &(dims.front()), &(buffer.front()));
+    std::cout << "Large File " << i << "/1000" << std::endl;
 
   }
 
-	herr_t err = H5Fclose(file_id);
-MXA_REQUIRE(err >= 0);
+  herr_t err = H5Fclose(file_id);
+  MXA_REQUIRE(err >= 0);
 
 }
 
+#define TYPE_DETECTION(type, check)\
+{\
+  type v = 0x00;\
+  hid_t t = H5Lite::HDFTypeForPrimitive<type>(v);\
+  MXA_REQUIRE_EQUAL(t, check);\
+}
+
+
+template<typename T>
+hid_t _testTypeName()
+{
+  T v = 0x00;
+  return H5Lite::HDFTypeForPrimitive<T>(v);
+}
+
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+void TestTypeDetection()
+{
+
+  MXA_REQUIRE_EQUAL(_testTypeName<int8_t>(), H5T_NATIVE_INT8)
+#if CMP_TYPE_CHAR_IS_SIGNED
+  MXA_REQUIRE_EQUAL(_testTypeName<char>(), H5T_NATIVE_INT8)
+#else
+  MXA_REQUIRE_EQUAL(_testTypeName<char>(), H5T_NATIVE_UINT8)
+#endif
+  MXA_REQUIRE_EQUAL(_testTypeName<signed char>(), H5T_NATIVE_INT8)
+  MXA_REQUIRE_EQUAL(_testTypeName<unsigned char>(), H5T_NATIVE_UINT8)
+  MXA_REQUIRE_EQUAL(_testTypeName<uint8_t>(), H5T_NATIVE_UINT8)
+
+//  TYPE_DETECTION(uint8_t, H5T_NATIVE_UINT8);
+//
+//  TYPE_DETECTION(char, H5T_NATIVE_INT8);
+//  TYPE_DETECTION(signed char, H5T_NATIVE_INT8);
+
+
+}
 
 // -----------------------------------------------------------------------------
 //  Use Boost unit test framework
@@ -1149,6 +1187,7 @@ MXA_REQUIRE(err >= 0);
 int main(int argc, char **argv)
 {
   int err = EXIT_SUCCESS;
+  MXA_REGISTER_TEST( TestTypeDetection() );
   MXA_REGISTER_TEST( H5LiteTest() );
   MXA_REGISTER_TEST( RemoveTestFiles() );
 
