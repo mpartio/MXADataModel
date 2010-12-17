@@ -63,13 +63,11 @@ if ( ${MXA_INSTALL_FILES} EQUAL 1 )
 else()
 # Include an install rule for NON-Apple systems. The specialized installer that ParaView uses
 # will take care of copying the MXADataModel library into the proper location.
-    if (NOT APPLE)
-        INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
-                LIBRARY DESTINATION bin
-                ARCHIVE DESTINATION lib
-                RUNTIME DESTINATION bin
-                COMPONENT Runtime)
-    endif()
+    INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME}
+            EXPORT ${PV_INSTALL_EXPORT_NAME}
+          RUNTIME DESTINATION ${PV_INSTALL_BIN_DIR} COMPONENT Runtime
+          LIBRARY DESTINATION ${PV_INSTALL_LIB_DIR} COMPONENT Runtime
+          ARCHIVE DESTINATION ${PV_INSTALL_LIB_DIR} COMPONENT Development)
 endif()
 
 set (lib_rt_dest lib)

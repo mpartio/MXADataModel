@@ -25,6 +25,9 @@ SET (MXA_BUILD_EXAMPLES OFF CACHE BOOL "" )
 #-- Remove the MXA Testing from being built
 SET (MXA_BUILD_TESTING FALSE)
 
+#-- Remove the MXA Utilities from being built
+SET (MXA_BUILD_UTILITIES FALSE)
+
 #-- Set the Name of the MXA Library. This should ALWAYS be MXADataModel
 SET (MXADATAMODEL_LIB_NAME MXADataModel)
 
@@ -37,7 +40,7 @@ set (MXA_INSTALL_FILES 0 CACHE INTERNAL "Ignore the MXA Install Rules, defaultin
 set (MXA_BUILD_TESTING_SAVE ${MXA_BUILD_TESTING})
 
 #-- ParaView already defines where to place output files like libraries and executables
-SET (MXA_OUTPUT_DIRS_DEFINED 1)
+SET (MXA_OUTPUT_DIRS_DEFINED 1 CACHE INTERNAL "The CMake output directories have already been defined")
 
 #-- We need some more boost libraries?
 set (MXA_BOOST_HEADERS_ONLY 0)
