@@ -1,18 +1,12 @@
 # ------------------------------------------------------------------------------ 
 # This CMake code sets up for CPack to be used to generate native installers
 # ------------------------------------------------------------------------------
-#INCLUDE (InstallRequiredSystemLibraries)
-if (BUILD_SHARED_LIBS)
-if (MXA_BUILD_EXAMPLES)
-set (MSVC_COMP "Examples")
-endif()
-if (MXA_BUILD_UTILITIES)
-    set (MSVC_COMP "Utilities")
-endif()
-if (MXA_BUILD_EXAMPLES OR MXA_BUILD_UTILITIES)
-    INCLUDE (${CMP_INSTALLATION_SUPPORT_SOURCE_DIR}/InstallMSVCLibraries.cmake)
-endif()
-endif()
+SET (CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP 1)
+INCLUDE (InstallRequiredSystemLibraries)
+INSTALL(FILES  ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+        DESTINATION ./)
+        
+        
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MXADataModel SDK")
 SET(CPACK_PACKAGE_VENDOR "BlueQuartz Software, Michael A. Jackson")
 SET(CPACK_PACKAGE_DESCRIPTION_FILE "${MXADataModel_SOURCE_DIR}/ReadMe.txt")
@@ -42,7 +36,20 @@ set(CPACK_COMPONENT_DOCUMENTATION_DESCRIPTION  "The MXADataModel API Documentati
 set(CPACK_COMPONENT_DOCUMENTATION_REQUIRED 0)
 set(CPACK_PACKAGE_EXECUTABLES 
     ImportGenerator;ImportGenerator)
-   
+
+IF (APPLE)
+  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-OSX")
+elseif(WIN32)
+    if ( "${CMAKE_SIZEOF_VOID_P}" EQUAL "8" )
+        set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-Win64")
+    else()
+        set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-Win32")
+    endif()
+else()
+  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CMAKE_SYSTEM_NAME}")
+endif()
+
+
 IF(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
   # sure there is at least one set of four (4) backlasshes.
