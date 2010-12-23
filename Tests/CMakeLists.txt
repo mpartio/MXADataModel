@@ -57,7 +57,7 @@ macro(MXA_ADD_TEST testname Exename)
         ADD_TEST(${testname} ${Exename})
     else()
         foreach(arch ${CMAKE_OSX_ARCHITECTURES})
-            ADD_TEST( ${arch}_${testname} ${OSX_TOOLS_DIR}/UBTest.sh ${arch} ${Exename} )
+            ADD_TEST( ${arch}_${testname} ${CMP_OSX_TOOLS_SOURCE_DIR}/UBTest.sh ${arch} ${Exename} )
         endforeach()
     endif()
 endmacro()
@@ -101,12 +101,12 @@ IF (MXA_BUILD_TESTING)
         ${MXATests_SOURCE_DIR}/DatasetTest.cpp
     )
     SET (MXADataset_TEST_HEADERS 
-      ${MXA_SOURCE_DIR}/MXA/DataWrappers/MXAArrayTemplate.hpp
-      ${MXA_SOURCE_DIR}/MXA/HDF5/H5Dataset.h
-      ${MXA_SOURCE_DIR}/MXA/Base/IFileReader.h
-      ${MXA_SOURCE_DIR}/MXA/Base/IFileWriter.h
-      ${MXA_SOURCE_DIR}/MXA/Base/IMXAArray.h
-      ${MXA_SOURCE_DIR}/MXA/Base/IDataFileIO.h
+      ${PROJECT_CODE_DIR}/MXA/DataWrappers/MXAArrayTemplate.hpp
+      ${PROJECT_CODE_DIR}/MXA/HDF5/H5Dataset.h
+      ${PROJECT_CODE_DIR}/MXA/Base/IFileReader.h
+      ${PROJECT_CODE_DIR}/MXA/Base/IFileWriter.h
+      ${PROJECT_CODE_DIR}/MXA/Base/IMXAArray.h
+      ${PROJECT_CODE_DIR}/MXA/Base/IDataFileIO.h
       )
    # source_group(src\\Testing FILES ${MXADataset_TEST_SRCS} ${MXADataset_TEST_HEADERS})
    IF ( MXA_USE_HDF5 AND MXA_USE_TIFF )

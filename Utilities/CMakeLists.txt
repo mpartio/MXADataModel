@@ -37,7 +37,7 @@ SET (ImportGenerator_SRCS
 )
 ADD_EXECUTABLE(ImportGenerator ${ImportGenerator_SRCS} )
 TARGET_LINK_LIBRARIES(ImportGenerator ${MXADATAMODEL_LIB_NAME} )
-ToolInstallationSupport (ImportGenerator "_debug" ${MXADataModel_BINARY_DIR} "Utilities")
+cmp_ToolInstallationSupport (ImportGenerator "_debug" ${MXADataModel_BINARY_DIR} "Utilities")
 
         
 SET (IMPORTGENERATOR_INSTALLED_RESOURCES
@@ -52,9 +52,3 @@ SET (IMPORTGENERATOR_INSTALLED_RESOURCES
 INSTALL (FILES ${IMPORTGENERATOR_INSTALLED_RESOURCES} 
         DESTINATION share/MXADataModel/Resources/Templates
         COMPONENT Resources)
-
-INSTALL (FILES ${PROJECT_CMAKE_DIR}/FindMXADataModel.cmake
-        DESTINATION share/MXADataModel/Resources/CMake
-        COMPONENT Resources
-        )
-        

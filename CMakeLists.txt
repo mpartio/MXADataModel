@@ -4,6 +4,7 @@
 #--  BSD License: http://www.opensource.org/licenses/bsd-license.html
 #--////////////////////////////////////////////////////////////////////////////
 # Set project's name
+
 PROJECT( MXADataModel )
 cmake_minimum_required(VERSION 2.6)
 
@@ -22,7 +23,7 @@ ENDIF(NOT DEFINED MXADataModel_SOURCE_DIR)
 
 # - Check to see if any other project is redefining the library names
 IF ( NOT DEFINED  MXADATAMODEL_LIB_NAME)
-  SET (MXADATAMODEL_LIB_NAME MXADataModel)
+  SET (MXADATAMODEL_LIB_NAME MXADataModel CACHE STRING "The Name of the Library")
 ENDIF ( NOT DEFINED MXADATAMODEL_LIB_NAME )
 
 # - Check to see if another project is over riding the naming of the libraries
@@ -83,19 +84,39 @@ SET (MXA_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
 #-------------------------------------------------------------------------------
 #  Define the location of the Resources Directory
 SET (PROJECT_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
-SET (MXADATAMODEL_RESOURCES_DIR ${PROJECT_RESOURCES_DIR})
-SET (PROJECT_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/CMake)
-SET (PROJECT_CMAKE_MODULES_DIR ${PROJECT_CMAKE_DIR}/Modules)
-SET (OSX_TOOLS_DIR ${PROJECT_RESOURCES_DIR}/OSX_Tools)
-SET (MXA_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Source)
+SET (PROJECT_CODE_DIR ${MXADataModel_SOURCE_DIR}/Code)
+
+# - Include all the cmake code to make sure that the MXA Library is built
+if(NOT EXISTS ${MXADataModel_SOURCE_DIR}/Resources/cmp/cmpProject.cmake)
+	message(STATUS "CMP is a git submodule of MXADataModel and does not seem to be cloned")
+	message(STATUS "from the repository properly. Execute the following command from within")
+	message(STATUS "the ${MXADataModel_SOURCE_DIR} directory in order to pull")
+	message(STATUS "the CMP project from the repository")
+	message(STATUS "git submodule update --init")
+	message(FATAL_ERROR "")
+endif()
+
+#-------------------------------------------------------------------------------
+# Include the cmp project to perform all the basic configuration tests for the 
+# project.
+#------------------------------------------------------------------------------- 
+set (CMP_HEADER_DIR ${MXADataModel_BINARY_DIR}/MXA)
+set (CMP_CONFIGURATION_FILE_NAME "MXACMPConfiguration.h")
+set (CMP_TYPES_FILE_NAME "MXATypes.h")
+set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
+set (CMP_EXTRA_CONFIGURATION_FILE "MXAConfiguration.h")
+SET (CMP_PROJECT_PREFIX "MXA" CACHE STRING "The 3 Letter Prefix to be used for Preprocessor definitions")
+set (CMP_PROJECT_NAMESPACE "MXA")
+INCLUDE (${PROJECT_RESOURCES_DIR}/cmp/cmpProject.cmake)
+
+# --------------------------------------------------------------------
+# Project Specific Variables
 SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
 SET (MXAExamples_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Examples)
 SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
-SET (PROJECT_PREFIX "MXA" CACHE STRING "The 3 Letter Prefix to be used for Preprocessor definitions")
+SET (MXA_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/MXACMake)
 SET (EXE_DEBUG_EXTENSION "_debug")
 
-INCLUDE (${PROJECT_RESOURCES_DIR}/CMake/CMakeMacros.cmake )
-INCLUDE (${PROJECT_RESOURCES_DIR}/CMake/ConfigureChecks.cmake)
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 if (NOT DEFINED MXA_BUILD_TESTING)
@@ -106,9 +127,9 @@ IF(MXA_BUILD_TESTING)
 ENDIF(MXA_BUILD_TESTING)
 
 # Extend the include path to include the MXADataModel source directory
-INCLUDE_DIRECTORIES( "${MXA_SOURCE_DIR}" )
+INCLUDE_DIRECTORIES( "${PROJECT_CODE_DIR}" )
 # ----- Also include our binary directory as some headers are generated into that directory
-INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" ${INCLUDE_DIRECTORIES} )
+INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}")
 
 # Build shared libraries
 OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
@@ -122,117 +143,6 @@ IF (BUILD_SHARED_LIBS)
   ENDIF (WIN32)
 ENDIF (BUILD_SHARED_LIBS)
 
-# --------------------------------------------------------------------
-# Find all the support libraries needed. Including the Boost Program
-# options library which the ImportGenerator Needs
-SET (Boost_USE_PROGRAM_OPTIONS TRUE)
-INCLUDE (${PROJECT_CMAKE_DIR}/FindSupportLibraries.cmake)
-
-#-- Include a Macro to setup source file properties
-INCLUDE ( ${PROJECT_CMAKE_DIR}/CMakeMacros.cmake)
-
-
-#-- Include all the source files
-INCLUDE (${MXA_SOURCE_DIR}/MXA/Base/Base_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/BMPIO/BMPIO_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/Common/Common_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/Core/Core_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/DataImport/DataImport_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/DataWrappers/DataWrappers_SourceList.cmake)
-INCLUDE (${MXA_SOURCE_DIR}/MXA/Utilities/Utilities_SourceList.cmake)
-
-# ------- Set up the MXADataModel Project Source Files -----------
-SET( MXADATAMODEL_SRCS
-    ${MXA_BASE_SRCS}
-    ${MXA_COMMON_SRCS}
-    ${MXA_CORE_SRCS}
-    ${MXA_DATA_IMPORT_SRCS}
-    ${MXA_DATA_WRAPPERS_SRCS}
-    ${MXA_UTILITIES_SRCS}
-)
-  
-#--- Adding headers is NOT needed unless you want Visual Studio or Xcode to have them in their projects 
-SET (MXADATAMODEL_HEADERS
-    ${MXA_BASE_HEADERS}
-    ${MXA_COMMON_HEADERS}
-    ${MXA_CORE_HEADERS}
-    ${MXA_DATA_IMPORT_HEADERS}
-    ${MXA_DATA_WRAPPERS_HEADERS}
-    ${MXA_UTILITIES_HEADERS}
-)
-
-#--------- XML Sources ---------------------------------------------------
-IF (MXA_USE_XML)
-    INCLUDE (${MXA_SOURCE_DIR}/MXA/XML/XML_SourceList.cmake)
-    SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_XML_SRCS} ${MXA_XML_HEADERS})
-    SET (MXA_XML_SUPPORT "1")
-ENDIF(MXA_USE_XML)
-
-#------- HDF5 Dependant Sources ------------------------------
-IF ( MXA_USE_HDF5 )
-  INCLUDE (${MXA_SOURCE_DIR}/MXA/HDF5/HDF5_SourceList.cmake)
-  SET(MXA_HDF5_SUPPORT "1")
-  OPTION(MXA_BUILD_VTK_HDF5 "Include Code to bridge HDF5 to VTK Datasets" OFF)
-  IF(MXA_BUILD_VTK_HDF5)
-    #-- Find VTK packages -----------------------------------------
-    FIND_PACKAGE(VTK REQUIRED)
-    INCLUDE(${VTK_USE_FILE})
-      
-    # List the kits from VTK that are needed by this project.
-    SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
-    
-    SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} ${MXA_SOURCE_DIR}/MXA/HDF5/vtkHDF5.cpp)
-    SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} ${MXA_SOURCE_DIR}/MXA/HDF5/vtkHDF5.h)
-    SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
-    SET(HDF5_VTK_BRIDGE "1")
-  ENDIF (MXA_BUILD_VTK_HDF5)
-  #-- Finally include all the sources and headers from the HDf5 and vtk sections
-  SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_SRCS} ${MXA_HDF5_HEADERS})
-  
-  # ------------------ Check for and Include Tif Lib dependent code --------------
-  IF(MXA_USE_TIFF)
-    SET (MXA_TIFF_SUPPORT "1")
-    SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_HDF5_TIFF_SRCS} ${MXA_HDF5_TIFF_HEADERS})
-  ENDIF (MXA_USE_TIFF)
-  
-  #-- The BMP IO Classes are dependent on HDF5
-  SET( MXADATAMODEL_SRCS ${MXADATAMODEL_SRCS} ${MXA_BMPIO_SRCS} ${MXA_BMPIO_HEADERS})
-  
-ENDIF ( MXA_USE_HDF5 )
-
-# ---------- Set up the Project Options -----------------------
-IF(WIN32)
- SET(GUI_TYPE WIN32)
- SET(WINDOWS_LARGE_FILE_SUPPORT "1")
-ENDIF(WIN32)
-
-
-if ( ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" )
-    set (NMAKE_GENERATOR 1)
-endif()
-
-# --------------------------------------------------------------------
-# Generate our header files
-# --------------------------------------------------------------------
-configure_file(${PROJECT_RESOURCES_DIR}/CMake/Configuration.h.in
-               ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h )
-configure_file(${PROJECT_RESOURCES_DIR}/CMake/PrimitiveTypes.h.in
-               ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h )
-configure_file(${PROJECT_SOURCE_DIR}/License.txt
-                ${PROJECT_BINARY_DIR}/License.txt )
-configure_file(${PROJECT_SOURCE_DIR}/ReadMe.txt
-                ${PROJECT_BINARY_DIR}/ReadMe.txt )
-SET(MXADATAMODEL_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/Source;${MXADataModel_BINARY_DIR}"  )
-
-# --------------------------------------------------------------------
-# Generate a Header file with Compile Version variables
-# --------------------------------------------------------------------
-GenerateVersionString( ${PROJECT_NAME} "${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" "${PROJECT_PREFIX}" )
-
-IDE_GENERATED_PROPERTIES( "Generated" 
-"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h" 
-"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h" 
-"${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h")               
                                
 # -------- Add some definitions for Debug Builds -----------------
 IF ( CMAKE_BUILD_TYPE MATCHES Debug )
@@ -253,64 +163,27 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-SET (MXADATAMODEL_HEADERS 
-    ${MXADATAMODEL_HEADERS}
-    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Version.h
-    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Configuration.h
-    ${MXADataModel_BINARY_DIR}/${PROJECT_PREFIX}/${PROJECT_PREFIX}Types.h 
-)
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
-# - Combine all the source files together -----------------------------
-SET ( PROJECT_SRCS  ${MXADATAMODEL_SRCS} ${MXADATAMODEL_HEADERS})
+# --------------------------------------------------------------------
+# Find all the support libraries needed. Including the Boost Program
+# options library which the ImportGenerator Needs
+INCLUDE (${MXA_CMAKE_DIR}/FindSupportLibraries.cmake)
 
-IF (BUILD_SHARED_LIBS)
-    SET (MXA_BUILT_AS_DYNAMIC_LIB 1)
+
+# ---------- Set up the Project Options -----------------------
+IF(WIN32)
+ SET(GUI_TYPE WIN32)
+ SET(WINDOWS_LARGE_FILE_SUPPORT "1")
+ENDIF(WIN32)
+
+
+if ( ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" )
+    set (NMAKE_GENERATOR 1)
 endif()
 
 # --------------------------------------------------------------------
-# -- Add the MXADataModel Library and link to needed libraries 
-# --------------------------------------------------------------------
-ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${PROJECT_SRCS} )
-TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
-LibraryProperties( ${MXADATAMODEL_LIB_NAME} ${EXE_DEBUG_EXTENSION})
-
-if ( ${MXA_INSTALL_FILES} EQUAL 1 )
-    INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin 
-		COMPONENT Runtime)
-else()
-# Include an install rule for NON-Apple systems. The specialized installer that ParaView uses
-# will take care of copying the MXADataModel library into the proper location.
-	if (NOT APPLE)
-		INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
-				LIBRARY DESTINATION bin
-				ARCHIVE DESTINATION lib
-				RUNTIME DESTINATION bin
-				COMPONENT Runtime)
-	endif()
-endif()
-
-set (lib_rt_dest lib)
-if (WIN32 AND BUILD_SHARED_LIBS)
-  set (lib_rt_dest bin)
-endif()
-
-
-#-----
-IF (MINGW)
-    SET (CMAKE_COLOR_MAKEFILE 0)
-endif()
-
-if (  ${MXA_INSTALL_FILES} EQUAL 1 )
-    # Copy DLL libraries into the correct build location on MSVC platforms
-    MXA_COPY_DEPENDENT_LIBRARIES ("tiff;expat;hdf5")
-    
-    # Generate Install Rules for the DLL Libraries
-    MXA_LIBRARIES_INSTALL_RULES ("tiff;expat;hdf5" "bin" )
-endif()
+# Add our MXA Library            
+add_subdirectory(${MXADataModel_SOURCE_DIR}/Code ${PROJECT_BINARY_DIR}/MXALib)
 
 #-- Include the MXADataModel Testing Sources
 IF ( MXA_BUILD_TESTING )
@@ -344,6 +217,7 @@ endif(MXA_BUILD_API_DOCS)
 
 #--- Set up the installation Code for Make Install
 if ( ${MXA_INSTALL_FILES} EQUAL 1 )
-    include ( ${PROJECT_CMAKE_DIR}/MXAInstall.cmake)
-    include ( ${PROJECT_CMAKE_DIR}/PackageProject.cmake)
+    include ( ${PROJECT_RESOURCES_DIR}/MXACMake/MXAInstall.cmake)
+    include ( ${PROJECT_RESOURCES_DIR}/CPack/PackageProject.cmake)
 endif()
+
