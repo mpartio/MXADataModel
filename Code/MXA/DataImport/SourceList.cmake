@@ -2,7 +2,7 @@ SET (MXA_DataImport_SRCS
     ${PROJECT_CODE_DIR}/MXA/DataImport/ImportDelegateManager.cpp
 )
 
-SET (MXA_DataImport_HEADERS
+SET (MXA_DataImport_HDRS
   ${PROJECT_CODE_DIR}/MXA/DataImport/AbstractImportDelegateFactory.h
   ${PROJECT_CODE_DIR}/MXA/DataImport/ImportDelegateManager.h
 )
@@ -13,8 +13,8 @@ SET ( MXA_DataImport_SRCS
     ${PROJECT_CODE_DIR}/MXA/DataImport/DataImportXmlParser.cpp
 )
 
-SET (MXA_DataImport_HEADERS
-    ${MXA_DataImport_HEADERS}
+SET (MXA_DataImport_HDRS
+    ${MXA_DataImport_HDRS}
     ${PROJECT_CODE_DIR}/MXA/DataImport/DataImportXmlParser.h
 )
 
@@ -25,5 +25,5 @@ if ( DEFINED MXA_INSTALL_FILES)
         set (install_files "1")
     endif()
 endif()
-cmp_IDE_SOURCE_PROPERTIES( "MXA/DataImport" "${MXA_DataImport_HEADERS}" "${MXA_DataImport_SRCS}" ${install_files})
+cmp_IDE_SOURCE_PROPERTIES( "MXA/DataImport" "${MXA_DataImport_HDRS}" "${MXA_DataImport_SRCS}" ${install_files})
 

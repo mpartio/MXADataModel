@@ -9,7 +9,7 @@ SET (MXA_Core_SRCS
 
 )
 
-SET (MXA_Core_HEADERS
+SET (MXA_Core_HDRS
   ${PROJECT_CODE_DIR}/MXA/Core/AttributeHelpers.h
   ${PROJECT_CODE_DIR}/MXA/Core/MXAConstants.h
   ${PROJECT_CODE_DIR}/MXA/Core/MXADataDimension.h
@@ -28,4 +28,4 @@ if ( DEFINED MXA_INSTALL_FILES)
         set (install_files "1")
     endif()
 endif()
-cmp_IDE_SOURCE_PROPERTIES( "MXA/Core" "${MXA_Core_HEADERS}" "${MXA_Core_SRCS}" ${install_files})
+cmp_IDE_SOURCE_PROPERTIES( "MXA/Core" "${MXA_Core_HDRS}" "${MXA_Core_SRCS}" ${install_files})

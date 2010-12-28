@@ -23,7 +23,7 @@ IF ( MXA_USE_HDF5 )
         ${PROJECT_CODE_DIR}/MXA/HDF5/H5Attribute.cpp
     )
       
-    SET(MXA_HDF5_HEADERS
+    SET(MXA_HDF5_HDRS
         ${PROJECT_CODE_DIR}/MXA/HDF5/H5MXADataFile.h
         ${PROJECT_CODE_DIR}/MXA/HDF5/H5AttributeWriter.h
         ${PROJECT_CODE_DIR}/MXA/HDF5/H5ReaderDelegate.h
@@ -52,8 +52,8 @@ IF ( MXA_USE_HDF5 )
             ${PROJECT_CODE_DIR}/MXA/HDF5/H5TiffImportDelegateFactory.cpp
         )
             
-        SET(MXA_HDF5_HEADERS
-            ${MXA_HDF5_HEADERS}
+        SET(MXA_HDF5_HDRS
+            ${MXA_HDF5_HDRS}
             ${PROJECT_CODE_DIR}/MXA/HDF5/H5TiffIO.h
             ${PROJECT_CODE_DIR}/MXA/HDF5/H5TiffImportDelegate.h
             ${PROJECT_CODE_DIR}/MXA/HDF5/H5TiffImportDelegateFactory.h
@@ -71,10 +71,10 @@ IF ( MXA_USE_HDF5 )
         SET(vtkLocal_LIBS vtkCommon vtksys vtkFiltering vtkIO vtkGraphics )
         
         SET (MXA_HDF5_SRCS ${MXA_HDF5_SRCS} ${PROJECT_CODE_DIR}/MXA/HDF5/vtkHDF5.cpp)
-        SET (MXA_HDF5_HEADERS ${MXA_HDF5_HEADERS} ${PROJECT_CODE_DIR}/MXA/HDF5/vtkHDF5.h)
+        SET (MXA_HDF5_HDRS ${MXA_HDF5_HDRS} ${PROJECT_CODE_DIR}/MXA/HDF5/vtkHDF5.h)
         SET (DEP_LIBS ${DEP_LIBS} ${vtkLocal_LIBS})
         SET(HDF5_VTK_BRIDGE "1")
     ENDIF (MXA_BUILD_VTK_HDF5)
   
-    cmp_IDE_SOURCE_PROPERTIES( "MXA/HDF5" "${MXA_HDF5_HEADERS}" "${MXA_HDF5_SRCS}" ${install_files})
+    cmp_IDE_SOURCE_PROPERTIES( "MXA/HDF5" "${MXA_HDF5_HDRS}" "${MXA_HDF5_SRCS}" ${install_files})
 endif()
