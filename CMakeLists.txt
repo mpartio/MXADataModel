@@ -8,6 +8,9 @@
 PROJECT( MXADataModel )
 cmake_minimum_required(VERSION 2.6)
 
+set (MXA_PROJECT "1")
+mark_as_advanced(MXA_PROJECT)
+
 if (NOT DEFINED MXA_INSTALL_FILES)
     set (MXA_INSTALL_FILES 1 CACHE INTERNAL "Use the Normal Install rules for the MXADataModel Project")
 endif()
