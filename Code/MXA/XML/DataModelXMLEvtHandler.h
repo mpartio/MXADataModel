@@ -191,13 +191,13 @@ class MXA_EXPORT DataModelXMLEvtHandler : public ExpatEvtHandler
       * @return Error Code. Zero or positive is success.
       */
       template<typename T>
-      int32_t readPrimitiveAttribute( const std::vector<uint64_t> &dims)
+      int32_t readPrimitiveAttribute( const std::vector<size_t> &dims)
       {
         //std::cout << logTime() << "readPrimitiveAttribute: " << this->_userMDKey << std::endl;
         int32_t err = 1;
         std::istringstream istream (this->_userAttributeData);
-        uint64_t size = 1;
-        for (std::vector<uint64_t>::const_iterator iter = dims.begin(); iter != dims.end(); ++iter )
+        size_t size = 1;
+        for (std::vector<size_t>::const_iterator iter = dims.begin(); iter != dims.end(); ++iter )
         {
           size *= *iter;
         }

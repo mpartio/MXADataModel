@@ -43,7 +43,7 @@ class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8_t>
     // -----------------------------------------------------------------------------
     //
     // -----------------------------------------------------------------------------
-    virtual void getDimensions(uint64_t* dims)
+    virtual void getDimensions(size_t* dims)
     {
       dims[1] = _width;
       dims[0] = _height;
@@ -54,7 +54,7 @@ class MXA_EXPORT MXARGBImage : public MXAArrayTemplate<uint8_t>
     virtual int32_t getHeight() { return _height; }
 
 
-    virtual int32_t resize(uint64_t size);
+    virtual int32_t resize(size_t size);
 
     /**
      * @brief Resizes the data array to the specified width and height

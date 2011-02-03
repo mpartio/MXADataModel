@@ -234,16 +234,17 @@ void MakeScalarAttribute(T value, std::string key, MXADataModel* model)
 //
 // -----------------------------------------------------------------------------
 template<typename T>
-void MakeVectorAttribute(T value, std::string key, std::vector<uint64_t> &dims, MXADataModel* model)
+void MakeVectorAttribute(T value, std::string key, std::vector<size_t> &dims, MXADataModel* model)
 {
     //std::vector<T> data;
     uint64_t numelements =1;
-    for (std::vector<uint64_t>::iterator iter = dims.begin(); iter != dims.end(); ++iter)
+    for (std::vector<size_t>::iterator iter = dims.begin(); iter != dims.end(); ++iter)
     {
       numelements *= *(iter);
     }
 
-    IMXAArray::Pointer vecPtr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int>(dims.size()), &(dims.front()) );
+    IMXAArray::Pointer vecPtr
+        = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int>(dims.size()), &(dims.front()) );
     // Copy data into the attribute container
     T* data = static_cast<T*>( vecPtr->getVoidPointer(0) );
     for (uint32_t i = 0; i < numelements; ++i)
@@ -272,7 +273,7 @@ void CreateAttributes(MXADataModel* model)
 
 
     //Create vector attributes
-    std::vector<uint64_t> dims;
+    std::vector<size_t> dims;
     dims.push_back(3);
     dims.push_back(3);
 

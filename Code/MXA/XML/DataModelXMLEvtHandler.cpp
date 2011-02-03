@@ -461,8 +461,8 @@ void DataModelXMLEvtHandler::onUserMetaDataEndTag(const XML_Char* name)
   }
   else
   {
-    std::vector<uint64_t> dims;
-    uint64_t temp = 0;
+    std::vector<size_t> dims;
+    size_t temp = 0;
     std::istringstream istream (this->_userMDDims);
     while(istream.good() )
     {

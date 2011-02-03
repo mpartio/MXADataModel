@@ -222,8 +222,12 @@ public:
   {
     herr_t err = -1;
     IMXAArray::Pointer ptr;
-    const size_t* dimPtr = reinterpret_cast<const size_t*>(&(dims.front()));
-    ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), dimPtr);
+    size_t* _dims = new size_t[dims.size()];
+     for(size_t i = 0; i < dims.size(); ++i)
+     {
+       _dims[i] = dims[i];
+     }
+    ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), _dims);
     if (ptr.get() == NULL)
     {
       return ptr; // empty attribute
@@ -271,9 +275,15 @@ public:
     }
     else // Multi-Dimensional Data
     {
-      const size_t* dimPtr = reinterpret_cast<const size_t*>(&(dims.front()));
+     // const size_t* dimPtr = reinterpret_cast<const size_t*>(&(dims.front()));
+      size_t* _dims = new size_t[dims.size()];
+      for(size_t i = 0; i < dims.size(); ++i)
+      {
+        _dims[i] = dims[i];
+      }
       IMXAArray::Pointer attr =
-            MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), dimPtr);
+            MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), _dims);
+      delete [] _dims;
       if (attr.get() == NULL)
       {
         return ptr; // empty attribute

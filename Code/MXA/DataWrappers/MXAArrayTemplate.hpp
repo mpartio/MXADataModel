@@ -241,6 +241,14 @@ class MXAArrayTemplate : public IMXAArray
     }
 
     /**
+     * Returns the number of dimensions the data has.
+     */
+    virtual int32_t getNumberOfDimensions()
+    {
+      return static_cast<int32_t>(this->_dims.size());
+    }
+
+    /**
      * @brief Copies the values of the dimensions into the supplied pointer
      * @param dims Pointer to store the dimension values into
      */
@@ -250,19 +258,11 @@ class MXAArrayTemplate : public IMXAArray
       ::memcpy(dims, &(_dims.front()), nBytes );
     }
 
-    /**
-     * Returns the number of dimensions the data has.
-     */
-    virtual int32_t getNumberOfDimensions()
-    {
-      return static_cast<int32_t>(this->_dims.size());
-    }
-
-/**
- * @brief Sets a specific value in the array
- * @param i The index of the value to set
- * @param value The new value to be set at the specified index
- */
+  /**
+   * @brief Sets a specific value in the array
+   * @param i The index of the value to set
+   * @param value The new value to be set at the specified index
+   */
     void setValue(size_t i, T value)
     {
       this->_data[i] = value;

@@ -59,12 +59,12 @@ class MXA_EXPORT IMXAArray
      * @param i The index to have the returned pointer pointing to.
      * @return Void Pointer. Possibly NULL.
      */
-    virtual void* getVoidPointer ( uint64_t i) = 0;
+    virtual void* getVoidPointer ( size_t i) = 0;
 
     /**
      * @brief Returns the number of elements in the internal array.
      */
-    virtual uint64_t getNumberOfElements () = 0;
+    virtual size_t getNumberOfElements () = 0;
 
     /**
      * Returns the number of dimensions the data has.
@@ -75,7 +75,7 @@ class MXA_EXPORT IMXAArray
      * @brief Copies the values of the dimensions into the supplied pointer.
      * @param dims
      */
-    virtual void getDimensions(uint64_t* dims) = 0;
+    virtual void getDimensions(size_t* dims) = 0;
 
     /**
      * @brief Returns an enumerated type that can be used to find out the type

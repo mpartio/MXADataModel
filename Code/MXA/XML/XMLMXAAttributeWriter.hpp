@@ -123,7 +123,7 @@ class XMLMXAAttributeWriter
 
       std::string sType = H5Lite::HDFTypeForPrimitiveAsStr(value[0]);
       stream << indent(5) << "<UserMetaData key=\"" << attributeKey << "\" dims=\"" ;
-      std::vector<uint64_t> dims(size, 0);
+      std::vector<size_t> dims(size, 0);
       attribute->getDimensions( &(dims.front() ) );
 
       // Write the values of each dimension to the file

@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
 
   int32_t numDimensions = int32_tarray->getNumberOfDimensions();
   std::cout << "There are " << numDimensions << " dimensions in the array." << std::endl;
-  std::vector<uint64_t> dimensions(numDimensions);
+  std::vector<size_t> dimensions(numDimensions);
   int32_tarray->getDimensions( &(dimensions.front() ) );
 
   for (int i = 0; i < numDimensions; ++i) {
