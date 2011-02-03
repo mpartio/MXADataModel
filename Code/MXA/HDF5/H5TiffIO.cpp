@@ -378,7 +378,7 @@ int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, const string &img_dat
   size_t type_size;
   H5T_class_t class_type;
   hid_t attrType = -1;
-  std::vector<uint64_t> dimensions;
+  std::vector<hsize_t> dimensions;
   err = H5Lite::getAttributeInfo(fileId,
                                  img_dataset_name,
                                  const_cast<std::string&>(MXA::H5Image::ImageSubclass),

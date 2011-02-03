@@ -152,7 +152,7 @@
    size_t attr_size;
    std::string res;
 
-   std::vector<uint64_t> dims;  //Reusable for the loop
+   std::vector<hsize_t> dims;  //Reusable for the loop
    err = H5Lite::getAttributeInfo(fileId, datasetPath, attributeKey, dims, attr_type, attr_size, typeId);
    if (err < 0 )
    {

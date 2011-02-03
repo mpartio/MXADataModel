@@ -218,12 +218,12 @@ public:
   template<typename T>
   static IMXAArray::Pointer readH5Data( hid_t locId,
                                          const std::string &datasetPath,
-                                         const std::vector<uint64_t> &dims)
+                                         const std::vector<hsize_t> &dims)
   {
     herr_t err = -1;
     IMXAArray::Pointer ptr;
-
-    ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32_t>(dims.size()), &(dims.front()));
+    const size_t* dimPtr = reinterpret_cast<const size_t*>(&(dims.front()));
+    ptr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), dimPtr);
     if (ptr.get() == NULL)
     {
       return ptr; // empty attribute
@@ -253,7 +253,7 @@ public:
   static IMXAArray::Pointer readH5Attribute(  hid_t locId,
                                                const std::string &datasetPath,
                                                const std::string &key,
-                                               const std::vector<uint64_t> &dims)
+                                               const std::vector<hsize_t> &dims)
   {
     herr_t err = -1;
     IMXAArray::Pointer ptr;
@@ -271,7 +271,9 @@ public:
     }
     else // Multi-Dimensional Data
     {
-      IMXAArray::Pointer attr = MXAArrayTemplate<T>::CreateMultiDimensionalArray( static_cast<int32_t>(dims.size()), &(dims.front()));
+      const size_t* dimPtr = reinterpret_cast<const size_t*>(&(dims.front()));
+      IMXAArray::Pointer attr =
+            MXAArrayTemplate<T>::CreateMultiDimensionalArray( dims.size(), dimPtr);
       if (attr.get() == NULL)
       {
         return ptr; // empty attribute

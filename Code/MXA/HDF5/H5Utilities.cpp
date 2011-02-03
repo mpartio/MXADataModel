@@ -564,7 +564,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
   size_t attr_size;
   std::string res;
 
-  std::vector<uint64_t> dims;  //Reusable for the loop
+  std::vector<hsize_t> dims;  //Reusable for the loop
   std::list<std::string> names;
   err = H5Utilities::getAllAttributeNames(fileId, datasetPath, names );
 

@@ -62,7 +62,7 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
   {
     data[i] = (T)(i);
   }
-  uint64_t dims[1];
+  hsize_t dims[1];
   dims[0] = DIM0;
 
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
@@ -93,7 +93,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
       data[i][j] = (T)(i * j);
     }
   }
-  uint64_t dims[RANK_2D];
+  hsize_t dims[RANK_2D];
   dims[0] = DIM0;
   dims[1] = DIM1;
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
@@ -122,7 +122,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
       }
     }
   }
-  uint64_t dims[RANK_3D];
+  hsize_t dims[RANK_3D];
   dims[0] = DIM0;
   dims[1] = DIM1;
   dims[2] = DIM2;
@@ -144,7 +144,7 @@ herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName )
   attributeKey = "VectorAttribute<" + attributeKey + ">";
 
   int32_t numElements = DIM0;
-  std::vector<uint64_t> dims (1, DIM0);
+  std::vector<hsize_t> dims (1, DIM0);
 
   /* Make dataset */
   std::vector<T> data (DIM0, 0);
@@ -186,7 +186,7 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   herr_t err = 1;
   int32_t rank = 2;
   // Create the Dimensions
-  uint64_t dims[2];
+  hsize_t dims[2];
   dims[0] = DIM0; dims[1] = DIM1;
 
   /* Make dataset char */

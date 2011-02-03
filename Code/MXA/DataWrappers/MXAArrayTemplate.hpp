@@ -53,7 +53,7 @@ class MXAArrayTemplate : public IMXAArray
  * @param numElements The number of elements in the internal array.
  * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
  */
-    static IMXAArray::Pointer CreateArray( uint64_t numElements)
+    static IMXAArray::Pointer CreateArray( size_t numElements)
     {
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( numElements, true);
       if ( d->_allocate() < 0)
@@ -70,7 +70,7 @@ class MXAArrayTemplate : public IMXAArray
     * @param dims Size of each dimension
     * @return Boost::Shared_Ptr wrapping an instance of MXAArrayTemplateTemplate<T>
     */
-    static IMXAArray::Pointer CreateMultiDimensionalArray(size_t nDims, const uint64_t* dims)
+    static IMXAArray::Pointer CreateMultiDimensionalArray(size_t nDims, const size_t* dims)
     {
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( nDims, dims, true);
       if ( d->_allocate() < 0)
@@ -105,7 +105,7 @@ class MXAArrayTemplate : public IMXAArray
  * @param numElements The number of elements in the internal array.
  * @return
  */
-    static MXAArrayTemplate<T>* New( uint64_t numElements)
+    static MXAArrayTemplate<T>* New( size_t numElements)
     {
       MXAArrayTemplate<T>* ptr = new MXAArrayTemplate<T>( numElements, true);
       if (ptr->_allocate() < 0)
@@ -121,7 +121,7 @@ class MXAArrayTemplate : public IMXAArray
      * @param dims The size of each dimension
      * @return Pointer to Object or NULL if there was an error creating the object.
      */
-    static MXAArrayTemplate<T>* New(size_t nDims, const uint64_t* dims)
+    static MXAArrayTemplate<T>* New(size_t nDims, const size_t* dims)
     {
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( static_cast<int32_t>(nDims), dims, true);
       if ( d->_allocate() < 0)
@@ -194,7 +194,7 @@ class MXAArrayTemplate : public IMXAArray
      * @param size The new size of the internal array
      * @return 1 on success, 0 on failure
      */
-    virtual int32_t resize(uint64_t size)
+    virtual int32_t resize(size_t size)
     {
       if(this->_resizeAndExtend(size) || size <= 0)
         {
@@ -213,7 +213,7 @@ class MXAArrayTemplate : public IMXAArray
    * @param i The index to have the returned pointer pointing to.
    * @return Void Pointer. Possibly NULL.
    */
-    virtual void* getVoidPointer(uint64_t i)
+    virtual void* getVoidPointer(size_t i)
     {
       if (i >= this->getNumberOfElements() )
       {
@@ -227,7 +227,7 @@ class MXAArrayTemplate : public IMXAArray
    * @param i The index to return the value at
    * @return The value at index i
    */
-    virtual T getValue(uint64_t i)
+    virtual T getValue(size_t i)
     {
       return this->_data[i];
     }
@@ -235,7 +235,7 @@ class MXAArrayTemplate : public IMXAArray
     /**
      * @brief Returns the number of elements in the internal array.
      */
-    virtual uint64_t getNumberOfElements()
+    virtual size_t getNumberOfElements()
     {
       return _nElements;
     }
@@ -244,9 +244,9 @@ class MXAArrayTemplate : public IMXAArray
      * @brief Copies the values of the dimensions into the supplied pointer
      * @param dims Pointer to store the dimension values into
      */
-    virtual void getDimensions(uint64_t* dims)
+    virtual void getDimensions(size_t* dims)
     {
-      uint64_t nBytes = _dims.size() * sizeof(uint64_t);
+      size_t nBytes = _dims.size() * sizeof(size_t);
       ::memcpy(dims, &(_dims.front()), nBytes );
     }
 
@@ -263,7 +263,7 @@ class MXAArrayTemplate : public IMXAArray
  * @param i The index of the value to set
  * @param value The new value to be set at the specified index
  */
-    void setValue(uint64_t i, T value)
+    void setValue(size_t i, T value)
     {
       this->_data[i] = value;
     }
@@ -329,7 +329,7 @@ class MXAArrayTemplate : public IMXAArray
  * @param i The index to return the pointer to.
  * @return The pointer to the index
  */
-    virtual T* getPointer(uint64_t i)
+    virtual T* getPointer(size_t i)
     {
       return (T*)(&(_data[i]) );
     }
@@ -581,7 +581,7 @@ class MXAArrayTemplate : public IMXAArray
    * @param numElements The number of elements in the internal array.
    * @param takeOwnership Will the class clean up the memory. Default=true
      */
-      MXAArrayTemplate(int32_t numElements,
+      MXAArrayTemplate(size_t numElements,
                        bool ownsData = true) :
         _data(NULL),
         _nElements(numElements),
@@ -598,7 +598,7 @@ class MXAArrayTemplate : public IMXAArray
    * @param takeOwnership Will the class clean up the memory. Default=true
    */
       MXAArrayTemplate(size_t numDims,
-                       const uint64_t* dims,
+                       const size_t* dims,
                        bool ownsData = true) :
         _data(NULL),
         _ownsData(ownsData)
@@ -641,7 +641,7 @@ class MXAArrayTemplate : public IMXAArray
        * @param size
        * @return Pointer to the internal array
        */
-      virtual T* _resizeAndExtend(uint64_t size)
+      virtual T* _resizeAndExtend(size_t size)
         {
           T* newArray;
           uint64_t newSize;
@@ -706,10 +706,10 @@ class MXAArrayTemplate : public IMXAArray
   private:
 
     T* _data;
-    uint64_t _nElements;
+    size_t _nElements;
     bool _ownsData;
 
-    std::vector<uint64_t> _dims;
+    std::vector<size_t> _dims;
 
     MXAArrayTemplate(const MXAArrayTemplate&);    //Not Implemented
     void operator=(const MXAArrayTemplate&); //Not Implemented

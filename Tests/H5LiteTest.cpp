@@ -126,7 +126,7 @@ herr_t testWritePointer1DArrayAttribute(hid_t file_id, const std::string &dsetNa
   {
     data[i] = (T)(i);
   }
-  uint64_t dims[1];
+  hsize_t dims[1];
   dims[0] = DIM0;
 
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
@@ -155,7 +155,7 @@ herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetNam
   H5T_class_t attr_type;
   size_t attr_size;
   hid_t typeId = -1;
-  std::vector<uint64_t> dims;  //Reusable for the loop
+  std::vector<hsize_t> dims;  //Reusable for the loop
   err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 1);
@@ -199,7 +199,7 @@ herr_t testWritePointer2DArrayAttribute(hid_t file_id, const std::string &dsetNa
       data[i][j] = (T)(i * j);
     }
   }
-  uint64_t dims[RANK_2D];
+  hsize_t dims[RANK_2D];
   dims[0] = DIM0;
   dims[1] = DIM1;
   err = H5Lite::writePointerAttribute<T>(file_id, dsetName, attributeKey, rank, dims, (T*)data);
@@ -229,7 +229,7 @@ herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetNam
   H5T_class_t attr_type;
   size_t attr_size;
   hid_t typeId = -1;
-  std::vector<uint64_t> dims;  //Reusable for the loop
+  std::vector<hsize_t> dims;  //Reusable for the loop
   err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 2);
@@ -273,7 +273,7 @@ herr_t testWritePointer3DArrayAttribute(hid_t file_id, const std::string &dsetNa
       }
     }
   }
-  uint64_t dims[RANK_3D];
+  hsize_t dims[RANK_3D];
   dims[0] = DIM0;
   dims[1] = DIM1;
   dims[2] = DIM2;
@@ -305,7 +305,7 @@ herr_t testReadPointer3DArrayAttribute(hid_t file_id, const std::string &dsetNam
   H5T_class_t attr_type;
   size_t attr_size;
   hid_t typeId = -1;
-  std::vector<uint64_t> dims;  //Reusable for the loop
+  std::vector<hsize_t> dims;  //Reusable for the loop
   err = H5Lite::getAttributeInfo(file_id, dsetName, attributeKey, dims, attr_type, attr_size, typeId);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 3);
@@ -341,7 +341,7 @@ herr_t testWriteVectorAttribute(hid_t file_id, std::string dsetName )
   attributeKey = "VectorAttribute<" + attributeKey + ">";
 
   int32_t numElements = DIM0;
-  std::vector<uint64_t> dims (1, DIM0);
+  std::vector<hsize_t> dims (1, DIM0);
 
   /* Make dataset */
   std::vector<T> data (DIM0, 0);
@@ -367,7 +367,7 @@ herr_t testReadVectorAttribute(hid_t file_id, std::string dsetName )
   attributeKey = "VectorAttribute<" + attributeKey + ">";
 
   int32_t numElements = DIM0;
-  std::vector<uint64_t> dims (1, DIM0);
+  std::vector<hsize_t> dims (1, DIM0);
 
   std::vector<T> data (DIM0, 0);
   for (int i = 0; i < numElements; ++i) {
@@ -427,7 +427,7 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   herr_t err = 1;
   int32_t rank = 2;
   // Create the Dimensions
-  uint64_t dims[2];
+  hsize_t dims[2];
   dims[0] = DIM0; dims[1] = DIM1;
 
   /* Make dataset char */
@@ -1127,7 +1127,7 @@ void TestLargeFileSupport()
   MXA_REQUIRE(file_id > 0);
   std::vector<int > buffer(1000000); // Create a 4 MegaByte Buffer
   int32_t rank = 1;
-  std::vector<uint64_t > dims(1, 1000000);
+  std::vector<hsize_t > dims(1, 1000000);
   std::string dsetName;
   for (int i = 0; i < 1000; ++i)
   {

@@ -801,7 +801,7 @@ herr_t H5Lite::getDatasetInfo( hid_t loc_id,
 herr_t H5Lite::getAttributeInfo(hid_t loc_id,
                                 const std::string& objName,
                                 const std::string& attrName,
-                                std::vector<uint64_t> &dims,
+                                std::vector<hsize_t> &dims,
                                 H5T_class_t &type_class,
                                 size_t &type_size,
                                 hid_t &tid)
