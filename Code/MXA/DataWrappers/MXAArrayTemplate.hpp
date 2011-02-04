@@ -58,7 +58,8 @@ class MXAArrayTemplate : public IMXAArray
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( numElements, true);
       if ( d->_allocate() < 0)
       {  // Could not allocate enough memory, reset the pointer to null and return
-        d = NULL;
+        delete d;
+        return IMXAArray::NullPointer();
       }
       IMXAArray::Pointer ptr ( static_cast<IMXAArray*>(d) );
       return ptr;
@@ -75,7 +76,8 @@ class MXAArrayTemplate : public IMXAArray
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( nDims, dims, true);
       if ( d->_allocate() < 0)
       {  // Could not allocate enough memory, reset the pointer to null and return
-        d = NULL;
+        delete d;
+        return IMXAArray::NullPointer();
       }
       IMXAArray::Pointer ptr ( static_cast<IMXAArray*>(d) );
       return ptr;
@@ -91,7 +93,8 @@ class MXAArrayTemplate : public IMXAArray
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>(1, true);
       if ( d->_allocate() < 0)
       {  // Could not allocate enough memory, reset the pointer to null and return
-        d = NULL;
+        delete d;
+        return IMXAArray::NullPointer();
       }
       d->setValue(0, value);
       IMXAArray::Pointer ptr ( static_cast<IMXAArray*>(d) );
@@ -107,12 +110,13 @@ class MXAArrayTemplate : public IMXAArray
  */
     static MXAArrayTemplate<T>* New( size_t numElements)
     {
-      MXAArrayTemplate<T>* ptr = new MXAArrayTemplate<T>( numElements, true);
-      if (ptr->_allocate() < 0)
+      MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( numElements, true);
+      if (d->_allocate() < 0)
       { // Could not allocate enough memory, reset the pointer to null and return
-        ptr = 0x0;
+        delete d;
+        d = NULL;
       }
-      return ptr;
+      return d;
     }
 
     /**
@@ -126,6 +130,7 @@ class MXAArrayTemplate : public IMXAArray
       MXAArrayTemplate<T>* d = new MXAArrayTemplate<T>( static_cast<int32_t>(nDims), dims, true);
       if ( d->_allocate() < 0)
       {  // Could not allocate enough memory, reset the pointer to null and return
+        delete d;
         d = NULL;
       }
       return d;
@@ -138,13 +143,15 @@ class MXAArrayTemplate : public IMXAArray
  */
     virtual ~MXAArrayTemplate()
     {
-      //std::cout << "~MXAArrayTemplateTemplate" << std::endl;
+      //std::cout << "~MXAArrayTemplateTemplate '" << m_Name << "'" << std::endl;
       if ((NULL != this->_data) && (true == this->_ownsData))
       {
         free(this->_data);
       }
     }
 
+    void setName(const std::string &name) { m_Name = name; }
+    std::string getName() { return m_Name; }
 
     /**
      * @brief Makes this class responsible for freeing the memory
@@ -604,10 +611,10 @@ class MXAArrayTemplate : public IMXAArray
         _ownsData(ownsData)
       {
         _dims.resize(numDims);
-        ::memcpy( &(_dims.front()), dims, numDims * sizeof(uint64_t));
         _nElements = 1;
         for(size_t i = 0; i < numDims; ++i)
         {
+          _dims[i] = dims[i];
           _nElements = _nElements * dims[i];
         }
       }
@@ -644,7 +651,7 @@ class MXAArrayTemplate : public IMXAArray
       virtual T* _resizeAndExtend(size_t size)
         {
           T* newArray;
-          uint64_t newSize;
+          size_t newSize;
 
           if (size > this->_nElements)
           {
@@ -694,6 +701,7 @@ class MXAArrayTemplate : public IMXAArray
 
           // Allocation was successful.  Save it.
           this->_nElements = newSize;
+          this->_dims.resize(1);
           this->_dims[0] = this->_nElements;
           this->_data = newArray;
           // This object has now allocated its memory and owns it.
@@ -710,6 +718,7 @@ class MXAArrayTemplate : public IMXAArray
     bool _ownsData;
 
     std::vector<size_t> _dims;
+    std::string m_Name;
 
     MXAArrayTemplate(const MXAArrayTemplate&);    //Not Implemented
     void operator=(const MXAArrayTemplate&); //Not Implemented

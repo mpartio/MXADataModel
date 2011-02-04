@@ -40,6 +40,9 @@ class MXA_EXPORT IMXAArray
     IMXAArray() {}
     virtual ~IMXAArray() {}
 
+    virtual void setName(const std::string &name) = 0;
+    virtual std::string getName() = 0;
+
     /**
      * @brief Makes this class responsible for freeing the memory.
      */

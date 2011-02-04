@@ -567,9 +567,9 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
   std::vector<hsize_t> dims;  //Reusable for the loop
   std::list<std::string> names;
   err = H5Utilities::getAllAttributeNames(fileId, datasetPath, names );
-
   for (std::list<std::string>::iterator iter=names.begin(); iter != names.end(); iter++)
   {
+    //std::cout << "Reading Attribute " << *iter << std::endl;
     err = H5Lite::getAttributeInfo(fileId, datasetPath, (*iter), dims, attr_type, attr_size, typeId);
     if (err < 0) {
       std::cout << "Error in getAttributeInfo method in readUserMetaData." << std::endl;
@@ -581,6 +581,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
         err = H5Lite::readStringAttribute(fileId, datasetPath, (*iter), res );
         if (err >= 0) {
           IMXAArray::Pointer attr = MXAAsciiStringData::Create( res );
+          attr->setName(*iter);
           attributes[*iter] = attr;
         }
         break;
@@ -589,27 +590,35 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
         if ( H5Tequal(typeId, H5T_STD_U8BE) || H5Tequal(typeId,H5T_STD_U8LE) ) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint8_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else if ( H5Tequal(typeId, H5T_STD_U16BE) || H5Tequal(typeId,H5T_STD_U16LE) ) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint16_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else if ( H5Tequal(typeId, H5T_STD_U32BE) || H5Tequal(typeId,H5T_STD_U32LE) ) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint32_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else if ( H5Tequal(typeId, H5T_STD_U64BE) || H5Tequal(typeId,H5T_STD_U64LE) ) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<uint64_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else if ( H5Tequal(typeId, H5T_STD_I8BE) || H5Tequal(typeId,H5T_STD_I8LE) ) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int8_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else if ( H5Tequal(typeId, H5T_STD_I16BE) || H5Tequal(typeId,H5T_STD_I16LE) ) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int16_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else if ( H5Tequal(typeId, H5T_STD_I32BE) || H5Tequal(typeId,H5T_STD_I32LE) ) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int32_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else if ( H5Tequal(typeId, H5T_STD_I64BE) || H5Tequal(typeId,H5T_STD_I64LE) ) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<int64_t>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else {
           std::cout << "Unknown Type: " << typeId << " at " <<  datasetPath << std::endl;
           err = -1;
@@ -620,9 +629,11 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
         if (attr_size == 4) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<float32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else if (attr_size == 8 ) {
           IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<float64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
+          ptr->setName(*iter);
         } else {
           std::cout << "Unknown Floating point type" << std::endl;
           err = -1;
