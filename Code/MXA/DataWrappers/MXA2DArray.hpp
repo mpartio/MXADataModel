@@ -137,7 +137,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
     {
       if(this->_resizeAndExtend(size) || size <= 0)
         {
-        this->_width = size;
+        this->_width = static_cast<int32_t>(size);
         this->_height = 1;
         return 1;
         }

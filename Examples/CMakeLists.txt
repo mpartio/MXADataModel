@@ -61,7 +61,7 @@ cmp_IDE_GENERATED_PROPERTIES ("Generated" " ${PROJECT_BINARY_DIR}/ExampleFileLoc
 IF ( MXA_USE_HDF5 )
     ADD_EXECUTABLE ( GetDataExample ${GETDATA_SRCS} )
     TARGET_LINK_LIBRARIES ( GetDataExample  ${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
-    cmp_ToolInstallationSupport (GetDataExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+    #cmp_ToolInstallationSupport (GetDataExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
 ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ IF ( MXA_USE_HDF5 )
     cmp_IDE_GENERATED_PROPERTIES("MXA/Examples/Example1" "" "Example1.cpp" "0")
     ADD_EXECUTABLE(Example1 ${MXAExamples_SOURCE_DIR}/Example1/Example1.cpp)
     TARGET_LINK_LIBRARIES(Example1 ${MXADATAMODEL_LIB_NAME} )
-    cmp_ToolInstallationSupport (Example1 "_debug" ${MXADataModel_BINARY_DIR} "Examples" )
+    #cmp_ToolInstallationSupport (Example1 "_debug" ${MXADataModel_BINARY_DIR} "Examples" )
 ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ IF ( MXA_USE_HDF5 )
     cmp_IDE_GENERATED_PROPERTIES("MXA/Examples/Example2" "" "Example2.cpp" "0")
     ADD_EXECUTABLE(Example2 ${MXAExamples_SOURCE_DIR}/Example2/Example2.cpp)
     TARGET_LINK_LIBRARIES(Example2 ${MXADATAMODEL_LIB_NAME})
-    cmp_ToolInstallationSupport (Example2 "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+    #cmp_ToolInstallationSupport (Example2 "_debug" ${MXADataModel_BINARY_DIR} "Examples")
 ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ ENDIF ( MXA_USE_HDF5 )
 IF ( MXA_USE_HDF5 )
     ADD_EXECUTABLE(DataWrapperExample ${MXAExamples_SOURCE_DIR}/DataWrapperExample.cpp)
     TARGET_LINK_LIBRARIES(DataWrapperExample ${MXADATAMODEL_LIB_NAME})
-    cmp_ToolInstallationSupport (DataWrapperExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+    #cmp_ToolInstallationSupport (DataWrapperExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
 ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ cmp_IDE_GENERATED_PROPERTIES("MXA/Examples/DataImport" "${DATAIMPORT_EXAMPLE_HEA
 IF ( MXA_USE_HDF5 )
     ADD_EXECUTABLE(DataImportExample ${DATAIMPORT_EXAMPLE_SOURCES})
     TARGET_LINK_LIBRARIES(DataImportExample ${MXADATAMODEL_LIB_NAME} ) 
-    cmp_ToolInstallationSupport (DataImportExample "_debug" "${MXADataModel_BINARY_DIR}" "Examples")
+   # cmp_ToolInstallationSupport (DataImportExample "_debug" "${MXADataModel_BINARY_DIR}" "Examples")
 ENDIF ( MXA_USE_HDF5 )
 
 
@@ -130,7 +130,7 @@ cmp_IDE_GENERATED_PROPERTIES("MXA/Examples/MXAPropertyExample" "${MXA_PROPERTY_E
 
 ADD_EXECUTABLE(MXAPropertyExample ${MXA_PROPERTY_EXAMPLE_SRCS} ${MXA_PROPERTY_EXAMPLE_HEADERS})
 TARGET_LINK_LIBRARIES(MXAPropertyExample ${MXADATAMODEL_LIB_NAME} ) 
-cmp_ToolInstallationSupport (MXAPropertyExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+#cmp_ToolInstallationSupport (MXAPropertyExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
 
 # ------------------------------------------------------------------------------
 #  Add Executable for Support File Example
@@ -147,6 +147,6 @@ IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
  
     ADD_EXECUTABLE(SupportFileExample ${SUPPORT_FILE_EXAMPLE_SRCS} ${SUPPORT_FILE_EXAMPLE_HEADERS})
     TARGET_LINK_LIBRARIES(SupportFileExample ${MXADATAMODEL_LIB_NAME} )
-    cmp_ToolInstallationSupport (SupportFileExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+    #cmp_ToolInstallationSupport (SupportFileExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
 ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF )
 

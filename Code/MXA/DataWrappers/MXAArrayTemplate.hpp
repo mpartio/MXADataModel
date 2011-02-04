@@ -625,7 +625,7 @@ class MXAArrayTemplate : public IMXAArray
           }
           this->_data = NULL;
           this->_ownsData = true;
-          int newSize = (this->_nElements > 0 ? this->_nElements : 1);
+          size_t newSize = (this->_nElements > 0 ? this->_nElements : 1);
           this->_data = (T*)malloc(newSize * sizeof(T));
           if (!this->_data)
           {

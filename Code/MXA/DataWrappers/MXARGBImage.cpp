@@ -84,7 +84,7 @@ int32_t MXARGBImage::resize(size_t size)
 {
   if(this->_resizeAndExtend(size) || size <= 0)
     {
-    this->_width = size;
+    this->_width = static_cast<int32_t>(size);
     this->_height = 1;
     return 1;
     }

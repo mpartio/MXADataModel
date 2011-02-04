@@ -788,9 +788,9 @@ void MXABmpIO::convertToGrayscale()
     {
       element1 = (row * width) + col;
       element2 = element1 * 3;
-      grayscaleImage[element1] = bitmapData[element2] * 0.299 +
-        bitmapData[element2 + 1] * 0.587 +
-        bitmapData[element2 + 2] * 0.114;
+      grayscaleImage[element1] = static_cast<uint8_t>(bitmapData[element2] * 0.299) +
+        static_cast<uint8_t>(bitmapData[element2 + 1] * 0.587) +
+        static_cast<uint8_t>(bitmapData[element2 + 2] * 0.114);
     }
   }
   isGrayscale = true;

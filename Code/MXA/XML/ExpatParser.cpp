@@ -172,7 +172,7 @@ void ExpatParser::Destroy()
 bool ExpatParser::Parse(const char* buf, size_t len, bool isFinal)
 {
 	assert(m_parser != NULL);
-	return XML_Parse(m_parser, buf, len, isFinal) != 0;
+	return XML_Parse(m_parser, buf, static_cast<int>(len), isFinal) != 0;
 }
 
 bool ExpatParser::Parse(const char* buf, bool isFinal)
@@ -183,13 +183,13 @@ bool ExpatParser::Parse(const char* buf, bool isFinal)
 bool ExpatParser::Parse(size_t len, bool isFinal)
 {
 	assert(m_parser != NULL);
-	return XML_ParseBuffer(m_parser, len, isFinal) != 0;
+	return XML_ParseBuffer(m_parser, static_cast<int>(len), isFinal) != 0;
 }
 
 void* ExpatParser::GetBuffer(size_t len)
 {
 	assert(m_parser != NULL);
-	return XML_GetBuffer(m_parser, len);
+	return XML_GetBuffer(m_parser, static_cast<int>(len));
 }
 
 /******************************** Parser callback enable/disable methods **/

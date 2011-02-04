@@ -329,8 +329,8 @@ int32_t _Write2DArrayTest( const std::string &recName, IDataFile::Pointer dataFi
   MXA_REQUIRE(data != 0x0);
   MXA_REQUIRE(data->getNumberOfElements() == numElements);
   data->getDimensions( &(dims.front() ) );
-  MXA_REQUIRE(dims[0] = 256);
-  MXA_REQUIRE(dims[1] = 100);
+  MXA_REQUIRE(dims[0] == 256);
+  MXA_REQUIRE(dims[1] == 100);
 
   numElements = 0; // Resize the array to zero
   err = data->resizeArray(0, 0);

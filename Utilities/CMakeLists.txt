@@ -37,7 +37,7 @@ SET (ImportGenerator_SRCS
 )
 ADD_EXECUTABLE(ImportGenerator ${ImportGenerator_SRCS} )
 TARGET_LINK_LIBRARIES(ImportGenerator ${MXADATAMODEL_LIB_NAME} )
-cmp_ToolInstallationSupport (ImportGenerator "_debug" ${MXADataModel_BINARY_DIR} "Utilities")
+#cmp_ToolInstallationSupport (ImportGenerator "_debug" ${MXADataModel_BINARY_DIR} "Utilities")
 
         
 SET (IMPORTGENERATOR_INSTALLED_RESOURCES
