@@ -55,13 +55,33 @@ CONFIGURE_FILE(${MXAExamples_SOURCE_DIR}/ExampleFileLocations.h.in
                ${PROJECT_BINARY_DIR}/ExampleFileLocations.h @ONLY IMMEDIATE)
 cmp_IDE_GENERATED_PROPERTIES ("Generated" " ${PROJECT_BINARY_DIR}/ExampleFileLocations.h" "" "0")
 
+# --------------------------------------------------------------------
+# Setup the install rules for the various platforms
+set(install_dir "tools")
+if (WIN32)
+    set (install_dir ".")
+endif()
+
 # ------------------------------------------------------------------------------
 #  Add Executable for GetDataExample
 # ------------------------------------------------------------------------------
 IF ( MXA_USE_HDF5 )
-    ADD_EXECUTABLE ( GetDataExample ${GETDATA_SRCS} )
-    TARGET_LINK_LIBRARIES ( GetDataExample  ${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
+    #ADD_EXECUTABLE ( GetDataExample ${GETDATA_SRCS} )
+    #TARGET_LINK_LIBRARIES ( GetDataExample  ${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
     #cmp_ToolInstallationSupport (GetDataExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+    BuildToolBundle(
+        TARGET GetDataExample
+        SOURCES ${GETDATA_SRCS}
+        DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
+        VERSION_MAJOR ${CMP_VER_MAJOR}
+        VERSION_MINOR ${CMP_VER_MINOR}
+        VERSION_PATCH ${CMP_VER_PATCH}
+        BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
+        LINK_LIBRARIES ${MXADATAMODEL_LIB_NAME} ${DEP_LIBS}
+        LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        COMPONENT     Applications
+        INSTALL_DEST  "${install_dir}"
+    )   
 ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
@@ -69,9 +89,19 @@ ENDIF ( MXA_USE_HDF5 )
 # ------------------------------------------------------------------------------
 IF ( MXA_USE_HDF5 )
     cmp_IDE_GENERATED_PROPERTIES("MXA/Examples/Example1" "" "Example1.cpp" "0")
-    ADD_EXECUTABLE(Example1 ${MXAExamples_SOURCE_DIR}/Example1/Example1.cpp)
-    TARGET_LINK_LIBRARIES(Example1 ${MXADATAMODEL_LIB_NAME} )
-    #cmp_ToolInstallationSupport (Example1 "_debug" ${MXADataModel_BINARY_DIR} "Examples" )
+    BuildToolBundle(
+        TARGET Example1
+        SOURCES ${MXAExamples_SOURCE_DIR}/Example1/Example1.cpp
+        DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
+        VERSION_MAJOR ${CMP_VER_MAJOR}
+        VERSION_MINOR ${CMP_VER_MINOR}
+        VERSION_PATCH ${CMP_VER_PATCH}
+        BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
+        LINK_LIBRARIES ${MXADATAMODEL_LIB_NAME}
+        LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        COMPONENT     Applications
+        INSTALL_DEST  "${install_dir}"
+    )   
 ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
@@ -79,18 +109,38 @@ ENDIF ( MXA_USE_HDF5 )
 # ------------------------------------------------------------------------------
 IF ( MXA_USE_HDF5 )
     cmp_IDE_GENERATED_PROPERTIES("MXA/Examples/Example2" "" "Example2.cpp" "0")
-    ADD_EXECUTABLE(Example2 ${MXAExamples_SOURCE_DIR}/Example2/Example2.cpp)
-    TARGET_LINK_LIBRARIES(Example2 ${MXADATAMODEL_LIB_NAME})
-    #cmp_ToolInstallationSupport (Example2 "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+    BuildToolBundle(
+        TARGET Example2
+        SOURCES ${MXAExamples_SOURCE_DIR}/Example2/Example2.cpp
+        DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
+        VERSION_MAJOR ${CMP_VER_MAJOR}
+        VERSION_MINOR ${CMP_VER_MINOR}
+        VERSION_PATCH ${CMP_VER_PATCH}
+        BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
+        LINK_LIBRARIES ${MXADATAMODEL_LIB_NAME}
+        LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        COMPONENT     Applications
+        INSTALL_DEST  "${install_dir}"
+    )  
 ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
 #  Add Executable for DataWrapperExample
 # ------------------------------------------------------------------------------
 IF ( MXA_USE_HDF5 )
-    ADD_EXECUTABLE(DataWrapperExample ${MXAExamples_SOURCE_DIR}/DataWrapperExample.cpp)
-    TARGET_LINK_LIBRARIES(DataWrapperExample ${MXADATAMODEL_LIB_NAME})
-    #cmp_ToolInstallationSupport (DataWrapperExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+    BuildToolBundle(
+        TARGET DataWrapperExample
+        SOURCES ${MXAExamples_SOURCE_DIR}/DataWrapperExample.cpp
+        DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
+        VERSION_MAJOR ${CMP_VER_MAJOR}
+        VERSION_MINOR ${CMP_VER_MINOR}
+        VERSION_PATCH ${CMP_VER_PATCH}
+        BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
+        LINK_LIBRARIES ${MXADATAMODEL_LIB_NAME}
+        LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        COMPONENT     Applications
+        INSTALL_DEST  "${install_dir}"
+    )  
 ENDIF ( MXA_USE_HDF5 )
 
 # ------------------------------------------------------------------------------
@@ -110,9 +160,19 @@ SET (DATAIMPORT_EXAMPLE_HEADERS
 cmp_IDE_GENERATED_PROPERTIES("MXA/Examples/DataImport" "${DATAIMPORT_EXAMPLE_HEADERS}" "${DATAIMPORT_EXAMPLE_SOURCES}" "0")
 
 IF ( MXA_USE_HDF5 )
-    ADD_EXECUTABLE(DataImportExample ${DATAIMPORT_EXAMPLE_SOURCES})
-    TARGET_LINK_LIBRARIES(DataImportExample ${MXADATAMODEL_LIB_NAME} ) 
-   # cmp_ToolInstallationSupport (DataImportExample "_debug" "${MXADataModel_BINARY_DIR}" "Examples")
+    BuildToolBundle(
+        TARGET DataImportExample
+        SOURCES ${DATAIMPORT_EXAMPLE_SOURCES}
+        DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
+        VERSION_MAJOR ${CMP_VER_MAJOR}
+        VERSION_MINOR ${CMP_VER_MINOR}
+        VERSION_PATCH ${CMP_VER_PATCH}
+        BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
+        LINK_LIBRARIES ${MXADATAMODEL_LIB_NAME}
+        LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        COMPONENT     Applications
+        INSTALL_DEST  "${install_dir}"
+    )  
 ENDIF ( MXA_USE_HDF5 )
 
 
@@ -128,9 +188,19 @@ SET (MXA_PROPERTY_EXAMPLE_HEADERS
 )
 cmp_IDE_GENERATED_PROPERTIES("MXA/Examples/MXAPropertyExample" "${MXA_PROPERTY_EXAMPLE_HEADERS}" "${MXA_PROPERTY_EXAMPLE_SRCS}" "0")
 
-ADD_EXECUTABLE(MXAPropertyExample ${MXA_PROPERTY_EXAMPLE_SRCS} ${MXA_PROPERTY_EXAMPLE_HEADERS})
-TARGET_LINK_LIBRARIES(MXAPropertyExample ${MXADATAMODEL_LIB_NAME} ) 
-#cmp_ToolInstallationSupport (MXAPropertyExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+BuildToolBundle(
+    TARGET MXAPropertyExample
+    SOURCES  ${MXA_PROPERTY_EXAMPLE_SRCS};${MXA_PROPERTY_EXAMPLE_HEADERS}
+    DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
+    VERSION_MAJOR ${CMP_VER_MAJOR}
+    VERSION_MINOR ${CMP_VER_MINOR}
+    VERSION_PATCH ${CMP_VER_PATCH}
+    BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
+    LINK_LIBRARIES ${MXADATAMODEL_LIB_NAME}
+    LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    COMPONENT     Applications
+    INSTALL_DEST  "${install_dir}"
+)  
 
 # ------------------------------------------------------------------------------
 #  Add Executable for Support File Example
@@ -145,8 +215,18 @@ IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
     )
     cmp_IDE_GENERATED_PROPERTIES("MXA/Examples" "${SUPPORT_FILE_EXAMPLE_HEADERS}" "${SUPPORT_FILE_EXAMPLE_SRCS}" "0")
  
-    ADD_EXECUTABLE(SupportFileExample ${SUPPORT_FILE_EXAMPLE_SRCS} ${SUPPORT_FILE_EXAMPLE_HEADERS})
-    TARGET_LINK_LIBRARIES(SupportFileExample ${MXADATAMODEL_LIB_NAME} )
-    #cmp_ToolInstallationSupport (SupportFileExample "_debug" ${MXADataModel_BINARY_DIR} "Examples")
+    BuildToolBundle(
+        TARGET SupportFileExample
+        SOURCES  ${SUPPORT_FILE_EXAMPLE_SRCS};${SUPPORT_FILE_EXAMPLE_HEADERS}
+        DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
+        VERSION_MAJOR ${CMP_VER_MAJOR}
+        VERSION_MINOR ${CMP_VER_MINOR}
+        VERSION_PATCH ${CMP_VER_PATCH}
+        BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
+        LINK_LIBRARIES ${MXADATAMODEL_LIB_NAME}
+        LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        COMPONENT     Applications
+        INSTALL_DEST  "${install_dir}"
+    )  
 ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF )
 
