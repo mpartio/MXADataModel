@@ -436,7 +436,7 @@ int main(int argc, char **argv) {
   int err = EXIT_SUCCESS;
 
   MXA_REGISTER_TEST( H5UtilitiesTest() );
-//  MXA_REGISTER_TEST( RemoveTestFiles() );
+  MXA_REGISTER_TEST( RemoveTestFiles() );
   PRINT_TEST_SUMMARY();
   return err;
 }
