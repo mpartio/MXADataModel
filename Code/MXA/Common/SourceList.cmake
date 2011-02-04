@@ -51,6 +51,7 @@ cmp_IDE_SOURCE_PROPERTIES( "MXA/Common" "${MXA_Common_HDRS}" "${MXA_Common_SRCS}
 SET (MXA_Common_SRCS
     ${MXA_WIN_Common_SRCS}
     ${MXA_UNIX_Common_SRCS}
+    ${MXA_Common_SOURCES}
 )
 
 SET (MXA_Common_HDRS 

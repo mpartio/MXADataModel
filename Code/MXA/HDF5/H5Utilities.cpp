@@ -1,16 +1,44 @@
+/* ============================================================================
+ * Copyright (c) 2010, Michael A. Jackson (BlueQuartz Software)
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of Michael A. Jackson nor the names of its contributors may
+ * be used to endorse or promote products derived from this software without
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+ * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #include <MXA/HDF5/H5Utilities.h>
-
-
-#include <MXA/HDF5/H5Lite.h>
-#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
-#include <MXA/DataWrappers/MXAAsciiStringData.h>
-
-#include <MXA/Utilities/StringUtils.h>
-#include <MXA/Common/LogTime.h>
 
 // C++ Includes
 #include <iostream>
 
+#include <MXA/Common/LogTime.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/Utilities/StringUtils.h>
+
+#ifdef H5LITE_USE_MXA_CONSTRUCTS
+#include <MXA/DataWrappers/MXAAsciiStringData.h>
+#endif
 
 #define CheckValidLocId(locId)\
   if (locId < 0 ) {std::cout << "Invalid HDF Location ID: " << locId << std::endl;return -1;}
@@ -239,7 +267,7 @@ herr_t H5Utilities::getGroupObjects(hid_t loc_id, int32_t typeFilter, std::list<
   err = H5Gget_num_objs(loc_id, &numObjs);
   if (err < 0) {
     std::cout << "Error getting number of objects for group: "
-	      << loc_id << std::endl;
+        << loc_id << std::endl;
     return err;
   }
 
@@ -548,7 +576,7 @@ herr_t H5Utilities::getAllAttributeNames(hid_t obj_id,
  }
 #endif
 
-
+#if H5LITE_USE_MXA_CONSTRUCTS
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
@@ -654,6 +682,7 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
 
   return retErr;
 }
+#endif
 
 // -----------------------------------------------------------------------------
 //
@@ -754,7 +783,7 @@ herr_t H5Utilities::objectNameAtIndex(hid_t fileId, int32_t idx, std::string &na
   // call H5Gget_objname_by_idx with name as NULL to get its length
   ssize_t name_len = H5Gget_objname_by_idx(fileId, idx, NULL, 0);
   if(name_len < 0) {
-  	name.clear();
+    name.clear();
     return -1;
   }
 

@@ -12,14 +12,6 @@
 #define _HDF5_UTILITIES_H_
 
 
-//#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
-//#include <MXA/Common/MXATypeDefs.h>
-#include <MXA/Base/IDataModel.h>
-#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
-#include <MXA/HDF5/H5Lite.h>
-#include <MXA/HDF5/H5Utilities.h>
-
 // C++ Includes
 #include <map>
 #include <list>
@@ -27,6 +19,21 @@
 
 //-- HDF Headers
 #include <hdf5.h>
+
+
+#include <MXA/MXATypes.h>
+#include <MXA/HDF5/H5Lite.h>
+#include <MXA/HDF5/H5Utilities.h>
+
+/* H5LITE_USE_MXA_CONSTRUCTS is used to include MXADataModel Specific classes in
+ * this class. If this is being compiled as part of MXADataModel this should
+ * _always_ be defined. If this code is being used as part of another project
+ * then this should probably NOT be defined.
+ */
+#ifdef H5LITE_USE_MXA_CONSTRUCTS
+#include <MXA/Base/IDataModel.h>
+#include <MXA/DataWrappers/MXAArrayTemplate.hpp>
+#endif
 
 /**
  * @brief General Utilities for working with the HDF5 data files and API
@@ -195,7 +202,7 @@ public:
   static MXA_EXPORT herr_t getAllAttributeNames(hid_t objId, const std::string &obj_name,
                                                   std::list<std::string> &names);
 
-
+#if H5LITE_USE_MXA_CONSTRUCTS
   /**
    * @brief Returns a vector of IAttributes, one for each attribute of a given hdf5 object
    * @param fileId The parent hdf5 id
@@ -298,7 +305,7 @@ public:
     }
     return ptr;
   }
-
+#endif
 
 
 protected:
