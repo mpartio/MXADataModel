@@ -188,7 +188,7 @@ herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::s
   //  being the grayscale values
   int32_t pixel_count = width * height;
   unsigned char *src, *dst;
-  unsigned char r,g,b;
+ // unsigned char r,g,b;
   float R, G, B;
   // The collapse is done IN PLACE
   src = raster;

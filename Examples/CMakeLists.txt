@@ -59,7 +59,7 @@ cmp_IDE_GENERATED_PROPERTIES ("Generated" " ${PROJECT_BINARY_DIR}/ExampleFileLoc
 # Setup the install rules for the various platforms
 set(install_dir "tools")
 if (WIN32)
-    set (install_dir ".")
+    set (install_dir "bin")
 endif()
 
 # ------------------------------------------------------------------------------

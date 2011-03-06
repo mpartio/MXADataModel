@@ -185,7 +185,7 @@ LOAD_TEXTUREBMP_RESULT MXABmpIO::readBitmapData24Bit()
   // For each scan line
   int targetRow = 0;
   char* buffPtr = (char*)buffer;
-  float fTmp;
+ // float fTmp;
   uint8_t r,g,b;
   float R, G, B;
   for (int i = 0; i < height; i++)
