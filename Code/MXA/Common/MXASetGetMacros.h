@@ -14,6 +14,14 @@
 #include <sstream>
 #include <stdexcept>
 
+
+
+#if defined(QT_CORE_LIB)
+//-- Qt includes
+#include <QtCore/QSharedPointer>
+//#define RAW_PTR  data
+#endif
+
 //-- Boost Includes
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -21,7 +29,6 @@
 
 #define SHARED_IS_NULL(ptr)\
   (  (ptr).get() == NULL )
-
 
 /**
  * @brief Creates a static method that returns a NULL pointer wrapped in a
@@ -34,17 +41,38 @@
     return Pointer(static_cast<thisClass*>(NULL));\
   }
 
+
+/**
+ * @brief Creates some basic typedefs that can be used throughout the code to
+ * reference the class.
+ */
+#define QT_SHARED_POINTERS(thisClass)\
+  typedef thisClass                      Self;\
+  typedef QSharedPointer< Self >        Pointer;\
+  typedef QSharedPointer<const Self >  ConstPointer;\
+  MXA_NULL_SHARED_POINTER(thisClass)
+
 /**
  * @brief Creates some basic typedefs that can be used throughout the code to
  * reference the class.
  */
 #define MXA_SHARED_POINTERS(thisClass)\
-  typedef thisClass                       Self;\
+  typedef thisClass                      Self;\
   typedef boost::shared_ptr<Self >        Pointer;\
   typedef boost::shared_ptr<const Self >  ConstPointer;\
-  typedef boost::weak_ptr<thisClass >     WeakPointer;\
-  typedef boost::weak_ptr<thisClass >     ConstWeakPointer;\
+  typedef boost::weak_ptr<thisClass > WeakPointer;\
+  typedef boost::weak_ptr<thisClass > ConstWeakPointer;\
   MXA_NULL_SHARED_POINTER(thisClass)
+
+
+#define MXA_STATIC_NEW_SUPERCLASS(superclass, theclass)\
+  static superclass::Pointer New()\
+  {\
+    theclass* ptr = new theclass();\
+    superclass::Pointer shared_ptr (dynamic_cast<superclass*>(ptr) );\
+    return shared_ptr;\
+  }
+
 
 /**
  * @brief Creates a typedef that points to the superclass of this class
@@ -74,6 +102,13 @@ static Pointer New(void) \
   return sharedPtr; \
 }
 
+#define MXA_STATIC_NEW_MACRO_WITH_ARGS(thisClass, args) \
+static Pointer New args \
+{ \
+  Pointer sharedPtr (new thisClass); \
+  return sharedPtr; \
+}
+
 /** Macro used to add standard methods to all classes, mainly type
  * information. */
 #define MXA_TYPE_MACRO(thisClass) \
@@ -89,8 +124,6 @@ static Pointer New(void) \
 #define MXA_PROPERTY_CONSTANT(prpty) \
   const std::string prpty ( #prpty );
 
-
-
 /**
 * @brief Creates a "setter" method to set the property.
 */
@@ -102,6 +135,16 @@ static Pointer New(void) \
 */
 #define MXA_GET_PROPERTY(type, prpty) \
   type get##prpty() { return m_##prpty; }
+
+
+
+#define MXA_VIRTUAL_INSTANCE_PROPERTY(type, prpty)\
+  private:\
+      type   m_##prpty;\
+  public:\
+    virtual MXA_SET_PROPERTY(type, prpty)\
+    virtual MXA_GET_PROPERTY(type, prpty)
+
 
 
 #define MXA_INSTANCE_PROPERTY(type, prpty)\
@@ -125,13 +168,13 @@ static Pointer New(void) \
   void get##prpty(type &value_0, type &value_1) {\
       value_0 = varname[0]; value_1 = varname[1]; }
 
-#define MXA_INSTANCE_2DVECTOR_PROPERTY(type, prpty, varname)\
-  private:\
-    type   varname[2];\
-  public:\
-    MXA_SET_2DVECTOR_PROPERTY(type, prpty, varname)\
-    MXA_GET_2DVECTOR_PROPERTY(type, prpty, varname)
 
+#define MXA_INSTANCE_2DVECTOR_PROPERTY(type, prpty)\
+  private:\
+    type   m_##prpty[2];\
+  public:\
+    MXA_SET_2DVECTOR_PROPERTY(type, prpty, m_##prpty)\
+    MXA_GET_2DVECTOR_PROPERTY(type, prpty, m_##prpty)
 
 /**
 * @brief Creates a "setter" method to set the property.
@@ -145,44 +188,15 @@ static Pointer New(void) \
 #define MXA_GET_STRING_PROPERTY( prpty, varname) \
   std::string get##prpty() { return varname; }
 
-
+/**
+ * @brief Creates setters and getters in the form of 'setXXX()' and 'getXXX()' methods
+ */
 #define MXA_INSTANCE_STRING_PROPERTY(prpty)\
   private:\
   std::string      m_##prpty;\
   public:\
   MXA_SET_STRING_PROPERTY(prpty,  m_##prpty)\
   MXA_GET_STRING_PROPERTY(prpty,  m_##prpty)
-
-
-/**
-* @brief Creates a "setter" method to set the property.
-*/
-#define MXA_SET_PROPERTY_OLD(type, prpty, var) \
-  void set##prpty(type value) { this->var = value; }
-
-/**
-* @brief Creates a "getter" method to retrieve the value of the property.
-*/
-#define MXA_GET_PROPERTY_OLD(type, prpty, var) \
-  type get##prpty() { return var; }
-
-
-#define MXA_INSTANCE_PROPERTY_OLD(type, prpty, var)\
-  private:\
-      type   var;\
-  public:\
-    MXA_SET_PROPERTY_OLD(type, prpty, var)\
-    MXA_GET_PROPERTY_OLD(type, prpty, var)
-
-
-#define MXA_INSTANCE_STRING_PROPERTY_OLD(prpty, var)\
-  private:\
-  std::string      var;\
-  public:\
-  MXA_SET_STRING_PROPERTY(prpty,  var)\
-  MXA_GET_STRING_PROPERTY(prpty,  var)
-
-
 
 // These are simple over-rides from the boost distribution because we don't want the entire boost distribution just
 // for a few boost headers
@@ -257,13 +271,13 @@ namespace MXA
 */
 
 #define GET_PROPERTY_BODY(name_space, type, prpty, key, value)\
-  if (name_space::prpty.compare(key) == 0) {  \
-  try { value = *(reinterpret_cast<T*>( &(m_##prpty))); return 1;} \
+    if (name_space::prpty.compare(key) == 0) {  \
+      try { value = *(reinterpret_cast<T*>( &(m_##prpty))); return 1;} \
   catch(MXA::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
 
 #define GET_STRING_PROPERTY_BODY2(name_space, type, prpty, key, value)\
   if (name_space::prpty.compare(key) == 0) {  \
-  try { value = m_##prpty; return 1;} \
+    try { value = m_##prpty; return 1;} \
   catch(MXA::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
 
 
@@ -271,8 +285,6 @@ namespace MXA
 ////////////////////////////////////////////////////////////////////////////////
 
 #endif
-
-
 
 
 #endif /* _MXASetGetMacros_h_  */

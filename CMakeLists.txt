@@ -8,6 +8,9 @@
 PROJECT( MXADataModel )
 cmake_minimum_required(VERSION 2.6)
 
+set (MXA_PROJECT "1")
+mark_as_advanced(MXA_PROJECT)
+
 if (NOT DEFINED MXA_INSTALL_FILES)
     set (MXA_INSTALL_FILES 1 CACHE INTERNAL "Use the Normal Install rules for the MXADataModel Project")
 endif()
@@ -150,11 +153,11 @@ IF ( CMAKE_BUILD_TYPE MATCHES Debug )
   if (NOT WIN32)
     ADD_DEFINITIONS(-Wall)
   endif()
-  IF (MSVC)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-  ENDIF()
 ENDIF ( CMAKE_BUILD_TYPE MATCHES Debug )
 
+IF (MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmessage-length=0")

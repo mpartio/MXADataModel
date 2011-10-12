@@ -30,15 +30,31 @@ CONFIGURE_FILE(${MXAUtilities_SOURCE_DIR}/UtilityFileLocations.h.in ${PROJECT_BI
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR})
 include_directories(${MXAUtilities_SOURCE_DIR})
 
+# --------------------------------------------------------------------
+# Setup the install rules for the various platforms
+set(install_dir "tools")
+if (WIN32)
+    set (install_dir "bin")
+endif()
 
 # List the source files here
 SET (ImportGenerator_SRCS
     ${MXAUtilities_SOURCE_DIR}/ImportGenerator.cpp
 )
-ADD_EXECUTABLE(ImportGenerator ${ImportGenerator_SRCS} )
-TARGET_LINK_LIBRARIES(ImportGenerator ${MXADATAMODEL_LIB_NAME} )
-cmp_ToolInstallationSupport (ImportGenerator "_debug" ${MXADataModel_BINARY_DIR} "Utilities")
 
+BuildToolBundle(
+    TARGET ImportGenerator
+    SOURCES  ${ImportGenerator_SRCS}
+    DEBUG_EXTENSION ${EXE_DEBUG_EXTENSION}
+    VERSION_MAJOR ${CMP_VER_MAJOR}
+    VERSION_MINOR ${CMP_VER_MINOR}
+    VERSION_PATCH ${CMP_VER_PATCH}
+    BINARY_DIR    ${${PROJECT_NAME}_BINARY_DIR}
+    LINK_LIBRARIES ${MXADATAMODEL_LIB_NAME}
+    LIB_SEARCH_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    COMPONENT     Applications
+    INSTALL_DEST  "${install_dir}"
+)  
         
 SET (IMPORTGENERATOR_INSTALLED_RESOURCES
     ${MXAUtilities_SOURCE_DIR}/Templates/CMakeLists.txt.in

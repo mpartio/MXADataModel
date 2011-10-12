@@ -3,7 +3,7 @@ SET (MXA_Base_SRCS
 )
 
 
-SET (MXA_Base_HEADERS
+SET (MXA_Base_HDRS
   ${PROJECT_CODE_DIR}/MXA/Base/IAttribute.h
   ${PROJECT_CODE_DIR}/MXA/Base/IAttributeHelper.h
   ${PROJECT_CODE_DIR}/MXA/Base/IAttributeWriter.h
@@ -39,4 +39,4 @@ if ( DEFINED MXA_INSTALL_FILES)
         set (install_files "1")
     endif()
 endif()
-cmp_IDE_SOURCE_PROPERTIES( "MXA/Base" "${MXA_Base_HEADERS}" "${MXA_Base_SRCS}" "${install_files}")
+cmp_IDE_SOURCE_PROPERTIES( "MXA/Base" "${MXA_Base_HDRS}" "${MXA_Base_SRCS}" "${install_files}")

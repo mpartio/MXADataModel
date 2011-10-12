@@ -64,5 +64,5 @@ INCLUDE_DIRECTORIES (${MXADataModel_SOURCE_DIR}/Source)
 INCLUDE_DIRECTORIES (${ParaView_BINARY_DIR}/MXADataModel)
 
 #-- Include a CMake file with some Macros that will be needed.
-include (${MXADataModel_SOURCE_DIR}/Resources/cmp/cmpCMakeMacros.cmake)
-CMP_LIBRARIES_INSTALL_RULES ("hdf5" "bin")
+#include (${MXADataModel_SOURCE_DIR}/Resources/cmp/cmpCMakeMacros.cmake)
+#CMP_LIBRARIES_INSTALL_RULES ("hdf5" "bin")

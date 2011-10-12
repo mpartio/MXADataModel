@@ -69,7 +69,7 @@ int32_t H5WriterDelegate::writeModel(IDataModel::Pointer model)
 int32_t H5WriterDelegate::writeSupportFiles(hid_t fileId)
 {
   int32_t err = 0;
-  uint64_t fileSize[1] = { 0 };
+  hsize_t fileSize[1] = { 0 };
   uint8_t* fileContents = NULL;
   int32_t rank = 1;
   ISupportFile* file = NULL;

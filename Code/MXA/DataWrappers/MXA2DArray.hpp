@@ -93,7 +93,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @brief Returns the sizes of the dimensions
      * @param dims A pointer to an array of at least size=2.
      */
-    virtual void getDimensions(uint64_t* dims)
+    virtual void getDimensions(size_t* dims)
     {
       dims[0] = _width;
       dims[1] = _height;
@@ -123,7 +123,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
       {
         return NULL;
       }
-      uint64_t index = (_width * y ) + x ;
+      size_t index = ((size_t)_width * (size_t)y ) + (size_t)x ;
       return static_cast<T*>(this->getVoidPointer(index));
     }
 
@@ -133,11 +133,11 @@ class MXA2DArray : public MXAArrayTemplate<T>
      * @param size The new size of the array
      * @return 1 if the resize succeeded, 0 on error
      */
-    virtual int32_t resize(uint64_t size)
+    virtual int32_t resize(size_t size)
     {
       if(this->_resizeAndExtend(size) || size <= 0)
         {
-        this->_width = size;
+        this->_width = static_cast<int32_t>(size);
         this->_height = 1;
         return 1;
         }
@@ -155,7 +155,7 @@ class MXA2DArray : public MXAArrayTemplate<T>
      */
     int32_t resizeArray(int32_t width, int32_t height)
     {
-      int32_t err =  this->resize(width * height);
+      int32_t err =  this->resize( (size_t)width * (size_t)height);
       this->_width = width;
       this->_height = height;
       if (err == 0)

@@ -188,14 +188,22 @@ herr_t H5TiffIO::_importGrayscaleTiffImage(TIFF *in, hid_t groupId, const std::s
   //  being the grayscale values
   int32_t pixel_count = width * height;
   unsigned char *src, *dst;
+ // unsigned char r,g,b;
+  float R, G, B;
   // The collapse is done IN PLACE
   src = raster;
   dst = raster;
   while( pixel_count > 0 )
   {
-    *(dst) =  (unsigned char)((float)src[0] * 0.299f +
-                (float)src[1] * 0.587f +
-                (float)src[2] * 0.114f);
+    if (src[0] == src[1] && src[0] == src[2])
+    {
+      *(dst) = src[0];
+    }
+    else
+    {
+      R = src[0] * 0.299; G = src[1] * 0.587; B = src[2] * 0.144;
+      *(dst) =  (unsigned char)(R + G + B);
+    }
     dst++;
     src += 4; //skip ahead by 4 bytes because we read the raw array into an RGBA array.
     pixel_count--;
@@ -378,7 +386,7 @@ int H5TiffIO::_determineTiffOutputImageClass(hid_t fileId, const string &img_dat
   size_t type_size;
   H5T_class_t class_type;
   hid_t attrType = -1;
-  std::vector<uint64_t> dimensions;
+  std::vector<hsize_t> dimensions;
   err = H5Lite::getAttributeInfo(fileId,
                                  img_dataset_name,
                                  const_cast<std::string&>(MXA::H5Image::ImageSubclass),

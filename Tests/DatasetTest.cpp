@@ -207,9 +207,9 @@ int32_t _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFi
 
   // Create the data
   int rank = 1;
-  std::vector<uint64_t> dims(rank, 0);
+  std::vector<size_t> dims(rank, 0);
 
-  uint64_t numElements = 5;
+  size_t numElements = 5;
   MXAArrayTemplate<T>* data = MXAArrayTemplate<T>::New( numElements);
   IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data));
   MXA_REQUIRE(data != 0x0);
@@ -322,15 +322,15 @@ int32_t _Write2DArrayTest( const std::string &recName, IDataFile::Pointer dataFi
   // Create the data
   uint64_t numElements = 256 * 100;
   int rank = 2;
-  std::vector<uint64_t> dims(rank, 0);
+  std::vector<size_t> dims(rank, 0);
   MXA2DArray<T>* data = MXA2DArray<T>::New( 256, 100);
   IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
 
   MXA_REQUIRE(data != 0x0);
   MXA_REQUIRE(data->getNumberOfElements() == numElements);
   data->getDimensions( &(dims.front() ) );
-  MXA_REQUIRE(dims[0] = 256);
-  MXA_REQUIRE(dims[1] = 100);
+  MXA_REQUIRE(dims[0] == 256);
+  MXA_REQUIRE(dims[1] == 100);
 
   numElements = 0; // Resize the array to zero
   err = data->resizeArray(0, 0);
@@ -404,9 +404,9 @@ void _WriteRGBImageTest( const std::string &recName, IDataFile::Pointer dataFile
   int32_t err = 1;
 
   // Create the data
-  uint64_t numElements = 256 * 100 * 3;
+  size_t numElements = 256 * 100 * 3;
   int rank = 2;
-  std::vector<uint64_t> dims(rank, 0);
+  std::vector<size_t> dims(rank, 0);
   MXARGBImage* data = MXARGBImage::New( 256, 100);
   IMXAArray::Pointer dataPtr (static_cast<IMXAArray*>(data) ); //Let boost manage the pointer
   MXA_REQUIRE(data != 0x0);
@@ -537,7 +537,7 @@ int32_t _readRGBImageTest(const std::string &recName, IDataFile::Pointer dataFil
   IMXAArray::Pointer dataPtr = H5MXAUtilities::readData(dataFile, dsPath);
   uint64_t numElements = 150 * 101 * 3;
   int rank = 2;
-  std::vector<uint64_t> dims(rank, 0);
+  std::vector<size_t> dims(rank, 0);
   //MXA_REQUIRE(dataPtr->getWidth() == 150);
   //MXA_REQUIRE(dataPtr->getHeight() == 101);
   MXA_REQUIRE(dataPtr->getNumberOfElements() == numElements);

@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
   // Create our output file, overwriting any existing file
   InitializeFile();
 
-  int numValues = 10;
+  size_t numValues = 10;
   // Create an Array to hold a 1 Dimensional Array of 10 values of 32 bit integers
   MXAArrayTemplate<int32_t>* int32_tarray = MXAArrayTemplate<int32_t>::New(numValues);
 
@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
 
   int32_t numDimensions = int32_tarray->getNumberOfDimensions();
   std::cout << "There are " << numDimensions << " dimensions in the array." << std::endl;
-  std::vector<uint64_t> dimensions(numDimensions);
+  std::vector<size_t> dimensions(numDimensions);
   int32_tarray->getDimensions( &(dimensions.front() ) );
 
   for (int i = 0; i < numDimensions; ++i) {

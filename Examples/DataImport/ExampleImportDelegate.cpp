@@ -64,7 +64,7 @@ int32_t ExampleImportDelegate::importDataSource(IDataSource::Pointer dataSource,
   int32_t nDims = 2;
   int32_t NX  =  5; /* dataset dimensions */
   int32_t NY   =  3;
-  uint64_t dims[2] = {NX, NY};
+  size_t dims[2] = {NX, NY};
   IMXAArray::Pointer array = MXAArrayTemplate<int32_t>::CreateMultiDimensionalArray(nDims, dims);
   int32_t* data = static_cast<int32_t*>(array->getVoidPointer(0) );
 

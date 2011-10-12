@@ -1,4 +1,7 @@
 [submodule "Resources/cmp"]
 	path = Resources/cmp
 	url = git://scm.bluequartz.net/support-libraries/cmp.git
+<<<<<<< HEAD
 
+=======
+>>>>>>> aa3c89cbbcdebf3904b3689e730e3de825b4afe3

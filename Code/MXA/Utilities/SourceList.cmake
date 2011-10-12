@@ -8,7 +8,7 @@ SET (MXA_Utilities_SRCS
   ${PROJECT_CODE_DIR}/MXA/Utilities/MXALogger.cpp
 )
 
-SET (MXA_Utilities_HEADERS
+SET (MXA_Utilities_HDRS
   ${PROJECT_CODE_DIR}/MXA/Utilities/StringUtils.h
   ${PROJECT_CODE_DIR}/MXA/Utilities/IStringSection.h
   ${PROJECT_CODE_DIR}/MXA/Utilities/DataSourcePathIndexSection.h
@@ -22,7 +22,7 @@ SET (MXA_Utilities_HEADERS
 
 IF (MSVC)
     SET (MXA_Utilities_SRCS ${MXA_Utilities_SRCS} ${PROJECT_CODE_DIR}/MXA/Utilities/MXADirent.c )
-    SET (MXA_Utilities_HEADERS ${MXA_Utilities_HEADERS} ${PROJECT_CODE_DIR}/MXA/Utilities/MXADirent.h )
+    SET (MXA_Utilities_HDRS ${MXA_Utilities_HDRS} ${PROJECT_CODE_DIR}/MXA/Utilities/MXADirent.h )
 endif()
 
 if ( DEFINED MXA_INSTALL_FILES)
@@ -32,5 +32,5 @@ if ( DEFINED MXA_INSTALL_FILES)
 endif()
 
 
-cmp_IDE_SOURCE_PROPERTIES( "MXA/Utilities" "${MXA_Utilities_HEADERS}" "${MXA_Utilities_SRCS}" ${install_files})
+cmp_IDE_SOURCE_PROPERTIES( "MXA/Utilities" "${MXA_Utilities_HDRS}" "${MXA_Utilities_SRCS}" ${install_files})
 
