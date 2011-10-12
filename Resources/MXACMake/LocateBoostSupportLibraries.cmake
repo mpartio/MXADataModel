@@ -9,6 +9,8 @@ SET (Boost_FIND_QUIETLY TRUE)
 set (Boost_USE_MULTITHREADED TRUE)
 set (Boost_USE_STATIC_LIBS TRUE)
 SET (Boost_ADDITIONAL_VERSIONS "1.44" "1.44.0" "1.36" "1.36.0" "1.41" "1.41.0" "1.39" "1.39.0")
+set (Boost_FIND_COMPONENTS "")
+set (Boost_NO_BOOST_CMAKE 1)
 
 # --------------------------------------------------------------------
 # MXA_BOOST_HEADERS_ONLY determines if any boost libraries are going to

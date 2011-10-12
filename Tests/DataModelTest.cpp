@@ -510,7 +510,7 @@ void CopyConstructorTest()
 
 
 // -----------------------------------------------------------------------------
-//  Use Boost unit test framework
+//  Use MXA unit test framework
 // -----------------------------------------------------------------------------
 int main(int argc, char **argv) {
   int err = EXIT_SUCCESS;

@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 
   // Register the known ImportDelegates, which will also instantiate the ImportDelegateManager instance.
   // The ImportDelegateManager instance is a singleton so only one can ever be active per program.
-  ImportDelegateManager::registerKnownImportDeletegateFactories();
+  ImportDelegateManager::registerKnownImportDelegateFactories();
 
   // Register our Import Delegate by using the static methods from ImportDelegateManager
   AbstractImportDelegateFactory::Pointer exampleImportDelegateFactory ( new ExampleImportDelegateFactory() );

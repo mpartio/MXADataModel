@@ -53,7 +53,7 @@ class MXA_EXPORT ImportDelegateManager
       *  H5Tiff importer
       *  H5BMP Importer
       */
-     static void registerKnownImportDeletegateFactories();
+     static void registerKnownImportDelegateFactories();
 
      /**
       * @brief This method ensures the ImportDelegateManager is instantiated and
