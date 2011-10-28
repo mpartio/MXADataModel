@@ -16,14 +16,17 @@
 *  integration into C++ environments.                                        *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include <MXA/HDF5/H5Image.h>
-#include <MXA/HDF5/H5Lite.h>
-
-//-- STL Includes
-#include <string>
 
 //-- C includes
 #include <string.h>
 #include <stdlib.h>
+
+//-- STL Includes
+#include <string>
+#include <list>
+
+#include "MXA/HDF5/H5Lite.h"
+#include "MXA/HDF5/H5Utilities.h"
 
 
 #if 1
@@ -368,7 +371,7 @@ herr_t H5Image::H5IMget_image_info(hid_t loc_id, std::string datasetName, hsize_
 
   if ( has_pal == 1 )
   {
-    attr_id = H5Aopen_name( did, MXA::H5Image::Palette.c_str() );
+    attr_id = H5Aopen_by_name( loc_id, datasetName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT );
     if ( attr_id >= 0 )
     {
       attr_type = H5Aget_type( attr_id );
@@ -483,10 +486,11 @@ herr_t H5Image::H5IMmake_palette( hid_t loc_id,
 
 {
 
- int32_t has_pal;
+ int32_t has_pal = 0;
 
  /* Check if the dataset already exists */
  has_pal = H5Lite::findDataset( loc_id, pal_name );
+
 
  /* It exists. Return */
  if ( has_pal == 1 )
@@ -598,7 +602,7 @@ herr_t H5Image::H5IMlink_palette( hid_t loc_id,
 
  {
 
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -737,7 +741,7 @@ herr_t H5Image::H5IMunlink_palette( hid_t loc_id,
  /* The attribute exists, open it */
  else if ( ok_pal ==  1 )
  {
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -819,7 +823,7 @@ herr_t H5Image::H5IMget_npalettes( hid_t loc_id,
  if ( has_pal ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -912,7 +916,7 @@ herr_t H5Image::H5IMget_palette_info( hid_t loc_id,
  if ( has_pal ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -1032,7 +1036,7 @@ herr_t H5Image::H5IMget_palette( hid_t loc_id,
  if ( has_pal ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -1146,7 +1150,7 @@ herr_t H5Image::H5IMis_image( hid_t loc_id,
  else if ( has_class ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( did, MXA::H5Image::ImageClass.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, datasetName.c_str(), MXA::H5Image::ImageClass.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -1234,7 +1238,7 @@ herr_t H5Image::H5IMis_palette( hid_t loc_id,
  else if ( has_class ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( did, MXA::H5Image::ImageClass.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, datasetName.c_str(), MXA::H5Image::ImageClass.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )

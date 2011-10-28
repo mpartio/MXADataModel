@@ -71,7 +71,7 @@ extern "C" {
 #endif
   herr_t MXA_EXPORT find_attr( hid_t loc_id, const char *name, const H5A_info_t* info, void *op_data);
 
-  herr_t MXA_EXPORT find_dataset( hid_t loc_id, const char *name, void *op_data);
+  herr_t MXA_EXPORT find_dataset(hid_t loc_id, const char *name, const H5A_info_t* info, void *op_data);
 
 #ifdef __cplusplus
 }
@@ -402,11 +402,11 @@ static herr_t replacePointerDataset (hid_t loc_id,
   }
 
   HDF_ERROR_HANDLER_OFF
-  did = H5Dopen(loc_id, dsetName.c_str() );
+  did = H5Dopen(loc_id, dsetName.c_str(), H5P_DEFAULT );
   HDF_ERROR_HANDLER_ON
   if ( did < 0 ) // dataset does not exist so create it
   {
-    did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT, H5P_DEFAULT);
+    did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
   }
   if ( did >= 0 )
   {
@@ -677,18 +677,19 @@ static herr_t writePointerAttribute(hid_t loc_id,
 {
   hid_t      obj_id, sid, attr_id;
   int32_t        has_attr;
-  H5G_stat_t statbuf;
+  H5O_info_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
   T test = 0x00;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(test);
   if (dataType == -1)
   {
-    std::cout << DEBUG_OUT(logTime) << "dataType was unknown" << std::endl;
+    std::cout  << "dataType was unknown" << std::endl;
     return -1;
   }
   /* Get the type of object */
-  if (H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf) < 0) {
+
+  if (H5Oget_info_by_name(loc_id, objName.c_str(), &statbuf, H5P_DEFAULT) < 0) {
     std::cout << "Error getting object info." << std::endl;
     return -1;
   }
@@ -782,7 +783,7 @@ static herr_t writeVectorAttribute(hid_t loc_id,
   hid_t      obj_id, sid, attr_id;
   //hsize_t    dim_size = data.size();
   int32_t        has_attr;
-  H5G_stat_t statbuf;
+  H5O_info_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
   hid_t dataType = H5Lite::HDFTypeForPrimitive(data.front());
@@ -791,7 +792,7 @@ static herr_t writeVectorAttribute(hid_t loc_id,
     return -1;
   }
   /* Get the type of object */
-  if (H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf) < 0) {
+  if (H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT) < 0) {
     std::cout << "Error getting object info." << std::endl;
     return -1;
   }
@@ -925,7 +926,7 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
 
   hid_t      obj_id, sid, attr_id;
   int32_t        has_attr;
-  H5G_stat_t statbuf;
+  H5O_info_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
   hsize_t dims = 1;
@@ -936,7 +937,7 @@ static herr_t  writeScalarAttribute(hid_t loc_id,
     return -1;
   }
   /* Get the type of object */
-  if (H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf) < 0) {
+  if (H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT) < 0) {
     std::cout << "Error getting object info." << std::endl;
     return -1;
   }
@@ -1247,7 +1248,7 @@ static herr_t readVectorAttribute(hid_t loc_id,
 {
   /* identifiers */
   hid_t      obj_id;
-  H5G_stat_t statbuf;
+  H5O_info_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
   hid_t attr_id;
@@ -1260,14 +1261,14 @@ static herr_t readVectorAttribute(hid_t loc_id,
   }
   //std::cout << "   Reading Vector Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
-  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
+  err = H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT);
   if (err<0)
     return err;
   /* Open the object */
   obj_id = H5Lite::openId( loc_id, objName, statbuf.type);
   if ( obj_id >= 0)
   {
-    attr_id = H5Aopen_name( obj_id, attrName.c_str() );
+    attr_id = H5Aopen_by_name( loc_id, objName.c_str(), attrName.c_str(), H5P_DEFAULT, H5P_DEFAULT );
     if ( attr_id >= 0 )
     {
       //Need to allocate the array size
@@ -1323,7 +1324,7 @@ static herr_t  readScalarAttribute(hid_t loc_id,
 
   /* identifiers */
   hid_t      obj_id;
-  H5G_stat_t statbuf;
+  H5O_info_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
   hid_t attr_id;
@@ -1335,14 +1336,14 @@ static herr_t  readScalarAttribute(hid_t loc_id,
   }
   //std::cout << "Reading Scalar style Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
-  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
+  err = H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT);
   if (err<0)
     return err;
   /* Open the object */
   obj_id = H5Lite::openId( loc_id, objName, statbuf.type);
   if ( obj_id >= 0)
   {
-    attr_id = H5Aopen_name( obj_id, attrName.c_str() );
+    attr_id = H5Aopen_by_name( loc_id, objName.c_str(), attrName.c_str(), H5P_DEFAULT, H5P_DEFAULT );
     if ( attr_id >= 0 )
     {
       err = H5Aread( attr_id, dataType, &data );
@@ -1385,7 +1386,7 @@ static herr_t readPointerAttribute(hid_t loc_id,
 {
   /* identifiers */
   hid_t      obj_id;
-  H5G_stat_t statbuf;
+  H5O_info_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
   hid_t attr_id;
@@ -1397,14 +1398,14 @@ static herr_t readPointerAttribute(hid_t loc_id,
   }
   //std::cout << "   Reading Vector Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
-  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
+  err = H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT);
   if (err<0)
     return err;
   /* Open the object */
   obj_id = H5Lite::openId( loc_id, objName, statbuf.type);
   if ( obj_id >= 0)
   {
-    attr_id = H5Aopen_name( obj_id, attrName.c_str() );
+    attr_id = H5Aopen_by_name( loc_id, objName.c_str(), attrName.c_str(), H5P_DEFAULT, H5P_DEFAULT );
     if ( attr_id >= 0 )
     {
       err = H5Aread( attr_id, dataType, data);
@@ -1591,9 +1592,9 @@ protected:
 private:
   // This is here to make sure these functions are NOT stripped by the compiler
    void NEVER_USED() {
-     herr_t ret = H5Aiterate( 0, NULL, find_attr, (void *)(NULL) );
-     ret = H5Giterate( 0, NULL, 0, find_dataset, (void *)(NULL) );
-     ret =0;
+     //     herr_t ret = H5Aiterate( 0, NULL, find_attr, (void *)(NULL) );
+     //     ret = H5Giterate( 0, NULL, 0, find_dataset, (void *)(NULL) );
+     //     ret =0;
    }
 };
 

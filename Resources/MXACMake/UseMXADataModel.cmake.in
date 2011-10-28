@@ -13,6 +13,7 @@ SET(MXADATAMODEL_IS_SHARED @MXA_BUILT_AS_DYNAMIC_LIB@)
 # ---------- Find Boost Headers/Libraries -----------------------
 SET (Boost_FIND_REQUIRED TRUE)
 SET (Boost_FIND_QUIETLY TRUE)
+set (Boost_NO_BOOST_CMAKE 1)
 SET (Boost_USE_STATIC_LIBS @Boost_USE_STATIC_LIBS@)
 #SET (MXA_BOOST_COMPONENTS program_options thread)
 if(WIN32)

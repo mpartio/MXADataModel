@@ -429,7 +429,7 @@ herr_t H5WriterDelegate::_writeStringDataset (hid_t loc_id,
               hsize_t storageSize = H5Dget_storage_size(did);
               if (did > 0 && storageSize != data.size() + 1)
               { // Data sizes are NOT the same. Delete current data set
-                err = H5Gunlink(loc_id, dsetName.c_str() );
+                err = H5Ldelete(loc_id, dsetName.c_str(), H5P_DEFAULT);
                 if (err < 0 )
                 {
                   retErr = err;

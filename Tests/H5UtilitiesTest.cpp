@@ -295,11 +295,11 @@ void H5UtilitiesTest()
 
    hid_t objType = -1;
    err = H5Utilities::getObjectType(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", &objType);
-   MXA_REQUIRE(objType == H5G_DATASET);
+   MXA_REQUIRE(objType == H5O_TYPE_DATASET);
    MXA_REQUIRE(err >= 0);
 
    err = H5Utilities::getObjectType(file_id, "/", &objType);
-   MXA_REQUIRE(objType == H5G_GROUP);
+   MXA_REQUIRE(objType == H5O_TYPE_GROUP);
    MXA_REQUIRE(err >= 0);
 
    std::string objPath = H5Utilities::getObjectPath(dsetId, false);

@@ -286,12 +286,13 @@ herr_t H5ReaderDelegate::_traverseDataRecords( hid_t gid, MXADataRecord::Pointer
   }
   herr_t err = -1;
   hsize_t numObjects = 0;
-  err = H5Gget_num_objs(gid, &numObjects);
+  H5G_info_t group_info;
+  err = H5Gget_info(gid, &group_info);
   if (err < 0 ) {
     std::cout << "Error Retrieving the number of Data Records: " << err << std::endl;
     return err;
   }
-
+  numObjects = group_info.nlinks;
   uint32_t index = 0;
 
   for (index = 0; index < numObjects; ++index) {

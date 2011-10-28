@@ -69,14 +69,14 @@ AbstractH5Attribute::Pointer H5Attribute::ReadH5Attribute(hid_t loc_id,
 {
   /* identifiers */
    hid_t      obj_id;
-   H5G_stat_t statbuf;
+   H5O_info_t statbuf;
    herr_t err = 0;
    herr_t retErr = 0;
    hid_t attr_id;
    std::string sData;
    AbstractH5Attribute::Pointer attrPtr = AbstractH5Attribute::NullPointer();
    /* Get the type of object */
-   err = H5Gget_objinfo(loc_id, dsetName.c_str(), 1, &statbuf);
+   err = H5Oget_info_by_name(loc_id, dsetName.c_str(),  &statbuf, H5P_DEFAULT);
    if (err<0)
      return attrPtr;
    /* Open the object */
@@ -84,7 +84,8 @@ AbstractH5Attribute::Pointer H5Attribute::ReadH5Attribute(hid_t loc_id,
 
    if ( obj_id >= 0)
    {
-     attr_id = H5Aopen_name( obj_id, attributeKey.c_str() );
+     attr_id = H5Aopen_by_name( obj_id, dsetName.c_str(), attributeKey.c_str(), H5P_DEFAULT, H5P_DEFAULT );
+
      if ( attr_id >= 0 )
      {
        //Need to allocate the array size
