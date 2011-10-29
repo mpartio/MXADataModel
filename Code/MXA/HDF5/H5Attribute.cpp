@@ -68,23 +68,23 @@ AbstractH5Attribute::Pointer H5Attribute::ReadH5Attribute(hid_t loc_id,
                                                     const std::string &attributeKey)
 {
   /* identifiers */
-   hid_t      obj_id;
-   H5O_info_t statbuf;
+   //hid_t      obj_id;
+   //H5O_info_t statbuf;
    herr_t err = 0;
    herr_t retErr = 0;
    hid_t attr_id;
    std::string sData;
    AbstractH5Attribute::Pointer attrPtr = AbstractH5Attribute::NullPointer();
    /* Get the type of object */
-   err = H5Oget_info_by_name(loc_id, dsetName.c_str(),  &statbuf, H5P_DEFAULT);
+   //err = H5Oget_info_by_name(loc_id, dsetName.c_str(),  &statbuf, H5P_DEFAULT);
    if (err<0)
      return attrPtr;
    /* Open the object */
-   obj_id = H5Lite::openId( loc_id, dsetName, statbuf.type);
+  // obj_id = H5Lite::openId( loc_id, dsetName, statbuf.type);
 
-   if ( obj_id >= 0)
+   if ( loc_id >= 0)
    {
-     attr_id = H5Aopen_by_name( obj_id, dsetName.c_str(), attributeKey.c_str(), H5P_DEFAULT, H5P_DEFAULT );
+     attr_id = H5Aopen_by_name( loc_id, dsetName.c_str(), attributeKey.c_str(), H5P_DEFAULT, H5P_DEFAULT );
 
      if ( attr_id >= 0 )
      {
@@ -149,11 +149,11 @@ AbstractH5Attribute::Pointer H5Attribute::ReadH5Attribute(hid_t loc_id,
      {
        retErr = attr_id;
      }
-     err = H5Lite::closeId( obj_id, statbuf.type );
-     if ( err < 0 ) {
-      std::cout << "Error Closing Object" << std::endl;
-      retErr = err;
-     }
+//     err = H5Lite::closeId( obj_id, statbuf.type );
+//     if ( err < 0 ) {
+//      std::cout << "Error Closing Object" << std::endl;
+//      retErr = err;
+//     }
    }
    return attrPtr;
 }
