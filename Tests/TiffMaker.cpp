@@ -9,7 +9,7 @@
 
 #include "TiffMaker.h"
 
-#include "MXA/MXATypes.h"
+#include "MXA/MXA.h"
 //-- std C++ headers
 #include <iostream>
 

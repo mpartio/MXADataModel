@@ -11,7 +11,7 @@
 #ifndef _H5TIFFIO_H_
 #define _H5TIFFIO_H_
 
-#include "MXA/MXATypes.h"
+#include "MXA/MXA.h"
 
 #if MXA_TIFF_SUPPORT
 

@@ -95,7 +95,7 @@ herr_t H5ReaderDelegate::readModelType(hid_t locId)
 herr_t H5ReaderDelegate::readModelVersion(hid_t locId)
 {
   herr_t err = -1;
-  float32 modelVersion;
+  float modelVersion;
   err = H5Lite::readScalarAttribute(locId, MXA::DataModel, MXA::ModelVersion, modelVersion);
   if(err < 0)
   {

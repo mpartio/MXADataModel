@@ -9,7 +9,7 @@
 #ifndef _IDataset_h_
 #define _IDataset_h_
 
-//#include <MXA/MXATypes.h>
+//#include "MXA/MXA.h"
 #include <MXA/Base/IDataFileIO.h>
 #include <MXA/Base/IMXAArray.h>
 

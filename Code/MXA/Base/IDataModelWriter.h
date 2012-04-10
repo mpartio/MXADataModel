@@ -11,8 +11,8 @@
 #ifndef _IDATAMODELWRITER_H_
 #define _IDATAMODELWRITER_H_
 
-#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXADLLExport.h"
+#include "MXA/MXA.h"
 //#include <MXA/Base/IFileIODelegate.h>
 
 

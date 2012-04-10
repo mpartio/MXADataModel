@@ -11,7 +11,7 @@
 #ifndef IMPORTDELEGATEMANAGER_H_
 #define IMPORTDELEGATEMANAGER_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/DataImport/AbstractImportDelegateFactory.h>
 

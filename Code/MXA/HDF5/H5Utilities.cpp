@@ -667,11 +667,11 @@ herr_t H5Utilities::readAllAttributes(hid_t fileId,
         break;
       case H5T_FLOAT:
         if (attr_size == 4) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<float32>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<float>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
           ptr->setName(*iter);
         } else if (attr_size == 8 ) {
-          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<float64>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
+          IMXAArray::Pointer ptr = H5Utilities::readH5Attribute<double>(fileId, const_cast<std::string&>(datasetPath), (*iter), dims);
           attributes[*iter] = ptr;
           ptr->setName(*iter);
         } else {

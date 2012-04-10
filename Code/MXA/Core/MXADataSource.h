@@ -13,9 +13,9 @@
 #define MXADATASOURCE_H
 
 //-- MXA Headers
-//#include <MXA/Common/DLLExport.h>
+//#include "MXA/MXADLLExport.h"
 //#include <MXA/Common/MXATypeDefs.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataSource.h>
 #include <MXA/Base/IImportDelegate.h>

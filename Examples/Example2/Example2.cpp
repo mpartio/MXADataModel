@@ -9,7 +9,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //-- MXA Includes
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Core/MXADataDimension.h>
@@ -127,7 +127,7 @@ int32_t readData()
       }
 
       //We know the temperature was a scalar float value of size 32 bits
-      //MXAArrayTemplate<float32>* tempValue = MXAArrayTemplate<float32>::New( 1 );
+      //MXAArrayTemplate<float>* tempValue = MXAArrayTemplate<float>::New( 1 );
 
       IMXAArray* tempValue = H5Lite::readMXAArray(dataFile->getFileId(), tempPath);
       if (NULL == tempValue) {
@@ -235,7 +235,7 @@ int32_t generateData()
 
 
 
-  MXAArrayTemplate<float32>* temperatureArray = MXAArrayTemplate<float32>::New(1);
+  MXAArrayTemplate<float>* temperatureArray = MXAArrayTemplate<float>::New(1);
   IMXAArray::Pointer temperaturePtr(temperatureArray); // Let boost clean up the memory when we are finished with it
   int32_t err = 0;
   // Define the height/width of our camera "image"

@@ -33,7 +33,7 @@
 
 
 //MXA Includes
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include "MXA/Common/MXASetGetMacros.h"
 #include <expat.h>
 

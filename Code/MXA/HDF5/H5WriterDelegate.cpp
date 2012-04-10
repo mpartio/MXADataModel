@@ -156,7 +156,7 @@ int32_t H5WriterDelegate::writeDataModelTemplate(hid_t fileId)
       H5Gclose(modelGroupId);
       return err;
     }
-    float32 version = m_DataModel->getModelVersion();
+    float version = m_DataModel->getModelVersion();
     err = H5Lite::writeScalarAttribute(fileId, MXA::DataModel, MXA::ModelVersion, version);
     if (err < 0)
     {

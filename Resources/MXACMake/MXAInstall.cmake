@@ -4,10 +4,10 @@
 #--  BSD License: http://www.opensource.org/licenses/bsd-license.html
 #--////////////////////////////////////////////////////////////////////////////
     
-INSTALL (FILES  "${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME}" 
-                "${CMP_HEADER_DIR}/${CMP_CONFIGURATION_FILE_NAME}" 
-                "${CMP_HEADER_DIR}/${CMP_TYPES_FILE_NAME}"
-                "${CMP_HEADER_DIR}/${CMP_EXTRA_CONFIGURATION_FILE}"
+INSTALL (FILES  "${CMP_HEADER_DIR}/${CMP_CONFIGURATION_FILE_NAME}" 
+                "${CMP_HEADER_DIR}/${CMP_TYPES_FILE_NAME}" 
+                "${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME}"
+                "${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE}"
          DESTINATION include/MXA 
          COMPONENT Headers           
 )

@@ -11,7 +11,7 @@
 #ifndef IDATARECORD_H_
 #define IDATARECORD_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Common/MXASetGetMacros.h>
 
 #include <vector>

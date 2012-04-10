@@ -11,7 +11,7 @@
 #ifndef IDATAFILE_H_
 #define IDATAFILE_H_
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXASetGetMacros.h>
 
 #define MXA_READ_ONLY true

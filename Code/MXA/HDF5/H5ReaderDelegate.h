@@ -12,7 +12,7 @@
 #define _HDFREADER_H_
 
 //MXA Includes
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Core/MXADataDimension.h>
 #include <MXA/Core/MXADataRecord.h>
 #include <MXA/Core/MXADataModel.h>

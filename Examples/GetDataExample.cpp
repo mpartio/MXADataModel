@@ -74,7 +74,7 @@ int main(int argc, char **argv)
   // Have the DataModel generate the proper internal path relative to the root level and extending to the dataset
   std::string dsetPath = H5MXAUtilities::generateH5PathToDataset(modelPtr, indices, record );
 
-  std::vector<float32> data; // This will hold our data. The next call will call 'clear' and 'resize' the vector as needed
+  std::vector<float> data; // This will hold our data. The next call will call 'clear' and 'resize' the vector as needed
   err = H5Lite::readVectorDataset(fileId, dsetPath, data);
   if (err < 0)
   {
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     return -1;
   }
   //Print the data:
-  for (std::vector<float32>::iterator iter = data.begin(); iter != data.end(); ++iter )
+  for (std::vector<float>::iterator iter = data.begin(); iter != data.end(); ++iter )
   {
     std::cout << *iter << " ";
   }

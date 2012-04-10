@@ -8,7 +8,7 @@
 #ifndef UNITTESTSUPPORT_HPP_
 #define UNITTESTSUPPORT_HPP_
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Core/MXADataModel.h>
 #include <MXA/Core/MXADataDimension.h>
@@ -268,8 +268,8 @@ void CreateAttributes(MXADataModel* model)
     uint32_t ui32 = 32;
     int64_t i64 = -64;
     uint64_t ui64 = 64;
-    float32 f32 = 32.32f;
-    float64 f64 = 64.64;
+    float f32 = 32.32f;
+    double f64 = 64.64;
 
 
     //Create vector attributes

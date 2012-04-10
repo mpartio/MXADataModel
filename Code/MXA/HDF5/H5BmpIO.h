@@ -12,8 +12,8 @@
 #define _H5BMPIO_H_
 
 //-- MXA Headers
-#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXADLLExport.h"
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/BMPIO/MXABmpIO.h>
 

@@ -1,14 +1,14 @@
 SET (MXA_DataWrappers_SRCS
-  ${PROJECT_CODE_DIR}/MXA/DataWrappers/MXAAsciiStringData.cpp
-  ${PROJECT_CODE_DIR}/MXA/DataWrappers/MXARGBImage.cpp
+  ${MXA_SOURCE_DIR}/MXA/DataWrappers/MXAAsciiStringData.cpp
+  ${MXA_SOURCE_DIR}/MXA/DataWrappers/MXARGBImage.cpp
 )
 
 SET (MXA_DataWrappers_HDRS
-  ${PROJECT_CODE_DIR}/MXA/DataWrappers/MXA2DArray.hpp
-  ${PROJECT_CODE_DIR}/MXA/DataWrappers/MXAArrayTemplate.hpp
-  ${PROJECT_CODE_DIR}/MXA/DataWrappers/MXAAsciiStringData.h
-  ${PROJECT_CODE_DIR}/MXA/DataWrappers/MXARGBImage.h
-  ${PROJECT_CODE_DIR}/MXA/DataWrappers/DataExportProperties.h
+  ${MXA_SOURCE_DIR}/MXA/DataWrappers/MXA2DArray.hpp
+  ${MXA_SOURCE_DIR}/MXA/DataWrappers/MXAArrayTemplate.hpp
+  ${MXA_SOURCE_DIR}/MXA/DataWrappers/MXAAsciiStringData.h
+  ${MXA_SOURCE_DIR}/MXA/DataWrappers/MXARGBImage.h
+  ${MXA_SOURCE_DIR}/MXA/DataWrappers/DataExportProperties.h
   )
   
 if ( DEFINED MXA_INSTALL_FILES)

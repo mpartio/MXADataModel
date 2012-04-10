@@ -11,7 +11,7 @@
 #ifndef MXA_BMP_HEADERS_H
 #define MXA_BMP_HEADERS_H
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 
 enum CompressionType {
   BMP_BI_RGB=0, 

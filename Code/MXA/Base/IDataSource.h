@@ -1,7 +1,7 @@
 #ifndef _IDATASOURCE_H_
 #define _IDATASOURCE_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IDataModel.h>
 #include <MXA/Base/IImportDelegate.h>

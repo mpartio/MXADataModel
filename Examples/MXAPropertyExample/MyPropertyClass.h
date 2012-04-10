@@ -10,7 +10,7 @@
 #define _MYPROPERTYCLASS_H_
 
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IImportProperty.h>
 

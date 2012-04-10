@@ -13,8 +13,8 @@
 #define MXADATAIMPORT_H
 
 //-- MXA Includes
-#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXADLLExport.h"
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataImport.h>

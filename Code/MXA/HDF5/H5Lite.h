@@ -11,8 +11,8 @@
 #ifndef _HDF5_LITE_H_
 #define _HDF5_LITE_H_
 
-#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXADLLExport.h"
+#include "MXA/MXA.h"
 #include <MXA/Common/LogTime.h>
 
 //--C++ Headers
@@ -192,8 +192,8 @@ static std::string HDFTypeForPrimitiveAsStr(T value)
   if (typeid(value) == typeid(int64_t)) return "H5T_NATIVE_INT64";
   if (typeid(value) == typeid(uint64_t)) return "H5T_NATIVE_UINT64";
 
-  if (typeid(value) == typeid(float32)) return "H5T_NATIVE_FLOAT";
-  if (typeid(value) == typeid(float64)) return "H5T_NATIVE_DOUBLE";
+  if (typeid(value) == typeid(float)) return "H5T_NATIVE_FLOAT";
+  if (typeid(value) == typeid(double)) return "H5T_NATIVE_DOUBLE";
 
   //if (typeid(value) == typeid(bool)) return "H5T_NATIVE_UINT8";
 
@@ -211,8 +211,8 @@ template<typename T>
 static hid_t HDFTypeForPrimitive(T value)
 {
 
-  if (typeid(value) == typeid(float32)) return H5T_NATIVE_FLOAT;
-  if (typeid(value) == typeid(float64)) return H5T_NATIVE_DOUBLE;
+  if (typeid(value) == typeid(float)) return H5T_NATIVE_FLOAT;
+  if (typeid(value) == typeid(double)) return H5T_NATIVE_DOUBLE;
 
   if (typeid(value) == typeid(int8_t)) return H5T_NATIVE_INT8;
   if (typeid(value) == typeid(uint8_t)) return H5T_NATIVE_UINT8;

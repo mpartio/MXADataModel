@@ -11,7 +11,7 @@
 #ifndef _IDATADIMENSIONWRITER_H_
 #define _IDATADIMENSIONWRITER_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 
 class IDataDimension;
 

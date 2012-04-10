@@ -1,31 +1,96 @@
-project(MXALib)
+#///////////////////////////////////////////////////////////////////////////////
+#  Copyright (c) 2010, Michael A. Jackson. BlueQuartz Software
+#  All rights reserved.
+#  BSD License: http://www.opensource.org/licenses/bsd-license.html
+#///////////////////////////////////////////////////////////////////////////////
 
-set (MXALib_PROJECT_FILES "")
+project(MXA)
+
+
+SET (MXA_BUILT_AS_DYNAMIC_LIB)
+IF (BUILD_SHARED_LIBS)
+    SET (MXA_BUILT_AS_DYNAMIC_LIB 1)
+    IF (WIN32)
+        ADD_DEFINITIONS("-DMXA_BUILT_AS_DYNAMIC_LIB")
+    ENDIF (WIN32)
+ENDIF (BUILD_SHARED_LIBS)
+
+SET (PROJECT_CODE_DIR ${PROJECT_SOURCE_DIR}/Source)
+if (NOT PROJECT_RESOURCES_DIR)
+SET (PROJECT_RESOURCES_DIR ${MXA_SOURCE_DIR}/Resources)
+endif()
+if (NOT DEFINED CMP_SOURCE_DIR)
+set(CMP_SOURCE_DIR ${MXA_SOURCE_DIR}/Support/cmp)
+endif()
+
+SET (PROJECT_PREFIX "MXA" CACHE STRING "The Prefix to be used for Preprocessor definitions")
+set (MXA_INSTALL_FILES 0)
+#-------------------------------------------------------------------------------
+# Include the cmp project to perform all the basic configuration tests for the 
+# project.
+#------------------------------------------------------------------------------- 
+set (CMP_HEADER_DIR ${MXA_BINARY_DIR})
+set (CMP_CONFIGURATION_FILE_NAME "MXAConfiguration.h")
+set (CMP_TYPES_FILE_NAME "MXATypes.h")
+set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
+set (CMP_VERSION_SOURCE_FILE_NAME "MXAVersion.cpp")
+set (CMP_TOP_HEADER_FILE "MXA.h")
+set (CMP_PROJECT_NAMESPACE "MXA")
+set (CMP_PROJECT_NAME "MXA")
+set (CMP_ENABLE_PLUGINS "0")
+set (CMP_LIB_SEARCH_DIRS "")
+INCLUDE (${CMP_SOURCE_DIR}/cmpProject.cmake)
+
+
+
+set (MXA_PROJECT_FILES "")
 # --------------------------------------------------------------------
-Macro(Add_MXALib_Dir DirName)
-    include(${MXALib_SOURCE_DIR}/MXA/${DirName}/SourceList.cmake)
-    set (MXALib_PROJECT_FILES ${MXALib_PROJECT_FILES}
+Macro(Add_MXA_Dir DirName)
+    include(${MXA_SOURCE_DIR}/MXA/${DirName}/SourceList.cmake)
+    set (MXA_PROJECT_FILES ${MXA_PROJECT_FILES}
                                         ${MXA_${DirName}_SRCS}
                                         ${MXA_${DirName}_HDRS} )
 endMacro()
 
-Add_MXALib_Dir(Base)
-Add_MXALib_Dir(BMPIO)
-Add_MXALib_Dir(Common)
-Add_MXALib_Dir(Core)
-Add_MXALib_Dir(DataImport)
-Add_MXALib_Dir(DataWrappers)
-Add_MXALib_Dir(HDF5)
-Add_MXALib_Dir(Utilities)
-Add_MXALib_Dir(XML)
+Add_MXA_Dir(Base)
+Add_MXA_Dir(BMPIO)
+Add_MXA_Dir(Common)
+Add_MXA_Dir(Core)
+Add_MXA_Dir(DataImport)
+Add_MXA_Dir(DataWrappers)
+Add_MXA_Dir(HDF5)
+Add_MXA_Dir(Utilities)
+Add_MXA_Dir(XML)
 
 # --------------------------------------------------------------------
+# Generate a Header file with Compile Version variables
+# --------------------------------------------------------------------
+cmpVersionStringsFromGit(GENERATED_HEADER_FILE_PATH ${CMP_HEADER_DIR}/MXAVersion.h 
+                         GENERATED_SOURCE_FILE_PATH ${CMP_HEADER_DIR}/MXAVersion.cpp
+                         NAMESPACE "MXA"
+                         cmpProjectName "MXA" 
+                         WORKING_DIRECTORY ${MXADataModel_SOURCE_DIR} )
+                         
+
+configure_file(${MXA_SOURCE_DIR}/MXAConfiguration.h.in
+               ${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE})
+
+cmp_IDE_GENERATED_PROPERTIES("Generated" 
+                             "${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE};${CMP_HEADER_DIR}/${CMP_TYPES_FILE_NAME};${CMP_HEADER_DIR}/${CMP_CONFIGURATION_FILE_NAME};${CMP_HEADER_DIR}/MXAVersion.h"
+                             "${CMP_HEADER_DIR}/MXAVersion.cpp")
+
+
+      
+      
+# --------------------------------------------------------------------
 # Include the generated Headers
-SET (MXALib_PROJECT_FILES 
-    ${MXALib_PROJECT_FILES}
-    ${MXADataModel_BINARY_DIR}/${CMP_PROJECT_PREFIX}/MXAVersion.h
-    ${MXADataModel_BINARY_DIR}/${CMP_PROJECT_PREFIX}/MXAConfiguration.h
-    ${MXADataModel_BINARY_DIR}/${CMP_PROJECT_PREFIX}/MXATypes.h 
+SET (MXA_PROJECT_FILES 
+    ${MXA_PROJECT_FILES}
+    ${MXA_BINARY_DIR}/${CMP_CONFIGURATION_FILE_NAME}
+    ${MXA_BINARY_DIR}/${CMP_TYPES_FILE_NAME}
+    ${MXA_BINARY_DIR}/${CMP_VERSION_HEADER_FILE_NAME}
+    ${MXA_BINARY_DIR}/${CMP_VERSION_SOURCE_FILE_NAME}
+    ${MXA_BINARY_DIR}/${CMP_TOP_HEADER_FILE}
 )
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
@@ -42,49 +107,35 @@ configure_file(${MXADataModel_SOURCE_DIR}/License.txt
                 ${MXADataModel_BINARY_DIR}/License.txt )
 configure_file(${MXADataModel_SOURCE_DIR}/ReadMe.txt
                 ${MXADataModel_BINARY_DIR}/ReadMe.txt )
-configure_file(${PROJECT_RESOURCES_DIR}/MXACMake/MXAConfiguration.h.in
-               ${CMP_HEADER_DIR}/MXAConfiguration.h)
+#configure_file(${PROJECT_RESOURCES_DIR}/MXACMake/MXAConfiguration.h.in
+#               ${CMP_HEADER_DIR}/MXAConfiguration.h)
 SET(MXADATAMODEL_INCLUDE_DIRS "${PROJECT_CODE_DIR};${MXADataModel_BINARY_DIR}"  )
 
 
 # --------------------------------------------------------------------
 # -- Add the MXADataModel Library and link to needed libraries 
 # --------------------------------------------------------------------
-ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${MXALib_PROJECT_FILES} )
+ADD_LIBRARY (${MXADATAMODEL_LIB_NAME} ${LIB_TYPE} ${MXA_PROJECT_FILES} )
 TARGET_LINK_LIBRARIES (${MXADATAMODEL_LIB_NAME} ${DEP_LIBS} )
 LibraryProperties( ${MXADATAMODEL_LIB_NAME} ${EXE_DEBUG_EXTENSION})
 
+set(install_dir "tools")
+set(lib_install_dir "lib")
+if (WIN32)
+    set (install_dir ".")
+    set(lib_install_dir "")
+endif()
+
+if (BUILD_SHARED_LIBS AND NOT APPLE)
+    INSTALL(TARGETS ${PROJECT_NAME} 
+        COMPONENT Applications
+        RUNTIME DESTINATION ${install_dir}
+        LIBRARY DESTINATION ${lib_install_dir}
+        ARCHIVE DESTINATION ${lib_install_dir}       
+        BUNDLE DESTINATION "."
+    ) 
+endif() 
+
 if ( ${MXA_INSTALL_FILES} EQUAL 1 )
-    INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin 
-        COMPONENT Runtime)
-else()
-# Include an install rule for NON-Apple systems. The specialized installer that ParaView uses
-# will take care of copying the MXADataModel library into the proper location.
-    INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME}
-            EXPORT ${PV_INSTALL_EXPORT_NAME}
-          RUNTIME DESTINATION ${PV_INSTALL_BIN_DIR} COMPONENT Runtime
-          LIBRARY DESTINATION ${PV_INSTALL_LIB_DIR} COMPONENT Runtime
-          ARCHIVE DESTINATION ${PV_INSTALL_LIB_DIR} COMPONENT Development)
-endif()
-
-set (lib_rt_dest lib)
-if (WIN32 AND BUILD_SHARED_LIBS)
-  set (lib_rt_dest bin)
-endif()
-
-
-#-----
-IF (MINGW)
-    SET (CMAKE_COLOR_MAKEFILE 0)
-endif()
-
-if (  ${MXA_INSTALL_FILES} EQUAL 1 )
-    # Copy DLL libraries into the correct build location on MSVC platforms
-    CMP_COPY_DEPENDENT_LIBRARIES ("tiff;expat;hdf5")
-    
-    # Generate Install Rules for the DLL Libraries
-    CMP_LIBRARIES_INSTALL_RULES ("tiff;expat;hdf5" "bin" )
+    include ( ${PROJECT_RESOURCES_DIR}/MXACMake/MXAInstall.cmake)
 endif()

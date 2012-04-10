@@ -11,7 +11,7 @@
 #ifndef _IDATARECORDWRITER_H_
 #define _IDATARECORDWRITER_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 
 class IDataRecord;
 

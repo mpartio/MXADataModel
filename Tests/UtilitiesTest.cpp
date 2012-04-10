@@ -9,7 +9,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 
 #include <MXA/Utilities/DataSourcePathBuilder.h>

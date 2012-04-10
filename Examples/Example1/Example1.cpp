@@ -21,7 +21,7 @@
  */
 
 //-- MXA Includes
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Core/MXADataDimension.h>
@@ -118,8 +118,8 @@ int main(int argc, char **argv) {
   }
 
   // Add some user defined Meta Data to the model
-  float32 value = 12.234234f;
-  IMXAArray::Pointer umd = MXAArrayTemplate<float32>::CreateSingleValueArray(value);
+  float value = 12.234234f;
+  IMXAArray::Pointer umd = MXAArrayTemplate<float>::CreateSingleValueArray(value);
   model->addUserMetaData("Float32 User Meta Data", umd);
 
   int32_t iMDValue = 34212;
@@ -225,7 +225,7 @@ void listUserMetaData(IDataFile::Pointer dataFile)
   IDataModel::Pointer modelPtr = dataFile->getDataModel();
   MXAAbstractAttributes userMetaData = modelPtr->getUserMetaData();
 
-  float32* fAttr = NULL;
+  float* fAttr = NULL;
   IMXAArray::Pointer attr;
   std::string key;
   //std::string value;
@@ -242,7 +242,7 @@ void listUserMetaData(IDataFile::Pointer dataFile)
     if (key.compare("Float32 User Meta Data") == 0)
     {
       // This works because we have a-priori knowledge of the type of data stored
-      fAttr = static_cast<float32*>(attr->getVoidPointer(0) );
+      fAttr = static_cast<float*>(attr->getVoidPointer(0) );
       std::cout << "Value is: " << *fAttr << std::endl;
     }
   }

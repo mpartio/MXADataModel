@@ -7,7 +7,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/LogTime.h>
 #include <MXA/Utilities/MXADir.h>
 #include <MXA/Utilities/MXAFileInfo.h>

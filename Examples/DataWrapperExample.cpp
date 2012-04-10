@@ -9,7 +9,7 @@
 
 
 //-- MXA Includes
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 
 #if MXA_HDF5_SUPPORT

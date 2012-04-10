@@ -1154,9 +1154,9 @@ IMXAArray* H5Lite::readMXAArray(hid_t loc_id,
           break;
         case H5T_FLOAT:
           if (attr_size == 4) {
-            data = MXAArrayTemplate<float32>::New(_dims.size(), &(_dims.front() ) );
+            data = MXAArrayTemplate<float>::New(_dims.size(), &(_dims.front() ) );
           } else if (attr_size == 8 ) {
-            data = MXAArrayTemplate<float64>::New(_dims.size(), &(_dims.front() ) );
+            data = MXAArrayTemplate<double>::New(_dims.size(), &(_dims.front() ) );
           } else {
             std::cout << "Unknown Floating point type" << __FILE__ << "(" << __LINE__ << ")"  << std::endl;
             err = -1;
@@ -1278,9 +1278,9 @@ IMXAArray* H5Lite::readMXAAttribute(hid_t loc_id,
           break;
         case H5T_FLOAT:
           if (attr_size == 4) {
-            data = MXAArrayTemplate<float32>::New(_dims.size(), &(_dims.front() ) );
+            data = MXAArrayTemplate<float>::New(_dims.size(), &(_dims.front() ) );
           } else if (attr_size == 8 ) {
-            data = MXAArrayTemplate<float64>::New(_dims.size(), &(_dims.front() ) );
+            data = MXAArrayTemplate<double>::New(_dims.size(), &(_dims.front() ) );
           } else {
             std::cout << "Unknown Floating point type" << __FILE__ << "(" << __LINE__ << ")"  << std::endl;
             err = -1;

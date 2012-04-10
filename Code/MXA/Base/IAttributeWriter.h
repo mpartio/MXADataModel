@@ -11,8 +11,8 @@
 #ifndef _IATTRIBUTEWRITER_H_
 #define _IATTRIBUTEWRITER_H_
 
-#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXADLLExport.h"
+#include "MXA/MXA.h"
 
 #include <string>
 
@@ -118,7 +118,7 @@ public:
    * @param value The value of the Attribute
    * @return Error condition. Negative=Error: Zero or Positive=Success
    */  
-  virtual int32_t writeAttribute(int32_t locationId, const std::string &datasetPath, const std::string &key, float32 value) = 0;
+  virtual int32_t writeAttribute(int32_t locationId, const std::string &datasetPath, const std::string &key, float value) = 0;
   /**
    * @brief Writes an attribute to the underlying data storage mechanism
    * @param locationId Unique location or file identifier
@@ -127,7 +127,7 @@ public:
    * @param value The value of the Attribute
    * @return Error condition. Negative=Error: Zero or Positive=Success
    */ 
-  virtual int32_t writeAttribute(int32_t locationId, const std::string &datasetPath, const std::string &key, float64 value) = 0;
+  virtual int32_t writeAttribute(int32_t locationId, const std::string &datasetPath, const std::string &key, double value) = 0;
   
   /**
    * @brief Writes an attribute to the underlying data storage mechanism where the attribute value is really an array of values.
@@ -226,7 +226,7 @@ public:
    * @param value The value of the Attribute
    * @return Error condition. Negative=Error: Zero or Positive=Success
    */ 
-  virtual int32_t writeAttribute(int32_t locationId, const std::string &datasetPath, const std::string &key, std::vector<uint64_t> &dims, std::vector<float32> &value) = 0;
+  virtual int32_t writeAttribute(int32_t locationId, const std::string &datasetPath, const std::string &key, std::vector<uint64_t> &dims, std::vector<float> &value) = 0;
   
   /**
    * @brief Writes an attribute to the underlying data storage mechanism where the attribute value is really an array of values.
@@ -237,7 +237,7 @@ public:
    * @param value The value of the Attribute
    * @return Error condition. Negative=Error: Zero or Positive=Success
    */ 
-  virtual int32_t writeAttribute(int32_t locationId, const std::string &datasetPath, const std::string &key, std::vector<uint64_t> &dims, std::vector<float64> & value) = 0;
+  virtual int32_t writeAttribute(int32_t locationId, const std::string &datasetPath, const std::string &key, std::vector<uint64_t> &dims, std::vector<double> & value) = 0;
   
   
 protected:

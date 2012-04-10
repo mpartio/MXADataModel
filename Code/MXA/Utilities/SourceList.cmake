@@ -1,28 +1,28 @@
 SET (MXA_Utilities_SRCS
-  ${PROJECT_CODE_DIR}/MXA/Utilities/DataSourcePathIndexSection.cpp
-  ${PROJECT_CODE_DIR}/MXA/Utilities/DataSourcePathTextSection.cpp
-  ${PROJECT_CODE_DIR}/MXA/Utilities/DataSourcePathBuilder.cpp
- # ${PROJECT_CODE_DIR}/MXA/Utilities/MXAFileSystemPath.cpp
-  ${PROJECT_CODE_DIR}/MXA/Utilities/MXADir.cpp
-  ${PROJECT_CODE_DIR}/MXA/Utilities/MXAFileInfo.cpp
-  ${PROJECT_CODE_DIR}/MXA/Utilities/MXALogger.cpp
+  ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathIndexSection.cpp
+  ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathTextSection.cpp
+  ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathBuilder.cpp
+ # ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileSystemPath.cpp
+  ${MXA_SOURCE_DIR}/MXA/Utilities/MXADir.cpp
+  ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileInfo.cpp
+  ${MXA_SOURCE_DIR}/MXA/Utilities/MXALogger.cpp
 )
 
 SET (MXA_Utilities_HDRS
-  ${PROJECT_CODE_DIR}/MXA/Utilities/StringUtils.h
-  ${PROJECT_CODE_DIR}/MXA/Utilities/IStringSection.h
-  ${PROJECT_CODE_DIR}/MXA/Utilities/DataSourcePathIndexSection.h
-  ${PROJECT_CODE_DIR}/MXA/Utilities/DataSourcePathTextSection.h
-  ${PROJECT_CODE_DIR}/MXA/Utilities/DataSourcePathBuilder.h
- # ${PROJECT_CODE_DIR}/MXA/Utilities/MXAFileSystemPath.h
-  ${PROJECT_CODE_DIR}/MXA/Utilities/MXADir.h
-  ${PROJECT_CODE_DIR}/MXA/Utilities/MXAFileInfo.h
-  ${PROJECT_CODE_DIR}/MXA/Utilities/MXALogger.h
+  ${MXA_SOURCE_DIR}/MXA/Utilities/StringUtils.h
+  ${MXA_SOURCE_DIR}/MXA/Utilities/IStringSection.h
+  ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathIndexSection.h
+  ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathTextSection.h
+  ${MXA_SOURCE_DIR}/MXA/Utilities/DataSourcePathBuilder.h
+ # ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileSystemPath.h
+  ${MXA_SOURCE_DIR}/MXA/Utilities/MXADir.h
+  ${MXA_SOURCE_DIR}/MXA/Utilities/MXAFileInfo.h
+  ${MXA_SOURCE_DIR}/MXA/Utilities/MXALogger.h
 )
 
 IF (MSVC)
-    SET (MXA_Utilities_SRCS ${MXA_Utilities_SRCS} ${PROJECT_CODE_DIR}/MXA/Utilities/MXADirent.c )
-    SET (MXA_Utilities_HDRS ${MXA_Utilities_HDRS} ${PROJECT_CODE_DIR}/MXA/Utilities/MXADirent.h )
+    SET (MXA_Utilities_SRCS ${MXA_Utilities_SRCS} ${MXA_SOURCE_DIR}/MXA/Utilities/MXADirent.c )
+    SET (MXA_Utilities_HDRS ${MXA_Utilities_HDRS} ${MXA_SOURCE_DIR}/MXA/Utilities/MXADirent.h )
 endif()
 
 if ( DEFINED MXA_INSTALL_FILES)

@@ -125,7 +125,7 @@ int main(int argc, char **argv)
   try
   {
     //CmdLine Parser generator
-    TCLAP::CmdLine cmd("M3C Program", ' ', MXA::Version::Complete);
+    TCLAP::CmdLine cmd("M3C Program", ' ', MXA::Version::Complete());
     TCLAP::ValueArg<std::string > projectNameArg("n", "name", "Name of the Project", true, "", "Name of the Project");
     cmd.add(projectNameArg);
     TCLAP::ValueArg<std::string > outputDirArg("o", "output", "Output Directory for Project files", true, "", "Output Directory for Project files");

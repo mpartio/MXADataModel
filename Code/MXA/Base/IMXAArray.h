@@ -11,7 +11,7 @@
 #ifndef _IAbstractDataArray_h_
 #define _IAbstractDataArray_h_
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/DataWrappers/DataExportProperties.h>
 #include <MXA/Common/MXASetGetMacros.h>
 

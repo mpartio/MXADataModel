@@ -7,7 +7,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXAEndian.h>
 #include <MXA/Common/IO/MXAFileReader64.h>
 #include <MXA/Common/IO/MXAFileWriter64.h>

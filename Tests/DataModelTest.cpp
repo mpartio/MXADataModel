@@ -11,7 +11,7 @@
 
 //TODO: Write a Unit Test for Data Dimension Insertion
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXAEndian.h>
 #include <MXA/Base/IDataFile.h>
@@ -439,8 +439,8 @@ void TestDataModelOverWrite()
     uint32_t ui32 = 32 * 2;
     int64_t i64 = -64 * 2;
     uint64_t ui64 = 64 * 2;
-    float32 f32 = 32.32f * 2;
-    float64 f64 = 64.64 * 2;
+    float f32 = 32.32f * 2;
+    double f64 = 64.64 * 2;
     MakeScalarAttribute( i8, "Scalar Int 8", model);
     MakeScalarAttribute( ui8, "Scalar UInt8", model);
     MakeScalarAttribute( i16, "Scalar Int 16", model);

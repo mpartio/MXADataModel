@@ -152,13 +152,13 @@ herr_t DataFileGenerator::makeRecords(MXADataModel::Pointer modelPtr, MXADataImp
   modelPtr->addDataRecord(uint64_tRec, parentRec);
   this->createAndStore(modelPtr, uint64_tRec, dataImport, MXATypes::Uint64_tType, dims);
 
-  MXADataRecord::Pointer float32Rec = MXADataRecord::New(8, DataGen::Float32Rec, DataGen::Float32Rec );
-  modelPtr->addDataRecord(float32Rec, parentRec);
-  this->createAndStore(modelPtr, float32Rec, dataImport, MXATypes::Float32Type, dims);
+  MXADataRecord::Pointer floatRec = MXADataRecord::New(8, DataGen::Float32Rec, DataGen::Float32Rec );
+  modelPtr->addDataRecord(floatRec, parentRec);
+  this->createAndStore(modelPtr, floatRec, dataImport, MXATypes::Float32Type, dims);
 
-  MXADataRecord::Pointer float64Rec = MXADataRecord::New(9, DataGen::Float64Rec, DataGen::Float64Rec );
-  modelPtr->addDataRecord(float64Rec, parentRec);
-  this->createAndStore(modelPtr, float64Rec, dataImport, MXATypes::Float64Type, dims);
+  MXADataRecord::Pointer doubleRec = MXADataRecord::New(9, DataGen::Float64Rec, DataGen::Float64Rec );
+  modelPtr->addDataRecord(doubleRec, parentRec);
+  this->createAndStore(modelPtr, doubleRec, dataImport, MXATypes::Float64Type, dims);
   #endif
   return 1;
 }

@@ -16,8 +16,8 @@
 #include <vector>
 
 //MXA Includes
-#include <MXA/MXATypes.h>
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXA.h"
+#include "MXA/MXADLLExport.h"
 #include <MXA/BMPIO/MXABmpHeaders.h>
 
 namespace MXA

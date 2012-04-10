@@ -13,7 +13,7 @@
 
 //TODO: Add ability to append any type of attribute to this Data Record
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IDataRecord.h>
 #include <MXA/Base/IDataRecordWriter.h>

@@ -9,7 +9,7 @@
 #ifndef EXAMPLEIMPORTDELEGATE_H_
 #define EXAMPLEIMPORTDELEGATE_H_
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataSource.h>
 #include <MXA/Base/IDataFile.h>

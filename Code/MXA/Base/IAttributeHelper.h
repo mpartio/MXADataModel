@@ -11,7 +11,7 @@
 #ifndef _IATTRIBUTECONVERTER_H_
 #define _IATTRIBUTECONVERTER_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Base/IAttributeWriter.h>
 
 /**

@@ -11,7 +11,7 @@
 #ifndef _MXADATAMODELNODE_H_
 #define _MXADATAMODELNODE_H_
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataDimension.h>
 #include <MXA/Core/MXAConstants.h>

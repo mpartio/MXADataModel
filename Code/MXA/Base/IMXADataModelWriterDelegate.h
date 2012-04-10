@@ -8,7 +8,7 @@
 #ifndef IMXADATAMODELWRITERDELEGATE_H_
 #define IMXADATAMODELWRITERDELEGATE_H_
 
-#include "MXA/MXATypes.h"
+#include "MXA/MXA.h"
 #include "MXA/Common/MXASetGetMacros.h"
 #include "MXA/Base/IDataModel.h"
 

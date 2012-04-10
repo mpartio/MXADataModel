@@ -17,8 +17,8 @@
 //TODO: Add ImageSpec Version attribute
 
 //MXA Includes
-#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXADLLExport.h"
+#include "MXA/MXA.h"
 
 //-- STL headers
 #include <string>
