@@ -6,7 +6,7 @@
 # Set project's name
 
 PROJECT( MXADataModel )
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 
 set (MXA_PROJECT "1")
 mark_as_advanced(MXA_PROJECT)
@@ -90,27 +90,25 @@ SET (PROJECT_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
 SET (PROJECT_CODE_DIR ${MXADataModel_SOURCE_DIR}/Code)
 
 # - Include all the cmake code to make sure that the MXA Library is built
-if(NOT EXISTS ${MXADataModel_SOURCE_DIR}/Resources/cmp/cmpProject.cmake)
-	message(STATUS "CMP is a git submodule of MXADataModel and does not seem to be cloned")
-	message(STATUS "from the repository properly. Execute the following command from within")
-	message(STATUS "the ${MXADataModel_SOURCE_DIR} directory in order to pull")
-	message(STATUS "the CMP project from the repository")
-	message(STATUS "git submodule update --init")
-	message(FATAL_ERROR "")
+if (NOT DEFINED CMP_SOURCE_DIR)
+set(CMP_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/../CMP)
 endif()
 
 #-------------------------------------------------------------------------------
 # Include the cmp project to perform all the basic configuration tests for the 
 # project.
 #------------------------------------------------------------------------------- 
-set (CMP_HEADER_DIR ${MXADataModel_BINARY_DIR}/MXA)
-set (CMP_CONFIGURATION_FILE_NAME "MXACMPConfiguration.h")
+set (CMP_HEADER_DIR ${MXA_BINARY_DIR})
+set (CMP_CONFIGURATION_FILE_NAME "MXAConfiguration.h")
 set (CMP_TYPES_FILE_NAME "MXATypes.h")
 set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
-set (CMP_EXTRA_CONFIGURATION_FILE "MXAConfiguration.h")
-SET (CMP_PROJECT_PREFIX "MXA" CACHE STRING "The 3 Letter Prefix to be used for Preprocessor definitions")
+set (CMP_VERSION_SOURCE_FILE_NAME "MXAVersion.cpp")
+set (CMP_TOP_HEADER_FILE "MXA.h")
 set (CMP_PROJECT_NAMESPACE "MXA")
-INCLUDE (${PROJECT_RESOURCES_DIR}/cmp/cmpProject.cmake)
+set (CMP_PROJECT_NAME "MXA")
+set (CMP_ENABLE_PLUGINS "0")
+set (CMP_LIB_SEARCH_DIRS "")
+INCLUDE (${CMP_SOURCE_DIR}/cmpProject.cmake)
 
 # --------------------------------------------------------------------
 # Project Specific Variables
