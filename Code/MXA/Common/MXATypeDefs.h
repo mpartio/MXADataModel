@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+
 //
 //  Copyright (c) 2007, 2010 Michael A. Jackson for BlueQuartz Software
 //  All rights reserved.
@@ -7,7 +7,7 @@
 //  This code was written under United States Air Force Contract number
 //                           FA8650-04-C-5229
 //
-///////////////////////////////////////////////////////////////////////////////
+
 #ifndef _MXATYPEDEFS_H__
 #define _MXATYPEDEFS_H__
 
@@ -90,8 +90,8 @@ template<typename T>
   if (typeid(value) == typeid(int64_t)) return "H5T_NATIVE_INT64";
   if (typeid(value) == typeid(uint64_t)) return "H5T_NATIVE_UINT64";
 
-  if (typeid(value) == typeid(float)) return "H5T_NATIVE_FLOAT";
-  if (typeid(value) == typeid(double)) return "H5T_NATIVE_DOUBLE";
+  if (typeid(value) == typeid(float32)) return "H5T_NATIVE_FLOAT";
+  if (typeid(value) == typeid(float64)) return "H5T_NATIVE_DOUBLE";
 
   //if (typeid(value) == typeid(bool)) return "H5T_NATIVE_UINT8";
 
@@ -107,8 +107,8 @@ template<typename T>
 template<typename T>
  MXA_EXPORT int32_t HDFTypeForPrimitive(T value)
 {
-  if (typeid(value) == typeid(float)) return H5T_NATIVE_FLOAT;
-  if (typeid(value) == typeid(double)) return H5T_NATIVE_DOUBLE;
+  if (typeid(value) == typeid(float32)) return H5T_NATIVE_FLOAT;
+  if (typeid(value) == typeid(float64)) return H5T_NATIVE_DOUBLE;
 
   if (typeid(value) == typeid(int8_t)) return H5T_NATIVE_INT8;
   if (typeid(value) == typeid(uint8_t)) return H5T_NATIVE_UINT8;

@@ -1,13 +1,15 @@
-///////////////////////////////////////////////////////////////////////////////
+
 //
 //  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
 //
-///////////////////////////////////////////////////////////////////////////////
+
 #ifndef _MXASetGetMacros_h_
 #define _MXASetGetMacros_h_
+
+#include <string.h>
 
 #include <string>
 #include <iostream>
@@ -42,6 +44,7 @@
   }
 
 
+#ifndef QT_SHARED_POINTERS
 /**
  * @brief Creates some basic typedefs that can be used throughout the code to
  * reference the class.
@@ -51,6 +54,8 @@
   typedef QSharedPointer< Self >        Pointer;\
   typedef QSharedPointer<const Self >  ConstPointer;\
   MXA_NULL_SHARED_POINTER(thisClass)
+
+#endif
 
 /**
  * @brief Creates some basic typedefs that can be used throughout the code to
@@ -112,8 +117,58 @@ static Pointer New args \
 /** Macro used to add standard methods to all classes, mainly type
  * information. */
 #define MXA_TYPE_MACRO(thisClass) \
-    virtual const char* getNameOfClass() const \
-        {return #thisClass;}
+public: \
+virtual const std::string getNameOfClass() {return std::string(#thisClass);}\
+static int IsTypeOf(const char *type) \
+{ \
+if ( !strcmp(#thisClass,type) ) \
+{ \
+return 1; \
+} \
+return 0; \
+} \
+virtual int IsA(const char *type) \
+{ \
+return this->thisClass::IsTypeOf(type); \
+} \
+template <class Source, class Target>\
+inline Target SafeObjectDownCast(Source x) { \
+if( dynamic_cast<Target>(x) != x ) { \
+return NULL;\
+}\
+return static_cast<Target>(x);\
+}
+
+
+#define MXA_TYPE_MACRO_SUPER(thisClass,superclass) \
+public: \
+virtual const std::string getNameOfClass() {return std::string(#thisClass);}\
+static std::string ClassName() {return std::string(#thisClass);}\
+static int IsTypeOf(const char *type) \
+{ \
+if ( !strcmp(#thisClass,type) ) \
+{ \
+return 1; \
+} \
+return superclass::IsTypeOf(type); \
+} \
+virtual int IsA(const char *type) \
+{ \
+return this->thisClass::IsTypeOf(type); \
+} \
+template <class Source, class Target>\
+static Target SafeObjectDownCast(Source x) { \
+if( dynamic_cast<Target>(x) != x ) { \
+return NULL;\
+}\
+return static_cast<Target>(x);\
+}\
+static thisClass* SafePointerDownCast(superclass* s) {\
+return SafeObjectDownCast<superclass*, thisClass*>(s);\
+}
+
+
+
 
 //------------------------------------------------------------------------------
 // Macros for Properties
@@ -175,6 +230,35 @@ static Pointer New args \
   public:\
     MXA_SET_2DVECTOR_PROPERTY(type, prpty, m_##prpty)\
     MXA_GET_2DVECTOR_PROPERTY(type, prpty, m_##prpty)
+
+
+#define MXA_SET_VEC3_PROPERTY(type, prpty, varname)\
+  void set##prpty(type value[3]) {\
+      varname[0] = value[0]; varname[1] = value[1]; varname[2] = value[2]; }\
+  void set##prpty(type value_0, type value_1, type value_2) {\
+      varname[0] = value_0; varname[1] = value_1; varname[2] = value_2; }
+
+#define MXA_GET_VEC3_PROPERTY(type, prpty, varname)\
+  void get##prpty(type value[3]) {\
+      value[0] = varname[0]; value[1] = varname[1]; value[2] = varname[2]; }\
+  void get##prpty(type &value_0, type &value_1, type &value_2) {\
+      value_0 = varname[0]; value_1 = varname[1]; value_2 = varname[2]; }
+
+
+#define MXA_INSTANCE_VEC3_PROPERTY(type, prpty)\
+  private:\
+    type   m_##prpty[3];\
+  public:\
+    MXA_SET_VEC3_PROPERTY(type, prpty, m_##prpty)\
+    MXA_GET_VEC3_PROPERTY(type, prpty, m_##prpty)
+
+
+
+#define MXA_CONTAINER_TYPE(thisClass, container) \
+    typedef container<thisClass >     ContainerT; \
+    typedef boost::shared_ptr< container<thisClass > > ContainerPType;
+
+
 
 /**
 * @brief Creates a "setter" method to set the property.
@@ -281,8 +365,6 @@ namespace MXA
   catch(MXA::bad_any_cast &) { std::cout << "Could not cast value '" << value << "' to type '" << #type << "' for property '" << #prpty << "'" << std::endl; } }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
 
 #endif
 
