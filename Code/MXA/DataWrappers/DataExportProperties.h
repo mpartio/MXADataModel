@@ -15,7 +15,10 @@
 #include <MXA/Base/IImportProperty.h>
 
 //-- HDF includes
+
+#if MXA_HDF5_SUPPORT
 #include <hdf5.h>
+#endif
 
 /**
  * @namespace This is for the Exporting functionality
@@ -70,6 +73,7 @@ class MXA_EXPORT DataExportProperties
     /**
      * @brief
      */
+#if MXA_HDF5_SUPPORT
     static DataExportProperties::Pointer New(hid_t fileId, const std::string &exportFile,
                                              const std::string &datasetPath,
                                              int fileType,
@@ -85,10 +89,13 @@ class MXA_EXPORT DataExportProperties
       ptr->setEndian(endian);
       return ptr;
     }
+#endif
 
     virtual ~DataExportProperties(){}
 
+#if MXA_HDF5_SUPPORT
     MXA_INSTANCE_PROPERTY(hid_t, HDFFileId);
+#endif
 
     MXA_INSTANCE_STRING_PROPERTY(HDFDatasetPath);
 
@@ -132,7 +139,9 @@ class MXA_EXPORT DataExportProperties
 
   protected:
     DataExportProperties() :
+#if MXA_HDF5_SUPPORT
      m_HDFFileId (-1),
+#endif
      m_HDFDatasetPath(),
      m_ExportFile(),
      m_FileType(MXA::Export::Ascii),

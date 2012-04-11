@@ -11,6 +11,8 @@
 #ifndef _MXAArrayTemplate_h_
 #define _MXAArrayTemplate_h_
 
+#include <vector>
+
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/LogTime.h>
 #include <MXA/Common/MXAEndian.h>

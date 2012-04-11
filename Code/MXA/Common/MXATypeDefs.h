@@ -20,7 +20,7 @@
 #include <boost/shared_array.hpp>
 
 #include "MXA/MXA.h"
-
+#include "MXA/Common/LogTime.h"
 
 /** @file MXATypeDefs.h
  * @brief This file contains many common typdefs used through out the MXA Source code
