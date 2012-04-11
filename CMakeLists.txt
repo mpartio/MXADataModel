@@ -128,7 +128,7 @@ set(CMP_VERSION_MAJOR "v1")
 if (NOT DEFINED MXA_BUILD_TESTING)
     OPTION(MXA_BUILD_TESTING "Build MXADataModel Unit Testing" ON)
 endif()
-message(STATUS "MXA_BUILD_TESTING: ${MXA_BUILD_TESTING}")
+
 IF(MXA_BUILD_TESTING)
   ENABLE_TESTING()
 ENDIF(MXA_BUILD_TESTING)
@@ -191,6 +191,11 @@ endif()
 # --------------------------------------------------------------------
 # Add our MXA Library            
 add_subdirectory(${MXADataModel_SOURCE_DIR}/Code ${PROJECT_BINARY_DIR}/MXA)
+
+message(STATUS "MXA_BUILD_TESTING: ${MXA_BUILD_TESTING}")
+message(STATUS "MXA_BUILD_EXAMPLES: ${MXA_BUILD_EXAMPLES}")
+message(STATUS "MXA_BUILD_UTILITIES: ${MXA_BUILD_UTILITIES}")
+message(STATUS "MXA_BUILD_API_DOCS: ${MXA_BUILD_API_DOCS}")
 
 #-- Include the MXADataModel Testing Sources
 IF ( MXA_BUILD_TESTING )
