@@ -65,19 +65,20 @@ Add_MXA_Dir(XML)
 # --------------------------------------------------------------------
 # Generate a Header file with Compile Version variables
 # --------------------------------------------------------------------
-cmpVersionStringsFromGit(GENERATED_HEADER_FILE_PATH ${CMP_HEADER_DIR}/MXAVersion.h 
-                         GENERATED_SOURCE_FILE_PATH ${CMP_HEADER_DIR}/MXAVersion.cpp
+cmpVersionStringsFromGit(GENERATED_HEADER_FILE_PATH ${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME} 
+                         GENERATED_SOURCE_FILE_PATH ${CMP_HEADER_DIR}/${CMP_VERSION_SOURCE_FILE_NAME}
                          NAMESPACE "MXA"
                          cmpProjectName "MXA" 
-                         WORKING_DIRECTORY ${MXADataModel_SOURCE_DIR} )
+                         WORKING_DIRECTORY ${MXADataModel_SOURCE_DIR}
+                         EXPORTS_DEFINE  MXA_EXPORT)
                          
 
 configure_file(${MXA_SOURCE_DIR}/MXAConfiguration.h.in
                ${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE})
 
 cmp_IDE_GENERATED_PROPERTIES("Generated" 
-                             "${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE};${CMP_HEADER_DIR}/${CMP_TYPES_FILE_NAME};${CMP_HEADER_DIR}/${CMP_CONFIGURATION_FILE_NAME};${CMP_HEADER_DIR}/MXAVersion.h"
-                             "${CMP_HEADER_DIR}/MXAVersion.cpp")
+                             "${CMP_HEADER_DIR}/${CMP_TOP_HEADER_FILE};${CMP_HEADER_DIR}/${CMP_TYPES_FILE_NAME};${CMP_HEADER_DIR}/${CMP_CONFIGURATION_FILE_NAME};${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME}"
+                             "${CMP_HEADER_DIR}/${CMP_VERSION_SOURCE_FILE_NAME}")
 
 
       

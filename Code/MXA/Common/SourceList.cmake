@@ -29,13 +29,14 @@ endif()
 
 
 SET (MXA_Common_SRCS
-
+    ${MXA_SOURCE_DIR}/MXA/Common/MXAMemory.cpp
 )
 
 SET (MXA_Common_HDRS 
     ${MXA_SOURCE_DIR}/MXA/Common/LogTime.h
-   # ${MXA_SOURCE_DIR}/MXA/Common/DLLExport.h
+    ${MXA_SOURCE_DIR}/MXA/MXADLLExport.h
     ${MXA_SOURCE_DIR}/MXA/Common/MXAEndian.h
+    ${MXA_SOURCE_DIR}/MXA/Common/MXAMemory.h
     ${MXA_SOURCE_DIR}/MXA/Common/MXATypeDefs.h
     ${MXA_SOURCE_DIR}/MXA/Common/MXAErrorDefinitions.h
     ${MXA_SOURCE_DIR}/MXA/Common/MXASetGetMacros.h
@@ -51,7 +52,7 @@ cmp_IDE_SOURCE_PROPERTIES( "MXA/Common" "${MXA_Common_HDRS}" "${MXA_Common_SRCS}
 SET (MXA_Common_SRCS
     ${MXA_WIN_Common_SRCS}
     ${MXA_UNIX_Common_SRCS}
-    ${MXA_Common_SOURCES}
+    ${MXA_Common_SRCS}
 )
 
 SET (MXA_Common_HDRS 
