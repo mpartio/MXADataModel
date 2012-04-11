@@ -16,14 +16,17 @@
 *  integration into C++ environments.                                        *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include <MXA/HDF5/H5Image.h>
-#include <MXA/HDF5/H5Lite.h>
-
-//-- STL Includes
-#include <string>
 
 //-- C includes
 #include <string.h>
 #include <stdlib.h>
+
+//-- STL Includes
+#include <string>
+#include <list>
+
+#include "MXA/HDF5/H5Lite.h"
+#include "MXA/HDF5/H5Utilities.h"
 
 
 #if 1
@@ -44,7 +47,7 @@
  *
  *-------------------------------------------------------------------------
  */
-static herr_t find_palette( hid_t loc_id, const char *name, void  *op_data )
+static herr_t find_palette( hid_t loc_id, const char *name, const H5A_info_t*, void  *op_data )
 {
 
  /* Define a default zero value for return. This will cause the iterator to continue if
@@ -247,11 +250,11 @@ herr_t H5Image::H5IMmake_image_24bit(hid_t loc_id, std::string datasetName,
 herr_t H5Image::H5IM_find_palette( hid_t loc_id )
 {
 
- uint32_t attr_num;     /* Starting attribute to look up */
+ hsize_t attr_num;     /* Starting attribute to look up */
  herr_t      ret;
 
  attr_num = 0;
- ret = H5Aiterate( loc_id, &attr_num, find_palette, 0 );
+ ret = H5Aiterate( loc_id, H5_INDEX_NAME, H5_ITER_INC, &attr_num, find_palette, 0 );
 
  return ret;
 }
@@ -294,7 +297,7 @@ herr_t H5Image::H5IMget_image_info(hid_t loc_id, std::string datasetName, hsize_
   *npals = 0;
 
   /* Open the dataset. */
-  did = H5Dopen(loc_id, datasetName.c_str() );
+  did = H5Dopen(loc_id, datasetName.c_str(), H5P_DEFAULT  );
   if (did < 0)
   {
     return did;
@@ -368,7 +371,7 @@ herr_t H5Image::H5IMget_image_info(hid_t loc_id, std::string datasetName, hsize_
 
   if ( has_pal == 1 )
   {
-    attr_id = H5Aopen_name( did, MXA::H5Image::Palette.c_str() );
+    attr_id = H5Aopen_by_name( loc_id, datasetName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT );
     if ( attr_id >= 0 )
     {
       attr_type = H5Aget_type( attr_id );
@@ -436,7 +439,7 @@ herr_t H5Image::H5IMread_image( hid_t loc_id,
  hid_t   did;
 
  /* Open the dataset. */
- if ( (did = H5Dopen( loc_id, datasetName.c_str() )) < 0 )
+ if ( (did = H5Dopen( loc_id, datasetName.c_str(), H5P_DEFAULT )) < 0 )
   return -1;
 
  /* Read */
@@ -483,10 +486,11 @@ herr_t H5Image::H5IMmake_palette( hid_t loc_id,
 
 {
 
- int32_t has_pal;
+ int32_t has_pal = 0;
 
  /* Check if the dataset already exists */
  has_pal = H5Lite::findDataset( loc_id, pal_name );
+
 
  /* It exists. Return */
  if ( has_pal == 1 )
@@ -558,7 +562,7 @@ herr_t H5Image::H5IMlink_palette( hid_t loc_id,
   */
 
  /* First we get the image id */
- if ( (image_id = H5Dopen( loc_id, imageName.c_str() )) < 0 )
+ if ( (image_id = H5Dopen( loc_id, imageName.c_str(), H5P_DEFAULT )) < 0 )
   return -1;
 
  /* Try to find the attribute const_cast<std::string&>(MXA::H5Image::Palette) on the >>image<< dataset */
@@ -576,7 +580,7 @@ herr_t H5Image::H5IMlink_palette( hid_t loc_id,
    goto out;
 
   /* Create the attribute const_cast<std::string&>(MXA::H5Image::Palette) to be attached to the image*/
-  if ( (attr_id = H5Acreate( image_id, MXA::H5Image::Palette.c_str(), attr_type, attr_space_id, H5P_DEFAULT )) < 0 )
+  if ( (attr_id = H5Acreate( image_id, MXA::H5Image::Palette.c_str(), attr_type, attr_space_id, H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   /* Create a reference. The reference is created on the local id.  */
@@ -598,7 +602,7 @@ herr_t H5Image::H5IMlink_palette( hid_t loc_id,
 
  {
 
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -644,7 +648,7 @@ herr_t H5Image::H5IMlink_palette( hid_t loc_id,
     goto out;
 
    /* Create the attribute again with the changes of space */
-   if ( (attr_id = H5Acreate( image_id, MXA::H5Image::Palette.c_str(), attr_type, attr_space_id, H5P_DEFAULT )) < 0 )
+   if ( (attr_id = H5Acreate( image_id, MXA::H5Image::Palette.c_str(), attr_type, attr_space_id, H5P_DEFAULT, H5P_DEFAULT )) < 0 )
     goto out;
 
     /* Write the attribute with the new references */
@@ -724,7 +728,7 @@ herr_t H5Image::H5IMunlink_palette( hid_t loc_id,
   */
 
  /* First we get the image id */
- if ( (image_id = H5Dopen( loc_id, imageName.c_str() )) < 0 )
+ if ( (image_id = H5Dopen( loc_id, imageName.c_str(), H5P_DEFAULT )) < 0 )
   return -1;
 
  /* Try to find the attribute const_cast<std::string&>(MXA::H5Image::Palette) on the >>image<< dataset */
@@ -737,7 +741,7 @@ herr_t H5Image::H5IMunlink_palette( hid_t loc_id,
  /* The attribute exists, open it */
  else if ( ok_pal ==  1 )
  {
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -810,7 +814,7 @@ herr_t H5Image::H5IMget_npalettes( hid_t loc_id,
  *npals = 0;
 
  /* Open the dataset. */
- if ( (image_id = H5Dopen( loc_id, imageName.c_str() )) < 0 )
+ if ( (image_id = H5Dopen( loc_id, imageName.c_str(), H5P_DEFAULT )) < 0 )
   return -1;
 
  /* Try to find the attribute const_cast<std::string&>(MXA::H5Image::Palette) on the >>image<< dataset */
@@ -819,7 +823,7 @@ herr_t H5Image::H5IMget_npalettes( hid_t loc_id,
  if ( has_pal ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -903,7 +907,7 @@ herr_t H5Image::H5IMget_palette_info( hid_t loc_id,
  hsize_t    pal_maxdims[2];
 
  /* Open the dataset. */
- if ( (image_id = H5Dopen( loc_id, imageName.c_str() )) < 0 )
+ if ( (image_id = H5Dopen( loc_id, imageName.c_str(), H5P_DEFAULT)) < 0 )
   return -1;
 
  /* Try to find the attribute const_cast<std::string&>(MXA::H5Image::Palette) on the >>image<< dataset */
@@ -912,7 +916,7 @@ herr_t H5Image::H5IMget_palette_info( hid_t loc_id,
  if ( has_pal ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -1023,7 +1027,7 @@ herr_t H5Image::H5IMget_palette( hid_t loc_id,
  hid_t      pal_id;
 
  /* Open the dataset. */
- if ( (image_id = H5Dopen( loc_id, imageName.c_str() )) < 0 )
+ if ( (image_id = H5Dopen( loc_id, imageName.c_str(), H5P_DEFAULT )) < 0 )
   return -1;
 
  /* Try to find the attribute const_cast<std::string&>(MXA::H5Image::Palette) on the >>image<< dataset */
@@ -1032,7 +1036,7 @@ herr_t H5Image::H5IMget_palette( hid_t loc_id,
  if ( has_pal ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( image_id, MXA::H5Image::Palette.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, imageName.c_str(), MXA::H5Image::Palette.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -1131,7 +1135,7 @@ herr_t H5Image::H5IMis_image( hid_t loc_id,
  ret = -1;
 
  /* Open the dataset. */
- if ( (did = H5Dopen( loc_id, datasetName.c_str() )) < 0 )
+ if ( (did = H5Dopen( loc_id, datasetName.c_str(), H5P_DEFAULT )) < 0 )
   return -1;
 
  /* Try to find the attribute const_cast<std::string&>(MXA::H5Image::ImageClass) on the dataset */
@@ -1146,7 +1150,7 @@ herr_t H5Image::H5IMis_image( hid_t loc_id,
  else if ( has_class ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( did, MXA::H5Image::ImageClass.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, datasetName.c_str(), MXA::H5Image::ImageClass.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -1219,7 +1223,7 @@ herr_t H5Image::H5IMis_palette( hid_t loc_id,
  ret = -1;
 
  /* Open the dataset. */
- if ( (did = H5Dopen( loc_id, datasetName.c_str() )) < 0 )
+ if ( (did = H5Dopen( loc_id, datasetName.c_str(), H5P_DEFAULT )) < 0 )
   return -1;
 
     /* Try to find the attribute const_cast<std::string&>(MXA::H5Image::ImageClass) on the dataset */
@@ -1234,7 +1238,7 @@ herr_t H5Image::H5IMis_palette( hid_t loc_id,
  else if ( has_class ==  1 )
  {
 
-  if ( (attr_id = H5Aopen_name( did, MXA::H5Image::ImageClass.c_str() )) < 0 )
+  if ( (attr_id = H5Aopen_by_name( loc_id, datasetName.c_str(), MXA::H5Image::ImageClass.c_str(), H5P_DEFAULT, H5P_DEFAULT )) < 0 )
    goto out;
 
   if ( (attr_type = H5Aget_type( attr_id )) < 0 )
@@ -1282,7 +1286,7 @@ int H5Image::H5IMget_image_dimensions(hid_t loc_id,
   herr_t err = 0;
 
   /* Open the dataset. */
-  did = H5Dopen(loc_id, datasetName.c_str());
+  did = H5Dopen(loc_id, datasetName.c_str(), H5P_DEFAULT);
   if (did < 0)
   {
     return did;

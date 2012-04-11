@@ -9,7 +9,7 @@
 #ifndef _MXAPRIVATE_FILEREADER_H_
 #define _MXAPRIVATE_FILEREADER_H_
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 
 // Hard set our stream buffer to 4096 bytes
 #define BUFF_SIZE 4096

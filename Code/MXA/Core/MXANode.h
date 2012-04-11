@@ -14,7 +14,7 @@
 #define _MHDNODE_H_
 
 //MXA Includes
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/INode.h>

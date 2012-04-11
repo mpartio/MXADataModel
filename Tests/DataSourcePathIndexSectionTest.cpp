@@ -7,7 +7,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/DataImport/DataImportXmlParser.h>
 #include <MXA/Utilities/IStringSection.h>
 #include <MXA/Utilities/DataSourcePathIndexSection.h>

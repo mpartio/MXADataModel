@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //-- MXA Includes
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <Tests/MXAUnitTestDataFileLocations.h>
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IDataFile.h>
@@ -251,8 +251,8 @@ int32_t _WriteDatasetTest( const std::string &recName, IDataFile::Pointer dataFi
   MakeAttribute<uint32_t>(dsPath, ds );
   MakeAttribute<int64_t>( dsPath, ds );
   MakeAttribute<uint64_t>(dsPath, ds );
-  MakeAttribute<float32>(dsPath, ds );
-  MakeAttribute<float64>( dsPath, ds );
+  MakeAttribute<float>(dsPath, ds );
+  MakeAttribute<double>( dsPath, ds );
   MakeStringAttribute(dsPath, ds);
 
   // Write the data to the file
@@ -292,8 +292,8 @@ void _WriteStringDataTest ( const std::string &recName, IDataFile::Pointer dataF
   MakeAttribute<uint32_t>(dsPath, ds );
   MakeAttribute<int64_t>( dsPath, ds );
   MakeAttribute<uint64_t>(dsPath, ds );
-  MakeAttribute<float32>(dsPath, ds );
-  MakeAttribute<float64>( dsPath, ds );
+  MakeAttribute<float>(dsPath, ds );
+  MakeAttribute<double>( dsPath, ds );
   MakeStringAttribute(dsPath, ds);
 
   // Write the data to the file
@@ -472,8 +472,8 @@ void WriteDatasetTest()
   _WriteDatasetTest<uint32_t>( "Dataset UInt 32", dataFile );
   _WriteDatasetTest<int64_t>( "Dataset Int 64", dataFile );
   _WriteDatasetTest<uint64_t>( "Dataset UInt 64", dataFile );
-  _WriteDatasetTest<float32>( "Dataset Float 32", dataFile );
-  _WriteDatasetTest<float64>( "Dataset Float 64", dataFile );
+  _WriteDatasetTest<float>( "Dataset Float 32", dataFile );
+  _WriteDatasetTest<double>( "Dataset Float 64", dataFile );
   std::cout << "... Passed." << std::endl;
 
   std::cout << "Running _WriteStringDataTest Test ....";
@@ -489,8 +489,8 @@ void WriteDatasetTest()
   _Write2DArrayTest<uint32_t>( "2DArray UInt 32", dataFile );
   _Write2DArrayTest<int64_t>( "2DArray Int 64", dataFile );
   _Write2DArrayTest<uint64_t>( "2DArray UInt 64", dataFile );
-  _Write2DArrayTest<float32>( "2DArray Float 32", dataFile );
-  _Write2DArrayTest<float64>( "2DArray Float 64", dataFile );
+  _Write2DArrayTest<float>( "2DArray Float 32", dataFile );
+  _Write2DArrayTest<double>( "2DArray Float 64", dataFile );
   std::cout << "... Passed." << std::endl;
 
   std::cout << "Running _WriteRGBImageTest Test ....";

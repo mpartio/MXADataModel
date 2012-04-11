@@ -21,7 +21,7 @@
 #include <hdf5.h>
 
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/HDF5/H5Lite.h>
 #include <MXA/HDF5/H5Utilities.h>
 

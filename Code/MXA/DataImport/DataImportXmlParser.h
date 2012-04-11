@@ -13,7 +13,7 @@
 
 //-- MXA Includes
 #include <MXA/Common/MXATypeDefs.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Base/IDataModel.h>
 #include <MXA/Base/IDataImport.h>
 #include <MXA/Core/MXADataModel.h>

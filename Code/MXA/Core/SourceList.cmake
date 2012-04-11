@@ -1,26 +1,26 @@
 SET (MXA_Core_SRCS
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataModel.cpp
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataDimension.cpp
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataRecord.cpp
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataSource.cpp
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataImport.cpp
-  ${PROJECT_CODE_DIR}/MXA/Core/MXASupportFile.cpp
-  ${PROJECT_CODE_DIR}/MXA/Core/RequiredMetaData.cpp
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataModel.cpp
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataDimension.cpp
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataRecord.cpp
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataSource.cpp
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataImport.cpp
+  ${MXA_SOURCE_DIR}/MXA/Core/MXASupportFile.cpp
+  ${MXA_SOURCE_DIR}/MXA/Core/RequiredMetaData.cpp
 
 )
 
 SET (MXA_Core_HDRS
-  ${PROJECT_CODE_DIR}/MXA/Core/AttributeHelpers.h
-  ${PROJECT_CODE_DIR}/MXA/Core/MXAConstants.h
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataDimension.h
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataImport.h
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataModel.h
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataRecord.h
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataSource.h
-  ${PROJECT_CODE_DIR}/MXA/Core/MXASupportFile.h
-  ${PROJECT_CODE_DIR}/MXA/Core/RequiredMetaData.h
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataModelWriter.hpp
-  ${PROJECT_CODE_DIR}/MXA/Core/MXADataModelReader.hpp
+  ${MXA_SOURCE_DIR}/MXA/Core/AttributeHelpers.h
+  ${MXA_SOURCE_DIR}/MXA/Core/MXAConstants.h
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataDimension.h
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataImport.h
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataModel.h
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataRecord.h
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataSource.h
+  ${MXA_SOURCE_DIR}/MXA/Core/MXASupportFile.h
+  ${MXA_SOURCE_DIR}/MXA/Core/RequiredMetaData.h
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataModelWriter.hpp
+  ${MXA_SOURCE_DIR}/MXA/Core/MXADataModelReader.hpp
 )
 
 if ( DEFINED MXA_INSTALL_FILES)

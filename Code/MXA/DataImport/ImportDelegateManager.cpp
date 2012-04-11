@@ -46,7 +46,7 @@ ImportDelegateManager::Pointer ImportDelegateManager::instance()
 // -----------------------------------------------------------------------------
 //  Static Method
 // -----------------------------------------------------------------------------
-void ImportDelegateManager::registerKnownImportDeletegateFactories()
+void ImportDelegateManager::registerKnownImportDelegateFactories()
 {
 #if MXA_TIFF_SUPPORT
     //Register to be able to import Tiff images

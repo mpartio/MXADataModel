@@ -214,7 +214,7 @@ IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
         
     )
     cmp_IDE_GENERATED_PROPERTIES("MXA/Examples" "${SUPPORT_FILE_EXAMPLE_HEADERS}" "${SUPPORT_FILE_EXAMPLE_SRCS}" "0")
- 
+
     BuildToolBundle(
         TARGET SupportFileExample
         SOURCES  ${SUPPORT_FILE_EXAMPLE_SRCS};${SUPPORT_FILE_EXAMPLE_HEADERS}
@@ -228,5 +228,6 @@ IF ( MXA_USE_HDF5 AND MXA_USE_TIFF)
         COMPONENT     Applications
         INSTALL_DEST  "${install_dir}"
     )  
+
 ENDIF ( MXA_USE_HDF5 AND MXA_USE_TIFF )
 

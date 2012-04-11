@@ -11,8 +11,8 @@
 #ifndef IDATADIMENSION_H_
 #define IDATADIMENSION_H_
 
-#include <MXA/MXATypes.h>
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXA.h"
+#include "MXA/MXADLLExport.h"
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataDimensionWriter.h>
 

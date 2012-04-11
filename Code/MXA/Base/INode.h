@@ -13,7 +13,7 @@
 #define _IMXANODE_H_
 
 //-- MXA includes
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Common/MXATypeDefs.h>
 //-- STL Includes
 #include <string>

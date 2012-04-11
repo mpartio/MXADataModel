@@ -23,13 +23,15 @@
 #define MXAENDIAN_H_
 
 
-#include "MXA/MXATypes.h"
+
+//-- Needed for the memcpy function
+#include <string.h>
 
 #include <iosfwd>
 #include <string>
 
-//-- Needed for the memcpy function
-#include <string.h>
+
+#include "MXA/MXA.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -151,9 +153,9 @@ inline void _reverseBytes ( uint16_t &n )
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-inline void _reverseBytes ( float32 &n )
+inline void _reverseBytes ( float &n )
 {
-  n = static_cast < float32 >
+  n = static_cast < float >
       ( ((((uint32_t)n)<<24) & 0xFF000000) |
         ((((uint32_t)n)<< 8) & 0x00FF0000) |
         ((((uint32_t)n)>> 8) & 0x0000FF00) |
@@ -224,7 +226,7 @@ template <> struct ReverseBytes < sizeof ( uint32_t ) >
   {
     MXA::Endian::Detail::_reverseBytes ( (uint32_t&)n  );
   }
-  void operator () ( float32 &n ) const
+  void operator () ( float &n ) const
   {
     MXA::Endian::Detail::_reverseBytes ( ( uint32_t&)n );
   }
@@ -239,7 +241,7 @@ template <> struct ReverseBytes < sizeof ( uint64_t ) >
   {
     MXA::Endian::Detail::_reverseBytes ( (uint64_t&)n );
   }
-  void operator () ( float64 &n ) const
+  void operator () ( double &n ) const
   {
     MXA::Endian::Detail::_reverseBytes ( (uint64_t&)n );
   }

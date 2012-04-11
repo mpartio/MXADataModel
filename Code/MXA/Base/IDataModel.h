@@ -13,7 +13,7 @@
 
 
 //-- MXA Includes
-//#include <MXA/Common/DLLExport.h>
+//#include "MXA/MXADLLExport.h"
 //#include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IDataDimension.h>

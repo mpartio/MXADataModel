@@ -12,8 +12,8 @@
 #ifndef IDATAMODELREADER_H_
 #define IDATAMODELREADER_H_
 
-#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXADLLExport.h"
+#include "MXA/MXA.h"
 #include <MXA/Base/IFileIODelegate.h>
 
 /**

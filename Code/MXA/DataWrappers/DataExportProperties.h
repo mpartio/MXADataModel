@@ -9,7 +9,7 @@
 #ifndef _DataExportProperties_h_
 #define _DataExportProperties_h_
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IImportProperty.h>

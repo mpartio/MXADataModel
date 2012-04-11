@@ -36,6 +36,7 @@
 #include <MXA/DataWrappers/MXAAsciiStringData.h>
 #endif
 
+#include "MXA/HDF5/H5Utilities.h"
 
 /*-------------------------------------------------------------------------
  * Function: find_dataset
@@ -52,7 +53,7 @@
  *
  *-------------------------------------------------------------------------
  */
-herr_t find_dataset( hid_t loc_id, const char *name, void *op_data)
+herr_t find_dataset(hid_t loc_id, const char *name, const H5A_info_t* info, void *op_data)
 {
 
  /* Define a default zero value for return. This will cause the iterator to continue if
@@ -81,7 +82,7 @@ herr_t find_dataset( hid_t loc_id, const char *name, void *op_data)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t find_attr( hid_t loc_id, const char *name, void *op_data)
+herr_t find_attr(hid_t loc_id, const char *name, const H5A_info_t* info, void *op_data)
 {
 
  /* Define a default zero value for return. This will cause the iterator to continue if
@@ -136,29 +137,30 @@ void H5Lite::disableErrorHandlers()
 herr_t H5Lite::openId( hid_t loc_id, const std::string& obj_name, int32_t obj_type)
 {
 
- hid_t   obj_id = -1;
+  hid_t   obj_id = -1;
 
- switch ( obj_type )
- {
-  case H5G_DATASET:
+  switch ( obj_type )
+  {
+   case H5O_TYPE_DATASET:
 
-   /* Open the dataset. */
-   if ( (obj_id = H5Dopen( loc_id, obj_name.c_str() )) < 0 )
+     /* Open the dataset. */
+     if ( (obj_id = H5Dopen( loc_id, obj_name.c_str(), H5P_DEFAULT )) < 0 )
+      return -1;
+     break;
+
+    case H5O_TYPE_GROUP:
+
+     /* Open the group. */
+     if ( (obj_id = H5Gopen( loc_id, obj_name.c_str(), H5P_DEFAULT )) < 0 )
+      return -1;
+     break;
+
+
+   default:
     return -1;
-   break;
+  }
 
-  case H5G_GROUP:
-
-   /* Open the group. */
-   if ( (obj_id = H5Gopen( loc_id, obj_name.c_str() )) < 0 )
-    return -1;
-   break;
-
-  default:
-   return -1;
- }
-
- return obj_id;
+  return obj_id;
 
 }
 
@@ -167,25 +169,25 @@ herr_t H5Lite::openId( hid_t loc_id, const std::string& obj_name, int32_t obj_ty
 // -----------------------------------------------------------------------------
 herr_t H5Lite::closeId( hid_t obj_id, int32_t obj_type )
 {
- switch ( obj_type )
- {
-  case H5G_DATASET:
-   /* Close the dataset. */
-   if ( H5Dclose( obj_id ) < 0 )
+  switch ( obj_type )
+  {
+   case H5O_TYPE_DATASET:
+    /* Close the dataset. */
+    if ( H5Dclose( obj_id ) < 0 )
+     return -1;
+    break;
+
+   case H5O_TYPE_GROUP:
+   /* Close the group. */
+    if ( H5Gclose( obj_id ) < 0 )
+     return -1;
+    break;
+
+   default:
     return -1;
-   break;
+  }
 
-  case H5G_GROUP:
-  /* Close the group. */
-   if ( H5Gclose( obj_id ) < 0 )
-    return -1;
-   break;
-
-  default:
-   return -1;
- }
-
- return 1;
+  return 1;
 }
 
 // -----------------------------------------------------------------------------
@@ -194,13 +196,13 @@ herr_t H5Lite::closeId( hid_t obj_id, int32_t obj_type )
 herr_t H5Lite::findAttribute( hid_t loc_id, const std::string& attrName )
 {
 
- uint32_t attr_num;
- herr_t ret = 0;
+  hsize_t attr_num;
+  herr_t ret = 0;
 
- attr_num = 0;
- ret = H5Aiterate( loc_id, &attr_num, find_attr, (void *)(attrName.c_str()) );
+  attr_num = 0;
+  ret = H5Aiterate( loc_id, H5_INDEX_NAME, H5_ITER_INC, &attr_num, find_attr, (void *)(attrName.c_str()) );
 
- return ret;
+  return ret;
 }
 
 // -----------------------------------------------------------------------------
@@ -208,12 +210,17 @@ herr_t H5Lite::findAttribute( hid_t loc_id, const std::string& attrName )
 // -----------------------------------------------------------------------------
 herr_t H5Lite::findDataset( hid_t loc_id, const std::string& dsetName )
 {
-
- herr_t  ret = 0;
-
- ret = H5Giterate( loc_id, ".", 0, find_dataset, (void*)(dsetName.c_str() ) );
-
- return ret;
+  std::list<std::string> names;
+  herr_t err = H5Utilities::getGroupObjects(loc_id, H5Utilities::MXA_DATASET, names);
+  if (err < 0) { return 0;}
+  for (std::list<std::string>::iterator iter = names.begin(); iter != names.end(); ++iter )
+ {
+   if (dsetName.compare((*iter)) == 0)
+   {
+     return 1;
+   }
+ }
+  return 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -242,7 +249,7 @@ herr_t  H5Lite::writeStringDataset (hid_t loc_id,
         if ( (sid = H5Screate( H5S_SCALAR )) >= 0 )
         {
           /* Create the dataset. */
-          if ( (did = H5Dcreate(loc_id, dsetName.c_str(), tid, sid, H5P_DEFAULT)) >= 0 )
+          if ( (did = H5Dcreate(loc_id, dsetName.c_str(), tid, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT)) >= 0 )
           {
              if ( NULL != data )
               {
@@ -289,7 +296,7 @@ herr_t H5Lite::writeStringDataset (hid_t loc_id, const std::string& dsetName, co
         if ( (sid = H5Screate( H5S_SCALAR )) >= 0 )
         {
           /* Create the dataset. */
-          if ( (did = H5Dcreate(loc_id, dsetName.c_str(), tid, sid, H5P_DEFAULT)) >= 0 )
+          if ( (did = H5Dcreate(loc_id, dsetName.c_str(), tid, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT)) >= 0 )
           {
              if ( !data.empty() )
               {
@@ -354,82 +361,82 @@ herr_t  H5Lite::writeStringAttribute(hid_t loc_id,
                               hsize_t size,
                               const char* data)
 {
-   hid_t      attr_type;
-   hid_t      attr_space_id;
-   hid_t      attr_id;
-   hid_t      obj_id;
-   int32_t      has_attr;
-   H5G_stat_t statbuf;
-   size_t     attr_size;
-   herr_t     err = 0;
-   herr_t     retErr = 0;
+  hid_t      attr_type;
+  hid_t      attr_space_id;
+  hid_t      attr_id;
+  hid_t      obj_id;
+  int32_t      has_attr;
+  H5O_info_t statbuf;
+  size_t     attr_size;
+  herr_t     err = 0;
+  herr_t     retErr = 0;
 
-   /* Get the type of object */
-   retErr = H5Gget_objinfo( loc_id, objName.c_str(), 1, &statbuf );
-   if (retErr >= 0) {
-     /* Open the object */
-     obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
-     if ( obj_id >= 0) {
-       /* Create the attribute */
-       attr_type = H5Tcopy( H5T_C_S1 );
-       if ( attr_type >= 0 ) {
-         attr_size = size; /* extra null term */
-         err = H5Tset_size( attr_type, (size_t)attr_size);
-         if (err<0) {
-           std::cout << "Error Setting H5T Size" << std::endl;
-           retErr = err;
-         }
-         if ( err >= 0 ) {
-           err = H5Tset_strpad( attr_type, H5T_STR_NULLTERM );
-           if (err<0) {
-             std::cout << "Error adding a null terminator." << std::endl;
-             retErr = err;
-           }
-           if ( err >= 0 )  {
-             attr_space_id = H5Screate( H5S_SCALAR );
-             if ( attr_space_id >= 0 ) {
-               /* Verify if the attribute already exists */
-               has_attr = H5Lite::findAttribute( obj_id, attrName );
-               /* The attribute already exists, delete it */
-               if ( has_attr == 1 )
-               {
-                 err = H5Adelete( obj_id, attrName.c_str() );
-                 if (err<0) {
-                   std::cout << "Error Deleting Attribute '" << attrName << "' from Object '" <<  objName << "'" << std::endl;
-                   retErr = err;
-                 }
-               }
-               if (err >= 0) {
-                 /* Create and write the attribute */
-                 attr_id = H5Acreate( obj_id, attrName.c_str(), attr_type, attr_space_id, H5P_DEFAULT );
-                 if ( attr_id >= 0 ) {
-                   err = H5Awrite( attr_id, attr_type, data );
-                   if ( err < 0 ) {
-                     std::cout << "Error Writing String attribute." << std::endl;\
-                     retErr = err;
-                   }
-                 }
-                 CloseH5A(attr_id, err, retErr);
-               }
-               CloseH5S(attr_space_id, err, retErr);
-             }
-           }
-         }
-         CloseH5T(attr_type, err, retErr);
-       }
-       else
-       {
-         retErr = attr_type;
-       }
-       /* Close the object */
-       err = H5Lite::closeId( obj_id, statbuf.type );
-       if (err < 0) {
-         std::cout << "Error Closing Object Id" << std::endl;
-         retErr = err;
-       }
-     }
-   }
-   return retErr;
+  /* Get the type of object */
+  retErr = H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT);
+  if (retErr >= 0) {
+    /* Open the object */
+    obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
+    if ( obj_id >= 0) {
+      /* Create the attribute */
+      attr_type = H5Tcopy( H5T_C_S1 );
+      if ( attr_type >= 0 ) {
+        attr_size = size; /* extra null term */
+        err = H5Tset_size( attr_type, (size_t)attr_size);
+        if (err<0) {
+          std::cout << "Error Setting H5T Size" << std::endl;
+          retErr = err;
+        }
+        if ( err >= 0 ) {
+          err = H5Tset_strpad( attr_type, H5T_STR_NULLTERM );
+          if (err<0) {
+            std::cout << "Error adding a null terminator." << std::endl;
+            retErr = err;
+          }
+          if ( err >= 0 )  {
+            attr_space_id = H5Screate( H5S_SCALAR );
+            if ( attr_space_id >= 0 ) {
+              /* Verify if the attribute already exists */
+              has_attr = H5Lite::findAttribute( obj_id, attrName );
+              /* The attribute already exists, delete it */
+              if ( has_attr == 1 )
+              {
+                err = H5Adelete( obj_id, attrName.c_str() );
+                if (err<0) {
+                  std::cout << "Error Deleting Attribute '" << attrName << "' from Object '" <<  objName << "'" << std::endl;
+                  retErr = err;
+                }
+              }
+              if (err >= 0) {
+                /* Create and write the attribute */
+                attr_id = H5Acreate( obj_id, attrName.c_str(), attr_type, attr_space_id, H5P_DEFAULT, H5P_DEFAULT);
+                if ( attr_id >= 0 ) {
+                  err = H5Awrite( attr_id, attr_type, data );
+                  if ( err < 0 ) {
+                    std::cout << "Error Writing String attribute." << std::endl;\
+                    retErr = err;
+                  }
+                }
+                CloseH5A(attr_id, err, retErr);
+              }
+              CloseH5S(attr_space_id, err, retErr);
+            }
+          }
+        }
+        CloseH5T(attr_type, err, retErr);
+      }
+      else
+      {
+        retErr = attr_type;
+      }
+      /* Close the object */
+      err = H5Lite::closeId( obj_id, statbuf.type );
+      if (err < 0) {
+        std::cout << "Error Closing Object Id" << std::endl;
+        retErr = err;
+      }
+    }
+  }
+  return retErr;
 }
 
 // -----------------------------------------------------------------------------
@@ -454,7 +461,7 @@ herr_t H5Lite::readStringDataset(hid_t loc_id, const std::string& dsetName, std:
   herr_t retErr = 0;
   hsize_t size;
 
-  did = H5Dopen(loc_id, dsetName.c_str() );
+  did = H5Dopen(loc_id, dsetName.c_str(), H5P_DEFAULT );
   if (did < 0) {
     std::cout << "Error Opening Dataset" << std::endl;
     return -1;
@@ -489,7 +496,7 @@ herr_t H5Lite::readStringDataset(hid_t loc_id,
   herr_t err = 0;
   herr_t retErr = 0;
 
-  did = H5Dopen(loc_id, dsetName.c_str() );
+  did = H5Dopen(loc_id, dsetName.c_str(), H5P_DEFAULT );
   if (did < 0) {
     std::cout << "Error Opening Dataset" << std::endl;
     return -1;
@@ -516,63 +523,63 @@ herr_t H5Lite::readStringAttribute(hid_t loc_id, const std::string& objName, con
                               std::string &data)
 {
 
- /* identifiers */
- hid_t      obj_id;
- H5G_stat_t statbuf;
- hid_t      attr_id;
- hid_t      attr_type;
- std::vector<char> attr_out;
- hsize_t    size;
- herr_t err = 0;
- herr_t retErr = 0;
+  /* identifiers */
+  hid_t      obj_id;
+  H5O_info_t statbuf;
+  hid_t      attr_id;
+  hid_t      attr_type;
+  std::vector<char> attr_out;
+  hsize_t    size;
+  herr_t err = 0;
+  herr_t retErr = 0;
 
- HDF_ERROR_HANDLER_OFF;
+  HDF_ERROR_HANDLER_OFF;
 
-  /* Get the type of object */
-  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
-  if (err<0) {
-    return err;
+   /* Get the type of object */
+   err = H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT);
+   if (err<0) {
+     return err;
+   }
+
+   /* Open the object */
+   obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
+   if ( obj_id >= 0)
+   {
+     attr_id = H5Aopen_by_name( loc_id, objName.c_str(), attrName.c_str(), H5P_DEFAULT, H5P_DEFAULT );
+     if ( attr_id >= 0 )
+     {
+       size = H5Aget_storage_size(attr_id);
+       attr_out.resize( static_cast<int>(size) );  //Resize the vector to the proper length
+       attr_type = H5Aget_type( attr_id );
+       if ( attr_type >= 0 )
+       {
+         err = H5Aread( attr_id, attr_type, &(attr_out.front()) );
+         if (err < 0) {
+           std::cout << "Error Reading Attribute." << std::endl;
+           retErr = err;
+         } else {
+           if (attr_out[size-1] == 0) // NULL Terminated string
+           {
+             size = size -1;
+           }
+           data.append( &(attr_out.front()), size ); //Append the data to the passed in string
+         }
+         CloseH5T(attr_type, err, retErr);
+       }
+       CloseH5A(attr_id, err, retErr);
+     }
+     else
+     {
+       retErr = attr_id;
+     }
+     err = H5Lite::closeId( obj_id, statbuf.type );
+     if (err<0) {
+       std::cout << "Error Closing Object ID" << std::endl;
+       retErr = err;
+     }
   }
-
-  /* Open the object */
-  obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
-  if ( obj_id >= 0)
-  {
-    attr_id = H5Aopen_name( obj_id, attrName.c_str() );
-    if ( attr_id >= 0 )
-    {
-      size = H5Aget_storage_size(attr_id);
-      attr_out.resize( static_cast<int>(size) );  //Resize the vector to the proper length
-      attr_type = H5Aget_type( attr_id );
-      if ( attr_type >= 0 )
-      {
-        err = H5Aread( attr_id, attr_type, &(attr_out.front()) );
-        if (err < 0) {
-          std::cout << "Error Reading Attribute." << std::endl;
-          retErr = err;
-        } else {
-          if (attr_out[size-1] == 0) // NULL Terminated string
-          {
-            size = size -1;
-          }
-          data.append( &(attr_out.front()), size ); //Append the data to the passed in string
-        }
-        CloseH5T(attr_type, err, retErr);
-      }
-      CloseH5A(attr_id, err, retErr);
-    }
-    else
-    {
-      retErr = attr_id;
-    }
-    err = H5Lite::closeId( obj_id, statbuf.type );
-    if (err<0) {
-      std::cout << "Error Closing Object ID" << std::endl;
-      retErr = err;
-    }
- }
-  HDF_ERROR_HANDLER_ON;
- return retErr;
+   HDF_ERROR_HANDLER_ON;
+  return retErr;
 }
 
 // -----------------------------------------------------------------------------
@@ -584,53 +591,53 @@ herr_t H5Lite::readStringAttribute(hid_t loc_id,
                                    uint8_t* data)
 {
 
- /* identifiers */
- hid_t      obj_id;
- H5G_stat_t statbuf;
- hid_t      attr_id;
- hid_t      attr_type;
- herr_t err = 0;
- herr_t retErr = 0;
+  /* identifiers */
+  hid_t      obj_id;
+  H5O_info_t statbuf;
+  hid_t      attr_id;
+  hid_t      attr_type;
+  herr_t err = 0;
+  herr_t retErr = 0;
 
- HDF_ERROR_HANDLER_OFF;
+  HDF_ERROR_HANDLER_OFF;
 
-  /* Get the type of object */
-  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
-  if (err<0) {
-    return err;
+   /* Get the type of object */
+   err = H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT);
+   if (err<0) {
+     return err;
+   }
+
+   /* Open the object */
+   obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
+   if ( obj_id >= 0)
+   {
+     attr_id = H5Aopen_by_name( loc_id, objName.c_str(), attrName.c_str(), H5P_DEFAULT, H5P_DEFAULT );
+     if ( attr_id >= 0 )
+     {
+       attr_type = H5Aget_type( attr_id );
+       if ( attr_type >= 0 )
+       {
+         err = H5Aread( attr_id, attr_type, data );
+         if (err < 0) {
+           std::cout  << "Error Reading Attribute." << std::endl;
+           retErr = err;
+         }
+         CloseH5T(attr_type, err, retErr);
+       }
+       CloseH5A(attr_id, err, retErr);
+     }
+     else
+     {
+       retErr = attr_id;
+     }
+     err = H5Lite::closeId( obj_id, statbuf.type );
+     if (err<0) {
+       std::cout  << "Error Closing Object ID" << std::endl;
+       retErr = err;
+     }
   }
-
-  /* Open the object */
-  obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
-  if ( obj_id >= 0)
-  {
-    attr_id = H5Aopen_name( obj_id, attrName.c_str() );
-    if ( attr_id >= 0 )
-    {
-      attr_type = H5Aget_type( attr_id );
-      if ( attr_type >= 0 )
-      {
-        err = H5Aread( attr_id, attr_type, data );
-        if (err < 0) {
-          std::cout << DEBUG_OUT(logTime) << "Error Reading Attribute." << std::endl;
-          retErr = err;
-        }
-        CloseH5T(attr_type, err, retErr);
-      }
-      CloseH5A(attr_id, err, retErr);
-    }
-    else
-    {
-      retErr = attr_id;
-    }
-    err = H5Lite::closeId( obj_id, statbuf.type );
-    if (err<0) {
-      std::cout << DEBUG_OUT(logTime) << "Error Closing Object ID" << std::endl;
-      retErr = err;
-    }
- }
-  HDF_ERROR_HANDLER_ON;
- return retErr;
+   HDF_ERROR_HANDLER_ON;
+  return retErr;
 }
 
 // -----------------------------------------------------------------------------
@@ -645,7 +652,7 @@ herr_t H5Lite::getDatasetNDims( hid_t loc_id, const std::string& dsetName, hid_t
  rank = 0;
 
  /* Open the dataset. */
- if ( (did = H5Dopen( loc_id, dsetName.c_str() )) < 0 )
+ if ( (did = H5Dopen( loc_id, dsetName.c_str(), H5P_DEFAULT )) < 0 )
   return -1;
 
  /* Get the dataspace handle */
@@ -684,44 +691,44 @@ herr_t H5Lite::getAttributeNDims(hid_t loc_id,
                                 const std::string& attrName,
                                 hid_t &rank)
 {
-   /* identifiers */
-   hid_t      obj_id;
-   H5G_stat_t statbuf;
-   hid_t      attr_id;
-   herr_t err = 0;
-   herr_t retErr = 0;
-   hid_t sid;
-   rank = -1;
-    /* Get the type of object */
-  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
-  if (err<0) {
-    return err;
-  }
-  /* Open the object */
-  obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
-  if ( obj_id >= 0)
-  {
-    attr_id = H5Aopen_name( obj_id, attrName.c_str() );
-    if ( attr_id >= 0 )
-    {
-      sid = H5Aget_space( attr_id );
-      if ( sid >= 0 )
-      {
-        rank = H5Sget_simple_extent_ndims( sid );
-        CloseH5S(sid, err, retErr);
-      }
-      CloseH5A(attr_id, err, retErr);
-    }
-    err = H5Lite::closeId( obj_id, statbuf.type );
-    if (err<0) {
-      std::cout << "Error Closing Object ID" << std::endl;
-      retErr = err;
-    }
+  /* identifiers */
+  hid_t      obj_id;
+  H5O_info_t statbuf;
+  hid_t      attr_id;
+  herr_t err = 0;
+  herr_t retErr = 0;
+  hid_t sid;
+  rank = -1;
+   /* Get the type of object */
+ err = H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT);
+ if (err<0) {
+   return err;
  }
- if (attr_id < 0) {
-   retErr = attr_id;
- }
- return retErr;
+ /* Open the object */
+ obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
+ if ( obj_id >= 0)
+ {
+   attr_id = H5Aopen_by_name( loc_id, objName.c_str(), attrName.c_str(), H5P_DEFAULT, H5P_DEFAULT );
+   if ( attr_id >= 0 )
+   {
+     sid = H5Aget_space( attr_id );
+     if ( sid >= 0 )
+     {
+       rank = H5Sget_simple_extent_ndims( sid );
+       CloseH5S(sid, err, retErr);
+     }
+     CloseH5A(attr_id, err, retErr);
+   }
+   err = H5Lite::closeId( obj_id, statbuf.type );
+   if (err<0) {
+     std::cout << "Error Closing Object ID" << std::endl;
+     retErr = err;
+   }
+}
+if (attr_id < 0) {
+  retErr = attr_id;
+}
+return retErr;
 }
 
 // -----------------------------------------------------------------------------
@@ -734,7 +741,7 @@ hid_t H5Lite::getDatasetType(hid_t loc_id, const std::string &dsetName)
   herr_t retErr = 0;
   hid_t did = -1;
   /* Open the dataset. */
-  if ( (did = H5Dopen( loc_id, dsetName.c_str() )) < 0 )
+  if ( (did = H5Dopen( loc_id, dsetName.c_str(), H5P_DEFAULT )) < 0 )
   {
      return -1;
   }
@@ -766,7 +773,7 @@ herr_t H5Lite::getDatasetInfo( hid_t loc_id,
 
 
   /* Open the dataset. */
-  if ( (did = H5Dopen( loc_id, dsetName.c_str() )) < 0 )
+  if ( (did = H5Dopen( loc_id, dsetName.c_str(), H5P_DEFAULT )) < 0 )
   return -1;
 
   /* Get an identifier for the datatype. */
@@ -837,77 +844,77 @@ herr_t H5Lite::getAttributeInfo(hid_t loc_id,
                                 size_t &type_size,
                                 hid_t &tid)
 {
-   /* identifiers */
-   hid_t      obj_id;
-   H5G_stat_t statbuf;
-   hid_t      attr_id;
- //  hid_t      tid;
-   herr_t err = 0;
-   herr_t retErr = 0;
-   hid_t sid;
-   hid_t rank = -1;
+  /* identifiers */
+  hid_t      obj_id;
+  H5O_info_t statbuf;
+  hid_t      attr_id;
+//  hid_t      tid;
+  herr_t err = 0;
+  herr_t retErr = 0;
+  hid_t sid;
+  hid_t rank = -1;
 
-  err = H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf);
-  if (err<0) {
-    return err;
-  }
-
-  /* Open the object */
-  obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
-  if ( obj_id >= 0)
-  {
-    attr_id = H5Aopen_name( obj_id, attrName.c_str() );
-    if ( attr_id >= 0 )
-    {
-      /* Get an identifier for the datatype. */
-      tid = H5Aget_type( attr_id );
-      if (tid>0)
-      {
-        /* Get the class. */
-        type_class = H5Tget_class( tid );
-        /* Get the size. */
-        type_size = H5Tget_size( tid );
-        sid = H5Aget_space(attr_id);
-        if (sid >= 0 )
-        {
-          if (type_class == H5T_STRING)
-          {
-            rank = 1;
-            dims.resize(1);
-            dims[0] = type_size;
-          }
-          else
-          {
-            rank = H5Sget_simple_extent_ndims( sid );
-            std::vector<hsize_t> _dims(rank, 0);
-            /* Get dimensions */
-            err = H5Sget_simple_extent_dims( sid, &(_dims.front() ), NULL);
-            if (err<0) {
-              std::cout << "Error Getting Attribute dims" << std::endl;
-              retErr = err;
-            }
-            //Copy the dimensions into the dims vector
-            dims.clear(); //Erase everything in the Vector
-            dims.resize(rank);
-            for (hid_t i = 0; i < rank; ++i)
-            {
-              dims[i] = static_cast<uint64_t>(_dims[i]);
-            }
-          }
-          CloseH5S(sid, err, retErr);
-        }
-        //CloseH5T(tid, err, retErr); We are passing back the tid so don't close it
-      }
-      CloseH5A(attr_id, err, retErr);
-    }
-    err = H5Lite::closeId( obj_id, statbuf.type );
-    if (err<0) {
-      std::cout << "Error Closing Object ID" << std::endl;
-      retErr = err;
-    }
-
+ err = H5Oget_info_by_name(loc_id, objName.c_str(),  &statbuf, H5P_DEFAULT);
+ if (err<0) {
+   return err;
  }
- return retErr;
+
+ /* Open the object */
+ obj_id = H5Lite::openId( loc_id, objName, statbuf.type );
+ if ( obj_id >= 0)
+ {
+   attr_id = H5Aopen_by_name( loc_id, objName.c_str(), attrName.c_str(), H5P_DEFAULT, H5P_DEFAULT );
+   if ( attr_id >= 0 )
+   {
+     /* Get an identifier for the datatype. */
+     tid = H5Aget_type( attr_id );
+     if (tid>0)
+     {
+       /* Get the class. */
+       type_class = H5Tget_class( tid );
+       /* Get the size. */
+       type_size = H5Tget_size( tid );
+       sid = H5Aget_space(attr_id);
+       if (sid >= 0 )
+       {
+         if (type_class == H5T_STRING)
+         {
+           rank = 1;
+           dims.resize(1);
+           dims[0] = type_size;
+         }
+         else
+         {
+           rank = H5Sget_simple_extent_ndims( sid );
+           std::vector<hsize_t> _dims(rank, 0);
+           /* Get dimensions */
+           err = H5Sget_simple_extent_dims( sid, &(_dims.front() ), NULL);
+           if (err<0) {
+             std::cout << "Error Getting Attribute dims" << std::endl;
+             retErr = err;
+           }
+           //Copy the dimensions into the dims vector
+           dims.clear(); //Erase everything in the Vector
+           dims.resize(rank);
+           for (hid_t i = 0; i < rank; ++i)
+           {
+             dims[i] = static_cast<uint64_t>(_dims[i]);
+           }
+         }
+         CloseH5S(sid, err, retErr);
+       }
+       //CloseH5T(tid, err, retErr); We are passing back the tid so don't close it
+     }
+     CloseH5A(attr_id, err, retErr);
+   }
+   err = H5Lite::closeId( obj_id, statbuf.type );
+   if (err<0) {
+     std::cout << "Error Closing Object ID" << std::endl;
+     retErr = err;
+   }
+
+}
+return retErr;
 }
 
 #ifdef H5LITE_USE_MXA_CONSTRUCTS
@@ -952,7 +959,7 @@ herr_t H5Lite::writeMXAArray(hid_t loc_id,
     return sid;
   }
   // Create the Dataset
-  did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT);
+  did = H5Dcreate (loc_id, dsetName.c_str(), dataType, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
   if ( did >= 0 )
   {
     err = H5Dwrite( did, dataType, H5S_ALL, H5S_ALL, H5P_DEFAULT, data );
@@ -987,7 +994,7 @@ herr_t H5Lite::writeMXAAttribute(hid_t loc_id,
 {
   hid_t      obj_id, sid, attr_id;
    int32_t        has_attr;
-   H5G_stat_t statbuf;
+   H5O_info_t statbuf;
    herr_t err = 0;
    herr_t retErr = 0;
 
@@ -1008,7 +1015,7 @@ herr_t H5Lite::writeMXAAttribute(hid_t loc_id,
    }
 
    /* Get the type of object */
-   if (H5Gget_objinfo(loc_id, objName.c_str(), 1, &statbuf) < 0) {
+   if (H5Oget_info_by_name(loc_id, objName.c_str(), &statbuf, H5P_DEFAULT) < 0) {
      std::cout << "Error getting object info." << std::endl;
      return -1;
    }
@@ -1045,7 +1052,7 @@ herr_t H5Lite::writeMXAAttribute(hid_t loc_id,
 
      if ( err >= 0 ) {
        /* Create the attribute. */
-       attr_id = H5Acreate( obj_id, attrName.c_str() , dataType, sid, H5P_DEFAULT );
+       attr_id = H5Acreate( obj_id, attrName.c_str() , dataType, sid, H5P_DEFAULT, H5P_DEFAULT );
        if ( attr_id >= 0 ) {
          /* Write the attribute data. */
          err = H5Awrite( attr_id, dataType, data );
@@ -1095,7 +1102,7 @@ IMXAArray* H5Lite::readMXAArray(hid_t loc_id,
   std::string sData;
 
  /* Open the dataset. */
-  did = H5Dopen( loc_id, dsetName.c_str() );
+  did = H5Dopen( loc_id, dsetName.c_str(), H5P_DEFAULT );
   if ( did < 0 ) {
     std::cout << " Error opening Dataset: " << did << std::endl;
     return NULL;
@@ -1147,9 +1154,9 @@ IMXAArray* H5Lite::readMXAArray(hid_t loc_id,
           break;
         case H5T_FLOAT:
           if (attr_size == 4) {
-            data = MXAArrayTemplate<float32>::New(_dims.size(), &(_dims.front() ) );
+            data = MXAArrayTemplate<float>::New(_dims.size(), &(_dims.front() ) );
           } else if (attr_size == 8 ) {
-            data = MXAArrayTemplate<float64>::New(_dims.size(), &(_dims.front() ) );
+            data = MXAArrayTemplate<double>::New(_dims.size(), &(_dims.front() ) );
           } else {
             std::cout << "Unknown Floating point type" << __FILE__ << "(" << __LINE__ << ")"  << std::endl;
             err = -1;
@@ -1209,7 +1216,7 @@ IMXAArray* H5Lite::readMXAAttribute(hid_t loc_id,
 
   /* identifiers */
   hid_t      obj_id;
-  H5G_stat_t statbuf;
+  H5O_info_t statbuf;
   herr_t err = 0;
   herr_t retErr = 0;
   hid_t attr_id;
@@ -1217,14 +1224,14 @@ IMXAArray* H5Lite::readMXAAttribute(hid_t loc_id,
   std::string sData;
   //std::cout << "   Reading Vector Attribute at Path '" << objName << "' with Key: '" << attrName << "'" << std::endl;
   /* Get the type of object */
-  err = H5Gget_objinfo(loc_id, dsetName.c_str(), 1, &statbuf);
+  err = H5Oget_info_by_name(loc_id, dsetName.c_str(),  &statbuf, H5P_DEFAULT);
   if (err<0)
     return data;
   /* Open the object */
   obj_id = H5Lite::openId( loc_id, dsetName, statbuf.type);
   if ( obj_id >= 0)
   {
-    attr_id = H5Aopen_name( obj_id, attributeKey.c_str() );
+    attr_id = H5Aopen_by_name( loc_id, dsetName.c_str(), attributeKey.c_str(), H5P_DEFAULT, H5P_DEFAULT );
     if ( attr_id >= 0 )
     {
       //Need to allocate the array size
@@ -1271,9 +1278,9 @@ IMXAArray* H5Lite::readMXAAttribute(hid_t loc_id,
           break;
         case H5T_FLOAT:
           if (attr_size == 4) {
-            data = MXAArrayTemplate<float32>::New(_dims.size(), &(_dims.front() ) );
+            data = MXAArrayTemplate<float>::New(_dims.size(), &(_dims.front() ) );
           } else if (attr_size == 8 ) {
-            data = MXAArrayTemplate<float64>::New(_dims.size(), &(_dims.front() ) );
+            data = MXAArrayTemplate<double>::New(_dims.size(), &(_dims.front() ) );
           } else {
             std::cout << "Unknown Floating point type" << __FILE__ << "(" << __LINE__ << ")"  << std::endl;
             err = -1;

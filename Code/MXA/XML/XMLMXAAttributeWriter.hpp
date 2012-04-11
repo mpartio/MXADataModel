@@ -53,11 +53,11 @@ class XMLMXAAttributeWriter
       int32_t err = -1;
       if (typeId == H5T_NATIVE_FLOAT)
       {
-        err = this->writeAttributeData<float32>(attributeKey, attribute);
+        err = this->writeAttributeData<float>(attributeKey, attribute);
       }
       else if (typeId == H5T_NATIVE_DOUBLE)
       {
-        err = this->writeAttributeData<float64>(attributeKey, attribute);
+        err = this->writeAttributeData<double>(attributeKey, attribute);
       }
 
       else if (typeId == H5T_NATIVE_INT8)

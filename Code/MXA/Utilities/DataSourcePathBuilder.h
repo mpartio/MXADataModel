@@ -11,7 +11,7 @@
 #ifndef DATASOURCEPATHBUILDER_H_
 #define DATASOURCEPATHBUILDER_H_
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Utilities/IStringSection.h>
 

@@ -11,12 +11,14 @@
 #ifndef H5TIFFIMPORTDELEGATEFACTORY_H_
 #define H5TIFFIMPORTDELEGATEFACTORY_H_
 
+//-- C++ includes
+#include <string>
+
 //-- MXA Includes
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
-//-- C++ includes
-#include <string>
+
 
 
 DEFINE_IMPORT_DELEGATE_NAMESPACE(H5TiffImport);

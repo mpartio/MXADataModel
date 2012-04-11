@@ -11,7 +11,7 @@
 #ifndef IMPORTDELEGATEMANAGER_H_
 #define IMPORTDELEGATEMANAGER_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/DataImport/AbstractImportDelegateFactory.h>
 
@@ -53,7 +53,7 @@ class MXA_EXPORT ImportDelegateManager
       *  H5Tiff importer
       *  H5BMP Importer
       */
-     static void registerKnownImportDeletegateFactories();
+     static void registerKnownImportDelegateFactories();
 
      /**
       * @brief This method ensures the ImportDelegateManager is instantiated and

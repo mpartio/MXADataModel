@@ -12,8 +12,8 @@
 #define _ATTRIBUTEHELPERS_H_
 
 // MXA inludes
-#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXADLLExport.h"
+#include "MXA/MXA.h"
 #include <MXA/Base/IAttributeHelper.h>
 #include <MXA/Base/IAttributeWriter.h>
 

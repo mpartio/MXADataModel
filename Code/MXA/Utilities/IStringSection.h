@@ -11,8 +11,8 @@
 #ifndef ISOURCEPATHSECTION_H_
 #define ISOURCEPATHSECTION_H_
 
-#include <MXA/Common/DLLExport.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXADLLExport.h"
+#include "MXA/MXA.h"
 #include <MXA/Common/MXASetGetMacros.h>
 
 #include <vector>

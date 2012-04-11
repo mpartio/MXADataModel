@@ -11,7 +11,7 @@
 #ifndef _IAttribute_H_
 #define _IAttribute_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Common/MXATypeDefs.h>
 
 #include <string>
@@ -52,12 +52,12 @@ class MXA_EXPORT IAttribute
     /**
      * @brief Converts the data value to a float value
      */
-    virtual float32 valueToFloat32() = 0;
+    virtual float valueToFloat32() = 0;
 
     /**
      * @brief Converts the data value to a double value
      */
-    virtual float64 valueToFloat64() = 0;
+    virtual double valueToFloat64() = 0;
 
     /**
      * @brief Converts the data value to a string

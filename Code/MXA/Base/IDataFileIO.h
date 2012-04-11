@@ -17,8 +17,8 @@
 #ifndef __IDATAFILE_IO_H__
 #define __IDATAFILE_IO_H__
 
-//#include <MXA/Common/DLLExport.h>
-//#include <MXA/MXATypes.h>
+//#include "MXA/MXADLLExport.h"
+//#include "MXA/MXA.h"
 
 /**
 * @class IDataFileIO IDataFileIO.h PathToHeader/IDataFileIO.h

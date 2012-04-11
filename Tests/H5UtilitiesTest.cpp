@@ -11,7 +11,7 @@
 
 //--MXA Includes
 #include <Tests/MXAUnitTestDataFileLocations.h>
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/LogTime.h>
 #include <MXA/Common/Win32Defines.h>
 #include <MXA/HDF5/H5Lite.h>
@@ -218,8 +218,8 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   err = testWritePointer3DArrayAttribute<int16_t>(file_id, dsetName);
   err = testWritePointer3DArrayAttribute<int32_t>(file_id, dsetName);
   err = testWritePointer3DArrayAttribute<int64_t>(file_id, dsetName);
-  err = testWritePointer3DArrayAttribute<float32>(file_id, dsetName);
-  err = testWritePointer3DArrayAttribute<float64>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<float>(file_id, dsetName);
+  err = testWritePointer3DArrayAttribute<double>(file_id, dsetName);
 
   err = testWritePointer1DArrayAttribute<int8_t>(file_id, dsetName);
   err = testWritePointer1DArrayAttribute<uint8_t>(file_id, dsetName);
@@ -229,8 +229,8 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   err = testWritePointer1DArrayAttribute<uint32_t>(file_id, dsetName);
   err = testWritePointer1DArrayAttribute<int64_t>(file_id, dsetName);
   err = testWritePointer1DArrayAttribute<uint64_t>(file_id, dsetName);
-  err = testWritePointer1DArrayAttribute<float32>(file_id, dsetName);
-  err = testWritePointer1DArrayAttribute<float64>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<float>(file_id, dsetName);
+  err = testWritePointer1DArrayAttribute<double>(file_id, dsetName);
 
   err = testWritePointer2DArrayAttribute<int8_t>(file_id, dsetName);
   err = testWritePointer2DArrayAttribute<uint8_t>(file_id, dsetName);
@@ -240,8 +240,8 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   err = testWritePointer2DArrayAttribute<uint32_t>(file_id, dsetName);
   err = testWritePointer2DArrayAttribute<int64_t>(file_id, dsetName);
   err = testWritePointer2DArrayAttribute<uint64_t>(file_id, dsetName);
-  err = testWritePointer2DArrayAttribute<float32>(file_id, dsetName);
-  err = testWritePointer2DArrayAttribute<float64>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<float>(file_id, dsetName);
+  err = testWritePointer2DArrayAttribute<double>(file_id, dsetName);
 
   err = testWriteVectorAttribute<int8_t>(file_id, dsetName);
   err = testWriteVectorAttribute<uint8_t>(file_id, dsetName);
@@ -251,8 +251,8 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   err = testWriteVectorAttribute<uint32_t>(file_id, dsetName);
   err = testWriteVectorAttribute<int64_t>(file_id, dsetName);
   err = testWriteVectorAttribute<uint64_t>(file_id, dsetName);
-  err = testWriteVectorAttribute<float32>(file_id, dsetName);
-  err = testWriteVectorAttribute<float64>(file_id, dsetName);
+  err = testWriteVectorAttribute<float>(file_id, dsetName);
+  err = testWriteVectorAttribute<double>(file_id, dsetName);
 
   err = testWriteScalarAttribute<int8_t>(file_id, dsetName);
   err = testWriteScalarAttribute<uint8_t>(file_id, dsetName);
@@ -262,8 +262,8 @@ herr_t testWritePointer2DArrayDataset(hid_t file_id)
   err = testWriteScalarAttribute<uint32_t>(file_id, dsetName);
   err = testWriteScalarAttribute<int64_t>(file_id, dsetName);
   err = testWriteScalarAttribute<uint64_t>(file_id, dsetName);
-  err = testWriteScalarAttribute<float32>(file_id, dsetName);
-  err = testWriteScalarAttribute<float64>(file_id, dsetName);
+  err = testWriteScalarAttribute<float>(file_id, dsetName);
+  err = testWriteScalarAttribute<double>(file_id, dsetName);
 
   std::cout << " Passed" << std::endl;
   return err;
@@ -295,11 +295,11 @@ void H5UtilitiesTest()
 
    hid_t objType = -1;
    err = H5Utilities::getObjectType(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", &objType);
-   MXA_REQUIRE(objType == H5G_DATASET);
+   MXA_REQUIRE(objType == H5O_TYPE_DATASET);
    MXA_REQUIRE(err >= 0);
 
    err = H5Utilities::getObjectType(file_id, "/", &objType);
-   MXA_REQUIRE(objType == H5G_GROUP);
+   MXA_REQUIRE(objType == H5O_TYPE_GROUP);
    MXA_REQUIRE(err >= 0);
 
    std::string objPath = H5Utilities::getObjectPath(dsetId, false);

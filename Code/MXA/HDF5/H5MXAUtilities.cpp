@@ -114,9 +114,9 @@
      break;
    case H5T_FLOAT:
      if (attr_size == 4) {
-       ptr = H5Utilities::readH5Data<float32>(dataFile->getFileId(), datasetPath,  dims);
+       ptr = H5Utilities::readH5Data<float>(dataFile->getFileId(), datasetPath,  dims);
      } else if (attr_size == 8 ) {
-       ptr = H5Utilities::readH5Data<float64>(dataFile->getFileId(), datasetPath,  dims);
+       ptr = H5Utilities::readH5Data<double>(dataFile->getFileId(), datasetPath,  dims);
      } else {
        std::cout << "Unknown Floating point type" << std::endl;
        err = -1;
@@ -195,9 +195,9 @@
      break;
    case H5T_FLOAT:
      if (attr_size == 4) {
-       ptr = H5Utilities::readH5Attribute<float32>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+       ptr = H5Utilities::readH5Attribute<float>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else if (attr_size == 8 ) {
-       ptr = H5Utilities::readH5Attribute<float64>(dataFile->getFileId(), datasetPath, attributeKey, dims);
+       ptr = H5Utilities::readH5Attribute<double>(dataFile->getFileId(), datasetPath, attributeKey, dims);
      } else {
        std::cout << DEBUG_OUT(logTime) << "Unknown Floating point type: " << typeId << " for attribute:'" << attributeKey << "' for dataset:'" <<  datasetPath <<"'" << std::endl;
        err = -1;

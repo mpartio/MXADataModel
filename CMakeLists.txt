@@ -6,7 +6,7 @@
 # Set project's name
 
 PROJECT( MXADataModel )
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 
 set (MXA_PROJECT "1")
 mark_as_advanced(MXA_PROJECT)
@@ -90,27 +90,35 @@ SET (PROJECT_RESOURCES_DIR ${MXADataModel_SOURCE_DIR}/Resources)
 SET (PROJECT_CODE_DIR ${MXADataModel_SOURCE_DIR}/Code)
 
 # - Include all the cmake code to make sure that the MXA Library is built
-if(NOT EXISTS ${MXADataModel_SOURCE_DIR}/Resources/cmp/cmpProject.cmake)
-	message(STATUS "CMP is a git submodule of MXADataModel and does not seem to be cloned")
-	message(STATUS "from the repository properly. Execute the following command from within")
-	message(STATUS "the ${MXADataModel_SOURCE_DIR} directory in order to pull")
-	message(STATUS "the CMP project from the repository")
-	message(STATUS "git submodule update --init")
-	message(FATAL_ERROR "")
+if (NOT DEFINED CMP_SOURCE_DIR)
+  set(CMP_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/../CMP)
 endif()
+
+INCLUDE (${CMP_SOURCE_DIR}/cmpCMakeMacros.cmake )
+set (CMP_ENABLE_PLUGINS "1")
+set (CMP_PLUGIN_LIST_FILE ${PROJECT_BINARY_DIR}/MXADataModel_PluginList.txt)
+file(WRITE ${CMP_PLUGIN_LIST_FILE} "")
+set (CMP_PLUGIN_SEARCHDIR_FILE ${PROJECT_BINARY_DIR}/libsearchdirs.txt)
+file(WRITE ${CMP_PLUGIN_SEARCHDIR_FILE} "${PROJECT_BINARY_DIR}/Bin/plugins;")
+file(APPEND ${CMP_PLUGIN_SEARCHDIR_FILE} "${PROJECT_BINARY_DIR}/Bin;")
+set (CMP_LIB_SEARCH_DIRS "")
+set(CMP_MODULES_SOURCE_DIR ${CMP_SOURCE_DIR}/Modules CACHE INTERNAL "")
 
 #-------------------------------------------------------------------------------
 # Include the cmp project to perform all the basic configuration tests for the 
 # project.
 #------------------------------------------------------------------------------- 
-set (CMP_HEADER_DIR ${MXADataModel_BINARY_DIR}/MXA)
-set (CMP_CONFIGURATION_FILE_NAME "MXACMPConfiguration.h")
-set (CMP_TYPES_FILE_NAME "MXATypes.h")
-set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
-set (CMP_EXTRA_CONFIGURATION_FILE "MXAConfiguration.h")
-SET (CMP_PROJECT_PREFIX "MXA" CACHE STRING "The 3 Letter Prefix to be used for Preprocessor definitions")
-set (CMP_PROJECT_NAMESPACE "MXA")
-INCLUDE (${PROJECT_RESOURCES_DIR}/cmp/cmpProject.cmake)
+#set (CMP_HEADER_DIR ${MXADataModel_BINARY_DIR}/MXA)
+#set (CMP_CONFIGURATION_FILE_NAME "MXAConfiguration.h")
+#set (CMP_TYPES_FILE_NAME "MXATypes.h")
+#set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
+#set (CMP_VERSION_SOURCE_FILE_NAME "MXAVersion.cpp")
+#set (CMP_TOP_HEADER_FILE "MXA.h")
+#set (CMP_PROJECT_NAMESPACE "MXA")
+#set (CMP_PROJECT_NAME "MXA")
+#set (CMP_ENABLE_PLUGINS "0")
+#set (CMP_LIB_SEARCH_DIRS "")
+#INCLUDE (${CMP_SOURCE_DIR}/cmpProject.cmake)
 
 # --------------------------------------------------------------------
 # Project Specific Variables
@@ -120,11 +128,23 @@ SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
 SET (MXA_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/MXACMake)
 SET (EXE_DEBUG_EXTENSION "_debug")
 
+# --------------------------------------------------------------------
+# In order to increment the version of DREAM3D simply adjust these variables.
+# we are using a 3 part Version scheme commonly found in software development. The
+# example would be Version 2.1.6543 which translates to Version [major].[minor].[patch].
+# The Major version is set here in the CMake file. We will use Git 
+# to figure out the "patch" leve of the version by using "git describe" which will
+# calculate how many commits since the last "tag" was applied to the repository.
+# this basically gives us an always incrementing number for the patch level
+# and we can set the Major and Minor versions as we see fit. 
+set(CMP_VERSION_MAJOR "v1")
+
 
 # ------- Enable the CTest testing. Use make test to run all tests ---------------
 if (NOT DEFINED MXA_BUILD_TESTING)
     OPTION(MXA_BUILD_TESTING "Build MXADataModel Unit Testing" ON)
 endif()
+message(STATUS "MXA_BUILD_TESTING: ${MXA_BUILD_TESTING}")
 IF(MXA_BUILD_TESTING)
   ENABLE_TESTING()
 ENDIF(MXA_BUILD_TESTING)
@@ -137,13 +157,13 @@ INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}")
 # Build shared libraries
 OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 SET (LIB_TYPE STATIC)
-SET (MXA_BUILT_AS_DYNAMIC_LIB)
 IF (BUILD_SHARED_LIBS)
-  SET (LIB_TYPE SHARED)
-  SET (MXA_BUILT_AS_DYNAMIC_LIB 1)
-  IF (WIN32)
-    ADD_DEFINITIONS("-DMXA_BUILT_AS_DYNAMIC_LIB")
-  ENDIF (WIN32)
+    SET (LIB_TYPE SHARED)
+    list(APPEND CMP_LIB_SEARCH_DIRS  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
+    if (MSVC)
+        list(APPEND CMP_LIB_SEARCH_DIRS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug
+                                    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release )
+    endif()
 ENDIF (BUILD_SHARED_LIBS)
 
                                
@@ -186,7 +206,7 @@ endif()
 
 # --------------------------------------------------------------------
 # Add our MXA Library            
-add_subdirectory(${MXADataModel_SOURCE_DIR}/Code ${PROJECT_BINARY_DIR}/MXALib)
+add_subdirectory(${MXADataModel_SOURCE_DIR}/Code ${PROJECT_BINARY_DIR}/MXA)
 
 #-- Include the MXADataModel Testing Sources
 IF ( MXA_BUILD_TESTING )
@@ -220,7 +240,6 @@ endif(MXA_BUILD_API_DOCS)
 
 #--- Set up the installation Code for Make Install
 if ( ${MXA_INSTALL_FILES} EQUAL 1 )
-    include ( ${PROJECT_RESOURCES_DIR}/MXACMake/MXAInstall.cmake)
     include ( ${PROJECT_RESOURCES_DIR}/CPack/PackageProject.cmake)
 endif()
 

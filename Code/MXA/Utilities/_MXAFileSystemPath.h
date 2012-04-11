@@ -10,7 +10,7 @@
 #define _MXAFileSystemPath_h_
 
 #error THIS FILE IS NOT BEING USED ANYMORE
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 
 
 //-- STL includes

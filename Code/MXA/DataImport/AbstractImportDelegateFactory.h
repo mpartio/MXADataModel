@@ -11,7 +11,7 @@
 #ifndef ABSTRACTFACTORY_H_
 #define ABSTRACTFACTORY_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Common/MXASetGetMacros.h>
 #include <MXA/Base/IImportDelegate.h>
 

@@ -12,7 +12,7 @@
 #define ANYDATADELEGATE_H_
 
 
-#include <MXA/MXATypes.h>
+#include "MXA/MXA.h"
 #include <MXA/Common/MXATypeDefs.h>
 #include <MXA/Base/IImportDelegate.h>
 #include <MXA/Base/IDataFile.h>

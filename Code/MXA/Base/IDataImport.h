@@ -11,7 +11,7 @@
 #ifndef IDATAIMPORT_H_
 #define IDATAIMPORT_H_
 
-#include <MXA/Common/DLLExport.h>
+#include "MXA/MXADLLExport.h"
 #include <MXA/Base/IDataFile.h>
 #include <MXA/Base/IDataSource.h>
 
