@@ -4,7 +4,6 @@
 #--  BSD License: http://www.opensource.org/licenses/bsd-license.html
 #--////////////////////////////////////////////////////////////////////////////
 # Set project's name
-
 PROJECT( MXADataModel )
 cmake_minimum_required(VERSION 2.8)
 
@@ -192,26 +191,27 @@ endif()
 # Add our MXA Library            
 add_subdirectory(${MXADataModel_SOURCE_DIR}/Code ${PROJECT_BINARY_DIR}/MXA)
 
-message(STATUS "MXA_BUILD_TESTING: ${MXA_BUILD_TESTING}")
-message(STATUS "MXA_BUILD_EXAMPLES: ${MXA_BUILD_EXAMPLES}")
-message(STATUS "MXA_BUILD_UTILITIES: ${MXA_BUILD_UTILITIES}")
-message(STATUS "MXA_BUILD_API_DOCS: ${MXA_BUILD_API_DOCS}")
-
 #-- Include the MXADataModel Testing Sources
 IF ( MXA_BUILD_TESTING )
   ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Tests ${PROJECT_BINARY_DIR}/Tests)
 ENDIF ( MXA_BUILD_TESTING )
 
 #-- Include the Examples Directory
-OPTION(MXA_BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" ON)
+if (NOT DEFINED MXA_BUILD_EXAMPLES)
+  OPTION(MXA_BUILD_EXAMPLES "Build Programs that demonstrate the use of the API" ON)
+endif()
 IF(MXA_BUILD_EXAMPLES)
+    message(FATAL_ERROR "WE SHOULD NOT BE HERE")
     ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Examples ${PROJECT_BINARY_DIR}/Examples)
 ENDIF(MXA_BUILD_EXAMPLES)
 
-OPTION(MXA_BUILD_UTILITIES "Build programs that help with extending MXADataModel" ON)
+if (NOT DEFINED MXA_BUILD_UTILITIES)
+  OPTION(MXA_BUILD_UTILITIES "Build programs that help with extending MXADataModel" ON)
+endif()
 IF (MXA_BUILD_UTILITIES)
     ADD_SUBDIRECTORY(${MXADataModel_SOURCE_DIR}/Utilities ${PROJECT_BINARY_DIR}/Utilities)
 ENDIF (MXA_BUILD_UTILITIES)
+
 
 option(MXA_BUILD_API_DOCS "Use Doxygen to create the HTML based API documentation" OFF)
 if(MXA_BUILD_API_DOCS)
