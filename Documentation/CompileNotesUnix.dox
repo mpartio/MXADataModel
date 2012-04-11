@@ -1,0 +1,29 @@
+/**
+
+ @page compilenotesunix Compile Notes Unix
+
+@section basicsunix Basics
+
+Download, compile and install <a href="http://www.cmake.org">CMake</a> first.
+Then proceed to build all the third party libraries that are needed. See
+<a href="SystemRequirements.html">this page</a> for more information regarding
+the necessary libraries.
+
+@section compunix Compiling
+
+Use CMake to generate Makefiles for your platform. If you are running OS X and
+you want Xcode projects have CMake geneate those projects for you. <br>
+See below for boost compilation notes.<br>
+@section boostunix Boost  Notes
+
+The easiest way to use boost is with static libraries. On OS X this means static
+ libraries that are dynamically linked to the crt (c runtime). Use the Multi-Threaded
+  versions. Below is the invocation of 'bjam' to use on OS X to compile the correct libraries.
+@code
+bjam toolset=darwin --with-test --with-filesystem
+--with-program_options --with-iostreams --with-thread
+variant=release,debug threading=multi link=static runtime-link=shared
+--prefix=/Users/Shared/Toolkits/boost-1_36/ architecture=combined install
+@endcode
+
+*/

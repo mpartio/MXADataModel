@@ -1,42 +1,16 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>MXA Specification</title>
-<link rel="stylesheet" type="text/css" href="default.css" media="screen">
-<meta content="text/html; charset=iso-8859-1" http-equiv="content-type">
-<meta content="All By Hand" name="generator">
-<meta content="max-age=0, must-revalidate" http-equiv="Cache-Control">
-<script type="text/javascript" src="Navigation.js"></script>
-</head>
-<body>
-<div class="outer-container">
-<div class="inner-container">
-<div class="header">
-<div class="title"><span class="sitename"><a href="index.html">MXADataModel
-Documentation</a></span>
-<div class="slogan" id="slogan">APIs for the Programmer</div>
-</div>
-</div>
-<div class="path" id="breadcrumb"><a href="index.html">Home</a></div>
-<div class="main">
-<table border="0" cellpadding="5" cellspacing="5">
-  <tbody>
-    <tr>
-      <td valign="top"><!-- NAVIGATION STARTS HERE -->
-      <div class="navigation"><script type="text/javascript">GenerateNavigation('MXA Specification', 'MXASpecification.html');</script>
-      </div>
-      <div class="clearer">&nbsp;</div>
-      <!-- NAVIGATION ENDS HERE --><br>
-      </td>
+/**
+@page spec MXA Specification
 
-      <td valign="top">
-      <div class="content">
-      <!-- CONTENT STARTS HERE -->
-<h4>Introduction</h4>
-    &nbsp;&nbsp;&nbsp;&nbsp;The MXA File format is based on the HDF5 file format so every MXA file is just an HDF5 file. What the MXA API does is bring some order to the HDF5 file and how the data is stored. The format is excellent for 'Field' or Image type data. Data such as 3D mesh or other complex representations may find it difficult to encode into MXADataModel files. The specification laid out in the tables below always refers to HDF5 Groups or Datasets in absolute terms, ie, from the 'root' node of the HDF5 file.
+@section mxaspec_1  Introduction
+        The MXA File format is based on the HDF5 file format so every MXA file
+is just an HDF5 file. What the MXA API does is bring some order to the HDF5 file
+and how the data is stored. The format is excellent for 'Field' or Image type
+data. Data such as 3D mesh or other complex representations may find it difficult
+to encode into MXADataModel files. The specification laid out in the tables below
+always refers to HDF5 Groups or Datasets in absolute terms, ie, from the 'root'
+node of the HDF5 file.
 
-<h4>HDF5 Specification</h4>
+@section mxaspec_2 HDF5 Specification
 <!-- /Data Model Table Begin -->
 <table border="1px" cellspacing="3" cellpadding="2">
   <tr>
@@ -48,8 +22,8 @@ Documentation</a></span>
     <td colspan="4"><b>HDF5 Object Type</b> - HDF Group</td>
   </tr>
   <tr>
-    <td colspan="4">This group holds the main portion of the model description. It contains 2 groups, 1 data set and 
-        has 2 attributes attached to the group itself.</td>
+    <td colspan="4">This group holds the main portion of the model description.
+    It contains 2 groups, 1 data set and has 2 attributes attached to the group itself.</td>
   </tr>
   <tr>
     <th></th>
@@ -168,12 +142,12 @@ Documentation</a></span>
     <td colspan="4"><b>HDF5 Object Type</b> - HDF Group</td>
   </tr>
   <tr>
-    <td colspan="4">There are 'n' number of datasets in this group. Each data set will have 
-        the following attributes and value. <br><b>Data Value Description</b>: 
-        The value of this HDF5 Dataset is the index of this Data dimension. The 
-        Dimensions need to be ordered in the HDF5 File so that appropriate paths 
-        can be created. This is the value of the index of the data dimension in 
-        that ordering. The indexing should start from zero (0). The HDF5 Object 
+    <td colspan="4">There are 'n' number of datasets in this group. Each data set will have
+        the following attributes and value. <br><b>Data Value Description</b>:
+        The value of this HDF5 Dataset is the index of this Data dimension. The
+        Dimensions need to be ordered in the HDF5 File so that appropriate paths
+        can be created. This is the value of the index of the data dimension in
+        that ordering. The indexing should start from zero (0). The HDF5 Object
         Name is also the index, just in string form.</td>
   </tr>
   <tr>
@@ -380,15 +354,6 @@ Documentation</a></span>
   </tr>
 </table>
 
-      <!-- CONTENT ENDS HERE -->
-      </div>
-    </td>
-    </tr>
-  </tbody>
-</table>
-<div class="footer"><script type="text/javascript">generateFooter();</script></div>
-</div>
-</div>
-</div>
-</body>
-</html>
+*/
+
+

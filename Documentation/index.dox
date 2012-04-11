@@ -1,0 +1,34 @@
+/**
+
+@mainpage MXADataModel
+
+@section mxadatamodel MXADataModel Home Page
+    The MXADataModel project is an effort to bring some order to the mess
+of digital files that usually results from todays scientific experiments.
+The background page has more details of the
+goals of this project.
+   There are several sections to the documentation including notes on
+how to compile the source, creating your own importers and system
+requirements.
+
+@subpage background "MXADataModel Introduction and Background"
+
+@subpage compilenotes "Compile Notes For Windows"
+
+@subpage compilenotesunix "Compile Notes Unix"
+
+@subpage examples "Examples"
+
+@subpage howtowritedataimportdeledate "How To Write Data Import Delegate"
+
+@subpage importingdata "Importing Data"
+
+@subpage spec "MXA Specification"
+
+@subpage util "MXA Utilities"
+
+@subpage sysreq "System Requirements"
+
+@subpage xmluse "XML Usage"
+
+*/

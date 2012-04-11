@@ -1,0 +1,93 @@
+/**
+
+@page util MXA Utilities
+
+@section mxautil_1  Import Generator:
+   This utility will help you create the necessary C++ code to write your own importer. If you
+follow the instructions at this <a href="HowToWriteDataImportDelegate.html">link</a> you will
+notice that there is a lot of code to implement and get it implemented just right.
+This utilitiy will simply create all the skeleton code for you. The implementation details are
+still left to you.
+Here is a typical session from using the tool:
+@code
+506:[mjackson@Shepard:Build]$ bin/ImportGenerator --outputdir /tmp --projectname BinaryImport
+Creating directory: /tmp/BinaryImport
+Creating directory: /tmp/BinaryImport/src
+Generated: /tmp/BinaryImport/CMakeLists.txt
+Generated: /tmp/BinaryImport/FindMXADataModel.cmake
+Generated: /tmp/BinaryImport/src/BinaryImportDelegate.h
+Generated: /tmp/BinaryImport/src/BinaryImportDelegate.cpp
+Generated: /tmp/BinaryImport/src/BinaryImportDelegateFactory.h
+Generated: /tmp/BinaryImport/src/BinaryImportDelegateFactory.cpp
+Generated: /tmp/BinaryImport/src/Main.cpp
+ImportGenerator is now complete. You can find your new project at /tmp/BinaryImport
+The project is automatically setup to use CMake.
+Setting the environment variable 'MXADataModel_INSTALL' will help this new project configure more quickly.
+@endcode
+<br> As noted in the output of the program the project is automatically setup to
+use CMake as its project generation system. Any other IDE or build system can be
+used if you understand how to use your IDE.
+<br>
+@section mxautil_2  ImportGenerator Program Arguments
+
+<table>
+<tr class="row">
+<th class="bordered">Arguments</th><th class="bordered">Description</th>
+</tr>
+<tr class="row">
+<td  class="bordered">--outputdir</td>
+<td class="bordered">The path to where you want the project root to be created.
+Note from the above that we did NOT include the name of the project in
+this argument.</td>
+</tr>
+<tr class="row">
+<td class="bordered">--projectname</td>
+<td class="bordered">This is the name of the project. A directory with this name will be created in
+the 'outputdir' location. Also all the source files created will use this as
+a prefix so names that end with <i>import</i> are recommended but not required.</td>
+</tr>
+</table>
+
+@section mxautil_3  Files Created
+
+<table>
+<tr class="row">
+<th class="bordered">File Name</th><th  class="bordered" >Description</th>
+</tr>
+<tr class="row">
+<td class="bordered">CMakeLists.txt</td>
+<td class="bordered">This is the CMake file that can be used to generate the
+build system or IDE project files of your choice.</td>
+</tr>
+<tr class="row">
+<td class="bordered">FindMXADataModel.cmake</td>
+<td class="bordered">This is used by the CMakeLists.txt file in order to find
+the installed MXADataModel libraries and include files.</td>
+</tr>
+<tr class="row">
+<td class="bordered">src/<b>{projectname}</b>Delegate.h/cpp</td>
+<td class="bordered">This class is the code that does the actual importing.</td>
+</tr>
+
+<tr class="row">
+<td class="bordered">src/<b>{projectname}</b>DelegateFactory.h/cpp</td>
+<td class="bordered">This class is a Factory class that is used to create
+the delegate class based on the name of the class. This is useful when parsing
+an xml import file.</td>
+</tr>
+
+<tr class="row">
+<td class="bordered">src/main.cpp</td>
+<td class="bordered">This file is the skeleton code used to run your import.</td>
+</tr>
+</table>
+
+
+
+ After the project is generated then you can start your implementation.
+
+
+
+
+*/
+

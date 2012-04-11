@@ -1,0 +1,117 @@
+/**
+@page howtowritedataimportdeledate How To Write Data Import Delegate
+
+
+
+@section xxx_ Introduction
+
+   In order to use MXA's built in facilities to
+    import data into HDF5 data files 2 classes need to be written. MXA
+    uses the Factory Design Pattern to register specific classes that are
+    capable of importing the type of data that is needed. There is a
+    central class that handles the registration of the various factory
+    classes. Each factory class can instantiate a single type of data
+    import delegate. The following code is based off the
+    "SimpleImportExample" that can be found in the
+    src/Examples/DataImport directory.
+
+    The first class we are going to implement will be an <i>ImportDelegate</i>
+    which is named <i>ExampleImportDelegate</i>
+
+@section xxx_ Contents of the ExampleImportDelegate.h File
+    @code
+#include <MXA/Common/MXATypes.h>
+#include <Base/IImportDelegate.h>
+
+class ExampleImportDelegate : public IImportDelegate
+{
+ public:
+  ExampleImportDelegate();
+  virtual ~ExampleImportDelegate();
+
+  int32 importDataSource(IDataSourcePtr dataSource,
+                              IDataFilePtr dataFile);
+
+  private:
+  ExampleImportDelegate(const ExampleImportDelegate&amp;);
+  void operator=(const ExampleImportDelegate);
+};
+    @endcode
+    The implementation of <i>importDataSource</i> contains all the code
+    necessary to import a single data record's worth of data into the HDF5
+    file.
+
+    The Second class to implement is a subclass of <i>AbstractImportDelegateFactory</i>.
+    Following along with our example code from the Examples/DataImport
+    directory we have created a class called <i>ExampleImportDelegateFactory</i>.
+    The implementation of which is (some content removed for brevity)
+
+    <b>Contents of the ExampleImportDelegateFactory.h File</b>
+    @code
+#include <DataImport/AbstractImportDelegateFactory.h>
+#include <Examples/DataImport/ExampleImportDelegate.h>
+
+DEFINE_IMPORT_DELEGATE_NAMESPACE(ExampleImport)
+
+class ExampleImportDelegateFactory : public
+AbstractImportDelegateFactory
+{
+ public:
+ ExampleImportDelegateFactory();
+ virtual ~ExampleImportDelegateFactory();
+
+ IImportDelegatePtr newDataImportDelegate (const std::string className )
+ {
+  IImportDelegatePtr delegate; // Creates a Null Shared Pointer
+  if (className.compare(ExampleImport::Detail::ClassName) == 0)
+  {
+    delegate.reset(new ExampleImportDelegate());
+  }
+  return delegate;
+ }
+ std::string delegateClassName()
+ {
+  return ExampleImport::Detail::ClassName;
+ }
+
+  private:
+  ExampleImportDelegateFactory(const ExampleImportDelegateFactory&amp;);
+  void operator=(const ExampleImportDelegateFactory&amp;);
+}
+
+
+    @endcode
+    <b>Some notes from the implementation:</b>
+    <ul>
+      <li>DEFINE_IMPORT_DELEGATE_NAMESPACE(ExampleImport) is a macro
+      defined in the AbstractImportDelegateFactory header that will create
+      a namespace that contains a std::string constant that contains the
+      value of the classname as defined in the argument to the macro. This
+      string can be used in other parts of the code to instantiate an
+      import delegate during runtime if needed that could be read from an
+      xml file to direct the importer on what class should be used to
+      import the data.</li>
+      <li>The definition of 'delegateClassName' simply returns the
+      constant as defined above.</li>
+    </ul>
+Now that the basic code is implemented this is how you might use the code. This code
+is located in src/Examples/DataImport/main.cpp
+
+@code  //Register known formats if needed/wanted
+  ImportDelegateManager::registerKnownImportDeletegateFactories();
+ // Register our Import Delegate by using the
+ // static methods from ImportDelegateManager
+ AbstractImportDelegateFactoryPtr exampleIDF (new ExampleImportDelegateFactory() );
+ ImportDelegateManager::registerImportDelegateFactory(exampleIDF);
+@endcode
+ You can now start using the rest of the MXA DataImport classes as needed. Please take a look
+at src/Examples/DataImport/SimpleImportExample.cpp for more details on the use of those classes.
+
+<b>Concrete Example Usage</b><div class="section1">
+    For a more concrete example take a look at
+    the source code for the <b>H5TiffImportDelegate</b> and <b>H5TiffImportDelegateFactory</b>
+    classes.
+
+
+
+*/

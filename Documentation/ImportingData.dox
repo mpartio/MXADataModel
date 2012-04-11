@@ -1,0 +1,189 @@
+/**
+
+@page importingdata Importing Data
+
+
+@section importdata_1 Introduction
+
+    Saving data to an MXA formatted file can be straight forward or involve creating new C++ classes and a recompile
+    of the project. Basically there are 2 ways to import data into an HDF5 based MXA data file.
+
+@section importdata_2 First Way - Utilize Existing Import Functionality
+
+    3 Items are needed in order to take advantage of the include functionality.
+    <ol>
+        <li>A Data Model (preferably in an XML file, but another HDF5 file will work also).</li>
+        <li>A Data Import XML file listing the data model file, the output file,
+        corrections to the Data Model and Data Sources.</li>
+        <li>Some Sources of Data. Either Tiff/BMP images or other sources that you have
+        custom code to parse.</li>
+    </ol>
+
+@section importdata_3 Data Import XML File
+
+    This is a xml file that contains a subset of the Data Model XML, the Output file to write the data
+    into, Data Sources (either Implicit or Explicit) and Support Files.
+
+  <table>
+  <tr>
+      <td>Data Model</td><td>The data model can come from another xml file or another MXA Data File. No matter which
+  file the model comes from, the model only serves as a "template" model. The details of data dimensions can
+  be over ridden by the import xml although the Data Records can not. So for example in your "template" model files you
+  may have a Data Dimension with a starting value of 10 and an ending value of 20. If your new data does not quite
+  match up with that then you will have a chance to over ride those values in the Data Import XML file.</td>
+  </tr>
+  <tr><td>Output File</td>
+      <td>XML Tag is <Output_File> This tells the importer where
+  to save the MXA datafile.</td></tr>
+  <tr><td>Data Sources</td><td>There are 2 types of Data Sources: Implicit and Explicit. Implicit Data Sources
+  are used when the file heirarchy on your local filesystem mimics the data exactly. To use an Implicit Data Source
+  you would need to be able to break down the path to the data files in a generic manner and then encode those
+  paths into the xml file. Explicit data sources describe <b>exactly</b> where the data file is on your local
+  filesystem. If the file is not found then a possible error will be generated (depending on the importer used).</td></tr>
+  <tr><td>Support Files</td><td>These are files that are not directly a source of data but you would like to include
+  into the data file. These files can be anything from a simple text file to a binary image file.</td></tr>
+  </table>
+
+@section importdata_4 Second Way - Create C++ code and Compile a new program
+
+    Write custom c++ code to complete any or all of the above tasks. This is the
+    course of action to take if your data is in custom data files or
+    in files that the current set of importers do understand. Each of the above tasks
+    can be programatically completed if needed. Quicker solutions
+    can be obtained if the model is stored in an XML file. This will cut down on
+    the programatic creation of the data model. If your data happens to be images
+     in the form of TIFF or to a lesser extent BMP, then you can use the existing
+     Data Import functionality.
+     If your data is in custom files then you will need to write a parser for that
+     data. See the page on creating an ImportDelegate for more information.
+     If your data is laid out on your hard drive in such a way that the Import XML
+     can be used this will help reduce the amount of code that needs
+     to be written to find the data sources on your hard drive. Instead the locations
+     are describe with some MXA xml tags.
+     <p></p>
+@section importdata_5 Code Maintainer Notes
+
+      If you add more xml tags to the list there are a few code places that will need
+      to be updated. <i>src/XML/DataImportXMLParser.cpp</i> will need to be updated. Specifically
+      you will need to update the following method:
+@codevoid DataImportXmlParser::OnStartElement(const XML_Char* name, const XML_Char** attrs)
+            void DataImportXmlParser::OnEndElement(const XML_Char* name, const XML_Char** attrs)
+      @endcode
+      In those methods you will need to add additional conditional statements to check for
+      the specific tag you are adding.
+       You will then need to add the appropriate
+@code
+          onXXXXStartTag(...) and onXXXXEndTag(...)
+      @endcode
+      methods to actually process the tags. Look at the rest of the code for examples on how to do that.
+
+
+
+@section importdata_6 XML Import Example
+Say you have a bunch of images taken from an experiment
+    that has 2 independent variables called "time" and "volume fraction" with units of seconds (for time) and
+    percentage (for Volume fraction). Say you run the experiment for 60 seconds and vary the volume fraction
+    from 20% to 60% in 5% increments. Translating this to the MXA Data Model you would end up with
+    2 Data Dimensions (Volume Fraction and Time) and 1 Data Record (Image).
+        The Vol. Frac. data dimesion would start at 20, end at 60, have a cout of 9 and an increment of 1.
+        The Time data dimension would start at 0, end at 60 have a count of 61 and an increment of 1.
+        The Data Record would have a name of "Image".
+
+        Now say all this data has been collected and orgnanized into directories with the following format:
+        Data/020/000/image.tiff, where the '020' denotes the volume fraction and the 000 denotes the
+        time in seconds. There is a set of directories for every combination of volume fraction and time.
+
+        With this setup one can setup an Implicit Data Source in the Import XML file.
+@section importdata_7 Example XML Code
+
+@code
+<Implicit_Data_Source Data_Record="Record 0" Source_Type="h5TiffImport">
+   <Import_Property Key="FileNotFoundIsError" Value="1" />
+   <Import_Property Key="ImportAsGrayScale" Value="1" />
+   <File_Path>
+     <Text_Part Text="Data/" />
+     <Index_Part
+           Padding_Char="0"
+       Max_Char_Length="3
+         Numeric_Type="Integer"
+         Data_Dimension="Volume Fraction" />
+     <Text_Part Text="/" />
+     <Index_Part
+           Padding_Char="0"
+       Max_Char_Length="3"
+         Numeric_Type="Integer"
+         Data_Dimension="Time" />
+     <Text_Part Text="/image.tif" />
+   </File_Path>
+</Implicit_Data_Source>
+ @endcode
+
+@section importdata_8 Line By Line Explanation of the Example XML Code
+
+        <table>
+        <tr><td>
+        <Implicit_Data_Source
+            Data_Record="Image"
+            Source_Type="h5TiffImport"></td>
+        <td>Tells the model to associate the data with the "Image" Data Record and use the
+        Tiff image importer to import the data.</td>
+        </tr>
+        <tr>
+        <td><Import_Property
+                  Key="FileNotFoundIsError"
+                  Value="1" ></td>
+        <td>Each Data Source can have any number of "Import_Properties". This tells the importer to
+        stop the import process if a file can not be found. This can be good for debugging your
+        import xml or if there truly are missing images from your experiment.</td>
+        </tr>
+
+        <tr>
+        <td><Import_Property
+                 Key="ImportAsGrayScale"
+                 Value="1"></td>
+        <td>Tells the importer to convert tiff images into 8 bit grayscale images.</td>
+        </tr>
+         <tr>
+        <td><File_Path></td>
+        <td>Tells the importer the definition of a file system path is starting</td>
+        </tr>
+         <tr>
+        <td><Text_Part Text="Data/"></td>
+        <td>Pure text part of the path description</td>
+        </tr>
+        <tr>
+        <td><Index_Part
+            Padding_Char="0"
+            Max_Char_Length="3"
+            Numeric_Type="Integer"
+            Data_Dimension="Volume
+            Fraction"></td>
+        <td>This tag describes how to generate this part of the file path. We are going to use 3 characters for the number and pad
+        the number with leading Zeros if needed. Also the number is an integer (no decimal) and is associated with the
+        'Volume Fraction" Data Dimension'</td>
+        </tr>
+        <tr>
+        <td><Text_Part Text="/"></td>
+        <td>Add a directory separator character. Unix style slashes are ok as they will be converted
+        to Windows path separators if needed.</td>
+        </tr>
+
+        <tr>
+        <td><Index_Part
+            Padding_Char="0"
+            Max_Char_Length="3"
+            Numeric_Type="Integer"
+            Data_Dimension="Time"></td>
+        <td>This tag describes how to generate this part of the file path. We are going to use 3 characters for the number and pad
+        the number with leading Zeros if needed. Also the number is an integer (no decimal) and is associated with the
+        'Time" Data Dimension'</td>
+        </tr>
+
+        <tr>
+        <td><Text_Part Text="/image.tif"></td>
+        <td>Add a directory separator character. Unix style slashes are ok as they will be converted
+        to Windows path separators if needed. This also states the final name of the image file. </td>
+        </tr>
+        </table>
+
+*/

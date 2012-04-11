@@ -217,7 +217,7 @@ if(MXA_BUILD_API_DOCS)
   configure_file(${PROJECT_RESOURCES_DIR}/MXADataModel.doxyfile.in 
                  ${MXADataModel_BINARY_DIR}/Doxyfile  @ONLY IMMEDIATE)
 
-  add_custom_target (Docs COMMAND ${DOXYGEN_EXECUTABLE} ${MXADataModel_BINARY_DIR}/Doxyfile
+  add_custom_target (MXADataModel_docs COMMAND ${DOXYGEN_EXECUTABLE} ${MXADataModel_BINARY_DIR}/Doxyfile
 													SOURCES ${MXADataModel_BINARY_DIR}/Doxyfile)
 endif(MXA_BUILD_API_DOCS)
 

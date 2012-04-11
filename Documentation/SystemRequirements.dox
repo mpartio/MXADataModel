@@ -1,0 +1,95 @@
+/**
+@page sysreq System Requirements
+
+
+@section sysreq_1   Required Libraries
+These are the required libraries that need to be either compiled or present
+on the system that is using the MXADataModel.
+<ul>
+  <li><a href="http://www.cmake.org">CMake</a> - Compile or otherwise
+  install on your system.</li>
+  <li><a href="http://hdf.ncsa.uiuc.edu/">HDF5 version 1.6.9</a> - This
+  is the latest stable production version. When the next version is released
+  the MXA code base will be updated. You can download version 1.6.8 from our
+  git server <a href="http://echo1.bluequartz.net/cgi-bin/gitweb/gitweb.cgi">here.</a>
+  Currently the MXA Data Model does <strong>NOT</strong> employ the inline compression
+  available in the HDF5 library. Because of this, you will NOT need to have
+  'szip' installed on your system. You only need the HDF5 library compiled
+  and installed. Some platforms prefer the static libraries, some prefer the
+  dynamic library.</li>
+  <li><a href="http://www.remotesensing.org/libtiff/">Tiff Library</a>
+  - Needed for reading Tiff images. We have created a CMake build system for
+  libTiff. You can download a tar ball of the source directory <a
+    href="http://echo1.bluequartz.net/cgi-bin/gitweb/gitweb.cgi">here</a></li>
+  <li><a href="http://expat.sourceforge.net/">Expat XML Library</a> -
+  The current version of expat that is utilized is 2.0.1. We have created a
+  CMake based build system for expat. You can download the source tree from
+  our cvs repository <a
+    href="http://echo1.bluequartz.net/cgi-bin/gitweb/gitweb.cgi">here</a>.
+  </li>
+
+  <li><a href="http://www.boost.org">Boost 1.39.0</a> - This is the
+  earliest version that has been tested. There were some bug fixes for OS X
+  compilation in the 1.36.0 series so this the earliest release that is
+  being used at this time. You will need to build the following boost
+  libraries<br />
+
+  <ol>
+    <li>test</li>
+    <li>thread</li>
+    <li>program_options</li>
+  </ol>
+  <li><a href="http://www.vtk.org">VTK</a> - There are some optional
+  bindings for VTK in the MXA Source code. These are optional to build. If
+  you do build them VTK version 5 is required.</li>
+  <li><a href="http://www.trolltech.com">Qt</a> - This is only required if you are
+  compiling the GUI based applications.</li>
+</ul>
+
+
+
+<b> Begin OS / Compiler Tested Combinations</b>
+@section sysreq_2    OS and Compiler Combinations Tested
+<table>
+  <tr class="row">
+    <th>Operating System</th>
+    <th>Compiler</th>
+    <th>Notes</th>
+  </tr>
+  <tr class="row">
+    <td>OS X 10.5.x</td>
+    <td>GCC 4.x (Xcode 3.1 Tooling)</td>
+    <td>OS X 10.4.11 should be supported without any issues. Both PPC and i386 are also supported.</td>
+  </tr>
+  <tr class="row">
+    <td>Windows XP SP2</td>
+    <td>MSVC++ 2009 Express</td>
+    <td>Currently using VS2009 Express to compile everything</td>
+  </tr>
+  <tr class="row">
+    <td>Windows 7</td>
+    <td>Visual Studio 2009 Standard</td>
+    <td>Currently using VS2009 Standard to compile everything</td>
+  </tr>
+        <tr class="row">
+    <td>Windows XP SP2</td>
+    <td>MinGW 3.1.4 with MSys 1.10</td>
+    <td>GCC 3.4.5 from MinGW project seems to work. Compiling Boost and Qt will be the tricky
+    parts. I would suggest compiling all the 3rd party libraries as static libraries to make
+    things easier.</td>
+  </tr>
+  <tr class="row">
+    <td>Ubuntu 8.10</td>
+    <td>GCC 4.2</td>
+    <td>Should compile just fine. Large file support, greater than 2GB, may be an issue.</td>
+  </tr>
+
+  <tr class="row">
+    <td>Linux HPC IA64</td>
+    <td>GCC 4.x</td>
+    <td>Not tested in a long time but should compile without issues.</td>
+  </tr>
+</table>
+<b>End OS / Compiler Tested Combinations</b>
+
+*/

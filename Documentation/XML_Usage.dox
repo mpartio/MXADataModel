@@ -1,0 +1,85 @@
+/**
+
+@page xmluse XML Usage
+
+@section xmluse Introduction
+
+The MXA api has the ability to import and export the data model as an xml file. This
+allows the researcher to reuse models from experiment to experiment. The xml model references
+a DTD which describes what mandatory and option data is contained in the xml description
+of the Data Model. In the current usage scenario it is expected to use the xml file
+as a template for a type of experiment/dataset. For this reason certain attributes
+of the Data Dimension entity are optional in the XML file. If these values are omitted from
+the xml file it is assumed that the values will be gathered through another mechanism such
+as a GUI or configuration/initialization file for the experiment.  If needed, the
+complete data model can be exported including all attributes. Below is a sample XML
+file that shows most options being used.
+
+@code
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE File_Root SYSTEM "<a href="http://mxa.web.cmu.edu/mxa_0.4.dtd">http://mxa.web.cmu.edu/mxa_0.4.dtd</a>">
+<File_Root>
+  <Data_Model Model_Type="MXA" Model_Version="0.4">
+    <Data_Root Name="DataModelTest/Data/Root/Is/Here/" />
+    <Data_Dimensions>
+  <Dimension Alt_Name="Vol Frac"
+  Count="15" End_Value="50" Increment="2" Index="0"
+  Name="Volume Fraction" Start_Value="20" Uniform="1" />
+  <Dimension Alt_Name="Rnd Seed" Count="10"
+  End_Value="5000" Increment="500" Index="1"
+  Name="Random Seed" Start_Value="1000" Uniform="1" />
+  <Dimension Alt_Name="TS" Count="100" End_Value="99"
+  Increment="1" Index="2"
+  Name="Timestep" Start_Value="0" Uniform="1" />
+  <Dimension Alt_Name="slice" Count="256" End_Value="255"
+  Increment="1" Index="3"
+  Name="Slice" Start_Value="0" Uniform="1" />
+    </Data_Dimensions>
+    <Data_Records>
+      <Signal Alt_Name="AltComp" Name="Composition" />
+    <Signal_Group Alt_Name="OP" Name="Order Parameters">
+      <Signal Alt_Name="Alt Eta1" Name="Eta1" />
+      <Signal Alt_Name="Alt Eta2" Name="Eta2" />
+      <Signal Alt_Name="Alt Eta3" Name="Eta3" />
+    </Signal_Group>
+    <Signal_Group Alt_Name="OP 2" Name="Order Parameters 2">
+      <Signal Alt_Name="Alt Eta1" Name="Eta1" />
+      <Signal Alt_Name="Alt Eta2" Name="Eta2" />
+      <Signal Alt_Name="Alt Eta3" Name="Eta3" />
+    </Signal_Group>
+    </Data_Records>
+  </Data_Model>
+  <Meta_Data>
+    <Required_MD Creator="Mike Jackson"
+    Date="2006:12:24 15:34.51"
+    Description="Just a test case showing
+    how to organize data"
+    Distribution_Rights="Unlimited"
+    Name="Testing Example Data Model"
+    Original_Source_File="Original Data Files"
+    Pedigree="Original"
+    Release_Number="AFRL/WS07-0476" />
+    <UserDefined_MD>
+          <UserMetaData key="Vector Int8" dims="5 2" type="H5T_NATIVE_INT8">
+          0 1 3 4 6
+          7 9 10 12 13
+          </UserMetaData>
+
+  </UserDefined_MD>
+  </Meta_Data>
+</File_Root>
+@endcode
+
+<b>Code Maintainer Notes</b><br>
+
+If you add more tags to the MXA XML set there are several files that will need to be updated.
+<ul>
+<li>The Resources/mxa_0.4.dtd will need to be updated</li>
+<li>The Resources/ModelTemplate.xml</li>
+<li>DataImporttest.xml.in if you want to test your new tags</li>
+<li>The HDF5/H5DataModelReader and the HDF5DataModelWriter classes</li>
+<li>The XML/XMLDataModelReader and XML/XMLDataModelWriter classes</li>
+</ul>
+
+*/
+
