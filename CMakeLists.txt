@@ -104,22 +104,6 @@ file(APPEND ${CMP_PLUGIN_SEARCHDIR_FILE} "${PROJECT_BINARY_DIR}/Bin;")
 set (CMP_LIB_SEARCH_DIRS "")
 set(CMP_MODULES_SOURCE_DIR ${CMP_SOURCE_DIR}/Modules CACHE INTERNAL "")
 
-#-------------------------------------------------------------------------------
-# Include the cmp project to perform all the basic configuration tests for the 
-# project.
-#------------------------------------------------------------------------------- 
-#set (CMP_HEADER_DIR ${MXADataModel_BINARY_DIR}/MXA)
-#set (CMP_CONFIGURATION_FILE_NAME "MXAConfiguration.h")
-#set (CMP_TYPES_FILE_NAME "MXATypes.h")
-#set (CMP_VERSION_HEADER_FILE_NAME "MXAVersion.h")
-#set (CMP_VERSION_SOURCE_FILE_NAME "MXAVersion.cpp")
-#set (CMP_TOP_HEADER_FILE "MXA.h")
-#set (CMP_PROJECT_NAMESPACE "MXA")
-#set (CMP_PROJECT_NAME "MXA")
-#set (CMP_ENABLE_PLUGINS "0")
-#set (CMP_LIB_SEARCH_DIRS "")
-#INCLUDE (${CMP_SOURCE_DIR}/cmpProject.cmake)
-
 # --------------------------------------------------------------------
 # Project Specific Variables
 SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
