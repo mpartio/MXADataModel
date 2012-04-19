@@ -5,7 +5,7 @@
 #--////////////////////////////////////////////////////////////////////////////
 # Set project's name
 PROJECT( MXADataModel )
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.6)
 
 set (MXA_PROJECT "1")
 mark_as_advanced(MXA_PROJECT)
