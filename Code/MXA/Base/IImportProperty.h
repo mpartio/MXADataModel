@@ -26,6 +26,7 @@ class MXA_EXPORT IImportProperty
 {
 
 public:
+    MXA_TYPE_MACRO(IImportProperty)
   IImportProperty(){};
   virtual ~IImportProperty(){};
 

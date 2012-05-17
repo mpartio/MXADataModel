@@ -27,9 +27,11 @@ class MXA_EXPORT IDataImport
 {
   public:
     MXA_SHARED_POINTERS(IDataImport)
+    MXA_TYPE_MACRO(IDataImport)
+
     IDataImport() {};
     virtual ~IDataImport() {};
-    
+
 #if 0
     /**
      * @brief Set the value of m_outputFilePath

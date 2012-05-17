@@ -34,9 +34,11 @@ class MXA_EXPORT IImportDelegate : public IImportProperty
 
 public:
     MXA_SHARED_POINTERS(IImportDelegate)
+    MXA_TYPE_MACRO_SUPER(IImportDelegate, IImportProperty)
+
     typedef boost::shared_ptr<IDataSource> DataSourceType;
     typedef boost::shared_ptr<IDataFile>   DataFileType;
-    
+
   IImportDelegate(){};
   virtual ~IImportDelegate(){};
 
@@ -48,7 +50,7 @@ public:
   * @return Zero or Positive on Success
   */
   virtual int32_t importDataSource(DataSourceType dataSource, DataFileType dataFile) = 0;
-  
+
   #if 0
   virtual int32_t setProperty(const std::string &key, const std::string &value)
     { return 0; }

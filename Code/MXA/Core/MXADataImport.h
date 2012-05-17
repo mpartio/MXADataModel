@@ -41,7 +41,8 @@ class MXA_EXPORT MXADataImport : public IDataImport
 {
 public:
   MXA_SHARED_POINTERS(MXADataImport);
-  MXA_TYPE_MACRO(MXADataImport);
+  MXA_TYPE_MACRO_SUPER(MXADataImport, IDataImport);
+
 
   /**
    * Empty Constructor
@@ -57,10 +58,7 @@ public:
    * @brief Static method to create a new MXADataImport Object
    * @return boost shared pointer wrapping an MXADataImport Object pointer
    */
-  static IDataImport::Pointer New()
-  {
-    return IDataImport::Pointer( new MXADataImport );
-  }
+  MXA_STATIC_NEW_SUPERCLASS(IDataImport, MXADataImport)
 
   /**
    * Set the value of m_dataModel
