@@ -9,6 +9,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+//--STL Includes
+#include <iostream>
+
+
 //--MXA Includes
 #include "MXA/MXA.h"
 #include <MXA/Common/LogTime.h>
@@ -777,7 +781,7 @@ herr_t HDF5Dump_datatype(hid_t dataset_id, std::ostream &iostr)
     break;
   }
 
-  iostr << "\"" << endl;
+  iostr << "\"" << std::endl;
 
   status = H5Tclose(type_id);
 
