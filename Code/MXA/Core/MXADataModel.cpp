@@ -25,7 +25,11 @@ _dataRoot("/")
   #if MXA_HDF5_SUPPORT
  // _ioDelegate.reset(new H5IODelegate());
   #else
+#if defined (_MSC_VER)
+#pragma  message ("MXA_HDF5_SUPPORT is OFF. There is NO default IODelegatePtr for MXADataModel")
+#else
   #warning MXA_HDF5_SUPPORT is OFF. There is NO default IODelegatePtr for MXADataModel
+#endif
   #endif
 }
 
