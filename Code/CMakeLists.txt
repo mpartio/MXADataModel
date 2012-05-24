@@ -136,7 +136,7 @@ if (WIN32)
 endif()
 
 if (BUILD_SHARED_LIBS AND NOT APPLE)
-    INSTALL(TARGETS ${PROJECT_NAME} 
+    INSTALL(TARGETS ${MXADATAMODEL_LIB_NAME} 
         COMPONENT Applications
         RUNTIME DESTINATION ${install_dir}
         LIBRARY DESTINATION ${lib_install_dir}
