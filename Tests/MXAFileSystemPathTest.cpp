@@ -231,16 +231,17 @@ int AbsolutePathTest()
 
   std::string currentPath = MXADir::currentPath();
   std::cout << "|++ currentPath:           " << currentPath << std::endl;
-  std::cout << "|++ MXATestBinaryDirectory:" << MXAUnitTest::MXATestBinaryDirectory << std::endl;
-  success = currentPath.compare(MXAUnitTest::MXATestBinaryDirectory);
+  std::cout << "|++ MXATestBinaryDirectory:" << MXAUnitTest::MXABuildDir << std::endl;
+  success = currentPath.compare(MXAUnitTest::MXABuildDir);
   MXA_REQUIRE_EQUAL(success, 0);
 
   std::string file = MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   PRINT_LINE_NUMBER();
   CheckFile(MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
   file = MXADir::absolutePath(file);
-  std::string refPath = MXAUnitTest::MXATestBinaryDirectory + MXADir::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
-  std::cout << "|-- file: " << file << std::endl;
+  std::string refPath = MXAUnitTest::MXABuildDir + MXADir::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
+  std::cout << "|-- file:    " << file << std::endl;
+  std::cout << "|-- refPath: " << refPath << std::endl;
   success = file.compare(refPath);
   MXA_REQUIRE_EQUAL(success, 0);
   PRINT_LINE_NUMBER();
@@ -251,20 +252,22 @@ int AbsolutePathTest()
   PRINT_LINE_NUMBER();
   CheckFile("." + MXADir::getSeparator() + MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
   file = MXADir::absolutePath(file);
-  refPath = MXAUnitTest::MXATestBinaryDirectory + MXADir::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
-  std::cout << "|-- file: " << file << std::endl;
+  refPath = MXAUnitTest::MXABuildDir + MXADir::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
+  std::cout << "|-- file:    " << file << std::endl;
+  std::cout << "|-- refPath: " << refPath << std::endl;
   success = file.compare(refPath);
   MXA_REQUIRE_EQUAL(success, 0);
   PRINT_LINE_NUMBER();
   CheckFile(file, MXAUnitTest::MXAFileSystemPathTest::OutputFileName, "bin");
 
-  // Check with a ../ prefixed to the file anem
+  // Check with a ../ prefixed to the file name
   file = MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
   PRINT_LINE_NUMBER();
   CheckFile( ".." + MXADir::getSeparator() + MXAUnitTest::MXAFileSystemPathTest::OutputFileName, file, "bin");
-  file = MXADir::absolutePath(".." + MXADir::getSeparator() + file);
+  file = MXAUnitTest::MXABuildDir + MXADir::Separator + file;
   refPath = MXAUnitTest::MXABuildDir + MXADir::Separator + MXAUnitTest::MXAFileSystemPathTest::OutputFileName;
-  std::cout << "|-- file: " << file << std::endl;
+  std::cout << "|-- file:    " << file << std::endl;
+  std::cout << "|-- refPath: " << refPath << std::endl;
   success = file.compare(refPath);
   MXA_REQUIRE_EQUAL(success, 0);
   PRINT_LINE_NUMBER();
@@ -281,7 +284,7 @@ int MakeDirectoriesTest()
 {
 
   std::cout  << "|- MakeDirectoriesTest -----------------" << std::endl;
-	int err = 0;
+    int err = 0;
   bool exists;
   bool isDir;
   bool isFile;
@@ -336,6 +339,53 @@ int MakeDirectoriesTest()
   MXA_REQUIRE_EQUAL(isRelative, false);
   isAbsolute = MXADir::isAbsolutePath(dirPath);
   MXA_REQUIRE_EQUAL(isAbsolute, true);
+
+
+#if defined (WIN32)
+    dirPath = "C:\";
+#else
+  dirPath = "/tmp";
+#endif
+
+  exists = MXADir::exists(dirPath);
+  MXA_REQUIRE_EQUAL(exists, true);
+
+  std::string path = MXADir::cleanPath(dirPath);
+  MXA_REQUIRE_NE(path.compare(dirPath), 0)
+
+  err = MXADir::mkdir(dirPath, true);
+  MXA_REQUIRE_EQUAL(err, 1);
+
+  isDir = MXADir::isDirectory(dirPath);
+  MXA_REQUIRE_EQUAL(isDir, true);
+
+  isFile = MXADir::isFile(dirPath);
+  MXA_REQUIRE_EQUAL(isFile, false);
+
+  exists = MXADir::exists(dirPath);
+  MXA_REQUIRE_EQUAL(exists, true);
+
+
+  isRelative = MXADir::isRelativePath(dirPath);
+  MXA_REQUIRE_EQUAL(isRelative, false);
+
+  isAbsolute = MXADir::isAbsolutePath(dirPath);
+  MXA_REQUIRE_EQUAL(isAbsolute, true);
+
+
+  path = MXADir::cleanPath("/tmp/");
+  if (path.compare("/tmp") != 0)
+  {
+      std::cout << "This is bad" << std::endl;
+  }
+
+  path = MXADir::cleanPath("/tmp/Other");
+  if (path.compare("/tmp/Other") != 0)
+  {
+      std::cout << "This is bad" << std::endl;
+  }
+
+
 
   return err;
 }
@@ -465,6 +515,10 @@ int FileNameExtensionTest()
 int main(int argc, char **argv)
 {
   int err = EXIT_SUCCESS;
+
+
+
+
   MXA_REGISTER_TEST( MakeDirectoriesTest() );
   MXA_REGISTER_TEST( FilesTest() );
   MXA_REGISTER_TEST( FileNameTest() );

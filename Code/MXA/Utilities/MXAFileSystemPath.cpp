@@ -1,11 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
+
 //
 //  Copyright (c) 2009, Michael A. Jackson. BlueQuartz Software
 //  All rights reserved.
 //  BSD License: http://www.opensource.org/licenses/bsd-license.html
 //
 //
-///////////////////////////////////////////////////////////////////////////////
+
 /* Note that some of this implementation was inspired by the Qt source code,
  * in particular the QDir and QFileEngine source codes. The idea is to keep the
  * API the same between my implementation and the Qt Implementation so that
@@ -213,8 +213,8 @@ std::string MXA_FILESYSTEM_BASE_CLASS::currentPath()
 // -----------------------------------------------------------------------------
 std::string MXA_FILESYSTEM_BASE_CLASS::absolutePath(const std::string &path)
 {
-  std::string abspath;
-  if ( true == MXA_FILESYSTEM_BASE_CLASS::isAbsolutePath(path))
+  std::string abspath = MXA_FILESYSTEM_BASE_CLASS::toNativeSeparators(path);
+  if ( true == MXA_FILESYSTEM_BASE_CLASS::isAbsolutePath(abspath))
   { return path; }
 
   abspath = MXA_FILESYSTEM_BASE_CLASS::currentPath();
@@ -304,7 +304,7 @@ bool MXA_FILESYSTEM_BASE_CLASS::isDirPath(const std::string &folderPath, bool *e
     if (fileAttrib == INVALID_FILE_ATTRIBUTES)
         return false;
 
-    return (bool)(fileAttrib & FILE_ATTRIBUTE_DIRECTORY);
+    return (fileAttrib & FILE_ATTRIBUTE_DIRECTORY) ? true : false;
 }
 #endif
 
@@ -365,11 +365,10 @@ std::string MXA_FILESYSTEM_BASE_CLASS::cleanPath(const std::string &fsPath)
      std::string::size_type pos = 0;
      std::string::size_type pos1 = 0;
 
-     // Check for UNC style paths first
-
      pos = path.find_first_of(slash, pos);
      pos1 = path.find_first_of(slash, pos + 1);
    #if defined (WIN32)
+     // Check for UNC style paths first
      if (pos == 0 && pos1 == 1)
      {
        pos1 = path.find_first_of(slash, pos1 + 1);
@@ -378,6 +377,11 @@ std::string MXA_FILESYSTEM_BASE_CLASS::cleanPath(const std::string &fsPath)
      if (pos != 0)
      {
        stk.push_back(path.substr(0, pos));
+     }
+     // check for a top level Unix Path:
+     if (pos == 0 && pos1 == std::string::npos)
+     {
+         stk.push_back(path);
      }
 
 
