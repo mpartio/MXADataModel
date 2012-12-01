@@ -109,7 +109,7 @@ SET (MXATests_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Tests)
 SET (MXAExamples_SOURCE_DIR ${MXADataModel_SOURCE_DIR}/Examples)
 SET (MXA_DOCUMENTATION_DIR ${MXADataModel_SOURCE_DIR}/Documentation)
 SET (MXA_CMAKE_DIR ${PROJECT_RESOURCES_DIR}/MXACMake)
-SET (EXE_DEBUG_EXTENSION "_debug")
+SET (EXE_DEBUG_EXTENSION "-debug")
 
 # --------------------------------------------------------------------
 # In order to increment the version of DREAM3D simply adjust these variables.

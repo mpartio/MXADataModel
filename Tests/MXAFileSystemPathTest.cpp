@@ -351,7 +351,7 @@ int MakeDirectoriesTest()
   MXA_REQUIRE_EQUAL(exists, true);
 
   std::string path = MXADir::cleanPath(dirPath);
-  MXA_REQUIRE_NE(path.compare(dirPath), 0)
+  MXA_REQUIRE_EQUAL(path.compare(dirPath), 0)
 
   err = MXADir::mkdir(dirPath, true);
   MXA_REQUIRE_EQUAL(err, 1);
@@ -515,10 +515,6 @@ int FileNameExtensionTest()
 int main(int argc, char **argv)
 {
   int err = EXIT_SUCCESS;
-
-
-
-
   MXA_REGISTER_TEST( MakeDirectoriesTest() );
   MXA_REGISTER_TEST( FilesTest() );
   MXA_REGISTER_TEST( FileNameTest() );
