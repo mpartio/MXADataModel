@@ -5,7 +5,7 @@ The purpose of this fork of MXADataModel is to enable builds on RHEL8/gcc8.
 Build process:
 
 ```
-dnf install libexpat-devel libtiff-devel boost169-devel libhdf5-devel
+dnf install libexpat-devel libtiff-devel boost169-devel libhdf5-devel cmake3
 git clone git@github.com:mpartio/MXADataModel.git
 git clone git@github.com:BlueQuartzSoftware/CMP.git
 cd MXADataModel
@@ -175,7 +175,7 @@ Apply this patch:
 ```
 
 ```
-patch -p0 < p
+patch -p0 < patchfile
 make
 ```
 
