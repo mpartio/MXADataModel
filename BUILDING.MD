@@ -190,8 +190,9 @@ If the contents of the rpm are not suitable, it can be adjusted:
 ```
 mkdir -p _CPack_Packages/Linux/RPM/MXADataModel-Linux/usr/bin
 mv _CPack_Packages/Linux/RPM/MXADataModel-Linux/usr/tools/* _CPack_Packages/Linux/RPM/MXADataModel-Linux/usr/bin
-cp ./Bin/libMXADataModel.a _CPack_Packages/Linux/RPM/MXADataModel-Linux/usr/lib/
 mkdir -p _CPack_Packages/Linux/RPM/MXADataModel-Linux/usr/include/MXA
+cp MXA/*h _CPack_Packages/Linux/RPM/MXADataModel-Linux/usr/include/MXA/
+cp ./Bin/libMXADataModel.a _CPack_Packages/Linux/RPM/MXADataModel-Linux/usr/lib/
 cp -r ../Code/MXA _CPack_Packages/Linux/RPM/MXADataModel-Linux/usr/include
 find _CPack_Packages/Linux/RPM/MXADataModel-Linux/usr/include/MXA/ -name "*.cpp" -delete
 ```
