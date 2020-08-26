@@ -164,7 +164,7 @@ herr_t testReadPointer1DArrayAttribute(hid_t file_id, const std::string &dsetNam
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 1);
   MXA_REQUIRE(attr_size == sizeof(T));
-  hid_t rank = 0;
+  int32_t rank = 0;
   err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(rank == 1);
@@ -238,7 +238,7 @@ herr_t testReadPointer2DArrayAttribute(hid_t file_id, const std::string &dsetNam
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 2);
   MXA_REQUIRE(attr_size == sizeof(T));
-  hid_t rank = 0;
+  int32_t rank = 0;
   err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(rank == 2);
@@ -314,7 +314,7 @@ herr_t testReadPointer3DArrayAttribute(hid_t file_id, const std::string &dsetNam
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 3);
   MXA_REQUIRE(attr_size == sizeof(T));
-  hid_t rank = 0;
+  int32_t rank = 0;
   err = H5Lite::getAttributeNDims(file_id, dsetName, attributeKey, rank);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(rank == 3);
@@ -818,7 +818,7 @@ herr_t testReadPointer2DArrayDataset(hid_t file_id)
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(dims.size() == 2);
   MXA_REQUIRE(attr_size == sizeof(T));
-  hid_t rank = 0;
+  int32_t rank = 0;
   err = H5Lite::getDatasetNDims(file_id, dsetName, rank);
   MXA_REQUIRE(err >= 0);
   MXA_REQUIRE(rank == 2);

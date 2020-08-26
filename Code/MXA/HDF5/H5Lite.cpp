@@ -643,7 +643,7 @@ herr_t H5Lite::readStringAttribute(hid_t loc_id,
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-herr_t H5Lite::getDatasetNDims( hid_t loc_id, const std::string& dsetName, hid_t &rank)
+herr_t H5Lite::getDatasetNDims( hid_t loc_id, const std::string& dsetName, int32_t &rank)
 {
  hid_t       did;
  hid_t       sid;
@@ -689,7 +689,7 @@ herr_t H5Lite::getDatasetNDims( hid_t loc_id, const std::string& dsetName, hid_t
 herr_t H5Lite::getAttributeNDims(hid_t loc_id,
                                  const std::string& objName,
                                 const std::string& attrName,
-                                hid_t &rank)
+                                int32_t &rank)
 {
   /* identifiers */
   hid_t      obj_id;

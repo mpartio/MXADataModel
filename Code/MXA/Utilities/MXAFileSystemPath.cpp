@@ -70,6 +70,7 @@
 #define MXA_STAT_LNK   S_IFLNK
 
 #else
+#include <unistd.h>
 #define MXA_STATBUF    struct stat
 #define MXA_STATBUF4TSTAT  struct stat
 #define MXA_STAT     stat

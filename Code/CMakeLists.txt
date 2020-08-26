@@ -64,7 +64,7 @@ Add_MXA_Dir(XML)
 # --------------------------------------------------------------------
 # Generate a Header file with Compile Version variables
 # --------------------------------------------------------------------
-if (EXISTS ${MXADataModel_SOURCE_DIR}/.git)
+if (FALSE AND EXISTS ${MXADataModel_SOURCE_DIR}/.git)
 cmpVersionStringsFromGit(GENERATED_HEADER_FILE_PATH ${CMP_HEADER_DIR}/${CMP_VERSION_HEADER_FILE_NAME} 
                          GENERATED_SOURCE_FILE_PATH ${CMP_HEADER_DIR}/${CMP_VERSION_SOURCE_FILE_NAME}
                          NAMESPACE "MXA"

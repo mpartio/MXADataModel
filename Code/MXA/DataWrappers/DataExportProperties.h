@@ -16,7 +16,7 @@
 
 //-- HDF includes
 
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
 #include <hdf5.h>
 #endif
 
@@ -73,7 +73,7 @@ class MXA_EXPORT DataExportProperties
     /**
      * @brief
      */
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
     static DataExportProperties::Pointer New(hid_t fileId, const std::string &exportFile,
                                              const std::string &datasetPath,
                                              int fileType,
@@ -93,7 +93,7 @@ class MXA_EXPORT DataExportProperties
 
     virtual ~DataExportProperties(){}
 
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
     MXA_INSTANCE_PROPERTY(hid_t, HDFFileId);
 #endif
 
@@ -139,7 +139,7 @@ class MXA_EXPORT DataExportProperties
 
   protected:
     DataExportProperties() :
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
      m_HDFFileId (-1),
 #endif
      m_HDFDatasetPath(),

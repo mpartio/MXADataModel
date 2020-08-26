@@ -8,7 +8,7 @@
 #include "MXASupportFile.h"
 #include <MXA/Common/IO/MXAFileReader64.h>
 #include <MXA/Core/MXAConstants.h>
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
 #include <MXA/HDF5/H5MXADataFile.h>
 #endif
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
@@ -46,11 +46,11 @@ ISupportFile::Pointer MXASupportFile::NewFromFileSystem(const std::string &files
   return spPtr;
 }
 
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-ISupportFile::Pointer MXASupportFile::NewFromMXAFile(hid_t dataFile,
+ISupportFile::Pointer MXASupportFile::NewFromMXAFile(int32_t dataFile,
                                                const std::string &index,
                                                bool cacheFile)
 {
@@ -114,8 +114,8 @@ _fileId(0)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-#if MXA_HDF5_SUPPORT
-MXASupportFile::MXASupportFile(hid_t fileId, int index) :
+#ifdef MXA_HDF5_SUPPORT
+MXASupportFile::MXASupportFile(int32_t fileId, int index) :
 _index(index),
 _fileId(fileId)
 {
@@ -152,7 +152,7 @@ int32_t MXASupportFile::readFromMXAFile()
 {
 
   int32_t err = -1;
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
   hid_t fileId = this->_fileId;
   std::string dsetpath = MXA::SupportFilesPath + "/" + StringUtils::numToString(this->_index);
   // Read the contents of the file into an array
@@ -244,7 +244,7 @@ uint64_t MXASupportFile::getFileSize()
 
   if (this->_fileId > 0)
   {
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
     std::vector<hsize_t> dims;
     H5T_class_t type_class;
     size_t type_size;

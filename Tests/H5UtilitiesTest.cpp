@@ -293,7 +293,7 @@ void H5UtilitiesTest()
    int32_t err = H5Utilities::objectNameAtIndex(file_id, 0, objName);
    MXA_REQUIRE(objName.compare("Pointer2DArrayDataset<H5T_NATIVE_INT32>") == 0);
 
-   hid_t objType = -1;
+   int32_t objType = -1;
    err = H5Utilities::getObjectType(file_id, "Pointer2DArrayDataset<H5T_NATIVE_INT32>", &objType);
    MXA_REQUIRE(objType == H5O_TYPE_DATASET);
    MXA_REQUIRE(err >= 0);

@@ -14,7 +14,7 @@
 #include <MXA/Base/ISupportFile.h>
 
 #include <string>
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
 #include <hdf5.h>
 #endif
 
@@ -62,7 +62,7 @@ class MXA_EXPORT MXASupportFile: public ISupportFile
      * goes wrong during the initialization then it is possible to get a NULL pointer
      * returned.
      */
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
     static ISupportFile::Pointer NewFromMXAFile(int32_t dataFile,
                                                const std::string &index,
                                                bool cacheFile);

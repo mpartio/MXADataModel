@@ -358,7 +358,7 @@ int32_t H5MXADataFile::readData(const IDataset::Pointer dataset)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-hid_t H5MXADataFile::getFileId()
+int32_t H5MXADataFile::getFileId()
 {
-  return this->_fileId;
+  return static_cast<int32_t> (this->_fileId);
 }

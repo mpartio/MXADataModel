@@ -12,7 +12,7 @@
 #include "MXA/MXA.h"
 #include <MXA/DataWrappers/MXAArrayTemplate.hpp>
 
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
 //-- HDF5 includes
 #include <hdf5.h>
 

@@ -14,7 +14,7 @@
 #include "MXA/Common/MXASetGetMacros.h"
 #include "MXA/Base/IDataModel.h"
 
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
 #include <MXA/HDF5/H5Lite.h>
 #endif
 

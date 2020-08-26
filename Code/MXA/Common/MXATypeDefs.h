@@ -49,7 +49,7 @@ typedef boost::shared_array<int64_t>                 LongLongArray;
   UCharArray VarName(new uint8_t[Size]);
 
 /* If we are compiling WITHOUT HDF5 support then we need some enumerated types */
-#if  MXA_HDF5_SUPPORT == 0
+#if not defined MXA_HDF5_SUPPORT
 
 #define H5T_NATIVE_INT8 1
 #define H5T_NATIVE_INT8  1

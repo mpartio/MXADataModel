@@ -816,11 +816,14 @@ herr_t H5Utilities::objectNameAtIndex(hid_t fileId, int32_t idx, std::string &na
 bool H5Utilities::isGroup(hid_t nodeId, const std::string &objName)   {
   bool isGroup = true;
   herr_t err = -1;
-  H5O_info_t statbuf;
-  err = H5Oget_info_by_name(nodeId, objName.c_str(),  &statbuf, H5P_DEFAULT);
+  H5G_stat_t statbuf;
+
+  H5E_BEGIN_TRY
+  err = H5Gget_objinfo(nodeId, objName.c_str(), false, &statbuf);
+  H5E_END_TRY
+
   if (err < 0)
   {
-    std::cout << DEBUG_OUT(logTime) << "Error in methd H5Gget_objinfo" << std::endl;
     return false;
   }
   switch (statbuf.type) {

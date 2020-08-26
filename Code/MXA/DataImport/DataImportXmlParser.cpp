@@ -15,7 +15,7 @@
 #include "MXA/XML/XMLStreamReaderDelegate.hpp"
 
 
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
 #include <MXA/HDF5/H5MXADataFile.h>
 #endif
 

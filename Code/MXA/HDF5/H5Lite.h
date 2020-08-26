@@ -1464,7 +1464,7 @@ static MXA_EXPORT herr_t readStringAttribute(hid_t loc_id,
  * @param attrName The name of the attribute
  * @param rank (out) Number of dimensions is store into this variable
  */
-static MXA_EXPORT hid_t getAttributeNDims(hid_t loc_id, const std::string& objName, const std::string& attrName, hid_t &rank);
+static MXA_EXPORT herr_t getAttributeNDims(hid_t loc_id, const std::string& objName, const std::string& attrName, int32_t &rank);
 
 /**
  * @brief Returns the number of dimensions for a given dataset
@@ -1472,7 +1472,7 @@ static MXA_EXPORT hid_t getAttributeNDims(hid_t loc_id, const std::string& objNa
  * @param objName The name of the dataset
  * @param rank (out) Number of dimensions is store into this variable
  */
-static MXA_EXPORT hid_t getDatasetNDims(hid_t loc_id, const std::string& objName, hid_t &rank);
+static MXA_EXPORT herr_t getDatasetNDims(hid_t loc_id, const std::string& objName, int32_t &rank);
 
 /**
  * @brief Returns the H5T value for a given dataset.

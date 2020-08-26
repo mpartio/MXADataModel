@@ -3,7 +3,7 @@
 #include <MXA/Base/IDataFile.h>
 #include <MXA/Core/MXAConstants.h>
 #include <MXA/Utilities/StringUtils.h>
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
 #include <MXA/HDF5/H5Lite.h>
 #endif
 //-- C++ includes

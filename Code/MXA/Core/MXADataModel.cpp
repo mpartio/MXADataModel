@@ -13,7 +13,6 @@
 #include <MXA/Core/RequiredMetaData.h>
 #include <MXA/HDF5/H5MXARequiredMetaData.h>
 
-
 //-------------------------------------------------
 // Constructor
 //-------------------------------------------------
@@ -22,7 +21,7 @@ _fileVersion(-1.0),
 _fileType(""),
 _dataRoot("/")
 {
-  #if MXA_HDF5_SUPPORT
+  #ifdef MXA_HDF5_SUPPORT
  // _ioDelegate.reset(new H5IODelegate());
   #else
 #if defined (_MSC_VER)
@@ -611,7 +610,7 @@ int32_t MXADataModel::setRequiredMetaData(std::string researcherName,
 				      std::string pedigree,
               std::string derivedSrcFile)
 {
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
   _requiredMetaData = H5MXARequiredMetaData::New( researcherName,
                                                   dateCreated,
                                                   datasetName,
@@ -633,7 +632,7 @@ int32_t MXADataModel::setRequiredMetaData(std::string researcherName,
 // -----------------------------------------------------------------------------
 int32_t MXADataModel::setRequiredMetaData(std::map<std::string, std::string> &requiredMetaData)
 {
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
   _requiredMetaData = H5MXARequiredMetaData::New( requiredMetaData[MXA::MXA_CREATOR_TAG],
                                                   requiredMetaData[MXA::MXA_DATE_TAG],
                                                   requiredMetaData[MXA::MXA_DSET_NAME_TAG],

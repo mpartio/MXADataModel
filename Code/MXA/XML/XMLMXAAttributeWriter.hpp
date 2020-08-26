@@ -12,7 +12,7 @@
 #define _XMLMXAAttributeWriter_h_
 
 #include <MXA/Base/IMXAArray.h>
-#if MXA_HDF5_SUPPORT
+#ifdef MXA_HDF5_SUPPORT
 #include <hdf5.h>
 #endif
 /**
