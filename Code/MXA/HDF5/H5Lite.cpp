@@ -134,7 +134,7 @@ void H5Lite::disableErrorHandlers()
 // -----------------------------------------------------------------------------
 //  Opens an ID for HDF5 operations
 // -----------------------------------------------------------------------------
-herr_t H5Lite::openId( hid_t loc_id, const std::string& obj_name, int32_t obj_type)
+hid_t H5Lite::openId( hid_t loc_id, const std::string& obj_name, int32_t obj_type)
 {
 
   hid_t   obj_id = -1;
@@ -169,6 +169,10 @@ herr_t H5Lite::openId( hid_t loc_id, const std::string& obj_name, int32_t obj_ty
 // -----------------------------------------------------------------------------
 herr_t H5Lite::closeId( hid_t obj_id, int32_t obj_type )
 {
+  if (H5Iis_valid(obj_id) != 1)
+    // object is not valid
+    return 0;
+
   switch ( obj_type )
   {
    case H5O_TYPE_DATASET:

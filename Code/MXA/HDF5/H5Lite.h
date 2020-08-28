@@ -101,9 +101,9 @@ public:
  * @param loc_id The parent object that holds the true object we want to open
  * @param objName The string name of the object
  * @param obj_type The HDF5_TYPE of object
- * @return Standard HDF5 Error Conditions
+ * @return Identifier of the opened object, -1 on error
  */
-static MXA_EXPORT herr_t openId( hid_t loc_id, const std::string& objName, int32_t obj_type);
+static MXA_EXPORT hid_t openId( hid_t loc_id, const std::string& objName, int32_t obj_type);
 
 /**
  * @brief Opens an HDF5 Object
